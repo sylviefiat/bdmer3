@@ -4,6 +4,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { Http } from '@angular/http';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 
 // libs
 import { StoreModule } from '@ngrx/store';
@@ -65,7 +66,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
 
 @NgModule({
   imports: [
-    BrowserModule,
+    BrowserModule, Angular2FontawesomeModule,
     CoreModule.forRoot([
       { provide: WindowService, useFactory: (win) },
       { provide: StorageService, useFactory: (storage) },
