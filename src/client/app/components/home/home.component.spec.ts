@@ -20,6 +20,7 @@ import { AnalyticsModule } from '../../modules/analytics/analytics.module';
 import { MultilingualModule } from '../../modules/i18n/multilingual.module';
 import { LanguageProviders } from '../../modules/i18n/index';
 import { SharedModule } from '../../modules/shared/index';
+import { BooksModule, BookEffects } from '../../modules/books/index';
 import { HomeComponent } from './home.component';
 
 // test module configuration for each test
@@ -28,16 +29,19 @@ const testModuleConfig = () => {
     imports: [
       CoreModule,
       SharedModule,
+      BooksModule,
       RouterTestingModule,
       AnalyticsModule,
       MultilingualModule,
       StoreModule.provideStore({ sample: reducer }),
-      EffectsModule.run(SampleEffects)
+      EffectsModule.run(SampleEffects),
+      EffectsModule.run(BookEffects)
     ],
     declarations: [HomeComponent, TestComponent],
     providers: [
       LanguageProviders,
       NameListService,
+      BookEffects,
       BaseRequestOptions,
       MockBackend,
       {

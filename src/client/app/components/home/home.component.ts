@@ -5,8 +5,11 @@ import { Observable } from 'rxjs/Observable';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getNames } from '../../modules/ngrx/index';
+import { IAppState, getNames , getSearchQuery, getSearchResults, getSearchLoading } from '../../modules/ngrx/index';
 import { NameList } from '../../modules/sample/index';
+import { Book } from '../../modules/books/index';
+import { BookAction } from '../../modules/books/actions/index';
+
 
 @Component({
   moduleId: module.id,
@@ -15,14 +18,14 @@ import { NameList } from '../../modules/sample/index';
   styleUrls: ['home.component.css']
 })
 export class HomeComponent implements OnInit {
+  newName: string;  
   public names$: Observable<any>;
-  public newName: string;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
+    this.newName='';
     this.names$ = this.store.let(getNames);
-    this.newName = '';
   }
 
   /*
@@ -44,5 +47,9 @@ export class HomeComponent implements OnInit {
         name: 'slideTop',
       }
     });
+  }
+
+  search(query: string) {
+    this.store.dispatch(new BookAction.SearchAction(query));
   }
 }

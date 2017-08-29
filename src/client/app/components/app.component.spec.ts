@@ -14,6 +14,7 @@ import { t } from '../modules/test/index';
 import { Config } from '../modules/core/index';
 import { TEST_CORE_PROVIDERS, TEST_HTTP_PROVIDERS } from '../modules/core/testing/index';
 import { NameListService } from '../modules/sample/index';
+import { BooksModule } from '../modules/books/index';
 import { SharedModule } from '../modules/shared/index';
 import { MultilingualModule } from '../modules/i18n/multilingual.module';
 import { reducer, LanguageProviders } from '../modules/i18n/index';
@@ -32,7 +33,8 @@ const config:Route[] = [
 const testModuleConfig = () => {
   TestBed.configureTestingModule({
     imports: [
-      SharedModule,
+      SharedModule, 
+      BooksModule,     
       Angulartics2Module.forRoot([
         Angulartics2Segment
       ]),

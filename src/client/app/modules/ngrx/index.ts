@@ -2,6 +2,7 @@
 import { Observable } from 'rxjs/Observable';
 // import { combineLatest } from 'rxjs/observable/combineLatest';
 import { ActionReducer } from '@ngrx/store';
+import { createSelector } from 'reselect';
 import '@ngrx/core/add/operator/select';
 
 /**
@@ -39,6 +40,7 @@ import { combineReducers } from '@ngrx/store';
  */
 import * as fromMultilingual from '../i18n/index';
 import * as fromSample from '../sample/index';
+import * as fromBooks from '../books/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -47,6 +49,9 @@ import * as fromSample from '../sample/index';
 export interface IAppState {
   i18n: fromMultilingual.IMultilingualState;
   sample: fromSample.ISampleState;
+  book: fromBooks.IBookState;
+  collection: fromBooks.ICollectionState;
+  search: fromBooks.ISearchState;
 }
 
 /**
@@ -58,7 +63,10 @@ export interface IAppState {
  */
 const reducers = {
   i18n: fromMultilingual.reducer,
-  sample: fromSample.reducer
+  sample: fromSample.reducer,
+  book: fromBooks.bookReducer,
+  collection: fromBooks.collectionReducer,
+  search: fromBooks.searchReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -81,6 +89,40 @@ export function getMultilingualState(state$: Observable<IAppState>): Observable<
 export function getNameListState(state$: Observable<IAppState>): Observable<fromSample.ISampleState> {
   return state$.select(s => s.sample);
 }
+export function getBookState(state$: Observable<IAppState>): Observable<fromBooks.IBookState> {
+  return state$.select(s => s.book);
+}
+export function getCollectionState(state$: Observable<IAppState>): Observable<fromBooks.ICollectionState> {
+  return state$.select(s => s.collection);
+}
+export function getSearchState(state$: Observable<IAppState>): Observable<fromBooks.ISearchState> {
+  return state$.select(s => s.search);
+}
+export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
+  return state$.select(s => s);
+}
 
 export const getLang: any = compose(fromMultilingual.getLang, getMultilingualState);
 export const getNames: any = compose(fromSample.getNames, getNameListState);
+
+export const getBookEntities: any = compose(fromBooks.getBooksEntities, getBookState);
+export const getBooksIds: any = compose(fromBooks.getBookIds, getBookState);
+export const getSelectedBookId: any = compose(fromBooks.getSelectedBookId, getBookState);
+
+export const getSelectedBook = compose(fromBooks.getSelectedBook,getBookState);
+export const getAll = compose(fromBooks.getAll,getBookState);
+
+
+export const getCollectionLoaded = compose(fromBooks.getCollectionLoaded, getCollectionState);
+export const getCollectionLoading: any = compose(fromBooks.getCollectionLoading, getCollectionState);
+export const getCollectionBookIds: any = compose(fromBooks.getCollectionBookIds, getCollectionState);
+
+export const getBookCollection: any = compose(fromBooks.getCollectionBook,getAppState);
+
+
+export const isSelectedBookInCollection: any = compose(fromBooks.isSelectedBookInCollection,getAppState);
+
+export const getSearchBookIds: any = compose(fromBooks.getSearchBookIds, getSearchState);
+export const getSearchQuery: any = compose(fromBooks.getSearchQuery, getSearchState);
+export const getSearchLoading: any = compose(fromBooks.getSearchLoading, getSearchState);
+export const getSearchResults: any = compose(fromBooks.getSearchResults, getAppState);

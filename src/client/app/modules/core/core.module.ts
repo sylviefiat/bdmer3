@@ -4,12 +4,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { DBModule } from '@ngrx/db';
 
 // module
 import { SharedModule } from '../shared/index';
+import { BooksModule } from '../books/index';
 import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
+import { schema } from '../db/index';
 
 interface ICoreModuleOptions {
   window?: any;
@@ -22,7 +25,9 @@ interface ICoreModuleOptions {
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
+    BooksModule,
+    DBModule.provideDB(schema),
   ],
   declarations: [
     ...CORE_DIRECTIVES

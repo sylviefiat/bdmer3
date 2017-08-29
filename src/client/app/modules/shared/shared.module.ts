@@ -3,17 +3,23 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MdCardModule, MdInputModule } from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // modules
 import { MultilingualModule } from '../i18n/index';
 import { SHARED_COMPONENTS } from './components/index';
+
 
 const SHARED_MODULES: any[] = [
   CommonModule,
   HttpModule,
   FormsModule,
   RouterModule,
-  MultilingualModule
+  MultilingualModule,
+  BrowserAnimationsModule,
+  MdCardModule,
+  MdInputModule
 ];
 
 /**

@@ -10,6 +10,7 @@ import { ILang, WindowService, ConsoleService, provideConsoleTarget, LogLevel } 
 import { CoreModule } from '../../core/core.module';
 import { AnalyticsModule } from '../../analytics/analytics.module';
 import { SharedModule } from '../../shared/index';
+import { BooksModule } from '../../books/index';
 import { MultilingualModule } from '../multilingual.module';
 import { MultilingualService, reducer, Languages, LanguageViewHelper } from '../index';
 import { getLanguages } from '../testing/index';
@@ -33,6 +34,7 @@ const testModuleConfig = (languages?: Array<ILang>) => {
         { provide: ConsoleService, useValue: console }
       ]),
       SharedModule,
+      BooksModule,
       RouterTestingModule,
       AnalyticsModule,
       MultilingualModule,

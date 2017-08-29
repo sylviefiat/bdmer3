@@ -12,7 +12,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
   
   constructor() {
     super();
-    // this.APP_TITLE = 'Put name of your app here';
+    this.APP_TITLE = 'ENTROPIE_SKELETON';
     // this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
 
     /* Enable typeless compiler runs (faster) between typed compiler runs. */
@@ -44,8 +44,37 @@ export class ProjectConfig extends SeedAdvancedConfig {
     // ng2-translate is already added with the advanced seed - here for example only
     let additionalPackages: ExtendPackages[] = [{
       name: 'angular2-fontawesome',
-      // Path to the package's bundle
       path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
+    },{
+      name: '@angular/material',
+      packageMeta: {
+          main: 'bundles/material.umd.js',
+          defaultExtension: 'js'
+        }
+    },{
+      name: '@angular/cdk/platform',
+      packageMeta: {
+          main: 'bundles/cdk-platform.umd.js',
+          defaultExtension: 'js'
+        }
+    },{
+      name: '@angular/cdk',
+      packageMeta: {
+          main: 'bundles/cdk.umd.js',
+          defaultExtension: 'js'
+        }
+    },{
+      name: '@angular/cdk/a11y',
+      packageMeta: {
+          main: 'bundles/cdk-a11y.umd.js',
+          defaultExtension: 'js'
+        }
+    },{
+      name: '@ngrx/db',
+      packageMeta: {
+          main: 'bundles/db.umd.js',
+          defaultExtension: 'js'
+        }
     }];
     
     this.addPackagesBundles(additionalPackages);
