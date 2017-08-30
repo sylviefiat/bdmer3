@@ -13,7 +13,7 @@ import { of } from 'rxjs/observable/of';
 
 import { GoogleBooksService } from '../../core/services/google-books';
 import { BookAction } from '../actions/index';
-import { IAppState, getCollectionLoaded, getBooks, getSearchLoading } from '../../ngrx/index';
+import { IAppState, getCollectionLoaded, getBookEntities, getSearchLoading } from '../../ngrx/index';
 import { IBookState,ICollectionState  } from '../states/index';
 
 /**
@@ -50,7 +50,7 @@ export class BookExistsGuard implements CanActivate {
   hasBookInStore(id: string): Observable<boolean> {
     console.log(id);
     return this.bookStore
-      .select(getBooks)
+      .select(getBookEntities)
       .map(entities => !!entities[id])
       .take(1);
   }

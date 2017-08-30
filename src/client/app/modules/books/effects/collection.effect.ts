@@ -3,13 +3,14 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
+import { PouchDBService } from "../../core/services/pouchdb.service";
 
 import { CollectionAction } from '../actions/index';
 import { Book } from '../models/book';
@@ -27,19 +28,22 @@ export class CollectionEffects {
    * effect easier to test.
    */
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => {
-    return this.db.open('books_app');
+  openDB$: Observable<any> = defer(() => {    
+    return this.database.getChanges();
   });
 
   @Effect()
   loadCollection$: Observable<Action> = this.actions$
     .ofType(CollectionAction.ActionTypes.LOAD)
     .switchMap(() =>
-      this.db
-        .query('books')
-        .toArray()
+      //this.db
+      //  .query('document-store')
+      //  .toArray()      
+      this.database
+        .getAll()
         .map((books: Book[]) => new CollectionAction.LoadSuccessAction(books))
         .catch(error => of(new CollectionAction.LoadFailAction(error)))
+
     );
 
   @Effect()
@@ -47,10 +51,14 @@ export class CollectionEffects {
     .ofType(CollectionAction.ActionTypes.ADD_BOOK)
     .map((action: CollectionAction.AddBookAction) => action.payload)
     .mergeMap(book =>
-      this.db
-        .insert('books', [book])
+      this.database
+        .add(book)
         .map(() => new CollectionAction.AddBookSuccessAction(book))
         .catch(() => of(new CollectionAction.AddBookFailAction(book)))
+      /*this.db
+        .insert('books', [book])
+        .map(() => new CollectionAction.AddBookSuccessAction(book))
+        .catch(() => of(new CollectionAction.AddBookFailAction(book)))*/
     );
 
   @Effect()
@@ -58,11 +66,16 @@ export class CollectionEffects {
     .ofType(CollectionAction.ActionTypes.REMOVE_BOOK)
     .map((action: CollectionAction.RemoveBookAction) => action.payload)
     .mergeMap(book =>
-      this.db
-        .executeWrite('books', 'delete', [book.id])
+      //this.db
+        //.executeWrite('books', 'delete', [book.id])
+      this.database
+        .delete(book)
         .map(() => new CollectionAction.RemoveBookSuccessAction(book))
         .catch(() => of(new CollectionAction.RemoveBookFailAction(book)))
     );
 
-  constructor(private actions$: Actions, private db: Database) {}
+  constructor(private actions$: Actions, private db: Database, private database: PouchDBService) {
+    
+    
+  }
 }

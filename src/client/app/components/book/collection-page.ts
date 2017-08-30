@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import { PouchDBService } from "../../modules/core/services/pouchdb.service";
 
 import { IAppState, getBookCollection } from '../../modules/ngrx/index';
 import { CollectionAction } from '../../modules/books/actions/index';
@@ -38,8 +39,8 @@ export class CollectionPageComponent implements OnInit {
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
-  ngOnInit() {
+  ngOnInit() {    
     this.books$ = this.store.let(getBookCollection);
-    this.store.dispatch(new CollectionAction.LoadAction());
+    this.store.dispatch(new CollectionAction.LoadAction());    
   }
 }
