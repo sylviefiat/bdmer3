@@ -6,6 +6,7 @@ export function collectionReducer(
   state: ICollectionState = collectionInitialState,
   action: CollectionAction.Actions
 ): ICollectionState {
+
   switch (action.type) {
     case CollectionAction.ActionTypes.LOAD: {
       return Object.assign({}, state, {
@@ -13,7 +14,7 @@ export function collectionReducer(
       });
     }
 
-    case CollectionAction.ActionTypes.LOAD_SUCCESS: {
+    case CollectionAction.ActionTypes.LOAD_SUCCESS: {      
       const books = action.payload;
 
       return {

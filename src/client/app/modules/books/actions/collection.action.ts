@@ -81,7 +81,7 @@ export namespace CollectionAction {
     payload: string = null;
   }
 
-  export class LoadSuccessAction implements Action {
+  export class LoadSuccessAction implements Action {    
     readonly type = ActionTypes.LOAD_SUCCESS;
     constructor(public payload: Book[]) {}
   }

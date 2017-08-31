@@ -18,6 +18,7 @@ import { Book } from '../../modules/books/models/book';
     </md-card>
 
     <bc-book-preview-list [books]="books$ | async"></bc-book-preview-list>
+    
   `,
   /**
    * Container components are permitted to have just enough styles
@@ -36,6 +37,8 @@ import { Book } from '../../modules/books/models/book';
 })
 export class CollectionPageComponent implements OnInit {
   books$: Observable<Book[]>;
+  lat: number = 51.678418;
+  lng: number = 7.809007;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 

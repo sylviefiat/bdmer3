@@ -9,6 +9,8 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+
 import { of } from 'rxjs/observable/of';
 import { PouchDBService } from "../../core/services/pouchdb.service";
 
@@ -28,37 +30,30 @@ export class CollectionEffects {
    * effect easier to test.
    */
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => {    
-    return this.database.getChanges();
+  openDB$: Observable<any> = defer(() => { 
+    return this.database.initDB();
   });
 
   @Effect()
   loadCollection$: Observable<Action> = this.actions$
     .ofType(CollectionAction.ActionTypes.LOAD)
-    .switchMap(() =>
-      //this.db
-      //  .query('document-store')
-      //  .toArray()      
+    .switchMap(() =>     
       this.database
         .getAll()
         .map((books: Book[]) => new CollectionAction.LoadSuccessAction(books))
         .catch(error => of(new CollectionAction.LoadFailAction(error)))
-
+    
     );
 
   @Effect()
   addBookToCollection$: Observable<Action> = this.actions$
     .ofType(CollectionAction.ActionTypes.ADD_BOOK)
     .map((action: CollectionAction.AddBookAction) => action.payload)
-    .mergeMap(book =>
-      this.database
-        .add(book)
+    .mergeMap(book => 
+      fromPromise(this.database
+        .add(book))
         .map(() => new CollectionAction.AddBookSuccessAction(book))
         .catch(() => of(new CollectionAction.AddBookFailAction(book)))
-      /*this.db
-        .insert('books', [book])
-        .map(() => new CollectionAction.AddBookSuccessAction(book))
-        .catch(() => of(new CollectionAction.AddBookFailAction(book)))*/
     );
 
   @Effect()
@@ -66,10 +61,8 @@ export class CollectionEffects {
     .ofType(CollectionAction.ActionTypes.REMOVE_BOOK)
     .map((action: CollectionAction.RemoveBookAction) => action.payload)
     .mergeMap(book =>
-      //this.db
-        //.executeWrite('books', 'delete', [book.id])
-      this.database
-        .delete(book)
+      fromPromise(this.database
+        .delete(book))
         .map(() => new CollectionAction.RemoveBookSuccessAction(book))
         .catch(() => of(new CollectionAction.RemoveBookFailAction(book)))
     );
