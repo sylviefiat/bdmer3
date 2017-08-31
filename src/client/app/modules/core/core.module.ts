@@ -9,6 +9,7 @@ import { DBModule } from '@ngrx/db';
 // module
 import { SharedModule } from '../shared/index';
 import { BooksModule } from '../books/index';
+import { AuthModule } from '../auth/index';
 import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
@@ -27,7 +28,8 @@ interface ICoreModuleOptions {
   imports: [
     SharedModule,
     BooksModule,
-    DBModule.provideDB(schema),
+    AuthModule,
+    DBModule.provideDB(schema),    
   ],
   declarations: [
     ...CORE_DIRECTIVES

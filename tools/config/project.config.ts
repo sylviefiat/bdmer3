@@ -46,6 +46,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
       name: 'angular2-fontawesome',
       path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
     },{
+      name: '@agm/core',
+      packageMeta: {
+          main: 'core.umd.js',
+          defaultExtension: 'js'
+        }
+    },{
       name: 'pouchdb',
       path: 'node_modules/pouchdb/dist/pouchdb.js'
     },{

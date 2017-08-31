@@ -41,6 +41,7 @@ import { combineReducers } from '@ngrx/store';
 import * as fromMultilingual from '../i18n/index';
 import * as fromSample from '../sample/index';
 import * as fromBooks from '../books/index';
+import * as fromAuth from '../auth/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -52,6 +53,7 @@ export interface IAppState {
   book: fromBooks.IBookState;
   collection: fromBooks.ICollectionState;
   search: fromBooks.ISearchState;
+  auth: fromAuth.IAuthState;
 }
 
 /**
@@ -66,7 +68,8 @@ const reducers = {
   sample: fromSample.reducer,
   book: fromBooks.bookReducer,
   collection: fromBooks.collectionReducer,
-  search: fromBooks.searchReducer
+  search: fromBooks.searchReducer,
+  auth: fromAuth.authReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -98,6 +101,9 @@ export function getCollectionState(state$: Observable<IAppState>): Observable<fr
 export function getSearchState(state$: Observable<IAppState>): Observable<fromBooks.ISearchState> {
   return state$.select(s => s.search);
 }
+export function getAuthState(state$: Observable<IAppState>): Observable<fromAuth.IAuthState> {
+  return state$.select(s => s.auth);
+}
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
 }
@@ -126,3 +132,7 @@ export const getSearchBookIds: any = compose(fromBooks.getSearchBookIds, getSear
 export const getSearchQuery: any = compose(fromBooks.getSearchQuery, getSearchState);
 export const getSearchLoading: any = compose(fromBooks.getSearchLoading, getSearchState);
 export const getSearchResults: any = compose(fromBooks.getSearchResults, getAppState);
+
+export const getLoggedIn: any = compose(fromAuth.getLoggedIn, getAuthState);
+export const getLoginPagePending: any = compose(fromAuth.getPending, getAuthState);
+export const getLoginPageError: any = compose(fromAuth.getError, getAuthState);
