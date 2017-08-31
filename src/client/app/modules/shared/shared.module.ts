@@ -1,10 +1,11 @@
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MdCardModule, MdInputModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AgmCoreModule } from '@agm/core';
 
 // modules
 import { MultilingualModule } from '../i18n/index';
@@ -15,11 +16,12 @@ const SHARED_MODULES: any[] = [
   CommonModule,
   HttpModule,
   FormsModule,
+  ReactiveFormsModule,
   RouterModule,
   MultilingualModule,
   BrowserAnimationsModule,
   MdCardModule,
-  MdInputModule
+  MdInputModule,  
 ];
 
 /**
@@ -31,7 +33,10 @@ const SHARED_MODULES: any[] = [
 
 @NgModule({
   imports: [
-    ...SHARED_MODULES
+    ...SHARED_MODULES,  
+    AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g'
+    }),
   ],
   declarations: [
     ...SHARED_COMPONENTS
@@ -43,6 +48,7 @@ const SHARED_MODULES: any[] = [
   exports: [
     ...SHARED_MODULES,
     ...SHARED_COMPONENTS,
+    AgmCoreModule
   ]
 })
 export class SharedModule {}
