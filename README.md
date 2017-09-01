@@ -1,4 +1,7 @@
-#### ENTROPIE TEMPLATE APP
+#### BDMER3
+
+BDMER version 3 - Evaluation des stocks d'holothurie et autre invertébrés
+[UMR ENTROPIE](umr-entropie.ird.nc), IRD NOUVELLE CALEDONIE
 
 
 This is an **advanced** seed project for Angular apps based on [Minko Gechev's](https://github.com/mgechev) [angular-seed](https://github.com/mgechev/angular-seed) and [Nathan Walker's(https://github.com/NathanWalker)] [angular-seed-advanced](https://github.com/NathanWalker/angular-seed-advanced) that expands on all of its great features to include core support for:
