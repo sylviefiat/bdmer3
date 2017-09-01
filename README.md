@@ -1,12 +1,7 @@
-![Angular Seed Advanced](https://cdn.filestackcontent.com/LSWpUEEGQiOdCpv9t6Ri?v=0)
+#### ENTROPIE TEMPLATE APP
 
-[![Angular Style Guide](https://mgechev.github.io/angular2-style-guide/images/badge.svg)](https://angular.io/styleguide)
-[![Build Status](https://travis-ci.org/NathanWalker/angular-seed-advanced.svg?branch=master)](https://travis-ci.org/Nate.hanWalker/angular-seed-advanced)
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
-[![Dependency Status](https://david-dm.org/NathanWalker/angular-seed-advanced.svg)](https://david-dm.org/NathanWalker/angular-seed-advanced)
-[![devDependency Status](https://david-dm.org/NathanWalker/angular-seed-advanced/dev-status.svg)](https://david-dm.org/NathanWalker/angular-seed-advanced#info=devDependencies)
 
-This is an **advanced** seed project for Angular apps based on [Minko Gechev's](https://github.com/mgechev) [angular-seed](https://github.com/mgechev/angular-seed) that expands on all of its great features to include core support for:
+This is an **advanced** seed project for Angular apps based on [Minko Gechev's](https://github.com/mgechev) [angular-seed](https://github.com/mgechev/angular-seed) and [Nathan Walker's(https://github.com/NathanWalker)] [angular-seed-advanced](https://github.com/NathanWalker/angular-seed-advanced) that expands on all of its great features to include core support for:
 
 #### Integration with:
 - [ngrx/store](https://github.com/ngrx/store) RxJS powered state management, inspired by **Redux**
@@ -30,32 +25,9 @@ This is an **advanced** seed project for Angular apps based on [Minko Gechev's](
 | :---: |
 | *Programming Nirvana.* Mac and Windows desktop both running the same code. |
 
-# Table of Contents
-
-- [Prerequisites](#prerequisites)
-- [How to start](#how-to-start)
-- [How to start with AoT](#how-to-start-with-aot)
-- [Mobile app](#mobile-app)
-- [Desktop app](#desktop-app)
-- [Running tests](#running-tests)
-- [Web configuration options](#web-configuration-options)
-- [Code organization overview](#code-organization-overview)
-- [How-tos](#how-tos)
-- [General best practice guide to sharing code](#general-best-practice-guide-to-sharing-code)
-- [Integration guides](https://github.com/NathanWalker/angular-seed-advanced/wiki)
-- [How best to use for your project](#how-best-to-use-for-your-project)
-- [Dockerization](#dockerization)
-  + [How to build and start the dockerized version of the application](#how-to-build-and-start-the-dockerized-version-of-the-application)
-  + [Development build and deployment](#development-build-and-deployment)
-  + [Production build and deployment](#production-build-and-deployment)
-- [Contributing](#contributing)
-- [License](#license)
-  
-**Advice**: If your project is intended to target a single platform (i.e, web only), then [angular-seed](https://github.com/mgechev/angular-seed) is likely more than suitable for your needs. However if your project goals are to target multiple platforms (web, native mobile and native desktop), with powerful out of the box library support and highly configurable/flexible testing options, then you might want to keep reading.
-
-**Too Much?!**: Don't worry it's ok, I completely understand. There is a simplified version of this seed which still allows web + mobile + desktop **without** the extra libraries and features like ngrx or analytics. Give this a shot: https://github.com/jlooper/angular-starter
-
-It's built with a lot of the same structure found here so things work the same but is definitely easier to start with if just getting into multi-platform development.
+#### Ajouts pour Entropie:
+- [PouchDB](https://pouchdb.com/) database designed to run well within the browser, thats syncs with online [CouchDB](http://couchdb.apache.org/)
+- [AGM - Angular Google Maps](https://github.com/SebastianM/angular-google-maps) angular 2 component for google map api
 
 ### Prerequisites
 
