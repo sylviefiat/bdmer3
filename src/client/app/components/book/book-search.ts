@@ -51,4 +51,5 @@ export class BookSearchComponent {
   @Input() query = '';
   @Input() searching = false;
   @Output() search = new EventEmitter<string>();
+  
 }

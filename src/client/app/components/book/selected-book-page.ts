@@ -25,6 +25,7 @@ export class SelectedBookPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
+    console.log("initbook");
     this.book$ = this.store.let(getSelectedBook);
     this.isSelectedBookInCollection$ = this.store.let(
       isSelectedBookInCollection

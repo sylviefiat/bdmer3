@@ -38,13 +38,11 @@ export class PouchDBService {
     }
 
     public delete(book: Book) : Promise<any> {
-        console.log(book);
         return this.db.remove(book);
 
     } 
 
     public sync(remote: string) : Promise<any> {
-        console.log(remote);
         let remoteDatabase = new PouchDB(remote);
         return this.db.sync(remoteDatabase, {
             live: true,
@@ -53,10 +51,10 @@ export class PouchDBService {
             console.log(change);
         }).on('paused', function (info) {
           // replication was paused, usually because of a lost connection
-          console.log(info);
+          console.log("pouchdb remote connexion paused");
         }).on('active', function (info) {
           // replication was resumed
-          console.log(info);
+          console.log("pouchdb remote connexion active");
         }).on('error', error => {
             console.error(JSON.stringify(error));
         });

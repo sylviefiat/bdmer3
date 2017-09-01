@@ -7,8 +7,6 @@ import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { IAppState, getNames , getSearchQuery, getSearchResults, getSearchLoading } from '../../modules/ngrx/index';
 import { NameList } from '../../modules/sample/index';
-import { Book } from '../../modules/books/index';
-import { BookAction } from '../../modules/books/actions/index';
 
 
 @Component({
@@ -47,9 +45,5 @@ export class HomeComponent implements OnInit {
         name: 'slideTop',
       }
     });
-  }
-
-  search(query: string) {
-    this.store.dispatch(new BookAction.SearchAction(query));
   }
 }

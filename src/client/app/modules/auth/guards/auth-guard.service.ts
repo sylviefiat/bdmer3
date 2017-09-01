@@ -11,8 +11,9 @@ import { IAppState, getLoggedIn } from '../../ngrx/index';
 export class AuthGuard implements CanActivate {
   constructor(private store: Store<IAppState>) {}
 
-  canActivate(): Observable<boolean> {
+  canActivate(): Observable<boolean> {    
     return this.store.select(getLoggedIn).take(1).map(authed => {
+      console.log(authed);
       if (!authed) {
         this.store.dispatch(new AuthAction.LoginRedirect());
         return false;

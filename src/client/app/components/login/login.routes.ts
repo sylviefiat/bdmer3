@@ -1,8 +1,8 @@
-import { LoginComponent } from './login.component';
+import { LoginPageComponent } from './login-page.component';
 
 export const LoginRoutes: Array<any> = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginPageComponent
   }
 ];

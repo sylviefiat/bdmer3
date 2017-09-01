@@ -5,14 +5,14 @@ import { User, Authenticate } from '../models/user';
 
 @Injectable()
 export class AuthService {
-  constructor() {}
+  constructor() {
+  }
 
   login({ username, password }: Authenticate) {
     /**
      * Simulate a failed login to display the error
      * message for the login form.
      */
-    console.log("you");
     if (username !== 'test') {
       return _throw('Invalid username or password');
     }

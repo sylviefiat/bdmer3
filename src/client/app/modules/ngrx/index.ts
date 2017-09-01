@@ -54,6 +54,7 @@ export interface IAppState {
   collection: fromBooks.ICollectionState;
   search: fromBooks.ISearchState;
   auth: fromAuth.IAuthState;
+  loginpage: fromAuth.ILoginPageState;
 }
 
 /**
@@ -69,7 +70,8 @@ const reducers = {
   book: fromBooks.bookReducer,
   collection: fromBooks.collectionReducer,
   search: fromBooks.searchReducer,
-  auth: fromAuth.authReducer
+  auth: fromAuth.authReducer,
+  loginpage: fromAuth.loginPageReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -104,6 +106,9 @@ export function getSearchState(state$: Observable<IAppState>): Observable<fromBo
 export function getAuthState(state$: Observable<IAppState>): Observable<fromAuth.IAuthState> {
   return state$.select(s => s.auth);
 }
+export function getLoginPageState(state$: Observable<IAppState>): Observable<fromAuth.ILoginPageState> {
+  return state$.select(s => s.loginpage);
+}
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
 }
@@ -134,5 +139,6 @@ export const getSearchLoading: any = compose(fromBooks.getSearchLoading, getSear
 export const getSearchResults: any = compose(fromBooks.getSearchResults, getAppState);
 
 export const getLoggedIn: any = compose(fromAuth.getLoggedIn, getAuthState);
-export const getLoginPagePending: any = compose(fromAuth.getPending, getAuthState);
-export const getLoginPageError: any = compose(fromAuth.getError, getAuthState);
+export const getUser: any = compose(fromAuth.getUser, getAuthState);
+export const getLoginPagePending: any = compose(fromAuth.getPending, getLoginPageState);
+export const getLoginPageError: any = compose(fromAuth.getError, getLoginPageState);

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { Authenticate } from '../../modules/auth/models/user';
 import { IAppState, getLoginPagePending, getLoginPageError } from '../../modules/ngrx/index';
@@ -14,17 +16,19 @@ import { AuthAction } from '../../modules/auth/actions/index';
       [errorMessage]="error$ | async">
     </bc-login-form>
   `,
-  styles: [],
 })
 export class LoginPageComponent implements OnInit {
-  pending$ = this.store.select(getLoginPagePending);
-  error$ = this.store.select(getLoginPageError);
+  pending$: Observable<boolean>;
+  error$: Observable<string | null>;
 
-  constructor(private store: Store<IAppState>) {}
+  constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pending$ = this.store.let(getLoginPagePending);
+    this.error$ = this.store.let(getLoginPageError);    
+  }
 
-  onSubmit($event: Authenticate) {
-    this.store.dispatch(new AuthAction.Login($event));
+  onSubmit(auth: Authenticate) {
+    this.store.dispatch(new AuthAction.Login(auth));
   }
 }

@@ -2,11 +2,11 @@ import { ILoginPageState, loginPageInitialState } from '../states/index';
 
 import { AuthAction } from '../actions/index';
 
-export function reducer(state = loginPageInitialState, action: AuthAction.Actions): ILoginPageState {
-  console.log(action.type);
+export function loginPageReducer(state = loginPageInitialState, action: AuthAction.Actions): ILoginPageState {
+  //console.log(action.type);
   switch (action.type) {
     case AuthAction.ActionTypes.LOGIN: {
-
+      console.log(action.type);
       return {
         ...state,
         error: null,

@@ -21,7 +21,7 @@ import { Book } from './../../modules/books/models/book';
         Remove Book from Collection
         </button>
 
-        <button md-raised-button color="primary" *ngIf="!inCollection" (click)="add.emit(book)">
+        <button md-raised-button color="primary" *ngIf="!inCollection" (click)="addit()">
         Add Book to Collection
         </button>
       </md-card-actions>
@@ -72,6 +72,12 @@ export class BookDetailComponent {
   @Input() inCollection: boolean;
   @Output() add = new EventEmitter<Book>();
   @Output() remove = new EventEmitter<Book>();
+
+  addit() {
+    //add.emit(book)
+    console.log(this.add.emit(this.book));
+    this.add.emit(this.book);
+  }
 
   /**
    * Tip: Utilize getters to keep templates clean

@@ -28,7 +28,7 @@ interface ICoreModuleOptions {
   imports: [
     SharedModule,
     BooksModule,
-    AuthModule,
+    AuthModule.forRoot(),
     DBModule.provideDB(schema),    
   ],
   declarations: [

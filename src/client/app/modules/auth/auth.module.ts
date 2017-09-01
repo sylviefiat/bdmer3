@@ -9,7 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
-import { AuthService } from './services/auth.service';
+import { AUTH_PROVIDERS } from './services/index';
 import { AuthGuard } from './guards/auth-guard.service';
 import { AuthEffects } from './effects/auth.effects';
 
@@ -37,7 +37,10 @@ export class AuthModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: RootAuthModule,
-      providers: [AuthService, AuthGuard],
+      providers: [
+        ...AUTH_PROVIDERS, 
+        AuthGuard
+      ],
     };
   }
 }
