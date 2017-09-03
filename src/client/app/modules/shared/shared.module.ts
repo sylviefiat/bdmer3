@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MdCardModule, MdInputModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 import { AgmCoreModule } from '@agm/core';
 
 // modules
@@ -21,7 +22,8 @@ const SHARED_MODULES: any[] = [
   MultilingualModule,
   BrowserAnimationsModule,
   MdCardModule,
-  MdInputModule,  
+  MdInputModule, 
+  Angular2FontawesomeModule 
 ];
 
 /**

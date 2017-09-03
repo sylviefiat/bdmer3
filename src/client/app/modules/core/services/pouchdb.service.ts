@@ -10,13 +10,12 @@ import { Book } from '../../books/models/book';
 export class PouchDBService {
 
     private db: any;
-    private isImplemented: boolean = false;
 
     public constructor() { }
 
-    initDB() : Promise<any> {
-        this.db = new PouchDB('books_app');
-        return this.sync("http://entropie-dev:5984/books_app");
+    initDB(dbname: string, remote : string) : Promise<any> {
+        this.db = new PouchDB(dbname);
+        return this.sync(remote+dbname);
     }
 
     public getAll() : Observable<any> {        

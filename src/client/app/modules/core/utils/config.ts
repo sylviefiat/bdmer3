@@ -63,11 +63,8 @@ export class Config {
   // supported languages
   public static GET_SUPPORTED_LANGUAGES() {
     return [
-      { code: 'en', title: 'English' },
-      { code: 'es', title: 'Spanish' },
-      { code: 'fr', title: 'French' },
-      { code: 'ru', title: 'Russian' },
-      { code: 'bg', title: 'Bulgarian' }
+      { code: 'en', title: 'ENGLISH' },
+      { code: 'fr', title: 'FRENCH' }
     ];
   }
 
