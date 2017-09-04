@@ -2,7 +2,6 @@
 import { Observable } from 'rxjs/Observable';
 // import { combineLatest } from 'rxjs/observable/combineLatest';
 import { ActionReducer } from '@ngrx/store';
-import { createSelector } from 'reselect';
 import '@ngrx/core/add/operator/select';
 
 /**

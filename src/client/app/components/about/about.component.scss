@@ -18,3 +18,12 @@
   color: #999;
   font-size: 18;
 }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+md-card {
+      max-width: 500px;
+      margin:10px;
+}

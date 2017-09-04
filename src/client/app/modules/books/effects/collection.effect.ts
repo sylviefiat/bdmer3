@@ -31,7 +31,7 @@ export class CollectionEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => { 
-    return this.database.initDB('books_app','http://127.0.0.1:5984/');
+    return this.database.initDB('books_app','http://entropie-dev:5984/');
   });
 
   @Effect()

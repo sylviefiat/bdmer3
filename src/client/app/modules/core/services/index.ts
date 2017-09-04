@@ -16,7 +16,7 @@ export const CORE_PROVIDERS: any[] = [
   LogService,
   AppService,
   RouterExtensions,
-  GoogleBooksService
+  GoogleBooksService,
 ];
 
 export * from './console.service';
@@ -27,3 +27,4 @@ export * from './app.service';
 export * from './storage.service';
 export * from './pouchdb.service';
 export * from './google-books';
+

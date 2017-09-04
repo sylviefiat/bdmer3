@@ -18,11 +18,13 @@ import { Config } from '../modules/core/utils/index';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  
   constructor(
     public analytics: AnalyticsService,
     public log: LogService,
-    private appService: AppService
+    private appService: AppService,
   ) {
     log.debug(`Config env: ${Config.ENVIRONMENT().ENV}`);
   }
+
 }
