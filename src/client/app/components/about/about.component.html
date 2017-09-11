@@ -1,11 +1,11 @@
 <div>
   <h2>{{'ABOUT_TITLE' | translate}}</h2>
-  <h3>{{'ABOUT_FEAT' | translate}}</h3>
   <div class="container">
   <md-card>
-    <md-card-header>
+    <md-card-title-group>
       <md-card-title>{{'ABOUT_TITLE_FEAT1' | translate}}</md-card-title>
-    </md-card-header>
+      <fa [name]="'database'" [border]=true [size]=3></fa>
+    </md-card-title-group>
     <md-card-content>
       <p>
         {{'ABOUT_FEAT1' | translate}}
@@ -13,9 +13,10 @@
     </md-card-content>
   </md-card>
   <md-card>
-    <md-card-header>
-      <md-card-title>{{'ABOUT_TITLE_FEAT2' | translate}}</md-card-title>
-    </md-card-header>
+    <md-card-title-group>
+      <md-card-title>{{'ABOUT_TITLE_FEAT2' | translate}}</md-card-title>  
+      <fa [name]="'cogs'" [border]=true [size]=3></fa> 
+    </md-card-title-group>
     <md-card-content>
       <p>
         {{'ABOUT_FEAT2' | translate}}
@@ -23,9 +24,10 @@
     </md-card-content>
   </md-card>
   <md-card>
-    <md-card-header>
+    <md-card-title-group>
       <md-card-title>{{'ABOUT_TITLE_FEAT3' | translate}}</md-card-title>
-    </md-card-header>
+      <fa [name]="'file-text-o'" [border]=true [size]=3></fa>
+    </md-card-title-group>
     <md-card-content>
       <p>
         {{'ABOUT_FEAT3' | translate}}
@@ -33,8 +35,19 @@
     </md-card-content>
   </md-card>
   </div>
-  <div>
-    <h3>{{'ABOUT_DOWNLOAD' | translate}}</h3>
-    <a md-list-item class="link" href="{{getPdfUrl()}}" download><fa [name]="'file-pdf-o'" [size]=4 [border]=false></fa> {{getPdf()}}</a>
+  <div class="container">
+  <a md-list-item class="link" href="{{getPdfUrl()}}" download>
+  <md-card class="download">
+    <md-card-title-group>
+      <md-card-title>{{'ABOUT_DOWNLOAD' | translate}}</md-card-title>
+      <fa [name]="'file-pdf-o'" [border]=true [size]=3></fa>
+    </md-card-title-group>
+    <md-card-content>
+      <p>
+        {{getPdf()}}
+      </p>
+    </md-card-content>
+  </md-card>
+  </a>
   </div>
 </div>

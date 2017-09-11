@@ -27,3 +27,15 @@ md-card {
       max-width: 500px;
       margin:10px;
 }
+
+a md-card.download {
+  background-color:lightgrey;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover md-card.download {
+  background-color:grey;
+}
