@@ -9,10 +9,12 @@ import { IAppState, getLoggedIn } from '../../ngrx/index';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  
   constructor(private store: Store<IAppState>) {}
 
   canActivate(): Observable<boolean> {    
-    return this.store.select(getLoggedIn).take(1).map(authed => {
+
+    return this.store.let(getLoggedIn).take(1).map(authed => {
       console.log(authed);
       if (!authed) {
         this.store.dispatch(new AuthAction.LoginRedirect());

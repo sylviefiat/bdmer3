@@ -14,7 +14,10 @@ export class PouchDBService {
     public constructor() { }
 
     initDB(dbname: string, remote : string) : Promise<any> {
-        this.db = new PouchDB(dbname);
+        var pouchOpts = {
+          skip_setup: true
+        };
+        this.db = new PouchDB(dbname, pouchOpts);
         return this.sync(remote+dbname);
     }
 
