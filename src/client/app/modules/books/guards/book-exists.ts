@@ -36,7 +36,6 @@ export class BookExistsGuard implements CanActivate {
    * has finished.
    */
   waitForCollectionToLoad(): Observable<boolean> {
-    console.log("waitioo");
     return this.collectionStore
       .let(getCollectionLoaded)
       .filter(loaded => loaded)

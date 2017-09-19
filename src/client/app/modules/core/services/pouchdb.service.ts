@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import * as PouchDB from "pouchdb";
+import * as PouchDBAuth from "pouchdb-authentication";
+
 import { Book } from '../../books/models/book';
 
 
@@ -11,14 +13,22 @@ export class PouchDBService {
 
     private db: any;
 
-    public constructor() { }
+    public constructor() { 
+        PouchDB.plugin(PouchDBAuth);
+    }
 
-    initDB(dbname: string, remote : string) : Promise<any> {
+    initDB(dbname: string, remote : string, useLocal: boolean = true) : Promise<any> {
         var pouchOpts = {
           skip_setup: true
         };
-        this.db = new PouchDB(dbname, pouchOpts);
-        return this.sync(remote+dbname);
+        console.log(useLocal);
+        if(useLocal){
+            this.db = new PouchDB(dbname, pouchOpts);
+            return this.sync(remote+dbname);
+        } else {
+
+            return this.db= new PouchDB(remote+dbname, pouchOpts);
+        }
     }
 
     public getAll() : Observable<any> {        
@@ -44,19 +54,25 @@ export class PouchDBService {
 
     } 
 
+    public login() : Observable<any> {
+        return this.db.login('admin', 'admin', function (err, response) {
+          if (err) {
+            if (err.name === 'unauthorized') {
+              console.log('unauthorized');
+              return null;
+            } else {
+              console.log(err);
+              return null;
+            }
+          }
+        });
+    }
+
     public sync(remote: string) : Promise<any> {
         let remoteDatabase = new PouchDB(remote);
         return this.db.sync(remoteDatabase, {
             live: true,
             retry: true
-        }).on('change', change => {
-            console.log(change);
-        }).on('paused', function (info) {
-          // replication was paused, usually because of a lost connection
-          console.log("pouchdb remote connexion paused");
-        }).on('active', function (info) {
-          // replication was resumed
-          console.log("pouchdb remote connexion active");
         }).on('error', error => {
             console.error(JSON.stringify(error));
         });

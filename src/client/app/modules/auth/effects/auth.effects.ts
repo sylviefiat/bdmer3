@@ -33,6 +33,26 @@ export class AuthEffects {
       this.router.navigate(['/login']);
     });
 
+  @Effect() signup = this.actions$
+    .ofType(AuthAction.ActionTypes.SIGNUP)
+    .map((action: AuthAction.Signup) => action.payload)
+    .exhaustMap(auth =>
+      this.authService
+        .signup(auth)
+        .map(user => new AuthAction.SignupSuccess({ user }))
+        .catch(error => of(new AuthAction.SignupFailure(error)))
+    );
+
+  @Effect({ dispatch: false }) signupSuccess$ = this.actions$
+    .ofType(AuthAction.ActionTypes.SIGNUP_SUCCESS)
+    .do(() => this.router.navigate(['/']));
+
+  @Effect({ dispatch: false }) signupRedirect$ = this.actions$
+    .ofType(AuthAction.ActionTypes.SIGNUP_REDIRECT, AuthAction.ActionTypes.LOGOUT)
+    .do(authed => {
+      this.router.navigate(['/login']);
+    });
+
   constructor(
     private actions$: Actions,
     private authService: AuthService,

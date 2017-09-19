@@ -2,53 +2,60 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angular/http';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Observable } from 'rxjs/Observable';
 import { User, Authenticate } from '../models/user';
+import * as PouchDB from "pouchdb";
+import * as PouchDBAuth from "pouchdb-authentication";
 
 @Injectable()
 export class AuthService {
-  public token: string;
-  constructor(private http: Http) {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = currentUser && currentUser.token;
-    //this.headers = new Headers();
-    //this.headers.set('Content-Type', 'application/json');
+  public currentUser: User;
+  private db: any;
+
+  constructor(private http: Http) {   
+    var pouchOpts = {
+      skipSetup: true
+    };
+    this.db = new PouchDB('http://entropie-dev:5984/books_app', pouchOpts);    
   }
 
-  login({ username, password }: Authenticate) {    
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-    /*return this.http
-      //.get('http://entropie-dev.ird.nc:5984/_session?basic=true')
-      .post('http://entropie-dev.ird.nc:5984/_session', JSON.stringify({ name: username, password: password }), options)
-        .subscribe(data => {console.log(data)}, error => {
-          console.log(error.json());
-      });*/
-    return this.http.post('http://entropie-dev.ird.nc:5984/_session', JSON.stringify({ name: username, password: password }), options)
-            .map((response: Response) => {
-              console.log(response);
-                // login successful if there's a jwt token in the response
-                let token = response.json() && response.json().ok;
-                if (token) {
-                    // set token property
-                    this.token = token;
- 
-                    // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
- 
-                    // return true to indicate successful login
-                    return of({ name: 'User' });
-                } else {
-                  console.log("FAILED LOGIN");
-                    // return false to indicate failed login
-                    return null;
-                }
-            });
-
+  login({ username, password }: Authenticate): Observable<User> {  
+    return fromPromise(this.db.login(username, password, (err, response) => {
+      if (err) {
+        if (err.name === 'unauthorized') {
+          console.log(err);
+          return of(_throw('Invalid username or password'));
+        } else {
+          console.log(err);
+          return of(_throw(err.reason));
+        }
+      }
+      return of({ name: username, country: response.roles[0]});
+    }));
   }
 
-  logout() {
-    this.token = null;
-    localStorage.removeItem('currentUser');
-    return of(true);
+  logout(): Observable<any> {
+    return fromPromise(this.db.logout((err, response) => {
+      if (err) {
+        return of(_throw(err.reason));
+      }
+      return of(response.ok);
+    }));
+  }
+
+  signup({ username, password }: Authenticate): Observable<any> {
+    return fromPromise(this.db.signup(username, password, (err, response) => {
+      if (err) {
+        if (err.name === 'conflict') {
+          return of(_throw('Invalid username or password'));
+        } else if (err.name === 'forbidden') {
+          return of(_throw('User name already exists'));
+        } else {
+          return of(_throw(err.reason));
+        }
+      }
+      return of(response.ok);
+    }));
   }
 }

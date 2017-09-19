@@ -13,6 +13,9 @@ import { SelectedBookPageComponent } from './book/selected-book-page';
 import { CollectionPageComponent } from './book/collection-page';
 import { LoginComponent } from './login/login.component';
 import { LoginPageComponent } from './login/login-page.component';
+import { SignupComponent } from './login/signup.component';
+import { SignupPageComponent } from './login/signup-page.component';
+import { LogoutComponent } from './login/logout.component';
 
 export const APP_COMPONENTS: any[] = [
   AppComponent,
@@ -29,7 +32,10 @@ export const APP_COMPONENTS: any[] = [
   SelectedBookPageComponent,
   CollectionPageComponent,
   LoginComponent,
-  LoginPageComponent
+  LoginPageComponent,
+  SignupPageComponent,
+  SignupComponent,
+  LogoutComponent
 ];
 
 export * from './app.component';
@@ -47,3 +53,6 @@ export * from './book/collection-page';
 export * from './map/map.component';
 export * from './login/login.component';
 export * from './login/login-page.component';
+export * from './login/logout.component';
+export * from './login/signup-page.component';
+export * from './login/signup.component';

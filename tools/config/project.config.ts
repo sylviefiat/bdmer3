@@ -55,6 +55,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
       name: 'pouchdb',
       path: 'node_modules/pouchdb/dist/pouchdb.js'
     },{
+      name: 'pouchdb-authentication',
+      path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
+    },{
       name: '@angular/material',
       packageMeta: {
           main: 'bundles/material.umd.js',
