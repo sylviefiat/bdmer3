@@ -22,7 +22,7 @@ import { AuthEffects } from './effects/auth.effects';
     MaterialModule,
     RouterModule,
     SharedModule,
-    MultilingualModule,
+    MultilingualModule
   ],
   declarations: [],
   schemas: [

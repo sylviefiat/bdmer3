@@ -5,7 +5,7 @@ import { CanActivate } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { AuthAction } from '../actions/index';
-import { IAppState, getLoggedIn } from '../../ngrx/index';
+import { IAppState, getisLoggedIn } from '../../ngrx/index';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {    
 
-    return this.store.let(getLoggedIn).take(1).map(authed => {
+    return this.store.let(getisLoggedIn).take(1).map(authed => {
       console.log(authed);
       if (!authed) {
         this.store.dispatch(new AuthAction.LoginRedirect());

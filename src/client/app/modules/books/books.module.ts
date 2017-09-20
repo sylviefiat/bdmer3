@@ -20,7 +20,7 @@ import { BookExistsGuard } from './guards/book-exists';
     SharedModule,
     MultilingualModule,
     EffectsModule.run(BookEffects),
-    EffectsModule.run(CollectionEffects),
+    EffectsModule.run(CollectionEffects)
   ],
   declarations: [],
   providers: [BookExistsGuard],

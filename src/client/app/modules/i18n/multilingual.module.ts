@@ -31,7 +31,7 @@ export function translateLoaderFactory(http: Http) {
       provide: TranslateLoader,
       deps: [Http],
       useFactory: (translateLoaderFactory)
-    }]),
+    }])
   ],
   declarations: [
     ...MULTILANG_COMPONENTS

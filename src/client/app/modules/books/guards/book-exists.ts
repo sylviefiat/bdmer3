@@ -13,7 +13,7 @@ import { of } from 'rxjs/observable/of';
 
 import { GoogleBooksService } from '../../core/services/google-books';
 import { BookAction } from '../actions/index';
-import { IAppState, getCollectionLoaded, getBookEntities, getSearchLoading } from '../../ngrx/index';
+import { IAppState, getCollectionisLoaded, getBookEntities } from '../../ngrx/index';
 import { IBookState,ICollectionState  } from '../states/index';
 
 /**
@@ -37,7 +37,7 @@ export class BookExistsGuard implements CanActivate {
    */
   waitForCollectionToLoad(): Observable<boolean> {
     return this.collectionStore
-      .let(getCollectionLoaded)
+      .let(getCollectionisLoaded)
       .filter(loaded => loaded)
       .take(1);
   }

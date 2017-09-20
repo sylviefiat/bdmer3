@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { IAppState, getSearchQuery, getSearchResults, getSearchLoading } from '../../modules/ngrx/index';
+import { IAppState, getQuerySearch, getResultsSearch, getLoadingSearch } from '../../modules/ngrx/index';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { BookAction } from '../../modules/books/actions/index';
@@ -26,13 +26,12 @@ export class FindBookPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
-    this.searchQuery$ = this.store.let(getSearchQuery).take(1);
-    this.books$ = this.store.let(getSearchResults);
-    this.loading$ = this.store.let(getSearchLoading);
+    this.searchQuery$ = this.store.let(getQuerySearch).take(1);
+    this.books$ = this.store.let(getResultsSearch);
+    this.loading$ = this.store.let(getLoadingSearch);
   }
 
   search(query: string) {
-    //console.log(query);
     this.store.dispatch(new BookAction.SearchAction(query));
   }
 }

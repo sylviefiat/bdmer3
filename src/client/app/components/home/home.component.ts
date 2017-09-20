@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getNames , getSearchQuery, getSearchResults, getSearchLoading } from '../../modules/ngrx/index';
+import { IAppState, getListNames  } from '../../modules/ngrx/index';
 import { NameList } from '../../modules/sample/index';
 
 
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.newName='';
-    this.names$ = this.store.let(getNames);
+    this.names$ = this.store.let(getListNames);
   }
 
   /*

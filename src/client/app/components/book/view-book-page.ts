@@ -4,7 +4,7 @@ import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
-import { IAppState, getSearchQuery, getSearchResults, getSearchLoading } from '../../modules/ngrx/index';
+import { IAppState } from '../../modules/ngrx/index';
 
 import { BookAction } from '../../modules/books/actions/index';
 

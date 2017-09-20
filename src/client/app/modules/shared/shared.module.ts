@@ -1,10 +1,11 @@
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MdCardModule, MdInputModule, MdListModule } from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 import { AgmCoreModule } from '@agm/core';
 
@@ -15,6 +16,8 @@ import { SHARED_COMPONENTS } from './components/index';
 
 const SHARED_MODULES: any[] = [
   CommonModule,
+  RouterModule,
+  BrowserModule,
   HttpModule,
   FormsModule,
   ReactiveFormsModule,

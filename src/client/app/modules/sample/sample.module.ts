@@ -17,7 +17,7 @@ import { MultilingualModule } from '../i18n/multilingual.module';
 @NgModule({
   imports: [
     SharedModule,
-    MultilingualModule,
+    MultilingualModule
   ],
   providers: [
     ...SAMPLE_PROVIDERS

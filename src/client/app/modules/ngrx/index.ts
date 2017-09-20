@@ -37,23 +37,25 @@ import { combineReducers } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-import * as fromMultilingual from '../i18n/index';
-import * as fromSample from '../sample/index';
-import * as fromBooks from '../books/index';
-import * as fromAuth from '../auth/index';
+import { IMultilingualState, multilingualReducer, getLang } from '../i18n/index';
+import { ISampleState, reducer, getNames} from '../sample/index';
+import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookId, getSelectedBook, getAll } from '../books/index';
+import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
+import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
+import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser} from '../auth/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
  * our top level state interface is just a map of keys to inner state types.
  */
 export interface IAppState {
-  i18n: fromMultilingual.IMultilingualState;
-  sample: fromSample.ISampleState;
-  book: fromBooks.IBookState;
-  collection: fromBooks.ICollectionState;
-  search: fromBooks.ISearchState;
-  auth: fromAuth.IAuthState;
-  loginpage: fromAuth.ILoginPageState;
+  i18n: IMultilingualState;
+  sample: ISampleState;
+  book: IBookState;
+  collection: ICollectionState;
+  search: ISearchState;
+  auth: IAuthState;
+  loginpage: ILoginPageState;
 }
 
 /**
@@ -64,13 +66,13 @@ export interface IAppState {
  * the result from right to left.
  */
 const reducers = {
-  i18n: fromMultilingual.reducer,
-  sample: fromSample.reducer,
-  book: fromBooks.bookReducer,
-  collection: fromBooks.collectionReducer,
-  search: fromBooks.searchReducer,
-  auth: fromAuth.authReducer,
-  loginpage: fromAuth.loginPageReducer
+  i18n: multilingualReducer,
+  sample: reducer,
+  book: bookReducer,
+  collection: collectionReducer,
+  search: searchReducer,
+  auth: authReducer,
+  loginpage: loginPageReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -87,57 +89,59 @@ export function AppReducer(state: any, action: any) {
   }
 }
 
-export function getMultilingualState(state$: Observable<IAppState>): Observable<fromMultilingual.IMultilingualState> {
+export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
   return state$.select(s => s.i18n);
 }
-export function getNameListState(state$: Observable<IAppState>): Observable<fromSample.ISampleState> {
+export function getNameListState(state$: Observable<IAppState>): Observable<ISampleState> {
   return state$.select(s => s.sample);
 }
-export function getBookState(state$: Observable<IAppState>): Observable<fromBooks.IBookState> {
+export function getBookState(state$: Observable<IAppState>): Observable<IBookState> {
   return state$.select(s => s.book);
 }
-export function getCollectionState(state$: Observable<IAppState>): Observable<fromBooks.ICollectionState> {
+export function getCollectionState(state$: Observable<IAppState>): Observable<ICollectionState> {
   return state$.select(s => s.collection);
 }
-export function getSearchState(state$: Observable<IAppState>): Observable<fromBooks.ISearchState> {
+export function getSearchState(state$: Observable<IAppState>): Observable<ISearchState> {
   return state$.select(s => s.search);
 }
-export function getAuthState(state$: Observable<IAppState>): Observable<fromAuth.IAuthState> {
+export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
+  console.log("blabla");
   return state$.select(s => s.auth);
 }
-export function getLoginPageState(state$: Observable<IAppState>): Observable<fromAuth.ILoginPageState> {
+export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
   return state$.select(s => s.loginpage);
 }
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
 }
 
-export const getLang: any = compose(fromMultilingual.getLang, getMultilingualState);
-export const getNames: any = compose(fromSample.getNames, getNameListState);
+export const getLangues: any = compose(getLang, getMultilingualState);
+export const getListNames: any = compose(getNames, getNameListState);
 
-export const getBookEntities: any = compose(fromBooks.getBooksEntities, getBookState);
-export const getBooksIds: any = compose(fromBooks.getBookIds, getBookState);
-export const getSelectedBookId: any = compose(fromBooks.getSelectedBookId, getBookState);
+export const getBookEntities: any = compose(getBooksEntities, getBookState);
+export const getBooksIds: any = compose(getBookIds, getBookState);
+export const getIdBookSelected: any = compose(getSelectedBookId, getBookState);
 
-export const getSelectedBook = compose(fromBooks.getSelectedBook,getBookState);
-export const getAll = compose(fromBooks.getAll,getBookState);
-
-
-export const getCollectionLoaded = compose(fromBooks.getCollectionLoaded, getCollectionState);
-export const getCollectionLoading: any = compose(fromBooks.getCollectionLoading, getCollectionState);
-export const getCollectionBookIds: any = compose(fromBooks.getCollectionBookIds, getCollectionState);
-
-export const getBookCollection: any = compose(fromBooks.getCollectionBook,getAppState);
+export const getBookSelected = compose(getSelectedBook,getBookState);
+export const getAllBooks = compose(getAll,getBookState);
 
 
-export const isSelectedBookInCollection: any = compose(fromBooks.isSelectedBookInCollection,getAppState);
+export const getCollectionisLoaded = compose(getCollectionLoaded, getCollectionState);
+export const getCollectionisLoading: any = compose(getCollectionLoading, getCollectionState);
+export const getBookIdsCollection: any = compose(getCollectionBookIds, getCollectionState);
 
-export const getSearchBookIds: any = compose(fromBooks.getSearchBookIds, getSearchState);
-export const getSearchQuery: any = compose(fromBooks.getSearchQuery, getSearchState);
-export const getSearchLoading: any = compose(fromBooks.getSearchLoading, getSearchState);
-export const getSearchResults: any = compose(fromBooks.getSearchResults, getAppState);
+export const getBookCollection: any = compose(getCollectionBook,getAppState);
 
-export const getLoggedIn: any = compose(fromAuth.getLoggedIn, getAuthState);
-export const getUser: any = compose(fromAuth.getUser, getAuthState);
-export const getLoginPagePending: any = compose(fromAuth.getPending, getLoginPageState);
-export const getLoginPageError: any = compose(fromAuth.getError, getLoginPageState);
+
+export const selectedBookInCollection: any = compose(isSelectedBookInCollection,getAppState);
+
+export const getBookIdsSearch: any = compose(getSearchBookIds, getSearchState);
+export const getQuerySearch: any = compose(getSearchQuery, getSearchState);
+export const getLoadingSearch: any = compose(getSearchLoading, getSearchState);
+export const getResultsSearch: any = compose(getSearchResults, getAppState);
+
+export const getisLoggedIn: any = compose(getLoggedIn, getAuthState);
+export const getAuthUser: any = compose(getUser, getAuthState);
+export const getRoleUser: any = compose(getRole, getAuthState);
+export const getLoginPagePending: any = compose(getPending, getLoginPageState);
+export const getLoginPageError: any = compose(getError, getLoginPageState);

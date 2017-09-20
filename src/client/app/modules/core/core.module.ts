@@ -39,6 +39,7 @@ interface ICoreModuleOptions {
   ],
   providers: [
     ...CORE_PROVIDERS,
+    SharedModule
   ]
 })
 export class CoreModule {

@@ -12,7 +12,7 @@ export class LogoutComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new AuthAction.Logout());
+    this.store.dispatch(new AuthAction.Logout("get out boy"));
   }
 
 }

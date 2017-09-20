@@ -54,7 +54,8 @@ export class LoginRedirect implements Action {
 
 export class Logout implements Action {
   readonly type = ActionTypes.LOGOUT;
-  payload: string = null;
+  
+  constructor(public payload: any) {}
 }
 
 export class Signup implements Action {

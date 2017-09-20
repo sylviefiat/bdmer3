@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getSelectedBook, isSelectedBookInCollection } from '../../modules/ngrx/index';
+import { IAppState, getBookSelected, selectedBookInCollection } from '../../modules/ngrx/index';
 import { CollectionAction } from '../../modules/books/actions/index';
 import { Book } from '../../modules/books/models/book';
 
@@ -26,9 +26,9 @@ export class SelectedBookPageComponent implements OnInit {
 
   ngOnInit() {
     console.log("initbook");
-    this.book$ = this.store.let(getSelectedBook);
+    this.book$ = this.store.let(getBookSelected);
     this.isSelectedBookInCollection$ = this.store.let(
-      isSelectedBookInCollection
+      selectedBookInCollection
     );
   }
 

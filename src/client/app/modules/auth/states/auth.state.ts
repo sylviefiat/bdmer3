@@ -14,6 +14,7 @@ export const authInitialState: IAuthState = {
 };
 
 export function getLoggedIn(state$: Observable<IAuthState>) {
+	console.log("qio");
   return state$.select(state => state.loggedIn);
 }
 

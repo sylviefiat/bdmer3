@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angular/http';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
@@ -12,6 +12,8 @@ import * as PouchDBAuth from "pouchdb-authentication";
 export class AuthService {
   public currentUser: User;
   private db: any;
+
+  @Output() getLoggedInUser: EventEmitter<User> = new EventEmitter();
 
   constructor(private http: Http) {   
     var pouchOpts = {
@@ -31,6 +33,8 @@ export class AuthService {
           return of(_throw(err.reason));
         }
       }
+      this.currentUser = { name: username, country: response.roles[0]};
+      this.getLoggedInUser.emit(this.currentUser);
       return of({ name: username, country: response.roles[0]});
     }));
   }
@@ -40,6 +44,8 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
+      this.currentUser = { name: null, country: null};
+      this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));
   }

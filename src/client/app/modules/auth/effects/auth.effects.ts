@@ -23,12 +23,21 @@ export class AuthEffects {
         .catch(error => of(new AuthAction.LoginFailure(error)))
     );
 
+  @Effect() logout$ = this.actions$
+    .ofType(AuthAction.ActionTypes.LOGOUT)
+    .map((action: AuthAction.Logout) => action.payload)
+    .exhaustMap(stringisnull =>
+      this.authService.logout()
+      .do(authed => {
+      this.router.navigate(['/']);
+    }));
+
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
     .do(() => this.router.navigate(['/']));
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
-    .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT, AuthAction.ActionTypes.LOGOUT)
+    .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)
     .do(authed => {
       this.router.navigate(['/login']);
     });
@@ -48,7 +57,7 @@ export class AuthEffects {
     .do(() => this.router.navigate(['/']));
 
   @Effect({ dispatch: false }) signupRedirect$ = this.actions$
-    .ofType(AuthAction.ActionTypes.SIGNUP_REDIRECT, AuthAction.ActionTypes.LOGOUT)
+    .ofType(AuthAction.ActionTypes.SIGNUP_REDIRECT)
     .do(authed => {
       this.router.navigate(['/login']);
     });
