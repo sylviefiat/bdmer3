@@ -1,9 +1,5 @@
 export interface Authenticate {
-  username: string;
+  email: string;
   password: string;
 }
 
-export interface User {
-  name: string;
-  country: string;
-}

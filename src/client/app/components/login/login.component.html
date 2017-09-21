@@ -3,22 +3,31 @@
       <md-card-content>
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
+            <fa [name]="'user-o'" [border]=false [size]=2></fa>
             <md-input-container>
               <input type="text" mdInput placeholder="Username" formControlName="username">
             </md-input-container>
           </p>
           <p>
+            <fa [name]="'key'" [border]=false [size]=2></fa>
             <md-input-container>
               <input type="password" mdInput placeholder="Password" formControlName="password">
             </md-input-container>
           </p>
           <p *ngIf="errorMessage" class="loginError">
             {{ errorMessage }}
-          </p>          
-        
+          </p>    
+
+          
           <p class="loginButtons">
             <button type="submit" md-button>Login</button>
           </p>
+
+          <div class="actionButtons">
+            <a [routerLink]="['/signup']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Register now!</a>
+            <a [routerLink]="['/password']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Forgot password ?</a>
+          </div>
         </form>
       </md-card-content>
+
     </md-card>

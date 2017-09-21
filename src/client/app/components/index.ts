@@ -35,7 +35,7 @@ export const APP_COMPONENTS: any[] = [
   LoginPageComponent,
   SignupPageComponent,
   SignupComponent,
-  LogoutComponent
+  LogoutComponent,
 ];
 
 export * from './app.component';

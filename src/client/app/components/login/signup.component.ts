@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Authenticate } from '../../modules/auth/models/user';
 
 @Component({
@@ -25,8 +25,11 @@ export class SignupComponent implements OnInit {
   @Output() submitted = new EventEmitter<Authenticate>();
 
   form: FormGroup = new FormGroup({
-    username: new FormControl(''),
+    firstname: new FormControl('', Validators.required),
+    lastname: new FormControl(''),
+    email: new FormControl(''),
     password: new FormControl(''),
+    country: new FormControl('')
   });
 
   constructor() {}

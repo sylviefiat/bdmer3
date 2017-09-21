@@ -5,7 +5,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
 
-import { Book } from '../../books/models/book';
+//import { Book } from '../../books/models/book';
 
 
 @Injectable()
@@ -41,16 +41,16 @@ export class PouchDBService {
                 }));
     }
 
-    public add(book: Book) : Promise<any> {
-         return this.db.post(book);
+    public add(any: any) : Promise<any> {
+         return this.db.post(any);
     }
 
-    public update(book: Book) : Promise<any> {
-        return this.db.put(book);
+    public update(any: any) : Promise<any> {
+        return this.db.put(any);
     }
 
-    public delete(book: Book) : Promise<any> {
-        return this.db.remove(book);
+    public delete(any: any) : Promise<any> {
+        return this.db.remove(any);
 
     } 
 

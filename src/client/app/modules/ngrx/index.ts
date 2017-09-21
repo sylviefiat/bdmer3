@@ -145,3 +145,5 @@ export const getAuthUser: any = compose(getUser, getAuthState);
 export const getRoleUser: any = compose(getRole, getAuthState);
 export const getLoginPagePending: any = compose(getPending, getLoginPageState);
 export const getLoginPageError: any = compose(getError, getLoginPageState);
+export const getSignupPagePending: any = compose(getPending, getLoginPageState);
+export const getSignupPageError: any = compose(getError, getLoginPageState);
