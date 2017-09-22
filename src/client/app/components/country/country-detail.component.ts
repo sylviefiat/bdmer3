@@ -11,7 +11,7 @@ import { Country } from './../../modules/countries/models/country';
       </md-card-title-group>
       <md-card-content>
         <md-card-subtitle>Country users</md-card-subtitle>
-        <bc-user-detail *ngFor="let user of users" [User]="user"></bc-user-detail>
+        <bc-user-detail *ngFor="let user of users" [user]="user"></bc-user-detail>
       </md-card-content>
       <md-card-actions align="start">
         <button md-raised-button color="warn" (click)="removecountry.emit(country)">
@@ -76,9 +76,7 @@ export class CountryDetailComponent {
   }
 
   get flag() {
-    return (
-      this.country.countryInfo.flag &&
-      this.country.countryInfo.flag._attachments
-    );
+    return this.country.countryInfo.flag &&
+      this.country.countryInfo.flag._attachments;    
   }
 }

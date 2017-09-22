@@ -12,7 +12,7 @@ import { defer } from 'rxjs/observable/defer';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import { of } from 'rxjs/observable/of';
-import { CountriesService } from "../services/index";
+import { CountriesService } from "../../core/services/index";
 
 import { CountryAction } from '../actions/index';
 import { Country, User } from '../models/country';
@@ -36,10 +36,10 @@ export class CountryEffects {
     .ofType(CountryAction.ActionTypes.ADD_USER)
     .map((action: CountryAction.AddUserAction) => action.payload)
     .mergeMap(user => 
-      fromPromise(this.countriesService
-        .add(user))
-        .map(() => new CountryAction.AddUserSuccessAction(user))
-        .catch(() => of(new CountryAction.AddUserFailAction(user)))
+      this.countriesService
+        .addUser(user))
+        .map((user) => new CountryAction.AddUserSuccessAction(user))
+        .catch((user) => of(new CountryAction.AddUserFailAction(user))
     );
 
   @Effect()
@@ -47,10 +47,10 @@ export class CountryEffects {
     .ofType(CountryAction.ActionTypes.REMOVE_USER)
     .map((action: CountryAction.RemoveUserAction) => action.payload)
     .mergeMap(user =>
-      fromPromise(this.countriesService
-        .delete(user))
-        .map(() => new CountryAction.RemoveUserSuccessAction(user))
-        .catch(() => of(new CountryAction.RemoveUserFailAction(user)))
+      this.countriesService
+        .removeUser(user))
+        .map((user) => new CountryAction.RemoveUserSuccessAction(user))
+        .catch((user) => of(new CountryAction.RemoveUserFailAction(user))
     );
 
   constructor(private actions$: Actions, private countriesService: CountriesService) {

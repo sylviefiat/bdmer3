@@ -10,10 +10,11 @@ export interface Country {
 
 export interface User {
   id: string;
+  username: string;
   firstname: string;
   lastname: string;
   email: string;
-  countryId: string;
+  country: string;
 }
 
 export interface Image {

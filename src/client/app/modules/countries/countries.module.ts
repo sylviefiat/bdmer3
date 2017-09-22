@@ -1,4 +1,4 @@
-import { NgModule, Optional, SkipSelf, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, ModuleWithProviders, Optional, SkipSelf, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -22,7 +22,7 @@ import { CountryExistsGuard } from './guards/country-exists';
     EffectsModule.run(CountriesEffects),
   ],
   declarations: [],
-  providers: [CountryExistsGuard],
+  providers:[CountryExistsGuard],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA

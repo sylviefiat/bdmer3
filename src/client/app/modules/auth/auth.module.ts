@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, ModuleWithProviders, Optional, SkipSelf,NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
-import { AUTH_PROVIDERS } from './services/index';
+//import { AUTH_PROVIDERS } from './services/index';
 import { AuthGuard } from './guards/auth-guard.service';
 import { AuthEffects } from './effects/auth.effects';
 
@@ -25,6 +25,7 @@ import { AuthEffects } from './effects/auth.effects';
     MultilingualModule
   ],
   declarations: [],
+  providers: [AuthGuard],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
@@ -34,21 +35,9 @@ import { AuthEffects } from './effects/auth.effects';
   ],
 })
 export class AuthModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: RootAuthModule,
-      providers: [
-        ...AUTH_PROVIDERS, 
-        AuthGuard
-      ],
-    };
+  constructor(@Optional() @SkipSelf() parentModule: AuthModule) {
+    if (parentModule) {
+      throw new Error('AuthModule already loaded; Import in root module only.');
+    }
   }
 }
-
-@NgModule({
-  imports: [
-    AuthModule,
-    EffectsModule.run(AuthEffects),
-  ],
-})
-export class RootAuthModule {}

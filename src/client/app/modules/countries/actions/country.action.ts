@@ -13,6 +13,7 @@ export namespace CountryAction {
     REMOVE_USER: string;
     REMOVE_USER_SUCCESS: string;
     REMOVE_USER_FAIL: string;
+    SELECT: string;
   }
 
   export const ActionTypes: ICountryActions = {
@@ -21,7 +22,8 @@ export namespace CountryAction {
     ADD_USER_FAIL: type(`${COUNTRY} Add user Fail`),
     REMOVE_USER: type(`${COUNTRY} Remove user`),
     REMOVE_USER_SUCCESS: type(`${COUNTRY} Remove user Success`),
-    REMOVE_USER_FAIL: type(`${COUNTRY} Remove user Fail`)
+    REMOVE_USER_FAIL: type(`${COUNTRY} Remove user Fail`),
+    SELECT: type(`${COUNTRY} Select`)
   };
 
   /**
@@ -70,11 +72,17 @@ export namespace CountryAction {
     constructor(public payload: User) {}
   }
 
+  export class SelectAction implements Action {
+    readonly type = ActionTypes.SELECT;
+    constructor(public payload: any) {}
+  }
+
   export type Actions =
     | AddUserAction
     | AddUserSuccessAction
     | AddUserFailAction
     | RemoveUserAction
     | RemoveUserSuccessAction
-    | RemoveUserFailAction;
+    | RemoveUserFailAction
+    | SelectAction;
 }

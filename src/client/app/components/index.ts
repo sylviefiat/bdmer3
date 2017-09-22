@@ -16,6 +16,15 @@ import { LoginPageComponent } from './login/login-page.component';
 import { SignupComponent } from './login/signup.component';
 import { SignupPageComponent } from './login/signup-page.component';
 import { LogoutComponent } from './login/logout.component';
+import { CountryPageComponent } from './country/country-page.component';
+import { CountryDetailComponent } from './country/country-detail.component';
+import { CountryPreviewListComponent } from './country/country-preview-list.component';
+import { CountryPreviewComponent } from './country/country-preview.component';
+import { SelectedCountryPageComponent } from './country/selected-country-page.component';
+import { UserDetailComponent } from './country/user-detail.component';
+import { ViewCountryPageComponent } from './country/view-country-page.component';
+import { ViewUserPageComponent } from './country/view-user-page.component';
+import { SelectedUserPageComponent } from './country/selected-user-page.component';
 
 export const APP_COMPONENTS: any[] = [
   AppComponent,
@@ -36,6 +45,15 @@ export const APP_COMPONENTS: any[] = [
   SignupPageComponent,
   SignupComponent,
   LogoutComponent,
+  CountryPageComponent,
+  CountryDetailComponent,
+  CountryPreviewListComponent,
+  CountryPreviewComponent,
+  SelectedCountryPageComponent,
+  UserDetailComponent,
+  ViewCountryPageComponent,
+  ViewUserPageComponent,
+  SelectedUserPageComponent
 ];
 
 export * from './app.component';
@@ -56,3 +74,12 @@ export * from './login/login-page.component';
 export * from './login/logout.component';
 export * from './login/signup-page.component';
 export * from './login/signup.component';
+export * from './country/country-page.component';
+export * from './country/country-detail.component';
+export * from './country/country-preview-list.component';
+export * from './country/country-preview.component';
+export * from './country/selected-country-page.component';
+export * from './country/user-detail.component';
+export * from './country/view-country-page.component';
+export * from './country/view-user-page.component';
+export * from  './country/selected-user-page.component';

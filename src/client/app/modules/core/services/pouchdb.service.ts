@@ -45,28 +45,28 @@ export class PouchDBService {
          return this.db.post(any);
     }
 
+    public get(any: any) : Observable<any> {
+         return this.db.get(any);
+    }
+
     public update(any: any) : Promise<any> {
         return this.db.put(any);
     }
 
     public delete(any: any) : Promise<any> {
         return this.db.remove(any);
-
     } 
 
-    public login() : Observable<any> {
-        return this.db.login('admin', 'admin', function (err, response) {
-          if (err) {
-            if (err.name === 'unauthorized') {
-              console.log('unauthorized');
-              return null;
-            } else {
-              console.log(err);
-              return null;
-            }
-          }
-        });
-    }
+    public query(func: any, any: any) : Observable<any> {
+        return fromPromise(
+            this.db.query(func, any)
+                .then(docs => {
+                    return docs.rows.map(row => {
+                        return row.doc;
+                    });
+                }));
+    } 
+    
 
     public sync(remote: string) : Promise<any> {
         let remoteDatabase = new PouchDB(remote);
@@ -88,4 +88,6 @@ export class PouchDBService {
         });
     }
 
+
 }
+

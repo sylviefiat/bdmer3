@@ -43,6 +43,8 @@ import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookI
 import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
 import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser} from '../auth/index';
+import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, getCurrentCountryId,getCurrentCountry} from '../countries/index';
+import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser} from '../countries/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -56,6 +58,8 @@ export interface IAppState {
   search: ISearchState;
   auth: IAuthState;
   loginpage: ILoginPageState;
+  countries: ICountriesState;
+  country: ICountryState;
 }
 
 /**
@@ -72,12 +76,15 @@ const reducers = {
   collection: collectionReducer,
   search: searchReducer,
   auth: authReducer,
-  loginpage: loginPageReducer
+  loginpage: loginPageReducer,
+  countries: countriesReducer,
+  country: countryReducer
 };
 
 // ensure state is frozen as extra level of security when developing
 // helps maintain immutability
-const developmentReducer: ActionReducer<IAppState> = compose(storeFreeze, combineReducers)(reducers);
+//const developmentReducer: ActionReducer<IAppState> = compose(storeFreeze, combineReducers)(reducers);
+const developmentReducer: ActionReducer<IAppState> = combineReducers(reducers);
 // for production, dev has already been cleared so no need
 const productionReducer: ActionReducer<IAppState> = combineReducers(reducers);
 
@@ -110,6 +117,12 @@ export function getAuthState(state$: Observable<IAppState>): Observable<IAuthSta
 }
 export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
   return state$.select(s => s.loginpage);
+}
+export function getCountriesState(state$: Observable<IAppState>): Observable<ICountriesState> {
+  return state$.select(s => s.countries);
+}
+export function getCountryState(state$: Observable<IAppState>): Observable<ICountryState> {
+  return state$.select(s => s.country);
 }
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
@@ -147,3 +160,11 @@ export const getLoginPagePending: any = compose(getPending, getLoginPageState);
 export const getLoginPageError: any = compose(getError, getLoginPageState);
 export const getSignupPagePending: any = compose(getPending, getLoginPageState);
 export const getSignupPageError: any = compose(getError, getLoginPageState);
+
+export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
+export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
+export const getCountries: any = compose(getCountriesEntities, getCountriesState);
+export const getCountry: any = compose(getCurrentCountry, getCountriesState);
+
+export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
+export const getUserCountry: any = compose(getCurrentUser, getCountryState);

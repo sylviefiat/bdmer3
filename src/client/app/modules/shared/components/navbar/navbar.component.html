@@ -9,6 +9,7 @@
   </a>
   <a [routerLink]="['/find']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'FIND' | translate}}</a>
   <a [routerLink]="['/books']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'BOOKS' | translate}}</a>
+  <a [routerLink]="['/countries']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'COUNTRIES' | translate}}</a>
   <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MAP' | translate}}</a>
   
   <a *ngIf="!isLoggedIn" [routerLink]="['/login']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">

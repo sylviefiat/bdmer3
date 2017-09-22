@@ -4,27 +4,33 @@ import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Observable } from 'rxjs/Observable';
-import { Authenticate } from '../models/user';
+import { Authenticate } from '../../auth/models/user';
+import { CountriesService } from './index';
 import { User, Country } from '../../countries/models/country';
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
 
+
 @Injectable()
 export class AuthService {
-  public currentUser: User;
+  public currentUser: Observable<User>;
+  public currentCountry: Observable<Country>;
   private db: any;
 
-  @Output() getLoggedInUser: EventEmitter<User> = new EventEmitter();
+  @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
+  @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
-  constructor(private http: Http) {   
+  constructor(private countriesService: CountriesService) { 
     var pouchOpts = {
       skipSetup: true
     };
-    this.db = new PouchDB('http://entropie-dev:5984/users', pouchOpts);    
+    this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);    
   }
 
-  login({ email, password }: Authenticate): Observable<User> {  
-    return fromPromise(this.db.login(email, password, (err, response) => {
+  login({ username, password }: Authenticate): Observable<User> {  
+    console.log(username);
+    return fromPromise(this.db.login(username, password, (err, response) => {
+      console.log(err);
       if (err) {
         if (err.name === 'unauthorized') {
           console.log(err);
@@ -34,9 +40,13 @@ export class AuthService {
           return of(_throw(err.reason));
         }
       }
-      //this.currentUser = { email: email, country: response.roles[0]};
+      this.currentUser = this.countriesService.getUser(username);
+      this.currentUser.subscribe(user => {
+        this.currentCountry = this.countriesService.getCountry(user.country);
+      });     
       this.getLoggedInUser.emit(this.currentUser);
-      return of({ name: email, country: response.roles[0]});
+      this.getCountry.emit(this.currentCountry);
+      return this.currentUser;
     }));
   }
 
@@ -45,14 +55,14 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
-      //this.currentUser = { firstname: null, lastname: null, email: null, country: null};
+      this.currentUser = of({ id: null, username: null, firstname: null, lastname: null, email: null, country: null});
       this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));
   }
 
-  signup({ email, password }: Authenticate): Observable<any> {
-    return fromPromise(this.db.signup(email, password, (err, response) => {
+  signup({ username, password }: Authenticate): Observable<any> {
+    return fromPromise(this.db.signup(username, password, (err, response) => {
       if (err) {
         if (err.name === 'conflict') {
           return of(_throw('Invalid username or password'));

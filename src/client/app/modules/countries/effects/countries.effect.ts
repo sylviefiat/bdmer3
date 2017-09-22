@@ -12,7 +12,7 @@ import { defer } from 'rxjs/observable/defer';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import { of } from 'rxjs/observable/of';
-import { PouchDBService } from "../../core/services/pouchdb.service";
+import { CountriesService } from "../../core/services/index";
 
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
@@ -29,16 +29,12 @@ export class CountriesEffects {
    * Wrapping the database open call in `defer` makes
    * effect easier to test.
    */
-  @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => { 
-    return this.database.initDB('countries','http://entropie-dev:5984/');
-  });
 
   @Effect()
   loadCountries$: Observable<Action> = this.actions$
     .ofType(CountriesAction.ActionTypes.LOAD)
     .switchMap(() =>     
-      this.database
+      this.countriesService
         .getAll()
         .map((countries: Country[]) => new CountriesAction.LoadSuccessAction(countries))
         .catch(error => of(new CountriesAction.LoadFailAction(error)))
@@ -50,8 +46,8 @@ export class CountriesEffects {
     .ofType(CountriesAction.ActionTypes.ADD_COUNTRY)
     .map((action: CountriesAction.AddCountryAction) => action.payload)
     .mergeMap(country => 
-      fromPromise(this.database
-        .add(country))
+      fromPromise(this.countriesService
+        .addCountry(country))
         .map(() => new CountriesAction.AddCountrySuccessAction(country))
         .catch(() => of(new CountriesAction.AddCountryFailAction(country)))
     );
@@ -61,13 +57,13 @@ export class CountriesEffects {
     .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY)
     .map((action: CountriesAction.RemoveCountryAction) => action.payload)
     .mergeMap(country =>
-      fromPromise(this.database
-        .delete(country))
+      fromPromise(this.countriesService
+        .removeCountry(country))
         .map(() => new CountriesAction.RemoveCountrySuccessAction(country))
         .catch(() => of(new CountriesAction.RemoveCountryFailAction(country)))
     );
 
-  constructor(private actions$: Actions, private database: PouchDBService) {
+  constructor(private actions$: Actions, private countriesService: CountriesService) {
     
     
   }

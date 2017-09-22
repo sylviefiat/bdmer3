@@ -1,7 +1,7 @@
 import { IAuthState, authInitialState } from '../states/index';
 
 import { AuthAction } from '../actions/index';
-import { User } from '../models/user';
+import { User } from '../../countries/models/country';
 
 export function authReducer(
   state : IAuthState = authInitialState,

@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { User } from '../models/user';
+
+import { User } from '../../countries/models/country';
 
 export interface IAuthState {
   loggedIn: boolean;
@@ -14,7 +15,6 @@ export const authInitialState: IAuthState = {
 };
 
 export function getLoggedIn(state$: Observable<IAuthState>) {
-	console.log("qio");
   return state$.select(state => state.loggedIn);
 }
 

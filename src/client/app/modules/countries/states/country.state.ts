@@ -4,7 +4,7 @@ import { Country, User } from '../models/country';
 export interface ICountryState {
   userIds: string[];
   users: { [id: string]: User };
-  currentUserId: string | null;
+  currentUserId: string;
 }
 
 export const countryInitialState: ICountryState = {

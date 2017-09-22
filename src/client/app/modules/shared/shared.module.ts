@@ -21,7 +21,6 @@ const SHARED_MODULES: any[] = [
   HttpModule,
   FormsModule,
   ReactiveFormsModule,
-  RouterModule,
   MultilingualModule,
   BrowserAnimationsModule,
   MdCardModule,

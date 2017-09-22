@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { StorageService } from './storage.service';
 import { PouchDBService } from './pouchdb.service';
 import { GoogleBooksService } from './google-books';
+import { AuthService } from './auth.service';
+import { CountriesService } from './countries.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,
@@ -17,6 +19,8 @@ export const CORE_PROVIDERS: any[] = [
   AppService,
   RouterExtensions,
   GoogleBooksService,
+  AuthService,
+  CountriesService,
 ];
 
 export * from './console.service';
@@ -27,4 +31,6 @@ export * from './app.service';
 export * from './storage.service';
 export * from './pouchdb.service';
 export * from './google-books';
+export * from './auth.service';
+export * from './countries.service';
 

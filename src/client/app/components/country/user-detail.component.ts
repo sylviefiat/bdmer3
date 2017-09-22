@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { User } from './../../modules/auth/models/user';
+import { User } from './../../modules/countries/models/country';
 
 @Component({
-  selector: 'bc-country-detail',
+  selector: 'bc-user-detail',
   template: `
     <div>
       <p>{{firstname}} {{lastname}} {{email}}</p>
@@ -10,7 +10,6 @@ import { User } from './../../modules/auth/models/user';
         Remove user for country
       </button>
     </div>
-  </div>
 
   `,
   styles: [

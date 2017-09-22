@@ -12,7 +12,7 @@ import { AnalyticsModule } from '../../analytics/analytics.module';
 import { SharedModule } from '../../shared/index';
 import { BooksModule } from '../../books/index';
 import { MultilingualModule } from '../multilingual.module';
-import { MultilingualService, reducer, Languages, LanguageViewHelper } from '../index';
+import { MultilingualService, multilingualReducer, Languages, LanguageViewHelper } from '../index';
 import { getLanguages } from '../testing/index';
 
 // test module configuration for each test
@@ -38,7 +38,7 @@ const testModuleConfig = (languages?: Array<ILang>) => {
       RouterTestingModule,
       AnalyticsModule,
       MultilingualModule,
-      StoreModule.provideStore({ i18n: reducer })
+      StoreModule.provideStore({ i18n: multilingualReducer })
     ],
     declarations: [TestComponent],
     providers

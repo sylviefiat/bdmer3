@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
 
 @Injectable()

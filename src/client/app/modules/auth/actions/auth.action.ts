@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { User, Authenticate } from '../models/user';
+import { Authenticate } from '../models/user';
+import { User } from '../../countries/models/country';
 import { type } from '../../core/utils/index';
   
 export namespace AuthAction {
