@@ -65,16 +65,20 @@ export class CountryPreviewComponent {
   @Input() country: Country;
 
   get id() {
-    return this.country.id;
+    return this.country._id;
   }
 
   get name() {
-    return this.country.countryInfo.name;
+    return this.country.name;
+  }
+
+  get code() {
+    return this.country.code;
   }
 
   get flag() {
-    return this.country.countryInfo.flag &&
-      this.country.countryInfo.flag._attachments;    
+    return this.country.flag &&
+      this.country.flag._attachments;    
   }
 
 }

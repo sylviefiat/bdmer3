@@ -25,6 +25,8 @@ import { UserDetailComponent } from './country/user-detail.component';
 import { ViewCountryPageComponent } from './country/view-country-page.component';
 import { ViewUserPageComponent } from './country/view-user-page.component';
 import { SelectedUserPageComponent } from './country/selected-user-page.component';
+import { NewCountryPageComponent } from './country/new-country-page.component';
+import { NewCountryComponent } from './country/new-country.component';
 
 export const APP_COMPONENTS: any[] = [
   AppComponent,
@@ -45,15 +47,17 @@ export const APP_COMPONENTS: any[] = [
   SignupPageComponent,
   SignupComponent,
   LogoutComponent,
-  CountryPageComponent,
-  CountryDetailComponent,
-  CountryPreviewListComponent,
-  CountryPreviewComponent,
-  SelectedCountryPageComponent,
+  NewCountryPageComponent,
+  NewCountryComponent,
   UserDetailComponent,
+  CountryDetailComponent,
+  CountryPreviewComponent,
+  CountryPreviewListComponent,
+  SelectedCountryPageComponent,
+  CountryPageComponent,
   ViewCountryPageComponent,
   ViewUserPageComponent,
-  SelectedUserPageComponent
+  SelectedUserPageComponent,
 ];
 
 export * from './app.component';
@@ -83,3 +87,5 @@ export * from './country/user-detail.component';
 export * from './country/view-country-page.component';
 export * from './country/view-user-page.component';
 export * from  './country/selected-user-page.component';
+export * from './country/new-country.component';
+export * from './country/new-country-page.component';

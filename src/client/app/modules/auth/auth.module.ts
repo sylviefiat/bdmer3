@@ -22,7 +22,8 @@ import { AuthEffects } from './effects/auth.effects';
     MaterialModule,
     RouterModule,
     SharedModule,
-    MultilingualModule
+    MultilingualModule,
+    EffectsModule.run(AuthEffects),
   ],
   declarations: [],
   providers: [AuthGuard],

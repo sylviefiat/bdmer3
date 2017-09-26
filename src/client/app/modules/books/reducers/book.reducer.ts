@@ -22,7 +22,7 @@ export function bookReducer(
         },
         {}
       );
-      console.log(Object.assign({}, state.entities, newBookEntities));
+      //console.log(Object.assign({}, state.entities, newBookEntities));
       return {
         ids: [...state.ids, ...newBookIds],
         entities: Object.assign({}, state.entities, newBookEntities),

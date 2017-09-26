@@ -4,7 +4,6 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
-
 //import { Book } from '../../books/models/book';
 
 
@@ -17,18 +16,9 @@ export class PouchDBService {
         PouchDB.plugin(PouchDBAuth);
     }
 
-    initDB(dbname: string, remote : string, useLocal: boolean = true) : Promise<any> {
-        var pouchOpts = {
-          skip_setup: true
-        };
-        console.log(useLocal);
-        if(useLocal){
-            this.db = new PouchDB(dbname, pouchOpts);
-            return this.sync(remote+dbname);
-        } else {
-
-            return this.db= new PouchDB(remote+dbname, pouchOpts);
-        }
+    initDB(dbname: string, remote : string) : Promise<any> {
+        this.db = new PouchDB(dbname);
+        return this.sync(remote+dbname);
     }
 
     public getAll() : Observable<any> {        

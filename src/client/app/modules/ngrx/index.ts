@@ -43,8 +43,8 @@ import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookI
 import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
 import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser} from '../auth/index';
-import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, getCurrentCountryId,getCurrentCountry} from '../countries/index';
-import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser} from '../countries/index';
+import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, getCurrentCountryId,getCurrentCountry, getCountryNamesList} from '../countries/index';
+import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError} from '../countries/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -112,7 +112,6 @@ export function getSearchState(state$: Observable<IAppState>): Observable<ISearc
   return state$.select(s => s.search);
 }
 export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
-  console.log("blabla");
   return state$.select(s => s.auth);
 }
 export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
@@ -161,10 +160,13 @@ export const getLoginPageError: any = compose(getError, getLoginPageState);
 export const getSignupPagePending: any = compose(getPending, getLoginPageState);
 export const getSignupPageError: any = compose(getError, getLoginPageState);
 
+export const getCountryList: any = compose(getCountryNamesList, getCountriesState);
+
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
 export const getCountries: any = compose(getCountriesEntities, getCountriesState);
 export const getCountry: any = compose(getCurrentCountry, getCountriesState);
+export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 
 export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
 export const getUserCountry: any = compose(getCurrentUser, getCountryState);

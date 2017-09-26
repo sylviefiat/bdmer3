@@ -34,7 +34,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
-    .do(() => this.router.navigate(['/']));
+    .do(() =>this.router.navigate(['/']));
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)

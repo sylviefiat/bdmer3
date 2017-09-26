@@ -31,7 +31,7 @@ interface ICoreModuleOptions {
     BooksModule,
     CountriesModule,
     AuthModule,
-    DBModule.provideDB(schema),    
+    DBModule.provideDB(schema)
   ],
   declarations: [
     ...CORE_DIRECTIVES

@@ -18,7 +18,14 @@ import { Country } from '../../modules/countries/models/country';
     </md-card>
 
     <bc-country-preview-list [countries]="countries$ | async"></bc-country-preview-list>
-    
+    <md-card>
+      <md-card-actions align="start">
+
+        <button md-raised-button color="primary" (click)="newCountry()">
+        New Country
+        </button>
+      </md-card-actions>
+    </md-card>
   `,
   /**
    * Container components are permitted to have just enough styles
@@ -42,6 +49,16 @@ export class CountryPageComponent implements OnInit {
 
   ngOnInit() {    
     this.countries$ = this.store.let(getCountries);
+    //console.log(this.countries$);
     this.store.dispatch(new CountriesAction.LoadAction());    
+  }
+
+  newCountry() {
+    this.routerext.navigate(['/newcountry'], {
+      transition: {
+        duration: 1000,
+        name: 'slideTop',
+      }
+    });
   }
 }

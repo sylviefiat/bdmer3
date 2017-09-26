@@ -1,0 +1,24 @@
+<md-card>
+      <md-card-title>Add New Country in BDMER</md-card-title>
+        <md-card-content>
+          <form [formGroup]="form" (ngSubmit)="submit()" >
+          <p>
+            <fa [name]="'globe'" [border]=false [size]=2></fa>
+           <md-select placeholder="Select country" formControlName="pays" >
+             <md-option *ngFor="let pays of (countryList$ | async)" [value]="pays">{{ pays.name }}</md-option>
+          </md-select>
+          <img md-card-sm-image *ngIf="flag" [src]="flag | async" />
+        </p>
+          <p *ngIf="errorMessage" class="countryError">
+            {{ errorMessage }}
+          </p>    
+
+          
+          <p class="countryButtons">
+            <button type="submit" md-button>Ajouter</button>
+          </p>
+
+        </form>
+      </md-card-content>
+
+    </md-card>

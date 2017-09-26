@@ -18,4 +18,8 @@ import { Country } from './../../modules/countries/models/country';
 })
 export class CountryPreviewListComponent {
   @Input() countries: Country[];
+
+  constructor() {
+    //console.log(this.countries)
+  }
 }

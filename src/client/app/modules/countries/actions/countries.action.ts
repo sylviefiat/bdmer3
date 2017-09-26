@@ -13,6 +13,9 @@ export namespace CountriesAction {
     REMOVE_COUNTRY: string;
     REMOVE_COUNTRY_SUCCESS: string;
     REMOVE_COUNTRY_FAIL: string;
+    INIT: string;
+    INITIALIZED: string;
+    INIT_FAILED: string;
     LOAD: string;
     LOAD_SUCCESS: string;
     LOAD_FAIL: string;
@@ -25,6 +28,9 @@ export namespace CountriesAction {
     REMOVE_COUNTRY: type(`${COUNTRIES} Remove country`),
     REMOVE_COUNTRY_SUCCESS: type(`${COUNTRIES} Remove country Success`),
     REMOVE_COUNTRY_FAIL: type(`${COUNTRIES} Remove country Fail`),
+    INIT: type(`${COUNTRIES} Init list`),
+    INITIALIZED: type(`${COUNTRIES} list Initialized`),
+    INIT_FAILED: type(`${COUNTRIES} list Init Failed`),
     LOAD: type(`${COUNTRIES} Load`),
     LOAD_SUCCESS: type(`${COUNTRIES} Load Success`),
     LOAD_FAIL: type(`${COUNTRIES} Load Fail`)
@@ -55,7 +61,7 @@ export namespace CountriesAction {
   export class AddCountryFailAction implements Action {
     readonly type = ActionTypes.ADD_COUNTRY_FAIL;
 
-    constructor(public payload: Country) {}
+    constructor(public payload: any) {}
   }
 
   /**
@@ -76,7 +82,23 @@ export namespace CountriesAction {
   export class RemoveCountryFailAction implements Action {
     readonly type = ActionTypes.REMOVE_COUNTRY_FAIL;
 
-    constructor(public payload: Country) {}
+    constructor(public payload: any) {}
+  }
+
+  export class InitAction implements Action {
+    type = ActionTypes.INIT;
+    payload: string = null;
+  }
+
+  export class InitializedAction implements Action {
+    type = ActionTypes.INITIALIZED;
+
+    constructor(public payload: any[]) { }
+  }
+
+  export class InitFailedAction implements Action {
+    type = ActionTypes.INIT_FAILED;
+    payload: string = null;
   }
 
   /**

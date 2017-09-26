@@ -60,6 +60,7 @@ export class MultilingualModule {
   }
 
   constructor(@Optional() @SkipSelf() parentModule: MultilingualModule) {
+    //console.log(MULTILANG_COMPONENTS);
     if (parentModule) {
       throw new Error('MultilingualModule already loaded; Import in root module only.');
     }

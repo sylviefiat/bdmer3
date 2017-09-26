@@ -46,7 +46,7 @@ export class CountryEffects {
   removeUserFromCountry$: Observable<Action> = this.actions$
     .ofType(CountryAction.ActionTypes.REMOVE_USER)
     .map((action: CountryAction.RemoveUserAction) => action.payload)
-    .mergeMap(user =>
+    .mergeMap(user => 
       this.countriesService
         .removeUser(user))
         .map((user) => new CountryAction.RemoveUserSuccessAction(user))

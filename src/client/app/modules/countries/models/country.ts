@@ -1,15 +1,13 @@
 export interface Country {
 	_id: string;
-	id: string;
-	countryInfo: {
-		name: string;
-		flag: Image;		
-	};
+	code: string;
+	name: string;
+	flag: Image;
 	users: User[];
 }
 
 export interface User {
-  id: string;
+  _id: string;
   username: string;
   firstname: string;
   lastname: string;
@@ -19,9 +17,8 @@ export interface User {
 
 export interface Image {
 	_id: string;
-	id: string;
 	_attachments: {
-		filename: {
+		flag: {
         type: string;
         data: object;
       }

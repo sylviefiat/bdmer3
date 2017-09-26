@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
 import { CountriesEffects } from './effects/index';
+import { CountryListService } from './services/country-list.service';
 import { CountryExistsGuard } from './guards/country-exists';
 
 
@@ -22,7 +23,7 @@ import { CountryExistsGuard } from './guards/country-exists';
     EffectsModule.run(CountriesEffects),
   ],
   declarations: [],
-  providers:[CountryExistsGuard],
+  providers:[CountryExistsGuard, CountryListService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA

@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MdCardModule, MdInputModule, MdListModule } from '@angular/material';
+import { MdCardModule, MdInputModule, MdListModule, MdSelectModule, MdOptionModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { AgmCoreModule } from '@agm/core';
@@ -26,7 +26,9 @@ const SHARED_MODULES: any[] = [
   MdCardModule,
   MdInputModule, 
   MdListModule,
-  Angular2FontawesomeModule,
+  MdSelectModule,
+  MdOptionModule,
+  Angular2FontawesomeModule
 ];
 
 /**

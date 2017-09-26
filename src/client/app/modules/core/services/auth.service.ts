@@ -5,7 +5,7 @@ import { _throw } from 'rxjs/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Observable } from 'rxjs/Observable';
 import { Authenticate } from '../../auth/models/user';
-import { CountriesService } from './index';
+import { CountriesService } from './countries.service';
 import { User, Country } from '../../countries/models/country';
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
@@ -30,7 +30,7 @@ export class AuthService {
   login({ username, password }: Authenticate): Observable<User> {  
     console.log(username);
     return fromPromise(this.db.login(username, password, (err, response) => {
-      console.log(err);
+      
       if (err) {
         if (err.name === 'unauthorized') {
           console.log(err);
@@ -41,9 +41,10 @@ export class AuthService {
         }
       }
       this.currentUser = this.countriesService.getUser(username);
+      console.log(this.currentUser);
       this.currentUser.subscribe(user => {
         this.currentCountry = this.countriesService.getCountry(user.country);
-      });     
+      });  
       this.getLoggedInUser.emit(this.currentUser);
       this.getCountry.emit(this.currentCountry);
       return this.currentUser;
@@ -55,7 +56,7 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
-      this.currentUser = of({ id: null, username: null, firstname: null, lastname: null, email: null, country: null});
+      this.currentUser = of({ _id: null, username: null, firstname: null, lastname: null, email: null, country: null});
       this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));

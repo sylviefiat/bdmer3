@@ -16,6 +16,7 @@ import { CountriesService } from "../../core/services/index";
 
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
+import { CountryListService } from '../services/index';
 
 @Injectable()
 export class CountriesEffects {
@@ -29,6 +30,22 @@ export class CountriesEffects {
    * Wrapping the database open call in `defer` makes
    * effect easier to test.
    */
+  @Effect({ dispatch: false })
+  openDB$: Observable<any> = defer(() => { 
+    return this.countriesService.initDB('countries','http://entropie-dev:5984/');
+  });
+
+  @Effect() init$: Observable<Action> = this.actions$
+    .ofType(CountriesAction.ActionTypes.INIT)
+    .startWith(new CountriesAction.InitAction)
+    .switchMap(() => this.countryListService.getCountryList())
+    .map(payload => {
+      //console.log(payload);
+      let countryList = payload;
+      return new CountriesAction.InitializedAction(countryList);
+    })
+    // nothing reacting to failure at moment but you could if you want (here for example)
+    .catch(() => Observable.of(new CountriesAction.InitFailedAction()));
 
   @Effect()
   loadCountries$: Observable<Action> = this.actions$
@@ -63,7 +80,7 @@ export class CountriesEffects {
         .catch(() => of(new CountriesAction.RemoveCountryFailAction(country)))
     );
 
-  constructor(private actions$: Actions, private countriesService: CountriesService) {
+  constructor(private actions$: Actions, private countriesService: CountriesService, private countryListService: CountryListService) {
     
     
   }
