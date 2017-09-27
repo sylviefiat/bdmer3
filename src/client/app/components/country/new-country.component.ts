@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { IAppState, getCountryList  } from '../../modules/ngrx/index';
 
-import { Country, Image } from '../../modules/countries/models/country';
+import { Country, Flagimg } from '../../modules/countries/models/country';
 
 @Component({
   moduleId: module.id,
@@ -43,18 +43,11 @@ export class NewCountryComponent implements OnInit {
     }
   }
 
-  safeUrl(flag : Observable<Image>): SafeUrl {
-    //console.log(flag);
-    return flag.subscribe(data => {console.log(data);return data._attachments},err=> console.log(err),() => console.log('done'));
-    //return null;
-  }
-
   get flag() {
-   
     return (
       this.form.get('pays') &&
       this.form.get('pays').value &&
-      this.form.get('pays').value['flag']
-    );
+        this.form.get('pays').value['flag']
+    )
   }
 }

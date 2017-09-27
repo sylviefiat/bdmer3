@@ -2,7 +2,7 @@ export interface Country {
 	_id: string;
 	code: string;
 	name: string;
-	flag: Image;
+	flag: Flagimg;
 	users: User[];
 }
 
@@ -15,7 +15,7 @@ export interface User {
   country: string;
 }
 
-export interface Image {
+export interface Flagimg {
 	_id: string;
 	_attachments: {
 		flag: {

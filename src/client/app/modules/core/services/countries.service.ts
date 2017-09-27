@@ -1,22 +1,24 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Store } from '@ngrx/store';
+import { of } from 'rxjs/observable/of';
 
 import { IAppState, getCountry } from '../../ngrx/index';
 
 import * as PouchDB from "pouchdb";
-import { User, Country } from '../../countries/models/country';
+import { User, Country, Flagimg } from '../../countries/models/country';
 
 @Injectable()
 export class CountriesService {
   public currentCountry: Country;
   public currentUser: User;
+  public currentFlag: Flagimg;
 
   private db: any;
 
-  constructor(private store: Store<IAppState>) { 
+  constructor(private store: Store<IAppState>, private http: Http) { 
     /*this.db = new PouchDB('countries');
     this.sync('http://entropie-dev:5984/countries'); */
   }  
@@ -27,11 +29,11 @@ export class CountriesService {
   }
 
   public getAll() : Observable<any> {  
-  //console.log("getall !");      
         return fromPromise(
             this.db.allDocs({ include_docs: true })
                 .then(docs => {
                     return docs.rows.map(row => {
+                      console.log(row.doc);
                         return row.doc;
                     });
                 }));
@@ -52,24 +54,25 @@ export class CountriesService {
     });
   }
 
-  addCountry(pays: any) : Promise<any> { 
-  console.log(pays);  
-  console.log(pays.pays.flag);  
-  return this.db.put({
-    code: pays.pays.code,
-    name: pays.pays.name,
-    flag: {
-      _attachments: {
-       flag: {
-         type: pays.pays.flag._attachments.flag.type,
-         data: pays.pays.flag._attachments.flag.data
-       }
-     }
-   }
-  }).catch(function (err) {
-    console.log(err);
-  });
-  	//return this.db.post(country);
+  addCountry(countryJson: any) : Observable<Country> { 
+    let country = countryJson.pays;
+    let url ='../node_modules/svg-country-flags/svg/'+country.code.toLowerCase()+'.svg';
+    let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
+    let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
+
+    return this.http
+        .get(url, {
+            headers: headers,
+            responseType: ResponseContentType.Blob
+        })
+        .map(res => 
+          res.blob())
+        .map(blob => {
+          let insert = {code:country.code, name: country.name, flag:{_attachments:{flag:{type:blob.type,data:blob}}}};
+          this.currentCountry = {_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null};
+          return this.db.put(this.currentCountry);
+        })
+    
   }
 
   removeCountry(country: Country) : Promise<any>{

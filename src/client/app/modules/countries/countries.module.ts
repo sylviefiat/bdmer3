@@ -9,8 +9,8 @@ import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
 import { CountriesEffects } from './effects/index';
-import { CountryListService } from './services/country-list.service';
 import { CountryExistsGuard } from './guards/country-exists';
+import { CountryListService } from './services/country-list.service';
 
 
 @NgModule({

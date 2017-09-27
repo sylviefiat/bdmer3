@@ -63,11 +63,11 @@ export class CountriesEffects {
     .ofType(CountriesAction.ActionTypes.ADD_COUNTRY)
     .map((action: CountriesAction.AddCountryAction) => action.payload)
     .mergeMap(country => 
-      fromPromise(this.countriesService
+      this.countriesService
         .addCountry(country))
-        .map(() => new CountriesAction.AddCountrySuccessAction(country))
-        .catch(() => of(new CountriesAction.AddCountryFailAction(country)))
-    );
+        .map((country) => new CountriesAction.AddCountrySuccessAction(country))
+        .catch((country) => of(new CountriesAction.AddCountryFailAction(country)))
+    ;
 
   @Effect()
   removeCountryFromCountries$: Observable<Action> = this.actions$
