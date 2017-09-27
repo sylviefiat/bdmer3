@@ -80,7 +80,9 @@ export class CountryDetailComponent {
   }
 
   get flag() {
-    return this.country.flag &&
-      this.country.flag._attachments;    
+    return (
+      this.country &&
+      this.country.flag
+    )
   }
 }

@@ -3,10 +3,11 @@ import { Country } from './../../modules/countries/models/country';
 
 @Component({
   selector: 'bc-country-preview',
-  template: `
+  template: `<p> bpatoi</p>
     <a [routerLink]="['/countries', id]">
       <md-card>
         <md-card-title-group>
+          <p>hello</p>
           <img md-card-sm-image *ngIf="flag" [src]="flag"/>
           <md-card-title>{{ name }}</md-card-title>
         </md-card-title-group>

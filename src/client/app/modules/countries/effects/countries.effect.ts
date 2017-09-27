@@ -5,6 +5,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import { Injectable, NgZone } from '@angular/core';
 import { Action } from '@ngrx/store';
+import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
@@ -69,6 +70,14 @@ export class CountriesEffects {
         .catch((country) => of(new CountriesAction.AddCountryFailAction(country)))
     ;
 
+  @Effect({ dispatch: false }) addCountrySuccess$ = this.actions$
+    .ofType(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS)
+    .do(() =>this.router.navigate(['/countries']));
+
+  @Effect({ dispatch: false }) removeCountrySuccess$ = this.actions$
+    .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS)
+    .do(() =>this.router.navigate(['/countries']));
+
   @Effect()
   removeCountryFromCountries$: Observable<Action> = this.actions$
     .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY)
@@ -80,7 +89,7 @@ export class CountriesEffects {
         .catch(() => of(new CountriesAction.RemoveCountryFailAction(country)))
     );
 
-  constructor(private actions$: Actions, private countriesService: CountriesService, private countryListService: CountryListService) {
+  constructor(private actions$: Actions, private router: Router, private countriesService: CountriesService, private countryListService: CountryListService) {
     
     
   }

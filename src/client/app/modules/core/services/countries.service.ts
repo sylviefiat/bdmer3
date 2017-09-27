@@ -33,7 +33,6 @@ export class CountriesService {
             this.db.allDocs({ include_docs: true })
                 .then(docs => {
                     return docs.rows.map(row => {
-                      console.log(row.doc);
                         return row.doc;
                     });
                 }));

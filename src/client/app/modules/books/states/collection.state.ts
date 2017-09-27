@@ -27,6 +27,7 @@ export function getCollectionBookIds(state$: Observable<ICollectionState>){
 }
 
 export function getCollectionBook(state$: Observable<IAppState>){
+  console.log(state$);
   return state$.select(state => state.collection.ids.map(id => state.book.entities[id]));
 }
 

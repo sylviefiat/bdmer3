@@ -48,9 +48,9 @@ export class CountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
+    this.store.dispatch(new CountriesAction.LoadAction()); 
     this.countries$ = this.store.let(getCountries);
-    //console.log(this.countries$);
-    this.store.dispatch(new CountriesAction.LoadAction());    
+    console.log(this.countries$);   
   }
 
   newCountry() {

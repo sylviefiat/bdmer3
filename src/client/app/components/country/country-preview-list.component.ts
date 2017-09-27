@@ -3,8 +3,9 @@ import { Country } from './../../modules/countries/models/country';
 
 @Component({
   selector: 'bc-country-preview-list',
-  template: `
+  template: `<p>bela</p>
     <bc-country-preview *ngFor="let country of countries" [country]="country"></bc-country-preview>
+  
   `,
   styles: [
     `
@@ -19,7 +20,4 @@ import { Country } from './../../modules/countries/models/country';
 export class CountryPreviewListComponent {
   @Input() countries: Country[];
 
-  constructor() {
-    //console.log(this.countries)
-  }
 }
