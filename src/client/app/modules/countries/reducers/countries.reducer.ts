@@ -71,8 +71,9 @@ console.log(action.type);
 
       return {
         ...state,
-        ids: state.ids.filter(id => id !== country.id),
-          error: null
+        entities: state.entities.filter(country => state.ids.includes(country._id)?false:country),
+        ids: state.ids.filter(id => id !== country._id),
+        error: null
 
       };
     }

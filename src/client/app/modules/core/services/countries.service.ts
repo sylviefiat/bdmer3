@@ -54,6 +54,7 @@ export class CountriesService {
   }
 
   addCountry(countryJson: any) : Observable<Country> { 
+    console.log(countryJson);
     let country = countryJson.pays;
     let url ='../node_modules/svg-country-flags/svg/'+country.code.toLowerCase()+'.svg';
     let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
@@ -67,9 +68,9 @@ export class CountriesService {
         .map(res => 
           res.blob())
         .map(blob => {
-          let insert = {code:country.code, name: country.name, flag:{_attachments:{flag:{type:blob.type,data:blob}}}};
-          this.currentCountry = of({_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null});
-          return this.db.put(this.currentCountry);
+          let fullCountry = {_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null}
+          this.currentCountry = of(fullCountry);
+          return this.db.put(fullCountry);
         })
     
   }
@@ -77,7 +78,7 @@ export class CountriesService {
   removeCountry(country: Country) : Promise<any>{
     this.currentCountry = null;
     console.log(country);
-  	return this.db.remove(country);
+    return this.db.remove(country);
   }
 
   addUser(user: User): Observable<any> {
