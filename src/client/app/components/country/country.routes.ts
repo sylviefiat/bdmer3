@@ -2,6 +2,7 @@ import { CountryPageComponent } from './country-page.component';
 import { ViewCountryPageComponent } from './view-country-page.component';
 import { ViewUserPageComponent } from './view-user-page.component';
 import { NewCountryPageComponent } from './new-country-page.component';
+import { NewUserPageComponent } from './new-user-page.component';
 
 export const CountryRoutes: Array<any> = [
   {
@@ -13,11 +14,15 @@ export const CountryRoutes: Array<any> = [
     component: ViewCountryPageComponent
   },
   {
-    path: 'countries/users/:id',
-    component: ViewUserPageComponent
-  },
-  {
     path: 'newcountry',
     component: NewCountryPageComponent
+  },
+  {
+    path: 'countries/:id/newuser',
+    component: NewUserPageComponent
+  },
+  {
+    path: 'countries/:id/:username',
+    component: ViewUserPageComponent
   },
 ];

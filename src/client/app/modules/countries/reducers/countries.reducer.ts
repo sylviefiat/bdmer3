@@ -6,7 +6,6 @@ export function countriesReducer(
   state: ICountriesState = countriesInitialState,
   action: CountriesAction.Actions
 ): ICountriesState {
-console.log(action.type);
   switch (action.type) {
     case CountriesAction.ActionTypes.LOAD: {
       return {
@@ -30,7 +29,6 @@ console.log(action.type);
 
       const newCountryIds = newCountries.map(country => country._id);
       
-      console.log([...state.ids, ...newCountryIds]);
       return {
         ...state,
         ids: [...state.ids, ...newCountryIds],

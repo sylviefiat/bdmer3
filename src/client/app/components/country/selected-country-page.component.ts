@@ -22,7 +22,7 @@ export class SelectedCountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
-    console.log("initcountry");
+    //console.log("initcountry");
     this.store.dispatch(new CountriesAction.LoadAction()); 
     this.country$ = this.store.let(getSelectedCountry);   
   }

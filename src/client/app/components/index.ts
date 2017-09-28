@@ -27,6 +27,8 @@ import { ViewUserPageComponent } from './country/view-user-page.component';
 import { SelectedUserPageComponent } from './country/selected-user-page.component';
 import { NewCountryPageComponent } from './country/new-country-page.component';
 import { NewCountryComponent } from './country/new-country.component';
+import { NewUserPageComponent } from './country/new-user-page.component';
+import { NewUserComponent } from './country/new-user.component';
 
 export const APP_COMPONENTS: any[] = [
   AppComponent,
@@ -58,6 +60,8 @@ export const APP_COMPONENTS: any[] = [
   ViewCountryPageComponent,
   ViewUserPageComponent,
   SelectedUserPageComponent,
+  NewUserPageComponent,
+  NewUserComponent
 ];
 
 export * from './app.component';
@@ -89,3 +93,5 @@ export * from './country/view-user-page.component';
 export * from  './country/selected-user-page.component';
 export * from './country/new-country.component';
 export * from './country/new-country-page.component';
+export * from './country/new-user-page.component';
+export * from './country/new-user.component';

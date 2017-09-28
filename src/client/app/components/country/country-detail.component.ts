@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
-import { Country } from './../../modules/countries/models/country';
+import { RouterExtensions, Config } from '../../modules/core/index';
+import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
+import { Country } from './../../modules/countries/models/country';
+
 
 @Component({
   selector: 'bc-country-detail',
@@ -15,8 +19,11 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
         <bc-user-detail *ngFor="let user of users" [user]="user"></bc-user-detail>
       </md-card-content>
       <md-card-actions align="start">
+        <button md-raised-button color="primary" (click)="addUser()">
+          Add user
+        </button>
         <button md-raised-button color="warn" (click)="removecountry.emit(country)">
-        Remove Country from Database
+          Delete Country
         </button>
       </md-card-actions>
     </md-card>
@@ -65,7 +72,7 @@ export class CountryDetailComponent{
   @Input() country: Country;
   @Output() removecountry = new EventEmitter<Country>();
 
-  constructor(private sanitizer: DomSanitizer){}
+  constructor(private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute){}
 
   /**
    * Tip: Utilize getters to keep templates clean
@@ -93,5 +100,16 @@ export class CountryDetailComponent{
 
     }    
     return null;
+  }
+
+  addUser() {
+    console.log(this.activatedRoute);
+    this.routerext.navigate(['newuser'], {
+      relativeTo: this.activatedRoute,
+      transition: {
+        duration: 1000,
+        name: 'slideTop',
+      }
+    });
   }
 }
