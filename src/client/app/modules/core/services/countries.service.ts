@@ -2,23 +2,20 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Store } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 
-import { IAppState, getCountry } from '../../ngrx/index';
 
 import * as PouchDB from "pouchdb";
 import { User, Country, Flagimg } from '../../countries/models/country';
 
 @Injectable()
 export class CountriesService {
-  public currentCountry: Country;
-  public currentUser: User;
-  public currentFlag: Flagimg;
+  public currentCountry: Observable<Country>;
+  public currentUser: Observable<User>;
 
   private db: any;
 
-  constructor(private store: Store<IAppState>, private http: Http) { 
+  constructor(private http: Http) { 
     /*this.db = new PouchDB('countries');
     this.sync('http://entropie-dev:5984/countries'); */
   }  
@@ -50,6 +47,9 @@ export class CountriesService {
     return this.db.query(this.countryMapFunction, {
       key: countryname, 
       include_docs: true
+    }).then(doc => {
+      console.log(doc);
+      return doc;
     });
   }
 
@@ -68,41 +68,36 @@ export class CountriesService {
           res.blob())
         .map(blob => {
           let insert = {code:country.code, name: country.name, flag:{_attachments:{flag:{type:blob.type,data:blob}}}};
-          this.currentCountry = {_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null};
+          this.currentCountry = of({_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null});
           return this.db.put(this.currentCountry);
         })
     
   }
 
   removeCountry(country: Country) : Promise<any>{
+    this.currentCountry = null;
   	return this.db.remove(country);
   }
 
-  addUser(user: User) : /*Observable<*/any/*>*/ {
-    console.log(this.store);
-  	/*return this.store.let(getActualCountry).
-  		map(country => {
-  			console.log(country);        
-      	return this.database.get(country).map((doc) => {
-      		console.log(doc);
-          user.country=doc.countryInfo.name;
-      		doc.users[doc.users.length] = user;
-      		return this.database.update(doc);
-      	});
-      })*/;
-    
+  addUser(user: User): Observable<any> {
+    return this.currentCountry.mergeMap(country => {
+      return this.db.get(country.code).map((doc) => {
+        console.log(doc);
+        user.country=doc.countryInfo.name;
+        doc.users[doc.users.length] = user;
+        return this.db.update(doc);
+      });
+    })
   }
 
-  removeUser(user: User) : /*Observable<*/any/*>*/ {
-    console.log(this.store);
-  	/*return this.store.let(getCountry).map(country => {
-  		console.log(country);
-      return this.database.get(country).map((doc) => {
-      	console.log(doc);
-      	doc.users = doc.users.filter(id => id !== user.id);
-      	return this.database.update(doc);
-      })
-    });*/
+  removeUser(user: User): Observable<any> {
+    return this.currentCountry.mergeMap(country => {
+  	  return this.db.get(country.code).map((doc) => {
+        console.log(doc);
+        doc.users = doc.users.filter(_id => _id !== user._id);
+        return this.db.update(doc);
+      });
+    });
   }
 
   userMapFunction(doc) {

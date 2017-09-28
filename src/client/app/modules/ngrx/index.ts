@@ -43,8 +43,8 @@ import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookI
 import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
 import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser} from '../auth/index';
-import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, getCurrentCountryId,getCurrentCountry, getCountryNamesList} from '../countries/index';
-import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError} from '../countries/index';
+import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, /*getCurrentCountryId,getCurrentCountry, */getCountryNamesList} from '../countries/index';
+import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -164,9 +164,10 @@ export const getCountryList: any = compose(getCountryNamesList, getCountriesStat
 
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
-export const getCountries: any = compose(getCountriesEntities, getCountriesState);
-export const getCountry: any = compose(getCurrentCountry, getCountriesState);
+export const getCountriesInApp: any = compose(getCountriesEntities, getCountriesState);
+//export const getCountryInApp: any = compose(getCurrentCountry, getCountriesState);
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 
+export const getSelectedCountry: any = compose(getCurrentCountry, getAppState);
 export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
 export const getUserCountry: any = compose(getCurrentUser, getCountryState);

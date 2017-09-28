@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewChecked } from '@angular/core';
 import { Country } from './../../modules/countries/models/country';
 
 @Component({
   selector: 'bc-country-preview-list',
-  template: `<p>bela</p>
+  template: `
     <bc-country-preview *ngFor="let country of countries" [country]="country"></bc-country-preview>
   
   `,
@@ -17,7 +17,14 @@ import { Country } from './../../modules/countries/models/country';
   `,
   ],
 })
-export class CountryPreviewListComponent {
+export class CountryPreviewListComponent implements AfterViewChecked {
   @Input() countries: Country[];
 
+  ngAfterViewChecked() {     
+    //console.log(this.countries);   
+  }
+
+  get pays() {
+    return this.countries;
+  }
 }

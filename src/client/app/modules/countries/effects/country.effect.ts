@@ -10,12 +10,14 @@ import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Store } from '@ngrx/store';
 
 import { of } from 'rxjs/observable/of';
 import { CountriesService } from "../../core/services/index";
 
 import { CountryAction } from '../actions/index';
 import { Country, User } from '../models/country';
+import { IAppState, getSelectedCountry } from '../../ngrx/index';
 
 @Injectable()
 export class CountryEffects {
@@ -53,7 +55,7 @@ export class CountryEffects {
         .catch((user) => of(new CountryAction.RemoveUserFailAction(user))
     );
 
-  constructor(private actions$: Actions, private countriesService: CountriesService) {
+  constructor(private actions$: Actions, private store: Store<IAppState>, private countriesService: CountriesService) {
     
     
   }

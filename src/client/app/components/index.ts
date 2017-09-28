@@ -47,14 +47,14 @@ export const APP_COMPONENTS: any[] = [
   SignupPageComponent,
   SignupComponent,
   LogoutComponent,
+  CountryPageComponent,
   NewCountryPageComponent,
   NewCountryComponent,
   UserDetailComponent,
-  CountryDetailComponent,
-  CountryPreviewComponent,
   CountryPreviewListComponent,
+  CountryPreviewComponent,
+  CountryDetailComponent,
   SelectedCountryPageComponent,
-  CountryPageComponent,
   ViewCountryPageComponent,
   ViewUserPageComponent,
   SelectedUserPageComponent,
@@ -79,9 +79,9 @@ export * from './login/logout.component';
 export * from './login/signup-page.component';
 export * from './login/signup.component';
 export * from './country/country-page.component';
-export * from './country/country-detail.component';
 export * from './country/country-preview-list.component';
 export * from './country/country-preview.component';
+export * from './country/country-detail.component';
 export * from './country/selected-country-page.component';
 export * from './country/user-detail.component';
 export * from './country/view-country-page.component';

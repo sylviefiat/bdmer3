@@ -5,18 +5,18 @@ import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { PouchDBService } from "../../modules/core/services/pouchdb.service";
 
-import { IAppState, getCountries } from '../../modules/ngrx/index';
+import { IAppState, getCountriesInApp } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
+import { Book } from '../../modules/books/models/book';
 
 @Component({
-  selector: 'bc-countries-page',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'bc-country-page',
+  //changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <md-card>
       <md-card-title>Countries in BDMER</md-card-title>
     </md-card>
-
     <bc-country-preview-list [countries]="countries$ | async"></bc-country-preview-list>
     <md-card>
       <md-card-actions align="start">
@@ -48,9 +48,17 @@ export class CountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
+    this.countries$ = this.store.let(getCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction()); 
-    this.countries$ = this.store.let(getCountries);
-    console.log(this.countries$);   
+      console.log(this.countries$) 
+  }
+
+  get pays() {
+    return this.countries$.map(countries => {
+      console.log(countries);
+      return this.countries$;
+    })
+    
   }
 
   newCountry() {

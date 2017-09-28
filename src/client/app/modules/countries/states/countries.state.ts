@@ -7,7 +7,7 @@ export interface ICountriesState {
   loading: boolean;
   entities: Country[];
   ids: string[];
-  currentCountryId: string;
+  //currentCountryId: string;
   error: string | null;
   countryList: any[];
 }
@@ -17,7 +17,7 @@ export const countriesInitialState: ICountriesState = {
   loading: false,
   entities: [],
   ids: [],
-  currentCountryId: null,
+  //currentCountryId: null,
   error: null,
   countryList: []
 };
@@ -31,20 +31,20 @@ export function getCountriesLoading(state$: Observable<ICountriesState>){
 }
 
 export function getCountriesEntities(state$: Observable<ICountriesState>){
-  return state$.select(state => {state.entities});
+  return state$.select(state => state.entities);
 }
 
 export function getCountriesIds(state$: Observable<ICountriesState>){
   return state$.select(state => state.ids);
 }
 
-export function getCurrentCountryId(state$: Observable<ICountriesState>){
+/*export function getCurrentCountryId(state$: Observable<ICountriesState>){
   return state$.select(state => state.currentCountryId);
 }
 
 export function getCurrentCountry(state$: Observable<ICountriesState>){
   return state$.select(state => state.entities[state.currentCountryId]);
-}
+}*/
 
 export function getCountryError(state$: Observable<ICountriesState>){
   return state$.select(state => state.error);

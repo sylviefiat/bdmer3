@@ -1,15 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { Country } from './../../modules/countries/models/country';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'bc-country-preview',
-  template: `<p> bpatoi</p>
+  template: `
     <a [routerLink]="['/countries', id]">
       <md-card>
         <md-card-title-group>
-          <p>hello</p>
           <img md-card-sm-image *ngIf="flag" [src]="flag"/>
           <md-card-title>{{ name }}</md-card-title>
+          <md-card-subtitle>{{ code }}</md-card-subtitle>
         </md-card-title-group>
         <md-card-content>
           <md-card-subtitle>Country users</md-card-subtitle>
@@ -44,8 +45,11 @@ import { Country } from './../../modules/countries/models/country';
       text-decoration: none;
     }
     img {
-      width: 60px;
-      min-width: 60px;
+      display: block;
+      max-width:100px;
+      max-height:70px;
+      width: auto;
+      height: auto;
       margin-left: 5px;
     }
     md-card-content {
@@ -65,6 +69,8 @@ import { Country } from './../../modules/countries/models/country';
 export class CountryPreviewComponent {
   @Input() country: Country;
 
+  constructor(private sanitizer: DomSanitizer){}
+
   get id() {
     return this.country._id;
   }
@@ -78,8 +84,16 @@ export class CountryPreviewComponent {
   }
 
   get flag() {
-    return this.country.flag &&
-      this.country.flag._attachments;    
+    if(this.country.flag &&
+      this.country.flag._attachments.flag.data){
+      let blob = this.country.flag._attachments.flag;
+      var file = new Blob([ blob.data ], {
+        type : blob.type
+      });
+      return this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
+
+    }    
+    return null;
   }
 
 }

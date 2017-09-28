@@ -7,7 +7,7 @@ export function countryReducer(
   action: CountryAction.Actions
 ): ICountryState {
 
-  switch (action.type) {    
+  switch (action.type) { 
 
     case CountryAction.ActionTypes.ADD_USER_SUCCESS:
     case CountryAction.ActionTypes.REMOVE_USER_FAIL: {
@@ -30,6 +30,14 @@ export function countryReducer(
         userIds: state.userIds.filter(id => id !== user.id),
       });
     }
+
+    case CountryAction.ActionTypes.SELECT: {
+      return {
+        ...state,
+        currentCountry: action.payload,
+      };
+    }
+
 
     default: {
       return state;

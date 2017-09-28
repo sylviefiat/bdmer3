@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getCountry } from '../../modules/ngrx/index';
+import { IAppState, getSelectedCountry } from '../../modules/ngrx/index';
 import { CountryAction } from '../../modules/countries/actions/index';
 import { User } from '../../modules/countries/models/country';
 
@@ -23,7 +23,7 @@ export class SelectedUserPageComponent implements OnInit {
 
   ngOnInit() {
     console.log("inituser");
-    this.user$ = this.store.let(getCountry);    
+    this.user$ = this.store.let(getSelectedCountry);    
   }
 
   removeFromCountry(user: User) {

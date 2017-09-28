@@ -9,7 +9,7 @@ export const CountryRoutes: Array<any> = [
     component: CountryPageComponent
   },
   {
-    path: 'countries/:id',
+    path: 'countries/:_id',
     component: ViewCountryPageComponent
   },
   {

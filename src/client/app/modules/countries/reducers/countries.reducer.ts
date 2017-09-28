@@ -25,33 +25,18 @@ console.log(action.type);
 
     case CountriesAction.ActionTypes.LOAD_SUCCESS: {      
       const countries = action.payload;
-      const newCountries = countries.filter(country => !state.entities[country.id]);
 
-      const newCountryIds = newCountries.map(country => country.id);
-      const newCountryEntities = newCountries.reduce(
-        (entities: { [id: string]: Country }, country: Country) => {
-          return Object.assign(entities, {
-            [country._id]: country,
-          });
-        },
-        {}
-      );
-      console.log(Object.assign({}, state.entities, newCountryEntities));
+      const newCountries = countries.filter(country => state.ids.includes(country._id)?false:country);
+
+      const newCountryIds = newCountries.map(country => country._id);
+      
+      console.log([...state.ids, ...newCountryIds]);
       return {
         ...state,
         ids: [...state.ids, ...newCountryIds],
-        entities: Object.assign({}, state.entities, newCountryEntities)
+        entities: [...state.entities, ...newCountries]
       };
-      /*console.log(countries);
-      return {
-        ...state,
-        loaded: true,
-        loading: false,
-        entities: countries,
-        ids: countries.map(country => country.code),
-        currentCountryId: null,
-        error: null
-      };*/
+      
     }
 
     case CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS: {
