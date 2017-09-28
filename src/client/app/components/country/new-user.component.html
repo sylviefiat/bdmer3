@@ -1,0 +1,50 @@
+<md-card>
+      <md-card-title>New User</md-card-title>
+      <md-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <p>
+            <fa [name]="'user-o'" [border]=false [size]=2></fa>
+            <md-input-container>
+              <input type="text" mdInput placeholder="Username" formControlName="username">
+            </md-input-container>
+          </p>
+          <p>
+            <fa [name]="'user-o'" [border]=false [size]=2></fa>
+            <md-input-container>
+              <input type="text" mdInput placeholder="Prénom" formControlName="prenom">
+            </md-input-container>
+          </p>
+          <p>
+            <fa [name]="'user-o'" [border]=false [size]=2></fa>
+            <md-input-container>
+              <input type="text" mdInput placeholder="Nom" formControlName="nom">
+            </md-input-container>
+          </p>
+          <p>
+            <fa [name]="'envelope-o'" [border]=false [size]=2></fa>
+            <md-input-container>
+              <input type="email" mdInput placeholder="Email" formControlName="email">
+            </md-input-container>
+          </p>
+          <p>
+            <fa [name]="'key'" [border]=false [size]=2></fa>
+            <md-input-container>
+              <input type="password" mdInput placeholder="Password" formControlName="password">
+            </md-input-container>
+          </p>
+          <p>
+            <fa [name]="'globe'" [border]=false [size]=2></fa>
+            <img md-card-sm-image *ngIf="flag" [src]="flag"/>
+          </p>
+          <p *ngIf="errorMessage" class="loginError">
+            {{ errorMessage }}
+          </p>    
+
+          
+          <p class="SaveButtons">
+            <button type="submit" md-button>Save</button>
+          </p>
+        </form>
+      </md-card-content>
+
+    </md-card>
