@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { Country } from './../../modules/countries/models/country';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'bc-country-detail',
@@ -52,7 +53,7 @@ import { Country } from './../../modules/countries/models/country';
   `,
   ],
 })
-export class CountryDetailComponent {
+export class CountryDetailComponent{
   /**
    * Presentational components receieve data through @Input() and communicate events
    * through @Output() but generally maintain no internal state of their
@@ -63,6 +64,8 @@ export class CountryDetailComponent {
    */
   @Input() country: Country;
   @Output() removecountry = new EventEmitter<Country>();
+
+  constructor(private sanitizer: DomSanitizer){}
 
   /**
    * Tip: Utilize getters to keep templates clean
@@ -80,9 +83,15 @@ export class CountryDetailComponent {
   }
 
   get flag() {
-    return (
-      this.country &&
-      this.country.flag
-    )
+    if(this.country.flag &&
+      this.country.flag._attachments.flag.data){
+      let blob = this.country.flag._attachments.flag;
+      var file = new Blob([ blob.data ], {
+        type : blob.type
+      });
+      return this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
+
+    }    
+    return null;
   }
 }

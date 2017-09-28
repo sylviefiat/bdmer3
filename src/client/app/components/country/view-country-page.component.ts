@@ -28,7 +28,7 @@ import { CountryAction } from '../../modules/countries/actions/index';
 export class ViewCountryPageComponent implements OnDestroy {
   actionsSubscription: Subscription;
 
-  constructor(store: Store<IAppState>, route: ActivatedRoute) {
+  constructor(store: Store<IAppState>, route: ActivatedRoute) {    
     this.actionsSubscription = route.params
       .map(params => new CountryAction.SelectAction(params.id))
       .subscribe(store);

@@ -76,6 +76,7 @@ export class CountriesService {
 
   removeCountry(country: Country) : Promise<any>{
     this.currentCountry = null;
+    console.log(country);
   	return this.db.remove(country);
   }
 

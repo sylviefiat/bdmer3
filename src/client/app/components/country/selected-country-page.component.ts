@@ -9,7 +9,7 @@ import { Country } from '../../modules/countries/models/country';
 @Component({
   selector: 'bc-selected-country-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<p>gnici</p>
+  template: `
     <bc-country-detail
       [country]="country$ | async"
       (removecountry)="removeFromCountries($event)">
@@ -23,7 +23,8 @@ export class SelectedCountryPageComponent implements OnInit {
 
   ngOnInit() {
     console.log("initcountry");
-    this.country$ = this.store.let(getSelectedCountry);    
+    this.store.dispatch(new CountriesAction.LoadAction()); 
+    this.country$ = this.store.let(getSelectedCountry);   
   }
 
   removeFromCountries(country: Country) {

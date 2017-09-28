@@ -17,24 +17,27 @@ export function countryReducer(
         return state;
       }
 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         userIds: [...state.userIds, user.id],
-      });
+      };
     }
 
     case CountryAction.ActionTypes.REMOVE_USER_SUCCESS:
     case CountryAction.ActionTypes.ADD_USER_FAIL: {
       const user = action.payload;
 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         userIds: state.userIds.filter(id => id !== user.id),
-      });
+      };
     }
 
     case CountryAction.ActionTypes.SELECT: {
+      console.log(action.payload);
       return {
         ...state,
-        currentCountry: action.payload,
+        currentCountryId: action.payload,
       };
     }
 

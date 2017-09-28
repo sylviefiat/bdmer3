@@ -17,14 +17,14 @@ import { Country } from './../../modules/countries/models/country';
   `,
   ],
 })
-export class CountryPreviewListComponent implements AfterViewChecked {
+export class CountryPreviewListComponent /*implements AfterViewChecked*/ {
   @Input() countries: Country[];
 
-  ngAfterViewChecked() {     
+  /*ngAfterViewChecked() {     
     //console.log(this.countries);   
   }
 
   get pays() {
     return this.countries;
-  }
+  }*/
 }
