@@ -37,8 +37,6 @@ import { Book } from '../../modules/books/models/book';
 })
 export class CollectionPageComponent implements OnInit {
   books$: Observable<Book[]>;
-  lat: number = 51.678418;
-  lng: number = 7.809007;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
