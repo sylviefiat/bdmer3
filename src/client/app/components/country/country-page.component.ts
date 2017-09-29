@@ -50,12 +50,12 @@ export class CountryPageComponent implements OnInit {
   ngOnInit() {    
     this.countries$ = this.store.let(getCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction()); 
-      console.log(this.countries$) 
+      //console.log(this.countries$) 
   }
 
   get pays() {
     return this.countries$.map(countries => {
-      console.log(countries);
+      //console.log(countries);
       return this.countries$;
     })
     

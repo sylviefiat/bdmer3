@@ -5,7 +5,7 @@
           <p>
             <fa [name]="'globe'" [border]=false [size]=2></fa>
            <md-select placeholder="Select country" formControlName="pays" >
-             <md-option *ngFor="let pays of (countryList$ | async)" [value]="pays">{{ pays.name }}</md-option>
+             <md-option *ngFor="let pays of (countryList$ | async)" [value]="pays" [disabled]="countriesIds$ | async | bcHasIntersection:pays">{{ pays.name }}</md-option>
           </md-select>
           <img md-card-sm-image *ngIf="flag" [src]="flag | async" />
         </p>

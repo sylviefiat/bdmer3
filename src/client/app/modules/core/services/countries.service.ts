@@ -53,7 +53,7 @@ export class CountriesService {
     });
   }
 
-  addCountry(countryJson: any) : Observable<Country> { 
+  addCountry(countryJson: any) : Observable<any> { 
     console.log(countryJson);
     let country = countryJson.pays;
     let url ='../node_modules/svg-country-flags/svg/'+country.code.toLowerCase()+'.svg';
@@ -85,7 +85,7 @@ export class CountriesService {
     return this.currentCountry.mergeMap(country => {
       return this.db.get(country.code).map((doc) => {
         console.log(doc);
-        user.country=doc.countryInfo.name;
+        user.countryCode=doc.countryInfo.name;
         doc.users[doc.users.length] = user;
         return this.db.update(doc);
       });

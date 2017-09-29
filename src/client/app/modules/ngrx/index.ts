@@ -165,6 +165,7 @@ export const getCountryList: any = compose(getCountryNamesList, getCountriesStat
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
 export const getCountriesInApp: any = compose(getCountriesEntities, getCountriesState);
+export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesState);
 //export const getCountryInApp: any = compose(getCurrentCountry, getCountriesState);
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 

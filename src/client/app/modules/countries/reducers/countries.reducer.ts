@@ -57,6 +57,7 @@ export function countriesReducer(
     case CountriesAction.ActionTypes.REMOVE_COUNTRY_FAIL:
     case CountriesAction.ActionTypes.ADD_COUNTRY_FAIL:
     {     
+      console.log("erreur");
       return {
         ...state,
         error: action.payload

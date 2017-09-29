@@ -65,10 +65,10 @@ export class CountriesEffects {
     .map((action: CountriesAction.AddCountryAction) => action.payload)
     .mergeMap(country => 
       this.countriesService
-        .addCountry(country))
+        .addCountry(country)
         .map((country) => new CountriesAction.AddCountrySuccessAction(country))
-        .catch((country) => of(new CountriesAction.AddCountryFailAction(country)))
-    ;
+        .catch((country) => {console.log(country);return of(new CountriesAction.AddCountryFailAction(country))})
+    );
 
   @Effect({ dispatch: false }) addCountrySuccess$ = this.actions$
     .ofType(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS)

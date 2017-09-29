@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+import { IAppState, getCountryList, getCountriesIdsInApp  } from '../../modules/ngrx/index';
 
-import { IAppState, getCountryList  } from '../../modules/ngrx/index';
-
+import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country, Flagimg } from '../../modules/countries/models/country';
 
 @Component({
@@ -19,6 +19,7 @@ import { Country, Flagimg } from '../../modules/countries/models/country';
 })
 export class NewCountryComponent implements OnInit {
   public countryList$: Observable<any[]>;
+  public countriesIds$: Observable<any[]>;
   public image: any;
 
   @Input() errorMessage: string | null;
@@ -34,6 +35,9 @@ export class NewCountryComponent implements OnInit {
 
   ngOnInit() {
     this.countryList$ = this.store.let(getCountryList);
+    this.store.dispatch(new CountriesAction.LoadAction()); 
+    this.countriesIds$ = this.store.let(getCountriesIdsInApp);
+    console.log("herer");
   }
 
   submit() {
