@@ -38,7 +38,9 @@ export function getCurrentUser(state$: Observable<ICountryState>){
 }
 
 export function getCurrentCountry(state$: Observable<IAppState>){
-  return state$.select(state => state.countries.entities.filter(country=> state.countries.ids.includes(state.country.currentCountryId)?country:false)[0]);
+  return state$.select(state => {
+    return state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0];
+  });
 }
 
 /*export function getUserError(state$: Observable<ICountryState>){
