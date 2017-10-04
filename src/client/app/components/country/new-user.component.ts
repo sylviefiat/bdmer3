@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewChecked, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-
-import { IAppState, getSelectedCountry  } from '../../modules/ngrx/index';
+import { IAppState  } from '../../modules/ngrx/index';
 
 import { User, Country } from '../../modules/countries/models/country';
+import { CountryAction } from '../../modules/countries/actions/index';
 
 @Component({
   moduleId: module.id,
@@ -17,11 +17,10 @@ import { User, Country } from '../../modules/countries/models/country';
     'new-user.component.css',
   ],
 })
-export class NewUserComponent implements OnInit {
+export class NewUserComponent implements AfterViewChecked {
 
   @Input() country: Country;
-  @Input() errorMessage: string | null;
-  
+  @Input() errorMessage: string | null;  
 
   @Output() submitted = new EventEmitter<User>();
 
@@ -31,23 +30,27 @@ export class NewUserComponent implements OnInit {
     username: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
+    countryCode: new FormControl(''),
   });
 
-  constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
+  constructor(private sanitizer: DomSanitizer ) {}
 
-  ngOnInit() {
-    
+  ngAfterViewChecked() {    
+    this.form.controls['countryCode'].setValue(this.country.code);
   }
 
   submit() {
     if (this.form.valid) {
-      console.log(this.submitted);
       this.submitted.emit(this.form.value);
     }
   }
 
+  get name() {
+    return this.country && this.country.name;
+  }
+
   get flag() {
-    if(this.country.flag &&
+    if(this.country && this.country.flag &&
       this.country.flag._attachments.flag.data){
       let blob = this.country.flag._attachments.flag;
       var file = new Blob([ blob.data ], {

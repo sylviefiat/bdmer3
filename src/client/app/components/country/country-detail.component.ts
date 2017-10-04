@@ -89,6 +89,11 @@ export class CountryDetailComponent{
     return this.country.code;
   }
 
+  get users() {
+    console.log(this.country.users);
+    return this.country.users;
+  }
+
   get flag() {
     if(this.country.flag &&
       this.country.flag._attachments.flag.data){

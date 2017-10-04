@@ -8,11 +8,11 @@ export interface Country {
 
 export interface User {
   _id: string;
+  nom: string;
+  prenom: string;
   username: string;
-  firstname: string;
-  lastname: string;
   email: string;
-  country: string;
+  countryCode: string;
 }
 
 export interface Flagimg {

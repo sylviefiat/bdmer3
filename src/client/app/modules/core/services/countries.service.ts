@@ -40,17 +40,21 @@ export class CountriesService {
     return this.db.query(this.userMapFunction, {
       key: username, 
       include_docs: true
+    }).then(result => result.rows && result.rows[0].doc)
+    .catch(function (err) {
+      console.log(err);
     });
   }
 
-  getCountry(countryname: string): Observable<Country> {
-    return this.db.query(this.countryMapFunction, {
-      key: countryname, 
-      include_docs: true
-    }).then(doc => {
-      console.log(doc);
-      return doc;
-    });
+  getCountry(countrycode: string): Observable<Country> {
+    return fromPromise(this.db.query(function (doc, emit) {
+      emit(doc.code);
+    }, {key: countrycode,include_docs:true}).then(function (result) {
+      //console.log(result.rows && result.rows[0].doc);
+      return result.rows && result.rows[0].doc;
+    }).catch(function (err) {
+      console.log(err);
+    }));
   }
 
   addCountry(countryJson: any) : Observable<any> { 
@@ -70,46 +74,56 @@ export class CountriesService {
         .map(blob => {
           let fullCountry = {_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null}
           this.currentCountry = of(fullCountry);
-          return this.db.put(fullCountry);
+          return this.db.put(fullCountry)
+        })
+        .filter(response => {console.log(response);return response.json().ok;})
+        .do(() => {
+          return this.currentCountry;
         })
     
   }
 
   removeCountry(country: Country) : Promise<any>{
     this.currentCountry = null;
-    console.log(country);
+    //console.log(country);
     return this.db.remove(country);
   }
 
-  addUser(user: User): Observable<any> {
-    return this.currentCountry.mergeMap(country => {
-      return this.db.get(country.code).map((doc) => {
-        console.log(doc);
-        user.countryCode=doc.countryInfo.name;
-        doc.users[doc.users.length] = user;
-        return this.db.update(doc);
-      });
-    })
+  addUser(user: User): Observable<Country> {
+    console.log(user);
+    return this.getCountry(user.countryCode)
+      .map(country => {
+        if(country.users===null){
+          country.users=[];
+        }
+        country.users[country.users.length] = user;
+        console.log(country);
+        return this.db.put(country);
+      })
+      .catch((err,caught) => { console.log(err); return caught;})
   }
 
-  removeUser(user: User): Observable<any> {
-    return this.currentCountry.mergeMap(country => {
-  	  return this.db.get(country.code).map((doc) => {
-        console.log(doc);
-        doc.users = doc.users.filter(_id => _id !== user._id);
-        return this.db.update(doc);
-      });
-    });
+  removeUser(user: User): Observable<Country> {
+    return this.getCountry(user.countryCode)
+      .map(country => {
+        country.users = country.users.filter(users => {return users.username!==user.username;});
+        return this.db.put(country);
+      })
+      .catch((err,caught) => { console.log(err); return caught;});
   }
 
-  userMapFunction(doc) {
+  userMapFunction(doc,emit) {
     doc.users.forEach(function (user) {
-      PouchDB.emit(user.username);
+      emit(user.username);
     });
   }
 
-  countryMapFunction(doc) {
-    PouchDB.emit(doc.countryInfo.name);
+  countryNameMapFunction(doc,emit) {
+    emit(doc.name);
+  }
+
+  countryCodeMapFunction(doc,emit) {
+    emit(doc.code);
   }
 
   public sync(remote: string) : Promise<any> {

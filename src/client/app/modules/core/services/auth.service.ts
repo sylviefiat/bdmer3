@@ -43,7 +43,7 @@ export class AuthService {
       this.currentUser = this.countriesService.getUser(username);
       console.log(this.currentUser);
       this.currentUser.subscribe(user => {
-        this.currentCountry = this.countriesService.getCountry(user.country);
+        this.currentCountry = this.countriesService.getCountry(user.countryCode);
       });  
       this.getLoggedInUser.emit(this.currentUser);
       this.getCountry.emit(this.currentCountry);
@@ -56,7 +56,7 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
-      this.currentUser = of({ _id: null, username: null, firstname: null, lastname: null, email: null, country: null});
+      this.currentUser = of({ _id: null, nom: null, prenom: null, username: null, email: null, countryCode: null});
       this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));

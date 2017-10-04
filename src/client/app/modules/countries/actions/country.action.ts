@@ -44,13 +44,13 @@ export namespace CountryAction {
   export class AddUserSuccessAction implements Action {
     readonly type = ActionTypes.ADD_USER_SUCCESS;
 
-    constructor(public payload: User) {}
+    constructor(public payload: Country) {}
   }
 
   export class AddUserFailAction implements Action {
     readonly type = ActionTypes.ADD_USER_FAIL;
 
-    constructor(public payload: User) {}
+    constructor(public payload: any) {}
   }
 
   /**
@@ -65,13 +65,13 @@ export namespace CountryAction {
   export class RemoveUserSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_USER_SUCCESS;
 
-    constructor(public payload: User) {}
+    constructor(public payload: Country) {}
   }
 
   export class RemoveUserFailAction implements Action {
     readonly type = ActionTypes.REMOVE_USER_FAIL;
 
-    constructor(public payload: User) {}
+    constructor(public payload: any) {}
   }
 
   export class LoadAction implements Action {

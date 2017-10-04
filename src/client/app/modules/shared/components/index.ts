@@ -7,6 +7,8 @@ import { EllipsisPipe } from './pipes/ellipsis';
 import { KeysPipe } from './pipes/keys';
 import { HasIntersection } from './pipes/has-intersection';
 
+import { ConfirmDirective } from './directives/confirm.directive';
+
 export const SHARED_COMPONENTS: any[] = [
   NavbarComponent,
   ToolbarComponent,
@@ -14,7 +16,8 @@ export const SHARED_COMPONENTS: any[] = [
   AddCommasPipe, 
   EllipsisPipe,
   KeysPipe,
-  HasIntersection
+  HasIntersection,
+  ConfirmDirective
 ];
 
 export * from './navbar/navbar.component';
@@ -24,3 +27,4 @@ export * from './pipes/add-commas';
 export * from './pipes/ellipsis';
 export * from './pipes/keys';
 export * from './pipes/has-intersection';
+export * from './directives/confirm.directive';

@@ -11,6 +11,8 @@ import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+
 
 import { of } from 'rxjs/observable/of';
 import { CountriesService } from "../../core/services/index";
@@ -40,8 +42,9 @@ export class CountryEffects {
     .mergeMap(user => 
       this.countriesService
         .addUser(user))
-        .map((user) => new CountryAction.AddUserSuccessAction(user))
-        .catch((user) => of(new CountryAction.AddUserFailAction(user))
+        .map((country) => new CountryAction.AddUserSuccessAction(country))
+        .catch((country) => of(new CountryAction.AddUserFailAction(country))
+        
     );
 
   @Effect()
@@ -51,11 +54,23 @@ export class CountryEffects {
     .mergeMap(user => 
       this.countriesService
         .removeUser(user))
-        .map((user) => new CountryAction.RemoveUserSuccessAction(user))
-        .catch((user) => of(new CountryAction.RemoveUserFailAction(user))
+        .map((country) => new CountryAction.RemoveUserSuccessAction(country))
+        .catch((country) => of(new CountryAction.RemoveUserFailAction(country))
     );
 
-  constructor(private actions$: Actions, private store: Store<IAppState>, private countriesService: CountriesService) {
+  @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
+    .ofType(CountryAction.ActionTypes.ADD_USER_SUCCESS)
+    .do(() =>this.router.navigate(['/countries']));
+
+  @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$
+    .ofType(CountryAction.ActionTypes.REMOVE_USER_SUCCESS)
+    .do(() =>this.router.navigate(['/countries']));
+
+  constructor(
+    private actions$: Actions, 
+    private store: Store<IAppState>, 
+    private countriesService: CountriesService,
+    private router: Router) {
     
     
   }

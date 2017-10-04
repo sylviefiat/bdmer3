@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewChecked } from '@angular/core';
 import { Book } from './../../modules/books/models/book';
 
 @Component({
@@ -16,7 +16,10 @@ import { Book } from './../../modules/books/models/book';
   `,
   ],
 })
-export class BookPreviewListComponent {
+export class BookPreviewListComponent/* implements AfterViewChecked*/ {
   @Input() books: Book[];
  
+  /*ngAfterViewChecked() {     
+    console.log(this.books);   
+  }*/
 }

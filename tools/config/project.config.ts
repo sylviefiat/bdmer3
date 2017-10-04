@@ -46,6 +46,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
       name: 'angular2-fontawesome',
       path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
     },{
+      name: 'jquery',
+      path: 'node_modules/jquery/dist/jquery.min.js'
+    },{
+      name: 'jquery-confirm',
+      path: 'node_modules/jquery-confirm/dist/jquery-confirm.min.js'
+    },{
       name: '@agm/core',
       packageMeta: {
           main: 'core.umd.js',

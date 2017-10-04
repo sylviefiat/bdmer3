@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
-import { CountriesEffects } from './effects/index';
+import { CountriesEffects, CountryEffects } from './effects/index';
 import { CountryExistsGuard } from './guards/country-exists';
 import { CountryListService } from './services/country-list.service';
 
@@ -21,6 +21,7 @@ import { CountryListService } from './services/country-list.service';
     SharedModule,
     MultilingualModule,
     EffectsModule.run(CountriesEffects),
+    EffectsModule.run(CountryEffects),
   ],
   declarations: [],
   providers:[CountryExistsGuard, CountryListService],

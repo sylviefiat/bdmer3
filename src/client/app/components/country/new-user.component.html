@@ -33,8 +33,8 @@
             </md-input-container>
           </p>
           <p>
-            <fa [name]="'globe'" [border]=false [size]=2></fa>
             <img md-card-sm-image *ngIf="flag" [src]="flag"/>
+            {{name}}
           </p>
           <p *ngIf="errorMessage" class="loginError">
             {{ errorMessage }}
