@@ -83,8 +83,8 @@ export class CountriesEffects {
     .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY)
     .map((action: CountriesAction.RemoveCountryAction) => action.payload)
     .mergeMap(country =>
-      fromPromise(this.countriesService
-        .removeCountry(country))
+      this.countriesService
+        .removeCountry(country)
         .map(() => new CountriesAction.RemoveCountrySuccessAction(country))
         .catch(() => of(new CountriesAction.RemoveCountryFailAction(country)))
     );

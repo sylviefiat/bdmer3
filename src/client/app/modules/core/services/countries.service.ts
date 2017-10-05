@@ -7,6 +7,7 @@ import { of } from 'rxjs/observable/of';
 
 import * as PouchDB from "pouchdb";
 import { User, Country, Flagimg } from '../../countries/models/country';
+import { ResponsePDB } from '../models/pouchdb-response';
 
 @Injectable()
 export class CountriesService {
@@ -57,7 +58,7 @@ export class CountriesService {
     }));
   }
 
-  addCountry(countryJson: any) : Observable<any> { 
+  addCountry(countryJson: any) : Observable<Country> { 
     console.log(countryJson);
     let country = countryJson.pays;
     let url ='../node_modules/svg-country-flags/svg/'+country.code.toLowerCase()+'.svg';
@@ -71,45 +72,59 @@ export class CountriesService {
         })
         .map(res => 
           res.blob())
-        .map(blob => {
+        .mergeMap(blob => {
           let fullCountry = {_id:country.code,code:country.code, name: country.name, flag:{_id:country.code+'_flag',_attachments:{flag:{type:blob.type,data:blob}}}, users: null}
           this.currentCountry = of(fullCountry);
-          return this.db.put(fullCountry)
+          return fromPromise(this.db.put(fullCountry))
         })
-        .filter(response => {console.log(response);return response.json().ok;})
-        .do(() => {
+        .filter((response:ResponsePDB) => {console.log(response);return response.ok;})
+        .mergeMap((response) => {
           return this.currentCountry;
         })
     
   }
 
-  removeCountry(country: Country) : Promise<any>{
-    this.currentCountry = null;
-    //console.log(country);
-    return this.db.remove(country);
+  removeCountry(country: Country) : Observable<Country>{
+    this.currentCountry = of(country);
+    console.log(country);    
+    return of(country)
+        .mergeMap(country => 
+          fromPromise(this.db.remove(country)))
+        .filter((response:ResponsePDB) => {console.log(response);return response.ok;})
+        .mergeMap(response => {
+          return this.currentCountry;
+        })
   }
 
   addUser(user: User): Observable<Country> {
-    console.log(user);
+    console.log(user);     
     return this.getCountry(user.countryCode)
-      .map(country => {
+      .mergeMap(country => {
+        this.currentCountry = of(country);
         if(country.users===null){
           country.users=[];
         }
         country.users[country.users.length] = user;
         console.log(country);
-        return this.db.put(country);
+        return fromPromise(this.db.put(country));
       })
-      .catch((err,caught) => { console.log(err); return caught;})
+      .filter((response:ResponsePDB) => {return response.ok;})
+      .mergeMap((response) => {
+        return this.currentCountry;
+      })
   }
 
   removeUser(user: User): Observable<Country> {
     return this.getCountry(user.countryCode)
-      .map(country => {
+      .mergeMap(country => {
+        this.currentCountry = of(country);
         country.users = country.users.filter(users => {return users.username!==user.username;});
-        return this.db.put(country);
+        return fromPromise(this.db.put(country));
       })
-      .catch((err,caught) => { console.log(err); return caught;});
+      .filter((response:ResponsePDB) => {console.log(response);return response.ok;})
+      .mergeMap((response) => {
+        return this.currentCountry;
+      })
   }
 
   userMapFunction(doc,emit) {

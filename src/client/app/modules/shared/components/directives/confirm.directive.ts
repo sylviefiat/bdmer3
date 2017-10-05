@@ -13,13 +13,12 @@ export class ConfirmDirective {
 
   @HostListener('click', ['$event']) 
   public clicked(e) {
-    console.log(e);
-    $.confirm({
+    /*$.confirm({
       buttons: {
         confirm: () => this.click.emit(),
         cancel: () => {}
       }
-    });
+    });*/
   }
 
 }

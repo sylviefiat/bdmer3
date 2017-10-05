@@ -16,7 +16,7 @@ import { Country } from './../../modules/countries/models/country';
       </md-card-title-group>
       <md-card-content>
         <md-card-subtitle>Country users</md-card-subtitle>
-        <bc-user-detail *ngFor="let user of users" [user]="user"></bc-user-detail>
+        <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="true"></bc-user-detail>
       </md-card-content>
       <md-card-actions align="start">
         <button md-raised-button color="primary" (click)="addUser()">
@@ -90,7 +90,6 @@ export class CountryDetailComponent{
   }
 
   get users() {
-    console.log(this.country.users);
     return this.country.users;
   }
 
@@ -108,7 +107,6 @@ export class CountryDetailComponent{
   }
 
   addUser() {
-    console.log(this.activatedRoute);
     this.routerext.navigate(['newuser'], {
       relativeTo: this.activatedRoute,
       transition: {

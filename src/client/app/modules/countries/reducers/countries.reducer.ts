@@ -39,19 +39,31 @@ export function countriesReducer(
 
     case CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS: {
       const country = action.payload;
-      console.log(country);
-      if (state.ids.indexOf(country.id) > -1) {
         return {
           ...state,
           error: null
         }
-      }
+    }
 
+    case CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS:
+     {
+      const removedCountry = action.payload;
       return {
         ...state,
-        ids: [...state.ids, country.id],
+        entities: state.entities.filter(country => removedCountry._id!==country._id),
+        ids: state.ids.filter(id => id !== removedCountry._id),
         error: null
+
       };
+    }
+
+    case CountriesAction.ActionTypes.REMOVE_COUNTRY_FAIL:
+    case CountriesAction.ActionTypes.ADD_COUNTRY_FAIL:
+    {     
+      return {
+        ...state,
+        error: action.payload
+      }
     }
 
     case CountryAction.ActionTypes.ADD_USER_SUCCESS:
@@ -62,39 +74,17 @@ export function countriesReducer(
       const countries = state.entities.filter(country => (country._id===updatedCountry._id));
       const countryToUpdate=countries && countries[0];
       console.log(countryToUpdate);
-      if((updatedCountry.users && !countryToUpdate) || updatedCountry.users.length===countryToUpdate.users.length){
-        return state;  
-      } else if(updatedCountry.users.length!==countryToUpdate.users.length) {
+      console.log([...state.entities.filter(country => updatedCountry._id!==country._id),...updatedCountry]);
+      if((updatedCountry.users!==null && countryToUpdate.users===null) || (updatedCountry.users===null && countryToUpdate.users!==null) || (countryToUpdate.users.length!==updatedCountry.users.length)) {
         return {
           ...state,
-          entities: [state.entities.filter(country => state.ids.includes(updatedCountry._id)?false:country),updatedCountry],
+          entities: [...state.entities.filter(country => updatedCountry._id!==country._id),...updatedCountry],
           error: null
         };
+      } else {
+        return state;  
       }
       
-    }
-
-    case CountriesAction.ActionTypes.REMOVE_COUNTRY_FAIL:
-    case CountriesAction.ActionTypes.ADD_COUNTRY_FAIL:
-    {     
-      console.log("erreur");
-      return {
-        ...state,
-        error: action.payload
-      }
-    }
-
-    case CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS:
-     {
-      const country = action.payload;
-
-      return {
-        ...state,
-        entities: state.entities.filter(country => state.ids.includes(country._id)?false:country),
-        ids: state.ids.filter(id => id !== country._id),
-        error: null
-
-      };
     }
 
     default: {

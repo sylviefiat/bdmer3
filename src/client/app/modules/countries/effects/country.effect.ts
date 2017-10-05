@@ -1,18 +1,12 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/toArray';
 import { Injectable, NgZone } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
-import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
-import { defer } from 'rxjs/observable/defer';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-
+import { Location } from '@angular/common';
 
 import { of } from 'rxjs/observable/of';
 import { CountriesService } from "../../core/services/index";
@@ -60,17 +54,16 @@ export class CountryEffects {
 
   @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
     .ofType(CountryAction.ActionTypes.ADD_USER_SUCCESS)
-    .do(() =>this.router.navigate(['/countries']));
-
-  @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$
-    .ofType(CountryAction.ActionTypes.REMOVE_USER_SUCCESS)
-    .do(() =>this.router.navigate(['/countries']));
+    .do(() => {
+      console.log(this.location);
+      this.location.back();
+    });
 
   constructor(
     private actions$: Actions, 
     private store: Store<IAppState>, 
     private countriesService: CountriesService,
-    private router: Router) {
+    public location: Location) {
     
     
   }

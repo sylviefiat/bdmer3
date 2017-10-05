@@ -10,10 +10,10 @@ import { CountryAction } from '../../modules/countries/actions/index';
   template: `
     <li>
       {{firstname}} {{lastname}}
-      <a href="mailto:{{email}}">
+      <a *ngIf="hasactions" href="mailto:{{email}}">
         <fa [name]="'envelope'" [border]=false [size]=1></fa>
       </a>
-      <a href="" (click)="removeUserFromCountry()" >
+      <a *ngIf="hasactions" href="javascript:void(0);" (click)="removeUserFromCountry()" >
         <fa [name]="'trash'" [border]=false [size]=1></fa>
       </a>
     </li>
@@ -48,6 +48,7 @@ export class UserDetailComponent {
    * More on 'smart' and 'presentational' components: https://gist.github.com/btroncone/a6e4347326749f938510#utilizing-container-components
    */
   @Input() user: User;
+  @Input() hasactions: boolean;
 
   constructor(private store: Store<IAppState>){}
 
