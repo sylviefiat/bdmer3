@@ -28,10 +28,11 @@ export class AuthService {
     this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);
   }
 
-  getUserByname(name: string): Observable<any> {
+  getUserByUsername(username: string): Observable<any> {
+    console.log(username);
     return fromPromise(this.db.query(function(doc, emit) {
       emit(doc.name);
-    }, { key: name, include_docs: true }).then(function(result) {
+    }, { key: username, include_docs: true }).then(function(result) {
       console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc;
     }).catch(function(err) {
@@ -72,10 +73,12 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
+    console.log(user.countryCode);
     let auth: Authenticate = { username: user.username, password: user.password, roles: [user.countryCode] };
+
     return of(user)
       .mergeMap(user =>
-        fromPromise(this.db.signup(auth.username, auth.password, auth.roles)))
+        fromPromise(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode]}})))
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
         return of(user);
@@ -92,9 +95,10 @@ export class AuthService {
   }
 
   remove(user): Observable<any> {
-    return this.getUserByname(user.username)
-      .mergeMap(user =>
-        fromPromise(this.db.remove(user)))
+    return fromPromise(this.db.get("org.couchdb.user:"+user.username))
+      .mergeMap(response => {
+        return fromPromise(this.db.remove(response))
+      })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return of(user);
