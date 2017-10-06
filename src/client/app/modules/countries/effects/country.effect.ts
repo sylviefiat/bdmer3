@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 
 import { of } from 'rxjs/observable/of';
 import { CountriesService } from "../../core/services/index";
+import { AuthService } from "../../core/services/index";
 
 import { CountryAction } from '../actions/index';
 import { Country, User } from '../models/country';
@@ -27,44 +28,50 @@ export class CountryEffects {
    * Wrapping the database open call in `defer` makes
    * effect easier to test.
    */
-  
+
 
   @Effect()
   addUserToCountry$: Observable<Action> = this.actions$
     .ofType(CountryAction.ActionTypes.ADD_USER)
     .map((action: CountryAction.AddUserAction) => action.payload)
-    .mergeMap(user => 
+    .mergeMap(user =>
+      this.authService
+        .signup(user))
+    .mergeMap(user =>
       this.countriesService
         .addUser(user))
-        .map((country) => new CountryAction.AddUserSuccessAction(country))
-        .catch((country) => of(new CountryAction.AddUserFailAction(country))
-        
+    .map((country) => new CountryAction.AddUserSuccessAction(country))
+    .catch((country) => of(new CountryAction.AddUserFailAction(country))
+
     );
 
   @Effect()
   removeUserFromCountry$: Observable<Action> = this.actions$
     .ofType(CountryAction.ActionTypes.REMOVE_USER)
     .map((action: CountryAction.RemoveUserAction) => action.payload)
-    .mergeMap(user => 
+    .mergeMap(user =>
+      this.authService
+        .remove(user))
+    .mergeMap(user =>
       this.countriesService
         .removeUser(user))
-        .map((country) => new CountryAction.RemoveUserSuccessAction(country))
-        .catch((country) => of(new CountryAction.RemoveUserFailAction(country))
+    .map((country) => new CountryAction.RemoveUserSuccessAction(country))
+    .catch((country) => of(new CountryAction.RemoveUserFailAction(country))
     );
 
   @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
     .ofType(CountryAction.ActionTypes.ADD_USER_SUCCESS)
     .do(() => {
-      console.log(this.location);
       this.location.back();
     });
 
   constructor(
-    private actions$: Actions, 
-    private store: Store<IAppState>, 
+    private actions$: Actions,
+    private store: Store<IAppState>,
     private countriesService: CountriesService,
+    private authService: AuthService,
     public location: Location) {
-    
-    
+
+
   }
 }

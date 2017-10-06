@@ -62,7 +62,7 @@ export class Logout implements Action {
 export class Signup implements Action {
   readonly type = ActionTypes.SIGNUP;
 
-  constructor(public payload: Authenticate) {}
+  constructor(public payload: User) {}
 }
 
 export class SignupSuccess implements Action {

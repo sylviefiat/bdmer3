@@ -13,7 +13,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
           <md-card-subtitle>{{ code }}</md-card-subtitle>
         </md-card-title-group>
         <md-card-content>
-          <md-card-subtitle>Country users</md-card-subtitle>
+          <md-card-subtitle>Users</md-card-subtitle>
           <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="false"></bc-user-detail>
         </md-card-content>
       </md-card>

@@ -25,8 +25,8 @@ export class SignupComponent implements OnInit {
   @Output() submitted = new EventEmitter<Authenticate>();
 
   form: FormGroup = new FormGroup({
-    firstname: new FormControl('', Validators.required),
-    lastname: new FormControl(''),
+    surname: new FormControl('', Validators.required),
+    name: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
     country: new FormControl('')

@@ -13,7 +13,7 @@ import { CountryAction } from '../../modules/countries/actions/index';
       <a *ngIf="hasactions" href="mailto:{{email}}">
         <fa [name]="'envelope'" [border]=false [size]=1></fa>
       </a>
-      <a *ngIf="hasactions" href="javascript:void(0);" (click)="removeUserFromCountry()" >
+      <a *ngIf="hasactions && isNotAdmin()" href="javascript:void(0);" (click)="removeUserFromCountry()" >
         <fa [name]="'trash'" [border]=false [size]=1></fa>
       </a>
     </li>
@@ -22,8 +22,8 @@ import { CountryAction } from '../../modules/countries/actions/index';
   styles: [
     `
     li {
-      list-style:circle;
-      margin-left:-50px;
+      list-style:none;
+      margin-left:0px;
       padding: 2px;
     }
     li a {
@@ -32,8 +32,8 @@ import { CountryAction } from '../../modules/countries/actions/index';
     }
     :host {
       display: flex;
-      justify-content: center;
-      margin: 25px 0;
+      justify-content: left;
+      margin: 15px 0;
     }
   `,
   ],
@@ -57,11 +57,11 @@ export class UserDetailComponent {
    */
  
   get firstname() {
-    return this.user.prenom;
+    return this.user.surname;
   }
 
   get lastname() {
-    return this.user.nom;
+    return this.user.name;
   }
 
   get email() {
@@ -71,5 +71,9 @@ export class UserDetailComponent {
   removeUserFromCountry() {
     console.log("here");
     this.store.dispatch(new CountryAction.RemoveUserAction(this.user));
+  }
+
+  isNotAdmin() {
+    return this.user.username!=='admin';
   }
 }

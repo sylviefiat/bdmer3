@@ -15,14 +15,14 @@ import { Country } from './../../modules/countries/models/country';
         <img md-card-sm-image *ngIf="flag" [src]="flag"/>
       </md-card-title-group>
       <md-card-content>
-        <md-card-subtitle>Country users</md-card-subtitle>
+        <md-card-subtitle>Users</md-card-subtitle>
         <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="true"></bc-user-detail>
       </md-card-content>
       <md-card-actions align="start">
         <button md-raised-button color="primary" (click)="addUser()">
           Add user
         </button>
-        <button md-raised-button color="warn" (click)="removecountry.emit(country)">
+        <button *ngIf="isNotAdmin()" md-raised-button color="warn" (click)="removecountry.emit(country)">
           Delete Country
         </button>
       </md-card-actions>
@@ -38,6 +38,9 @@ import { Country } from './../../modules/countries/models/country';
     }
     md-card {
       max-width: 600px;
+      min-width: 400px;
+      min-height: 300px;
+      margin: 15px;
     }
     md-card-title-group {
       margin-left: 0;
@@ -114,5 +117,9 @@ export class CountryDetailComponent{
         name: 'slideTop',
       }
     });
+  }
+
+  isNotAdmin() {
+    return this.country.code!=='AA';
   }
 }

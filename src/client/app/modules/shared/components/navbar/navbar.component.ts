@@ -18,24 +18,24 @@ import { AuthService } from '../../../core/services/index';
   ],
 })
 export class NavbarComponent implements OnInit {
-  public isLoggedIn: boolean;
-  public currentUser: User;
-  public currentCountry: Country;
+  public currentUser: Observable<User>;
+  public currentCountry: Observable<Country>;
   
   constructor(private store: Store<IAppState>,private authenticationService: AuthService) {	
 	  authenticationService.getLoggedInUser.subscribe(user => this.setCurrentUser(user));
     authenticationService.getCountry.subscribe(country => this.setCurrentCountry(country));
   }
 
-  setCurrentUser(user: User){
-  	console.log(user);
-  	this.isLoggedIn = user.username != null ? true:false;
-  	this.currentUser = user;
+  setCurrentUser(ouser: Observable<User>){
+  	this.currentUser = ouser;
   }
 
-  setCurrentCountry(country: Country){
-    console.log(country);
-    this.currentCountry = country;
+  setCurrentCountry(ocountry: Observable<Country>){
+    this.currentCountry = ocountry;
+  }
+
+  get isLoggedIn(){
+    return this.currentUser!=null;
   }
 
   ngOnInit() { 

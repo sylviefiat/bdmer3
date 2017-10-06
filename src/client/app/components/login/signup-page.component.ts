@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { Authenticate } from '../../modules/auth/models/user';
+import { User } from '../../modules/countries/models/country';
 import { IAppState, getSignupPagePending, getSignupPageError } from '../../modules/ngrx/index';
 import { AuthAction } from '../../modules/auth/actions/index';
 
@@ -28,7 +29,7 @@ export class SignupPageComponent implements OnInit {
     this.error$ = this.store.let(getSignupPageError);    
   }
 
-  onSubmit(auth: Authenticate) {
-    this.store.dispatch(new AuthAction.Signup(auth));
+  onSubmit(user: User) {
+    this.store.dispatch(new AuthAction.Signup(user));
   }
 }

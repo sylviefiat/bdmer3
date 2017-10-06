@@ -25,8 +25,8 @@ export class NewUserComponent implements AfterViewChecked {
   @Output() submitted = new EventEmitter<User>();
 
   form: FormGroup = new FormGroup({
-    nom: new FormControl(''),
-    prenom: new FormControl(''),
+    name: new FormControl(''),
+    surname: new FormControl(''),
     username: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
