@@ -66,7 +66,7 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
-      this.currentUser = of({ _id: null, name: null, surname: null, username: null, email: null, countryCode: null });
+      this.currentUser = of({ _id: null, name: null, surname: null, username: null, email: null, countryCode: null, password: null, role: null});
       this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));
@@ -78,7 +78,7 @@ export class AuthService {
 
     return of(user)
       .mergeMap(user =>
-        fromPromise(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode]}})))
+        fromPromise(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode, user.role]}})))
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
         return of(user);

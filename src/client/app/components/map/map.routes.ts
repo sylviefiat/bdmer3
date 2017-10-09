@@ -5,6 +5,6 @@ export const MapRoutes: Array<any> = [
   {
     path: 'map',
     component: MapComponent, 
-    canActivate : [AuthGuard]
+    //canActivate : [AuthGuard]
   }
 ];

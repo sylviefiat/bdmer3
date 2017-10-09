@@ -14,6 +14,7 @@ export interface User {
   email: string;
   countryCode: string;
   password:string;
+  role: string;
 }
 
 export interface Flagimg {

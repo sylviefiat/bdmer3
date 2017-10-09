@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
 
+import { CountriesService } from '../../core/services/countries.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
 
@@ -42,22 +43,22 @@ export class AuthEffects {
       this.router.navigate(['/login']);
     });
 
-  @Effect() signup = this.actions$
-    .ofType(AuthAction.ActionTypes.SIGNUP)
-    .map((action: AuthAction.Signup) => action.payload)
-    .exhaustMap(auth =>
-      this.authService
-        .signup(auth)
-        .map(user => new AuthAction.SignupSuccess({ user }))
-        .catch(error => of(new AuthAction.SignupFailure(error)))
+  @Effect() lostpassword$ = this.actions$
+    .ofType(AuthAction.ActionTypes.LOST_PASSWORD)
+    .map((action: AuthAction.LostPassword) => action.payload)
+    .exhaustMap(usermail =>
+      this.countriesService
+        .verifyMail(usermail)
+        .map(user => new AuthAction.LostPasswordSuccess(user))
+        .catch(error => of(new AuthAction.LostPasswordFailure(error)))
     );
 
-  @Effect({ dispatch: false }) signupSuccess$ = this.actions$
-    .ofType(AuthAction.ActionTypes.SIGNUP_SUCCESS)
-    .do(() => this.router.navigate(['/']));
+  @Effect({ dispatch: false }) lostpasswordSuccess$ = this.actions$
+    .ofType(AuthAction.ActionTypes.LOST_PASSWORD_SUCCESS)
+    .do(() => this.router.navigate(['/login']));
 
-  @Effect({ dispatch: false }) signupRedirect$ = this.actions$
-    .ofType(AuthAction.ActionTypes.SIGNUP_REDIRECT)
+  @Effect({ dispatch: false }) lostpasswordRedirect$ = this.actions$
+    .ofType(AuthAction.ActionTypes.LOST_PASSWORD_REDIRECT)
     .do(authed => {
       this.router.navigate(['/login']);
     });
@@ -65,6 +66,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private authService: AuthService,
+    private countriesService: CountriesService,
     private router: Router
   ) {}
 }

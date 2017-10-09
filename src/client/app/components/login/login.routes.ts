@@ -1,6 +1,6 @@
 import { LoginPageComponent } from './login-page.component';
 import { LogoutComponent } from './logout.component';
-import { SignupPageComponent } from './signup-page.component';
+import { LostPasswordComponent } from './lost-password.component';
 
 export const LoginRoutes: Array<any> = [
   {
@@ -12,7 +12,7 @@ export const LoginRoutes: Array<any> = [
     component: LogoutComponent
   },
   {
-    path: 'signup',
-    component: SignupPageComponent
+    path: 'lostpassword',
+    component: LostPasswordComponent
   }
 ];

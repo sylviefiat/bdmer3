@@ -46,8 +46,11 @@ import { Country } from './../../modules/countries/models/country';
       margin-left: 0;
     }
     img {
-      width: 60px;
-      min-width: 60px;
+      display: block;
+      max-width:100px;
+      max-height:70px;
+      width: auto;
+      height: auto;
       margin-left: 5px;
     }
     md-card-content {

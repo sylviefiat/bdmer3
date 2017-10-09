@@ -13,8 +13,7 @@ import { SelectedBookPageComponent } from './book/selected-book-page';
 import { CollectionPageComponent } from './book/collection-page';
 import { LoginComponent } from './login/login.component';
 import { LoginPageComponent } from './login/login-page.component';
-import { SignupComponent } from './login/signup.component';
-import { SignupPageComponent } from './login/signup-page.component';
+import { LostPasswordComponent } from './login/lost-password.component';
 import { LogoutComponent } from './login/logout.component';
 import { CountryPageComponent } from './country/country-page.component';
 import { CountryDetailComponent } from './country/country-detail.component';
@@ -46,8 +45,7 @@ export const APP_COMPONENTS: any[] = [
   CollectionPageComponent,
   LoginComponent,
   LoginPageComponent,
-  SignupPageComponent,
-  SignupComponent,
+  LostPasswordComponent,
   LogoutComponent,
   CountryPageComponent,
   NewCountryPageComponent,
@@ -80,8 +78,7 @@ export * from './map/map.component';
 export * from './login/login.component';
 export * from './login/login-page.component';
 export * from './login/logout.component';
-export * from './login/signup-page.component';
-export * from './login/signup.component';
+export * from './login/lost-password.component';;
 export * from './country/country-page.component';
 export * from './country/country-preview-list.component';
 export * from './country/country-preview.component';

@@ -33,6 +33,13 @@
             </md-input-container>
           </p>
           <p>
+            <fa [name]="'pencil'" [border]=false [size]=2></fa>
+            <md-radio-group formControlName="role">
+              <md-radio-button value="EDITOR">{{ 'EDITOR'  | translate}}}</md-radio-button>
+              <md-radio-button value="USER">{{ 'USER'  | translate}}}</md-radio-button>
+            </md-radio-group>
+          </p>
+          <p>
             <img md-card-sm-image *ngIf="flag" [src]="flag"/>
             {{name}}
           </p>

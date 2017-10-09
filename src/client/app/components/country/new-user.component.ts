@@ -31,6 +31,7 @@ export class NewUserComponent implements AfterViewChecked {
     email: new FormControl(''),
     password: new FormControl(''),
     countryCode: new FormControl(''),
+    role: new FormControl(''),
   });
 
   constructor(private sanitizer: DomSanitizer ) {}

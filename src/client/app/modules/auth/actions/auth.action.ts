@@ -10,25 +10,25 @@ export namespace AuthAction {
   export interface IAuthActions {
     LOGIN: string;
     LOGOUT: string;
-    SIGNUP: string;
+    LOST_PASSWORD: string;
     LOGIN_SUCCESS: string;
     LOGIN_FAILURE: string;
     LOGIN_REDIRECT: string;
-    SIGNUP_SUCCESS: string;
-    SIGNUP_FAILURE: string;
-    SIGNUP_REDIRECT: string;
+    LOST_PASSWORD_SUCCESS: string;
+    LOST_PASSWORD_FAILURE: string;
+    LOST_PASSWORD_REDIRECT: string;
   }
 
   export const ActionTypes: IAuthActions = {
     LOGIN : type('[Auth] Login'),
     LOGOUT : type('[Auth] Logout'),
-    SIGNUP : type('[Auth] Signup'),
+    LOST_PASSWORD : type('[Auth] Lost password'),
     LOGIN_SUCCESS : type('[Auth] Login Success'),
     LOGIN_FAILURE : type('[Auth] Login Failure'),
     LOGIN_REDIRECT : type('[Auth] Login Redirect'),
-    SIGNUP_SUCCESS : type('[Auth] Signup Success'),
-    SIGNUP_FAILURE : type('[Auth] Signup Failure'),
-    SIGNUP_REDIRECT : type('[Auth] Signup Redirect')
+    LOST_PASSWORD_SUCCESS : type('[Auth] Lost password Success'),
+    LOST_PASSWORD_FAILURE : type('[Auth] Lost password Failure'),
+    LOST_PASSWORD_REDIRECT : type('[Auth] Lost password Redirect')
   }
 export class Login implements Action {
   readonly type = ActionTypes.LOGIN;
@@ -59,26 +59,26 @@ export class Logout implements Action {
   constructor(public payload: any) {}
 }
 
-export class Signup implements Action {
-  readonly type = ActionTypes.SIGNUP;
+export class LostPassword implements Action {
+  readonly type = ActionTypes.LOST_PASSWORD;
 
-  constructor(public payload: User) {}
+  constructor(public payload: string) {}
 }
 
-export class SignupSuccess implements Action {
-  readonly type = ActionTypes.SIGNUP_SUCCESS;
+export class LostPasswordSuccess implements Action {
+  readonly type = ActionTypes.LOST_PASSWORD_SUCCESS;
 
   constructor(public payload: { user: User }) {}
 }
 
-export class SignupFailure implements Action {
-  readonly type = ActionTypes.SIGNUP_FAILURE;
+export class LostPasswordFailure implements Action {
+  readonly type = ActionTypes.LOST_PASSWORD_FAILURE;
 
   constructor(public payload: any) {}
 }
 
-export class SignupRedirect implements Action {
-  readonly type = ActionTypes.SIGNUP_REDIRECT;
+export class LostPasswordRedirect implements Action {
+  readonly type = ActionTypes.LOST_PASSWORD_REDIRECT;
   payload: string = null;
 }
 
@@ -87,9 +87,9 @@ export type Actions =
   | LoginSuccess
   | LoginFailure
   | LoginRedirect
-  | Signup
-  | SignupSuccess
-  | SignupFailure
-  | SignupRedirect
+  | LostPassword
+  | LostPasswordSuccess
+  | LostPasswordFailure
+  | LostPasswordRedirect
   | Logout;
 }
