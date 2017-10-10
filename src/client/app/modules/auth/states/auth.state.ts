@@ -23,6 +23,5 @@ export function getRole(state$: Observable<IAuthState>) {
 }
 
 export function getUser(state$: Observable<IAuthState>) {
-    console.log(state$);
-    return state$.select(state => {console.log(state);return state.user});
+    return state$.select(state => state.user);
 }
