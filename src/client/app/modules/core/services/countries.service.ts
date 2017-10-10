@@ -7,7 +7,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 
 import * as PouchDB from "pouchdb";
-import { User, Country, Flagimg } from '../../countries/models/country';
+import { User, Country } from '../../countries/models/country';
 import { ResponsePDB } from '../models/pouchdb';
 import { Authenticate } from '../../auth/models/user';
 
@@ -15,7 +15,7 @@ import { Authenticate } from '../../auth/models/user';
 export class CountriesService {
   public currentCountry: Observable<Country>;
   public currentUser: Observable<User>;
-  public adminUser = { _id: 'admin', name: 'admin', surname: null, username: 'admin', email: null, countryCode: 'AA', password: null, role: 'EDITOR' };
+  public adminUser = { _id: 'admin', name: 'admin', surname: 'ad', username: 'admin', email: null, countryCode: 'AA', password: null, role: 'EDITOR' };
   public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', flag: null, users: null };
 
   private db: any;
@@ -58,7 +58,7 @@ export class CountriesService {
       .mergeMap(response => {
         return fromPromise(this.db.put(country))
       })
-      .filter((response: ResponsePDB) => { console.log(response); return response.ok; })
+      .filter((response: ResponsePDB) => response.ok)
       .mergeMap(response => {
         return this.currentCountry;
       })
@@ -105,7 +105,7 @@ export class CountriesService {
         emit(user.username);
       });
     }, { key: username, include_docs: true }).then(function(result) {
-      console.log(result);
+      //console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.username === username) && result.rows[0].doc.users.filter(user => user.username === username)[0];
     }).catch(function(err) {
@@ -119,7 +119,7 @@ export class CountriesService {
         emit(user.username);
       });
     }, { key: username, include_docs: true }).then(function(result) {
-      console.log(result);
+      //console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc;
     }).catch(function(err) {
       console.log(err);
@@ -132,7 +132,7 @@ export class CountriesService {
         emit(user.email);
       });
     }, { key: email, include_docs: true }).then(function(result) {
-      console.log(result);
+      //console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
     }).catch(function(err) {
@@ -141,9 +141,9 @@ export class CountriesService {
   }
 
   addUser(user: User): Observable<Country> {
-    console.log(user);
+    //console.log(user);
     delete user.password;
-    console.log(user);
+   //console.log(user);
     return this.getCountry(user.countryCode)
       .mergeMap(country => {
         this.currentCountry = of(country);
@@ -175,10 +175,11 @@ export class CountriesService {
 
   verifyMail(email: string): Observable<any> {
     return this.getMailUser(email)
-      .filter(answer => !answer)
-      .map(() => {
-        return of(_throw('This email is not registered in BDMer, please contact administrator'));
+      .filter(answer => answer && answer._id && answer._id.length > 0)
+      .map((user) => {
+        return user;
       })
+      .catch(e => {return of(_throw('This email is not registered in BDMer, please contact administrator'));})
   }
 
   public sync(remote: string): Promise<any> {

@@ -9,12 +9,12 @@ export function authReducer(
 ): IAuthState {
   //console.log(action.type);
   switch (action.type) {
-    case AuthAction.ActionTypes.LOGIN_SUCCESS: {      
+    case AuthAction.ActionTypes.LOGIN_SUCCESS: {  
+    console.log(action.payload);
       return {
-        ...state,
         loggedIn: true,
-        role: action.payload.user.country,
-        user: action.payload.user,
+        role: action.payload.role,
+        user: action.payload,
       };
     }
 

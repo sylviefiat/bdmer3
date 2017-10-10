@@ -20,5 +20,6 @@
   <fa [name]="'sign-out'" [border]=true></fa>
     {{'LOGOUT' | translate}}
   </a>
+  <a class="hello" *ngIf="currentUser$ | async; let user">Bonjour {{user.username}}</a>
 </nav>
 

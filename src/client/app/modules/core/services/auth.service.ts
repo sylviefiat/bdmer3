@@ -28,37 +28,25 @@ export class AuthService {
     this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);
   }
 
-  getUserByUsername(username: string): Observable<any> {
-    console.log(username);
-    return fromPromise(this.db.query(function(doc, emit) {
-      emit(doc.name);
-    }, { key: username, include_docs: true }).then(function(result) {
-      console.log(result);
-      return result.rows && result.rows[0] && result.rows[0].doc;
-    }).catch(function(err) {
-      console.log(err);
-    }));
-  }
-
-  login({ username, password }: Authenticate): Observable<User> {
-    console.log(username);
-    return fromPromise(this.db.login(username, password, (err, response) => {
-
-      if (err) {
+  login({ username, password }: Authenticate): Observable<any> {
+    //console.log(username);
+    return fromPromise(this.db.login(username, password))
+      .filter((response: ResponsePDB) => response.ok)
+      .mergeMap(() => {
+        this.currentUser = this.countriesService.getUser(username);
+        this.currentCountry = this.countriesService.getCountryUser(username);
+        this.getLoggedInUser.emit(this.currentUser);
+        this.getCountry.emit(this.currentCountry);
+        return this.currentUser;
+      })
+      .catch(err => {
         if (err.name === 'unauthorized') {
           console.log(err);
           return of(_throw('Invalid username or password'));
-        } else {
-          console.log(err);
-          return of(_throw(err.reason));
         }
-      }
-      this.currentUser = this.countriesService.getUser(username);
-      this.currentCountry = this.countriesService.getCountryUser(username);
-      this.getLoggedInUser.emit(this.currentUser);
-      this.getCountry.emit(this.currentCountry);
-      return this.currentUser;
-    }));
+        console.log(err);
+        return of(_throw(err.reason));
+      })
   }
 
   logout(): Observable<any> {
@@ -66,7 +54,7 @@ export class AuthService {
       if (err) {
         return of(_throw(err.reason));
       }
-      this.currentUser = of({ _id: null, name: null, surname: null, username: null, email: null, countryCode: null, password: null, role: null});
+      this.currentUser = null;
       this.getLoggedInUser.emit(this.currentUser);
       return of(response.ok);
     }));

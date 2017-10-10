@@ -9,6 +9,7 @@ import { PouchDBService } from './pouchdb.service';
 import { GoogleBooksService } from './google-books';
 import { CountriesService } from './countries.service';
 import { AuthService } from './auth.service';
+import { MailService } from './mail.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,
@@ -21,6 +22,7 @@ export const CORE_PROVIDERS: any[] = [
   GoogleBooksService,
   CountriesService,
   AuthService,
+  MailService
 ];
 
 export * from './console.service';
@@ -33,3 +35,4 @@ export * from './pouchdb.service';
 export * from './google-books';
 export * from './countries.service';
 export * from './auth.service';
+export * from './mail.service';

@@ -2,9 +2,10 @@ import { Component, Input, Output, EventEmitter, AfterViewChecked } from '@angul
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
 
-import { Country } from './../../modules/countries/models/country';
-
+import { Country, User } from './../../modules/countries/models/country';
+import { WindowService } from './../../modules/core/services/index';
 
 @Component({
   selector: 'bc-country-detail',
@@ -22,7 +23,7 @@ import { Country } from './../../modules/countries/models/country';
         <button md-raised-button color="primary" (click)="addUser()">
           Add user
         </button>
-        <button *ngIf="isNotAdmin()" md-raised-button color="warn" (click)="removecountry.emit(country)">
+        <button *ngIf="isNotAdminCountry() && isUserAdmin()" md-raised-button color="warn" (click)="deleteCountry()">
           Delete Country
         </button>
       </md-card-actions>
@@ -67,6 +68,7 @@ import { Country } from './../../modules/countries/models/country';
   ],
 })
 export class CountryDetailComponent{
+  
   /**
    * Presentational components receieve data through @Input() and communicate events
    * through @Output() but generally maintain no internal state of their
@@ -76,9 +78,12 @@ export class CountryDetailComponent{
    * More on 'smart' and 'presentational' components: https://gist.github.com/btroncone/a6e4347326749f938510#utilizing-container-components
    */
   @Input() country: Country;
+  @Input() currentUser: User;
   @Output() removecountry = new EventEmitter<Country>();
 
-  constructor(private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute){}
+  constructor(private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute, private windowService: WindowService){
+    
+  }
 
   /**
    * Tip: Utilize getters to keep templates clean
@@ -122,7 +127,18 @@ export class CountryDetailComponent{
     });
   }
 
-  isNotAdmin() {
+  isNotAdminCountry(): boolean {
     return this.country.code!=='AA';
   }
+
+  isUserAdmin(): boolean {
+    console.log(this.currentUser);
+    return this.currentUser && this.currentUser.role && this.currentUser.countryCode === 'AA';
+  }
+
+  deleteCountry() {
+    if(this.windowService.confirm("Are you sure you want to delete this country from database ?"))
+      return this.removecountry.emit(this.country);
+  }
+
 }

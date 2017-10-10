@@ -39,7 +39,7 @@ export class Login implements Action {
 export class LoginSuccess implements Action {
   readonly type = ActionTypes.LOGIN_SUCCESS;
 
-  constructor(public payload: { user: User }) {}
+  constructor(public payload: User ) {}
 }
 
 export class LoginFailure implements Action {
@@ -68,7 +68,7 @@ export class LostPassword implements Action {
 export class LostPasswordSuccess implements Action {
   readonly type = ActionTypes.LOST_PASSWORD_SUCCESS;
 
-  constructor(public payload: { user: User }) {}
+  constructor(public payload: any) {}
 }
 
 export class LostPasswordFailure implements Action {

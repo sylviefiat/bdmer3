@@ -8,9 +8,11 @@ import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
 
-import { CountriesService } from '../../core/services/countries.service';
+import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
+import { User } from '../../countries/models/country';
+
 
 @Injectable()
 export class AuthEffects {
@@ -20,7 +22,7 @@ export class AuthEffects {
     .exhaustMap(auth =>
       this.authService
         .login(auth)
-        .map(user => new AuthAction.LoginSuccess({ user }))
+        .map(user => {console.log(user);return new AuthAction.LoginSuccess(user)})
         .catch(error => of(new AuthAction.LoginFailure(error)))
     );
 
@@ -49,7 +51,10 @@ export class AuthEffects {
     .exhaustMap(usermail =>
       this.countriesService
         .verifyMail(usermail)
-        .map(user => new AuthAction.LostPasswordSuccess(user))
+        .map((user: User) => {
+          return this.mailService.sendPasswordMail(user);
+        })
+        .map(success => new AuthAction.LostPasswordSuccess(success))
         .catch(error => of(new AuthAction.LostPasswordFailure(error)))
     );
 
@@ -67,6 +72,7 @@ export class AuthEffects {
     private actions$: Actions,
     private authService: AuthService,
     private countriesService: CountriesService,
+    private mailService: MailService,
     private router: Router
   ) {}
 }

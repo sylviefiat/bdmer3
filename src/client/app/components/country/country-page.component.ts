@@ -8,7 +8,6 @@ import { PouchDBService } from "../../modules/core/services/pouchdb.service";
 import { IAppState, getCountriesInApp } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
-import { Book } from '../../modules/books/models/book';
 
 @Component({
   selector: 'bc-country-page',
