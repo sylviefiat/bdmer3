@@ -42,8 +42,8 @@ import { ISampleState, reducer, getNames} from '../sample/index';
 import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookId, getSelectedBook, getAll } from '../books/index';
 import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
 import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
-import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser} from '../auth/index';
-import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getCountriesIds, /*getCurrentCountryId,getCurrentCountry, */getCountryNamesList} from '../countries/index';
+import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry} from '../auth/index';
+import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 
 /**
@@ -155,6 +155,7 @@ export const getResultsSearch: any = compose(getSearchResults, getAppState);
 export const getisLoggedIn: any = compose(getLoggedIn, getAuthState);
 export const getAuthUser: any = compose(getUser, getAuthState);
 export const getRoleUser: any = compose(getRole, getAuthState);
+export const getAuthCountry: any = compose(getCountry, getAuthState);
 export const getLoginPagePending: any = compose(getPending, getLoginPageState);
 export const getLoginPageError: any = compose(getError, getLoginPageState);
 export const getSignupPagePending: any = compose(getPending, getLoginPageState);
@@ -165,6 +166,7 @@ export const getCountryList: any = compose(getCountryNamesList, getCountriesStat
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
 export const getCountriesInApp: any = compose(getCountriesEntities, getCountriesState);
+export const getAllCountriesInApp: any = compose(getAllCountriesEntities, getCountriesState);
 export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesState);
 //export const getCountryInApp: any = compose(getCurrentCountry, getCountriesState);
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);

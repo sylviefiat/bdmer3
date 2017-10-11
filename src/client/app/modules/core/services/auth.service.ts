@@ -14,8 +14,8 @@ import * as PouchDBAuth from "pouchdb-authentication";
 
 @Injectable()
 export class AuthService {
-  public currentUser: Observable<User>;
-  public currentCountry: Observable<Country>;
+  public currentUser: /*Observable<*/User/*>*/;
+  public currentCountry: /*Observable<*/Country/*>*/;
   private db: any;
 
   @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
@@ -32,12 +32,25 @@ export class AuthService {
     //console.log(username);
     return fromPromise(this.db.login(username, password))
       .filter((response: ResponsePDB) => response.ok)
-      .mergeMap(() => {
-        this.currentUser = this.countriesService.getUser(username);
-        this.currentCountry = this.countriesService.getCountryUser(username);
-        this.getLoggedInUser.emit(this.currentUser);
-        this.getCountry.emit(this.currentCountry);
-        return this.currentUser;
+      .map(response => {
+        this.getLoggedInUser.emit(this.countriesService.getUser(username));
+        this.getCountry.emit(this.countriesService.getCountryUser(username));
+        return response;
+      })
+      .mergeMap((response) => {
+        return this.countriesService.getUser(username)
+          .map(user => {
+            this.currentUser = user;            
+          });
+      })
+      .mergeMap((response) => {
+        return this.countriesService.getCountryUser(username)
+          .map(country => {
+            this.currentCountry = country;
+          })
+        })
+      .mergeMap((response) => {
+        return of({user: this.currentUser, country: this.currentCountry});
       })
       .catch(err => {
         if (err.name === 'unauthorized') {
@@ -50,14 +63,16 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return fromPromise(this.db.logout((err, response) => {
-      if (err) {
+    return fromPromise(this.db.logout()) //(err, response) => {
+      .filter((response: ResponsePDB) => response.ok)
+      .map(response => {
+        this.getLoggedInUser.emit(null);
+        this.currentUser=null;
+        return response;
+      })
+      .catch(err => {
         return of(_throw(err.reason));
-      }
-      this.currentUser = null;
-      this.getLoggedInUser.emit(this.currentUser);
-      return of(response.ok);
-    }));
+      });
   }
 
   signup(user: User): Observable<any> {

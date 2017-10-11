@@ -28,6 +28,8 @@ import { NewCountryPageComponent } from './country/new-country-page.component';
 import { NewCountryComponent } from './country/new-country.component';
 import { NewUserPageComponent } from './country/new-user-page.component';
 import { NewUserComponent } from './country/new-user.component';
+import { ManagementPageComponent } from './management/management-page.component';
+import { ManagementComponent } from './management/management.component';
 
 export const APP_COMPONENTS: any[] = [
   AppComponent,
@@ -59,7 +61,9 @@ export const APP_COMPONENTS: any[] = [
   ViewUserPageComponent,
   SelectedUserPageComponent,
   NewUserPageComponent,
-  NewUserComponent
+  NewUserComponent,
+  ManagementPageComponent,
+  ManagementComponent,
 ];
 
 export * from './app.component';
@@ -92,3 +96,5 @@ export * from './country/new-country.component';
 export * from './country/new-country-page.component';
 export * from './country/new-user-page.component';
 export * from './country/new-user.component';
+export * from './management/management-page.component';
+export * from './management/management.component';

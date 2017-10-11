@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Authenticate } from '../models/user';
-import { User } from '../../countries/models/country';
+import { User, Country } from '../../countries/models/country';
 import { type } from '../../core/utils/index';
   
 export namespace AuthAction {
@@ -39,7 +39,7 @@ export class Login implements Action {
 export class LoginSuccess implements Action {
   readonly type = ActionTypes.LOGIN_SUCCESS;
 
-  constructor(public payload: User ) {}
+  constructor(public payload: {user: User,country: Country} ) {}
 }
 
 export class LoginFailure implements Action {

@@ -70,11 +70,8 @@ export function countriesReducer(
     case CountryAction.ActionTypes.REMOVE_USER_SUCCESS:
     {
       const updatedCountry = action.payload;
-      console.log(updatedCountry);
       const countries = state.entities.filter(country => (country._id===updatedCountry._id));
       const countryToUpdate=countries && countries[0];
-      console.log(countryToUpdate);
-      console.log([...state.entities.filter(country => updatedCountry._id!==country._id),...updatedCountry]);
       if((updatedCountry.users!==null && countryToUpdate.users===null) || (updatedCountry.users===null && countryToUpdate.users!==null) || (countryToUpdate.users.length!==updatedCountry.users.length)) {
         return {
           ...state,

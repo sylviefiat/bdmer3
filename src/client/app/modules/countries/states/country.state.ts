@@ -7,17 +7,16 @@ export interface ICountryState {
   users: { [id: string]: User };
   currentUserId: string;
   currentCountryId: string;
- /* error: string | null;
-  pending: boolean;*/
+   error: string | null;
+ /*pending: boolean;*/
 }
 
 export const countryInitialState: ICountryState = {
   userIds: null,
   users: {},
   currentUserId: null,
-  currentCountryId: null
- /* pending: false,
-  error: null*/
+  currentCountryId: null,
+  error: null
 };
 
 
@@ -38,17 +37,12 @@ export function getCurrentUser(state$: Observable<ICountryState>){
 }
 
 export function getCurrentCountry(state$: Observable<IAppState>){
-  return state$.select(state => {
-    return state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0];
-  });
+  console.log("here");
+  return state$.select(state => state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0]);
 }
 
-/*export function getUserError(state$: Observable<ICountryState>){
+export function getUserError(state$: Observable<ICountryState>){
   return state$.select(state => state.error);
 }
-
-export function getUserPending(state$: Observable<ICountryState>){
-  return state$.select(state => state.pending);
-}*/
 
 

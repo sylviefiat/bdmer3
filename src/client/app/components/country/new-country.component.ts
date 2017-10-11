@@ -37,7 +37,6 @@ export class NewCountryComponent implements OnInit {
     this.countryList$ = this.store.let(getCountryList);
     this.store.dispatch(new CountriesAction.LoadAction()); 
     this.countriesIds$ = this.store.let(getCountriesIdsInApp);
-    console.log("herer");
   }
 
   submit() {

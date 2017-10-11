@@ -11,7 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
-import { User } from '../../countries/models/country';
+import { User, Country } from '../../countries/models/country';
 
 
 @Injectable()
@@ -22,7 +22,7 @@ export class AuthEffects {
     .exhaustMap(auth =>
       this.authService
         .login(auth)
-        .map(user => {console.log(user);return new AuthAction.LoginSuccess(user)})
+        .map((result: {user:User,country:Country}) => new AuthAction.LoginSuccess({user: result.user, country:result.country}))
         .catch(error => of(new AuthAction.LoginFailure(error)))
     );
 

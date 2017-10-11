@@ -1,6 +1,7 @@
 export interface ResponsePDB {
     ok: boolean;
     id: string;
+    rows?: any;
     _rev: string;
 }
 

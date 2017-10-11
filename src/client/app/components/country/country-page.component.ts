@@ -3,15 +3,14 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { PouchDBService } from "../../modules/core/services/pouchdb.service";
 
-import { IAppState, getCountriesInApp } from '../../modules/ngrx/index';
+import { IAppState, getAllCountriesInApp } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 
 @Component({
   selector: 'bc-country-page',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <md-card>
       <md-card-title>Countries in BDMER</md-card-title>
@@ -26,12 +25,6 @@ import { Country } from '../../modules/countries/models/country';
       </md-card-actions>
     </md-card>
   `,
-  /**
-   * Container components are permitted to have just enough styles
-   * to bring the view together. If the number of styles grow,
-   * consider breaking them out into presentational
-   * components.
-   */
   styles: [
     `
     md-card-title {
@@ -47,17 +40,8 @@ export class CountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
-    this.countries$ = this.store.let(getCountriesInApp);
+    this.countries$ = this.store.let(getAllCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction()); 
-      //console.log(this.countries$) 
-  }
-
-  get pays() {
-    return this.countries$.map(countries => {
-      //console.log(countries);
-      return this.countries$;
-    })
-    
   }
 
   newCountry() {

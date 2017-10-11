@@ -44,11 +44,13 @@ export class CountriesService {
   getCountry(countrycode: string): Observable<Country> {
     return fromPromise(this.db.query(function(doc, emit) {
       emit(doc.code);
-    }, { key: countrycode, include_docs: true }).then(function(result) {
+    }, { key: countrycode, include_docs: true }))//.then(function(result) {
+    .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc;
-    }).catch(function(err) {
+    
+    })/*.catch(function(err) {
       console.log(err);
-    }));
+    }));*/
   }
 
   insertCountry(country: Country): Observable<Country> {
@@ -104,13 +106,13 @@ export class CountriesService {
       doc.users && doc.users.forEach(function(user) {
         emit(user.username);
       });
-    }, { key: username, include_docs: true }).then(function(result) {
-      //console.log(result);
+    }, { key: username, include_docs: true }))//.then(function(result) {
+    .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.username === username) && result.rows[0].doc.users.filter(user => user.username === username)[0];
-    }).catch(function(err) {
+    })/*.catch(function(err) {
       console.log(err);
-    }));
+    }));*/
   }
 
   getCountryUser(username: string): Observable<Country> {
@@ -118,12 +120,13 @@ export class CountriesService {
       doc.users && doc.users.forEach(function(user) {
         emit(user.username);
       });
-    }, { key: username, include_docs: true }).then(function(result) {
-      //console.log(result);
+    }, { key: username, include_docs: true }))//.then(function(result) {
+    .map((result: ResponsePDB) => {
+      console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc;
-    }).catch(function(err) {
+    })/*.catch((err) => {
       console.log(err);
-    }));
+    })*/;
   }
 
   getMailUser(email: string): Observable<User> {
@@ -131,13 +134,13 @@ export class CountriesService {
       doc.users && doc.users.forEach(function(user) {
         emit(user.email);
       });
-    }, { key: email, include_docs: true }).then(function(result) {
-      //console.log(result);
+    }, { key: email, include_docs: true }))//.then(function(result) {
+    .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
-    }).catch(function(err) {
+    })/*.catch(function(err) {
       console.log(err);
-    }));
+    }));*/
   }
 
   addUser(user: User): Observable<Country> {

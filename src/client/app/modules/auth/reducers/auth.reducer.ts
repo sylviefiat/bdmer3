@@ -10,11 +10,12 @@ export function authReducer(
   //console.log(action.type);
   switch (action.type) {
     case AuthAction.ActionTypes.LOGIN_SUCCESS: {  
-    
+      console.log(action.payload);
       return {
         loggedIn: true,
-        role: action.payload.role,
-        user: action.payload,
+        role: action.payload.user.role,
+        user: action.payload.user,
+        country: action.payload.country
       };
     }
 
