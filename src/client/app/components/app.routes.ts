@@ -5,6 +5,7 @@ import { BookRoutes } from './book/book.routes';
 import { MapRoutes } from './map/map.routes';
 import { LoginRoutes } from './login/login.routes';
 import { CountryRoutes } from './country/country.routes';
+import { ManagementRoutes } from './management/management.routes';
 import { NotFoundPageComponent } from '../modules/shared/components/not-found-page';
 
 export const routes: Array<any> = [
@@ -14,5 +15,6 @@ export const routes: Array<any> = [
   ...MapRoutes,
   ...LoginRoutes,
   ...CountryRoutes,
+  ...ManagementRoutes,
   { path: '**', component: NotFoundPageComponent }
 ];

@@ -110,9 +110,7 @@ export class CountriesService {
     .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.username === username) && result.rows[0].doc.users.filter(user => user.username === username)[0];
-    })/*.catch(function(err) {
-      console.log(err);
-    }));*/
+    })
   }
 
   getCountryUser(username: string): Observable<Country> {
@@ -124,9 +122,7 @@ export class CountriesService {
     .map((result: ResponsePDB) => {
       console.log(result);
       return result.rows && result.rows[0] && result.rows[0].doc;
-    })/*.catch((err) => {
-      console.log(err);
-    })*/;
+    });
   }
 
   getMailUser(email: string): Observable<User> {
@@ -138,15 +134,11 @@ export class CountriesService {
     .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
         result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
-    })/*.catch(function(err) {
-      console.log(err);
-    }));*/
+    });
   }
 
   addUser(user: User): Observable<Country> {
-    //console.log(user);
     delete user.password;
-   //console.log(user);
     return this.getCountry(user.countryCode)
       .mergeMap(country => {
         this.currentCountry = of(country);

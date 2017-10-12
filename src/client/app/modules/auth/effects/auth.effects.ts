@@ -23,7 +23,7 @@ export class AuthEffects {
       this.authService
         .login(auth)
         .map((result: {user:User,country:Country}) => new AuthAction.LoginSuccess({user: result.user, country:result.country}))
-        .catch(error => of(new AuthAction.LoginFailure(error)))
+        .catch(error => of(new AuthAction.LoginFailure(error.message)))
     );
 
   @Effect() logout$ = this.actions$

@@ -1,0 +1,15 @@
+    :host {
+      display: flex;
+      justify-content: center;
+      margin: 75px 0;
+    }
+
+    md-card {
+      max-width: 600px;
+      min-width: 400px;
+      min-height: 300px;
+      margin: 15px;
+    }
+    md-card-title-group {
+      margin-left: 0;
+    }

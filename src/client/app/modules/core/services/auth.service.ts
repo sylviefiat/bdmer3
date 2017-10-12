@@ -33,6 +33,7 @@ export class AuthService {
     return fromPromise(this.db.login(username, password))
       .filter((response: ResponsePDB) => response.ok)
       .map(response => {
+        //console.log(response);
         this.getLoggedInUser.emit(this.countriesService.getUser(username));
         this.getCountry.emit(this.countriesService.getCountryUser(username));
         return response;
@@ -52,14 +53,6 @@ export class AuthService {
       .mergeMap((response) => {
         return of({user: this.currentUser, country: this.currentCountry});
       })
-      .catch(err => {
-        if (err.name === 'unauthorized') {
-          console.log(err);
-          return of(_throw('Invalid username or password'));
-        }
-        console.log(err);
-        return of(_throw(err.reason));
-      })
   }
 
   logout(): Observable<any> {
@@ -70,9 +63,6 @@ export class AuthService {
         this.currentUser=null;
         return response;
       })
-      .catch(err => {
-        return of(_throw(err.reason));
-      });
   }
 
   signup(user: User): Observable<any> {
@@ -86,15 +76,6 @@ export class AuthService {
       .mergeMap(response => {
         return of(user);
       })
-      .catch(err => {
-        if (err.name === 'conflict') {
-          return of(_throw('Invalid username or password'));
-        } else if (err.name === 'forbidden') {
-          return of(_throw('User name already exists'));
-        }
-        return of(_throw(err.reason));
-      }
-      );
   }
 
   remove(user): Observable<any> {
