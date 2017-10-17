@@ -8,7 +8,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Species, Dimensions } from '../models/species';
+import { Species } from '../models/species';
 
 @Injectable()
 export class SpeciesService {
@@ -70,7 +70,7 @@ export class SpeciesService {
       })
   }
 
-  getDimensions(countryCode: string, speciesCode): Observable<Species> {
+  /*getDimensions(countryCode: string, speciesCode): Observable<Species> {
     return fromPromise(this.db.query(function(doc, emit) {
       doc.dimensions && doc.dimensions.forEach(function(dim) {
         emit(dim.codeCountry, dim.codeSpecies);
@@ -111,7 +111,7 @@ export class SpeciesService {
       .mergeMap((response) => {
         return this.currentSpecies;
       })
-  }
+  }*/
 
   public sync(remote: string): Promise<any> {
     let remoteDatabase = new PouchDB(remote);

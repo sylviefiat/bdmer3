@@ -2,25 +2,39 @@ export interface Species {
     _id: string;
     code: string;
     scientificName: string;
-    sp_nom: string;
-    sp_name: string;
-    LLW_coef_a: string;
-    LLW_coef_b: string;
-    LW_coef_a: string;
-    LW_coef_b: string;
-    conversion_salt: string;
-    conversion_BDM: string;
-    long_max: string;
-    larg_max: string;
+    names: NameI18N[];
+    LLW: CoefsAB;
+    LW: CoefsAB;
+    conversions: Conversion;
+    biologicDimensions: BiologicDimensions;
     distribution: string;
-    habtitat_preference: string;
-    dimensions: Dimensions[];
+    habitatPreference: string;
+    legalDimensions: LegalDimensions[];
 }
 
-export interface Dimensions {
+export interface BiologicDimensions {   
+    longMax: string;
+    largMax: string;
+}
+
+export interface LegalDimensions {
     _id: string;
-    codeSpecies: string;
     codeCountry: string;
-    L_min: string;
-    L_max: string
+    longMin: string;
+    longMax: string
+}
+
+export interface NameI18N {
+    lang: string;
+    name: string;
+}
+
+export interface CoefsAB {
+    coefA: string;
+    coefB: string;
+}
+
+export interface Conversion {
+    salt: string;
+    BDM: string;
 }

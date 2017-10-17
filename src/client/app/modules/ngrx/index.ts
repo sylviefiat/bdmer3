@@ -45,6 +45,7 @@ import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSea
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry} from '../auth/index';
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
+import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError } from '../datas/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -60,6 +61,7 @@ export interface IAppState {
   loginpage: ILoginPageState;
   countries: ICountriesState;
   country: ICountryState;
+  species: ISpeciesState;
 }
 
 /**
@@ -78,7 +80,8 @@ const reducers = {
   auth: authReducer,
   loginpage: loginPageReducer,
   countries: countriesReducer,
-  country: countryReducer
+  country: countryReducer,
+  species: speciesReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -123,54 +126,66 @@ export function getCountriesState(state$: Observable<IAppState>): Observable<ICo
 export function getCountryState(state$: Observable<IAppState>): Observable<ICountryState> {
   return state$.select(s => s.country);
 }
+export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
+  return state$.select(s => s.species);
+}
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
 }
 
+// i18n
 export const getLangues: any = compose(getLang, getMultilingualState);
 export const getListNames: any = compose(getNames, getNameListState);
 
+// Book
 export const getBookEntities: any = compose(getBooksEntities, getBookState);
 export const getBooksIds: any = compose(getBookIds, getBookState);
 export const getIdBookSelected: any = compose(getSelectedBookId, getBookState);
-
 export const getBookSelected = compose(getSelectedBook,getBookState);
 export const getAllBooks = compose(getAll,getBookState);
 
-
+// Collection
 export const getCollectionisLoaded = compose(getCollectionLoaded, getCollectionState);
 export const getCollectionisLoading: any = compose(getCollectionLoading, getCollectionState);
 export const getBookIdsCollection: any = compose(getCollectionBookIds, getCollectionState);
-
 export const getBookCollection: any = compose(getCollectionBook,getAppState);
-
-
 export const selectedBookInCollection: any = compose(isSelectedBookInCollection,getAppState);
 
+// Search
 export const getBookIdsSearch: any = compose(getSearchBookIds, getSearchState);
 export const getQuerySearch: any = compose(getSearchQuery, getSearchState);
 export const getLoadingSearch: any = compose(getSearchLoading, getSearchState);
 export const getResultsSearch: any = compose(getSearchResults, getAppState);
 
+// Auth
 export const getisLoggedIn: any = compose(getLoggedIn, getAuthState);
 export const getAuthUser: any = compose(getUser, getAuthState);
 export const getRoleUser: any = compose(getRole, getAuthState);
 export const getAuthCountry: any = compose(getCountry, getAuthState);
+
+// Login page
 export const getLoginPagePending: any = compose(getPending, getLoginPageState);
 export const getLoginPageError: any = compose(getError, getLoginPageState);
 export const getSignupPagePending: any = compose(getPending, getLoginPageState);
 export const getSignupPageError: any = compose(getError, getLoginPageState);
 
+// Countries
 export const getCountryList: any = compose(getCountryNamesList, getCountriesState);
-
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
 export const getCountriesInApp: any = compose(getCountriesEntities, getCountriesState);
 export const getAllCountriesInApp: any = compose(getAllCountriesEntities, getCountriesState);
 export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesState);
-//export const getCountryInApp: any = compose(getCurrentCountry, getCountriesState);
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 
+// Country
 export const getSelectedCountry: any = compose(getCurrentCountry, getAppState);
 export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
 export const getUserCountry: any = compose(getCurrentUser, getCountryState);
+
+// Species
+export const getSpeciesisLoaded: any = compose(getSpeciesLoaded, getSpeciesState);
+export const getSpeciesisLoading: any = compose(getSpeciesLoading, getSpeciesState);
+export const getSpeciesInApp: any = compose(getSpeciesEntities, getSpeciesState);
+export const getSpeciesIdsInApp: any = compose(getSpeciesIds, getSpeciesState);
+export const getSpeciesPageError: any = compose(getSpeciesError, getCountriesState);

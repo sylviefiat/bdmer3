@@ -35,9 +35,10 @@ export class AuthEffects {
       this.router.navigate(['/']);
     }));
 
-  @Effect({ dispatch: false }) loginSuccess$ = this.actions$
+    // REMOVED FOR DEV PURPOSE (AUTO LOGIN)
+ /* @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
-    .do(() =>this.router.navigate(['/']));
+    .do(() =>this.router.navigate(['/']));*/
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)

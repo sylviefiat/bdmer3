@@ -48,9 +48,7 @@ export class CountriesService {
     .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc;
     
-    })/*.catch(function(err) {
-      console.log(err);
-    }));*/
+    })
   }
 
   insertCountry(country: Country): Observable<Country> {

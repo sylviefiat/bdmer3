@@ -34,6 +34,6 @@ export function getSpeciesIds(state$: Observable<ISpeciesState>){
   return state$.select(state => state.ids);
 }
 
-export function getSpeciesyError(state$: Observable<ISpeciesState>){
+export function getSpeciesError(state$: Observable<ISpeciesState>){
   return state$.select(state => state.error);
 }

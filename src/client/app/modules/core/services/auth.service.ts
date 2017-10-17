@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angular/http';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
@@ -14,8 +14,8 @@ import * as PouchDBAuth from "pouchdb-authentication";
 
 @Injectable()
 export class AuthService {
-  public currentUser: /*Observable<*/User/*>*/;
-  public currentCountry: /*Observable<*/Country/*>*/;
+  public currentUser: User;
+  public currentCountry: Country;
   private db: any;
 
   @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
@@ -26,10 +26,10 @@ export class AuthService {
       skipSetup: true
     };
     this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);
+    
   }
 
   login({ username, password }: Authenticate): Observable<any> {
-    //console.log(username);
     return fromPromise(this.db.login(username, password))
       .filter((response: ResponsePDB) => response.ok)
       .map(response => {

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Species, Dimensions } from '../models/species';
+import { Species } from '../models/species';
 import { type } from '../../core/utils/index';
 
 export namespace SpeciesAction {

@@ -29,7 +29,6 @@ export function getCountriesLoading(state$: Observable<ICountriesState>){
 }
 
 export function getCountriesEntities(state$: Observable<ICountriesState>){
-  console.log("et la");
   return state$.select(state => state.entities.filter((country: Country) => country.code !== 'AA'));
 }
 
