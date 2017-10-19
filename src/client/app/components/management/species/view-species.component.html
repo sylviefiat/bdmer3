@@ -1,0 +1,64 @@
+<md-card *ngIf="species">
+      <md-card-title-group>      
+          <md-card-title> {{ species.scientificName }} - {{ species.code }}</md-card-title>
+          <md-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</md-card-subtitle>
+      </md-card-title-group>
+      
+      <md-card-content>
+        <div>
+          <h4>{{ 'LLW' | translate }}</h4>
+          <div>{{ 'COEFA' | translate }}: {{ species.LLW.coefA }}</div> 
+          <div>{{ 'COEFB' | translate }}: {{ species.LLW.coefB }}</div>
+        </div>
+        <div>
+          <h4>{{ 'LW' | translate }}</h4>
+          <div>{{ 'COEFA' | translate }}: {{ species.LW.coefA }}</div>
+          <div>{{ 'COEFB' | translate }}: {{ species.LW.coefB }}</div>
+      </div>
+      </md-card-content>
+      <md-card-content>
+        <div>
+          <h4>{{ 'CONVERSIONS' | translate }}</h4>
+          <div>{{ 'SALT' | translate }}: {{ species.conversions.salt }}</div>
+          <div>{{ 'BDM' | translate }}: {{ species.conversions.BDM }}</div>
+      </div>
+        <div>
+          <h4>{{ 'BIOLOGIC_DIM' | translate }}</h4>
+          <div>{{ 'LONG_MAX' | translate }}: {{ species.biologicDimensions.longMax }}</div>
+          <div>{{ 'LARG_MAX' | translate }}: {{ species.biologicDimensions.largMax }}</div>
+      </div>
+      </md-card-content>
+      <md-card-content class="one">
+        <div flex>
+          <h4>{{ 'DISTRIBUTION' | translate }}</h4>
+          <div>{{ species.distribution }}</div>
+      </div>
+      </md-card-content>
+      <md-card-content class="one">
+        <div flex>
+          <h4>{{ 'HABITAT_PREF' | translate }}</h4>
+          <div>{{ species.habitatPreference }}</div>
+      </div>
+      </md-card-content>
+      <md-card-content class="one">
+        <div *ngFor="let dim of species.legalDimensions" flex>
+          <h4>{{ 'LEGAL_DIM' | translate }}</h4>
+          <div>{{ 'COUNTRY' | translate }}: {{ dim.codeCountry }}</div>
+          <div>{{ 'LONG_MIN' | translate }}: {{ dim.longMin }}</div>
+          <div>{{ 'LONG_MAX' | translate }}: {{ dim.longMax }}</div>  
+        </div>    
+      </md-card-content>
+      <md-card-footer class="footer">
+        
+      </md-card-footer>
+
+      <md-card-actions align="space-between">
+        <button md-raised-button color="warn" (click)="edit.emit(species)">
+        Edit Species
+        </button>
+        <button md-raised-button color="warn" (click)="remove.emit(species)">
+        Remove Species
+        </button>
+
+      </md-card-actions>
+</md-card>

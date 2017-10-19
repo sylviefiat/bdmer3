@@ -31,6 +31,7 @@ import { NewUserComponent } from './country/new-user.component';
 import { DATA_COMPONENTS } from './management/index';
 
 export const APP_COMPONENTS: any[] = [
+  ...DATA_COMPONENTS,
   AppComponent,
   AboutComponent,
   HomeComponent,
@@ -61,7 +62,6 @@ export const APP_COMPONENTS: any[] = [
   SelectedUserPageComponent,
   NewUserPageComponent,
   NewUserComponent,
-  ...DATA_COMPONENTS
 ];
 
 export * from './app.component';

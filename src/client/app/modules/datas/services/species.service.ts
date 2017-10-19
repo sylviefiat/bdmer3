@@ -19,6 +19,7 @@ export class SpeciesService {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
+    console.log(dbname);
     this.db = new PouchDB(dbname);
     return fromPromise(this.sync(remote + dbname));
   }
@@ -43,17 +44,21 @@ export class SpeciesService {
     })
   }
 
-  addSpecies(species: Species): Observable<Species> {    
+  addSpecies(species: Species): Observable<Species> {
+    species._id=species.code;
     return fromPromise(this.db.put(species))
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
+        console.log(response);
         return of(species);
       })
   }
 
   editSpecies(species: Species): Observable<Species> {
+    species._id=species.code;
     return this.getSpecies(species.code)
-      .mergeMap(species => {        
+      .mergeMap(sp => {    
+        if(sp) {species._rev = sp._rev;}
         return fromPromise(this.db.put(species));
       })
       .filter((response: ResponsePDB) => { return response.ok; })

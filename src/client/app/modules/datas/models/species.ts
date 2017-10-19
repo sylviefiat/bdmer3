@@ -1,5 +1,6 @@
 export interface Species {
     _id: string;
+    _rev: string;
     code: string;
     scientificName: string;
     names: NameI18N[];

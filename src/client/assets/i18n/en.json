@@ -33,5 +33,20 @@
   "CREATE": "Create",
   "EDIT": "Edit",
   "FORM": "Form",
-  "IMPORT_CSV": "Import"
+  "IMPORT_CSV": "Import",
+  "LLW": "LLW growth variable",
+  "LW": "LW growth variable",
+  "COEFA": "Coefficient A",
+  "COEFB": "Coefficient B",
+  "CONVERSIONS": "Transformations",
+  "SALT": "Salt",
+  "BDM": "Bêche de mer",
+  "BIOLOGIC_DIM": "Species lenght",
+  "LONG_MAX": "Maximal lenght",
+  "LARG_MAX": "Maximal width",
+  "LONG_MIN": "Minimal lenght",
+  "DISTRIBUTION": "Distribution",
+  "HABITAT_PREF": "Species best habitats",
+  "LEGAL_DIM":"Legal fishing dimensions",
+  "COUNTRY":"Country"
 }

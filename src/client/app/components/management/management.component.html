@@ -1,5 +1,7 @@
 
 <div *ngIf="isCountryOk">
+</div>
+<div>
   <div class="container">
     <md-card>
       <md-card-title-group>
@@ -14,8 +16,9 @@
         </div>
         <div>
           <h4>{{'EDIT' | translate}}</h4>
-          <div>SELECT</div>
-          <button (click)="EditSpecies()">{{'EDIT' | translate}}</button>
+          <md-select  placeholder="Select species" (change)="editSpecies($event.value)">
+            <md-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</md-option>
+          </md-select>
         </div>
       </md-card-content>
     </md-card>    

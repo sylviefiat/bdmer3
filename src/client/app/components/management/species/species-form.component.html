@@ -1,5 +1,5 @@
 <md-card>
-  <md-card-title>Add new species</md-card-title>
+  <md-card-title class="toolbar">Add new species</md-card-title>
   <md-card-content>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -26,7 +26,7 @@
             </div>
           </div>
           <md-card-actions>
-            <a (click)="addName()">
+            <a class="action" (click)="addName()">
               Add another vernacular name +
             </a>
           </md-card-actions>
@@ -112,8 +112,34 @@
           </div>
         </md-card>
 
+        <!--legal dims-->
+        <md-card formArrayName="legalDimensions">
+          <md-card-subtitle>Dimensions de pêche </md-card-subtitle>
+          <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" class="panel">          
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j)"></fa>
+            <div [formGroupName]="j">
+              <bt-dim [group]="form.controls.legalDimensions.controls[j]"></bt-dim>
+            </div>
+          </div>
+          <md-card-actions>
+            <a class="action" (click)="addLegalDim()">
+              Add legal dimension for another country +
+            </a>
+          </md-card-actions>
+        </md-card>
+
+        <p *ngIf="errorMessage" class="speciesError">
+            {{ errorMessage }}
+        </p>  
+
         <div class="margin-20">
           <button type="submit" class="btn btn-primary pull-right" [disabled]="!form.valid">Submit</button>
+        </div>
+
+        <div class="margin-20">
+          <div>myForm details:-</div>
+          <pre>Is myForm valid?: <br>{{form.valid | json}}</pre>
+          <pre>form value: <br>{{form.value | json}}</pre>
         </div>
      
     </form>

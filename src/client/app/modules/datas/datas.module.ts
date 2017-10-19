@@ -23,7 +23,7 @@ import { SpeciesService } from './services/species.service';
     EffectsModule.run(SpeciesEffects),
   ],
   declarations: [],
-  providers:[/*CountryExistsGuard, */SpeciesService],
+  providers:[SpeciesService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
@@ -32,10 +32,10 @@ import { SpeciesService } from './services/species.service';
     SharedModule
   ]
 })
-export class SpeciesModule {
-  constructor(@Optional() @SkipSelf() parentModule: SpeciesModule) {
+export class DatasModule {
+  constructor(@Optional() @SkipSelf() parentModule: DatasModule) {
     if (parentModule) {
-      throw new Error('CountriesModule already loaded; Import in root module only.');
+      throw new Error('DatasModule already loaded; Import in root module only.');
     }
   }
 }

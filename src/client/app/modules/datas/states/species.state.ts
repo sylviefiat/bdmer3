@@ -5,6 +5,7 @@ import { IAppState } from '../../ngrx/index';
 export interface ISpeciesState {
   loaded: boolean;
   loading: boolean;
+  currentSpeciesId: string;
   entities: Species[];
   ids: string[];
   error: string | null;
@@ -13,6 +14,7 @@ export interface ISpeciesState {
 export const speciesInitialState: ISpeciesState = {
   loaded: false,
   loading: false,
+  currentSpeciesId: null,
   entities: [],
   ids: [],
   error: null
@@ -36,4 +38,12 @@ export function getSpeciesIds(state$: Observable<ISpeciesState>){
 
 export function getSpeciesError(state$: Observable<ISpeciesState>){
   return state$.select(state => state.error);
+}
+
+export function getCurrentSpeciesId(state$: Observable<ISpeciesState>){
+  return state$.select(state => state.currentSpeciesId);
+}
+
+export function getCurrentSpecies(state$: Observable<ISpeciesState>){
+  return state$.select(state => state.currentSpeciesId && state.entities.filter(species => species._id === state.currentSpeciesId)[0]);
 }

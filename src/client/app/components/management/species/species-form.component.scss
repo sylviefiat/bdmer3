@@ -1,0 +1,60 @@
+  :host {
+      display: flex;
+      justify-content: center;
+      margin: 72px 0;
+    }
+    md-card {
+        margin-bottom:10px;
+    }
+    md-card-title,
+    md-card-content {
+      display: flex;
+      justify-content: center;
+    }
+    md-card-subtitle {
+        color: #555;
+    }
+    md-input-container {
+      padding-left: 1em;
+    }
+    md-card-actions {
+      margin: 5px 0 0 !important;
+    }
+    input {
+      width: 300px;
+    }
+    textarea {
+      width: 650px;
+    }
+    .panel {
+      margin-bottom:5px;
+    }
+    .toolbar {
+      background-color: #106cc8;
+      color: rgba(255, 255, 255, 0.87);
+      display: block;
+      padding:10px;
+    }
+    .hint {
+        /* Position the hint */
+        position: absolute;
+        left: 2px;
+        right: auto;
+        bottom: 7px;
+        /* Copy styles from ng-messages */
+        font-size: 12px;
+        line-height: 14px;
+        transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+        /* Set our own color */
+        color: grey; 
+    }
+    .action {
+        text-decoration: underline;
+        cursor: pointer;
+        color: #555;
+    }
+    .btn[disabled] {
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: .65;
+    }

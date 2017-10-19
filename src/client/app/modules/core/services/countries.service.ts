@@ -45,10 +45,10 @@ export class CountriesService {
     return fromPromise(this.db.query(function(doc, emit) {
       emit(doc.code);
     }, { key: countrycode, include_docs: true }))//.then(function(result) {
-    .map((result: ResponsePDB) => {
-      return result.rows && result.rows[0] && result.rows[0].doc;
-    
-    })
+      .map((result: ResponsePDB) => {
+        return result.rows && result.rows[0] && result.rows[0].doc;
+
+      })
   }
 
   insertCountry(country: Country): Observable<Country> {
@@ -105,10 +105,10 @@ export class CountriesService {
         emit(user.username);
       });
     }, { key: username, include_docs: true }))//.then(function(result) {
-    .map((result: ResponsePDB) => {
-      return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
-        result.rows[0].doc.users.filter(user => user.username === username) && result.rows[0].doc.users.filter(user => user.username === username)[0];
-    })
+      .map((result: ResponsePDB) => {
+        return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
+          result.rows[0].doc.users.filter(user => user.username === username) && result.rows[0].doc.users.filter(user => user.username === username)[0];
+      })
   }
 
   getCountryUser(username: string): Observable<Country> {
@@ -117,10 +117,10 @@ export class CountriesService {
         emit(user.username);
       });
     }, { key: username, include_docs: true }))//.then(function(result) {
-    .map((result: ResponsePDB) => {
-      console.log(result);
-      return result.rows && result.rows[0] && result.rows[0].doc;
-    });
+      .map((result: ResponsePDB) => {
+        console.log(result);
+        return result.rows && result.rows[0] && result.rows[0].doc;
+      });
   }
 
   getMailUser(email: string): Observable<User> {
@@ -129,10 +129,10 @@ export class CountriesService {
         emit(user.email);
       });
     }, { key: email, include_docs: true }))//.then(function(result) {
-    .map((result: ResponsePDB) => {
-      return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
-        result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
-    });
+      .map((result: ResponsePDB) => {
+        return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
+          result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
+      });
   }
 
   addUser(user: User): Observable<Country> {
@@ -172,7 +172,7 @@ export class CountriesService {
       .map((user) => {
         return user;
       })
-      .catch(e => {return of(_throw('This email is not registered in BDMer, please contact administrator'));})
+      .catch(e => { return of(_throw('This email is not registered in BDMer, please contact administrator')); })
   }
 
   public sync(remote: string): Promise<any> {

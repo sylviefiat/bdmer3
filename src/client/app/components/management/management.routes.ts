@@ -1,6 +1,7 @@
 
 import { ManagementPageComponent } from './management-page.component';
-import { NewSpeciesPageComponent } from './species/new-species-page.component';
+import { SpeciesFormPageComponent } from './species/species-form-page.component';
+import { ViewSpeciesPageComponent } from './species/view-species-page.component';
 import { AuthGuard } from '../../modules/auth/guards/index';
 
 export const ManagementRoutes: Array<any> = [
@@ -10,8 +11,18 @@ export const ManagementRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'newSpeciesForm',
-    component: NewSpeciesPageComponent,
+    path: 'speciesForm',
+    component: SpeciesFormPageComponent,
     canActivate : [AuthGuard]
-  }
+  },
+  {
+    path: 'speciesForm/:id',
+    component: SpeciesFormPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'species/:id',
+    component: ViewSpeciesPageComponent,
+    canActivate : [AuthGuard]
+  },
 ];

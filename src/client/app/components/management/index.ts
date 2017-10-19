@@ -1,23 +1,29 @@
 
 import { ManagementPageComponent } from './management-page.component';
 import { ManagementComponent } from './management.component';
-import { NewSpeciesPageComponent } from './species/new-species-page.component';
-import { NewSpeciesComponent } from './species/new-species.component';
+import { SpeciesFormPageComponent } from './species/species-form-page.component';
+import { SpeciesFormComponent } from './species/species-form.component';
 import { NameComponent } from './species/name.component';
-import { CroissanceComponent } from './species/croissance.component';
+import { DimensionsComponent } from './species/dimensions.component';
+import { ViewSpeciesPageComponent } from './species/view-species-page.component';
+import { ViewSpeciesComponent } from './species/view-species.component';
 
 export const DATA_COMPONENTS: any[] = [
   ManagementPageComponent,
   ManagementComponent,
-  NewSpeciesPageComponent,
-  NewSpeciesComponent,
+  SpeciesFormPageComponent,
+  SpeciesFormComponent,
   NameComponent,
-  CroissanceComponent
+  DimensionsComponent,
+  ViewSpeciesPageComponent,
+  ViewSpeciesComponent
 ];
 
 export * from './management-page.component';
 export * from './management.component';
-export * from './species/new-species-page.component';
-export * from './species/new-species.component';
+export * from './species/species-form-page.component';
+export * from './species/species-form.component';
 export * from './species/name.component';
-export * from './species/croissance.component';
+export * from './species/dimensions.component';
+export * from './species/view-species-page.component';
+export * from './species/view-species.component';

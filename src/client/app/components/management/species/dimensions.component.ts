@@ -4,18 +4,25 @@ import { FormGroup } from '@angular/forms';
 
 @Component({
   moduleId: module.id,
-  selector: 'bt-name',
+  selector: 'bt-dim',
   template: `
-    <md-card-content [formGroup]="nameForm">
+    <md-card-content [formGroup]="dimForm">
+    <p>
       <md-input-container>
-        <input type="text" mdInput placeholder="Code language" formControlName="lang" required>
+        <input type="text" mdInput placeholder="Country code" formControlName="codeCountry" required>
         <div class="hint">Ex: FR</div>
-      </md-input-container>
-          
+      </md-input-container>          
+    </p>
+    <p> 
       <md-input-container>
-        <input type="text" mdInput placeholder="Nom vernaculaire" formControlName="name" required>
-        <div class="hint">Ex: Holothurie brune</div>    
+        <input type="text" mdInput placeholder="Longueur minimale" formControlName="longMin" required>mm
+        <div class="hint">Ex: 100</div>    
+      </md-input-container>     
+      <md-input-container>
+        <input type="text" mdInput placeholder="Longueur maximale" formControlName="longMax" required>mm
+        <div class="hint">Ex: 800</div>    
       </md-input-container>
+    </p>
     </md-card-content>
   `,
   styles: [
@@ -47,7 +54,7 @@ import { FormGroup } from '@angular/forms';
   `,
   ],
 })
-export class NameComponent {
+export class DimensionsComponent {
     @Input('group')
-    public nameForm: FormGroup;
+    public dimForm: FormGroup;
 }

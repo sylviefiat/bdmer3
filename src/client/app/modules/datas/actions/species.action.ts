@@ -17,6 +17,7 @@ export namespace SpeciesAction {
       LOAD: string;
       LOAD_SUCCESS: string;
       LOAD_FAIL: string;
+      SELECT: string;
     }
 
     export const ActionTypes: ISpeciesActions = {
@@ -28,7 +29,8 @@ export namespace SpeciesAction {
       REMOVE_SPECIES_FAIL: type(`${SPECIES} Remove Species Fail`),
       LOAD: type(`${SPECIES} Load`),
       LOAD_SUCCESS: type(`${SPECIES} Load Success`),
-      LOAD_FAIL: type(`${SPECIES} Load Fail`)
+      LOAD_FAIL: type(`${SPECIES} Load Fail`),
+      SELECT: type(`${SPECIES}  select`)
     };
 
   /**
@@ -91,6 +93,11 @@ export namespace SpeciesAction {
     constructor(public payload: any) {}
   }
 
+  export class SelectAction implements Action {
+    readonly type = ActionTypes.SELECT;
+    constructor(public payload: any) {}
+  }
+
   export type Actions =
     | AddSpeciesAction
     | AddSpeciesSuccessAction
@@ -100,5 +107,6 @@ export namespace SpeciesAction {
     | RemoveSpeciesFailAction
     | LoadAction
     | LoadSuccessAction
-    | LoadFailAction;
+    | LoadFailAction
+    | SelectAction;
  }

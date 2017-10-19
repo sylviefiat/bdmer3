@@ -1,0 +1,17 @@
+ :host {
+      display: flex;
+      justify-content: center;
+      margin: 72px 0;
+    }
+
+md-card-title {
+    font-style: italic;
+}
+md-card-content {
+    display: flex;
+    justify-content:space-between;
+}
+md-card-content.one{
+    display: flex;
+    justify-content:start;
+}
