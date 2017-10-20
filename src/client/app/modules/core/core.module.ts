@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { DBModule } from '@ngrx/db';
+import { PapaParseModule } from 'ngx-papaparse';
 
 // module
 import { SharedModule } from '../shared/index';
@@ -33,6 +34,7 @@ interface ICoreModuleOptions {
     CountriesModule,
     DatasModule,
     AuthModule,
+    PapaParseModule,
     DBModule.provideDB(schema)
   ],
   declarations: [

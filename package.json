@@ -199,6 +199,7 @@
     "jquery-confirm": "^3.3.2",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
+    "ngx-papaparse": "^1.2.4",
     "pouchdb": "^6.3.4",
     "pouchdb-authentication": "^0.5.5",
     "reflect-metadata": "^0.1.8",

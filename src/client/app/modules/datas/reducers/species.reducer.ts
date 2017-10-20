@@ -35,10 +35,11 @@ export function speciesReducer(
         }
 
         case SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS: {
-            const species = action.payload;
-            //console.log(species);
+            const addedspecies = action.payload;
+            console.log(addedspecies);
             return {
                 ...state,
+                entities: [...state.entities.filter(species => addedspecies._id !== species._id),addedspecies],
                 error: null
             }
         }
@@ -50,6 +51,7 @@ export function speciesReducer(
                     ...state,
                     entities: state.entities.filter(species => removedSpecies._id !== species._id),
                     ids: state.ids.filter(id => id !== removedSpecies._id),
+                    currentSpeciesId: null,
                     error: null
                 };
             }

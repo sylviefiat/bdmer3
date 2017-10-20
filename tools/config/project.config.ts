@@ -93,6 +93,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
           main: 'bundles/db.umd.js',
           defaultExtension: 'js'
         }
+    },{
+      name: 'ngrx-papaparse',
+      packageMeta: {
+          main: 'bundles/ngx-papaparse.umd.js',
+          defaultExtension: 'js'
+        }
     }];
     
     this.addPackagesBundles(additionalPackages);

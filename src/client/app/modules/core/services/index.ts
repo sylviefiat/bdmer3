@@ -10,6 +10,7 @@ import { GoogleBooksService } from './google-books';
 import { CountriesService } from './countries.service';
 import { AuthService } from './auth.service';
 import { MailService } from './mail.service';
+import { Csv2JsonService } from './csv2json.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,
@@ -22,7 +23,8 @@ export const CORE_PROVIDERS: any[] = [
   GoogleBooksService,
   CountriesService,
   AuthService,
-  MailService
+  MailService,
+  Csv2JsonService
 ];
 
 export * from './console.service';
@@ -36,3 +38,4 @@ export * from './google-books';
 export * from './countries.service';
 export * from './auth.service';
 export * from './mail.service';
+export * from './csv2json.service';

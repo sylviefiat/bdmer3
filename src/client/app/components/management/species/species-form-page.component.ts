@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../../modules/core/index';
 import { Species } from '../../../modules/datas/models/species';
+
 import { IAppState, getSpeciesPageError, getSelectedSpecies } from '../../../modules/ngrx/index';
 import { SpeciesAction } from '../../../modules/datas/actions/index';
 import { CountriesAction } from '../../../modules/countries/actions/index';

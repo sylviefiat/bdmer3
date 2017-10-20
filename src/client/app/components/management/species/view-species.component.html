@@ -24,8 +24,8 @@
       </div>
         <div>
           <h4>{{ 'BIOLOGIC_DIM' | translate }}</h4>
-          <div>{{ 'LONG_MAX' | translate }}: {{ species.biologicDimensions.longMax }}</div>
-          <div>{{ 'LARG_MAX' | translate }}: {{ species.biologicDimensions.largMax }}</div>
+          <div>{{ 'LONG_MAX' | translate }}: {{ species.biologicDimensions.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
+          <div>{{ 'LARG_MAX' | translate }}: {{ species.biologicDimensions.largMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
       </div>
       </md-card-content>
       <md-card-content class="one">
@@ -41,11 +41,18 @@
       </div>
       </md-card-content>
       <md-card-content class="one">
-        <div *ngFor="let dim of species.legalDimensions" flex>
-          <h4>{{ 'LEGAL_DIM' | translate }}</h4>
-          <div>{{ 'COUNTRY' | translate }}: {{ dim.codeCountry }}</div>
-          <div>{{ 'LONG_MIN' | translate }}: {{ dim.longMin }}</div>
-          <div>{{ 'LONG_MAX' | translate }}: {{ dim.longMax }}</div>  
+        <h4>{{ 'LEGAL_DIM' | translate }}</h4>
+      </md-card-content>
+       <md-card-content class="table">
+        <div>
+          <md-card-subtitle>{{ 'COUNTRY' | translate }}</md-card-subtitle>          
+          <div>{{ 'LONG_MIN' | translate }}</div>
+          <div>{{ 'LONG_MAX' | translate }}</div>  
+        </div>
+        <div *ngFor="let dim of species.legalDimensions">
+          <md-card-subtitle>{{ dim.codeCountry }}</md-card-subtitle>          
+          <div>{{ dim.longMin }}{{ 'MILLIMETER_ABR' | translate }}</div>
+          <div>{{ dim.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>  
         </div>    
       </md-card-content>
       <md-card-footer class="footer">
@@ -56,7 +63,7 @@
         <button md-raised-button color="warn" (click)="edit.emit(species)">
         Edit Species
         </button>
-        <button md-raised-button color="warn" (click)="remove.emit(species)">
+        <button *ngIf="isUserAdmin()" md-raised-button color="warn" (click)="deleteSpecies()">
         Remove Species
         </button>
 

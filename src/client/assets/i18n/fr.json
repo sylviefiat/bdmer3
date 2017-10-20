@@ -48,6 +48,6 @@
   "DISTRIBUTION": "Distribution",
   "HABITAT_PREF": "Habitats préférentiels de l'espèce",
   "LEGAL_DIM":"Dimensions de pêche",
-  "COUNTRY":"Pays"
-
+  "COUNTRY":"Pays",
+  "MILLIMETER_ABR":"mm"
 }

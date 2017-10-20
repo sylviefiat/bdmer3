@@ -7,8 +7,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSpecies } from '../../../modules/ngrx/index';
+import { IAppState, getSelectedSpecies, getAuthUser } from '../../../modules/ngrx/index';
 import { Species } from '../../../modules/datas/models/species';
+import { User } from '../../../modules/countries/models/country';
 import { SpeciesAction } from '../../../modules/datas/actions/index';
 
 /**
@@ -27,6 +28,7 @@ import { SpeciesAction } from '../../../modules/datas/actions/index';
   template: `
     <bc-view-species 
       [species]="species$ | async"
+      [currentUser]="currentUser$ | async"
       (edit)="editSpecies($event)"
       (remove)="removeSpecies($event)">
     </bc-view-species>
@@ -35,6 +37,7 @@ import { SpeciesAction } from '../../../modules/datas/actions/index';
 export class ViewSpeciesPageComponent implements OnInit, OnDestroy {
   actionsSubscription: Subscription;
   species$: Observable<Species | null>;
+  currentUser$: Observable<User>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     this.actionsSubscription = route.params
@@ -44,6 +47,7 @@ export class ViewSpeciesPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.species$ = this.store.let(getSelectedSpecies);
+    this.currentUser$ = this.store.let(getAuthUser);
   }
 
   ngOnDestroy() {

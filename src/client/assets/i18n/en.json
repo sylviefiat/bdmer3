@@ -48,5 +48,6 @@
   "DISTRIBUTION": "Distribution",
   "HABITAT_PREF": "Species best habitats",
   "LEGAL_DIM":"Legal fishing dimensions",
-  "COUNTRY":"Country"
+  "COUNTRY":"Country",
+  "MILLIMETER_ABR":"mm"
 }
