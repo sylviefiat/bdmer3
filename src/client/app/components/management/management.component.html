@@ -14,7 +14,7 @@
           <button (click)="newSpeciesForm()">{{'FORM' | translate}}</button>
           <button (click)="newSpeciesImport()">{{'IMPORT_CSV' | translate}}</button>
         </div>
-        <div>
+        <div *ngIf="(speciesList$ | async)?.length>0">
           <h4>{{'EDIT' | translate}}</h4>
           <md-select  placeholder="Select species" (change)="editSpecies($event.value)">
             <md-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</md-option>

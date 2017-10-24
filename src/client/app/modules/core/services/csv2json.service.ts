@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PapaParseService } from 'ngx-papaparse';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+
+import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
 
 @Injectable()
 export class Csv2JsonService {
@@ -8,36 +12,97 @@ export class Csv2JsonService {
 
     }
 
-    private extractData(data) { // Input csv data to the function
-
-    let csvData = data;
-    let allTextLines = csvData.split(/\r\n|\n/);
-    let headers = allTextLines[0].split(',');
-    let lines = [];
-
-    for ( let i = 0; i < allTextLines.length; i++) {
-        // split content based on comma
-        let data = allTextLines[i].split(',');
-        if (data.length == headers.length) {
-            let tarr = [];
-            for ( let j = 0; j < headers.length; j++) {
-                tarr.push(data[j]);
+    private extractSpeciesData(data): Species[] { // Input csv data to the function
+        let allTextLines = data;
+        let headers = allTextLines[0];
+        let lines: Species[] = [];
+        // don't iclude header start from 1
+        for (let i = 1; i < allTextLines.length; i++) {
+            // split content based on comma
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let sp = {} as Species;
+                let header, name = {} as NameI18N, value, parts, legaldim = {} as LegalDimensions;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "code":
+                        case "distribution":
+                        case "scientific_name":
+                        case "habitat_preference":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
+                            sp[header] = data[j];
+                            break;
+                        case "sp_name":
+                        case "sp_nom":
+                            name = { lang: (headers[j].indexOf('name') != -1) ? "EN" : "FR", name: data[j] };
+                            if (sp.names == null) sp.names = [];
+                            sp.names.push(name);
+                            break;
+                        case "LLW_coef_a":
+                        case "LLW_coef_b":
+                        case "LW_coef_a":
+                        case "LW_coef_b":
+                            parts = headers[j].split('_');
+                            header = parts[0];
+                            value = parts[1] + parts[2].charAt(0).toUpperCase() + parts[2].slice(1);
+                            if (sp[header] == null) sp[header] = {} as CoefsAB;
+                            sp[header][value] = data[j];
+                            break;
+                        case "conversion_salt":
+                        case "conversion_BDM":
+                            parts = headers[j].split('_');
+                            header = parts[0] + 's';
+                            value = parts[1];
+                            if (sp[header] == null) sp[header] = {} as Conversion;
+                            sp[header][value] = data[j];
+                            break;
+                        case "long_max":
+                        case "larg_max":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
+                            if (sp.biologicDimensions == null) sp.biologicDimensions = {} as BiologicDimensions;
+                            sp.biologicDimensions[header] = data[j];
+                            break;
+                        case "L_min_NC":
+                        case "L_min_VT":
+                        case "L_min_PG":
+                        case "L_min_SB":
+                        case "L_min_FJ":
+                        case "L_min_TO":
+                            header = headers[j].substring(headers[j].lastIndexOf('_') + 1);
+                            legaldim = { codeCountry: header, longMin: data[j], longMax: data[headers.indexOf('L_max_' + header)] };
+                            if (sp.legalDimensions == null) sp.legalDimensions = [];
+                            sp.legalDimensions.push(legaldim);
+                            break;
+                        default:
+                            // do nothing...
+                            break;
+                    }
+                }
+                lines.push(sp);
             }
-            lines.push(tarr);
         }
+        console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
     }
-    console.log(lines); //The data in the form of 2 dimensional array.
-  }
 
-    csv2Species(csv: any): any{
-        let csvData = 'code;scientific_name;sp_nom;sp_name;LLW_coef_a;LLW_coef_b;LW_coef_a;LW_coef_b;conversion_salt;conversion_BDM;long_max;larg_max;distribution;habitat_preference;L_min_NC;L_min_vanuatu;L_min_PNG;L_min_salomon;L_min_fiji;L_min_tonga;L_min_nd'+
-'a_echinites;Actinopyga echinites;Holothurie brune;Deepwater redfish;0.001320729;1.38;0.000342;2.6;0.5;0.1;360;100;restrict;Coastal reefs, in rubble, seagrass beds, or sand between corals. Depth: 0?3 m.;0;0;0;0;0;0;170'+
-'a_mauritiana;Actinopyga mauritiana;Holothurie des brisants;Surf redfish;0.019643443;1.11;0.000647;2.456;0.5;0.06;380;150;restrict;Oceanic-influenced reefs in wave-exposed zones. Depth: 0?10 m.;0;0;0;0;0;0;130'+
-'a_miliaris;Actinopyga miliaris;Holothurie noire (papaye);Hairy blackfish;0.100768051;0.93;0.000824;2.441;0.5;0.1;300;150;restrict;Sandy lagoons and reef flats. Depth: 1?10 m, but mostly less than 4 m.;0;0;0;0;0;0;140';
-        this.papa.parse(csvData,{
-            complete: (results, file) => {
-                console.log('Parsed: ', results, file);
-            }
-        });
+    csv2Species(csvFile: any): Observable<any> {
+        return Observable.create(
+            observable => {
+                this.papa.parse(csvFile, {
+                    download: true,
+                    complete: function(results) {
+                        console.log(results.data)
+                        observable.next(results.data);
+                        observable.complete();
+                    }
+                });
+            })
+            .mergeMap(data => {
+                console.log(data);
+                let res = this.extractSpeciesData(data);
+                console.log(res);
+                return res;
+            });
+
     }
 }

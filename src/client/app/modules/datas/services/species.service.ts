@@ -54,6 +54,11 @@ export class SpeciesService {
       })
   }
 
+  importSpecies(species: Species[]): Observable<Observable<Species>> {
+    return of(species)
+      .map((sp, i) => this.addSpecies(sp[i]))
+  }
+
   editSpecies(species: Species): Observable<Species> {
     species._id=species.code;
     return this.getSpecies(species.code)

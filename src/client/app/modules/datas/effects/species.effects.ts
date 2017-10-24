@@ -12,6 +12,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 
+import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SpeciesService } from "../services/species.service";
 import { SpeciesAction } from '../actions/index';
 import { Species } from '../models/species';
@@ -47,16 +48,32 @@ export class SpeciesEffects {
 
   @Effect()
   addSpeciesToList$: Observable<Action> = this.actions$
-    //.do((action) => console.log(`Received ${action.type}`))
-    //.filter((action) => action.type === SpeciesAction.ActionTypes.ADD_SPECIES)
+    /*.do((action) => console.log(`Received ${action.type}`))
+    .filter((action) => action.type === SpeciesAction.ActionTypes.ADD_SPECIES)*/
     .ofType(SpeciesAction.ActionTypes.ADD_SPECIES)
-    .map((action: SpeciesAction.AddSpeciesAction) => {console.log(action.type); return action.payload})
+    .map((action: SpeciesAction.AddSpeciesAction) => action.payload)
     .mergeMap(species => 
       this.speciesService
         .editSpecies(species)
         .map((species: Species) => new SpeciesAction.AddSpeciesSuccessAction(species))
         .catch((error) => {console.log(error);return of(new SpeciesAction.AddSpeciesFailAction(error))})
     );
+
+  @Effect()
+  importSpeciesToList$: Observable<Action> = this.actions$
+    .do((action) => console.log(`Received ${action.type}`))
+    .filter((action) => action.type === SpeciesAction.ActionTypes.IMPORT_SPECIES)
+    //.ofType(SpeciesAction.ActionTypes.IMPORT_SPECIES)
+    .map((action: SpeciesAction.ImportSpeciesAction) => action.payload)
+    .mergeMap(speciesCsv => this.csv2jsonService.csv2Species(speciesCsv))
+    .mergeMap((species) => {
+      return this.speciesService
+        .editSpecies(species)
+      })
+    .map((species: Species) => new SpeciesAction.ImportSpeciesSuccessAction(species))
+    .catch((error) => {console.log(error);return of(new SpeciesAction.AddSpeciesFailAction(error))})
+    
+    ;
 
   @Effect()
   removeSpeciesFromList$: Observable<Action> = this.actions$
@@ -78,7 +95,7 @@ export class SpeciesEffects {
     .ofType(SpeciesAction.ActionTypes.REMOVE_SPECIES_FAIL)
     .do(() =>this.router.navigate(['/management']));
 
-  constructor(private actions$: Actions, private router: Router, private speciesService: SpeciesService) {
+  constructor(private actions$: Actions, private router: Router, private speciesService: SpeciesService, private csv2jsonService: Csv2JsonService) {
     
     
   }

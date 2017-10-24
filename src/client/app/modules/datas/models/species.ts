@@ -19,7 +19,6 @@ export interface BiologicDimensions {
 }
 
 export interface LegalDimensions {
-    _id: string;
     codeCountry: string;
     longMin: string;
     longMax: string

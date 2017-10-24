@@ -9,6 +9,7 @@ export interface ISpeciesState {
   entities: Species[];
   ids: string[];
   error: string | null;
+  msg: string | null;
 }
 
 export const speciesInitialState: ISpeciesState = {
@@ -17,7 +18,8 @@ export const speciesInitialState: ISpeciesState = {
   currentSpeciesId: null,
   entities: [],
   ids: [],
-  error: null
+  error: null,
+  msg: null
 };
 
 export function getSpeciesLoaded(state$: Observable<ISpeciesState>){
@@ -38,6 +40,10 @@ export function getSpeciesIds(state$: Observable<ISpeciesState>){
 
 export function getSpeciesError(state$: Observable<ISpeciesState>){
   return state$.select(state => state.error);
+}
+
+export function getSpeciesMsg(state$: Observable<ISpeciesState>){
+  return state$.select(state => state.msg);
 }
 
 export function getCurrentSpeciesId(state$: Observable<ISpeciesState>){

@@ -11,6 +11,8 @@ export namespace SpeciesAction {
       ADD_SPECIES: string;
       ADD_SPECIES_SUCCESS: string;
       ADD_SPECIES_FAIL: string;
+      IMPORT_SPECIES: string;
+      IMPORT_SPECIES_SUCCESS: string;
       REMOVE_SPECIES: string;
       REMOVE_SPECIES_SUCCESS: string;
       REMOVE_SPECIES_FAIL: string;
@@ -24,6 +26,8 @@ export namespace SpeciesAction {
       ADD_SPECIES: type(`${SPECIES} Add Species`),
       ADD_SPECIES_SUCCESS: type(`${SPECIES} Add Species Success`),
       ADD_SPECIES_FAIL: type(`${SPECIES} Add Species Fail`),
+      IMPORT_SPECIES: type(`${SPECIES} Import Species`),
+      IMPORT_SPECIES_SUCCESS:type(`${SPECIES} Import Species Success`),
       REMOVE_SPECIES: type(`${SPECIES} Remove Species`),
       REMOVE_SPECIES_SUCCESS: type(`${SPECIES} Remove Species Success`),
       REMOVE_SPECIES_FAIL: type(`${SPECIES} Remove Species Fail`),
@@ -51,7 +55,19 @@ export namespace SpeciesAction {
   export class AddSpeciesFailAction implements Action {
     readonly type = ActionTypes.ADD_SPECIES_FAIL;
 
-    constructor(public payload: Species) {}
+    constructor(public payload: any) {}
+  }
+
+  export class ImportSpeciesAction implements Action {
+    readonly type = ActionTypes.IMPORT_SPECIES;
+
+    constructor(public payload: any) {}
+  }
+
+  export class ImportSpeciesSuccessAction implements Action {
+    readonly type = ActionTypes.IMPORT_SPECIES_SUCCESS;
+
+    constructor(public payload: any) {}
   }
 
   /**
@@ -102,6 +118,7 @@ export namespace SpeciesAction {
     | AddSpeciesAction
     | AddSpeciesSuccessAction
     | AddSpeciesFailAction
+    | ImportSpeciesAction
     | RemoveSpeciesAction
     | RemoveSpeciesSuccessAction
     | RemoveSpeciesFailAction

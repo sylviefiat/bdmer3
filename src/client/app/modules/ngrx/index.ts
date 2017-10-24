@@ -45,7 +45,7 @@ import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSea
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry} from '../auth/index';
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
-import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getCurrentSpecies } from '../datas/index';
+import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -189,4 +189,5 @@ export const getSpeciesisLoading: any = compose(getSpeciesLoading, getSpeciesSta
 export const getSpeciesInApp: any = compose(getSpeciesEntities, getSpeciesState);
 export const getSpeciesIdsInApp: any = compose(getSpeciesIds, getSpeciesState);
 export const getSpeciesPageError: any = compose(getSpeciesError, getSpeciesState);
+export const getSpeciesPageMsg: any = compose(getSpeciesMsg, getSpeciesState);
 export const getSelectedSpecies: any = compose(getCurrentSpecies, getSpeciesState);

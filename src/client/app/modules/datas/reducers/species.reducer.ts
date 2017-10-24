@@ -34,13 +34,18 @@ export function speciesReducer(
 
         }
 
-        case SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS: {
+        case SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS:
+        case SpeciesAction.ActionTypes.IMPORT_SPECIES_SUCCESS: {
+            console.log(action.payload);
             const addedspecies = action.payload;
-            console.log(addedspecies);
+            const editedspecies = state.entities.filter(species => addedspecies._id === species._id);
+
             return {
                 ...state,
-                entities: [...state.entities.filter(species => addedspecies._id !== species._id),addedspecies],
-                error: null
+                entities: [...editedspecies,...addedspecies],
+                ids: [...state.ids.filter(id => addedspecies._id === id), ...addedspecies._id],
+                error: null,
+                msg: "Species registered with success"
             }
         }
 
@@ -52,7 +57,8 @@ export function speciesReducer(
                     entities: state.entities.filter(species => removedSpecies._id !== species._id),
                     ids: state.ids.filter(id => id !== removedSpecies._id),
                     currentSpeciesId: null,
-                    error: null
+                    error: null,
+                    msg: "Specis removed with success"
                 };
             }
 
@@ -61,7 +67,8 @@ export function speciesReducer(
             {
                 return {
                     ...state,
-                    error: action.payload
+                    error: action.payload,
+                    msg: null
                 }
             }
 

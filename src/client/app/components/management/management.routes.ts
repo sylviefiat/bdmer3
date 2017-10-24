@@ -1,6 +1,7 @@
 
 import { ManagementPageComponent } from './management-page.component';
 import { SpeciesFormPageComponent } from './species/species-form-page.component';
+import { SpeciesImportPageComponent } from './species/species-import-page.component';
 import { ViewSpeciesPageComponent } from './species/view-species-page.component';
 import { AuthGuard } from '../../modules/auth/guards/index';
 
@@ -18,6 +19,11 @@ export const ManagementRoutes: Array<any> = [
   {
     path: 'speciesForm/:id',
     component: SpeciesFormPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'speciesImport',
+    component: SpeciesImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
