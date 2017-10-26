@@ -15,6 +15,8 @@ import { AuthService } from "../../core/services/index";
 import { CountryAction } from '../actions/index';
 import { Country, User } from '../models/country';
 import { IAppState, getSelectedCountry } from '../../ngrx/index';
+import { SiteAction } from '../../datas/actions/index';
+
 
 @Injectable()
 export class CountryEffects {
@@ -64,6 +66,7 @@ export class CountryEffects {
     .do(() => {
       this.location.back();
     });
+
 
   constructor(
     private actions$: Actions,

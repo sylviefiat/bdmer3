@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { RouterExtensions, Config } from '../../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../../modules/ngrx/index';
 
@@ -52,7 +52,7 @@ export class SpeciesFormComponent implements OnInit {
         legalDimensions: this._fb.array([]),
     });
 
-    constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer, private _fb: FormBuilder) { }
+    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     initName() {
         if (this.species && this.species.names && this.species.names.length > 0) {
@@ -159,6 +159,15 @@ export class SpeciesFormComponent implements OnInit {
         if (this.form.valid) {
             this.submitted.emit(this.form.value);
         }
+    }
+
+    return() {
+        this.routerext.navigate(['/management/'], {
+            transition: {
+                duration: 1000,
+                name: 'slideTop',
+            }
+        });
     }
 
 }

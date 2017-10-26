@@ -1,0 +1,63 @@
+:host {
+      display: flex;
+      justify-content: center;
+      margin: 75px 0;
+    }
+
+    md-card {
+      max-width: 600px;
+      min-width: 400px;
+      margin: 15px;
+    }
+    md-card-title-group, md-card-title {
+        width: 100%;
+    }
+    md-card-content {
+      padding-top:20px;
+    }
+    md-card-title-group {
+      margin-left: 0;
+      margin-bottom:20px;
+    }
+    md-card-footer {
+      width: 100%;
+    }
+    .toolbar {
+      background-color: #106cc8;
+      color: rgba(255, 255, 255, 0.87);
+      display: block;
+      padding:10px;
+    }
+    .actionButtons {
+        text-decoration: underline;
+        cursor: pointer;
+        color: #555;
+        text-align:right;
+    }
+    .question {
+        padding: 0px;
+        border-radius:120px;
+        height:40px;
+        width:40px;
+    }
+    .msg {
+      text-align: center;
+      padding: 16px;     
+      color: white;
+      background-color: #4BB543;
+    }
+    .error {
+      text-align: center;
+      padding: 16px;
+      color: white;
+      background-color: red;
+    }
+    .link {
+      text-decoration: underline;
+      cursor:pointer;
+
+    }
+    .space-around {
+      display: flex;
+      justify-content: space-between;
+    }

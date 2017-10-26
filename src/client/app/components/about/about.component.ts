@@ -13,21 +13,8 @@ import { IAppState } from '../../modules/ngrx/index';
 })
 export class AboutComponent {
 
-  // Just one way you could handle the {N} `ui/page` Page class
-  // in a shared component...
-  private _page: any;
   private pdfFile: string;
   private docs_repo: string;
-
-  private get page() {
-    if (Config.PageClass) {
-      if (!this._page) {
-        this._page = this.injector.get(Config.PageClass);
-      }
-
-      return this._page;
-    }
-  }
 
   constructor(private injector: Injector, private store: Store<IAppState>) {
     this.store.take(1).subscribe((s: any) => {
@@ -44,7 +31,7 @@ export class AboutComponent {
       }
       
     });
-    console.log(this.pdfFile);
+    //console.log(this.pdfFile);
   }
 
   getPdf(){    

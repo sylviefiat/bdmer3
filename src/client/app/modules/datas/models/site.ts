@@ -2,6 +2,7 @@ import { Species } from './species';
 
 export interface Site {
   _id: string;
+  _rev: string;
   code: string;
   codeCountry: string;
   description: string;
@@ -10,7 +11,6 @@ export interface Site {
 }
 
 export interface Zone {
-    _id: string;
     code: string;
     surface: string;
     transects: Transect[];
@@ -18,7 +18,6 @@ export interface Zone {
 }
 
 export interface Transect {
-    _id: string;
     code: string;
     name: string;
     longitude: string;
@@ -27,17 +26,15 @@ export interface Transect {
 }
 
 export interface Count {
-    _id: string;
     date: string;
     codeSpecies: string;
-    long_mm: string;
-    larg_mm: string;
+    longMm: string;
+    largMm: string;
 }
 
 export interface ZonePreference {
-    _id: string;
     code: string;
     codeSpecies: string;
     presence: string;
-    info_source: string;
+    infoSource: string;
 }

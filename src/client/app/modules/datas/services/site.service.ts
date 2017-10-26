@@ -1,0 +1,93 @@
+import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseContentType } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
+import { _throw } from 'rxjs/observable/throw';
+
+
+import * as PouchDB from "pouchdb";
+import { ResponsePDB } from '../../core/models/pouchdb';
+import { Site } from '../models/site';
+
+@Injectable()
+export class SiteService {
+  private currentSite: Observable<Site>;
+  private db: any;
+
+  constructor(private http: Http) {
+  }
+
+  initDB(dbname: string, remote: string): Observable<any> {
+    console.log(dbname);
+    this.db = new PouchDB(dbname);
+    return fromPromise(this.sync(remote + dbname));
+  }
+
+  public getAll(): Observable<any> {
+    return fromPromise(
+      this.db.allDocs({ include_docs: true })
+        .then(docs => {
+          return docs.rows.map(row => {
+            return row.doc;
+          });
+        }));
+  }
+
+  getSite(siteCode: string): Observable<Site> {
+    return fromPromise(this.db.query(function(doc, emit) {
+      emit(doc.code);
+    }, { key: siteCode, include_docs: true }))
+    .map((result: ResponsePDB) => {
+      return result.rows && result.rows[0] && result.rows[0].doc;
+    
+    })
+  }
+
+  addSite(site: Site): Observable<Site> {
+    site._id=site.code;
+    return fromPromise(this.db.put(site))
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        console.log(response);
+        return of(site);
+      })
+  }
+
+  importSite(site: Site[]): Observable<Observable<Site>> {
+    return of(site)
+      .map((sp, i) => this.addSite(sp[i]))
+  }
+
+  editSite(site: Site): Observable<Site> {
+    console.log(site);
+    site._id=site.code;
+    return this.getSite(site.code)
+      .mergeMap(sp => {    
+        if(sp) {site._rev = sp._rev;}
+        return fromPromise(this.db.put(site));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap((response) => {
+        return of(site);
+      })
+  }
+
+  removeSite(site: Site): Observable<Site> {    
+    return fromPromise(this.db.remove(site))
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(site);
+      })
+  }
+
+  public sync(remote: string): Promise<any> {
+    let remoteDatabase = new PouchDB(remote);
+    return this.db.sync(remoteDatabase, {
+      live: true,
+      retry: true
+    }).on('error', error => {
+      console.error(JSON.stringify(error));
+    });
+  }
+}

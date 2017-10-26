@@ -3,7 +3,11 @@
       justify-content: center;
       margin: 75px 0;
     }
-
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }    
     md-card {
       max-width: 600px;
       min-width: 400px;
@@ -12,4 +16,9 @@
     }
     md-card-title-group {
       margin-left: 0;
+    }
+
+    .space-around {
+      display: flex;
+      justify-content: space-around;
     }

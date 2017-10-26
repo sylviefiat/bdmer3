@@ -1,0 +1,14 @@
+<md-card-content [formGroup]="zoneForm">
+    <p>
+      <md-input-container>
+        <input type="text" mdInput placeholder="Zone code" formControlName="code" required>
+        <div class="hint">Ex: NOMDUSITE_Z001</div>
+      </md-input-container>          
+    </p>
+    <p> 
+      <md-input-container>
+        <input type="text" mdInput placeholder="Surface de la zone" formControlName="surface" required>m²
+        <div class="hint">Ex: 100</div>    
+      </md-input-container>          
+    </p>
+</md-card-content>

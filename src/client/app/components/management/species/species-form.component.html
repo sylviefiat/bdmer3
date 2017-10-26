@@ -1,5 +1,5 @@
 <md-card>
-  <md-card-title class="toolbar">Add new species</md-card-title>
+  <md-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 > </fa><span style="text-align:center">Add new species</span></md-card-title>
   <md-card-content>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -132,9 +132,9 @@
             {{ errorMessage }}
         </p>  
 
-        <div class="margin-20">
-          <button type="submit" class="btn btn-primary pull-right" [disabled]="!form.valid">Submit</button>
-          <button type="submit" class="btn btn-primary pull-right" [disabled]="!form.valid">Submit</button>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Submit</button>
+          <button (click)="return()" class="btn btn-secondary">Cancel</button>
         </div>
      
     </form>

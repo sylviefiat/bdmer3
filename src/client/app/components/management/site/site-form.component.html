@@ -1,0 +1,51 @@
+<md-card>
+  <md-card-title class="toolbar"><fa [name]="'map'" [border]=true [size]=1 > </fa><span style="text-align:center">Add new site for {{country.name}}</span></md-card-title>
+  <md-card-content>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <md-card class="row">
+          <p>
+          <md-input-container class="full">
+            <input class="full" type="text" mdInput placeholder="Code site" formControlName="code" required>
+            <div class="hint">Ex: MANGALILIU
+              <span class="warning"> caractères interdits : espace, accent, caractères spéciaux, "_"</span>
+            </div>
+          </md-input-container>
+          </p>
+          <p>
+          <md-input-container>
+            <textarea md-maxlength="150" rows="5" mdInput formControlName="description"  md-select-on-focus></textarea>
+            <div class="hint">Ex : Description du site</div> 
+          </md-input-container>            
+        </p>
+        </md-card>
+        <!--names-->
+        <md-card formArrayName="zones">
+          <md-card-subtitle>Zone </md-card-subtitle>
+          <div *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel">          
+            <fa [name]="'map-marker'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
+            <div [formGroupName]="i">
+              <!--<bt-zone-form [group]="form.controls.zones.controls[i]"></bt-zone-form>-->
+            </div>
+          </div>
+          <md-card-actions>
+            <a class="action" (click)="addZone()">
+              Add another zone +
+            </a>
+          </md-card-actions>
+        </md-card>
+
+        <p *ngIf="errorMessage" class="speciesError">
+            {{ errorMessage }}
+        </p>  
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Submit</button>
+          <button (click)="return()" class="btn btn-secondary">Cancel</button>
+        </div>
+     
+    </form>
+  </md-card-content>
+    
+
+</md-card>

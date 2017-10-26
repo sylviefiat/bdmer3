@@ -45,7 +45,7 @@ export function speciesReducer(
                 entities: [...editedspecies,...addedspecies],
                 ids: [...state.ids.filter(id => addedspecies._id === id), ...addedspecies._id],
                 error: null,
-                msg: "Species registered with success"
+                msg: action.type===SpeciesAction.ActionTypes.IMPORT_SPECIES_SUCCESS?"Species registered with success":null
             }
         }
 

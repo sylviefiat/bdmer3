@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
+import { Site } from '../../datas/models/site';
 
 @Injectable()
 export class Csv2JsonService {
@@ -85,6 +86,35 @@ export class Csv2JsonService {
         return lines;
     }
 
+    private extractSiteData(data): Site[] { // Input csv data to the function
+        let allTextLines = data;
+        let headers = allTextLines[0];
+        let lines: Site[] = [];
+        // don't iclude header start from 1
+        for (let i = 1; i < allTextLines.length; i++) {
+            // split content based on comma
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let st = {} as Site;
+                let header, name = {} as NameI18N, value, parts, legaldim = {} as LegalDimensions;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "code":
+                        case "description":
+                            st[headers[j]] = data[j];
+                            break;                        
+                        default:
+                            // do nothing...
+                            break;
+                    }
+                }
+                lines.push(st);
+            }
+        }
+        console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
+    }
+
     csv2Species(csvFile: any): Observable<any> {
         return Observable.create(
             observable => {
@@ -100,6 +130,29 @@ export class Csv2JsonService {
             .mergeMap(data => {
                 console.log(data);
                 let res = this.extractSpeciesData(data);
+                console.log(res);
+                return res;
+            });
+
+    }
+
+
+
+    csv2Site(csvFile: any): Observable<any> {
+        return Observable.create(
+            observable => {
+                this.papa.parse(csvFile, {
+                    download: true,
+                    complete: function(results) {
+                        console.log(results.data)
+                        observable.next(results.data);
+                        observable.complete();
+                    }
+                });
+            })
+            .mergeMap(data => {
+                console.log(data);
+                let res = this.extractSiteData(data);
                 console.log(res);
                 return res;
             });

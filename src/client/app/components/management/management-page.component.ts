@@ -21,13 +21,7 @@ import { Country, User } from '../../modules/countries/models/country';
     <md-card>
       <md-card-title>Data management</md-card-title>
     </md-card>
-    <div *ngIf="user$ | async; let user">
-      <md-card *ngIf="user.countryCode==='AA'">
-      <md-select  placeholder="Select country" (change)="setCountry($event.value)">
-          <md-option *ngFor="let pays of countries$ | async" [value]="pays">{{ pays.name }}</md-option>
-      </md-select>
-      </md-card>
-    </div>
+    <bc-choose [user]="user$ | async" [countries]="countries$ | async"></bc-choose>
     <bc-data [country]="country$ | async"></bc-data>
   `,
   styles: [
@@ -58,13 +52,6 @@ export class ManagementPageComponent implements OnInit  {
       .subscribe(this.store);
     this.country$ = this.store.let(getSelectedCountry);
     this.user$ = this.store.let(getAuthUser);
-  }
-
-  setCountry(country: Country){ 
-    console.log(country);
-    return of(country)
-      .map(country => new CountryAction.SelectAction(country._id))
-      .subscribe(this.store);
   }
 
 }

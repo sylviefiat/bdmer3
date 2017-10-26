@@ -49,5 +49,12 @@
   "HABITAT_PREF": "Habitats préférentiels de l'espèce",
   "LEGAL_DIM":"Dimensions de pêche",
   "COUNTRY":"Pays",
-  "MILLIMETER_ABR":"mm"
+  "MILLIMETER_ABR":"mm",
+  "SITE":"Site",
+  "MANAGE":"Gestion des données",
+  "ADD_ZONE":"Ajouter une zone",
+  "IMPORT_ZONE":"Importer une ou plusieurs zone",
+  "SELECT_SPECIES":"Selectionner une espèce",
+  "SELECT_SITE":"Sélectionner un site",
+  "SELECT_ZONE":"Sélectionner une zone"
 }

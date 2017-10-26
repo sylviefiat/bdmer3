@@ -6,22 +6,22 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../../modules/core/index';
-import { Species } from '../../../modules/datas/models/species';
+import { Site } from '../../../modules/datas/models/index';
 
-import { IAppState, getSpeciesPageError, getSelectedSpecies, getSpeciesPageMsg } from '../../../modules/ngrx/index';
-import { SpeciesAction } from '../../../modules/datas/actions/index';
+import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../../modules/ngrx/index';
+import { SiteAction } from '../../../modules/datas/actions/index';
 import { CountriesAction } from '../../../modules/countries/actions/index';
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-species-import-page',
-    templateUrl: './species-import-page.component.html',
+    selector: 'bc-site-import-page',
+    templateUrl: './site-import-page.component.html',
     styleUrls: [
-        './species-import-page.component.css',
+        './site-import-page.component.css',
     ],
 })
-export class SpeciesImportPageComponent implements OnInit, OnDestroy {
+export class SiteImportPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
     actionsSubscription: Subscription;
@@ -32,13 +32,13 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
         this.store.take(1).subscribe((s: any) => {
             this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importSpecies.csv";
+            this.csvFile = "importSite.csv";
         });
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getSpeciesPageError);
-        this.msg$ = this.store.let(getSpeciesPageMsg);
+        this.error$ = this.store.let(getSitePageError);
+        this.msg$ = this.store.let(getSitePageMsg);
     }
 
     ngOnDestroy() {
@@ -49,9 +49,9 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
         console.log(csvFile);
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.store.dispatch(new SpeciesAction.ImportSpeciesAction(csvFile.target.files[0]));
+            this.store.dispatch(new SiteAction.ImportSiteAction(csvFile.target.files[0]));
         } else {
-            this.store.dispatch(new SpeciesAction.AddSpeciesFailAction('No csv file found'));
+            this.store.dispatch(new SiteAction.AddSiteFailAction('No csv file found'));
         }
     }
 
@@ -59,11 +59,11 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
         this.needHelp = !this.needHelp;
     }
 
-    getCsvSpecies() {
+    getCsvSite() {
         return this.csvFile;
     }
 
-    getCsvSpeciesUrl() {
+    getCsvSitesUrl() {
         return this.docs_repo + this.csvFile;
     }
 

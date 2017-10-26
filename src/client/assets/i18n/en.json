@@ -49,5 +49,12 @@
   "HABITAT_PREF": "Species best habitats",
   "LEGAL_DIM":"Legal fishing dimensions",
   "COUNTRY":"Country",
-  "MILLIMETER_ABR":"mm"
+  "MILLIMETER_ABR":"mm",
+  "SITE":"Site",
+  "MANAGE":"Data management",
+  "ADD_ZONE":"Add zone",
+  "IMPORT_ZONE":"Importer one or many zone",
+  "SELECT_SPECIES":"Select species",
+  "SELECT_SITE":"Select site",
+  "SELECT_ZONE":"Select zone"
 }

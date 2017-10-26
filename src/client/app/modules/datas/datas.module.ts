@@ -8,9 +8,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
-import { SpeciesEffects } from './effects/index';
+import { SpeciesEffects, SiteEffects } from './effects/index';
 //import { CountryExistsGuard } from './guards/country-exists';
-import { SpeciesService } from './services/species.service';
+import { SpeciesService, SiteService } from './services/index';
 
 
 @NgModule({
@@ -21,9 +21,10 @@ import { SpeciesService } from './services/species.service';
     SharedModule,
     MultilingualModule,
     EffectsModule.run(SpeciesEffects),
+    EffectsModule.run(SiteEffects),
   ],
   declarations: [],
-  providers:[SpeciesService],
+  providers:[SpeciesService, SiteService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA

@@ -46,6 +46,7 @@ import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
+import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getCurrentSite } from '../datas/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -62,6 +63,7 @@ export interface IAppState {
   countries: ICountriesState;
   country: ICountryState;
   species: ISpeciesState;
+  site: ISiteState;
 }
 
 /**
@@ -81,7 +83,8 @@ const reducers = {
   loginpage: loginPageReducer,
   countries: countriesReducer,
   country: countryReducer,
-  species: speciesReducer
+  species: speciesReducer,
+  site: siteReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -128,6 +131,9 @@ export function getCountryState(state$: Observable<IAppState>): Observable<ICoun
 }
 export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
   return state$.select(s => s.species);
+}
+export function getSiteState(state$: Observable<IAppState>): Observable<ISiteState> {
+  return state$.select(s => s.site);
 }
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
@@ -191,3 +197,12 @@ export const getSpeciesIdsInApp: any = compose(getSpeciesIds, getSpeciesState);
 export const getSpeciesPageError: any = compose(getSpeciesError, getSpeciesState);
 export const getSpeciesPageMsg: any = compose(getSpeciesMsg, getSpeciesState);
 export const getSelectedSpecies: any = compose(getCurrentSpecies, getSpeciesState);
+
+// Site
+export const getSiteisLoaded: any = compose(getSiteLoaded, getSiteState);
+export const getSiteisLoading: any = compose(getSiteLoading, getSiteState);
+export const getSiteInApp: any = compose(getSiteEntities, getSiteState);
+export const getSiteIdsInApp: any = compose(getSiteIds, getSiteState);
+export const getSitePageError: any = compose(getSiteError, getSiteState);
+export const getSitePageMsg: any = compose(getSiteMsg, getSiteState);
+export const getSelectedSite: any = compose(getCurrentSite, getSiteState);
