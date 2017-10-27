@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
@@ -12,10 +13,12 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 
+import { IAppState, getSelectedCountry } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SiteService } from "../services/site.service";
 import { SiteAction } from '../actions/index';
-import { Site } from '../models/site';
+import { Site, Zone } from '../models/site';
+import { Country } from '../../countries/models/country';
 
 @Injectable()
 export class SiteEffects {
@@ -30,19 +33,19 @@ export class SiteEffects {
    * effect easier to test.
    */
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => { 
+  openDB$: Observable<any> = defer(() => {
     console.log("openDB sites");
-    return this.siteService.initDB('sites','http://entropie-dev:5984/');
+    return this.siteService.initDB('sites', 'http://entropie-dev:5984/');
   });
 
   @Effect()
   loadSites$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.LOAD)
-    .switchMap(() =>     
+    .switchMap(() =>
       this.siteService
         .getAll()
         .map((site: Site[]) => new SiteAction.LoadSuccessAction(site))
-        .catch(error => of(new SiteAction.LoadFailAction(error)))    
+        .catch(error => of(new SiteAction.LoadFailAction(error)))
     );
 
   @Effect()
@@ -51,12 +54,17 @@ export class SiteEffects {
     //.filter((action) => action.type === SiteAction.ActionTypes.ADD_SITE)
     .ofType(SiteAction.ActionTypes.ADD_SITE)
     .map((action: SiteAction.AddSiteAction) => action.payload)
-    .mergeMap(site => 
-      this.siteService
-        .editSite(site)
-        .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
-        .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-    ).share();
+    .mergeMap((site: Site) =>
+      this.store.let(getSelectedCountry)
+        .mergeMap((country: Country) => {
+          site.codeCountry = country.code;
+          if (!site.zones) site.zones = [];
+          return this.siteService
+            .editSite(site)
+            .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
+            .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+        })
+    );
 
   @Effect()
   importSiteToList$: Observable<Action> = this.actions$
@@ -65,14 +73,20 @@ export class SiteEffects {
     .ofType(SiteAction.ActionTypes.IMPORT_SITE)
     .map((action: SiteAction.ImportSiteAction) => action.payload)
     .mergeMap(sitesCsv => this.csv2jsonService.csv2Site(sitesCsv))
-    .mergeMap((site) => {
-      return this.siteService
-        .editSite(site)
-      })
-    .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
-    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-    
-    ;
+    //.do((site) => site.codeCountry = 
+    .mergeMap((site: Site) =>
+      this.store.let(getSelectedCountry)
+        .mergeMap((country: Country) => {
+          site.codeCountry = country.code;
+          if (!site.zones) site.zones = [];
+          console.log(site);
+          return this.siteService
+            .editSite(site)
+            .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
+            .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+        })
+    )
+  ;
 
   @Effect()
   removeSiteFromList$: Observable<Action> = this.actions$
@@ -85,17 +99,17 @@ export class SiteEffects {
         .catch(() => of(new SiteAction.RemoveSiteFailAction(site)))
     );
 
-   @Effect({ dispatch: false }) addSiteSuccess$ = this.actions$
+  @Effect({ dispatch: false }) addSiteSuccess$ = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_SITE_SUCCESS)
     .map((action: SiteAction.AddSiteSuccessAction) => action.payload)
-    .mergeMap((site) =>this.router.navigate(['/site/'+site._id]));
+    .mergeMap((site) => this.router.navigate(['/site/' + site._id]));
 
   @Effect({ dispatch: false }) removeSiteSuccess$ = this.actions$
     .ofType(SiteAction.ActionTypes.REMOVE_SITE_FAIL)
-    .do(() =>this.router.navigate(['/management']));
+    .do(() => this.router.navigate(['/management']));
 
-  constructor(private actions$: Actions, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {
-    
-    
+  constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {
+
+
   }
 }

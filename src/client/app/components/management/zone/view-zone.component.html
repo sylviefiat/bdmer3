@@ -1,0 +1,24 @@
+<md-card *ngIf="zone" [formGroup]="zoneForm">
+      <md-card-title-group>      
+          <md-card-title>Zone {{ zone.code }}</md-card-title>
+      </md-card-title-group>
+      
+      <md-card-content>
+        <div>
+          <h4>{{ 'SURFACE' | translate }}</h4>
+          <div>{{ zone.surface }}</div> 
+        </div>
+      </md-card-content>
+
+      <!--<bc-transect *ngFor="let transect of zone.transects" [transect]="transect"></bc-transect>-->
+
+      <md-card-actions align="space-between">
+        <button md-raised-button color="warn" (click)="edit.emit(zone)">
+        Edit Zone
+        </button>
+        <button md-raised-button color="warn" (click)="deleteZone()">
+        Remove Zone
+        </button>
+
+      </md-card-actions>
+</md-card>

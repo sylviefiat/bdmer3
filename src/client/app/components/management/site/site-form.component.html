@@ -23,9 +23,9 @@
         <md-card formArrayName="zones">
           <md-card-subtitle>Zone </md-card-subtitle>
           <div *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel">          
-            <fa [name]="'map-marker'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
             <div [formGroupName]="i">
-              <!--<bt-zone-form [group]="form.controls.zones.controls[i]"></bt-zone-form>-->
+              <bc-zone-form [zone]="zone"></bc-zone-form>
             </div>
           </div>
           <md-card-actions>

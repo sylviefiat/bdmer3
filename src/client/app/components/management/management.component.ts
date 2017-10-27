@@ -8,7 +8,7 @@ import { Country } from './../../modules/countries/models/country';
 import { Species, Site, Zone } from './../../modules/datas/models/index';
 import { SpeciesAction, SiteAction } from '../../modules/datas/actions/index';
 
-import { IAppState, getSpeciesInApp, getSiteInApp } from '../../modules/ngrx/index';
+import { IAppState, getSpeciesInApp, getSiteListCurrentCountry } from '../../modules/ngrx/index';
 
 @Component({
     moduleId: module.id,
@@ -33,7 +33,7 @@ export class ManagementComponent implements OnInit {
 
     ngOnInit() {
         this.speciesList$ = this.store.let(getSpeciesInApp);
-        this.siteList$ = this.store.let(getSiteInApp);
+        this.siteList$ = this.store.let(getSiteListCurrentCountry);
         this.store.dispatch(new SpeciesAction.LoadAction());
     }
 
@@ -73,6 +73,7 @@ export class ManagementComponent implements OnInit {
     }
 
     addZone() {
+        console.log(this.site);
         this.routerext.navigate(['/zoneForm/'+this.site._id]);
     }
 
@@ -81,6 +82,7 @@ export class ManagementComponent implements OnInit {
     }
 
     editZone() {
+        console.log("edit !");
         this.routerext.navigate(['/zoneForm/'+this.site._id+"/"+this.zone.code]);
     }
 }

@@ -10,7 +10,7 @@
         </div>
       </md-card-content>
 
-      <!--<bc-zone *ngFor="let zone of site.zones" [zone]="zone"></bc-zone>-->
+      <bc-zone *ngFor="let zone of site.zones" [zone]="zone"></bc-zone>
 
       <md-card-actions align="space-between">
         <button md-raised-button color="warn" (click)="edit.emit(site)">

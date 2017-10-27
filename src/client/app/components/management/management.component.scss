@@ -10,7 +10,7 @@
     }    
     md-card {
       max-width: 600px;
-      min-width: 400px;
+      min-width: 500px;
       min-height: 300px;
       margin: 15px;
     }
@@ -22,3 +22,9 @@
       display: flex;
       justify-content: space-around;
     }
+
+    button[disabled] {
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: .65;
+   }

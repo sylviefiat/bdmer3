@@ -46,7 +46,7 @@ import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
-import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getCurrentSite } from '../datas/index';
+import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getCurrentSite, getSiteOfCurrentCountry } from '../datas/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -206,3 +206,4 @@ export const getSiteIdsInApp: any = compose(getSiteIds, getSiteState);
 export const getSitePageError: any = compose(getSiteError, getSiteState);
 export const getSitePageMsg: any = compose(getSiteMsg, getSiteState);
 export const getSelectedSite: any = compose(getCurrentSite, getSiteState);
+export const getSiteListCurrentCountry: any = compose(getSiteOfCurrentCountry, getAppState);

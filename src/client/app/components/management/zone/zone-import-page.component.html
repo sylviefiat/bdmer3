@@ -1,0 +1,35 @@
+<md-card>
+      <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa> Import new zones</md-card-title>
+      <md-card-subtitle>Import csv file containing sites definitions</md-card-subtitle>
+      
+      <md-card-content align="center">
+      <p>
+        <button (click)="fileInput.click()">
+          <fa [name]="'upload'" [border]=true [size]=1></fa>
+          <span>Import CSV</span>
+          <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+        </button>
+      </p>
+      <p class="space-around" *ngIf="!(msg$ | async)">
+        <a class="link" (click)="return()" title="Back">
+            <fa [name]="'chevron-left'" [border]=false [size]=1></fa>
+            Back
+        </a>
+        <button class="question" (click)="changeNeedHelp()" title="Help on format">
+            <fa [name]="'question'" [border]=false [size]=2></fa>
+        </button>
+      </p>
+      <p id="help" *ngIf="needHelp">
+        <a md-list-item class="link" href="{{getCsvSitesUrl()}}" download>
+          Download template file for site import
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+        </a>
+      </p>
+      </md-card-content>
+      <md-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</md-card-content>
+      <md-card-content *ngIf="msg$ | async" align="start">
+          <p class="msg">{{ msg$ | async }}</p>
+          <p class="actionButtons"><a [routerLink]="['/management']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Back to management</a></p>
+      </md-card-content> 
+
+    </md-card>

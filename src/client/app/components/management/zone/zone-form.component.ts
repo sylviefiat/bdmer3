@@ -6,7 +6,7 @@ import { RouterExtensions, Config } from '../../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../../modules/ngrx/index';
 
-import { Zone, Transect, ZonePreference, Count } from '../../../modules/datas/models/index';
+import { Site, Zone, Transect, ZonePreference, Count } from '../../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -14,20 +14,19 @@ import { Zone, Transect, ZonePreference, Count } from '../../../modules/datas/mo
     selector: 'bc-zone-form',
     templateUrl: 'zone-form.component.html',
     styleUrls: [
-        'zone.component.css',
+        'zone-form.component.css',
     ],
 })
 export class ZoneFormComponent implements OnInit {
-    
-    @Input() errorMessage: string | null;
+    @Input() site: Site | null;
     @Input() zone: Zone | null;
-
+    @Input() errorMessage: string;
 
     @Output() submitted = new EventEmitter<Zone>();
 
     zoneForm: FormGroup = new FormGroup({
-        code: new FormControl(this.zone && this.zone.code, Validators.required),
-        surface: new FormControl(this.zone && this.zone.surface),
+        code: new FormControl("", Validators.required),
+        surface: new FormControl(""),
         transects: this._fb.array([]),   
         zonePreference: this._fb.array([]),      
     });
@@ -62,7 +61,7 @@ export class ZoneFormComponent implements OnInit {
         }
     }
 
-    initCounts(transect: Transect) {
+    /*initCounts(transect: Transect) {
         if (transect && transect.counts && transect.counts.length > 0) {
             const control = <FormArray>this.zoneForm.controls['counts'];
             console.log(transect.counts.length);
@@ -74,13 +73,15 @@ export class ZoneFormComponent implements OnInit {
         } else {
             return this.addZonePreference();
         }
-    }
+    }*/
 
     ngOnInit() {
         console.log(this.zone);
         if (this.zone) {
             this.zoneForm.controls.code.setValue(this.zone.code);
             this.zoneForm.controls.surface.setValue(this.zone.surface);
+        } else {
+            this.zoneForm.controls.code.setValue(this.site.code+"_Z");
         }
         this.initTransect();
     }
@@ -114,7 +115,7 @@ export class ZoneFormComponent implements OnInit {
             latitude: new FormControl(transect && transect.latitude||''),
             counts: this._fb.array([])
         });
-        this.initCounts(transect);
+        //this.initCounts(transect);
         return tr;
     }
 
@@ -129,7 +130,7 @@ export class ZoneFormComponent implements OnInit {
         control.removeAt(i);
     }
 
-    newCount(count: Count) {
+   /* newCount(count: Count) {
         let ct = this._fb.group({
             date: new FormControl(count && count.date||''),
             codeSpecies: new FormControl(count && count.codeSpecies||''),
@@ -148,7 +149,7 @@ export class ZoneFormComponent implements OnInit {
     removeCount(i: number) {
         const control = <FormArray>this.zoneForm.controls['counts'];
         control.removeAt(i);
-    }
+    }*/
 
     submit() {
         if (this.zoneForm.valid) {

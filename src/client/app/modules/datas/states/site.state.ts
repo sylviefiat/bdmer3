@@ -34,6 +34,10 @@ export function getSiteEntities(state$: Observable<ISiteState>){
   return state$.select(state => state.entities);
 }
 
+export function getSiteOfCurrentCountry(state$: Observable<IAppState>){
+  return state$.select(state => state.site.entities.filter(site => site.codeCountry === state.country.currentCountryId));
+}
+
 export function getSiteIds(state$: Observable<ISiteState>){
   return state$.select(state => state.ids);
 }

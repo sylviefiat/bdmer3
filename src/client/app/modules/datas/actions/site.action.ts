@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Site } from '../models/index';
+import { Site,Zone } from '../models/index';
 import { type } from '../../core/utils/index';
 
 export namespace SiteAction {
@@ -16,6 +16,13 @@ export namespace SiteAction {
       REMOVE_SITE: string;
       REMOVE_SITE_SUCCESS: string;
       REMOVE_SITE_FAIL: string;
+      ADD_ZONE: string;
+      ADD_ZONE_SUCCESS: string;
+      IMPORT_ZONE: string;
+      IMPORT_ZONE_SUCCESS: string;
+      REMOVE_ZONE: string;
+      REMOVE_ZONE_SUCCESS: string;
+      REMOVE_ZONE_FAIL: string;
       LOAD: string;
       LOAD_SUCCESS: string;
       LOAD_FAIL: string;
@@ -23,7 +30,7 @@ export namespace SiteAction {
     }
 
     export const ActionTypes: ISiteActions = {
-      ADD_SITE: type(`${SITE} Add Species`),
+      ADD_SITE: type(`${SITE} Add Site`),
       ADD_SITE_SUCCESS: type(`${SITE} Add Site Success`),
       ADD_SITE_FAIL: type(`${SITE} Add Site Fail`),
       IMPORT_SITE: type(`${SITE} Import Site`),
@@ -31,6 +38,13 @@ export namespace SiteAction {
       REMOVE_SITE: type(`${SITE} Remove Site`),
       REMOVE_SITE_SUCCESS: type(`${SITE} Remove Site Success`),
       REMOVE_SITE_FAIL: type(`${SITE} Remove Site Fail`),
+      ADD_ZONE: type(`${SITE} Add Zone`),
+      ADD_ZONE_SUCCESS: type(`${SITE} Add Zone Success`),
+      IMPORT_ZONE: type(`${SITE} Import Zone`),
+      IMPORT_ZONE_SUCCESS:type(`${SITE} Import Zone Success`),
+      REMOVE_ZONE: type(`${SITE} Remove Zone`),
+      REMOVE_ZONE_SUCCESS: type(`${SITE} Remove Zone Success`),
+      REMOVE_ZONE_FAIL: type(`${SITE} Remove Zone Fail`),      
       LOAD: type(`${SITE} Load`),
       LOAD_SUCCESS: type(`${SITE} Load Success`),
       LOAD_FAIL: type(`${SITE} Load Fail`),
@@ -38,7 +52,7 @@ export namespace SiteAction {
     };
 
   /**
-   * Add species to Site list Actions
+   * Add site to Site list Actions
    */
   export class AddSiteAction implements Action {
     readonly type = ActionTypes.ADD_SITE;
@@ -71,7 +85,7 @@ export namespace SiteAction {
   }
 
   /**
-   * Remove species from Site list Actions
+   * Remove site from Site list Actions
    */
   export class RemoveSiteAction implements Action {
     readonly type = ActionTypes.REMOVE_SITE;
@@ -87,6 +101,54 @@ export namespace SiteAction {
 
   export class RemoveSiteFailAction implements Action {
     readonly type = ActionTypes.REMOVE_SITE_FAIL;
+
+    constructor(public payload: Site) {}
+  }
+
+  /**
+   * Add zone to Site  Actions
+   */
+  export class AddZoneAction implements Action {
+    readonly type = ActionTypes.ADD_ZONE;
+
+    constructor(public payload: {site:Site,zone:Zone}) {}
+  }
+
+  export class AddZoneSuccessAction implements Action {
+    readonly type = ActionTypes.ADD_ZONE_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  export class ImportZoneAction implements Action {
+    readonly type = ActionTypes.IMPORT_ZONE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class ImportZoneSuccessAction implements Action {
+    readonly type = ActionTypes.IMPORT_ZONE_SUCCESS;
+
+    constructor(public payload: any) {}
+  }
+
+  /**
+   * Remove zone from Site  Actions
+   */
+  export class RemoveZoneAction implements Action {
+    readonly type = ActionTypes.REMOVE_ZONE;
+
+    constructor(public payload: {site:Site, zone: Zone}) {}
+  }
+
+  export class RemoveZoneSuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_ZONE_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  export class RemoveZoneFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_ZONE_FAIL;
 
     constructor(public payload: Site) {}
   }
@@ -122,6 +184,12 @@ export namespace SiteAction {
     | RemoveSiteAction
     | RemoveSiteSuccessAction
     | RemoveSiteFailAction
+    | AddZoneAction
+    | AddZoneSuccessAction
+    | ImportZoneAction
+    | RemoveZoneAction
+    | RemoveZoneSuccessAction
+    | RemoveZoneFailAction
     | LoadAction
     | LoadSuccessAction
     | LoadFailAction

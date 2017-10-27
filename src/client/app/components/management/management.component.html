@@ -2,34 +2,30 @@
 <div class="container">
      <md-card *ngIf="isCountryOk"> 
       <md-card-title-group>
-        <md-card-title>{{'SITE' | translate}} {{country.name}}</md-card-title>
+        <md-card-title>{{'SITES' | translate}} {{country.name}}</md-card-title>
         <fa [name]="'map'" [border]=true [size]=3></fa>
       </md-card-title-group>
       <md-card-content>
-        <div>
-          <h4>{{'CREATE' | translate}}</h4>
-          <div class="space-around">
-            <button (click)="newSiteForm()">{{'FORM' | translate}}</button>
-            <button (click)="newSiteImport()">{{'IMPORT_CSV' | translate}}</button>
-          </div>
-        </div>
-        <div *ngIf="(siteList$ | async)?.length>0">
-          <h4>{{'EDIT' | translate}}</h4>
-          <div class="space-around">
-            <md-select  placeholder="{{'SELECT_SITE' | translate}}" [(ngModel)]="site" (change)="loadZone()">
+          <h4>{{'SITE_MODIFY' | translate}}</h4>
+          <div class="space-around">            
+            <md-select *ngIf="(siteList$ | async)?.length>0"  placeholder="{{'SELECT_SITE' | translate}}" [(ngModel)]="site" (change)="loadZone()">
               <md-option *ngFor="let site of siteList$ | async" [value]="site">{{ site.code }}</md-option>
             </md-select>
-             <button *ngIf="site" (click)="editSite()">{{'EDIT' | translate}}</button>
-             <button *ngIf="site" (click)="addZone()">{{'ADD_ZONE' | translate}}</button>
-             <button *ngIf="site" (click)="importZone()">{{'IMPORT_ZONE' | translate}}</button>
+             <button  *ngIf="(siteList$ | async)?.length>0" [disabled]="!site" (click)="editSite()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
+           
+             <button (click)="newSiteForm()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
+             <button (click)="newSiteImport()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>           
           </div>
-          <div class="space-around" *ngIf="zoneList?.length>0">
-            <md-select  placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone">
+          <h4 *ngIf="site">{{'ZONE_MODIFY' | translate}}</h4>
+          <div class="space-around" *ngIf="site">
+            <md-select *ngIf="zoneList?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone">
               <md-option *ngFor="let zone of zoneList$ | async" [value]="zone">{{ zone.code }}</md-option>
             </md-select>
-             <button (click)="editZone()">{{'EDIT' | translate}}</button>
+             <button *ngIf="(zoneList$ | async)?.length>0"  [disabled]="!zone" (click)="editZone()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
+             <button (click)="addZone()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
+             <button (click)="importZone()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
           </div>
-        </div>
+        
       </md-card-content>
     </md-card>    
 
@@ -39,20 +35,16 @@
         <fa [name]="'paw'" [border]=true [size]=3></fa>
       </md-card-title-group>
       <md-card-content>
-        <div>
-          <h4>{{'CREATE' | translate}}</h4>
+        <div >
+          <h4>{{'SPECIES_MODIFY' | translate}}</h4>
           <div class="space-around">
-            <button (click)="newSpeciesForm()">{{'FORM' | translate}}</button>
-            <button (click)="newSpeciesImport()">{{'IMPORT_CSV' | translate}}</button>
-          </div>
-        </div>
-        <div *ngIf="(speciesList$ | async)?.length>0">
-          <h4>{{'EDIT' | translate}}</h4>
-          <div class="space-around">
-              <md-select placeholder="{{'SELECT_SPECIES' | translate}}" [(ngModel)]="species">
+              <md-select *ngIf="(speciesList$ | async)?.length>0" placeholder="{{'SELECT_SPECIES' | translate}}" [(ngModel)]="species">
                 <md-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</md-option>
               </md-select>
-            <button *ngIf="species" (click)="editSpecies()">{{'EDIT' | translate}}</button>
+            <button *ngIf="(speciesList$ | async)?.length>0" [disabled]="!species" (click)="editSpecies()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
+
+            <button (click)="newSpeciesForm()" title="{{'FORM' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
+            <button (click)="newSpeciesImport()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
           </div>
         </div>
       </md-card-content>

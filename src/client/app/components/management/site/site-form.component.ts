@@ -191,7 +191,6 @@ export class SiteFormComponent implements OnInit {
     submit() {
         console.log(this.form);
         if (this.form.valid) {
-            this.form.controls.codeCountry.setValue(this.country.code);
             this.submitted.emit(this.form.value);
         }
     }
