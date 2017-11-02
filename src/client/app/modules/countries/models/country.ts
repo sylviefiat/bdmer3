@@ -1,8 +1,9 @@
 export interface Country {
 	_id: string;
+  _rev?: string;
 	code: string;
 	name: string;
-	flag: Flagimg;
+	_attachments?: any;
 	users: User[];
 }
 

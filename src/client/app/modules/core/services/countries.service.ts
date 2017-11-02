@@ -16,7 +16,7 @@ export class CountriesService {
   public currentCountry: Observable<Country>;
   public currentUser: Observable<User>;
   public adminUser = { _id: 'admin', name: 'admin', surname: 'ad', username: 'admin', email: null, countryCode: 'AA', password: null, role: 'EDITOR' };
-  public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', flag: null, users: null };
+  public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', users: null };
 
   private db: any;
 
@@ -33,7 +33,7 @@ export class CountriesService {
 
   public getAll(): Observable<any> {
     return fromPromise(
-      this.db.allDocs({ include_docs: true })
+      this.db.allDocs({ include_docs: true, attachments: true, binary: true })
         .then(docs => {
           return docs.rows.map(row => {
             return row.doc;
@@ -41,10 +41,14 @@ export class CountriesService {
         }));
   }
 
+  getAttachment(countryId): Observable<any> {
+    return fromPromise(this.db.getAttachment(countryId, 'flag'));
+  }
+
   getCountry(countrycode: string): Observable<Country> {
     return fromPromise(this.db.query(function(doc, emit) {
       emit(doc.code);
-    }, { key: countrycode, include_docs: true }))//.then(function(result) {
+    }, { key: countrycode, include_docs: true, attachments: true, binary: true }))
       .map((result: ResponsePDB) => {
         return result.rows && result.rows[0] && result.rows[0].doc;
 
@@ -64,27 +68,39 @@ export class CountriesService {
       })
   }
 
+  addAttachment(countryId: string, image: any): Observable<any> {
+    return this.getCountry(countryId)
+      .mergeMap((country: Country) => {
+        this.currentCountry = of(country);
+        return fromPromise(this.db.putAttachment(country._id, "flag",country._rev,image, image.type))      
+      })
+      .filter((response: ResponsePDB) => response.ok)
+      .mergeMap((response) => {
+        return this.currentCountry;
+      })
+  }
+
   addCountry(countryJson: any): Observable<Country> {
     let country = countryJson.pays;
     let url = '../node_modules/svg-country-flags/svg/' + country.code.toLowerCase() + '.svg';
     let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
     let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
+    let fullCountry:Country = { _id: country.code, code: country.code, name: country.name, users: null }
+    this.currentCountry = of(fullCountry);
 
-    return this.http
-      .get(url, {
-        headers: headers,
-        responseType: ResponseContentType.Blob
+    return fromPromise(this.db.put(fullCountry))
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return this.http
+          .get(url, {
+            headers: headers,
+            responseType: ResponseContentType.Blob
+          })
       })
       .map(res =>
         res.blob())
       .mergeMap(blob => {
-        let fullCountry = { _id: country.code, code: country.code, name: country.name, flag: { _id: country.code + '_flag', _attachments: { flag: { type: blob.type, data: blob } } }, users: null }
-        this.currentCountry = of(fullCountry);
-        return fromPromise(this.db.put(fullCountry))
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return this.currentCountry;
+        return this.addAttachment(fullCountry._id,blob);
       })
   }
 
@@ -116,9 +132,8 @@ export class CountriesService {
       doc.users && doc.users.forEach(function(user) {
         emit(user.username);
       });
-    }, { key: username, include_docs: true }))//.then(function(result) {
+    }, { key: username, include_docs: true, attachments: true, binary: true }))
       .map((result: ResponsePDB) => {
-        console.log(result);
         return result.rows && result.rows[0] && result.rows[0].doc;
       });
   }
@@ -128,7 +143,7 @@ export class CountriesService {
       doc.users && doc.users.forEach(function(user) {
         emit(user.email);
       });
-    }, { key: email, include_docs: true }))//.then(function(result) {
+    }, { key: email, include_docs: true }))
       .map((result: ResponsePDB) => {
         return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
           result.rows[0].doc.users.filter(user => user.email === email) && result.rows[0].doc.users.filter(user => user.email === email)[0];
@@ -136,6 +151,7 @@ export class CountriesService {
   }
 
   addUser(user: User): Observable<Country> {
+    console.log(user);
     delete user.password;
     return this.getCountry(user.countryCode)
       .mergeMap(country => {
@@ -144,11 +160,12 @@ export class CountriesService {
           country.users = [];
         }
         country.users[country.users.length] = user;
-
+        console.log(country);
         return fromPromise(this.db.put(country));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
+        console.log("here");
         return this.currentCountry;
       })
   }

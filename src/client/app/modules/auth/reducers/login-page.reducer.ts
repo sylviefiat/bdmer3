@@ -6,7 +6,7 @@ export function loginPageReducer(state = loginPageInitialState, action: AuthActi
   //console.log(action.type);
   switch (action.type) {
     case AuthAction.ActionTypes.LOGIN: {
-      console.log(action.type);
+      //console.log(action.type);
       return {
         ...state,
         error: null,

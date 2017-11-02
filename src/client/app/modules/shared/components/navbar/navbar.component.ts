@@ -26,7 +26,7 @@ export class NavbarComponent {
   }
 
   setCurrentUser(ouser: Observable<User>){
-    console.log(ouser);
+    //console.log(ouser);
   	this.currentUser$ = ouser;
   }
 

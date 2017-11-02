@@ -69,7 +69,6 @@ export class UserDetailComponent {
   }
 
   removeUserFromCountry() {
-    console.log("here");
     this.store.dispatch(new CountryAction.RemoveUserAction(this.user));
   }
 

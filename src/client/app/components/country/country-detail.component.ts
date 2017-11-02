@@ -105,11 +105,12 @@ export class CountryDetailComponent{
   }
 
   get flag() {
-    if(this.country.flag &&
-      this.country.flag._attachments.flag.data){
-      let blob = this.country.flag._attachments.flag;
+    //console.log(this.country._attachments);
+    if(this.country._attachments &&
+      this.country._attachments.flag){
+      let blob = this.country._attachments.flag;
       var file = new Blob([ blob.data ], {
-        type : blob.type
+        type : blob.content_type
       });
       return this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
 
@@ -132,7 +133,7 @@ export class CountryDetailComponent{
   }
 
   isUserAdmin(): boolean {
-    console.log(this.currentUser);
+    //console.log(this.currentUser);
     return this.currentUser && this.currentUser.role && this.currentUser.countryCode === 'AA';
   }
 
