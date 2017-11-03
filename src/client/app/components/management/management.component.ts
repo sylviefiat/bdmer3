@@ -22,7 +22,7 @@ export class ManagementComponent implements OnInit {
     @Input() country: Country;
     speciesList$: Observable<Species[]>;
     siteList$: Observable<Site[]>;
-    zoneList: Zone[];
+    zoneList$: Observable<Zone[]>;
     species: Species;
     site: Site;
     zone: Zone;
@@ -51,7 +51,7 @@ export class ManagementComponent implements OnInit {
 
     editSpecies() {
         console.log(this.species);
-        this.routerext.navigate(['/speciesForm/'+this.species._id]);
+        this.routerext.navigate(['/speciesForm/' + this.species._id]);
     }
 
     newSiteForm() {
@@ -64,25 +64,41 @@ export class ManagementComponent implements OnInit {
 
     editSite() {
         console.log(this.site);
-        this.routerext.navigate(['/siteForm/'+this.site._id]);
+        this.routerext.navigate(['/siteForm/' + this.site._id]);
     }
 
     loadZone() {
         this.store.dispatch(new SiteAction.SelectAction(this.site));
-        this.zoneList= this.site.zones;
+        console.log(this.site);
+        this.zoneList$ = of(this.site.zones);
     }
 
     addZone() {
         console.log(this.site);
-        this.routerext.navigate(['/zoneForm/'+this.site._id]);
+        this.routerext.navigate(['/zoneForm/' + this.site._id], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
     }
 
     importZone() {
-        this.routerext.navigate(['/zoneImport/'+this.site._id]);
+        this.routerext.navigate(['/zoneImport/' + this.site._id], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
     }
 
     editZone() {
         console.log("edit !");
-        this.routerext.navigate(['/zoneForm/'+this.site._id+"/"+this.zone.code]);
+        this.routerext.navigate(['/zoneForm/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
     }
 }

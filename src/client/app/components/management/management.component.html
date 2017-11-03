@@ -3,7 +3,7 @@
      <md-card *ngIf="isCountryOk"> 
       <md-card-title-group>
         <md-card-title>{{'SITES' | translate}} {{country.name}}</md-card-title>
-        <fa [name]="'map'" [border]=true [size]=3></fa>
+        <fa [name]="'map-marker'" [border]=true [size]=3></fa>
       </md-card-title-group>
       <md-card-content>
           <h4>{{'SITE_MODIFY' | translate}}</h4>
@@ -18,7 +18,7 @@
           </div>
           <h4 *ngIf="site">{{'ZONE_MODIFY' | translate}}</h4>
           <div class="space-around" *ngIf="site">
-            <md-select *ngIf="zoneList?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone">
+            <md-select *ngIf="(zoneList$ | async)?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone">
               <md-option *ngFor="let zone of zoneList$ | async" [value]="zone">{{ zone.code }}</md-option>
             </md-select>
              <button *ngIf="(zoneList$ | async)?.length>0"  [disabled]="!zone" (click)="editZone()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>

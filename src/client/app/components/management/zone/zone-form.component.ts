@@ -20,16 +20,11 @@ import { Site, Zone, Transect, ZonePreference, Count } from '../../../modules/da
 export class ZoneFormComponent implements OnInit {
     @Input() site: Site | null;
     @Input() zone: Zone | null;
+    @Input() zoneForm: FormGroup;
     @Input() errorMessage: string;
 
     @Output() submitted = new EventEmitter<Zone>();
 
-    zoneForm: FormGroup = new FormGroup({
-        code: new FormControl("", Validators.required),
-        surface: new FormControl(""),
-        transects: this._fb.array([]),   
-        zonePreference: this._fb.array([]),      
-    });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
@@ -42,23 +37,23 @@ export class ZoneFormComponent implements OnInit {
                 addrCtrl = this.newTransect(transect);
                 control.push(addrCtrl);
             }
-        } else {
+        } /*else {
             return this.addTransect();
-        }
+        }*/
     }
 
-    initZonePreference(zone: Zone) {
-        if (zone && zone.zonePreference && zone.zonePreference.length > 0) {
+    initZonePreference() {
+        if (this.zone && this.zone.zonePreferences && this.zone.zonePreferences.length > 0) {
             const control = <FormArray>this.zoneForm.controls['zonePreferences'];
-            console.log(zone.zonePreference.length);
+            console.log(this.zone.zonePreferences.length);
             let addrCtrl;
-            for (let zp of zone.zonePreference) {
+            for (let zp of this.zone.zonePreferences) {
                 addrCtrl = this.newZonePreference(zp);
                 control.push(addrCtrl);
             }
-        } else {
+        } /*else {
             return this.addZonePreference();
-        }
+        }*/
     }
 
     /*initCounts(transect: Transect) {
@@ -76,22 +71,24 @@ export class ZoneFormComponent implements OnInit {
     }*/
 
     ngOnInit() {
-        console.log(this.zone);
+        /*console.log(this.zone);
         if (this.zone) {
             this.zoneForm.controls.code.setValue(this.zone.code);
             this.zoneForm.controls.surface.setValue(this.zone.surface);
         } else {
-            this.zoneForm.controls.code.setValue(this.site.code+"_Z");
-        }
+            console.log("here");
+            this.zoneForm.controls.code.setValue(this.site.code + "_Z");
+        }*/
         this.initTransect();
+        this.initZonePreference();
     }
 
     newZonePreference(zonePreference: ZonePreference) {
         let zp = this._fb.group({
-            code: new FormControl(zonePreference && zonePreference.code||''),
-            codeSpecies: new FormControl(zonePreference && zonePreference.codeSpecies||''),
-            presence: new FormControl(zonePreference && zonePreference.presence||''),
-            infoSource: new FormControl(zonePreference && zonePreference.infoSource||''),            
+            code: new FormControl(zonePreference && zonePreference.code || ""),
+            codeSpecies: new FormControl(zonePreference && zonePreference.codeSpecies || ''),
+            presence: new FormControl(zonePreference && zonePreference.presence || ''),
+            infoSource: new FormControl(zonePreference && zonePreference.infoSource || ''),
         });
         return zp;
     }
@@ -109,10 +106,10 @@ export class ZoneFormComponent implements OnInit {
 
     newTransect(transect: Transect) {
         let tr = this._fb.group({
-            code: new FormControl(transect && transect.code||''),
-            name: new FormControl(transect && transect.name||''),
-            longitude: new FormControl(transect && transect.longitude||''),
-            latitude: new FormControl(transect && transect.latitude||''),
+            code: new FormControl(transect && transect.code || ''),
+            name: new FormControl(transect && transect.name || ''),
+            longitude: new FormControl(transect && transect.longitude || ''),
+            latitude: new FormControl(transect && transect.latitude || ''),
             counts: this._fb.array([])
         });
         //this.initCounts(transect);
@@ -130,26 +127,26 @@ export class ZoneFormComponent implements OnInit {
         control.removeAt(i);
     }
 
-   /* newCount(count: Count) {
-        let ct = this._fb.group({
-            date: new FormControl(count && count.date||''),
-            codeSpecies: new FormControl(count && count.codeSpecies||''),
-            lonMm: new FormControl(count && count.longMm||''),
-            largMm: new FormControl(count && count.largMm||''),
-        });
-        return ct;
-    }
-
-    addCount() {
-        const control = <FormArray>this.zoneForm.controls['counts'];
-        const addrCtrl = this.newCount(null);
-        control.push(addrCtrl);
-    }
-
-    removeCount(i: number) {
-        const control = <FormArray>this.zoneForm.controls['counts'];
-        control.removeAt(i);
-    }*/
+    /* newCount(count: Count) {
+         let ct = this._fb.group({
+             date: new FormControl(count && count.date||''),
+             codeSpecies: new FormControl(count && count.codeSpecies||''),
+             lonMm: new FormControl(count && count.longMm||''),
+             largMm: new FormControl(count && count.largMm||''),
+         });
+         return ct;
+     }
+ 
+     addCount() {
+         const control = <FormArray>this.zoneForm.controls['counts'];
+         const addrCtrl = this.newCount(null);
+         control.push(addrCtrl);
+     }
+ 
+     removeCount(i: number) {
+         const control = <FormArray>this.zoneForm.controls['counts'];
+         control.removeAt(i);
+     }*/
 
     submit() {
         if (this.zoneForm.valid) {

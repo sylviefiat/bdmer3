@@ -66,7 +66,7 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    console.log(user.countryCode);
+    //console.log(user.countryCode);
     let auth: Authenticate = { username: user.username, password: user.password, roles: [user.countryCode] };
 
     return of(user)

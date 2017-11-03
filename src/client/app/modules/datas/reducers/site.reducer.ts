@@ -39,6 +39,7 @@ export function siteReducer(
             return state;
         }
 
+           // ON VOIT PAS LA ZONE APRES L AVOIR ENREGISTREE !!!
         case SiteAction.ActionTypes.ADD_SITE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_SITE_SUCCESS: {
             console.log(action.payload);           

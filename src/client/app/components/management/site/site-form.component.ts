@@ -102,10 +102,10 @@ export class SiteFormComponent implements OnInit {
 
     newZone(zone: Zone) {
         let zn = this._fb.group({
-            code: new FormControl(zone && zone.code||''),
+            code: new FormControl(zone && zone.code || this.site && this.site.code && this.site.code+'_Z' || ''),
             surface: new FormControl(zone && zone.surface||''),
             transects: this._fb.array([]),
-            zonePreference: this._fb.array([])
+            zonePreferences: this._fb.array([])
         });
         //this.initTransect(zone);
         //this.initZonePreference(zone);

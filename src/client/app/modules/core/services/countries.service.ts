@@ -151,7 +151,7 @@ export class CountriesService {
   }
 
   addUser(user: User): Observable<Country> {
-    console.log(user);
+    //console.log(user);
     delete user.password;
     return this.getCountry(user.countryCode)
       .mergeMap(country => {
@@ -160,12 +160,12 @@ export class CountriesService {
           country.users = [];
         }
         country.users[country.users.length] = user;
-        console.log(country);
+        //console.log(country);
         return fromPromise(this.db.put(country));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        console.log("here");
+       // console.log("here");
         return this.currentCountry;
       })
   }

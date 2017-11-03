@@ -1,5 +1,5 @@
 <md-card>
-  <md-card-title class="toolbar"><fa [name]="'map'" [border]=true [size]=1 > </fa><span style="text-align:center">Add new site for {{country.name}}</span></md-card-title>
+  <md-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">Add new site for {{country.name}}</span></md-card-title>
   <md-card-content>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -21,13 +21,14 @@
         </md-card>
         <!--names-->
         <md-card formArrayName="zones">
-          <md-card-subtitle>Zone </md-card-subtitle>
-          <div *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel">          
+          <md-card-subtitle>Zones </md-card-subtitle>
+          <md-card *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel"> 
+
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
             <div [formGroupName]="i">
-              <bc-zone-form [zone]="zone"></bc-zone-form>
+              <bc-zone-form [zone]="zone" [zoneForm]="form.controls.zones.controls[i]"></bc-zone-form>
             </div>
-          </div>
+          </md-card>
           <md-card-actions>
             <a class="action" (click)="addZone()">
               Add another zone +

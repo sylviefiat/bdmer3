@@ -30,7 +30,7 @@ export class ViewZoneComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.zone);
+        //console.log(this.zone);
     }
 
 

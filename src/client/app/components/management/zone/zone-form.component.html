@@ -1,23 +1,23 @@
-<md-card-content [formGroup]="zoneForm">
 
-    <p>
+  <div [formGroup]="zoneForm">
+    <md-card-content> 
       <md-input-container>
         <input type="text" mdInput placeholder="Zone code" formControlName="code" required>
         <div class="hint">Ex: NOMDUSITE_Z001</div>
       </md-input-container>          
-    </p>
-    <p> 
+    
       <md-input-container>
         <input type="text" mdInput placeholder="Surface de la zone" formControlName="surface" required>m²
         <div class="hint">Ex: 100</div>    
       </md-input-container>          
-    </p>
-
-    <md-card formArrayName="transects">
-          <md-card-subtitle>Transect </md-card-subtitle>
-          <div *ngFor="let transect of zoneForm.controls.transects.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.transects.controls.length > 1" (click)="removeTansect(i)"></fa>
-            <div [formGroupName]="i">
+    </md-card-content>
+    
+    <md-card-content>
+      <md-card formArrayName="transects" class="full">
+          <md-card-subtitle>Transects </md-card-subtitle>
+          <div *ngFor="let transect of zoneForm.controls.transects.controls; let j=index;" class="panel">          
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="zoneForm.controls.transects.controls.length > 1" (click)="removeTansect(j)"></fa>
+            <div [formGroupName]="j">
               <!--<bt-transect-form [group]="zoneForm.controls.transects.controls[i]"></bt-transect-form>-->
             </div>
           </div>
@@ -26,11 +26,13 @@
               Add another transect +
             </a>
           </md-card-actions>
-    </md-card>
-    <md-card formArrayName="zonePreferences">
-          <md-card-subtitle>Species Zone preference </md-card-subtitle>
+      </md-card>    
+    </md-card-content>
+    <md-card-content>
+      <md-card formArrayName="zonePreferences" class="full">
+          <md-card-subtitle>Species Zone preferences </md-card-subtitle>
           <div *ngFor="let zonePreference of zoneForm.controls.zonePreferences.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zonePreference.controls.length > 1" (click)="removeZonePreference(i)"></fa>
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="zoneForm.controls.zonePreferences.controls.length > 1" (click)="removeZonePreference(i)"></fa>
             <div [formGroupName]="i">
               <!--<bt-zone-preference-form [group]="zoneForm.controls.transects.controls[i]"></bt-zone-preference-form>-->
             </div>
@@ -40,6 +42,6 @@
               Add another Species Zone preference +
             </a>
           </md-card-actions>
-    </md-card>
-    
-</md-card-content>
+      </md-card>
+    </md-card-content>
+  </div>

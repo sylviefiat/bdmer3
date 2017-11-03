@@ -14,7 +14,7 @@ export interface Zone {
     code: string;
     surface: string;
     transects: Transect[];
-    zonePreference: ZonePreference[];
+    zonePreferences: ZonePreference[];
 }
 
 export interface Transect {
