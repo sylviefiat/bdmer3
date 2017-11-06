@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Site,Zone } from '../models/index';
 import { type } from '../../core/utils/index';
+import { Observable } from 'rxjs/Observable';
 
 export namespace SiteAction {
   // Category to uniquely identify the actions
@@ -123,13 +124,13 @@ export namespace SiteAction {
   export class ImportZoneAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE;
 
-    constructor(public payload: any) {}
+    constructor(public payload: {site:Observable<Site>,zone:Zone}) {}
   }
 
   export class ImportZoneSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_SUCCESS;
 
-    constructor(public payload: any) {}
+    constructor(public payload: Site) {}
   }
 
   /**

@@ -15,6 +15,7 @@ import { SiteImportPageComponent } from './site/site-import-page.component';
 import { ViewSitePageComponent } from './site/view-site-page.component';
 import { ViewSiteComponent } from './site/view-site.component';
 import { ZoneFormPageComponent } from './zone/zone-form-page.component';
+import { ZoneFormFormComponent } from './zone/zone-form-form.component';
 import { ZoneFormComponent } from './zone/zone-form.component';
 import { ZoneImportPageComponent } from './zone/zone-import-page.component';
 import { ViewZonePageComponent } from './zone/view-zone-page.component';
@@ -37,6 +38,7 @@ export const DATA_COMPONENTS: any[] = [
   ViewSiteComponent,
   ManagementChooseComponent,  
   ZoneFormPageComponent,
+  ZoneFormFormComponent,
   ZoneFormComponent,
   ZoneImportPageComponent,
   ViewZonePageComponent,
@@ -59,6 +61,7 @@ export * from './site/view-site-page.component';
 export * from './site/view-site.component';
 export * from './management-choose.component';
 export * from './zone/zone-form-page.component';
+export * from './zone/zone-form-form.component';
 export * from './zone/zone-form.component';
 export * from './zone/zone-import-page.component';
 export * from './zone/view-zone-page.component';

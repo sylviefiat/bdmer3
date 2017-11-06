@@ -22,6 +22,7 @@ import { CountriesAction } from '../../../modules/countries/actions/index';
     ],
 })
 export class ZoneImportPageComponent implements OnInit, OnDestroy {
+    site$: Observable<Site>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
     actionsSubscription: Subscription;
@@ -34,22 +35,26 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
             this.docs_repo = "../../../assets/docs/";
             this.csvFile = "importZone.csv";
         });
+        this.actionsSubscription = route.params
+            .map(params => new SiteAction.SelectAction(params.idsite))
+            .subscribe(store);
     }
 
     ngOnInit() {
         this.error$ = this.store.let(getSitePageError);
         this.msg$ = this.store.let(getSitePageMsg);
+        this.site$ = this.store.let(getSelectedSite);
     }
 
     ngOnDestroy() {
-
+        this.actionsSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.store.dispatch(new SiteAction.ImportZoneAction(csvFile.target.files[0]));
+            this.store.dispatch(new SiteAction.ImportZoneAction(site$,csvFile.target.files[0]));
         } else {
             this.store.dispatch(new SiteAction.AddSiteFailAction('No csv file found'));
         }
@@ -59,11 +64,11 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
         this.needHelp = !this.needHelp;
     }
 
-    getCsvZone() {
+    getCsvZones() {
         return this.csvFile;
     }
 
-    getCsvZoneUrl() {
+    getCsvZonesUrl() {
         return this.docs_repo + this.csvFile;
     }
 

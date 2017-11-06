@@ -21,7 +21,7 @@ import { Country, User } from '../../modules/countries/models/country';
     <md-card>
       <md-card-title>Data management</md-card-title>
     </md-card>
-    <bc-choose [user]="user$ | async" [countries]="countries$ | async"></bc-choose>
+    <bc-choose [user]="user$ | async" [countries]="countries$ | async" [currentCountry]="country$ | async"></bc-choose>
     <bc-data [country]="country$ | async"></bc-data>
   `,
   styles: [
@@ -42,14 +42,15 @@ export class ManagementPageComponent implements OnInit  {
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {
     
+    this.countries$ = this.store.let(getCountriesInApp);
+    this.actionsSubscription = this.store.let(getAuthCountry)
+      .filter((country: Country) => country.code !== 'AA')
+      .map((country: Country) => new CountryAction.SelectAction(country._id))
+      .subscribe(this.store);
   }
 
   ngOnInit() {
     this.store.dispatch(new CountriesAction.LoadAction());
-    this.countries$ = this.store.let(getCountriesInApp);
-    this.actionsSubscription = this.store.let(getAuthCountry)
-      .map((country: Country) => new CountryAction.SelectAction(country._id))
-      .subscribe(this.store);
     this.country$ = this.store.let(getSelectedCountry);
     this.user$ = this.store.let(getAuthUser);
   }

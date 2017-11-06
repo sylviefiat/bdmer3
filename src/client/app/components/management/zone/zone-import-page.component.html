@@ -1,6 +1,6 @@
 <md-card>
       <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa> Import new zones</md-card-title>
-      <md-card-subtitle>Import csv file containing sites definitions</md-card-subtitle>
+      <md-card-subtitle>Import csv file containing zones definitions for {{ site$.code | async }} site</md-card-subtitle>
       
       <md-card-content align="center">
       <p>
@@ -20,8 +20,8 @@
         </button>
       </p>
       <p id="help" *ngIf="needHelp">
-        <a md-list-item class="link" href="{{getCsvSitesUrl()}}" download>
-          Download template file for site import
+        <a md-list-item class="link" href="{{getCsvZonesUrl()}}" download>
+          Download template file for zones import
           <fa [name]="'download'" [border]=true [size]=1></fa>
         </a>
       </p>

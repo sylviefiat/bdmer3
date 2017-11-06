@@ -15,23 +15,12 @@ import { SiteAction } from '../../../modules/datas/actions/index';
 @Component({
   selector: 'bc-zone-page',
   template: `
-    <div id="zone-page">
-      <md-card>
-        <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>Add/Edit Zone</md-card-title>
-      
-      <bc-zone-form
-        (submitted)="onSubmit($event)"
-        [errorMessage]="error$ | async"
-        [site]="site$ | async"
-        [zone]="zone$ | async"
-        [zoneForm]="zoneForm">
-      </bc-zone-form>
-      <div class="actions">
-            <button (click)="submit()" class="btn btn-primary" [disabled]="!zoneForm.valid">Submit</button>
-            <button (click)="return()" class="btn btn-secondary">Cancel</button>
-      </div>
-      </md-card>
-    </div>
+    <bc-zone-form-page
+      (submitted)="onSubmit($event)"
+      [errorMessage]="error$ | async"
+      [site]="site$ | async"
+      [zone]="zone$ | async">
+    </bc-zone-form-page>
   `,
   styles: [
     `
@@ -58,14 +47,6 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
   site$: Observable<Site>;
   zone$: Observable<Zone | null>;
   actionsSubscription: Subscription;
-  @Input() site: Site;
-
-  zoneForm: FormGroup = new FormGroup({
-    code: new FormControl("", Validators.required),
-    surface: new FormControl(""),
-    transects: this._fb.array([]),
-    zonePreferences: this._fb.array([]),
-  });
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.actionsSubscription = route.params
@@ -82,13 +63,6 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
             return of(site.zones.filter(zone => zone.code === idzone)[0])
           })
           .mergeMap((zone: Zone) => {
-            console.log(site);
-            if (zone) {
-              this.zoneForm.controls.code.setValue(zone.code);
-              this.zoneForm.controls.surface.setValue(zone.surface);
-            } else {
-              this.zoneForm.controls.code.setValue(site.code + "_Z");
-            }
             return of(zone);
           })
       )
@@ -98,12 +72,9 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
     this.actionsSubscription.unsubscribe();
   }
 
-  submit() { 
-    this.site$.subscribe(site => {
-      console.log(site);
-      return this.store.dispatch(new SiteAction.AddZoneAction({ site: site, zone: this.zoneForm.value }))
-    }
-   )
+  onSubmit(value:{site: Site, zone: Zone}) { 
+      this.store.dispatch(new SiteAction.AddZoneAction(value))
+    
   }
 
   return() {

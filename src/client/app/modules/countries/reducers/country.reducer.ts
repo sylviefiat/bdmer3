@@ -26,7 +26,7 @@ export function countryReducer(
     }
 
     case CountryAction.ActionTypes.SELECT: {
-      //console.log(action.payload);
+      console.log("select country:" +action.payload);
       return {
         ...state,
         currentCountryId: action.payload,

@@ -16,7 +16,7 @@ import { IAppState } from '../../modules/ngrx/index';
   selector: 'bc-choose',
   template: `
       <md-card *ngIf="user.countryCode==='AA'">
-      <md-select  placeholder="Select country" (change)="setCountry($event.value)">
+      <md-select  placeholder="Select country" [ngModel]="currentCountry" (change)="setCountry($event.value)">
           <md-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</md-option>
       </md-select>
       </md-card>
@@ -29,6 +29,7 @@ import { IAppState } from '../../modules/ngrx/index';
 export class ManagementChooseComponent  {
   @Input() user: User;
   @Input() countries: Country[];
+  @Input() currentCountry: Country | null;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {
 

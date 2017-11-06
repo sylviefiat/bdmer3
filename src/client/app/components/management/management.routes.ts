@@ -68,12 +68,12 @@ export const ManagementRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'soneImport',
+    path: 'zoneImport/:idsite',
     component: ZoneImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'sone/:idsite/:idzone',
+    path: 'zone/:idsite/:idzone',
     component: ViewZonePageComponent,
     canActivate : [AuthGuard]
   },

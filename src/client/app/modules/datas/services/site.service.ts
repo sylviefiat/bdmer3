@@ -46,11 +46,12 @@ export class SiteService {
 
   addSite(site: Site): Observable<Site> {
     site._id=site.code;
+    this.currentSite = of(site);
     return fromPromise(this.db.put(site))
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
         console.log(response);
-        return of(site);
+        return  this.currentSite;
       })
   }
 
@@ -65,11 +66,12 @@ export class SiteService {
     return this.getSite(site.code)
       .mergeMap(st => {    
         if(st) {site._rev = st._rev;}
+        this.currentSite = of(site);
         return fromPromise(this.db.put(site));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        return of(site);
+        return  this.currentSite;
       })
   }
 
@@ -84,11 +86,12 @@ export class SiteService {
         } else {
           st.zones.push(zone);
         }
+        this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        return of(site);
+        return  this.currentSite;
       })
   }
 

@@ -35,19 +35,15 @@ export function siteReducer(
         }
 
         case SiteAction.ActionTypes.ADD_SITE:{
-            console.log(action.payload);
             return state;
         }
 
-           // ON VOIT PAS LA ZONE APRES L AVOIR ENREGISTREE !!!
         case SiteAction.ActionTypes.ADD_SITE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_SITE_SUCCESS: {
-            console.log(action.payload);           
             const addedsite = action.payload;
             console.log(addedsite);
             const sites = state.entities.filter(site => addedsite._id !== site._id);
             console.log(sites);
-            console.log([...sites,...addedsite])
             return {
                 ...state,
                 entities: [...sites,...addedsite],
@@ -81,7 +77,6 @@ export function siteReducer(
             }
 
         case SiteAction.ActionTypes.SELECT: {
-            console.log(action.payload);
             return {
                 ...state,
                 currentSiteId: action.payload,

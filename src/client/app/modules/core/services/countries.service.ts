@@ -27,8 +27,12 @@ export class CountriesService {
     this.db = new PouchDB(dbname);
     this.sync(remote + dbname);
 
-    return this.insertCountry(this.adminCountry)
-      .mergeMap(country => this.addUser(this.adminUser));
+    return this.getCountry(this.adminCountry.code)
+      .filter(country => !country)
+      .mergeMap(() =>
+        this.insertCountry(this.adminCountry)
+          .mergeMap(country => this.addUser(this.adminUser))
+      )
   }
 
   public getAll(): Observable<any> {
@@ -72,7 +76,7 @@ export class CountriesService {
     return this.getCountry(countryId)
       .mergeMap((country: Country) => {
         this.currentCountry = of(country);
-        return fromPromise(this.db.putAttachment(country._id, "flag",country._rev,image, image.type))      
+        return fromPromise(this.db.putAttachment(country._id, "flag", country._rev, image, image.type))
       })
       .filter((response: ResponsePDB) => response.ok)
       .mergeMap((response) => {
@@ -85,7 +89,7 @@ export class CountriesService {
     let url = '../node_modules/svg-country-flags/svg/' + country.code.toLowerCase() + '.svg';
     let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
     let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
-    let fullCountry:Country = { _id: country.code, code: country.code, name: country.name, users: null }
+    let fullCountry: Country = { _id: country.code, code: country.code, name: country.name, users: null }
     this.currentCountry = of(fullCountry);
 
     return fromPromise(this.db.put(fullCountry))
@@ -100,7 +104,7 @@ export class CountriesService {
       .map(res =>
         res.blob())
       .mergeMap(blob => {
-        return this.addAttachment(fullCountry._id,blob);
+        return this.addAttachment(fullCountry._id, blob);
       })
   }
 
@@ -165,7 +169,7 @@ export class CountriesService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-       // console.log("here");
+        // console.log("here");
         return this.currentCountry;
       })
   }
