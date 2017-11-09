@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
-import { Site } from '../../datas/models/site';
+import { Site, Zone } from '../../datas/models/site';
 
 @Injectable()
 export class Csv2JsonService {
@@ -13,8 +13,8 @@ export class Csv2JsonService {
 
     }
 
-    private extractSpeciesData(data): Species[] { // Input csv data to the function
-        let allTextLines = data;
+    private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
+        let allTextLines = arrayData;
         let headers = allTextLines[0];
         let lines: Species[] = [];
         // don't iclude header start from 1
@@ -75,8 +75,7 @@ export class Csv2JsonService {
                             sp.legalDimensions.push(legaldim);
                             break;
                         default:
-                            // do nothing...
-                            break;
+                            throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
                 lines.push(sp);
@@ -86,26 +85,23 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractSiteData(data): Site[] { // Input csv data to the function
-        let allTextLines = data;
+    private extractSiteData(arrayData): Site[] { 
+        let allTextLines = arrayData;
         let headers = allTextLines[0];
         let lines: Site[] = [];
-        // don't iclude header start from 1
         for (let i = 1; i < allTextLines.length; i++) {
-            // split content based on comma
             let data = allTextLines[i];
             if (data.length == headers.length) {
                 let st = {} as Site;
-                let header, name = {} as NameI18N, value, parts, legaldim = {} as LegalDimensions;
+                let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code":
                         case "description":
                             st[headers[j]] = data[j];
-                            break;                        
-                        default:
-                            // do nothing...
                             break;
+                        default:
+                            throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
                 lines.push(st);
@@ -115,33 +111,45 @@ export class Csv2JsonService {
         return lines;
     }
 
-    csv2Species(csvFile: any): Observable<any> {
-        return Observable.create(
-            observable => {
-                this.papa.parse(csvFile, {
-                    download: true,
-                    complete: function(results) {
-                        console.log(results.data)
-                        observable.next(results.data);
-                        observable.complete();
+    private extractZoneData(arrayData): Zone[] { 
+        let allTextLines = arrayData;
+        let headers = allTextLines[0];
+        console.log(headers);
+        let lines: Zone[] = [];
+        for (let i = 1; i < allTextLines.length; i++) {            
+            let data = allTextLines[i];
+            console.log(data);
+            if (data.length == headers.length) {
+                let st = {} as Zone;
+                let header;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "code":
+                        case "surface":
+                            console.log(headers[j]);
+                            st[headers[j]] = data[j];
+                            break;
+                        default:                            
+                            throw new Error('Wrong CSV File Unknown field detected');
                     }
-                });
-            })
-            .mergeMap(data => {
-                console.log(data);
-                let res = this.extractSpeciesData(data);
-                console.log(res);
-                return res;
-            });
-
+                }
+                lines.push(st);
+            }
+        }
+        console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
     }
 
-
-
-    csv2Site(csvFile: any): Observable<any> {
+    csv2(type: string, csvFile: any): Observable<any> {
+        console.log(type);
+        console.log(csvFile);
         return Observable.create(
             observable => {
                 this.papa.parse(csvFile, {
+                    /*delimiter: function(csvFile){
+                        return ",";
+                    },*/
+                    skipEmptyLines: true,
                     download: true,
                     complete: function(results) {
                         console.log(results.data)
@@ -152,7 +160,22 @@ export class Csv2JsonService {
             })
             .mergeMap(data => {
                 console.log(data);
-                let res = this.extractSiteData(data);
+                let res;
+                switch (type) {
+                    case "species":
+                        res = this.extractSpeciesData(data);
+                        break;
+                    case "site":
+                        res = this.extractSiteData(data);
+                        break;
+                    case "zone":
+                        console.log(data);
+                        res = this.extractZoneData(data);
+                        break;
+                    default:
+                        // code...
+                        break;
+                }
                 console.log(res);
                 return res;
             });

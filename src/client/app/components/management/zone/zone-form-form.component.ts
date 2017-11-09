@@ -56,7 +56,7 @@ export class ZoneFormFormComponent implements OnInit {
   @Input() zone: Zone;
   @Input() errorMessage: string | null;
   
-  @Output() submitted = new EventEmitter<{ site, zone }>();
+  @Output() submitted = new EventEmitter<any>();
 
   zoneForm: FormGroup = new FormGroup({
     code: new FormControl("", Validators.required),
@@ -70,16 +70,16 @@ export class ZoneFormFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.zone !== null) {
+    if (!this.zone) {
+      this.zoneForm.controls.code.setValue(this.site.code + "_Z");
+    } else {
       this.zoneForm.controls.code.setValue(this.zone.code);
       this.zoneForm.controls.surface.setValue(this.zone.surface);
-    } else {
-      this.zoneForm.controls.code.setValue(this.site.code + "_Z");
-    }
+    }  
   }
 
   submit() {
-    this.submitted.emit({ site:this.site, zone:this.zoneForm.value });
+    this.submitted.emit(this.zoneForm.value);
   }
 
   return() {

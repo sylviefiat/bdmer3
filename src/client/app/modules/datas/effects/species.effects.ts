@@ -65,7 +65,7 @@ export class SpeciesEffects {
     .filter((action) => action.type === SpeciesAction.ActionTypes.IMPORT_SPECIES)*/
     .ofType(SpeciesAction.ActionTypes.IMPORT_SPECIES)
     .map((action: SpeciesAction.ImportSpeciesAction) => action.payload)
-    .mergeMap(speciesCsv => this.csv2jsonService.csv2Species(speciesCsv))
+    .mergeMap(speciesCsv => this.csv2jsonService.csv2('species',speciesCsv))
     .mergeMap((species) => {
       return this.speciesService
         .editSpecies(species)

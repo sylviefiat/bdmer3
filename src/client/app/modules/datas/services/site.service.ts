@@ -76,7 +76,7 @@ export class SiteService {
   }
 
   editZone(site: Site, zone: Zone): Observable<Site> {
-    console.log(site);
+    console.log("Edit : "+site);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {    

@@ -1,5 +1,5 @@
 <md-card>
-  <md-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">Add new site for {{country.name}}</span></md-card-title>
+  <md-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">{{ 'ADD_SITE_COUNTRY' | translate }} {{country.name}}</span></md-card-title>
   <md-card-content>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -7,21 +7,21 @@
           <p>
           <md-input-container class="full">
             <input class="full" type="text" mdInput placeholder="Code site" formControlName="code" required>
-            <div class="hint">Ex: MANGALILIU
-              <span class="warning"> caractères interdits : espace, accent, caractères spéciaux, "_"</span>
+            <div class="hint">{{ 'EX_SITE_CODE' | translate }}
+              <span class="warning"> {{ 'EX_SITE_CODE_FORBIDDEN' | translate }} </span>
             </div>
           </md-input-container>
           </p>
           <p>
           <md-input-container>
             <textarea md-maxlength="150" rows="5" mdInput formControlName="description"  md-select-on-focus></textarea>
-            <div class="hint">Ex : Description du site</div> 
+            <div class="hint">{{ 'EX_SITE_DESC' | translate }}</div> 
           </md-input-container>            
         </p>
         </md-card>
         <!--names-->
         <md-card formArrayName="zones">
-          <md-card-subtitle>Zones </md-card-subtitle>
+          <md-card-subtitle>{{ 'ZONES' | translate }} </md-card-subtitle>
           <md-card *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel"> 
 
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
@@ -31,7 +31,7 @@
           </md-card>
           <md-card-actions>
             <a class="action" (click)="addZone()">
-              Add another zone +
+              {{ 'ADD_ZONE' | translate }}
             </a>
           </md-card-actions>
         </md-card>

@@ -77,6 +77,7 @@ export function siteReducer(
             }
 
         case SiteAction.ActionTypes.SELECT: {
+            console.log("select site: "+action.payload);
             return {
                 ...state,
                 currentSiteId: action.payload,

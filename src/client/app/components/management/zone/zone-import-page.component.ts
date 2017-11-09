@@ -13,28 +13,31 @@ import { SiteAction } from '../../../modules/datas/actions/index';
 import { CountriesAction } from '../../../modules/countries/actions/index';
 
 @Component({
-    moduleId: module.id,
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'bc-zone-import-page',
-    templateUrl: './zone-import-page.component.html',
-    styleUrls: [
-        './zone-import-page.component.css',
-    ],
+    template: `
+    <bc-zone-import
+      (upload)="handleUpload($event)"
+      (err)="handleErrorUpload($event)"
+      (back)="return($event)"
+      [errorMsg]="error$ | async"
+      [msg]="msg$ | async"
+      [site]="site$ | async">
+    </bc-zone-import>
+  `,
+  styles: [``]
 })
 export class ZoneImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
+
     actionsSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.store.take(1).subscribe((s: any) => {
-            this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importZone.csv";
-        });
+        console.log("here we are");
         this.actionsSubscription = route.params
             .map(params => new SiteAction.SelectAction(params.idsite))
             .subscribe(store);
@@ -51,28 +54,14 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
-        let reader = new FileReader();
-        if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.store.dispatch(new SiteAction.ImportZoneAction(site$,csvFile.target.files[0]));
-        } else {
-            this.store.dispatch(new SiteAction.AddSiteFailAction('No csv file found'));
-        }
+        this.store.dispatch(new SiteAction.ImportZoneAction(csvFile));
     }
 
-    changeNeedHelp() {
-        this.needHelp = !this.needHelp;
+    handleErrorUpload(msg: string){
+        this.store.dispatch(new SiteAction.AddSiteFailAction(msg));
     }
 
-    getCsvZones() {
-        return this.csvFile;
-    }
-
-    getCsvZonesUrl() {
-        return this.docs_repo + this.csvFile;
-    }
-
-    return() {
+    return(event) {
         this.routerext.navigate(['/management/'], {
             transition: {
                 duration: 1000,

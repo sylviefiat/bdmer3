@@ -112,7 +112,7 @@ export namespace SiteAction {
   export class AddZoneAction implements Action {
     readonly type = ActionTypes.ADD_ZONE;
 
-    constructor(public payload: {site:Site,zone:Zone}) {}
+    constructor(public payload: Zone) {}
   }
 
   export class AddZoneSuccessAction implements Action {
@@ -124,7 +124,7 @@ export namespace SiteAction {
   export class ImportZoneAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE;
 
-    constructor(public payload: {site:Observable<Site>,zone:Zone}) {}
+    constructor(public payload: any) {}
   }
 
   export class ImportZoneSuccessAction implements Action {

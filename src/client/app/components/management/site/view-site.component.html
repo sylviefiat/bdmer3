@@ -1,6 +1,6 @@
 <md-card *ngIf="site">
       <md-card-title-group>      
-          <md-card-title>SITE {{ site.code }}</md-card-title>
+          <md-card-title>{{ 'SITE' | translate }} {{ site.code }}</md-card-title>
       </md-card-title-group>
       
       <md-card-content>
@@ -10,6 +10,7 @@
         </div>
       </md-card-content>
 
+      <md-card-title *ngIf="site.zones">{{ 'ZONES' | translate }}</md-card-title>
       <bc-zone *ngFor="let zone of site.zones" [zone]="zone"></bc-zone>
 
       <md-card-actions align="space-between">

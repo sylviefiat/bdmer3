@@ -27,11 +27,10 @@ import { SiteAction } from '../../../modules/datas/actions/index';
   selector: 'bc-view-zone-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <md-card-title>{{ 'ZONES' | translate }}</md-card-title>
     <bc-zone 
       [site]="site$ | async"
-      [zone]="zone$ | async"
-      (edit)="editZone($event)"
-      (remove)="removeZone($event)">
+      [zone]="zone$ | async">
     </bc-zone>
   `,
 })
@@ -60,18 +59,5 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.actionsSubscription.unsubscribe();
-  }
-  // group: {site,zone}
-  editZone(group: any) {
-    this.routerext.navigate(['/zoneForm/' + group[0]._id+'/'+group[1].code], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
-  }
-  // group: {site,zone}
-  removeZone(group: any) {
-    this.store.dispatch(new SiteAction.RemoveZoneAction({site:group[0],zone:group[1]}));
   }
 }

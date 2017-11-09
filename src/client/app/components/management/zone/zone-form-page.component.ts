@@ -57,6 +57,7 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.site$
+      .do(site => console.log(site))
       .mergeMap((site: Site) =>
         this.route.params.map(params => params.idzone)
           .mergeMap(idzone => {
@@ -72,9 +73,8 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
     this.actionsSubscription.unsubscribe();
   }
 
-  onSubmit(value:{site: Site, zone: Zone}) { 
-      this.store.dispatch(new SiteAction.AddZoneAction(value))
-    
+  onSubmit(zone: Zone) { 
+      this.store.dispatch(new SiteAction.AddZoneAction(zone))    
   }
 
   return() {

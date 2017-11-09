@@ -1,12 +1,12 @@
 <md-card>
-      <md-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 ></fa> Import new species</md-card-title>
-      <md-card-subtitle>Import csv file containing species definitions</md-card-subtitle>
+      <md-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 ></fa>{{ 'IMPORT_SPECIES' | translate }}</md-card-title>
+      <md-card-subtitle>{{'IMPORT_SPECIES_DESC' | translate }}</md-card-subtitle>
       
       <md-card-content align="center">
       <p>
         <button (click)="fileInput.click()">
           <fa [name]="'upload'" [border]=true [size]=1></fa>
-          <span>Import CSV</span>
+          <span>{{ 'IMPORT_CSV' | translate }}</span>
           <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
         </button>
       </p>
@@ -21,7 +21,7 @@
       </p>
       <p id="help" *ngIf="needHelp">
         <a md-list-item class="link" href="{{getCsvSpeciesUrl()}}" download>
-          Download template file for species import
+          {{ 'DOWNLOAD_CSV_SPECIES' | translate }}
           <fa [name]="'download'" [border]=true [size]=1></fa>
         </a>
       </p>
@@ -29,7 +29,7 @@
       <md-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</md-card-content>
       <md-card-content *ngIf="msg$ | async" align="start">
           <p class="msg">{{ msg$ | async }}</p>
-          <p class="actionButtons"><a [routerLink]="['/management']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Back to management</a></p>
+         <p class="actionButtons"><a (click)="return()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
       </md-card-content> 
 
     </md-card>
