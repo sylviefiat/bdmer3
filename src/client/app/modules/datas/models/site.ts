@@ -19,13 +19,13 @@ export interface Zone {
 
 export interface Transect {
     code: string;
-    name: string;
     longitude: string;
     latitude: string;
     counts: Count[];
 }
 
 export interface Count {
+    code: string;
     date: string;
     codeSpecies: string;
     longMm: string;

@@ -120,5 +120,20 @@
   "SPECIES_HABITATS":"Habitats : species preferences",
   "SPECIES_HABITATS_EX":"Ex : Coastal reefs in detritus and sand areas surounded by coral patches? Depth : 0-3m",
   "SPECIES_FISHING_DIMS":"Fishing dimensions",
-  "ADD_FISHING_DIMS":"Add fishing dimensions for another country"
+  "ADD_FISHING_DIMS":"Add fishing dimensions for another country",
+  "ADD_ZONE":"Add/Edit Zone",
+  "ADD_TRANSECT":"Add/Edit Transect",
+  "SUBMIT":"Send",
+  "TRANSECT_CODE":"Transect code",
+  "TRANSECT_CODE_EX":"Ex: SITENAME_Z001_T001",
+  "TRANSECT_LONG":"Longitude",
+  "TRANSECT_LONG_EX":"Ex : 168.124563",
+  "TRANSECT_LAT":"Latitude",
+  "TRANSECT_LAT_EX":"Ex : -17.444785",
+  "COUNTS":"Counts",
+  "ADD_COUNT":"Add count +",
+  "IMPORT_TRANSECTS":"Transects import",
+  "IMPORT_TRANSECTS_DESC":"Import CSV file with transects for",
+  "DOWNLOAD_CSV_TRANSECTS":"Download CSV example for transects import",
+  "TRANSECTS":"Transects"
 }

@@ -76,11 +76,27 @@ export function siteReducer(
                 }
             }
 
-        case SiteAction.ActionTypes.SELECT: {
+        case SiteAction.ActionTypes.SELECT_SITE: {
             console.log("select site: "+action.payload);
             return {
                 ...state,
                 currentSiteId: action.payload,
+            };
+        }
+
+        case SiteAction.ActionTypes.SELECT_ZONE: {
+            console.log("select zone: "+action.payload);
+            return {
+                ...state,
+                currentZoneId: action.payload,
+            };
+        }
+
+        case SiteAction.ActionTypes.SELECT_TRANSECT: {
+            console.log("select transect: "+action.payload);
+            return {
+                ...state,
+                currentTransectId: action.payload,
             };
         }
 

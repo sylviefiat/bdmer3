@@ -6,40 +6,46 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../../modules/core/index';
-import { Site } from '../../../modules/datas/models/index';
+import { Site, Zone } from '../../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getSelectedZone } from '../../../modules/ngrx/index';
 import { SiteAction } from '../../../modules/datas/actions/index';
 import { CountriesAction } from '../../../modules/countries/actions/index';
 
 @Component({
-    selector: 'bc-zone-import-page',
+    selector: 'bc-transect-import-page',
     template: `
-    <bc-zone-import
+    <bc-transect-import
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
       [errorMsg]="error$ | async"
       [msg]="msg$ | async"
-      [site]="site$ | async">
-    </bc-zone-import>
+      [site]="site$ | async"
+      [zone]="zone$ | async">
+    </bc-transect-import>
   `,
-  styles: [``]
+    styles: [``]
 })
-export class ZoneImportPageComponent implements OnInit, OnDestroy {
+export class TransectImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
+    zone$: Observable<Zone>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
 
-    actionsSubscription: Subscription;
+
+    siteSubscription: Subscription;
+    zoneSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        console.log("here we are");
-        this.actionsSubscription = route.params
+        this.siteSubscription = route.params
             .map(params => new SiteAction.SelectSiteAction(params.idsite))
+            .subscribe(store);
+        this.zoneSubscription = route.params
+            .map(params => new SiteAction.SelectZoneAction(params.idzone))
             .subscribe(store);
     }
 
@@ -47,17 +53,19 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.let(getSitePageError);
         this.msg$ = this.store.let(getSitePageMsg);
         this.site$ = this.store.let(getSelectedSite);
+        this.zone$ = this.store.let(getSelectedZone);
     }
 
     ngOnDestroy() {
-        this.actionsSubscription.unsubscribe();
+        this.siteSubscription.unsubscribe();
+        this.zoneSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {
-        this.store.dispatch(new SiteAction.ImportZoneAction(csvFile));
+        this.store.dispatch(new SiteAction.ImportTransectAction(csvFile));
     }
 
-    handleErrorUpload(msg: string){
+    handleErrorUpload(msg: string) {
         this.store.dispatch(new SiteAction.AddSiteFailAction(msg));
     }
 

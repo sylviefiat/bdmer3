@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -7,26 +7,26 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../../modules/core/index';
-import { Site, Zone } from '../../../modules/datas/models/index';
+import { Site, Zone, Transect } from '../../../modules/datas/models/index';
 
 import { IAppState, getSitePageError, getSelectedSite } from '../../../modules/ngrx/index';
 import { SiteAction } from '../../../modules/datas/actions/index';
 
 @Component({
-  selector: 'bc-zone-form-page',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'bc-transect-form-page',
   template: `
       <md-card>
-        <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>{{ 'ADD_ZONE' | translate}}</md-card-title>
+        <md-card-title class="toolbar"><fa [name]="'arrow-h'" [border]=true [size]=1 ></fa>{{ 'ADD_TRANSECT' | translate}}</md-card-title>
       <form (ngSubmit)="submit()">
-      <bc-zone-form
+      <bc-transect-form
         [errorMessage]="errorMessage"
         [site]="site"
         [zone]="zone"
-        [zoneForm]="zoneForm">
-      </bc-zone-form>
+        [transect]="transect"
+        [transectForm]="transectForm">
+      </bc-transect-form>
       <div class="actions">
-            <button type="submit" class="btn btn-primary" [disabled]="!zoneForm.valid">{{ 'SUBMIT' | translate}}</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!transectForm.valid">{{ 'SUBMIT' | translate}}</button>
             <button (click)="return()" class="btn btn-secondary">{{ 'BACK_MANAGEMENT' | translate}}</button>
       </div>
       </form>
@@ -52,18 +52,19 @@ import { SiteAction } from '../../../modules/datas/actions/index';
     }
     `]
 })
-export class ZoneFormFormComponent implements OnInit {
+export class TransectFormFormComponent implements OnInit {
   @Input() site: Site;
   @Input() zone: Zone;
+  @Input() transect: Transect;
   @Input() errorMessage: string | null;
   
   @Output() submitted = new EventEmitter<any>();
 
-  zoneForm: FormGroup = new FormGroup({
+  transectForm: FormGroup = new FormGroup({
     code: new FormControl("", Validators.required),
-    surface: new FormControl(""),
-    transects: this._fb.array([]),
-    zonePreferences: this._fb.array([]),
+    longitude: new FormControl(""),
+    latitude: new FormControl(""),
+    counts: this._fb.array([])
   });
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
@@ -71,16 +72,17 @@ export class ZoneFormFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.zone) {
-      this.zoneForm.controls.code.setValue(this.site.code + "_Z");
+    if (!this.transect) {
+      this.transectForm.controls.code.setValue(this.zone.code + "_T");
     } else {
-      this.zoneForm.controls.code.setValue(this.zone.code);
-      this.zoneForm.controls.surface.setValue(this.zone.surface);
+      this.transectForm.controls.code.setValue(this.transect.code);
+      this.transectForm.controls.longitude.setValue(this.transect.longitude);
+      this.transectForm.controls.latitude.setValue(this.transect.latitude);
     }  
   }
 
   submit() {
-    this.submitted.emit(this.zoneForm.value);
+    this.submitted.emit(this.transectForm.value);
   }
 
   return() {

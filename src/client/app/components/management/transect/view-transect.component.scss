@@ -1,0 +1,22 @@
+
+
+
+md-card-title {
+    font-style: italic;
+}
+md-card-content, md-card-actions {
+    display: flex;
+    justify-content:space-around;
+}
+md-card-content.one{
+    display: flex;
+    justify-content:start;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+.table {
+    display: flex;
+    justify-content:space-between;
+}

@@ -25,7 +25,16 @@
              <button (click)="addZone()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
              <button (click)="importZone()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
           </div>
-        
+          
+          <h4 *ngIf="zone">{{'TRANSECT_MODIFY' | translate}}</h4>
+          <div class="space-around" *ngIf="zone">
+            <md-select *ngIf="(transectList$ | async)?.length>0" placeholder="{{'SELECT_TRANSECT' | translate}}" [(ngModel)]="transect">
+              <md-option *ngFor="let transect of transectList$ | async" [value]="transect">{{ transect.code }}</md-option>
+            </md-select>
+             <button *ngIf="(transectList$ | async)?.length>0"  [disabled]="!zone" (click)="editTransect()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
+             <button (click)="addTransect()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
+             <button (click)="importTransect()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
+          </div>
       </md-card-content>
     </md-card>    
 

@@ -120,5 +120,20 @@
   "SPECIES_HABITATS":"Habitats : préférences de l'espèce",
   "SPECIES_HABITATS_EX":"Ex : Récifs côtiers dans les zones de débris, d'herbiers et de sable entre les pâtés coralliens. Profondeur : 0-3",
   "SPECIES_FISHING_DIMS":"Dimensions de pêche",
-  "ADD_FISHING_DIMS":"Ajouter des Dimensions de pêche pour un autre pays"
+  "ADD_FISHING_DIMS":"Ajouter des Dimensions de pêche pour un autre pays",
+  "ADD_ZONE":"Ajouter/Editer une zone",
+  "ADD_TRANSECT":"Ajouter/Editer un transect",
+  "SUBMIT":"Envoyer",
+  "TRANSECT_CODE":"Code transect",
+  "TRANSECT_CODE_EX":"Ex: NOMDUSITE_Z001_T001",
+  "TRANSECT_LONG":"Longitude",
+  "TRANSECT_LONG_EX":"Ex : 168.124563",
+  "TRANSECT_LAT":"Latitude",
+  "TRANSECT_LAT_EX":"Ex : -17.444785",
+  "COUNTS":"Comptages",
+  "ADD_COUNT":"Ajouter un comptage +",
+  "IMPORT_TRANSECTS":"Import transects",
+  "IMPORT_TRANSECTS_DESC":"Importer un fichier CSV contenant des transect pour la zone ",
+  "DOWNLOAD_CSV_TRANSECTS":"Télécharger un exemple de CSV pour importer des transects",
+  "TRANSECTS":"Transects"
 }

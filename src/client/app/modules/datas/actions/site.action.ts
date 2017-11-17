@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Site,Zone } from '../models/index';
+import { Site,Zone, Transect } from '../models/index';
 import { type } from '../../core/utils/index';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,10 +24,21 @@ export namespace SiteAction {
       REMOVE_ZONE: string;
       REMOVE_ZONE_SUCCESS: string;
       REMOVE_ZONE_FAIL: string;
+      ADD_TRANSECT: string;
+      ADD_TRANSECT_SUCCESS: string;
+      IMPORT_TRANSECT: string;
+      IMPORT_TRANSECT_SUCCESS: string;
+      REMOVE_TRANSECT: string;
+      REMOVE_TRANSECT_SUCCESS: string;
+      REMOVE_TRANSECT_FAIL: string;
       LOAD: string;
       LOAD_SUCCESS: string;
       LOAD_FAIL: string;
-      SELECT: string;
+      SELECT_SITE: string;
+      SELECT_ZONE: string;
+      SELECT_TRANSECT: string;
+      SELECT_SP_PREF: string;
+      SELECT_COUNT: string;
     }
 
     export const ActionTypes: ISiteActions = {
@@ -45,11 +56,22 @@ export namespace SiteAction {
       IMPORT_ZONE_SUCCESS:type(`${SITE} Import Zone Success`),
       REMOVE_ZONE: type(`${SITE} Remove Zone`),
       REMOVE_ZONE_SUCCESS: type(`${SITE} Remove Zone Success`),
-      REMOVE_ZONE_FAIL: type(`${SITE} Remove Zone Fail`),      
+      REMOVE_ZONE_FAIL: type(`${SITE} Remove Zone Fail`), 
+      ADD_TRANSECT: type(`${SITE} Add Transect`),
+      ADD_TRANSECT_SUCCESS: type(`${SITE} Add Transect Success`),
+      IMPORT_TRANSECT: type(`${SITE} Import Transect`),
+      IMPORT_TRANSECT_SUCCESS:type(`${SITE} Import Transect Success`),
+      REMOVE_TRANSECT: type(`${SITE} Remove Transect`),
+      REMOVE_TRANSECT_SUCCESS: type(`${SITE} Remove Transect Success`),
+      REMOVE_TRANSECT_FAIL: type(`${SITE} Remove Transect Fail`),       
       LOAD: type(`${SITE} Load`),
       LOAD_SUCCESS: type(`${SITE} Load Success`),
       LOAD_FAIL: type(`${SITE} Load Fail`),
-      SELECT: type(`${SITE}  select`)
+      SELECT_SITE: type(`${SITE} select site`),
+      SELECT_ZONE: type(`${SITE} select zone`),
+      SELECT_TRANSECT: type(`${SITE} select transect`),
+      SELECT_SP_PREF: type(`${SITE} select species preference zone`),
+      SELECT_COUNT: type(`${SITE} select count`)
     };
 
   /**
@@ -139,7 +161,7 @@ export namespace SiteAction {
   export class RemoveZoneAction implements Action {
     readonly type = ActionTypes.REMOVE_ZONE;
 
-    constructor(public payload: {site:Site, zone: Zone}) {}
+    constructor(public payload: Zone) {}
   }
 
   export class RemoveZoneSuccessAction implements Action {
@@ -150,6 +172,55 @@ export namespace SiteAction {
 
   export class RemoveZoneFailAction implements Action {
     readonly type = ActionTypes.REMOVE_ZONE_FAIL;
+
+    constructor(public payload: Site) {}
+  }
+
+
+  /**
+   * Add zone to Transect  Actions
+   */
+  export class AddTransectAction implements Action {
+    readonly type = ActionTypes.ADD_TRANSECT;
+
+    constructor(public payload: Transect) {}
+  }
+
+  export class AddTransectSuccessAction implements Action {
+    readonly type = ActionTypes.ADD_TRANSECT_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  export class ImportTransectAction implements Action {
+    readonly type = ActionTypes.IMPORT_TRANSECT;
+
+    constructor(public payload: any) {}
+  }
+
+  export class ImportTransectSuccessAction implements Action {
+    readonly type = ActionTypes.IMPORT_TRANSECT_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  /**
+   * Remove Transect from Zone - Site  Actions
+   */
+  export class RemoveTransectAction implements Action {
+    readonly type = ActionTypes.REMOVE_TRANSECT;
+
+    constructor(public payload: Transect) {}
+  }
+
+  export class RemoveTransectSuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_TRANSECT_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  export class RemoveTransectFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_TRANSECT_FAIL;
 
     constructor(public payload: Site) {}
   }
@@ -172,8 +243,28 @@ export namespace SiteAction {
     constructor(public payload: any) {}
   }
 
-  export class SelectAction implements Action {
-    readonly type = ActionTypes.SELECT;
+  export class SelectSiteAction implements Action {
+    readonly type = ActionTypes.SELECT_SITE;
+    constructor(public payload: any) {}
+  }
+
+  export class SelectZoneAction implements Action {
+    readonly type = ActionTypes.SELECT_ZONE;
+    constructor(public payload: any) {}
+  }
+
+  export class SelectTransectAction implements Action {
+    readonly type = ActionTypes.SELECT_TRANSECT;
+    constructor(public payload: any) {}
+  }
+
+  export class SelectSpPrefAction implements Action {
+    readonly type = ActionTypes.SELECT_SP_PREF;
+    constructor(public payload: any) {}
+  }
+
+  export class SelectCountAction implements Action {
+    readonly type = ActionTypes.SELECT_COUNT;
     constructor(public payload: any) {}
   }
 
@@ -191,8 +282,18 @@ export namespace SiteAction {
     | RemoveZoneAction
     | RemoveZoneSuccessAction
     | RemoveZoneFailAction
+    | AddTransectAction
+    | AddTransectSuccessAction
+    | ImportTransectAction
+    | RemoveTransectAction
+    | RemoveTransectSuccessAction
+    | RemoveTransectFailAction
     | LoadAction
     | LoadSuccessAction
     | LoadFailAction
-    | SelectAction;
+    | SelectSiteAction
+    | SelectZoneAction
+    | SelectTransectAction
+    | SelectSpPrefAction
+    | SelectCountAction;
  }

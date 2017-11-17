@@ -18,7 +18,7 @@
           <div *ngFor="let transect of zoneForm.controls.transects.controls; let j=index;" class="panel">          
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="zoneForm.controls.transects.controls.length > 1" (click)="removeTansect(j)"></fa>
             <div [formGroupName]="j">
-              <!--<bt-transect-form [group]="zoneForm.controls.transects.controls[i]"></bt-transect-form>-->
+              <bc-transect-form [transect]="transect" [transectForm]="zoneForm.controls.transects.controls[j]"></bc-transect-form>
             </div>
           </div>
           <md-card-actions>

@@ -8,7 +8,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Site, Zone } from '../models/site';
+import { Site, Zone, Transect } from '../models/site';
 
 @Injectable()
 export class SiteService {
@@ -86,6 +86,25 @@ export class SiteService {
         } else {
           st.zones.push(zone);
         }
+        this.currentSite = of(st);
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap((response) => {
+        return  this.currentSite;
+      })
+  }
+
+
+  // A FINIR
+  editTransect(site: Site, zone: Zone, transect: Transect): Observable<Site> {
+    console.log("Edit : "+transect);
+    return this.getSite(site.code)
+      .filter(site => site!==null)
+      .mergeMap(st => {            
+        if(st.zones.filter(z => z.code === zone.code).length > -1){
+          st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
+        } 
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })

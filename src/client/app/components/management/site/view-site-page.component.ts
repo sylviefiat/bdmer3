@@ -41,7 +41,7 @@ export class ViewSitePageComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     this.actionsSubscription = route.params
-      .map(params => new SiteAction.SelectAction(params.id))
+      .map(params => new SiteAction.SelectSiteAction(params.id))
       .subscribe(store);
   }
 

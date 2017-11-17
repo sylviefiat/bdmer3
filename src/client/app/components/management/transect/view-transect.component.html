@@ -1,0 +1,9 @@
+<md-card *ngIf="transect">
+      <md-card-title-group>      
+          <md-card-title>{{ transect.code }}</md-card-title>
+          <md-card-subtitle>{{ 'COORDINATES' | translate }} : {{ transect.latitude }} {{ transect.longitude }}</md-card-subtitle>
+      </md-card-title-group>
+
+      <!--<bc-count *ngFor="let count of transect.counts" [count]="count"></bc-count>-->
+
+</md-card>

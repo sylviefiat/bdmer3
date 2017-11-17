@@ -14,11 +14,11 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 
-import { IAppState, getSelectedCountry, getSelectedSite } from '../../ngrx/index';
+import { IAppState, getSelectedCountry, getSelectedSite, getSelectedZone } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SiteService } from "../services/site.service";
 import { SiteAction } from '../actions/index';
-import { Site, Zone } from '../models/site';
+import { Site, Zone, Transect } from '../models/site';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -82,6 +82,21 @@ export class SiteEffects {
         .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
     );
 
+  @Effect() 
+  addTransectToZone$: Observable<Action> = this.actions$
+    /*.do((action) => console.log(`Received ${action.type}`))
+    .filter((action) => action.type === SiteAction.ActionTypes.ADD_ZONE)*/
+    .ofType(SiteAction.ActionTypes.ADD_TRANSECT)
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .withLatestFrom(this.store.let(getSelectedZone))
+    .map(([[action, site], zone]) => [action.payload, site, zone])
+    .mergeMap((value: [Transect, Site, Zone]) =>
+       this.siteService
+        .editTransect(value[1], value[2], value[0])
+        .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
+        .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+    );
+
   @Effect()
   importSiteToList$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_SITE)
@@ -117,7 +132,23 @@ export class SiteEffects {
     .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 
-
+ /* @Effect()
+  importTransectToZone$: Observable<Action> = this.actions$
+    .do((action) => console.log(`Received ${action.type}`))
+    .filter((action) => action.type === SiteAction.ActionTypes.IMPORT_TRANSECT)
+    //.ofType(SiteAction.ActionTypes.IMPORT_ZONE)
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .map(([action, site]) => [action.payload, site])
+    .mergeMap((value: [any, Site]) => {
+      return this.csv2jsonService.csv2('transect', value[0])
+        .mergeMap(transect =>
+          this.siteService
+            .editTransect(value[1], transect)
+        )
+    })
+    .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
+*/
   @Effect()
   removeSiteFromList$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.REMOVE_SITE)

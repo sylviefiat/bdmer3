@@ -21,6 +21,13 @@ import { ZoneImportComponent } from './zone/zone-import.component';
 import { ZoneImportPageComponent } from './zone/zone-import-page.component';
 import { ViewZonePageComponent } from './zone/view-zone-page.component';
 import { ViewZoneComponent } from './zone/view-zone.component';
+import { TransectFormPageComponent } from './transect/transect-form-page.component';
+import { TransectFormFormComponent } from './transect/transect-form-form.component';
+import { TransectFormComponent } from './transect/transect-form.component';
+import { TransectImportComponent } from './transect/transect-import.component';
+import { TransectImportPageComponent } from './transect/transect-import-page.component';
+import { ViewTransectPageComponent } from './transect/view-transect-page.component';
+import { ViewTransectComponent } from './transect/view-transect.component';
 
 export const DATA_COMPONENTS: any[] = [
   ManagementPageComponent,
@@ -45,6 +52,13 @@ export const DATA_COMPONENTS: any[] = [
   ZoneImportComponent,
   ViewZonePageComponent,
   ViewZoneComponent,
+  TransectFormPageComponent,
+  TransectFormFormComponent,
+  TransectFormComponent,
+  TransectImportComponent,
+  TransectImportPageComponent,
+  ViewTransectPageComponent,
+  ViewTransectComponent
 ];
 
 export * from './management-page.component';
@@ -69,3 +83,10 @@ export * from './zone/zone-import-page.component';
 export * from './zone/view-zone-page.component';
 export * from './zone/view-zone.component';
 export * from './zone/zone-import.component';
+export * from './transect/transect-form-page.component';
+export * from './transect/transect-form-form.component';
+export * from './transect/transect-form.component';
+export * from './transect/transect-import-page.component';
+export * from './transect/view-transect-page.component';
+export * from './transect/view-transect.component';
+export * from './transect/transect-import.component';

@@ -9,6 +9,9 @@ import { ViewSitePageComponent } from './site/view-site-page.component';
 import { ZoneFormPageComponent } from './zone/zone-form-page.component';
 import { ZoneImportPageComponent } from './zone/zone-import-page.component';
 import { ViewZonePageComponent } from './zone/view-zone-page.component';
+import { TransectFormPageComponent } from './transect/transect-form-page.component';
+import { TransectImportPageComponent } from './transect/transect-import-page.component';
+import { ViewTransectPageComponent } from './transect/view-transect-page.component';
 import { AuthGuard } from '../../modules/auth/guards/index';
 
 export const ManagementRoutes: Array<any> = [
@@ -77,4 +80,24 @@ export const ManagementRoutes: Array<any> = [
     component: ViewZonePageComponent,
     canActivate : [AuthGuard]
   },
+  {
+    path: 'transectForm/:idsite/:idzone',
+    component: TransectFormPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'transectForm/:idsite/:idzone/:idtransect',
+    component: TransectFormPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'transectImport/:idsite/:idzone',
+    component: TransectImportPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'transect/:idsite/:idzone/:idtransect',
+    component: ViewTransectPageComponent,
+    canActivate : [AuthGuard]
+  }
 ];

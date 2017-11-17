@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Country } from './../../modules/countries/models/country';
-import { Species, Site, Zone } from './../../modules/datas/models/index';
+import { Species, Site, Zone, Transect, ZonePreference, Count } from './../../modules/datas/models/index';
 import { SpeciesAction, SiteAction } from '../../modules/datas/actions/index';
 
 import { IAppState, getSpeciesInApp, getSiteListCurrentCountry } from '../../modules/ngrx/index';
@@ -23,9 +23,15 @@ export class ManagementComponent implements OnInit {
     speciesList$: Observable<Species[]>;
     siteList$: Observable<Site[]>;
     zoneList$: Observable<Zone[]>;
+    transectList$: Observable<Transect[]>;
+    zonePrefList$: Observable<ZonePreference[]>;
+    countList$: Observable<Count[]>;
     species: Species;
     site: Site;
     zone: Zone;
+    transect: Transect;
+    zonePreference: ZonePreference;
+    count: Count;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {
 
@@ -63,18 +69,15 @@ export class ManagementComponent implements OnInit {
     }
 
     editSite() {
-        console.log(this.site);
         this.routerext.navigate(['/siteForm/' + this.site._id]);
     }
 
     loadZone() {
-        this.store.dispatch(new SiteAction.SelectAction(this.site._id));
-        console.log(this.site);
+        this.store.dispatch(new SiteAction.SelectSiteAction(this.site._id));
         this.zoneList$ = of(this.site.zones);
     }
 
     addZone() {
-        console.log(this.site);
         this.routerext.navigate(['/zoneForm/' + this.site._id], {
             transition: {
                 duration: 800,
@@ -93,8 +96,105 @@ export class ManagementComponent implements OnInit {
     }
 
     editZone() {
-        console.log("edit !");
         this.routerext.navigate(['/zoneForm/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    loadTransect() {
+        this.store.dispatch(new SiteAction.SelectZoneAction(this.zone.code));
+        console.log(this.zone);
+        this.transectList$ = of(this.zone.transects);
+    }
+
+    addTransect() {
+        console.log(this.site._id);
+        this.routerext.navigate(['/transectForm/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    importTransect() {
+        this.routerext.navigate(['/transectImport/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    editTransect() {
+        this.routerext.navigate(['/transectForm/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    loadZonePref() {
+        this.store.dispatch(new SiteAction.SelectSpPrefAction(this.zone.code));
+        this.zonePrefList$ = of(this.zone.zonePreferences);
+    }
+
+    addZonePref() {
+        this.routerext.navigate(['/zonePreferenceForm/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    importZonePref() {
+        this.routerext.navigate(['/zonePreferenceImport/' + this.site._id + "/" + this.zone.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    editZonePref() {
+        this.routerext.navigate(['/zonePreferenceForm/' + this.site._id + "/" + this.zone.code + "/" + this.zonePreference.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    loadCount() {
+        this.store.dispatch(new SiteAction.SelectTransectAction(this.transect.code));
+        this.countList$ = of(this.transect.counts);
+    }
+
+    addCount() {
+        this.routerext.navigate(['/countForm/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    importCount() {
+        this.routerext.navigate(['/countImport/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    editCount() {
+        this.routerext.navigate(['/countForm/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code + "/" + this.count.code], {
             transition: {
                 duration: 800,
                 name: 'slideTop',

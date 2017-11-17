@@ -1,0 +1,35 @@
+<md-card>
+      <md-card-title class="toolbar"><fa [name]="'arrows-h'" [border]=true [size]=1 ></fa>{{ 'IMPORT_TRANSECTS' | translate }}</md-card-title>
+      <md-card-subtitle>{{ 'IMPORT_TRANSECTS_DESC' | translate }} {{ zone.code }}</md-card-subtitle>
+      
+      <md-card-content align="center">
+      <p>
+        <button (click)="fileInput.click()">
+          <fa [name]="'upload'" [border]=true [size]=1></fa>
+          <span>{{'IMPORT_CSV' | translate }}</span>
+          <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+        </button>
+      </p>
+      <p class="space-around" *ngIf="!(msg$ | async)">
+        <a class="link" (click)="return()" title="Back">
+            <fa [name]="'chevron-left'" [border]=false [size]=1></fa>
+            Back
+        </a>
+        <button class="question" (click)="changeNeedHelp()" title="Help on format">
+            <fa [name]="'question'" [border]=false [size]=2></fa>
+        </button>
+      </p>
+      <p id="help" *ngIf="needHelp">
+        <a md-list-item class="link" href="{{getCsvTransectsUrl()}}" download>
+          {{ 'DOWNLOAD_CSV_TRANSECTS' | translate }}
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+        </a>
+      </p>
+      </md-card-content>
+      <md-card-content class="error" *ngIf="errorMsg" align="center">{{ errorMsg }}</md-card-content>
+      <md-card-content *ngIf="msg" align="start">
+          <p class="msg">{{ msg }}</p>
+          <p class="actionButtons"><a (click)="cancel()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
+      </md-card-content> 
+
+    </md-card>

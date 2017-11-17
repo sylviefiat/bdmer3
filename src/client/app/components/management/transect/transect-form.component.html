@@ -1,0 +1,37 @@
+
+  <div [formGroup]="transectForm">
+    <md-card-content> 
+      <md-input-container>
+        <input type="text" mdInput placeholder="{{ 'TRANSECT_CODE' | translate }}" formControlName="code" required>
+        <div class="hint">{{ 'TRANSECT_CODE_EX' | translate }}</div>
+      </md-input-container>       
+    
+      <md-input-container>
+        <input type="text" mdInput placeholder="{{ 'TRANSECT_LONG' | translate }}" formControlName="longitude" required>m²
+        <div class="hint">{{ 'TRANSECT_LONG_EX' | translate }}</div>    
+      </md-input-container>          
+       
+    
+      <md-input-container>
+        <input type="text" mdInput placeholder="{{ 'TRANSECT_LAT' | translate }}" formControlName="latitude" required>m²
+        <div class="hint">{{ 'TRANSECT_LAT_EX' | translate }}</div>    
+      </md-input-container>          
+    </md-card-content>
+    
+    <md-card-content>
+      <md-card formArrayName="counts" class="full">
+          <md-card-subtitle>{{ 'COUNTS' | translate }}</md-card-subtitle>
+          <div *ngFor="let count of transectForm.controls.counts.controls; let i=index;" class="panel">          
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="transectForm.controls.counts.controls.length > 1" (click)="removeCount(i)"></fa>
+            <div [formGroupName]="i">
+             <!-- <bt-count-form [group]="transectForm.controls.counts.controls[i]"></bt-count-form>-->
+            </div>
+          </div>
+          <md-card-actions>
+            <a class="action" (click)="addCount()">
+              {{ 'ADD_COUNT' | translate }}
+            </a>
+          </md-card-actions>
+      </md-card>
+    </md-card-content>
+  </div>
