@@ -63,7 +63,7 @@ export class TransectImportComponent implements OnInit{
         return this.csvFile;
     }
 
-    getCsvZonesUrl() {
+    getCsvTransectsUrl() {
         return this.docs_repo + this.csvFile;
     }
 

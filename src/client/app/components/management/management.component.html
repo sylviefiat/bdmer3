@@ -18,7 +18,7 @@
           </div>
           <h4 *ngIf="site">{{'ZONE_MODIFY' | translate}}</h4>
           <div class="space-around" *ngIf="site">
-            <md-select *ngIf="(zoneList$ | async)?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone">
+            <md-select *ngIf="(zoneList$ | async)?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone" (change)="loadTransect()">
               <md-option *ngFor="let zone of zoneList$ | async" [value]="zone">{{ zone.code }}</md-option>
             </md-select>
              <button *ngIf="(zoneList$ | async)?.length>0"  [disabled]="!zone" (click)="editZone()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
@@ -28,7 +28,7 @@
           
           <h4 *ngIf="zone">{{'TRANSECT_MODIFY' | translate}}</h4>
           <div class="space-around" *ngIf="zone">
-            <md-select *ngIf="(transectList$ | async)?.length>0" placeholder="{{'SELECT_TRANSECT' | translate}}" [(ngModel)]="transect">
+            <md-select *ngIf="(transectList$ | async)?.length>0" placeholder="{{'SELECT_TRANSECT' | translate}}" [(ngModel)]="transect" (change)="loadCount()">
               <md-option *ngFor="let transect of transectList$ | async" [value]="transect">{{ transect.code }}</md-option>
             </md-select>
              <button *ngIf="(transectList$ | async)?.length>0"  [disabled]="!zone" (click)="editTransect()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>

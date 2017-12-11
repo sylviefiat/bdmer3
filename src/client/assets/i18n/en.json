@@ -75,6 +75,8 @@
   "ZONE_SURFACE_EX":"Ex: 100",
   "TRANSECTS":"Transects",
   "ADD_TRANSECT":"Add transect +",
+  "SELECT_TRANSECT":"Select transect",
+  "TRANSECT_MODIFY":"Add, Import or Edit transect",
   "ZONES_PREF":"Species preferences zones",
   "ADD_ZONE_PREF":"Add species preferences zones +",
   "DESC":"Description",

@@ -1,17 +1,21 @@
 <md-card *ngIf="site">
       <md-card-title-group>      
-          <md-card-title>{{ 'SITE' | translate }} {{ site.code }}</md-card-title>
+          <md-card-title><fa [name]="'map-marker'" [border]=false [size]=1 ></fa> {{ site.code }}</md-card-title>
       </md-card-title-group>
       
       <md-card-content>
-        <div>
-          <h4>{{ 'DESC' | translate }}</h4>
           <div>{{ site.description }}</div> 
-        </div>
       </md-card-content>
 
-      <md-card-title *ngIf="site.zones">{{ 'ZONES' | translate }}</md-card-title>
-      <bc-zone *ngFor="let zone of site.zones" [zone]="zone"></bc-zone>
+      <div>
+        <md-list *ngIf="site.zones" flex>
+          <md-card-subtitle class="md-no-sticky">{{ 'ZONES' | translate }}</md-card-subtitle>
+          <md-list-item class="link"  *ngFor="let zone of site.zones;" (click)="visitZone(zone.code)">
+              <fa [name]="'street-view'" [border]=false [size]=1 ></fa>
+              <p>{{zone.code}} -<span class="soustexte">{{zone.transects.length}} transects, {{zone.zonePreferences.length}} zones de préférence espèces</span></p>
+          </md-list-item>
+        </md-list>
+     </div>
 
       <md-card-actions align="space-between">
         <button md-raised-button color="warn" (click)="edit.emit(site)">

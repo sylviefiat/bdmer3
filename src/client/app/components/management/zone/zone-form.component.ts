@@ -54,7 +54,9 @@ export class ZoneFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.zoneForm);
         console.log(this.zone);
+        console.log(this.site);
         this.initTransect();
         this.initZonePreference();
     }

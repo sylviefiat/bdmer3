@@ -22,11 +22,11 @@
         <!--names-->
         <md-card formArrayName="zones">
           <md-card-subtitle>{{ 'ZONES' | translate }} </md-card-subtitle>
-          <md-card *ngFor="let zone of form.controls.zones.controls; let i=index;" class="panel"> 
+          <md-card *ngFor="let zone of site.zones; let i=index;" class="panel"> 
 
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.zones.controls.length > 1" (click)="removeZone(i)"></fa>
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZone(i)"></fa>
             <div [formGroupName]="i">
-              <bc-zone-form [zone]="zone" [zoneForm]="form.controls.zones.controls[i]"></bc-zone-form>
+              <bc-zone-form [errorMessage]="errorMessage" [site]="site" [zone]="zone" [zoneForm]="form.controls.zones.controls[i]"></bc-zone-form>
             </div>
           </md-card>
           <md-card-actions>

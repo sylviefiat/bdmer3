@@ -41,9 +41,7 @@ export function siteReducer(
         case SiteAction.ActionTypes.ADD_SITE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_SITE_SUCCESS: {
             const addedsite = action.payload;
-            console.log(addedsite);
             const sites = state.entities.filter(site => addedsite._id !== site._id);
-            console.log(sites);
             return {
                 ...state,
                 entities: [...sites,...addedsite],

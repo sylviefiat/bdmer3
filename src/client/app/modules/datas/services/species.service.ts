@@ -19,7 +19,6 @@ export class SpeciesService {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
-    console.log(dbname);
     this.db = new PouchDB(dbname);
     return fromPromise(this.sync(remote + dbname));
   }
@@ -49,7 +48,6 @@ export class SpeciesService {
     return fromPromise(this.db.put(species))
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
-        console.log(response);
         return of(species);
       })
   }

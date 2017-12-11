@@ -62,6 +62,7 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
+        console.log(csvFile);
         this.store.dispatch(new SiteAction.ImportTransectAction(csvFile));
     }
 

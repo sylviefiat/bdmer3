@@ -81,7 +81,7 @@ export class Csv2JsonService {
                 lines.push(sp);
             }
         }
-        console.log(lines); //The data in the form of 2 dimensional array.
+        //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
 
@@ -107,18 +107,16 @@ export class Csv2JsonService {
                 lines.push(st);
             }
         }
-        console.log(lines); //The data in the form of 2 dimensional array.
+        //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
 
     private extractZoneData(arrayData): Zone[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
-        console.log(headers);
         let lines: Zone[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
-            console.log(data);
             if (data.length == headers.length) {
                 let st = {} as Zone;
                 let header;
@@ -126,7 +124,6 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "code":
                         case "surface":
-                            console.log(headers[j]);
                             st[headers[j]] = data[j];
                             break;
                         default:                            
@@ -136,7 +133,37 @@ export class Csv2JsonService {
                 lines.push(st);
             }
         }
-        console.log(lines); //The data in the form of 2 dimensional array.
+        //console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
+    }
+
+    private extractTransectData(arrayData): Zone[] { 
+        let allTextLines = arrayData;
+        let headers = allTextLines[0];
+        let lines: Zone[] = [];
+        for (let i = 1; i < allTextLines.length; i++) {            
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let st = {} as Zone;
+                let header;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "code_zone":
+                        case "code":
+                        case "nom":
+                        case "latitude":
+                        case "longitude":
+                        case "description":
+                            st[headers[j]] = data[j];
+                            break;
+                        default:                            
+                            throw new Error('Wrong CSV File Unknown field detected');
+                    }
+                }
+                lines.push(st);
+            }
+        }
+        //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
 
@@ -169,8 +196,11 @@ export class Csv2JsonService {
                         res = this.extractSiteData(data);
                         break;
                     case "zone":
-                        console.log(data);
                         res = this.extractZoneData(data);
+                        break;
+                    case "transect":
+                        console.log(data);
+                        res = this.extractTransectData(data);
                         break;
                     default:
                         // code...

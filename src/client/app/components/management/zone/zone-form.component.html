@@ -16,7 +16,7 @@
       <md-card formArrayName="transects" class="full">
           <md-card-subtitle>{{ 'TRANSECTS' | translate }}</md-card-subtitle>
           <div *ngFor="let transect of zoneForm.controls.transects.controls; let j=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="zoneForm.controls.transects.controls.length > 1" (click)="removeTansect(j)"></fa>
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeTansect(j)"></fa>
             <div [formGroupName]="j">
               <bc-transect-form [transect]="transect" [transectForm]="zoneForm.controls.transects.controls[j]"></bc-transect-form>
             </div>
@@ -32,7 +32,7 @@
       <md-card formArrayName="zonePreferences" class="full">
           <md-card-subtitle>{{ 'ZONES_PREF' | translate }}</md-card-subtitle>
           <div *ngFor="let zonePreference of zoneForm.controls.zonePreferences.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="zoneForm.controls.zonePreferences.controls.length > 1" (click)="removeZonePreference(i)"></fa>
+            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZonePreference(i)"></fa>
             <div [formGroupName]="i">
               <!--<bt-zone-preference-form [group]="zoneForm.controls.transects.controls[i]"></bt-zone-preference-form>-->
             </div>

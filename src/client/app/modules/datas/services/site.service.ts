@@ -19,7 +19,7 @@ export class SiteService {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
-    console.log(dbname);
+    //console.log(dbname);
     this.db = new PouchDB(dbname);
     return fromPromise(this.sync(remote + dbname));
   }
@@ -95,15 +95,17 @@ export class SiteService {
       })
   }
 
-
-  // A FINIR
   editTransect(site: Site, zone: Zone, transect: Transect): Observable<Site> {
     console.log("Edit : "+transect);
     return this.getSite(site.code)
       .filter(site => site!==null)
-      .mergeMap(st => {            
-        if(st.zones.filter(z => z.code === zone.code).length > -1){
-          st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
+      .mergeMap(st => {  
+        let zn = st.zones.filter(z => z.code === zone.code)[0];
+        if(zn){
+          if(zn.transects.filter(t => t.code === transect.code).length > -1){
+            zn.transects = [ ...zn.transects.filter(t => t.code !== transect.code), transect];
+          }
+          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
         } 
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));

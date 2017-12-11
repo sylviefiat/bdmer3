@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { RouterExtensions, Config } from '../../../modules/core/index';
 
 import { IAppState } from '../../../modules/ngrx/index';
 
@@ -26,7 +27,7 @@ export class ViewSiteComponent implements OnInit {
     @Output() edit = new EventEmitter<Site>();
 
 
-    constructor(private store: Store<IAppState>, private windowService: WindowService) { }
+    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -42,6 +43,16 @@ export class ViewSiteComponent implements OnInit {
     deleteSite() {
         if (this.windowService.confirm("Are you sure you want to delete this site from database ?"))
             return this.remove.emit(this.site);
+    }
+
+    visitZone(idzone) {
+        console.log(idzone);
+        this.routerext.navigate(['/zone/'+this.site.code+'/'+idzone], {
+            transition: {
+                duration: 1000,
+                name: 'slideTop',
+            }
+        });
     }
 
 
