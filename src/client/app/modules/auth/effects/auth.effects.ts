@@ -4,10 +4,12 @@ import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
 
+import { IAppState, getLatestURL } from '../../ngrx/index';
 import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
@@ -40,7 +42,11 @@ export class AuthEffects {
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
-    .do(() =>this.router.navigate(['/']));
+    .withLatestFrom(this.store.let(getLatestURL))
+    .map((url) => {
+      console.log(url);
+      return this.router.navigate([url])
+    });
 
   @Effect() loginSession$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SESSION)
@@ -57,8 +63,10 @@ export class AuthEffects {
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)
     .do(authed => {
-      console.log(authed);
-      return this.router.navigate(['/login']);
+      let url = this.router.url;
+      console.log(url);
+      this.router.navigate(['/login']);
+      return url;
     });
 
   @Effect() lostpassword$ = this.actions$
@@ -89,6 +97,7 @@ export class AuthEffects {
     private authService: AuthService,
     private countriesService: CountriesService,
     private mailService: MailService,
-    private router: Router
+    private router: Router,
+    private store: Store<IAppState>
   ) {}
 }

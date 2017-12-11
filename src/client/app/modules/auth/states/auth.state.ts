@@ -4,6 +4,7 @@ import { User, Country } from '../../countries/models/country';
 
 export interface IAuthState {
     loggedIn: boolean;
+    latestURL: string;
     role: string;
     user: User | null;
     country: Country | null;
@@ -11,6 +12,7 @@ export interface IAuthState {
 
 export const authInitialState: IAuthState = {
     loggedIn: false,
+    latestURL: "/",
     role: null,
     user: null,
     country: null
@@ -18,6 +20,10 @@ export const authInitialState: IAuthState = {
 
 export function getLoggedIn(state$: Observable<IAuthState>) {
     return state$.select(state => state.loggedIn);
+}
+
+export function getURL(state$: Observable<IAuthState>) {
+    return state$.select(state => state.latestURL);
 }
 
 export function getRole(state$: Observable<IAuthState>) {

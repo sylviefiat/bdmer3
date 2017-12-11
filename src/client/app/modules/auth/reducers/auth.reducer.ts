@@ -12,10 +12,19 @@ export function authReducer(
     case AuthAction.ActionTypes.LOGIN_SUCCESS: {  
       console.log(action.payload);
       return {
+        ...state,
         loggedIn: true,
         role: action.payload.user.role,
         user: action.payload.user,
         country: action.payload.country
+      };
+    }
+
+    case AuthAction.ActionTypes.LOGIN_REDIRECT: {  
+      console.log(action.payload);
+      return {
+        ...state,
+        latestURL: action.payload
       };
     }
 
