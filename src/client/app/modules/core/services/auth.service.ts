@@ -7,9 +7,11 @@ import { Observable } from 'rxjs/Observable';
 import { Authenticate } from '../../auth/models/user';
 import { CountriesService } from './countries.service';
 import { User, Country } from '../../countries/models/country';
+
 import { ResponsePDB } from '../models/pouchdb';
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
+
 
 
 @Injectable()
@@ -25,29 +27,45 @@ export class AuthService {
     var pouchOpts = {
       skipSetup: true
     };
-    this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);
-    
+    this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);    
   }
 
   login({ username, password }: Authenticate): Observable<any> {
     return fromPromise(this.db.login(username, password))
-      .filter((response: ResponsePDB) => response.ok)
-      .map(response => {
-        //console.log(response);
-        this.getLoggedInUser.emit(this.countriesService.getUser(username));
-        this.getCountry.emit(this.countriesService.getCountryUser(username));
-        return response;
+      .mergeMap((result: ResponsePDB) => {
+        if (result.ok && result.roles.length > 0){
+          return this.setUser(username);
+        }
+        else
+          throw Observable.throw(result); 
+      });
+  }
+
+  session(): Observable<any> {
+    return fromPromise(this.db.getSession())
+      .mergeMap((result: ResponsePDB) => {
+        if (result.ok && result.userCtx.name){
+          return this.setUser(result.userCtx.name);
+        }
+        else{
+          throw Observable.throw(result); 
+        }
+      });
+  }
+
+  setUser(username): Observable<any>{
+    return this.countriesService.getUser(username)
+      .map(user => {
+        this.currentUser = user;
+        this.getLoggedInUser.emit(of(this.currentUser));        
+        return of(this.currentUser);    
       })
-      .mergeMap((response) => {
-        return this.countriesService.getUser(username)
-          .map(user => {
-            this.currentUser = user;            
-          });
-      })
-      .mergeMap((response) => {
+      .mergeMap(() => {
         return this.countriesService.getCountryUser(username)
           .map(country => {
             this.currentCountry = country;
+            this.getCountry.emit(of(this.currentCountry));
+            return of(this.currentCountry);
           })
         })
       .mergeMap((response) => {

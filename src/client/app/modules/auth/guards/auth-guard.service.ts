@@ -18,11 +18,7 @@ export class AuthGuard implements CanActivate {
 
     return this.store.let(getisLoggedIn).take(1).map(authed => {
       if (!authed) {
-        // DISABLE LOGIN FOR DEV
-        let userdev: Authenticate = {"username":"admin", "password":"admin", roles: ["EDITOR"]};
-        this.store.dispatch(new AuthAction.Login(userdev));
-        // ENABLE LOGIN
-        //this.store.dispatch(new AuthAction.LoginRedirect());
+        this.store.dispatch(new AuthAction.LoginRedirect());
         return false;
       }
 

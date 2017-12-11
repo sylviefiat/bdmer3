@@ -29,6 +29,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(auth: Authenticate) {
+    console.log(auth);
     this.store.dispatch(new AuthAction.Login(auth));
   }
 }

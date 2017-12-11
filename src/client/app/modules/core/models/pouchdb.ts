@@ -1,8 +1,12 @@
 export interface ResponsePDB {
+    id: string;
     ok?: boolean;
     error?: string;
-    id: string;
+    name?: string;
     rows?: any;
+    roles?: any;
+    info?: any;
+    userCtx?: any;
     _rev: string;
 }
 

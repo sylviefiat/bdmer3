@@ -14,6 +14,7 @@ export namespace AuthAction {
     LOGIN_SUCCESS: string;
     LOGIN_FAILURE: string;
     LOGIN_REDIRECT: string;
+    LOGIN_SESSION: string;
     LOST_PASSWORD_SUCCESS: string;
     LOST_PASSWORD_FAILURE: string;
     LOST_PASSWORD_REDIRECT: string;
@@ -26,6 +27,7 @@ export namespace AuthAction {
     LOGIN_SUCCESS : type('[Auth] Login Success'),
     LOGIN_FAILURE : type('[Auth] Login Failure'),
     LOGIN_REDIRECT : type('[Auth] Login Redirect'),
+    LOGIN_SESSION: type('[Auth] Get session'),
     LOST_PASSWORD_SUCCESS : type('[Auth] Lost password Success'),
     LOST_PASSWORD_FAILURE : type('[Auth] Lost password Failure'),
     LOST_PASSWORD_REDIRECT : type('[Auth] Lost password Redirect')
@@ -59,6 +61,12 @@ export class Logout implements Action {
   constructor(public payload: any) {}
 }
 
+export class Session implements Action {
+  readonly type = ActionTypes.LOGIN_SESSION;
+
+  constructor(public payload: any) {}
+}
+
 export class LostPassword implements Action {
   readonly type = ActionTypes.LOST_PASSWORD;
 
@@ -87,6 +95,7 @@ export type Actions =
   | LoginSuccess
   | LoginFailure
   | LoginRedirect
+  | Session
   | LostPassword
   | LostPasswordSuccess
   | LostPasswordFailure

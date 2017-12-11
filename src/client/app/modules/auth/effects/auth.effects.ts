@@ -22,7 +22,10 @@ export class AuthEffects {
     .exhaustMap(auth =>
       this.authService
         .login(auth)
-        .map((result: {user:User,country:Country}) => new AuthAction.LoginSuccess({user: result.user, country:result.country}))
+        .map((result: {user:User,country:Country}) => {
+          console.log(result);
+          return new AuthAction.LoginSuccess({user: result.user, country:result.country})
+        })
         .catch(error => of(new AuthAction.LoginFailure(error.message)))
     );
 
@@ -35,15 +38,27 @@ export class AuthEffects {
       this.router.navigate(['/']);
     }));
 
-    // REMOVED FOR DEV PURPOSE (AUTO LOGIN)
- /* @Effect({ dispatch: false }) loginSuccess$ = this.actions$
+  @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
-    .do(() =>this.router.navigate(['/']));*/
+    .do(() =>this.router.navigate(['/']));
+
+  @Effect() loginSession$ = this.actions$
+    .ofType(AuthAction.ActionTypes.LOGIN_SESSION)
+    .map((action: AuthAction.Session) => action.payload)
+    .exhaustMap(() => {
+      return this.authService
+        .session()
+        .map((result: {user:User,country:Country}) => {
+          console.log(result);
+          return new AuthAction.LoginSuccess({user: result.user, country:result.country})})
+        .catch(error => of(error))
+    });
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)
     .do(authed => {
-      this.router.navigate(['/login']);
+      console.log(authed);
+      return this.router.navigate(['/login']);
     });
 
   @Effect() lostpassword$ = this.actions$
