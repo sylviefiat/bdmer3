@@ -52,7 +52,7 @@ export class LoginFailure implements Action {
 
 export class LoginRedirect implements Action {
   readonly type = ActionTypes.LOGIN_REDIRECT;
-  payload: string = null;
+  constructor(public payload: string) {}
 }
 
 export class Logout implements Action {

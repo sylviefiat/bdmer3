@@ -16,9 +16,20 @@ export function authReducer(
         loggedIn: true,
         role: action.payload.user.role,
         user: action.payload.user,
-        country: action.payload.country
+        country: action.payload.country,
+        sessionLoaded: true
       };
     }
+
+    case AuthAction.ActionTypes.LOGIN_FAILURE: {  
+      console.log(action.payload);
+      return {
+        ...state,
+        loggedIn: false,
+        sessionLoaded: true
+      };
+    }
+
 
     case AuthAction.ActionTypes.LOGIN_REDIRECT: {  
       console.log(action.payload);

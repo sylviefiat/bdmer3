@@ -43,9 +43,9 @@ export class AuthEffects {
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
     .withLatestFrom(this.store.let(getLatestURL))
-    .map((url) => {
-      console.log(url);
-      return this.router.navigate([url])
+    .map(([action, url]) => [action.payload, url])
+    .mergeMap((value: [any, String]) => {
+      return this.router.navigate([value[1]])
     });
 
   @Effect() loginSession$ = this.actions$
@@ -55,18 +55,15 @@ export class AuthEffects {
       return this.authService
         .session()
         .map((result: {user:User,country:Country}) => {
-          console.log(result);
+          console.log("login session");
           return new AuthAction.LoginSuccess({user: result.user, country:result.country})})
-        .catch(error => of(error))
+        .catch(error => of(new AuthAction.LoginFailure(error.message)))
     });
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)
     .do(authed => {
-      let url = this.router.url;
-      console.log(url);
-      this.router.navigate(['/login']);
-      return url;
+      return this.router.navigate(['/login']);
     });
 
   @Effect() lostpassword$ = this.actions$

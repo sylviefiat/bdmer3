@@ -42,7 +42,7 @@ import { ISampleState, reducer, getNames} from '../sample/index';
 import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookId, getSelectedBook, getAll } from '../books/index';
 import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
 import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
-import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL} from '../auth/index';
+import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded} from '../auth/index';
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
@@ -169,6 +169,7 @@ export const getLatestURL: any = compose(getURL, getAuthState);
 export const getAuthUser: any = compose(getUser, getAuthState);
 export const getRoleUser: any = compose(getRole, getAuthState);
 export const getAuthCountry: any = compose(getCountry, getAuthState);
+export const getisSessionLoaded: any = compose(getSessionLoaded, getAuthState);
 
 // Login page
 export const getLoginPagePending: any = compose(getPending, getLoginPageState);
