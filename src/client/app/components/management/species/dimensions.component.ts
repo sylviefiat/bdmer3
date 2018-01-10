@@ -6,24 +6,24 @@ import { FormGroup } from '@angular/forms';
   moduleId: module.id,
   selector: 'bt-dim',
   template: `
-    <md-card-content [formGroup]="dimForm">
+    <mat-card-content [formGroup]="dimForm">
     <p>
-      <md-input-container>
-        <input type="text" mdInput placeholder="Country code" formControlName="codeCountry" required>
+      <mat-input-container>
+        <input type="text" matInput placeholder="Country code" formControlName="codeCountry" required>
         <div class="hint">Ex: FR</div>
-      </md-input-container>          
+      </mat-input-container>          
     </p>
     <p> 
-      <md-input-container>
-        <input type="text" mdInput placeholder="Longueur minimale" formControlName="longMin" required>mm
+      <mat-input-container>
+        <input type="text" matInput placeholder="Longueur minimale" formControlName="longMin" required>mm
         <div class="hint">Ex: 100</div>    
-      </md-input-container>     
-      <md-input-container>
-        <input type="text" mdInput placeholder="Longueur maximale" formControlName="longMax" required>mm
+      </mat-input-container>     
+      <mat-input-container>
+        <input type="text" matInput placeholder="Longueur maximale" formControlName="longMax" required>mm
         <div class="hint">Ex: 800</div>    
-      </md-input-container>
+      </mat-input-container>
     </p>
-    </md-card-content>
+    </mat-card-content>
   `,
   styles: [
     `
@@ -32,7 +32,7 @@ import { FormGroup } from '@angular/forms';
       flex-wrap: wrap;
       justify-content: center;
     }
-    md-input-container {
+    mat-input-container {
       padding-left: 1em;
     }
     input {

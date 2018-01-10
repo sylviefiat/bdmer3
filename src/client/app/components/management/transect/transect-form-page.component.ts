@@ -31,7 +31,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
       justify-content: center;
       margin: 72px 0;
     }
-    md-card {
+    mat-card {
       min-width: 500px;
     }
     

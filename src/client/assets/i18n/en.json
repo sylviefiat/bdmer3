@@ -51,6 +51,8 @@
   "LEGAL_DIM":"Legal fishing dimensions",
   "COUNTRY":"Country",
   "MILLIMETER_ABR":"mm",
+  "SPECIES_EDIT":"Edit species",
+  "SPECIES_DELETE":"Delete species",
   "SITES":"Sites",
   "SITE":"Site",
   "SITE_MODIFY":"Add, Import or Edit site",

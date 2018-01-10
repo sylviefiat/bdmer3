@@ -15,8 +15,8 @@ import { SiteAction } from '../../../modules/datas/actions/index';
 @Component({
   selector: 'bc-transect-form-page',
   template: `
-      <md-card>
-        <md-card-title class="toolbar"><fa [name]="'arrow-h'" [border]=true [size]=1 ></fa>{{ 'ADD_TRANSECT' | translate}}</md-card-title>
+      <mat-card>
+        <mat-card-title class="toolbar"><fa [name]="'arrow-h'" [border]=true [size]=1 ></fa>{{ 'ADD_TRANSECT' | translate}}</mat-card-title>
       <form (ngSubmit)="submit()">
       <bc-transect-form
         [errorMessage]="errorMessage"
@@ -30,7 +30,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
             <button (click)="return()" class="btn btn-secondary">{{ 'BACK_MANAGEMENT' | translate}}</button>
       </div>
       </form>
-      </md-card>
+      </mat-card>
   `,
   styles: [
     `
@@ -40,7 +40,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
       justify-content: center;
       margin: 72px 0;
     }
-    md-card {
+    mat-card {
       min-width: 500px;
     }
     

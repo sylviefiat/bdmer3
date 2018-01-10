@@ -6,17 +6,17 @@ import { FormGroup } from '@angular/forms';
   moduleId: module.id,
   selector: 'bt-name',
   template: `
-    <md-card-content [formGroup]="nameForm">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Code language" formControlName="lang" required>
+    <mat-card-content [formGroup]="nameForm">
+      <mat-input-container>
+        <input type="text" matInput placeholder="Code language" formControlName="lang" required>
         <div class="hint">Ex: FR</div>
-      </md-input-container>
+      </mat-input-container>
           
-      <md-input-container>
-        <input type="text" mdInput placeholder="Nom vernaculaire" formControlName="name" required>
+      <mat-input-container>
+        <input type="text" matInput placeholder="Nom vernaculaire" formControlName="name" required>
         <div class="hint">Ex: Holothurie brune</div>    
-      </md-input-container>
-    </md-card-content>
+      </mat-input-container>
+    </mat-card-content>
   `,
   styles: [
     `
@@ -25,7 +25,7 @@ import { FormGroup } from '@angular/forms';
       flex-wrap: wrap;
       justify-content: center;
     }
-    md-input-container {
+    mat-input-container {
       padding-left: 1em;
     }
     input {

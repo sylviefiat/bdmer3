@@ -16,8 +16,8 @@ import { SiteAction } from '../../../modules/datas/actions/index';
   selector: 'bc-zone-form-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-      <md-card>
-        <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>{{ 'ADD_ZONE' | translate}}</md-card-title>
+      <mat-card>
+        <mat-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>{{ 'ADD_ZONE' | translate}}</mat-card-title>
       <form (ngSubmit)="submit()">
       <bc-zone-form
         [errorMessage]="errorMessage"
@@ -30,7 +30,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
             <button (click)="return()" class="btn btn-secondary">{{ 'BACK_MANAGEMENT' | translate}}</button>
       </div>
       </form>
-      </md-card>
+      </mat-card>
   `,
   styles: [
     `
@@ -40,7 +40,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
       justify-content: center;
       margin: 72px 0;
     }
-    md-card {
+    mat-card {
       min-width: 500px;
     }
     

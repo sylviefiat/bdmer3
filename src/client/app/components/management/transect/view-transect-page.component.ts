@@ -27,7 +27,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
   selector: 'bc-view-transect-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <md-card-title>{{ 'TRANSECTS' | translate }}</md-card-title>
+    <mat-card-title>{{ 'TRANSECTS' | translate }}</mat-card-title>
     <bc-transect 
       [site]="site$ | async"
       [zone]="zone$ | async"

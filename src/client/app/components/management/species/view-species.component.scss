@@ -3,20 +3,22 @@
       justify-content: center;
       margin: 72px 0;
     }
-md-card {
+mat-card {
     min-width: 500px;
 }
-
-md-card-title {
+mat-card-title {
     font-style: italic;
 }
-md-card-content, md-card-actions {
+mat-card-content, mat-card-actions {
     display: flex;
     justify-content:space-around;
 }
-md-card-content.one{
+mat-card-content.one{
     display: flex;
     justify-content:start;
+}
+.mat-card-sm-image {
+  width: auto !important;
 }
 .actions {
   display: flex;
@@ -25,4 +27,13 @@ md-card-content.one{
 .table {
     display: flex;
     justify-content:space-between;
+}
+.codename {
+  font-size: smaller;
+}
+.smallcaps {
+  font-variant: all-small-caps;
+}
+.flexcolumn {
+  flex-direction: column;
 }

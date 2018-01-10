@@ -1,53 +1,53 @@
 <div>
   <h2>{{'ABOUT_TITLE' | translate}}</h2>
   <div class="container">
-  <md-card>
-    <md-card-title-group>
-      <md-card-title>{{'ABOUT_TITLE_FEAT1' | translate}}</md-card-title>
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'ABOUT_TITLE_FEAT1' | translate}}</mat-card-title>
       <fa [name]="'database'" [border]=true [size]=3></fa>
-    </md-card-title-group>
-    <md-card-content>
+    </mat-card-title-group>
+    <mat-card-content>
       <p>
         {{'ABOUT_FEAT1' | translate}}
       </p>
-    </md-card-content>
-  </md-card>
-  <md-card>
-    <md-card-title-group>
-      <md-card-title>{{'ABOUT_TITLE_FEAT2' | translate}}</md-card-title>  
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'ABOUT_TITLE_FEAT2' | translate}}</mat-card-title>  
       <fa [name]="'cogs'" [border]=true [size]=3></fa> 
-    </md-card-title-group>
-    <md-card-content>
+    </mat-card-title-group>
+    <mat-card-content>
       <p>
         {{'ABOUT_FEAT2' | translate}}
       </p>
-    </md-card-content>
-  </md-card>
-  <md-card>
-    <md-card-title-group>
-      <md-card-title>{{'ABOUT_TITLE_FEAT3' | translate}}</md-card-title>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'ABOUT_TITLE_FEAT3' | translate}}</mat-card-title>
       <fa [name]="'file-text-o'" [border]=true [size]=3></fa>
-    </md-card-title-group>
-    <md-card-content>
+    </mat-card-title-group>
+    <mat-card-content>
       <p>
         {{'ABOUT_FEAT3' | translate}}
       </p>
-    </md-card-content>
-  </md-card>
+    </mat-card-content>
+  </mat-card>
   </div>
   <div class="container">
-  <a md-list-item class="link" href="{{getPdfUrl()}}" download>
-  <md-card class="download">
-    <md-card-title-group>
-      <md-card-title>{{'ABOUT_DOWNLOAD' | translate}}</md-card-title>
+  <a mat-list-item class="link" href="{{getPdfUrl()}}" download>
+  <mat-card class="download">
+    <mat-card-title-group>
+      <mat-card-title>{{'ABOUT_DOWNLOAD' | translate}}</mat-card-title>
       <fa [name]="'file-pdf-o'" [border]=true [size]=3></fa>
-    </md-card-title-group>
-    <md-card-content>
+    </mat-card-title-group>
+    <mat-card-content>
       <p>
         {{getPdf()}}
       </p>
-    </md-card-content>
-  </md-card>
+    </mat-card-content>
+  </mat-card>
   </a>
   </div>
 </div>

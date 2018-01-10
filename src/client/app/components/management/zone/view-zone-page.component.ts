@@ -27,7 +27,7 @@ import { SiteAction } from '../../../modules/datas/actions/index';
   selector: 'bc-view-zone-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <md-card-title>{{ 'ZONES' | translate }}</md-card-title>
+    <mat-card-title>{{ 'ZONES' | translate }}</mat-card-title>
     <bc-zone 
       [site]="site$ | async"
       [zone]="zone$ | async">

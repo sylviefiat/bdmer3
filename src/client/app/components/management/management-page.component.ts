@@ -18,15 +18,15 @@ import { Country, User } from '../../modules/countries/models/country';
   moduleId: module.id,
   selector: 'bc-data-page',
   template: `
-    <md-card>
-      <md-card-title>Data management</md-card-title>
-    </md-card>
+    <mat-card>
+      <mat-card-title>Data management</mat-card-title>
+    </mat-card>
     <bc-choose [user]="user$ | async" [countries]="countries$ | async" [currentCountry]="country$ | async"></bc-choose>
     <bc-data [country]="country$ | async"></bc-data>
   `,
   styles: [
     `
-    md-card-title {
+    mat-card-title {
       display: flex;
       justify-content: center;
     }

@@ -1,47 +1,47 @@
 
   <div [formGroup]="zoneForm">
-    <md-card-content> 
-      <md-input-container>
-        <input type="text" mdInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
+    <mat-card-content> 
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
         <div class="hint">{{ 'ZONE_CODE_EX' | translate }}</div>
-      </md-input-container>          
+      </mat-input-container>          
     
-      <md-input-container>
-        <input type="text" mdInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface" required>m²
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface" required>m²
         <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>    
-      </md-input-container>          
-    </md-card-content>
+      </mat-input-container>          
+    </mat-card-content>
     
-    <md-card-content>
-      <md-card formArrayName="transects" class="full">
-          <md-card-subtitle>{{ 'TRANSECTS' | translate }}</md-card-subtitle>
+    <mat-card-content>
+      <mat-card formArrayName="transects" class="full">
+          <mat-card-subtitle>{{ 'TRANSECTS' | translate }}</mat-card-subtitle>
           <div *ngFor="let transect of zoneForm.controls.transects.controls; let j=index;" class="panel">          
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeTansect(j)"></fa>
             <div [formGroupName]="j">
               <bc-transect-form [transect]="transect" [transectForm]="zoneForm.controls.transects.controls[j]"></bc-transect-form>
             </div>
           </div>
-          <md-card-actions>
+          <mat-card-actions>
             <a class="action" (click)="addTransect()">
               {{ 'ADD_TRANSECT' | translate }}
             </a>
-          </md-card-actions>
-      </md-card>    
-    </md-card-content>
-    <md-card-content>
-      <md-card formArrayName="zonePreferences" class="full">
-          <md-card-subtitle>{{ 'ZONES_PREF' | translate }}</md-card-subtitle>
+          </mat-card-actions>
+      </mat-card>    
+    </mat-card-content>
+    <mat-card-content>
+      <mat-card formArrayName="zonePreferences" class="full">
+          <mat-card-subtitle>{{ 'ZONES_PREF' | translate }}</mat-card-subtitle>
           <div *ngFor="let zonePreference of zoneForm.controls.zonePreferences.controls; let i=index;" class="panel">          
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZonePreference(i)"></fa>
             <div [formGroupName]="i">
               <!--<bt-zone-preference-form [group]="zoneForm.controls.transects.controls[i]"></bt-zone-preference-form>-->
             </div>
           </div>
-          <md-card-actions>
+          <mat-card-actions>
             <a class="action" (click)="addZonePreference()">
               {{ 'ADD_ZONE_PREF' | translate }}
             </a>
-          </md-card-actions>
-      </md-card>
-    </md-card-content>
+          </mat-card-actions>
+      </mat-card>
+    </mat-card-content>
   </div>

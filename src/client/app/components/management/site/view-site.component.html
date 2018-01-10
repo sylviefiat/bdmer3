@@ -1,29 +1,29 @@
-<md-card *ngIf="site">
-      <md-card-title-group>      
-          <md-card-title><fa [name]="'map-marker'" [border]=false [size]=1 ></fa> {{ site.code }}</md-card-title>
-      </md-card-title-group>
+<mat-card *ngIf="site">
+      <mat-card-title-group>      
+          <mat-card-title><fa [name]="'map-marker'" [border]=false [size]=1 ></fa> {{ site.code }}</mat-card-title>
+      </mat-card-title-group>
       
-      <md-card-content>
+      <mat-card-content>
           <div>{{ site.description }}</div> 
-      </md-card-content>
+      </mat-card-content>
 
       <div>
-        <md-list *ngIf="site.zones" flex>
-          <md-card-subtitle class="md-no-sticky">{{ 'ZONES' | translate }}</md-card-subtitle>
-          <md-list-item class="link"  *ngFor="let zone of site.zones;" (click)="visitZone(zone.code)">
+        <mat-list *ngIf="site.zones" flex>
+          <mat-card-subtitle class="mat-no-sticky">{{ 'ZONES' | translate }}</mat-card-subtitle>
+          <mat-list-item class="link"  *ngFor="let zone of site.zones;" (click)="visitZone(zone.code)">
               <fa [name]="'street-view'" [border]=false [size]=1 ></fa>
               <p>{{zone.code}} -<span class="soustexte">{{zone.transects.length}} transects, {{zone.zonePreferences.length}} zones de préférence espèces</span></p>
-          </md-list-item>
-        </md-list>
+          </mat-list-item>
+        </mat-list>
      </div>
 
-      <md-card-actions align="space-between">
-        <button md-raised-button color="warn" (click)="edit.emit(site)">
+      <mat-card-actions align="space-between">
+        <button mat-raised-button color="warn" (click)="edit.emit(site)">
         Edit Site
         </button>
-        <button md-raised-button color="warn" (click)="deleteSite()">
+        <button mat-raised-button color="warn" (click)="deleteSite()">
         Remove Site
         </button>
 
-      </md-card-actions>
-</md-card>
+      </mat-card-actions>
+</mat-card>

@@ -1,9 +1,9 @@
-<md-card *ngIf="zone">
-      <md-card-title-group>      
-          <md-card-title>{{ zone.code }}</md-card-title>
-          <md-card-subtitle>{{ 'SURFACE' | translate }} : {{ zone.surface }}m²</md-card-subtitle>
-      </md-card-title-group>
+<mat-card *ngIf="zone">
+      <mat-card-title-group>      
+          <mat-card-title>{{ zone.code }}</mat-card-title>
+          <mat-card-subtitle>{{ 'SURFACE' | translate }} : {{ zone.surface }}m²</mat-card-subtitle>
+      </mat-card-title-group>
 
       <bc-transect *ngFor="let transect of zone.transects" [transect]="transect"></bc-transect>
 
-</md-card>
+</mat-card>

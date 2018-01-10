@@ -1,8 +1,8 @@
-<md-card>
-      <md-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 ></fa>{{ 'IMPORT_SPECIES' | translate }}</md-card-title>
-      <md-card-subtitle>{{'IMPORT_SPECIES_DESC' | translate }}</md-card-subtitle>
+<mat-card>
+      <mat-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 ></fa>{{ 'IMPORT_SPECIES' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{'IMPORT_SPECIES_DESC' | translate }}</mat-card-subtitle>
       
-      <md-card-content align="center">
+      <mat-card-content align="center">
       <p>
         <button (click)="fileInput.click()">
           <fa [name]="'upload'" [border]=true [size]=1></fa>
@@ -20,16 +20,16 @@
         </button>
       </p>
       <p id="help" *ngIf="needHelp">
-        <a md-list-item class="link" href="{{getCsvSpeciesUrl()}}" download>
+        <a mat-list-item class="link" href="{{getCsvSpeciesUrl()}}" download>
           {{ 'DOWNLOAD_CSV_SPECIES' | translate }}
           <fa [name]="'download'" [border]=true [size]=1></fa>
         </a>
       </p>
-      </md-card-content>
-      <md-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</md-card-content>
-      <md-card-content *ngIf="msg$ | async" align="start">
+      </mat-card-content>
+      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
+      <mat-card-content *ngIf="msg$ | async" align="start">
           <p class="msg">{{ msg$ | async }}</p>
          <p class="actionButtons"><a (click)="return()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
-      </md-card-content> 
+      </mat-card-content> 
 
-    </md-card>
+    </mat-card>

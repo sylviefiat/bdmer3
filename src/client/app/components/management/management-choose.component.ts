@@ -15,11 +15,13 @@ import { IAppState } from '../../modules/ngrx/index';
   moduleId: module.id,
   selector: 'bc-choose',
   template: `
-      <md-card *ngIf="user.countryCode==='AA'">
-      <md-select  placeholder="Select country" [ngModel]="currentCountry" (change)="setCountry($event.value)">
-          <md-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</md-option>
-      </md-select>
-      </md-card>
+      <mat-card *ngIf="user.countryCode==='AA'">
+      <mat-form-field>
+      <mat-select  placeholder="Select country" [ngModel]="currentCountry" (change)="setCountry($event.value)">
+          <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
+      </mat-select>
+      </mat-form-field>
+      </mat-card>
   `,
   styles: [
     `

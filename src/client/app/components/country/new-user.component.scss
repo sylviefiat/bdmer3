@@ -3,20 +3,20 @@
       justify-content: center;
       margin: 72px 0;
     }
-    md-card-title,
-    md-card-content {
+    mat-card-title,
+    mat-card-content {
       display: flex;
       justify-content: space-between;
     }
-    md-card-content form {
+    mat-card-content form {
       width: 100%;
     }
-    md-card-content .mat-card-sm-image {
+    mat-card-content .mat-card-sm-image {
       margin-left: 10px;
       width: 3em !important;
       height: 2em !important;
     }
-    md-input-container {
+    mat-input-container {
       padding-left: 1em;
     }
     input {

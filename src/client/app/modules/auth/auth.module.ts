@@ -2,7 +2,6 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf,NO_ERRORS_SCHEMA, CUS
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -19,7 +18,6 @@ import { AuthEffects } from './effects/auth.effects';
     CommonModule, 
     FormsModule,
     ReactiveFormsModule, 
-    MaterialModule,
     RouterModule,
     SharedModule,
     MultilingualModule,

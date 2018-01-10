@@ -51,6 +51,8 @@
   "LEGAL_DIM":"Dimensions de pêche",
   "COUNTRY":"Pays",
   "MILLIMETER_ABR":"mm",
+  "SPECIES_EDIT":"Editer l'espèce",
+  "SPECIES_DELETE":"Supprimer l'espèce",
   "SITES":"Sites",
   "SITE":"Site",  
   "SITE_MODIFY":"Ajouter, Importer ou Editer un site",

@@ -10,24 +10,24 @@ import { WindowService } from './../../modules/core/services/index';
 @Component({
   selector: 'bc-country-detail',
   template: `
-    <md-card *ngIf="country">
-      <md-card-title-group>
-        <md-card-title>{{ name }}</md-card-title>
-        <img md-card-sm-image *ngIf="flag" [src]="flag"/>
-      </md-card-title-group>
-      <md-card-content>
-        <md-card-subtitle>Users</md-card-subtitle>
+    <mat-card *ngIf="country">
+      <mat-card-title-group>
+        <mat-card-title>{{ name }}</mat-card-title>
+        <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
+      </mat-card-title-group>
+      <mat-card-content>
+        <mat-card-subtitle>Users</mat-card-subtitle>
         <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="true"></bc-user-detail>
-      </md-card-content>
-      <md-card-actions align="start">
-        <button md-raised-button color="primary" (click)="addUser()">
+      </mat-card-content>
+      <mat-card-actions align="start">
+        <button mat-raised-button color="primary" (click)="addUser()">
           Add user
         </button>
-        <button *ngIf="isNotAdminCountry() && isUserAdmin()" md-raised-button color="warn" (click)="deleteCountry()">
+        <button *ngIf="isNotAdminCountry() && isUserAdmin()" mat-raised-button color="warn" (click)="deleteCountry()">
           Delete Country
         </button>
-      </md-card-actions>
-    </md-card>
+      </mat-card-actions>
+    </mat-card>
 
   `,
   styles: [
@@ -37,13 +37,13 @@ import { WindowService } from './../../modules/core/services/index';
       justify-content: center;
       margin: 75px 0;
     }
-    md-card {
+    mat-card {
       max-width: 600px;
       min-width: 400px;
       min-height: 300px;
       margin: 15px;
     }
-    md-card-title-group {
+    mat-card-title-group {
       margin-left: 0;
     }
     img {
@@ -54,13 +54,13 @@ import { WindowService } from './../../modules/core/services/index';
       height: auto;
       margin-left: 5px;
     }
-    md-card-content {
+    mat-card-content {
       margin: 15px 0 50px;
     }
-    md-card-actions {
+    mat-card-actions {
       margin: 25px 0 0 !important;
     }
-    md-card-footer {
+    mat-card-footer {
       padding: 0 25px 25px;
       position: relative;
     }

@@ -23,12 +23,12 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-md-card {
+mat-card {
       max-width: 500px;
       margin:10px;
 }
 
-a md-card.download {
+a mat-card.download {
   background-color:lightgrey;
 }
 
@@ -36,6 +36,6 @@ a {
   text-decoration: none;
 }
 
-a:hover md-card.download {
+a:hover mat-card.download {
   background-color:grey;
 }

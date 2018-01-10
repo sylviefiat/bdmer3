@@ -1,8 +1,8 @@
-<md-card>
-      <md-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>{{ 'IMPORT_ZONES' | translate }}</md-card-title>
-      <md-card-subtitle>{{ 'IMPORT_ZONES_DESC' | translate }} {{ site.code }}</md-card-subtitle>
+<mat-card>
+      <mat-card-title class="toolbar"><fa [name]="'street-view'" [border]=true [size]=1 ></fa>{{ 'IMPORT_ZONES' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'IMPORT_ZONES_DESC' | translate }} {{ site.code }}</mat-card-subtitle>
       
-      <md-card-content align="center">
+      <mat-card-content align="center">
       <p>
         <button (click)="fileInput.click()">
           <fa [name]="'upload'" [border]=true [size]=1></fa>
@@ -20,16 +20,16 @@
         </button>
       </p>
       <p id="help" *ngIf="needHelp">
-        <a md-list-item class="link" href="{{getCsvZonesUrl()}}" download>
+        <a mat-list-item class="link" href="{{getCsvZonesUrl()}}" download>
           {{ 'DOWNLOAD_CSV_ZONES' | translate }}
           <fa [name]="'download'" [border]=true [size]=1></fa>
         </a>
       </p>
-      </md-card-content>
-      <md-card-content class="error" *ngIf="errorMsg" align="center">{{ errorMsg }}</md-card-content>
-      <md-card-content *ngIf="msg" align="start">
+      </mat-card-content>
+      <mat-card-content class="error" *ngIf="errorMsg" align="center">{{ errorMsg }}</mat-card-content>
+      <mat-card-content *ngIf="msg" align="start">
           <p class="msg">{{ msg }}</p>
           <p class="actionButtons"><a (click)="cancel()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
-      </md-card-content> 
+      </mat-card-content> 
 
-    </md-card>
+    </mat-card>

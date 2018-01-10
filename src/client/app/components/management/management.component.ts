@@ -55,8 +55,11 @@ export class ManagementComponent implements OnInit {
         this.routerext.navigate(['/speciesImport']);
     }
 
+    viewSpecies() {
+        this.routerext.navigate(['/species/' + this.species._id]);
+    }
+
     editSpecies() {
-        console.log(this.species);
         this.routerext.navigate(['/speciesForm/' + this.species._id]);
     }
 
@@ -66,6 +69,10 @@ export class ManagementComponent implements OnInit {
 
     newSiteImport() {
         this.routerext.navigate(['/siteImport']);
+    }
+
+    viewSite() {
+        this.routerext.navigate(['/site/' + this.site._id]);
     }
 
     editSite() {
@@ -88,6 +95,15 @@ export class ManagementComponent implements OnInit {
 
     importZone() {
         this.routerext.navigate(['/zoneImport/' + this.site._id], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    viewZone() {
+        this.routerext.navigate(['/zone/' + this.site._id + "/" + this.zone.code], {
             transition: {
                 duration: 800,
                 name: 'slideTop',
@@ -129,6 +145,15 @@ export class ManagementComponent implements OnInit {
         });
     }
 
+    viewTransect() {
+        this.routerext.navigate(['/transect/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
     editTransect() {
         this.routerext.navigate(['/transectForm/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
             transition: {
@@ -161,6 +186,15 @@ export class ManagementComponent implements OnInit {
         });
     }
 
+    viewZonePref() {
+        this.routerext.navigate(['/zonePreference/' + this.site._id + "/" + this.zone.code + "/" + this.zonePreference.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
     editZonePref() {
         this.routerext.navigate(['/zonePreferenceForm/' + this.site._id + "/" + this.zone.code + "/" + this.zonePreference.code], {
             transition: {
@@ -186,6 +220,15 @@ export class ManagementComponent implements OnInit {
 
     importCount() {
         this.routerext.navigate(['/countImport/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code], {
+            transition: {
+                duration: 800,
+                name: 'slideTop',
+            }
+        });
+    }
+
+    viewCount() {
+        this.routerext.navigate(['/count/' + this.site._id + "/" + this.zone.code + "/" + this.transect.code + "/" + this.count.code], {
             transition: {
                 duration: 800,
                 name: 'slideTop',

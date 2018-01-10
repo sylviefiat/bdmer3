@@ -6,38 +6,38 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   selector: 'bc-country-preview',
   template: `
     <a [routerLink]="['/countries', id]">
-      <md-card>
-        <md-card-title-group>
-          <img md-card-sm-image *ngIf="flag" [src]="flag"/>
-          <md-card-title>{{ name }}</md-card-title>
-          <md-card-subtitle>{{ code }}</md-card-subtitle>
-        </md-card-title-group>
-        <md-card-content>
-          <md-card-subtitle>Users</md-card-subtitle>
+      <mat-card>
+        <mat-card-title-group>
+          <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
+          <mat-card-title>{{ name }}</mat-card-title>
+          <mat-card-subtitle>{{ code }}</mat-card-subtitle>
+        </mat-card-title-group>
+        <mat-card-content>
+          <mat-card-subtitle>Users</mat-card-subtitle>
           <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="false"></bc-user-detail>
-        </md-card-content>
-      </md-card>
+        </mat-card-content>
+      </mat-card>
     </a>
   `,
   styles: [
     `
-    md-card {
+    mat-card {
       width: 400px;
       height: 300px;
       margin: 15px;
     }
     @media only screen and (max-width: 768px) {
-      md-card {
+      mat-card {
         margin: 15px 0 !important;
       }
     }
-    md-card:hover {
+    mat-card:hover {
       box-shadow: 3px 3px 16px -2px rgba(0, 0, 0, .5);
     }
-    md-card-title {
+    mat-card-title {
       margin-right: 10px;
     }
-    md-card-title-group {
+    mat-card-title-group {
       margin: 0;
     }
     a {
@@ -52,7 +52,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
       height: auto;
       margin-left: 5px;
     }
-    md-card-content {
+    mat-card-content {
       margin-top: 15px;
       margin: 15px 0 0;
     }
@@ -60,7 +60,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
       display: inline-block;
       font-size: 13px;
     }
-    md-card-footer {
+    mat-card-footer {
       padding: 0 25px 25px;
     }
   `,

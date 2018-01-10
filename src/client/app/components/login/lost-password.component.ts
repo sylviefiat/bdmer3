@@ -6,27 +6,27 @@ import { Authenticate } from '../../modules/auth/models/user';
   moduleId: module.id,
   selector: 'bc-lost-password-form',
   template: `
-    <md-card>
-      <md-card-title>Recover password</md-card-title>
-      <md-card-content>
+    <mat-card>
+      <mat-card-title>Recover password</mat-card-title>
+      <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'mail-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="text" mdInput placeholder="Email" formControlName="email">
-            </md-input-container>
+            <mat-input-container>
+              <input type="text" matInput placeholder="Email" formControlName="email">
+            </mat-input-container>
           </p>
           
           <p *ngIf="errorMessage" class="mailError">
             {{ errorMessage }}
           </p> 
           <p class="lostPasswordButton">
-            <button type="submit" md-button>Send me my password</button>
+            <button type="submit" mat-button>Send me my password</button>
           </p>
         </form>
-      </md-card-content>
+      </mat-card-content>
 
-    </md-card>
+    </mat-card>
 
   `,
   styles: [
@@ -36,22 +36,22 @@ import { Authenticate } from '../../modules/auth/models/user';
       justify-content: center;
       margin: 75px 0;
     }
-    md-card {
+    mat-card {
       max-width: 600px;
       min-width: 400px;
       min-height: 300px;
       margin: 15px;
     }
-    md-card-title-group {
+    mat-card-title-group {
       margin-left: 0;
     }
-    md-card-content {
+    mat-card-content {
       margin: 15px 0 50px;
     }
-    md-card-actions {
+    mat-card-actions {
       margin: 25px 0 0 !important;
     }
-    md-card-footer {
+    mat-card-footer {
       padding: 0 25px 25px;
       position: relative;
     }

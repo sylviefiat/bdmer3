@@ -1,71 +1,73 @@
-<md-card *ngIf="species">
-      <md-card-title-group>      
-          <md-card-title> {{ species.scientificName }} - {{ species.code }}</md-card-title>
-          <md-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</md-card-subtitle>
-      </md-card-title-group>
-      
-      <md-card-content>
+<mat-card *ngIf="species">
+      <mat-card-title-group>      
+          <mat-card-title> {{ species.scientificName }} <span class="codename">({{ species.code }})</span></mat-card-title>
+          <mat-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</mat-card-subtitle>
+          <img mat-card-sm-image src="/assets/img/{{ species.code }}.jpg">
+      </mat-card-title-group>
+      <mat-card-content>
         <div>
           <h4>{{ 'LLW' | translate }}</h4>
-          <div>{{ 'COEFA' | translate }}: {{ species.LLW.coefA }}</div> 
-          <div>{{ 'COEFB' | translate }}: {{ species.LLW.coefB }}</div>
+          <div><span class="smallcaps">{{ 'COEFA' | translate }}:</span> {{ species.LLW.coefA }}</div> 
+          <div><span class="smallcaps">{{ 'COEFB' | translate }}:</span> {{ species.LLW.coefB }}</div>
         </div>
         <div>
           <h4>{{ 'LW' | translate }}</h4>
-          <div>{{ 'COEFA' | translate }}: {{ species.LW.coefA }}</div>
-          <div>{{ 'COEFB' | translate }}: {{ species.LW.coefB }}</div>
+          <div><span class="smallcaps">{{ 'COEFA' | translate }}:</span> {{ species.LW.coefA }}</div>
+          <div><span class="smallcaps">{{ 'COEFB' | translate }}:</span> {{ species.LW.coefB }}</div>
       </div>
-      </md-card-content>
-      <md-card-content>
+      </mat-card-content>
+      <mat-card-content>
         <div>
           <h4>{{ 'CONVERSIONS' | translate }}</h4>
-          <div>{{ 'SALT' | translate }}: {{ species.conversions.salt }}</div>
-          <div>{{ 'BDM' | translate }}: {{ species.conversions.BDM }}</div>
+          <div><span class="smallcaps">{{ 'SALT' | translate }}:</span> {{ species.conversions.salt }}</div>
+          <div><span class="smallcaps">{{ 'BDM' | translate }}:</span> {{ species.conversions.BDM }}</div>
       </div>
         <div>
           <h4>{{ 'BIOLOGIC_DIM' | translate }}</h4>
-          <div>{{ 'LONG_MAX' | translate }}: {{ species.biologicDimensions.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
-          <div>{{ 'LARG_MAX' | translate }}: {{ species.biologicDimensions.largMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
+          <div><span class="smallcaps">{{ 'LONG_MAX' | translate }}:</span> {{ species.biologicDimensions.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
+          <div><span class="smallcaps">{{ 'LARG_MAX' | translate }}:</span> {{ species.biologicDimensions.largMax }}{{ 'MILLIMETER_ABR' | translate }}</div>
       </div>
-      </md-card-content>
-      <md-card-content class="one">
+      </mat-card-content>
+      <mat-card-content class="one">
         <div flex>
           <h4>{{ 'DISTRIBUTION' | translate }}</h4>
           <div>{{ species.distribution }}</div>
       </div>
-      </md-card-content>
-      <md-card-content class="one">
+      </mat-card-content>
+      <mat-card-content class="one">
         <div flex>
           <h4>{{ 'HABITAT_PREF' | translate }}</h4>
           <div>{{ species.habitatPreference }}</div>
       </div>
-      </md-card-content>
-      <md-card-content class="one">
-        <h4>{{ 'LEGAL_DIM' | translate }}</h4>
-      </md-card-content>
-       <md-card-content class="table">
-        <div>
-          <md-card-subtitle>{{ 'COUNTRY' | translate }}</md-card-subtitle>          
-          <div>{{ 'LONG_MIN' | translate }}</div>
-          <div>{{ 'LONG_MAX' | translate }}</div>  
+      </mat-card-content>
+      <mat-card-content class="flexcolumn">
+        <div class="one">
+          <h4>{{ 'LEGAL_DIM' | translate }}</h4>
         </div>
-        <div *ngFor="let dim of species.legalDimensions">
-          <md-card-subtitle>{{ dim.codeCountry }}</md-card-subtitle>          
-          <div>{{ dim.longMin }}{{ 'MILLIMETER_ABR' | translate }}</div>
-          <div>{{ dim.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>  
-        </div>    
-      </md-card-content>
-      <md-card-footer class="footer">
+        <div class="table">
+          <div>
+            <mat-card-subtitle>{{ 'COUNTRY' | translate }}</mat-card-subtitle>          
+            <div  class="smallcaps">{{ 'LONG_MIN' | translate }}</div>
+            <div  class="smallcaps">{{ 'LONG_MAX' | translate }}</div>  
+          </div>
+          <div *ngFor="let dim of species.legalDimensions">
+            <mat-card-subtitle>{{ dim.codeCountry }}</mat-card-subtitle>          
+            <div>{{ dim.longMin }}{{ 'MILLIMETER_ABR' | translate }}</div>
+            <div>{{ dim.longMax }}{{ 'MILLIMETER_ABR' | translate }}</div>  
+          </div>  
+        </div>  
+      </mat-card-content>
+      <mat-card-footer class="footer">
         
-      </md-card-footer>
+      </mat-card-footer>
 
-      <md-card-actions align="space-between">
-        <button md-raised-button color="warn" (click)="edit.emit(species)">
-        Edit Species
+      <mat-card-actions align="space-between">
+        <button mat-raised-button color="warn" (click)="edit.emit(species)">
+       {{ 'SPECIES_EDIT' | translate }}
         </button>
-        <button *ngIf="isUserAdmin()" md-raised-button color="warn" (click)="deleteSpecies()">
-        Remove Species
+        <button *ngIf="isUserAdmin()" mat-raised-button color="warn" (click)="deleteSpecies()">
+        {{ 'SPECIES_DELETE' | translate }}
         </button>
 
-      </md-card-actions>
-</md-card>
+      </mat-card-actions>
+</mat-card>

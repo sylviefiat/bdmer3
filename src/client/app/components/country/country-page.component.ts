@@ -12,22 +12,22 @@ import { Country } from '../../modules/countries/models/country';
   selector: 'bc-country-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <md-card>
-      <md-card-title>Countries in BDMER</md-card-title>
-    </md-card>
+    <mat-card>
+      <mat-card-title>Countries in BDMER</mat-card-title>
+    </mat-card>
     <bc-country-preview-list [countries]="countries$ | async"></bc-country-preview-list>
-    <md-card>
-      <md-card-actions align="start">
+    <mat-card>
+      <mat-card-actions align="start">
 
-        <button md-raised-button color="primary" (click)="newCountry()">
+        <button mat-raised-button color="primary" (click)="newCountry()">
         New Country
         </button>
-      </md-card-actions>
-    </md-card>
+      </mat-card-actions>
+    </mat-card>
   `,
   styles: [
     `
-    md-card-title {
+    mat-card-title {
       display: flex;
       justify-content: center;
     }

@@ -1,40 +1,40 @@
-<md-card>
-  <md-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">{{ 'ADD_SITE_COUNTRY' | translate }} {{country.name}}</span></md-card-title>
-  <md-card-content>
+<mat-card>
+  <mat-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">{{ 'ADD_SITE_COUNTRY' | translate }} {{country.name}}</span></mat-card-title>
+  <mat-card-content>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-        <md-card class="row">
+        <mat-card class="row">
           <p>
-          <md-input-container class="full">
-            <input class="full" type="text" mdInput placeholder="Code site" formControlName="code" required>
+          <mat-input-container class="full">
+            <input class="full" type="text" matInput placeholder="Code site" formControlName="code" required>
             <div class="hint">{{ 'EX_SITE_CODE' | translate }}
               <span class="warning"> {{ 'EX_SITE_CODE_FORBIDDEN' | translate }} </span>
             </div>
-          </md-input-container>
+          </mat-input-container>
           </p>
           <p>
-          <md-input-container>
-            <textarea md-maxlength="150" rows="5" mdInput formControlName="description"  md-select-on-focus></textarea>
+          <mat-input-container>
+            <textarea mat-maxlength="150" rows="5" matInput formControlName="description"  mat-select-on-focus></textarea>
             <div class="hint">{{ 'EX_SITE_DESC' | translate }}</div> 
-          </md-input-container>            
+          </mat-input-container>            
         </p>
-        </md-card>
+        </mat-card>
         <!--names-->
-        <md-card formArrayName="zones">
-          <md-card-subtitle>{{ 'ZONES' | translate }} </md-card-subtitle>
-          <md-card *ngFor="let zone of site.zones; let i=index;" class="panel"> 
+        <mat-card formArrayName="zones">
+          <mat-card-subtitle>{{ 'ZONES' | translate }} </mat-card-subtitle>
+          <mat-card *ngFor="let zone of site.zones; let i=index;" class="panel"> 
 
             <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZone(i)"></fa>
             <div [formGroupName]="i">
               <bc-zone-form [errorMessage]="errorMessage" [site]="site" [zone]="zone" [zoneForm]="form.controls.zones.controls[i]"></bc-zone-form>
             </div>
-          </md-card>
-          <md-card-actions>
+          </mat-card>
+          <mat-card-actions>
             <a class="action" (click)="addZone()">
               {{ 'ADD_ZONE' | translate }}
             </a>
-          </md-card-actions>
-        </md-card>
+          </mat-card-actions>
+        </mat-card>
 
         <p *ngIf="errorMessage" class="speciesError">
             {{ errorMessage }}
@@ -46,7 +46,7 @@
         </div>
      
     </form>
-  </md-card-content>
+  </mat-card-content>
     
 
-</md-card>
+</mat-card>

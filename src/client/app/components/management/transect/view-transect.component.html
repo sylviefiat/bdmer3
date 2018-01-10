@@ -1,9 +1,9 @@
-<md-card *ngIf="transect">
-      <md-card-title-group>      
-          <md-card-title>{{ transect.code }}</md-card-title>
-          <md-card-subtitle>{{ 'COORDINATES' | translate }} : {{ transect.latitude }} {{ transect.longitude }}</md-card-subtitle>
-      </md-card-title-group>
+<mat-card *ngIf="transect">
+      <mat-card-title-group>      
+          <mat-card-title>{{ transect.code }}</mat-card-title>
+          <mat-card-subtitle>{{ 'COORDINATES' | translate }} : {{ transect.latitude }} {{ transect.longitude }}</mat-card-subtitle>
+      </mat-card-title-group>
 
       <!--<bc-count *ngFor="let count of transect.counts" [count]="count"></bc-count>-->
 
-</md-card>
+</mat-card>

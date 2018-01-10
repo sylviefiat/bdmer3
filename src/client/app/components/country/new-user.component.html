@@ -1,46 +1,46 @@
-<md-card>
-      <md-card-title>New User</md-card-title>
-      <md-card-content>
+<mat-card>
+      <mat-card-title>New User</mat-card-title>
+      <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="text" mdInput placeholder="Username" formControlName="username">
-            </md-input-container>
+            <mat-input-container>
+              <input type="text" matInput placeholder="Username" formControlName="username">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="text" mdInput placeholder="Prénom" formControlName="surname">
-            </md-input-container>
+            <mat-input-container>
+              <input type="text" matInput placeholder="Prénom" formControlName="surname">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="text" mdInput placeholder="Nom" formControlName="name">
-            </md-input-container>
+            <mat-input-container>
+              <input type="text" matInput placeholder="Nom" formControlName="name">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'envelope-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="email" mdInput placeholder="Email" formControlName="email">
-            </md-input-container>
+            <mat-input-container>
+              <input type="email" matInput placeholder="Email" formControlName="email">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'key'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="password" mdInput placeholder="Password" formControlName="password">
-            </md-input-container>
+            <mat-input-container>
+              <input type="password" matInput placeholder="Password" formControlName="password">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'pencil'" [border]=false [size]=2></fa>
-            <md-radio-group formControlName="role">
-              <md-radio-button value="EDITOR">{{ 'EDITOR'  | translate}}</md-radio-button>
-              <md-radio-button value="USER">{{ 'USER'  | translate}}</md-radio-button>
-            </md-radio-group>
+            <mat-radio-group formControlName="role">
+              <mat-radio-button value="EDITOR">{{ 'EDITOR'  | translate}}</mat-radio-button>
+              <mat-radio-button value="USER">{{ 'USER'  | translate}}</mat-radio-button>
+            </mat-radio-group>
           </p>
           <p>
-            <img md-card-sm-image *ngIf="flag" [src]="flag"/>
+            <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
             {{name}}
           </p>
           <p *ngIf="errorMessage" class="loginError">
@@ -49,9 +49,9 @@
 
           
           <p class="SaveButtons">
-            <button type="submit" md-button>Save</button>
+            <button type="submit" mat-button>Save</button>
           </p>
         </form>
-      </md-card-content>
+      </mat-card-content>
 
-    </md-card>
+    </mat-card>

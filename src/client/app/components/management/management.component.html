@@ -1,16 +1,19 @@
 
 <div class="container">
-     <md-card *ngIf="isCountryOk"> 
-      <md-card-title-group>
-        <md-card-title>{{'SITES' | translate}} {{country.name}}</md-card-title>
+     <mat-card *ngIf="isCountryOk"> 
+      <mat-card-title-group>
+        <mat-card-title>{{'SITES' | translate}} {{country.name}}</mat-card-title>
         <fa [name]="'map-marker'" [border]=true [size]=3></fa>
-      </md-card-title-group>
-      <md-card-content>
+      </mat-card-title-group>
+      <mat-card-content>
           <h4>{{'SITE_MODIFY' | translate}}</h4>
-          <div class="space-around">            
-            <md-select *ngIf="(siteList$ | async)?.length>0"  placeholder="{{'SELECT_SITE' | translate}}" [(ngModel)]="site" (change)="loadZone()">
-              <md-option *ngFor="let site of siteList$ | async" [value]="site">{{ site.code }}</md-option>
-            </md-select>
+          <div class="space-around">  
+            <mat-form-field>      
+              <mat-select *ngIf="(siteList$ | async)"  placeholder="{{'SELECT_SITE' | translate}}" [(ngModel)]="site" (change)="loadZone()">
+                <mat-option *ngFor="let site of siteList$ | async" [value]="site">{{ site.code }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button *ngIf="(siteList$ | async)" [disabled]="!site" (click)="viewSite()" title="{{'VIEW' | translate}}"><fa [name]="'eye'" [border]=false [size]=1></fa></button>
              <button  *ngIf="(siteList$ | async)?.length>0" [disabled]="!site" (click)="editSite()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
            
              <button (click)="newSiteForm()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
@@ -18,9 +21,11 @@
           </div>
           <h4 *ngIf="site">{{'ZONE_MODIFY' | translate}}</h4>
           <div class="space-around" *ngIf="site">
-            <md-select *ngIf="(zoneList$ | async)?.length>0" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone" (change)="loadTransect()">
-              <md-option *ngFor="let zone of zoneList$ | async" [value]="zone">{{ zone.code }}</md-option>
-            </md-select>
+            <mat-form-field>   
+              <mat-select *ngIf="(zoneList$ | async)" placeholder="{{'SELECT_ZONE' | translate}}" [(ngModel)]="zone" (change)="loadTransect()">
+                <mat-option *ngFor="let zone of zoneList$ | async" [value]="zone">{{ zone.code }}</mat-option>
+              </mat-select>
+            </mat-form-field> 
              <button *ngIf="(zoneList$ | async)?.length>0"  [disabled]="!zone" (click)="editZone()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
              <button (click)="addZone()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
              <button (click)="importZone()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
@@ -28,36 +33,42 @@
           
           <h4 *ngIf="zone">{{'TRANSECT_MODIFY' | translate}}</h4>
           <div class="space-around" *ngIf="zone">
-            <md-select *ngIf="(transectList$ | async)?.length>0" placeholder="{{'SELECT_TRANSECT' | translate}}" [(ngModel)]="transect" (change)="loadCount()">
-              <md-option *ngFor="let transect of transectList$ | async" [value]="transect">{{ transect.code }}</md-option>
-            </md-select>
+            <mat-form-field> 
+              <mat-select *ngIf="(transectList$ | async)" placeholder="{{'SELECT_TRANSECT' | translate}}" [(ngModel)]="transect" (change)="loadCount()">
+                <mat-option *ngFor="let transect of transectList$ | async" [value]="transect">{{ transect.code }}</mat-option>
+              </mat-select>
+            </mat-form-field> 
              <button *ngIf="(transectList$ | async)?.length>0"  [disabled]="!zone" (click)="editTransect()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
              <button (click)="addTransect()" title="{{'ADD' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
              <button (click)="importTransect()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
           </div>
-      </md-card-content>
-    </md-card>    
 
-    <md-card>
-      <md-card-title-group>
-        <md-card-title>{{'SPECIES' | translate}}</md-card-title>
+      </mat-card-content>
+    </mat-card>    
+
+    <mat-card>
+      <mat-card-title-group>
+        <mat-card-title>{{'SPECIES' | translate}}</mat-card-title>
         <fa [name]="'paw'" [border]=true [size]=3></fa>
-      </md-card-title-group>
-      <md-card-content>
+      </mat-card-title-group>
+      <mat-card-content>
         <div >
           <h4>{{'SPECIES_MODIFY' | translate}}</h4>
           <div class="space-around">
-              <md-select *ngIf="(speciesList$ | async)?.length>0" placeholder="{{'SELECT_SPECIES' | translate}}" [(ngModel)]="species">
-                <md-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</md-option>
-              </md-select>
-            <button *ngIf="(speciesList$ | async)?.length>0" [disabled]="!species" (click)="editSpecies()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
+            <mat-form-field> 
+              <mat-select *ngIf="(speciesList$ | async)" placeholder="{{'SELECT_SPECIES' | translate}}" [(ngModel)]="species">
+                <mat-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button *ngIf="(speciesList$ | async)" [disabled]="!species" (click)="viewSpecies()" title="{{'VIEW' | translate}}"><fa [name]="'eye'" [border]=false [size]=1></fa></button>
+            <button *ngIf="(speciesList$ | async)" [disabled]="!species" (click)="editSpecies()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
 
             <button (click)="newSpeciesForm()" title="{{'FORM' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
             <button (click)="newSpeciesImport()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
           </div>
         </div>
-      </md-card-content>
-    </md-card>    
+      </mat-card-content>
+    </mat-card>    
 
 </div>
  

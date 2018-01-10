@@ -54,6 +54,15 @@ export class ViewSpeciesPageComponent implements OnInit, OnDestroy {
     this.actionsSubscription.unsubscribe();
   }
 
+  viewSpecies(species: Species) {
+    this.routerext.navigate(['/species/' + species._id], {
+      transition: {
+        duration: 1000,
+        name: 'slideTop',
+      }
+    });
+  }
+
   editSpecies(species: Species) {
     this.routerext.navigate(['/speciesForm/' + species._id], {
       transition: {

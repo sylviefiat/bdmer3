@@ -1,18 +1,18 @@
-<md-card>
-      <md-card-title>Login</md-card-title>
-      <md-card-content>
+<mat-card>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="text" mdInput placeholder="Username" formControlName="username">
-            </md-input-container>
+            <mat-input-container>
+              <input type="text" matInput placeholder="Username" formControlName="username">
+            </mat-input-container>
           </p>
           <p>
             <fa [name]="'key'" [border]=false [size]=2></fa>
-            <md-input-container>
-              <input type="password" mdInput placeholder="Password" formControlName="password">
-            </md-input-container>
+            <mat-input-container>
+              <input type="password" matInput placeholder="Password" formControlName="password">
+            </mat-input-container>
           </p>
           <p *ngIf="errorMessage" class="loginError">
             {{ errorMessage }}
@@ -20,13 +20,13 @@
 
           
           <p class="loginButtons">
-            <button type="submit" md-button>Login</button>
+            <button type="submit" mat-button>Login</button>
           </p>
 
           <div class="actionButtons">
             <a [routerLink]="['/lostpassword']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Forgot password ?</a>
           </div>
         </form>
-      </md-card-content>
+      </mat-card-content>
 
-    </md-card>
+    </mat-card>
