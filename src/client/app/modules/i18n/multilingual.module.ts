@@ -27,11 +27,13 @@ export function translateLoaderFactory(http: Http) {
     CommonModule,
     HttpModule,
     FormsModule,
-    TranslateModule.forRoot([{
-      provide: TranslateLoader,
-      deps: [Http],
-      useFactory: (translateLoaderFactory)
-    }])
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        deps: [Http],
+        useFactory: (translateLoaderFactory)
+      }
+    }),
   ],
   declarations: [
     ...MULTILANG_COMPONENTS

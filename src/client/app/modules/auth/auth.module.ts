@@ -20,7 +20,7 @@ import { AuthEffects } from './effects/auth.effects';
     ReactiveFormsModule, 
     RouterModule,
     SharedModule,
-    MultilingualModule,
+    //MultilingualModule,
     EffectsModule.run(AuthEffects),
   ],
   declarations: [],

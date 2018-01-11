@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-// app
-import { LogService } from '../../../core/services/logging/log.service';
 
 @Component({
   moduleId: module.id,
@@ -13,9 +11,9 @@ import { LogService } from '../../../core/services/logging/log.service';
 })
 export class ToolbarComponent {
 
-  constructor(private log: LogService) {}
+  constructor() {}
 
   public openLanguages(e: any): void {
-    this.log.debug('openLanguages');
+    console.log('openLanguages');
   }
 }

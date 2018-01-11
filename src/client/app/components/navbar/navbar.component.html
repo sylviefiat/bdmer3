@@ -12,11 +12,11 @@
   <a [routerLink]="['/countries']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'COUNTRIES' | translate}}</a>
   <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MAP' | translate}}</a>
    <a [routerLink]="['/management']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MANAGE' | translate}}</a>
-  <a *ngIf="!isLoggedIn" [routerLink]="['/login']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+  <a *ngIf="!(isLogged$ | async)" [routerLink]="['/login']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
 	<fa [name]="'sign-in'" [border]=true></fa>
   	{{'LOGIN' | translate}}
   </a>
-  <a *ngIf="isLoggedIn" [routerLink]="['/logout']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+  <a *ngIf="(isLogged$ | async)" [routerLink]="['/logout']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
   <fa [name]="'sign-out'" [border]=true></fa>
     {{'LOGOUT' | translate}}
   </a>

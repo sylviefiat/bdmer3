@@ -10,7 +10,6 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 import { AgmCoreModule } from '@agm/core';
 
 // modules
-import { MultilingualModule } from '../i18n/index';
 import { SHARED_COMPONENTS } from './components/index';
 
 
@@ -21,7 +20,6 @@ const SHARED_MODULES: any[] = [
   HttpModule,
   FormsModule,
   ReactiveFormsModule,
-  MultilingualModule,
   BrowserAnimationsModule,
   MatCardModule,
   MatInputModule, 

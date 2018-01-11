@@ -1,5 +1,3 @@
-import { NavbarComponent } from './navbar/navbar.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
 import { NotFoundPageComponent } from './not-found-page';
 
 import { AddCommasPipe } from './pipes/add-commas';
@@ -10,8 +8,6 @@ import { HasIntersection } from './pipes/has-intersection';
 import { ConfirmDirective } from './directives/confirm.directive';
 
 export const SHARED_COMPONENTS: any[] = [
-  NavbarComponent,
-  ToolbarComponent,
   NotFoundPageComponent,
   AddCommasPipe, 
   EllipsisPipe,
@@ -20,8 +16,6 @@ export const SHARED_COMPONENTS: any[] = [
   ConfirmDirective
 ];
 
-export * from './navbar/navbar.component';
-export * from './toolbar/toolbar.component';
 export * from './not-found-page';
 export * from './pipes/add-commas';
 export * from './pipes/ellipsis';

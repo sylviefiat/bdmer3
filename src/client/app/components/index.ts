@@ -1,4 +1,6 @@
 import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
 import { MapComponent } from './map/map.component';
@@ -33,6 +35,8 @@ import { DATA_COMPONENTS } from './management/index';
 export const APP_COMPONENTS: any[] = [
   ...DATA_COMPONENTS,
   AppComponent,
+  NavbarComponent,
+  ToolbarComponent,
   AboutComponent,
   HomeComponent,
   MapComponent,
@@ -65,6 +69,8 @@ export const APP_COMPONENTS: any[] = [
 ];
 
 export * from './app.component';
+export * from './navbar/navbar.component';
+export * from './toolbar/toolbar.component';
 export * from './about/about.component';
 export * from './home/home.component';
 export * from './book/book-authors';

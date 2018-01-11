@@ -19,7 +19,7 @@ import { SpeciesService, SiteService } from './services/index';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    MultilingualModule,
+    //MultilingualModule,
     EffectsModule.run(SpeciesEffects),
     EffectsModule.run(SiteEffects),
   ],

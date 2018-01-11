@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Authenticate } from '../models/user';
+import { Authenticate, AuthInfo } from '../models/user';
 import { User, Country } from '../../countries/models/country';
 import { type } from '../../core/utils/index';
   
@@ -41,7 +41,7 @@ export class Login implements Action {
 export class LoginSuccess implements Action {
   readonly type = ActionTypes.LOGIN_SUCCESS;
 
-  constructor(public payload: {user: User,country: Country} ) {}
+  constructor(public payload: AuthInfo ) {}
 }
 
 export class LoginFailure implements Action {

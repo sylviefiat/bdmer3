@@ -14,9 +14,9 @@ export function authReducer(
       return {
         ...state,
         loggedIn: true,
-        role: action.payload.user.role,
-        user: action.payload.user,
-        country: action.payload.country,
+        role: action.payload.access_token.user.role,
+        user: action.payload.access_token.user,
+        country: action.payload.access_token.country,
         sessionLoaded: true
       };
     }

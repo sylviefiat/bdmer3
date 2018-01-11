@@ -12,8 +12,6 @@ import { ResponsePDB } from '../models/pouchdb';
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
 
-
-
 @Injectable()
 export class AuthService {
   public currentUser: User;

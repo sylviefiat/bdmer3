@@ -13,20 +13,30 @@ import { IAppState, getLatestURL } from '../../ngrx/index';
 import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
+import { Authenticate, AuthInfo } from '../models/user';
 import { User, Country } from '../../countries/models/country';
 
 
 @Injectable()
 export class AuthEffects {
+
+  public static readonly tokenItem = 'token';
+  public static readonly expirationTime = 10*60*1000;  // setup 10min before login expiration
+
   @Effect() login$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN)
     .map((action: AuthAction.Login) => action.payload)
     .exhaustMap(auth =>
       this.authService
         .login(auth)
-        .map((result: {user:User,country:Country}) => {
-          console.log(result);
-          return new AuthAction.LoginSuccess({user: result.user, country:result.country})
+        .map((result: Authenticate) => {
+          const authInfoUpdated: AuthInfo = {
+            access_token: result,
+            expires_in: AuthEffects.expirationTime,
+            expires: Math.floor((Date.now()+AuthEffects.expirationTime) / 1000)
+          }
+          localStorage.setItem(AuthEffects.tokenItem, JSON.stringify(authInfoUpdated));
+          return new AuthAction.LoginSuccess(authInfoUpdated)
         })
         .catch(error => of(new AuthAction.LoginFailure(error.message)))
     );
@@ -36,29 +46,31 @@ export class AuthEffects {
     .map((action: AuthAction.Logout) => action.payload)
     .exhaustMap(stringisnull =>
       this.authService.logout()
-      .do(authed => {
-      this.router.navigate(['/']);
-    }));
+        .do(authed => {
+          localStorage.removeItem(AuthEffects.tokenItem);
+          this.router.navigate(['/']);
+        }));
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
     .withLatestFrom(this.store.let(getLatestURL))
     .map(([action, url]) => [action.payload, url])
-    .mergeMap((value: [any, String]) => {
+    .mergeMap((value: [any, String]) => {      
       return this.router.navigate([value[1]])
     });
 
-  @Effect() loginSession$ = this.actions$
+  /*@Effect() loginSession$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SESSION)
     .map((action: AuthAction.Session) => action.payload)
     .exhaustMap(() => {
       return this.authService
         .session()
-        .map((result: {user:User,country:Country}) => {
+        .map((result: { user: User, country: Country }) => {
           console.log("login session");
-          return new AuthAction.LoginSuccess({user: result.user, country:result.country})})
+          return new AuthAction.LoginSuccess({ user: result.user, country: result.country })
+        })
         .catch(error => of(new AuthAction.LoginFailure(error.message)))
-    });
+    });*/
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_REDIRECT)
@@ -96,5 +108,5 @@ export class AuthEffects {
     private mailService: MailService,
     private router: Router,
     private store: Store<IAppState>
-  ) {}
+  ) { }
 }

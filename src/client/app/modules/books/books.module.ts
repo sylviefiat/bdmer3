@@ -18,7 +18,6 @@ import { BookExistsGuard } from './guards/book-exists';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    MultilingualModule,
     EffectsModule.run(BookEffects),
     EffectsModule.run(CollectionEffects)
   ],
