@@ -1,9 +1,68 @@
-:host {
-  display: block;
-  padding: 0 16px;
-}
+  mat-card-title, mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
 
-.feature-list .body {
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flexcards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 75px 0;
+  }
+
+  mat-card.content {
+    width: 400px;
+    height: 300px;
+    margin: 15px;
+    flex: 0 0 calc(33% - 30px);
+  }
+  @media only screen and (max-width: 768px) {
+    mat-card {
+      margin: 15px 0 !important;
+    }
+  }
+  mat-card.content a:hover {
+    box-shadow: 3px 3px 16px -2px rgba(0, 0, 0, .5);
+  }
+  mat-card-title {
+    margin-right: 10px;
+  }
+  mat-card-title-group {
+    margin: 0;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .download {
+    background-color:#106cc8;
+    color:white;
+    border-radius: 3px;
+  }
+  img {
+    width: 60px;
+    min-width: 60px;
+    margin-left: 5px;
+  }
+  mat-card-content {
+    margin-top: 15px;
+    margin: 15px 0 0;
+  }
+  span {
+    display: inline-block;
+    font-size: 13px;
+  }
+  mat-card-footer {
+    padding: 0 25px 25px;
+  }
+
+/*.feature-list .body {
   font-size: 16;
   color: #555;
   margin: 0 0 5 0;
@@ -17,25 +76,23 @@
 .h4 {
   color: #999;
   font-size: 18;
-}
-.container {
+  }*/
+/*.container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-mat-card {
+  }*/
+/*mat-card {
       max-width: 500px;
       margin:10px;
-}
+      }*/
 
-a mat-card.download {
-  background-color:lightgrey;
-}
+/**/
 
-a {
+/*a {
   text-decoration: none;
 }
 
 a:hover mat-card.download {
-  background-color:grey;
-}
+  
+}*/
