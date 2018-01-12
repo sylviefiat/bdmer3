@@ -1,7 +1,7 @@
 import { User, Country } from '../../countries/models/country';
 
 export interface Authenticate {
-  user: string;
+  username: string;
   password: string;
   roles?: string[];
 }

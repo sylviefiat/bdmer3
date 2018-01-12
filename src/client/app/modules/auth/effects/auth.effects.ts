@@ -26,8 +26,9 @@ export class AuthEffects {
   @Effect() login$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN)
     .map((action: AuthAction.Login) => action.payload)
-    .exhaustMap(auth =>
-      this.authService
+    .exhaustMap(auth => {
+      console.log(auth);
+      return this.authService
         .login(auth)
         .map((result: AccessToken) => {
           const authInfoUpdated: AuthInfo = {
@@ -38,8 +39,8 @@ export class AuthEffects {
           localStorage.setItem(AuthEffects.tokenItem, JSON.stringify(authInfoUpdated));
           return new AuthAction.LoginSuccess(authInfoUpdated);
         })
-        .catch(error => of(new AuthAction.LoginFailure(error.message)))
-    );
+        .catch(error => of(new AuthAction.LoginFailure(error.message)))    
+    });
 
   @Effect() logout$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGOUT)

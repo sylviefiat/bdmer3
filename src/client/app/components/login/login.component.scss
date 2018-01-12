@@ -3,6 +3,10 @@
       justify-content: center;
       margin: 72px 0;
     }
+    mat-card {
+    min-width: 400px;
+    margin: 15px;
+  }
     mat-card-title,
     mat-card-content {
       display: flex;
