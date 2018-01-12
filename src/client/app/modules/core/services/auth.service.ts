@@ -28,11 +28,11 @@ export class AuthService {
     this.db = new PouchDB('http://entropie-dev:5984/_users', pouchOpts);    
   }
 
-  login({ username, password }: Authenticate): Observable<any> {
-    return fromPromise(this.db.login(username, password))
+  login({ user, password }: Authenticate): Observable<any> {
+    return fromPromise(this.db.login(user, password))
       .mergeMap((result: ResponsePDB) => {
         if (result.ok && result.roles.length > 0){
-          return this.setUser(username);
+          return this.setUser(user);
         }
         else
           throw Observable.throw(result); 
@@ -83,7 +83,7 @@ export class AuthService {
 
   signup(user: User): Observable<any> {
     //console.log(user.countryCode);
-    let auth: Authenticate = { username: user.username, password: user.password, roles: [user.countryCode] };
+    let auth: Authenticate = { user: user.username, password: user.password, roles: [user.countryCode] };
 
     return of(user)
       .mergeMap(user =>

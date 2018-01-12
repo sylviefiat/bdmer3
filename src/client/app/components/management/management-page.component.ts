@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 // app
 import { IAppState, getCountriesInApp, getAuthCountry, getAuthUser, getSelectedCountry } from '../../modules/ngrx/index';
 import { CountryAction, CountriesAction } from '../../modules/countries/actions/index';
+import { SiteAction } from '../../modules/datas/actions/index';
 import { Country, User } from '../../modules/countries/models/country';
 
 
@@ -19,10 +20,10 @@ import { Country, User } from '../../modules/countries/models/country';
   selector: 'bc-data-page',
   template: `
     <mat-card>
-      <mat-card-title>Data management</mat-card-title>
+      <mat-card-title>{{'MANAGE' | translate}}</mat-card-title>
     </mat-card>
     <bc-choose [user]="user$ | async" [countries]="countries$ | async" [currentCountry]="country$ | async"></bc-choose>
-    <bc-data [country]="country$ | async"></bc-data>
+    <bc-data [user]="user$ | async" [country]="country$ | async"></bc-data>
   `,
   styles: [
     `
@@ -44,7 +45,7 @@ export class ManagementPageComponent implements OnInit  {
     
     this.countries$ = this.store.let(getCountriesInApp);
     this.actionsSubscription = this.store.let(getAuthCountry)
-      .filter((country: Country) => country.code !== 'AA')
+      .filter((country: Country) => country && country.code !== 'AA')
       .map((country: Country) => new CountryAction.SelectAction(country._id))
       .subscribe(this.store);
   }

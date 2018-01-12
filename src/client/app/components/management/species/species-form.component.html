@@ -81,35 +81,35 @@
           <mat-card-subtitle>{{ 'SPECIES_DIMS' | translate }}</mat-card-subtitle>
           <div formGroupName="biologicDimensions">
                 <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>mm
+                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
                   <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
                 </mat-input-container>
                     
                 <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>mm
-                  <div class="hint">{{ 'SPECIES_LARG_MAX_EX' | translate }}</div>    
+                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
+                  <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>    
                 </mat-input-container>
           </div>
         </mat-card>
 
         <mat-card class="row">
           <mat-card-subtitle>{{ 'SPECIES_DISTRIB' | translate }}</mat-card-subtitle>
-          <div>
+          
                 <mat-input-container>
-                  <textarea mat-maxlength="150" rows="1" matInput formControlName="distribution"  mat-select-on-focus></textarea>
+                  <textarea mat-maxlength="150" rows="2" matInput formControlName="distribution"  mat-select-on-focus></textarea>
                   <div class="hint">{{ 'SPECIES_DISTRIB_EX' | translate }}</div>
                 </mat-input-container>
-          </div>
+          
         </mat-card>
 
         <mat-card class="row">
           <mat-card-subtitle>{{ 'SPECIES_HABITATS' | translate }}</mat-card-subtitle>
-          <div>
+          
                 <mat-input-container>
                   <textarea mat-maxlength="150" rows="5" matInput formControlName="habitatPreference"  mat-select-on-focus></textarea>
                   <div class="hint">{{ 'SPECIES_HABITATS_EX' | translate }}</div>
                 </mat-input-container>
-          </div>
+          
         </mat-card>
 
         <!--legal dims-->

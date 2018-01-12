@@ -46,7 +46,7 @@
       </mat-card-content>
     </mat-card>    
 
-    <mat-card>
+    <mat-card *ngIf="isUserOk">
       <mat-card-title-group>
         <mat-card-title>{{'SPECIES' | translate}}</mat-card-title>
         <fa [name]="'paw'" [border]=true [size]=3></fa>

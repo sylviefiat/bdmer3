@@ -13,9 +13,9 @@ import { IAppState, getLatestURL } from '../../ngrx/index';
 import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
-import { Authenticate, AuthInfo } from '../models/user';
+import { Authenticate, AuthInfo, AccessToken } from '../models/user';
 import { User, Country } from '../../countries/models/country';
-
+import { CountryAction } from '../../countries/actions/index';
 
 @Injectable()
 export class AuthEffects {
@@ -29,14 +29,14 @@ export class AuthEffects {
     .exhaustMap(auth =>
       this.authService
         .login(auth)
-        .map((result: Authenticate) => {
+        .map((result: AccessToken) => {
           const authInfoUpdated: AuthInfo = {
             access_token: result,
             expires_in: AuthEffects.expirationTime,
             expires: Math.floor((Date.now()+AuthEffects.expirationTime) / 1000)
           }
           localStorage.setItem(AuthEffects.tokenItem, JSON.stringify(authInfoUpdated));
-          return new AuthAction.LoginSuccess(authInfoUpdated)
+          return new AuthAction.LoginSuccess(authInfoUpdated);
         })
         .catch(error => of(new AuthAction.LoginFailure(error.message)))
     );

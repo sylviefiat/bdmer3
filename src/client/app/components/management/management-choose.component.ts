@@ -39,8 +39,6 @@ export class ManagementChooseComponent  {
 
 
   setCountry(country: Country) {
-    console.log(country);
     this.store.dispatch(new CountryAction.SelectAction(country._id));
-    this.store.dispatch(new SiteAction.LoadAction());
   }
 }

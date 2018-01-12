@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
-import { Country } from './../../modules/countries/models/country';
+import { Country, User } from './../../modules/countries/models/country';
 import { Species, Site, Zone, Transect, ZonePreference, Count } from './../../modules/datas/models/index';
 import { SpeciesAction, SiteAction } from '../../modules/datas/actions/index';
 
@@ -20,6 +20,7 @@ import { IAppState, getSpeciesInApp, getSiteListCurrentCountry } from '../../mod
 })
 export class ManagementComponent implements OnInit {
     @Input() country: Country;
+    @Input() user: User;
     speciesList$: Observable<Species[]>;
     siteList$: Observable<Site[]>;
     zoneList$: Observable<Zone[]>;
@@ -45,6 +46,10 @@ export class ManagementComponent implements OnInit {
 
     get isCountryOk() {
         return this.country && this.country.code != 'AA';
+    }
+
+    get isUserOk() {
+        return this.user && this.user.countryCode === 'AA';
     }
 
     newSpeciesForm() {

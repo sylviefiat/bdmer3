@@ -15,12 +15,12 @@ import { FormGroup } from '@angular/forms';
     </p>
     <p> 
       <mat-input-container>
-        <input type="text" matInput placeholder="Longueur minimale" formControlName="longMin" required>mm
-        <div class="hint">Ex: 100</div>    
+        <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MIN' | translate }}" formControlName="longMin" required>
+        <div class="hint">{{ 'SPECIES_DIMS_LONG_MIN_EX' | translate }}</div>    
       </mat-input-container>     
       <mat-input-container>
-        <input type="text" matInput placeholder="Longueur maximale" formControlName="longMax" required>mm
-        <div class="hint">Ex: 800</div>    
+        <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
+        <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX2' | translate }}</div>    
       </mat-input-container>
     </p>
     </mat-card-content>

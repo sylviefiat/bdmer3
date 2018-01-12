@@ -67,6 +67,9 @@ export class CountryEffects {
       this.location.back();
     });
 
+  @Effect({ dispatch: false }) select$ = this.actions$
+    .ofType(CountryAction.ActionTypes.SELECT)
+    .map(() => this.store.dispatch(new SiteAction.LoadAction()));
 
   constructor(
     private actions$: Actions,
