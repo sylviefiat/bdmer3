@@ -44,31 +44,7 @@
           </div>
 
       </mat-card-content>
-    </mat-card>    
-
-    <mat-card *ngIf="isUserOk">
-      <mat-card-title-group>
-        <mat-card-title>{{'SPECIES' | translate}}</mat-card-title>
-        <fa [name]="'paw'" [border]=true [size]=3></fa>
-      </mat-card-title-group>
-      <mat-card-content>
-        <div >
-          <h4>{{'SPECIES_MODIFY' | translate}}</h4>
-          <div class="space-around">
-            <mat-form-field> 
-              <mat-select *ngIf="(speciesList$ | async)" placeholder="{{'SELECT_SPECIES' | translate}}" [(ngModel)]="species">
-                <mat-option *ngFor="let species of speciesList$ | async" [value]="species">{{ species.scientificName }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <button *ngIf="(speciesList$ | async)" [disabled]="!species" (click)="viewSpecies()" title="{{'VIEW' | translate}}"><fa [name]="'eye'" [border]=false [size]=1></fa></button>
-            <button *ngIf="(speciesList$ | async)" [disabled]="!species" (click)="editSpecies()" title="{{'EDIT' | translate}}"><fa [name]="'pencil'" [border]=false [size]=1></fa></button>
-
-            <button (click)="newSpeciesForm()" title="{{'FORM' | translate}}"><fa [name]="'plus'" [border]=false [size]=1></fa></button>
-            <button (click)="newSpeciesImport()" title="{{'IMPORT' | translate}}"><fa [name]="'upload'" [border]=false [size]=1></fa></button>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>    
+    </mat-card>           
 
 </div>
  

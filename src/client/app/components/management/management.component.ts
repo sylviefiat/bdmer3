@@ -48,10 +48,6 @@ export class ManagementComponent implements OnInit {
         return this.country && this.country.code != 'AA';
     }
 
-    get isUserOk() {
-        return this.user && this.user.countryCode === 'AA';
-    }
-
     newSpeciesForm() {
         this.routerext.navigate(['/speciesForm']);
     }
