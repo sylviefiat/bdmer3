@@ -31,9 +31,11 @@ import { NewCountryComponent } from './country/new-country.component';
 import { NewUserPageComponent } from './country/new-user-page.component';
 import { NewUserComponent } from './country/new-user.component';
 import { DATA_COMPONENTS } from './management/index';
+import { SP_COMPONENTS } from './species/index';
 
 export const APP_COMPONENTS: any[] = [
   ...DATA_COMPONENTS,
+  ...SP_COMPONENTS,
   AppComponent,
   NavbarComponent,
   ToolbarComponent,
@@ -66,6 +68,7 @@ export const APP_COMPONENTS: any[] = [
   SelectedUserPageComponent,
   NewUserPageComponent,
   NewUserComponent,
+
 ];
 
 export * from './app.component';
@@ -101,3 +104,4 @@ export * from './country/new-country-page.component';
 export * from './country/new-user-page.component';
 export * from './country/new-user.component';
 export * from './management/index';
+export * from './species/index';

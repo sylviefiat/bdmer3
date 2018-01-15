@@ -85,8 +85,10 @@ export class ManagementComponent implements OnInit {
     }
 
     loadZone() {
-        this.store.dispatch(new SiteAction.SelectSiteAction(this.site._id));
-        this.zoneList$ = of(this.site.zones);
+        if(this.site){
+            this.store.dispatch(new SiteAction.SelectSiteAction(this.site._id));
+            this.zoneList$ = of(this.site.zones);
+        }
     }
 
     addZone() {

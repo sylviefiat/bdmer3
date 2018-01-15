@@ -1,16 +1,16 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/pluck';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { RouterExtensions, Config } from '../../../modules/core/index';
+import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSpecies, getAuthUser } from '../../../modules/ngrx/index';
-import { Species } from '../../../modules/datas/models/species';
-import { User } from '../../../modules/countries/models/country';
-import { SpeciesAction } from '../../../modules/datas/actions/index';
+import { IAppState, getSelectedSpecies, getAuthUser } from '../../modules/ngrx/index';
+import { Species } from '../../modules/datas/models/species';
+import { User } from '../../modules/countries/models/country';
+import { SpeciesAction } from '../../modules/datas/actions/index';
 
 /**
  * Note: Container components are also reusable. Whether or not

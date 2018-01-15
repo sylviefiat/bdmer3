@@ -5,12 +5,12 @@ import { _throw } from 'rxjs/observable/throw';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RouterExtensions, Config } from '../../../modules/core/index';
-import { Species } from '../../../modules/datas/models/species';
+import { RouterExtensions, Config } from '../../modules/core/index';
+import { Species } from '../../modules/datas/models/species';
 
-import { IAppState, getSpeciesPageError, getSelectedSpecies, getSpeciesPageMsg } from '../../../modules/ngrx/index';
-import { SpeciesAction } from '../../../modules/datas/actions/index';
-import { CountriesAction } from '../../../modules/countries/actions/index';
+import { IAppState, getSpeciesPageError, getSelectedSpecies, getSpeciesPageMsg } from '../../modules/ngrx/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
+import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
     moduleId: module.id,

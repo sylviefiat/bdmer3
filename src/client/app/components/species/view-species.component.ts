@@ -3,12 +3,12 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-import { IAppState, getSpeciesInApp } from '../../../modules/ngrx/index';
+import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { SpeciesAction } from '../../../modules/datas/actions/index';
-import { User } from '../../../modules/countries/models/country';
-import { Species } from '../../../modules/datas/models/species';
-import { WindowService } from '../../../modules/core/services/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
+import { User } from '../../modules/countries/models/country';
+import { Species } from '../../modules/datas/models/species';
+import { WindowService } from '../../modules/core/services/index';
 
 @Component({
     moduleId: module.id,

@@ -16,6 +16,11 @@
     {{'MANAGE' | translate}}
   </a>
 
+  <a *ngIf="(isLogged$ | async) && ((currentCountry$ | async)?.code==='AA')" [routerLink]="['/species']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <fa [name]="'paw'" [border]=true></fa>
+    {{'MENU_SPECIES' | translate}}
+  </a>
+
   <a *ngIf="(isLogged$ | async) && ((currentCountry$ | async)?.code==='AA')" [routerLink]="['/countries']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
     <fa [name]="'flag'" [border]=true></fa>
     {{'MENU_COUNTRIES' | translate}}
