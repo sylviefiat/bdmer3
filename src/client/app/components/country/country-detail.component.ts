@@ -13,18 +13,19 @@ import { WindowService } from './../../modules/core/services/index';
     <mat-card *ngIf="country">
       <mat-card-title-group>
         <mat-card-title>{{ name }}</mat-card-title>
+        <mat-card-subtitle>{{ code }}</mat-card-subtitle>
         <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
       </mat-card-title-group>
       <mat-card-content>
-        <mat-card-subtitle>Users</mat-card-subtitle>
+        <mat-card-subtitle>{{ 'USERS' | translate}}</mat-card-subtitle>
         <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="true"></bc-user-detail>
       </mat-card-content>
       <mat-card-actions align="start">
         <button mat-raised-button color="primary" (click)="addUser()">
-          Add user
+          {{ 'ADD_USER' | translate}}
         </button>
         <button *ngIf="isNotAdminCountry() && isUserAdmin()" mat-raised-button color="warn" (click)="deleteCountry()">
-          Delete Country
+          {{ 'DELETE_COUNTRY' | translate}}
         </button>
       </mat-card-actions>
     </mat-card>

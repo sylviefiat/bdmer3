@@ -1,11 +1,11 @@
 <mat-card>
-      <mat-card-title>Add New Country in BDMER</mat-card-title>
+      <mat-card-title>{{ 'TITLE_NEW_COUNTRY' | translate}}</mat-card-title>
         <mat-card-content>
           <form [formGroup]="form" (ngSubmit)="submit()" >
           <p>
             <fa [name]="'globe'" [border]=false [size]=2></fa>
             <mat-form-field>
-              <mat-select placeholder="Select country" formControlName="pays" >
+              <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="pays" >
                 <mat-option *ngFor="let pays of (countryList$ | async)" [value]="pays" [disabled]="countriesIds$ | async | bcHasIntersection:pays">{{ pays.name }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -17,7 +17,7 @@
 
           
           <p class="countryButtons">
-            <button type="submit" mat-button>Ajouter</button>
+            <button type="submit" mat-button>{{ 'ADD' | translate}}</button>
           </p>
 
         </form>

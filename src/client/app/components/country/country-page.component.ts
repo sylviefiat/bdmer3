@@ -13,21 +13,20 @@ import { Country } from '../../modules/countries/models/country';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
-      <mat-card-title>Countries in BDMER</mat-card-title>
+      <mat-card-title>{{ 'TITLE_COUNTRIES' | translate}}</mat-card-title>
+      <button mat-raised-button color="primary" (click)="newCountry()">
+        {{ 'NEW_COUNTRY' | translate}}
+      </button>
     </mat-card>
     <bc-country-preview-list [countries]="countries$ | async"></bc-country-preview-list>
-    <mat-card>
-      <mat-card-actions align="start">
-
-        <button mat-raised-button color="primary" (click)="newCountry()">
-        New Country
-        </button>
-      </mat-card-actions>
-    </mat-card>
+    
   `,
   styles: [
     `
-    mat-card-title {
+    mat-card {
+      text-align: center;
+    }
+    mat-card-title {      
       display: flex;
       justify-content: center;
     }

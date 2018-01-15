@@ -3,6 +3,10 @@
       justify-content: center;
       margin: 72px 0;
     }
+    mat-card {
+      margin: 15px;
+      width: 400px;
+    }
     mat-card-title,
     mat-card-content {
       display: flex;
@@ -32,4 +36,10 @@
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
+    }
+    .loginError {
+      padding: 16px;
+      width: 300px;
+      font-color: white;
+      background-color: red;
     }

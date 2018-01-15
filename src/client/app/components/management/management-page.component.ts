@@ -21,12 +21,16 @@ import { Country, User } from '../../modules/countries/models/country';
   template: `
     <mat-card>
       <mat-card-title>{{'MANAGE' | translate}}</mat-card-title>
+      <bc-choose *ngIf="(user$ | async)?.countryCode==='AA'" [user]="user$ | async" [countries]="countries$ | async" [currentCountry]="country$ | async"></bc-choose>
     </mat-card>
-    <bc-choose [user]="user$ | async" [countries]="countries$ | async" [currentCountry]="country$ | async"></bc-choose>
+    
     <bc-data [user]="user$ | async" [country]="country$ | async"></bc-data>
   `,
   styles: [
     `
+    mat-card {
+      text-align: center;
+    }
     mat-card-title {
       display: flex;
       justify-content: center;

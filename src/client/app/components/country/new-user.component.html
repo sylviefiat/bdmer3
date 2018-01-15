@@ -1,35 +1,35 @@
 <mat-card>
-      <mat-card-title>New User</mat-card-title>
+      <mat-card-title>{{ 'NEW_USER' | translate}}</mat-card-title>
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="text" matInput placeholder="Username" formControlName="username">
+              <input type="text" matInput placeholder="{{ 'USERNAME' | translate}}" formControlName="username">
             </mat-input-container>
           </p>
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="text" matInput placeholder="Prénom" formControlName="surname">
+              <input type="text" matInput placeholder="{{ 'FIRSTNAME' | translate}}" formControlName="surname">
             </mat-input-container>
           </p>
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="text" matInput placeholder="Nom" formControlName="name">
+              <input type="text" matInput placeholder="{{ 'NAME' | translate}}" formControlName="name">
             </mat-input-container>
           </p>
           <p>
             <fa [name]="'envelope-o'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="email" matInput placeholder="Email" formControlName="email">
+              <input type="email" matInput placeholder="{{ 'EMAIL' | translate}}" formControlName="email">
             </mat-input-container>
           </p>
           <p>
             <fa [name]="'key'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="password" matInput placeholder="Password" formControlName="password">
+              <input type="password" matInput placeholder="{{ 'PASSWORD' | translate}}" formControlName="password">
             </mat-input-container>
           </p>
           <p>
@@ -49,7 +49,7 @@
 
           
           <p class="SaveButtons">
-            <button type="submit" mat-button>Save</button>
+            <button type="submit" mat-button>{{ 'SUBMIT' | translate}}</button>
           </p>
         </form>
       </mat-card-content>

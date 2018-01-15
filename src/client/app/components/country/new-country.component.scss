@@ -3,6 +3,11 @@
       justify-content: center;
       margin: 72px 0;
     }
+    mat-card {
+      margin: 15px;
+      width: 400px;
+      height: 300px;
+    }
     mat-card-title,
     mat-card-content {
       display: flex;

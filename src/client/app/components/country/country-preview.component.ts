@@ -13,7 +13,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
           <mat-card-subtitle>{{ code }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          <mat-card-subtitle>Users</mat-card-subtitle>
+          <mat-card-subtitle>{{ 'USERS' | translate}}</mat-card-subtitle>
           <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="false"></bc-user-detail>
         </mat-card-content>
       </mat-card>
