@@ -30,12 +30,10 @@ export class ViewSpeciesComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.species);
     }
 
 
     isUserAdmin(): boolean {
-        console.log(this.currentUser);
         return this.currentUser && this.currentUser.role && this.currentUser.countryCode === 'AA';
     }
 

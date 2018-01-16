@@ -70,12 +70,10 @@ export class SpeciesService {
       })
   }
 
-  removeSpecies(species: Species): Observable<Species> {    
+  removeSpecies(species: Species): Observable<Species> {  
     return fromPromise(this.db.remove(species))
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(species);
-      })
+      .filter((response: ResponsePDB) => response.ok)
+      .mergeMap(response => of(species))
   }
 
   /*getDimensions(countryCode: string, speciesCode): Observable<Species> {

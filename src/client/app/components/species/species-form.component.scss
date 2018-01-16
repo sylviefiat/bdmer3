@@ -36,12 +36,6 @@
     .mat-form-field {
       width: auto;
     }
-    .toolbar {
-      background-color: #106cc8;
-      color: rgba(255, 255, 255, 0.87);
-      display: block;
-      padding:10px;
-    }
     .hint {
         /* Position the hint */
         position: absolute;
@@ -71,4 +65,7 @@
     }
     .actions {
       text-align: center;
+    }
+    .back {
+      background-color: darkgrey;
     }

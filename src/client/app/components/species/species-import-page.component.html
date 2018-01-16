@@ -1,35 +1,33 @@
-<mat-card>
-      <mat-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 ></fa>{{ 'IMPORT_SPECIES' | translate }}</mat-card-title>
-      <mat-card-subtitle>{{'IMPORT_SPECIES_DESC' | translate }}</mat-card-subtitle>
-      
-      <mat-card-content align="center">
-      <p>
-        <button (click)="fileInput.click()">
-          <fa [name]="'upload'" [border]=true [size]=1></fa>
-          <span>{{ 'IMPORT_CSV' | translate }}</span>
-          <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
-        </button>
-      </p>
-      <p class="space-around" *ngIf="!(msg$ | async)">
-        <a class="link" (click)="return()" title="Back">
-            <fa [name]="'chevron-left'" [border]=false [size]=1></fa>
-            Back
-        </a>
-        <button class="question" (click)="changeNeedHelp()" title="Help on format">
-            <fa [name]="'question'" [border]=false [size]=2></fa>
-        </button>
-      </p>
-      <p id="help" *ngIf="needHelp">
-        <a mat-list-item class="link" href="{{getCsvSpeciesUrl()}}" download>
-          {{ 'DOWNLOAD_CSV_SPECIES' | translate }}
-          <fa [name]="'download'" [border]=true [size]=1></fa>
-        </a>
-      </p>
-      </mat-card-content>
+<div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'IMPORT_SPECIES' | translate}}</mat-card-title>
+      <mat-card-content>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+      </mat-card-content>   
       <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
-      <mat-card-content *ngIf="msg$ | async" align="start">
-          <p class="msg">{{ msg$ | async }}</p>
-         <p class="actionButtons"><a (click)="return()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
-      </mat-card-content> 
-
+      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>     
     </mat-card>
+</div>
+<div class="insideform">
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+    </mat-card-title-group>
+    <mat-card-content>
+      {{'IMPORT_DESC' | translate }}
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SPECIES' | translate }}</h5>
+      <a href="{{getCsvSpeciesUrl()}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+      </a>
+    </mat-card-footer>
+    <mat-card-actions align="start">
+      <button (click)="fileInput.click()">
+        <span>{{ 'IMPORT_CSV' | translate }}</span>
+        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

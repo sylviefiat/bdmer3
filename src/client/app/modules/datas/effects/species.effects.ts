@@ -91,8 +91,8 @@ export class SpeciesEffects {
     .mergeMap((species) =>this.router.navigate(['/species/'+species._id]));
 
   @Effect({ dispatch: false }) removeSpeciesSuccess$ = this.actions$
-    .ofType(SpeciesAction.ActionTypes.REMOVE_SPECIES_FAIL)
-    .do(() =>this.router.navigate(['/management']));
+    .ofType(SpeciesAction.ActionTypes.REMOVE_SPECIES_SUCCESS)
+    .do(() =>this.router.navigate(['/species']));
 
   constructor(private actions$: Actions, private router: Router, private speciesService: SpeciesService, private csv2jsonService: Csv2JsonService) {
     

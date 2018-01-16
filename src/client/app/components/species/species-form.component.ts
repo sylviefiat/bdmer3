@@ -163,7 +163,7 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     return() {
-        this.routerext.navigate(['/management/'], {
+        this.routerext.navigate(['/species/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

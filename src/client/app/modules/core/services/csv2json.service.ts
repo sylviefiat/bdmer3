@@ -69,10 +69,19 @@ export class Csv2JsonService {
                         case "L_min_SB":
                         case "L_min_FJ":
                         case "L_min_TO":
+                        case "L_min_SO":
                             header = headers[j].substring(headers[j].lastIndexOf('_') + 1);
                             legaldim = { codeCountry: header, longMin: data[j], longMax: data[headers.indexOf('L_max_' + header)] };
                             if (sp.legalDimensions == null) sp.legalDimensions = [];
                             sp.legalDimensions.push(legaldim);
+                            break;
+                        case "L_max_NC":
+                        case "L_max_VT":
+                        case "L_max_PG":
+                        case "L_max_SB":
+                        case "L_max_FJ":
+                        case "L_max_TO":
+                        case "L_max_SO":
                             break;
                         default:
                             throw new Error('Wrong CSV File Unknown field detected');

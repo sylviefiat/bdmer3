@@ -3,6 +3,7 @@
           <mat-card-title> {{ species.scientificName }} <span class="codename">({{ species.code }})</span></mat-card-title>
           <mat-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</mat-card-subtitle>
           <img mat-card-sm-image src="/assets/img/{{ species.code }}.jpg">
+          <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
       </mat-card-title-group>
       <mat-card-content>
         <div>

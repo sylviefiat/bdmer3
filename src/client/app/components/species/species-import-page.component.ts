@@ -68,7 +68,7 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     }
 
     return() {
-        this.routerext.navigate(['/management/'], {
+        this.routerext.navigate(['/species/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',
