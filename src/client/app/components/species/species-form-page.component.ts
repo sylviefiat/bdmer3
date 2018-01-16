@@ -20,6 +20,17 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [species]="species$ | async">
     </bc-species-form>
   `,
+  styles: [
+    `
+    mat-card {
+      text-align: center;
+    }
+    mat-card-title {
+      display: flex;
+      justify-content: center;
+    }
+  `,
+  ],
 })
 export class SpeciesFormPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;

@@ -156,6 +156,7 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     submit() {
+        console.log("submit");
         if (this.form.valid) {
             this.submitted.emit(this.form.value);
         }

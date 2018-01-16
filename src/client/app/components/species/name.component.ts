@@ -20,16 +20,20 @@ import { FormGroup } from '@angular/forms';
   `,
   styles: [
     `
-    :host {
+    mat-card-content {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      background-color: #f3f3f4;
+      padding-top: 10px;
     }
     mat-input-container {
-      padding-left: 1em;
+      padding-left: 2em;
+      flex-grow: 1;
     }
-    input {
-      width: 300px;
+    
+    .mat-form-field {
+      width: auto;
     }
     .hint {
       /* Position the hint */

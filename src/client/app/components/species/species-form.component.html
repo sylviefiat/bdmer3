@@ -1,144 +1,131 @@
-<mat-card>
-  <mat-card-title class="toolbar"><fa [name]="'paw'" [border]=true [size]=1 > </fa><span style="text-align:center">{{ 'ADD_SPECIES' | translate }}</span></mat-card-title>
-  <mat-card-content>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_NAMING' | translate }}</mat-card-subtitle>
-          <mat-input-container>
-            <input type="text" matInput placeholder="{{ 'SPECIES_CODE' | translate }}" formControlName="code" required>
-            <div class="hint">{{ 'SPECIES_CODE_EX' | translate }}</div>
-          </mat-input-container>
-          
-          <mat-input-container>
-            <input type="text" matInput placeholder="{{ 'SPECIES_SCIENTIFIC_NAME' | translate }}" formControlName="scientificName" required>
-            <div class="hint">{{ 'SPECIES_SCIENTIFIC_NAME_EX' | translate }}</div>     
-          </mat-input-container>
-          
-        </mat-card>
-        <!--names-->
-        <mat-card formArrayName="names">
-          <mat-card-subtitle>{{ 'SPECIES_VERNACULAR_NAME' | translate }}</mat-card-subtitle>
-          <div *ngFor="let name of form.controls.names.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.names.controls.length > 1" (click)="removeName(i)"></fa>
-            <div [formGroupName]="i">
-              <bt-name [group]="form.controls.names.controls[i]"></bt-name>
-            </div>
-          </div>
-          <mat-card-actions>
-            <a class="action" (click)="addName()">
-              {{ 'ADD_VERNACULAR_NAME' | translate }}
-            </a>
-          </mat-card-actions>
-        </mat-card>
+<form [formGroup]="form" (ngSubmit)="submit()">  <div>
+  <mat-card class="actions">
+    <mat-card-title>{{ 'ADD_SPECIES' | translate}}</mat-card-title>
+    <p *ngIf="errorMessage" class="speciesError">{{ errorMessage }}</p>  
+    <div>
+      <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ 'SUBMIT' | translate }}</button>
+    </div>
+  </mat-card>
+</div>
+<div class="insideform">
+  <bt-chips (send)="submit()" id="SPECIES_NOMS"></bt-chips>
+  <mat-card class="row" id="SPECIES_NOMS">
+    <h5 mat-subheader>{{ 'SPECIES_NAMING' | translate }}</h5>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_CODE' | translate }}" formControlName="code" required>
+      <div class="hint">{{ 'SPECIES_CODE_EX' | translate }}</div>
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_COEF_LLW' | translate }}</mat-card-subtitle>
-          <div formGroupName="LLW">
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
-                  <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
-                </mat-input-container>
-                    
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
-                  <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
-                </mat-input-container>
-          </div>
-        </mat-card>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_SCIENTIFIC_NAME' | translate }}" formControlName="scientificName" required>
+      <div class="hint">{{ 'SPECIES_SCIENTIFIC_NAME_EX' | translate }}</div>     
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_COEF_LW' | translate }}</mat-card-subtitle>
-          <div formGroupName="LW">
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
-                  <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
-                </mat-input-container>
-                    
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
-                  <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
-                </mat-input-container>
-          </div>
-        </mat-card>
+  </mat-card>
+  <!--names-->
+  <mat-card class="row" formArrayName="names" id="SPECIES_VERNACULAR_NAME">
+    <h5 mat-subheader>{{ 'SPECIES_VERNACULAR_NAME' | translate }}</h5>
+    <div *ngFor="let name of form.controls.names.controls; let i=index;" [formGroupName]="i">          
+      <fa class="warn clickable" [name]="'times'" [size]=1 [pull]=right *ngIf="form.controls.names.controls.length > 1" (click)="removeName(i)"></fa>
+      <bt-name [group]="form.controls.names.controls[i]"></bt-name>     
+    </div>
+    <mat-card-actions>
+     <button mat-raised-button color="warn" (click)="addName()">
+       {{ 'ADD_VERNACULAR_NAME' | translate }}
+     </button>
+   </mat-card-actions>
+ </mat-card>
+ <bt-chips (send)="submit()" id="SPECIES_COEFS"></bt-chips>
+ <mat-card class="row">
+  <h5 mat-subheader>{{ 'SPECIES_COEF_LLW' | translate }}</h5>
+  <div formGroupName="LLW">
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_CONVERSIONS' | translate }}</mat-card-subtitle>
-          <div formGroupName="conversions">
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_SALT' | translate }}" formControlName="salt" required>
-                  <div class="hint">{{ 'SPECIES_CONVERSIONS_SALT_EX' | translate }}</div>
-                </mat-input-container>
-                    
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
-                  <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>    
-                </mat-input-container>
-          </div>
-        </mat-card>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
+    </mat-input-container>
+  </div>
+</mat-card>
+<mat-card class="row">
+  <h5 mat-subheader>{{ 'SPECIES_COEF_LW' | translate }}</h5>
+  <div formGroupName="LW">
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_DIMS' | translate }}</mat-card-subtitle>
-          <div formGroupName="biologicDimensions">
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
-                  <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
-                </mat-input-container>
-                    
-                <mat-input-container>
-                  <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
-                  <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>    
-                </mat-input-container>
-          </div>
-        </mat-card>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
+    </mat-input-container>
+  </div>
+</mat-card>
+<bt-chips (send)="submit()" id="SPECIES_CONVERSIONS"></bt-chips>
+<mat-card class="row">
+  <h5 mat-subheader>{{ 'SPECIES_CONVERSIONS' | translate }}</h5>
+  <div formGroupName="conversions">
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_SALT' | translate }}" formControlName="salt" required>
+      <div class="hint">{{ 'SPECIES_CONVERSIONS_SALT_EX' | translate }}</div>
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_DISTRIB' | translate }}</mat-card-subtitle>
-          
-                <mat-input-container>
-                  <textarea mat-maxlength="150" rows="2" matInput formControlName="distribution"  mat-select-on-focus></textarea>
-                  <div class="hint">{{ 'SPECIES_DISTRIB_EX' | translate }}</div>
-                </mat-input-container>
-          
-        </mat-card>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
+      <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>    
+    </mat-input-container>
+  </div>
+</mat-card>
+<mat-card class="row">
+  <h5 mat-subheader>{{ 'SPECIES_DIMS' | translate }}</h5>
+  <div formGroupName="biologicDimensions">
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
+      <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
+    </mat-input-container>
 
-        <mat-card class="row">
-          <mat-card-subtitle>{{ 'SPECIES_HABITATS' | translate }}</mat-card-subtitle>
-          
-                <mat-input-container>
-                  <textarea mat-maxlength="150" rows="5" matInput formControlName="habitatPreference"  mat-select-on-focus></textarea>
-                  <div class="hint">{{ 'SPECIES_HABITATS_EX' | translate }}</div>
-                </mat-input-container>
-          
-        </mat-card>
+    <mat-input-container>
+      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
+      <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>    
+    </mat-input-container>
+  </div>
+</mat-card>
+<bt-chips (send)="submit()" id="SPECIES_VIE"></bt-chips>
+<mat-card class="column">
+  <h5 mat-subheader>{{ 'SPECIES_DISTRIB' | translate }}</h5>
 
-        <!--legal dims-->
-        <mat-card formArrayName="legalDimensions">
-          <mat-card-subtitle>{{ 'SPECIES_FISHING_DIMS' | translate }} </mat-card-subtitle>
-          <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j)"></fa>
-            <div [formGroupName]="j">
-              <bt-dim [group]="form.controls.legalDimensions.controls[j]"></bt-dim>
-            </div>
-          </div>
-          <mat-card-actions>
-            <a class="action" (click)="addLegalDim()">
-              {{ 'ADD_FISHING_DIMS' | translate }}
-            </a>
-          </mat-card-actions>
-        </mat-card>
-
-        <p *ngIf="errorMessage" class="speciesError">
-            {{ errorMessage }}
-        </p>  
-
-        <div class="actions">
-          <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Submit</button>
-          <button (click)="return()" class="btn btn-secondary">{{ 'BACK_MANAGEMENT' | translate }}</button>
-        </div>
-     
-    </form>
-  </mat-card-content>
-    
+  <mat-input-container>
+    <textarea rows="2" matInput formControlName="distribution"  mat-select-on-focus></textarea>
+    <div class="hint">{{ 'SPECIES_DISTRIB_EX' | translate }}</div>
+  </mat-input-container>
 
 </mat-card>
+<mat-card class="column">
+  <h5 mat-subheader>{{ 'SPECIES_HABITATS' | translate }}</h5>
+
+  <mat-input-container>
+    <textarea mat-maxlength="150" rows="5" matInput formControlName="habitatPreference"  mat-select-on-focus></textarea>
+    <div class="hint">{{ 'SPECIES_HABITATS_EX' | translate }}</div>
+  </mat-input-container>
+
+</mat-card>
+<bt-chips (send)="submit()" id="SPECIES_FISHING_DIMS"></bt-chips>
+<!--legal dims-->
+<mat-card class="row" formArrayName="legalDimensions">
+  <h5 mat-subheader>{{ 'SPECIES_FISHING_DIMS' | translate }} </h5>
+  <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" [formGroupName]="j">          
+    <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j)"></fa>
+    <bt-dim [group]="form.controls.legalDimensions.controls[j]"></bt-dim>
+  </div>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" (click)="addLegalDim()">
+     {{ 'ADD_FISHING_DIMS' | translate }}
+   </button>
+ </mat-card-actions>
+</mat-card>
+</div>
+</form>

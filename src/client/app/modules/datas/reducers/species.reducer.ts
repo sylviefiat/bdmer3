@@ -38,12 +38,15 @@ export function speciesReducer(
         case SpeciesAction.ActionTypes.IMPORT_SPECIES_SUCCESS: {
             console.log(action.payload);
             const addedspecies = action.payload;
-            const editedspecies = state.entities.filter(species => addedspecies._id === species._id);
-
+            console.log(state.entities);
+            const otherspecies = state.entities.filter(species => addedspecies._id !== species._id);
+            console.log(otherspecies);
+            console.log([...otherspecies,...addedspecies]);
+            console.log([...state.ids.filter(id => addedspecies._id !== id), ...addedspecies._id]);
             return {
                 ...state,
-                entities: [...editedspecies,...addedspecies],
-                ids: [...state.ids.filter(id => addedspecies._id === id), ...addedspecies._id],
+                entities: [...otherspecies,...addedspecies],
+                ids: [...state.ids.filter(id => addedspecies._id !== id), ...addedspecies._id],
                 error: null,
                 msg: action.type===SpeciesAction.ActionTypes.IMPORT_SPECIES_SUCCESS?"Species registered with success":null
             }

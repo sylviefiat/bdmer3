@@ -65,7 +65,7 @@
         <button mat-raised-button color="warn" (click)="edit.emit(species)">
        {{ 'SPECIES_EDIT' | translate }}
         </button>
-        <button *ngIf="isUserAdmin()" mat-raised-button color="warn" (click)="deleteSpecies()">
+        <button *ngIf="isUserAdmin()" mat-raised-button class="warn" (click)="deleteSpecies()">
         {{ 'SPECIES_DELETE' | translate }}
         </button>
 

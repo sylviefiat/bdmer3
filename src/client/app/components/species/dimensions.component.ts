@@ -6,14 +6,14 @@ import { FormGroup } from '@angular/forms';
   moduleId: module.id,
   selector: 'bt-dim',
   template: `
-    <mat-card-content [formGroup]="dimForm">
-    <p>
+    <div [formGroup]="dimForm" class="container">
+    <mat-card-content>
       <mat-input-container>
         <input type="text" matInput placeholder="Country code" formControlName="codeCountry" required>
         <div class="hint">Ex: FR</div>
       </mat-input-container>          
-    </p>
-    <p> 
+    </mat-card-content>
+    <mat-card-content> 
       <mat-input-container>
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MIN' | translate }}" formControlName="longMin" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MIN_EX' | translate }}</div>    
@@ -22,21 +22,27 @@ import { FormGroup } from '@angular/forms';
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX2' | translate }}</div>    
       </mat-input-container>
-    </p>
     </mat-card-content>
+    </div>
   `,
   styles: [
     `
-    :host {
+    div.container {      
+      background-color: #f3f3f4;
+      padding-top: 10px;
+    }
+    mat-card-content {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
     }
     mat-input-container {
-      padding-left: 1em;
+      padding-left: 2em;
+      flex-grow: 1;
     }
-    input {
-      width: 300px;
+    
+    .mat-form-field {
+      width: auto;
     }
     .hint {
       /* Position the hint */

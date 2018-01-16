@@ -21,7 +21,7 @@ import { CountryAction } from '../../countries/actions/index';
 export class AuthEffects {
 
   public static readonly tokenItem = 'token';
-  public static readonly expirationTime = 10*60*1000;  // setup 10min before login expiration
+  public static readonly expirationTime = 60*60*1000;  // setup 10min before login expiration
 
   @Effect() login$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN)

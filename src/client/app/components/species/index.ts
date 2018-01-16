@@ -5,6 +5,7 @@ import { SpeciesFormPageComponent } from './species-form-page.component';
 import { SpeciesFormComponent } from './species-form.component';
 import { SpeciesImportPageComponent } from './species-import-page.component';
 import { NameComponent } from './name.component';
+import { ChipsComponent } from './chips.component';
 import { DimensionsComponent } from './dimensions.component';
 import { ViewSpeciesPageComponent } from './view-species-page.component';
 import { ViewSpeciesComponent } from './view-species.component';
@@ -18,6 +19,7 @@ export const SP_COMPONENTS: any[] = [
   SpeciesImportPageComponent,
   NameComponent,
   DimensionsComponent,
+  ChipsComponent,
   ViewSpeciesPageComponent,
   ViewSpeciesComponent,
 ];
@@ -29,6 +31,7 @@ export * from './species-form-page.component';
 export * from './species-form.component';
 export * from './species-import-page.component';
 export * from './name.component';
+export * from './chips.component';
 export * from './dimensions.component';
 export * from './view-species-page.component';
 export * from './view-species.component';
