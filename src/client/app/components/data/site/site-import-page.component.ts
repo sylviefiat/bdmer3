@@ -13,56 +13,62 @@ import { SiteAction } from '../../../modules/datas/actions/index';
 import { CountriesAction } from '../../../modules/countries/actions/index';
 
 @Component({
-    selector: 'bc-zone-import-page',
-    template: `
-    <bc-zone-import
-      (upload)="handleUpload($event)"
-      (err)="handleErrorUpload($event)"
-      (back)="return($event)"
-      [errorMsg]="error$ | async"
-      [msg]="msg$ | async"
-      [site]="site$ | async">
-    </bc-zone-import>
-  `,
-  styles: [``]
+    moduleId: module.id,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'bc-site-import-page',
+    templateUrl: './site-import-page.component.html',
+    styleUrls: [
+        './site-import-page.component.css',
+    ],
 })
-export class ZoneImportPageComponent implements OnInit, OnDestroy {
-    site$: Observable<Site>;
+export class SiteImportPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
-
     actionsSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        console.log("here we are");
-        this.actionsSubscription = route.params
-            .map(params => new SiteAction.SelectSiteAction(params.idsite))
-            .subscribe(store);
+        this.store.take(1).subscribe((s: any) => {
+            this.docs_repo = "../../../assets/docs/";
+            this.csvFile = "importSite.csv";
+        });
     }
 
     ngOnInit() {
         this.error$ = this.store.let(getSitePageError);
         this.msg$ = this.store.let(getSitePageMsg);
-        this.site$ = this.store.let(getSelectedSite);
     }
 
     ngOnDestroy() {
-        this.actionsSubscription.unsubscribe();
+
     }
 
     handleUpload(csvFile: any): void {
-        this.store.dispatch(new SiteAction.ImportZoneAction(csvFile));
+        console.log(csvFile);
+        let reader = new FileReader();
+        if (csvFile.target.files && csvFile.target.files.length > 0) {
+            this.store.dispatch(new SiteAction.ImportSiteAction(csvFile.target.files[0]));
+        } else {
+            this.store.dispatch(new SiteAction.AddSiteFailAction('No csv file found'));
+        }
     }
 
-    handleErrorUpload(msg: string){
-        this.store.dispatch(new SiteAction.AddSiteFailAction(msg));
+    changeNeedHelp() {
+        this.needHelp = !this.needHelp;
     }
 
-    return(event) {
-        this.routerext.navigate(['/management/'], {
+    getCsvSite() {
+        return this.csvFile;
+    }
+
+    getCsvSitesUrl() {
+        return this.docs_repo + this.csvFile;
+    }
+
+    return() {
+        this.routerext.navigate(['/site/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

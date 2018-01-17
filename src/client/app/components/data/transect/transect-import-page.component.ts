@@ -71,7 +71,7 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
     }
 
     return(event) {
-        this.routerext.navigate(['/management/'], {
+        this.routerext.navigate(['/site/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

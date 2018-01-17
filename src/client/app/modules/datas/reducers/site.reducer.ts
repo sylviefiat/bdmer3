@@ -17,17 +17,15 @@ export function siteReducer(
         }
 
         case SiteAction.ActionTypes.LOAD_SUCCESS: {
-            const site = action.payload;
-
-            const newSite = site.filter(site => state.ids.includes(site._id) ? false : site);
-
-            const newSiteIds = newSite.map(site => site._id);
+            const sites = action.payload;
+            const newSites = sites.filter(site => state.ids.includes(site._id) ? false : site);
+            const newSiteIds = newSites.map(site => site._id);
 
             return {
                 ...state,
                 loading: false,
                 loaded: true,
-                entities: [...state.entities, ...newSite],
+                entities: [...state.entities, ...newSites],
                 ids: [...state.ids, ...newSiteIds],
                 error: null
             };

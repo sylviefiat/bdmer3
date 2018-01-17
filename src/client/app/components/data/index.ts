@@ -1,7 +1,7 @@
 
-import { ManagementPageComponent } from './management-page.component';
-import { ManagementComponent } from './management.component';
-import { ManagementChooseComponent } from './management-choose.component';
+import { SiteListPageComponent } from './site/site-list-page.component';
+import { SitePreviewListComponent } from './site/site-preview-list.component';
+import { SitePreviewComponent } from './site/site-preview.component';
 import { SiteFormPageComponent } from './site/site-form-page.component';
 import { SiteFormComponent } from './site/site-form.component';
 import { SiteImportPageComponent } from './site/site-import-page.component';
@@ -23,14 +23,14 @@ import { ViewTransectPageComponent } from './transect/view-transect-page.compone
 import { ViewTransectComponent } from './transect/view-transect.component';
 
 export const DATA_COMPONENTS: any[] = [
-  ManagementPageComponent,
-  ManagementComponent,
+  SiteListPageComponent,
+  SitePreviewListComponent,
+  SitePreviewComponent,
   SiteFormPageComponent,
   SiteFormComponent,
   SiteImportPageComponent,
   ViewSitePageComponent,
-  ViewSiteComponent,
-  ManagementChooseComponent,  
+  ViewSiteComponent,  
   ZoneFormPageComponent,
   ZoneFormFormComponent,
   ZoneFormComponent,
@@ -47,14 +47,14 @@ export const DATA_COMPONENTS: any[] = [
   ViewTransectComponent
 ];
 
-export * from './management-page.component';
-export * from './management.component';
+export * from './site/site-list-page.component';
+export * from './site/site-preview-list.component';
+export * from './site/site-preview.component';
 export * from './site/site-form-page.component';
 export * from './site/site-form.component';
 export * from './site/site-import-page.component';
 export * from './site/view-site-page.component';
 export * from './site/view-site.component';
-export * from './management-choose.component';
 export * from './zone/zone-form-page.component';
 export * from './zone/zone-form-form.component';
 export * from './zone/zone-form.component';

@@ -7,25 +7,24 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../../modules/core/index';
-import { Site, Zone, Transect } from '../../../modules/datas/models/index';
+import { Site, Zone } from '../../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedTransect } from '../../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedZone } from '../../../modules/ngrx/index';
 import { SiteAction } from '../../../modules/datas/actions/index';
 
 @Component({
-  selector: 'bc-transect-page',
+  selector: 'bc-zone-page',
   template: `
-    <bc-transect-form-page
+    <bc-zone-form-page
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
-      [zone]="zone$ | async"
-      [transect]="transect$ | async">
-    </bc-transect-form-page>
+      [zone]="zone$ | async">
+    </bc-zone-form-page>
   `,
   styles: [
     `
-    #transect-page {
+    #zone-page {
       display: flex;
       flex-direction:row;
       justify-content: center;
@@ -43,46 +42,38 @@ import { SiteAction } from '../../../modules/datas/actions/index';
     }
     `]
 })
-export class TransectFormPageComponent implements OnInit, OnDestroy {
+export class ZoneFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
-  zone$: Observable<Zone>;
-  transect$: Observable<Transect>;
+  zone$: Observable<Zone | null>;
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
-  transectSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idsite))
-      .subscribe(store);      
+      .subscribe(store);
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idzone))
-      .subscribe(store);
-    this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idtransect))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transect$ = this.store.let(getSelectedTransect);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.transectSubscription.unsubscribe();
   }
 
-  onSubmit(transect: Transect) { 
-    console.log(transect);
-      this.store.dispatch(new SiteAction.AddTransectAction(transect))
+  onSubmit(zone: Zone) { 
+      this.store.dispatch(new SiteAction.AddZoneAction(zone))    
   }
 
   return() {
-    this.routerext.navigate(['/management/'], {
+    this.routerext.navigate(['/site/'], {
       transition: {
         duration: 1000,
         name: 'slideTop',

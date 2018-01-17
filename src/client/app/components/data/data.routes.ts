@@ -1,5 +1,5 @@
 
-import { ManagementPageComponent } from './management-page.component';
+import { SiteListPageComponent } from './site/site-list-page.component';
 import { SiteFormPageComponent } from './site/site-form-page.component';
 import { SiteImportPageComponent } from './site/site-import-page.component';
 import { ViewSitePageComponent } from './site/view-site-page.component';
@@ -11,10 +11,10 @@ import { TransectImportPageComponent } from './transect/transect-import-page.com
 import { ViewTransectPageComponent } from './transect/view-transect-page.component';
 import { AuthGuard } from '../../modules/auth/guards/index';
 
-export const ManagementRoutes: Array<any> = [
+export const DataRoutes: Array<any> = [
   {
-    path: 'management',
-    component: ManagementPageComponent,
+    path: 'site',
+    component: SiteListPageComponent,
     canActivate : [AuthGuard]
   },
   {

@@ -44,7 +44,7 @@ export class SiteEffects {
     .switchMap(() =>
       this.siteService
         .getAll()
-        .map((site: Site[]) => new SiteAction.LoadSuccessAction(site))
+        .map((sites: Site[]) => {console.log(sites); return new SiteAction.LoadSuccessAction(sites)})
         .catch(error => of(new SiteAction.LoadFailAction(error)))
     );
 
@@ -171,7 +171,7 @@ export class SiteEffects {
 
   @Effect({ dispatch: false }) removeSiteSuccess$ = this.actions$
     .ofType(SiteAction.ActionTypes.REMOVE_SITE_FAIL)
-    .do(() => this.router.navigate(['/management']));
+    .do(() => this.router.navigate(['/site']));
 
   constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {
 

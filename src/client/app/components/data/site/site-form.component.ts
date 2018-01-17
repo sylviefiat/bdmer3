@@ -85,7 +85,7 @@ export class SiteFormComponent implements OnInit {
     }
 
     return() {
-        this.routerext.navigate(['/management/'], {
+        this.routerext.navigate(['/site/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',
