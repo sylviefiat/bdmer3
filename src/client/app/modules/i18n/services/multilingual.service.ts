@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 
 // app
-import { Analytics, AnalyticsService } from '../../analytics/index';
 import { ILang } from '../../core/index';
 import { WindowService } from '../../core/services/window.service';
 import { IAppState } from '../../ngrx/index';
@@ -28,17 +27,14 @@ export const LanguageProviders = [
 
 // service
 @Injectable()
-export class MultilingualService extends Analytics {
+export class MultilingualService {
 
   constructor(
-    public analytics: AnalyticsService,
     private translate: TranslateService,
     private win: WindowService,
     private store: Store<IAppState>
   ) {
-    super(analytics);
-    this.category = CATEGORY;
-
+  
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang(initialState.lang);
 

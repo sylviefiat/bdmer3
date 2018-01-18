@@ -45,12 +45,11 @@ import { Species } from '../../modules/datas/models/species';
 })
 export class SpeciesListPageComponent implements OnInit {
   species$: Observable<Species[]>;
-
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
     this.species$ = this.store.let(getSpeciesInApp);
-    this.store.dispatch(new SpeciesAction.LoadAction());    
+    this.store.dispatch(new SpeciesAction.LoadAction());   
   }
 
   addSpecies(type: string){

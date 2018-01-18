@@ -11,7 +11,6 @@ import { IAppState, getisLoggedIn} from '../modules/ngrx/index';
 import { AuthAction } from '../modules/auth/actions/index';
 import { Authenticate, AuthInfo } from '../modules/auth/models/user';
 
-import { AnalyticsService } from '../modules/analytics/services/index';
 import { LogService, AppService } from '../modules/core/services/index';
 import { Config } from '../modules/core/utils/index';
 
@@ -28,7 +27,6 @@ export class AppComponent {
   public isLoggedIn$: Observable<any>;
   
   constructor(
-    public analytics: AnalyticsService,
     public log: LogService,
     private appService: AppService,
     private store: Store<IAppState>

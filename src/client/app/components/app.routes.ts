@@ -5,8 +5,10 @@ import { BookRoutes } from './book/book.routes';
 import { MapRoutes } from './map/map.routes';
 import { LoginRoutes } from './login/login.routes';
 import { CountryRoutes } from './country/country.routes';
-import { DataRoutes } from './data/data.routes';
+import { SiteRoutes } from './site/site.routes';
 import { SpeciesRoutes } from './species/species.routes';
+import { TransectRoutes } from './transect/transect.routes';
+import { ZoneRoutes } from './zone/zone.routes';
 import { NotFoundPageComponent } from '../modules/shared/components/not-found-page';
 
 export const routes: Array<any> = [
@@ -16,7 +18,9 @@ export const routes: Array<any> = [
   ...MapRoutes,
   ...LoginRoutes,
   ...CountryRoutes,
-  ...DataRoutes,
+  ...SiteRoutes,
   ...SpeciesRoutes,
+  ...TransectRoutes,
+  ...ZoneRoutes,
   { path: '**', component: NotFoundPageComponent }
 ];

@@ -30,12 +30,16 @@ import { NewCountryPageComponent } from './country/new-country-page.component';
 import { NewCountryComponent } from './country/new-country.component';
 import { NewUserPageComponent } from './country/new-user-page.component';
 import { NewUserComponent } from './country/new-user.component';
-import { DATA_COMPONENTS } from './data/index';
+import { SITE_COMPONENTS } from './site/index';
+import { ZONE_COMPONENTS } from './zone/index';
+import { TR_COMPONENTS } from './transect/index';
 import { SP_COMPONENTS } from './species/index';
 
 export const APP_COMPONENTS: any[] = [
-  ...DATA_COMPONENTS,
+  ...SITE_COMPONENTS,
   ...SP_COMPONENTS,
+  ...ZONE_COMPONENTS,
+  ...TR_COMPONENTS,
   AppComponent,
   NavbarComponent,
   ToolbarComponent,
@@ -103,5 +107,7 @@ export * from './country/new-country.component';
 export * from './country/new-country-page.component';
 export * from './country/new-user-page.component';
 export * from './country/new-user.component';
-export * from './data/index';
+export * from './site/index';
+export * from './zone/index';
+export * from './transect/index';
 export * from './species/index';

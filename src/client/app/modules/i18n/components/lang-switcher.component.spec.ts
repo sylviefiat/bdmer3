@@ -8,7 +8,6 @@ import { StoreModule } from '@ngrx/store';
 import { t } from '../../test/index';
 import { ILang, WindowService, ConsoleService, provideConsoleTarget, LogLevel } from '../../core/index';
 import { CoreModule } from '../../core/core.module';
-import { AnalyticsModule } from '../../analytics/analytics.module';
 import { SharedModule } from '../../shared/index';
 import { BooksModule } from '../../books/index';
 import { MultilingualModule } from '../multilingual.module';
@@ -36,7 +35,6 @@ const testModuleConfig = (languages?: Array<ILang>) => {
       SharedModule,
       BooksModule,
       RouterTestingModule,
-      AnalyticsModule,
       MultilingualModule,
       StoreModule.provideStore({ i18n: multilingualReducer })
     ],

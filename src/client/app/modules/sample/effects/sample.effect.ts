@@ -32,8 +32,6 @@ export class SampleEffects {
     .ofType(NameList.ActionTypes.ADD)
     .map(action => {
       let name = action.payload;
-      // analytics
-      this.nameListService.track(NameList.ActionTypes.NAME_ADDED, { label: name });
       return new NameList.NameAddedAction(name);
     });
 

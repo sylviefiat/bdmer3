@@ -24,6 +24,13 @@ export class SpeciesService {
   }
 
   public getAll(): Observable<any> {
+   return fromPromise(this.db.allDocs({ include_docs: true }))
+      .map((result: ResponsePDB) => 
+        result.rows.map(row => row.doc)
+      )
+    }
+
+  /*public getAll(): Observable<any> {
     return fromPromise(
       this.db.allDocs({ include_docs: true })
         .then(docs => {
@@ -31,7 +38,7 @@ export class SpeciesService {
             return row.doc;
           });
         }));
-  }
+  }*/
 
   getSpecies(speciesCode: string): Observable<Species> {
     return fromPromise(this.db.query(function(doc, emit) {

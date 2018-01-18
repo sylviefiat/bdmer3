@@ -30,6 +30,15 @@ export class SiteService {
         result.rows.map(row => row.doc)
       )
   }
+  /*public getAll(): Observable<any> {
+    return fromPromise(
+      this.db.allDocs({ include_docs: true })
+        .then(docs => {
+          return docs.rows.map(row => {
+            return row.doc;
+          });
+        }));
+  }*/
 
   getSite(siteCode: string): Observable<Site> {
     return fromPromise(this.db.query(function(doc, emit) {

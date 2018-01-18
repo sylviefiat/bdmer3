@@ -44,7 +44,7 @@ export class SiteEffects {
     .switchMap(() =>
       this.siteService
         .getAll()
-        .map((sites: Site[]) => {console.log(sites); return new SiteAction.LoadSuccessAction(sites)})
+        .map((sites: Site[]) => new SiteAction.LoadSuccessAction(sites))
         .catch(error => of(new SiteAction.LoadFailAction(error)))
     );
 

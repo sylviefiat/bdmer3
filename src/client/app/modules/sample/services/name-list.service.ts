@@ -7,20 +7,16 @@ import { Observable } from 'rxjs/Observable';
 
 // app
 import { Config } from '../../core/index';
-import { Analytics, AnalyticsService } from '../../analytics/index';
 
 // module
 import { NameList } from '../actions/index';
 
 @Injectable()
-export class NameListService extends Analytics {
+export class NameListService {
 
   constructor(
-    public analytics: AnalyticsService,
     private http: Http
   ) {
-    super(analytics);
-    this.category = NameList.CATEGORY;
   }
 
   getNames(): Observable<Array<string>> {
