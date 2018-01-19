@@ -1,10 +1,10 @@
- :host {
-      display: flex;
-      justify-content: center;
-      margin: 72px 0;
-    }
 mat-card {
-    min-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  text-align: center;
 }
 
 mat-card-title {

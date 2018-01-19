@@ -1,4 +1,5 @@
-
+import { TransectPreviewListComponent } from './transect-preview-list.component';
+import { TransectPreviewComponent } from './transect-preview.component';
 import { TransectFormFormComponent } from './transect-form-form.component';
 import { TransectFormPageComponent } from './transect-form-page.component';
 import { TransectFormComponent } from './transect-form.component';
@@ -8,6 +9,8 @@ import { ViewTransectPageComponent } from './view-transect-page.component';
 import { ViewTransectComponent } from './view-transect.component';
 
 export const TR_COMPONENTS: any[] = [
+  TransectPreviewListComponent,
+  TransectPreviewComponent,
   TransectFormFormComponent,
   TransectFormPageComponent,
   TransectFormComponent,
@@ -17,6 +20,8 @@ export const TR_COMPONENTS: any[] = [
   ViewTransectComponent,
 ];
 
+export * from './transect-preview-list.component';
+export * from './transect-preview.component';
 export * from './transect-form-form.component';
 export * from './transect-form-page.component';
 export * from './transect-form.component';

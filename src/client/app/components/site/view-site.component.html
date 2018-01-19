@@ -1,29 +1,21 @@
-<mat-card *ngIf="site">
-      <mat-card-title-group>      
-          <mat-card-title><fa [name]="'map-marker'" [border]=false [size]=1 ></fa> {{ site.code }}</mat-card-title>
-      </mat-card-title-group>
-      
+
+    <mat-card class="actions">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+      <mat-card-title>{{ 'SITE' | translate}} {{ site.code }}</mat-card-title>
       <mat-card-content>
-          <div>{{ site.description }}</div> 
+        <div>{{ site.description }}</div> 
       </mat-card-content>
+      <mat-card-actions>
+        <button (click)="edit.emit(site)">{{ 'EDIT' | translate }}</button>
+        <button (click)="deleteSite(site)">{{ 'DELETE' | translate }}</button> 
+        <mat-form-field>
+          <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
+              <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
+              <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>        
+      </mat-card-actions>       
+    </mat-card>
 
-      <mat-card-content>
-        <mat-list *ngIf="site.zones" flex>
-          <mat-card-subtitle class="mat-no-sticky">{{ 'ZONES' | translate }}</mat-card-subtitle>
-          <mat-list-item class="link"  *ngFor="let zone of site.zones;" (click)="visitZone(zone.code)">
-              <fa [name]="'street-view'" [border]=false [size]=1 ></fa>
-              <p>{{zone.code}} -<span class="soustexte">{{zone.transects.length}} transects, {{zone.zonePreferences.length}} zones de préférence espèces</span></p>
-          </mat-list-item>
-        </mat-list>
-     </mat-card-content>
-
-      <mat-card-actions align="space-between">
-        <button mat-raised-button color="warn" (click)="edit.emit(site)">
-        Edit Site
-        </button>
-        <button mat-raised-button color="warn" (click)="deleteSite()">
-        Remove Site
-        </button>
-
-      </mat-card-actions>
-</mat-card>
+    <bc-zone-preview-list [zones]="zones$ | async" [idSite]="site.code"></bc-zone-preview-list>  
+  

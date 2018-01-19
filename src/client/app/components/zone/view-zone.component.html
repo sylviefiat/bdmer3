@@ -1,9 +1,20 @@
-<mat-card *ngIf="zone">
-      <mat-card-title-group>      
-          <mat-card-title>{{ zone.code }}</mat-card-title>
-          <mat-card-subtitle>{{ 'SURFACE' | translate }} : {{ zone.surface }}m²</mat-card-subtitle>
-      </mat-card-title-group>
 
-      <bc-transect *ngFor="let transect of zone.transects" [transect]="transect"></bc-transect>
+    <mat-card class="actions">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+      <mat-card-title>{{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-content>
+        <div>{{ 'SURFACE' | translate }} : {{ zone.surface }}</div> 
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="edit.emit(zone)">{{ 'EDIT' | translate }}</button>
+        <button (click)="deleteZone(zone)">{{ 'DELETE' | translate }}</button> 
+        <mat-form-field>
+          <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
+              <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
+              <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>        
+      </mat-card-actions>       
+    </mat-card>
 
-</mat-card>
+    <bc-transect-preview-list [transects]="transect$ | async" [idZone]="zone.code" [idSite]="site.code"></bc-transect-preview-list>  

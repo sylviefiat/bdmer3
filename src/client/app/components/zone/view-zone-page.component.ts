@@ -1,5 +1,5 @@
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/take';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
@@ -27,9 +27,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
   selector: 'bc-view-zone-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <mat-card-title>{{ 'ZONES' | translate }}</mat-card-title>
     <bc-zone 
-      [site]="site$ | async"
+      [idSite]="(site$ | async)?._id"
       [zone]="zone$ | async">
     </bc-zone>
   `,
@@ -42,16 +41,14 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idsite))
-      .subscribe(store); 
-    this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idzone))
-      .subscribe(store);   
+      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+      .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.store.let(getSelectedZone);
+    this.zone$ = this.site$.map(site => this.route.params
+      .map(params => site.zones.filter(zone => zone.code===params.idZone)[0]));
   }
 
   ngOnDestroy() {

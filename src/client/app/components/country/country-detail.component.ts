@@ -25,7 +25,7 @@ import { WindowService } from './../../modules/core/services/index';
           {{ 'ADD_USER' | translate}}
         </button>
         <button *ngIf="isNotAdminCountry() && isUserAdmin()" mat-raised-button color="warn" (click)="deleteCountry()">
-          {{ 'DELETE_COUNTRY' | translate}}
+          {{ 'DELETE' | translate}}
         </button>
       </mat-card-actions>
     </mat-card>

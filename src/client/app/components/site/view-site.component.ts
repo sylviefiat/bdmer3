@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
@@ -8,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site } from '../../modules/datas/models/index';
+import { Site, Zone } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -22,6 +23,7 @@ import { WindowService } from '../../modules/core/services/index';
 })
 export class ViewSiteComponent implements OnInit {
     @Input() site: Site;
+    @Input() zones$: Observable<Zone[]>;
     @Input() currentUser: User;
     @Output() remove = new EventEmitter<Site>();
     @Output() edit = new EventEmitter<Site>();
@@ -31,7 +33,7 @@ export class ViewSiteComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.site);
+        this.zones$ = of(this.site.zones);
     }
 
 
@@ -45,14 +47,9 @@ export class ViewSiteComponent implements OnInit {
             return this.remove.emit(this.site);
     }
 
-    visitZone(idzone) {
-        console.log(idzone);
-        this.routerext.navigate(['/zone/'+this.site.code+'/'+idzone], {
-            transition: {
-                duration: 1000,
-                name: 'slideTop',
-            }
-        });
+    addZone(type: string) {
+        type = type.charAt(0).toUpperCase() + type.slice(1);
+        this.routerext.navigate(['/zone' + type+'/'+this.site._id]);
     }
 
 
