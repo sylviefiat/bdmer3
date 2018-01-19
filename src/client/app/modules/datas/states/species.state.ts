@@ -31,6 +31,7 @@ export function getSpeciesLoading(state$: Observable<ISpeciesState>){
 }
 
 export function getSpeciesEntities(state$: Observable<ISpeciesState>){
+  console.log(state$);
   return state$.select(state => state.entities);
 }
 

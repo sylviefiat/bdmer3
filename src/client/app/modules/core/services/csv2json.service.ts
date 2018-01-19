@@ -107,6 +107,7 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "code":
                         case "description":
+                        case "codeCountry":
                             st[headers[j]] = data[j];
                             break;
                         default:

@@ -1,35 +1,39 @@
-<md-card>
-      <md-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 ></fa>{{ 'IMPORT_SITES' | translate }} Import new sites</md-card-title>
-      <md-card-subtitle>{{ 'IMPORT_SITES_DESC' | translate }}</md-card-subtitle>
-      
-      <md-card-content align="center">
-      <p>
-        <button (click)="fileInput.click()">
-          <fa [name]="'upload'" [border]=true [size]=1></fa>
-          <span>{{ 'IMPORT_CSV' | translate }}</span>
-          <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
-        </button>
-      </p>
-      <p class="space-around" *ngIf="!(msg$ | async)">
-        <a class="link" (click)="return()" title="Back">
-            <fa [name]="'chevron-left'" [border]=false [size]=1></fa>
-            Back
-        </a>
-        <button class="question" (click)="changeNeedHelp()" title="Help on format">
-            <fa [name]="'question'" [border]=false [size]=2></fa>
-        </button>
-      </p>
-      <p id="help" *ngIf="needHelp">
-        <a md-list-item class="link" href="{{getCsvSitesUrl()}}" download>
-          {{ 'DOWNLOAD_CSV_SITES' | translate }}
+<div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'IMPORT_SITES' | translate}}</mat-card-title>
+      <mat-card-content>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+      </mat-card-content>   
+      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>     
+    </mat-card>
+</div>
+<div class="insideform">
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+    </mat-card-title-group>
+    <mat-card-content>
+      {{'IMPORT_DESC' | translate }}    
+    </mat-card-content>
+    <mat-card-content class="warn" *ngIf="isAdmin">
+      {{'IMPORT_DESC_ADMIN' | translate }}      
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SITES' | translate }} <span *ngIf="isAdmin">{{ 'DOWNLOAD_CSV_SITES_ADMIN' | translate }}</span></h5>
+      <a *ngIf="!isAdmin" href="{{getCsvSitesUrl()}}" download>
           <fa [name]="'download'" [border]=true [size]=1></fa>
-        </a>
-      </p>
-      </md-card-content>
-      <md-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</md-card-content>
-      <md-card-content *ngIf="msg$ | async" align="start">
-          <p class="msg">{{ msg$ | async }}</p>
-           <p class="actionButtons"><a (click)="cancel()">{{ 'BACK_MANAGEMENT' | translate }}</a></p>
-      </md-card-content> 
-
-    </md-card>
+      </a>
+      <a *ngIf="isAdmin" href="{{getCsvSitesUrlAdmin()}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+      </a>
+    </mat-card-footer>
+    <mat-card-actions align="start">
+      <button (click)="fileInput.click()">
+        <span>{{ 'IMPORT_CSV' | translate }}</span>
+        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -43,8 +43,8 @@ export function getSiteEntities(state$: Observable<ISiteState>) {
 }
 
 export function getSiteOfCurrentCountry(state$: Observable<IAppState>) {
+    console.log(state$);
     return state$.select(state => {
-        console.log(state);
         if(state.country.currentCountryId==='AA')
             return state.site.entities;
         return state.site.entities.filter(site => site.codeCountry === state.country.currentCountryId)

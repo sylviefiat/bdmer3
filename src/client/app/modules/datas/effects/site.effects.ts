@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/withLatestFrom';
+import { _throw } from 'rxjs/observable/throw';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Action } from '@ngrx/store';
@@ -89,30 +90,36 @@ export class SiteEffects {
     .withLatestFrom(this.store.let(getSelectedZone))
     .map(([[action, site], zone]) => [action.payload, site, zone])
     .mergeMap((value: [Transect, Site, Zone]) => {
+      let transect = value[0], site=value[1], zone=value[2];
       console.log(value);
        return this.siteService
-        .editTransect(value[1], value[2], value[0])
+        .editTransect(site, zone, transect)
         .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
         .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
     });
 
   @Effect()
   importSiteToList$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_SITE)
+    .ofType(SiteAction.ActionTypes.IMPORT_SITE)    
     .map((action: SiteAction.ImportSiteAction) => action.payload)
     .mergeMap(sitesCsv => this.csv2jsonService.csv2('site', sitesCsv))
+    //.withLatestFrom(this.store.let(getSelectedCountry))
+    .withLatestFrom(this.store.let(getSelectedCountry))
     // fait automatiquement une boucle sur les sites retournés
-    .mergeMap((site: Site) =>
-      this.store.let(getSelectedCountry)
-        .mergeMap((country: Country) => {
-          site.codeCountry = country.code;
-          if (!site.zones) site.zones = [];
-          return this.siteService
-            .editSite(site)
-            .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
-            .catch(error => of(new SiteAction.AddSiteFailAction(error)))
-        })
-    );
+    .mergeMap((value: [Site, Country]) => {
+      let site = value[0], country=value[1];
+      if(country !== undefined){
+        site.codeCountry = country.code;
+      }
+      if(site.codeCountry === null){
+        return _throw('Import is not possible : country has not been defined');
+      }
+      if (!site.zones) site.zones = [];
+      return this.siteService.editSite(site)            
+     })
+    .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
+    .catch(error => of(new SiteAction.AddSiteFailAction(error)))
+  ;
 
   @Effect()
   importZoneToSite$: Observable<Action> = this.actions$

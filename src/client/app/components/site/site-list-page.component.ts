@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
-import { IAppState, getSiteListCurrentCountry,getSiteInApp } from '../../modules/ngrx/index';
+import { IAppState, getSiteListCurrentCountry } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { Site } from '../../modules/datas/models/site';
 
@@ -43,7 +43,7 @@ export class SiteListPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {  
-    this.sites$ = this.store.let(getSiteInApp);       
+    this.sites$ = this.store.let(getSiteListCurrentCountry);       
     this.store.dispatch(new SiteAction.LoadAction());  
   }
 
