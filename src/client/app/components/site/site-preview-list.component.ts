@@ -4,7 +4,7 @@ import { Site } from './../../modules/datas/models/site';
 @Component({
   selector: 'bc-site-preview-list',
   template: `
-    <bc-site-preview *ngFor="let site of siteList" [site]="site"></bc-site-preview>
+    <bc-site-preview *ngFor="let site of sites" [site]="site"></bc-site-preview>
   `,
   styles: [
     `
@@ -16,15 +16,6 @@ import { Site } from './../../modules/datas/models/site';
   `,
   ],
 })
-export class SitePreviewListComponent implements OnInit, AfterViewChecked {
-  @Input() siteList: Site[];
-
-  ngOnInit(){
-    console.log(this.siteList);
-  }
-
-  ngAfterViewChecked(){
-    console.log(this.siteList);
-  }
- 
+export class SitePreviewListComponent {
+  @Input() sites: any;
 }

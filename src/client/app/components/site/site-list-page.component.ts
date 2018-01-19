@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
-import { IAppState, getSiteListCurrentCountry } from '../../modules/ngrx/index';
+import { IAppState, getSpeciesInApp,getSiteListCurrentCountry } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { Site } from '../../modules/datas/models/site';
 
@@ -14,6 +14,7 @@ import { Site } from '../../modules/datas/models/site';
   template: `
     <mat-card>
       <mat-card-title>{{ 'SITE_LIST' | translate}}</mat-card-title>
+      
       <mat-form-field>
       <mat-select  placeholder="{{'ADD_SITE' | translate}}" (change)="addSite($event.value)">
           <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
@@ -21,8 +22,7 @@ import { Site } from '../../modules/datas/models/site';
       </mat-select>
       </mat-form-field>
     </mat-card>
-
-    <bc-site-preview-list [siteList]="site$ | async"></bc-site-preview-list>
+    <bc-site-preview-list [sites]="sites$ | async"></bc-site-preview-list>
     
   `,
   styles: [
@@ -38,12 +38,12 @@ import { Site } from '../../modules/datas/models/site';
   ],
 })
 export class SiteListPageComponent implements OnInit {
-  sites$: Observable<Site[]>;
+  sites$: Observable<Site[]>;  
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {  
-    this.sites$ = this.store.let(getSiteListCurrentCountry);       
+    this.sites$ = this.store.let(getSiteListCurrentCountry);
     this.store.dispatch(new SiteAction.LoadAction());  
   }
 
