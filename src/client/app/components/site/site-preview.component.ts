@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Site } from './../../modules/datas/models/site';
 
 @Component({
@@ -14,6 +14,12 @@ import { Site } from './../../modules/datas/models/site';
         <mat-card-content>
           {{ description }}
         </mat-card-content>
+        <mat-card-content>
+          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
+          <div>{{nZones}} {{'ZONES' | translate}}</div>
+          <div role="listitem">{{nTransects}} {{'TRANSECTS' | translate}}</div>
+          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
+       </mat-card-content>
       </mat-card>
     </a>
   `,
@@ -50,20 +56,29 @@ import { Site } from './../../modules/datas/models/site';
       margin-top: 15px;
       margin: 15px 0 0;
     }
-    li {
-      display: inline-block;
-      font-size: 13px;
-      list-style-type: none;
-    }
-    mat-card-footer {
-      padding: 0 25px 25px;
+    mat-list-item {
+      max-height:20px !important;
     }
   `,
   ],
 })
-export class SitePreviewComponent{
+export class SitePreviewComponent implements OnInit {
   @Input() site: Site;
   countries: string;
+  nZones: number = 0;
+  nTransects: number = 0;
+  nCounts: number = 0;
+
+  ngOnInit(){
+    this.nZones = this.site.zones.length;
+    for(let z of this.site.zones) {
+      this.nTransects += z.transects.length;
+      for(let c of z.transects){
+        this.nCounts += c.counts.length;
+      }
+    }
+
+  }
 
   get id() {
     return this.site.code;

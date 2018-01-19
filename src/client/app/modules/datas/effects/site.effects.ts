@@ -177,7 +177,7 @@ export class SiteEffects {
     .mergeMap((site) => this.router.navigate(['/site/' + site._id]));
 
   @Effect({ dispatch: false }) removeSiteSuccess$ = this.actions$
-    .ofType(SiteAction.ActionTypes.REMOVE_SITE_FAIL)
+    .ofType(SiteAction.ActionTypes.REMOVE_SITE_SUCCESS)
     .do(() => this.router.navigate(['/site']));
 
   constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {

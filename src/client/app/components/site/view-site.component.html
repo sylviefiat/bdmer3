@@ -7,7 +7,7 @@
           <div>{{ site.description }}</div> 
       </mat-card-content>
 
-      <div>
+      <mat-card-content>
         <mat-list *ngIf="site.zones" flex>
           <mat-card-subtitle class="mat-no-sticky">{{ 'ZONES' | translate }}</mat-card-subtitle>
           <mat-list-item class="link"  *ngFor="let zone of site.zones;" (click)="visitZone(zone.code)">
@@ -15,7 +15,7 @@
               <p>{{zone.code}} -<span class="soustexte">{{zone.transects.length}} transects, {{zone.zonePreferences.length}} zones de préférence espèces</span></p>
           </mat-list-item>
         </mat-list>
-     </div>
+     </mat-card-content>
 
       <mat-card-actions align="space-between">
         <button mat-raised-button color="warn" (click)="edit.emit(site)">
