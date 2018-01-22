@@ -1,5 +1,11 @@
+mat-card {
+  display: flex;
+  flex-direction: column;
+}
 
-
+.actions {
+  text-align: center;
+}
 
 mat-card-title {
     font-style: italic;
@@ -12,11 +18,13 @@ mat-card-content.one{
     display: flex;
     justify-content:start;
 }
-.actions {
-  display: flex;
-  justify-content: space-between;
+mat-card-actions {
+  justify-content: center;
 }
-.table {
-    display: flex;
-    justify-content:space-between;
+mat-form-field {
+  margin-left:50px;
+}
+.warn {
+   margin-left: 10px;
+   background-color: #d9534f;
 }

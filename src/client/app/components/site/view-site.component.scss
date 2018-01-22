@@ -18,20 +18,13 @@ mat-card-content.one{
     display: flex;
     justify-content:start;
 }
-.actions {
-  display: flex;
-  justify-content: space-between;
+mat-card-actions {
+  justify-content: center;
 }
-.table {
-    display: flex;
-    justify-content:space-between;
+mat-form-field {
+  margin-left:50px;
 }
-
-.soustexte {
-  color: #888;
-  font-style: italic;
-}
-
-.link {
-  cursor: pointer;
+.warn {
+   
+   background-color: #d9534f;
 }

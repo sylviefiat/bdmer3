@@ -6,8 +6,10 @@
         <div>{{ site.description }}</div> 
       </mat-card-content>
       <mat-card-actions>
-        <button (click)="edit.emit(site)">{{ 'EDIT' | translate }}</button>
-        <button (click)="deleteSite(site)">{{ 'DELETE' | translate }}</button> 
+        <div>
+          <button (click)="edit.emit(site)">{{ 'EDIT' | translate }}</button>
+          <button class="warn" (click)="deleteSite(site)">{{ 'DELETE' | translate }}</button> 
+        </div>
         <mat-form-field>
           <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
               <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>

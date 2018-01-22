@@ -51,26 +51,29 @@ export class SiteEffects {
 
   @Effect()
   addSiteToList$: Observable<Action> = this.actions$
-    /*.do((action) => console.log(`Received ${action.type}`))
-    .filter((action) => action.type === SiteAction.ActionTypes.ADD_SITE)*/
     .ofType(SiteAction.ActionTypes.ADD_SITE)
     .map((action: SiteAction.AddSiteAction) => action.payload)
-    .mergeMap((site: Site) =>
-      this.store.let(getSelectedCountry)
-        .mergeMap((country: Country) => {
-          site.codeCountry = country.code;
-          if (!site.zones) site.zones = [];
-          return this.siteService
-            .editSite(site)
-            .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
-            .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-        })
-    );
+    .withLatestFrom(this.store.let(getSelectedCountry))
+    .mergeMap((value: [Site, Country]) => {
+      let site=value[0]; 
+      let country =value[1];
+      if(country !== undefined){
+        site.codeCountry = country.code;
+      }
+      if(site.codeCountry === null){
+        return _throw('Import is not possible : country has not been defined');
+      }
+      if (!site.zones) site.zones = [];
+      return this.siteService.editSite(site);
+     })
+    .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+        
+    
+    ;
 
   @Effect()
   addZoneToSite$: Observable<Action> = this.actions$
-    /*.do((action) => console.log(`Received ${action.type}`))
-    .filter((action) => action.type === SiteAction.ActionTypes.ADD_ZONE)*/
     .ofType(SiteAction.ActionTypes.ADD_ZONE)
     .withLatestFrom(this.store.let(getSelectedSite))
     .map(([action, site]) => [action.payload, site])
@@ -89,14 +92,12 @@ export class SiteEffects {
     .withLatestFrom(this.store.let(getSelectedSite))
     .withLatestFrom(this.store.let(getSelectedZone))
     .map(([[action, site], zone]) => [action.payload, site, zone])
-    .mergeMap((value: [Transect, Site, Zone]) => {
-      let transect = value[0], site=value[1], zone=value[2];
-      console.log(value);
-       return this.siteService
-        .editTransect(site, zone, transect)
+    .mergeMap((value: [Transect, Site, Zone]) => 
+       this.siteService
+        .editTransect(value[1], value[2], value[0])
         .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
         .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-    });
+    );
 
   @Effect()
   importSiteToList$: Observable<Action> = this.actions$
@@ -123,18 +124,11 @@ export class SiteEffects {
 
   @Effect()
   importZoneToSite$: Observable<Action> = this.actions$
-    /*.do((action) => console.log(`Received ${action.type}`))
-    .filter((action) => action.type === SiteAction.ActionTypes.IMPORT_ZONE)*/
-    .ofType(SiteAction.ActionTypes.IMPORT_ZONE)
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE)    
+    .map((action: SiteAction.ImportZoneAction) => action.payload)
+    .mergeMap((zone: Zone) => this.csv2jsonService.csv2('zone', zone))
     .withLatestFrom(this.store.let(getSelectedSite))
-    .map(([action, site]) => [action.payload, site])
-    .mergeMap((value: [any, Site]) => {
-      return this.csv2jsonService.csv2('zone', value[0])
-        .mergeMap(zone =>
-          this.siteService
-            .editZone(value[1], zone)
-        )
-    })
+    .mergeMap((value: [Zone,Site]) => this.siteService.editZone(value[1], value[0]))    
     .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 

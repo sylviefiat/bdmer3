@@ -23,7 +23,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class ZoneImportComponent implements OnInit{
     @Input() site: Site;
-    @Input() errorMsg: string | null;
+    @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();

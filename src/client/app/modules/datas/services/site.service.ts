@@ -30,15 +30,6 @@ export class SiteService {
         result.rows.map(row => row.doc)
       )
   }
-  /*public getAll(): Observable<any> {
-    return fromPromise(
-      this.db.allDocs({ include_docs: true })
-        .then(docs => {
-          return docs.rows.map(row => {
-            return row.doc;
-          });
-        }));
-  }*/
 
   getSite(siteCode: string): Observable<Site> {
     return fromPromise(this.db.query(function(doc, emit) {
@@ -81,12 +72,23 @@ export class SiteService {
       })
   }
 
+  removeSite(site: Site): Observable<Site> {    
+    return fromPromise(this.db.remove(site))
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(site);
+      })
+  }
+
   editZone(site: Site, zone: Zone): Observable<Site> {
-    console.log("Edit : "+site);
     return this.getSite(site.code)
       .filter(site => site!==null)
-      .mergeMap(st => {    
+      .mergeMap(st => {   
+        console.log(zone); 
         if(!st.zones) st.zones = [];
+        if(!zone.transects) zone.transects = [];
+        if(!zone.zonePreferences) zone.zonePreferences = [];
+        console.log(zone);
         if(st.zones.filter(z => z.code === zone.code).length > -1){
           st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
         } else {
@@ -106,6 +108,7 @@ export class SiteService {
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
+        if(!transect.counts) transect.counts = [];
         let zn = st.zones.filter(z => z.code === zone.code)[0];
         if(zn){
           if(zn.transects.filter(t => t.code === transect.code).length > -1){
@@ -119,14 +122,6 @@ export class SiteService {
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return  this.currentSite;
-      })
-  }
-
-  removeSite(site: Site): Observable<Site> {    
-    return fromPromise(this.db.remove(site))
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(site);
       })
   }
 

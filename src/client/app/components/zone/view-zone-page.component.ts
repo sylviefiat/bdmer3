@@ -28,14 +28,14 @@ import { SiteAction } from '../../modules/datas/actions/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-zone 
-      [idSite]="(site$ | async)?._id"
-      [zone]="zone$ | async">
+      [site]="(site$ | async)"
+      [zone]="zone$ | async"
+      (remove)="removeZone($event)">
     </bc-zone>
   `,
 })
 export class ViewZonePageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
-  zoneSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
 
@@ -47,12 +47,18 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.site$.map(site => this.route.params
-      .map(params => site.zones.filter(zone => zone.code===params.idZone)[0]));
+    this.zone$ = this.site$
+      .mergeMap(site => 
+        this.route.params
+          .map(params => site.zones.filter(zone => zone.code===params.idZone)[0]));
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
+  }
+
+  removeZone(site: Site){
+    console.log(site);
+    this.store.dispatch(new SiteAction.AddSiteAction(site));
   }
 }

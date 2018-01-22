@@ -3,11 +3,11 @@
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
       <mat-card-title>{{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
       <mat-card-content>
-        <div>{{ 'SURFACE' | translate }} : {{ zone.surface }}</div> 
+        <div>{{ 'SURFACE' | translate }} : {{ zone.surface }} m²</div> 
       </mat-card-content>
       <mat-card-actions>
         <button (click)="edit.emit(zone)">{{ 'EDIT' | translate }}</button>
-        <button (click)="deleteZone(zone)">{{ 'DELETE' | translate }}</button> 
+        <button class="warn" (click)="deleteZone(zone)">{{ 'DELETE' | translate }}</button> 
         <mat-form-field>
           <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
               <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
@@ -17,4 +17,4 @@
       </mat-card-actions>       
     </mat-card>
 
-    <bc-transect-preview-list [transects]="transect$ | async" [idZone]="zone.code" [idSite]="site.code"></bc-transect-preview-list>  
+    <bc-transect-preview-list [transects]="transects$ | async" [idZone]="zone.code" [idSite]="idSite"></bc-transect-preview-list>  

@@ -12,7 +12,7 @@ import { Site,Zone } from './../../modules/datas/models/site';
           <mat-card-subtitle *ngIf="idSite">{{ idSite }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ surface }}
+          {{ surface }} m²
         </mat-card-content>
         <mat-card-content>
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
@@ -68,9 +68,10 @@ export class ZonePreviewComponent implements OnInit {
   nCounts: number = 0;
 
   ngOnInit(){
-    this.nTransects = this.zone.transects.length;
-    for(let c of this.zone.transects) {
-      this.nCounts += c.counts.length;
+    console.log(this.zone);
+    this.nTransects = this.zone.transects ? this.zone.transects.length : 0;
+    for(let t of this.zone.transects) {
+      this.nCounts += t.counts ? t.counts.length : 0;
     }
 
   }

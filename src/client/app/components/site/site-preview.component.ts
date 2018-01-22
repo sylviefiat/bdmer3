@@ -70,12 +70,14 @@ export class SitePreviewComponent implements OnInit {
   nCounts: number = 0;
 
   ngOnInit(){
-    this.nZones = this.site.zones.length;
-    for(let z of this.site.zones) {
-      this.nTransects += z.transects.length;
-      for(let c of z.transects){
-        this.nCounts += c.counts.length;
-      }
+      this.nZones = this.site.zones ? this.site.zones.length : 0;
+      for(let z of this.site.zones) {
+        this.nTransects += z.transects ? z.transects.length : 0;
+        if(z.transects){
+          for(let c of z.transects){
+            this.nCounts += c.counts ? c.counts.length : 0;
+          }
+        }
     }
 
   }

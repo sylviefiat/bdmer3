@@ -19,7 +19,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
-      [errorMsg]="error$ | async"
+      [error]="error$ | async"
       [msg]="msg$ | async"
       [site]="site$ | async">
     </bc-zone-import>
@@ -37,9 +37,8 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        console.log("here we are");
         this.actionsSubscription = route.params
-            .map(params => new SiteAction.SelectSiteAction(params.idsite))
+            .map(params => new SiteAction.SelectSiteAction(params.idSite))
             .subscribe(store);
     }
 
