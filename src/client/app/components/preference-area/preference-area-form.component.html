@@ -1,0 +1,33 @@
+
+  <div [formGroup]="zonePrefForm">
+    <mat-card-content> 
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'ZONE_PREF_CODE' | translate }}" formControlName="code" required>
+        <div class="hint">{{ 'ZONE_PREF_CODE_EX' | translate }}</div>
+      </mat-input-container>       
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>m²
+        <div class="hint">{{ 'ZONE_CODE_EX' | translate }}</div>    
+      </mat-input-container>          
+       
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'SPECIES_CODE' | translate }}" formControlName="codeSpecies" required>m²
+        <div class="hint">{{ 'SPECIES_CODE_EX' | translate }}</div>    
+      </mat-input-container>          
+ 
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'PRESENCE' | translate }}" formControlName="presence" required>m²
+        <div class="hint">{{ 'PRESENCE_EX' | translate }}</div>    
+      </mat-input-container>          
+       
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'INFO_SOURCE' | translate }}" formControlName="infoSource" required>m²
+        <div class="hint">{{ 'INFO_SOURCE_EX' | translate }}</div>    
+      </mat-input-container>          
+    </mat-card-content>
+   
+  </div>

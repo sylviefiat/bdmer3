@@ -36,12 +36,16 @@ import { SiteAction } from '../../modules/datas/actions/index';
 })
 export class ViewZonePageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
+  zoneSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
+      .subscribe(store);
+    this.zoneSubscription = route.params
+      .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
   }
 
@@ -55,10 +59,10 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
+    this.zoneSubscription.unsubscribe();
   }
 
   removeZone(site: Site){
-    console.log(site);
     this.store.dispatch(new SiteAction.AddSiteAction(site));
   }
 }

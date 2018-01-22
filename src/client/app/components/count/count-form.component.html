@@ -1,0 +1,30 @@
+
+  <div [formGroup]="CountForm">
+    <mat-card-content> 
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'COUNT_CODE' | translate }}" formControlName="code" required>
+        <div class="hint">{{ 'COUNT_CODE_EX' | translate }}</div>
+      </mat-input-container>       
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'COUNT_DATE' | translate }}" formControlName="date" required>
+        <div class="hint">{{ 'COUNT_DATE_EX' | translate }}</div>    
+      </mat-input-container>          
+       
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'COUNT_CODESPECIES' | translate }}" formControlName="codeSpecies" required>
+        <div class="hint">{{ 'COUNT_CODESPECIES_EX' | translate }}</div>    
+      </mat-input-container>
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'COUNT_LONG' | translate }}" formControlName="longMm" required>mm
+        <div class="hint">{{ 'COUNT_LONG_EX' | translate }}</div>    
+      </mat-input-container> 
+    
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'COUNT_LAT' | translate }}" formControlName="latMm" required>mm
+        <div class="hint">{{ 'COUNT_LAT_EX' | translate }}</div>    
+      </mat-input-container>          
+    </mat-card-content>
+  </div>

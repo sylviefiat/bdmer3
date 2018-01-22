@@ -46,7 +46,7 @@ export class ViewZoneComponent implements OnInit {
 
     addTransect(type: string) {
         type = type.charAt(0).toUpperCase() + type.slice(1);
-        this.routerext.navigate(['/'+this.zone.code+'/transect' + type]);
+        this.routerext.navigate(['/transect' + type+'/'+this.site.code+'/'+this.zone.code]);
     }
 
 

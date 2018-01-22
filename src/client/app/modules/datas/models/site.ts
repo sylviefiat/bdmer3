@@ -34,6 +34,7 @@ export interface Count {
 
 export interface ZonePreference {
     code: string;
+    codeZone: string;
     codeSpecies: string;
     presence: string;
     infoSource: string;

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,Transect } from './../../modules/datas/models/site';
+import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
 
 @Component({
-  selector: 'bc-transect-preview',
+  selector: 'bc-zone-preference-preview',
   template: `
-    <a [routerLink]="['/transect', codeSite, codeZone, code]">
+    <a [routerLink]="['/zonePref', codeSite, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
@@ -12,12 +12,14 @@ import { Site,Zone,Transect } from './../../modules/datas/models/site';
           <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ latitude }}°, {{ longitude }}°
+          {{'CODE_SPECIES' | translate}} {{ codeSpecies }}
         </mat-card-content>
         <mat-card-content>
-          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
-          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
-       </mat-card-content>
+          {{'PRESENCE' | translate}} {{ presence }}
+        </mat-card-content>
+        <mat-card-content>
+          {{'INFO_SOURCE' | translate}} {{ infSource }}
+        </mat-card-content>
       </mat-card>
     </a>
   `,
@@ -60,23 +62,22 @@ import { Site,Zone,Transect } from './../../modules/datas/models/site';
   `,
   ],
 })
-export class TransectPreviewComponent implements OnInit {  
-  @Input() transect: Transect;
+export class PreferenceAreaPreviewComponent implements OnInit {  
+  @Input() zonePref: ZonePreference;
   @Input() zone: Zone;
   @Input() site: Site;
   nCounts: number = 0;
 
   ngOnInit(){
-    this.nCounts = this.transect.counts.length;
 
   }
 
   get id() {
-    return this.transect.code;
+    return this.zonePref.code;
   }
 
   get code() {
-    return this.transect.code;
+    return this.zonePref.code;
   }
 
   get codeSite() {
@@ -87,15 +88,19 @@ export class TransectPreviewComponent implements OnInit {
     return this.zone.code;
   }
 
-  get latitude() {
-    return this.transect.latitude;
+  get codeSpecies() {
+    return this.zonePref.codeSpecies;
   }
 
-  get longitude() {
-    return this.transect.longitude;
+  get presence() {
+    return this.zonePref.presence;
+  }
+
+  get infoSource() {
+    return this.zonePref.infoSource;
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.transect.code+".jpg"; 
+    return "/assets/img/"+this.zonePref.code+".jpg"; 
   }
 }

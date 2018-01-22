@@ -10,10 +10,15 @@
           <button (click)="edit.emit(site)">{{ 'EDIT' | translate }}</button>
           <button class="warn" (click)="deleteSite(site)">{{ 'DELETE' | translate }}</button> 
         </div>
+        <div>
+          <button (click)="addZone()">{{ 'ADD_ZONE' | translate }}</button> 
+        </div>
         <mat-form-field>
-          <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
-              <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
-              <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
+          <mat-select  placeholder="{{'IMPORT' | translate}}" (change)="import($event.value)">
+              <mat-option [value]="'zoneImport'">{{ 'IMPORT' | translate}} {{ 'ZONES' | translate}}</mat-option>
+              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
+              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>        
       </mat-card-actions>       

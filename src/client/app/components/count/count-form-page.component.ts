@@ -7,24 +7,26 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Site, Zone, Transect, Count } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedTransect, getSelectedCount } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 
 @Component({
-  selector: 'bc-zone-page',
+  selector: 'bc-count-page',
   template: `
-    <bc-zone-form-page
+    <bc-count-form-page
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
-      [zone]="zone$ | async">
-    </bc-zone-form-page>
+      [zone]="zone$ | async"
+      [transect]="transect$ | async"
+      [count]="count$ | async">
+    </bc-count-form-page>
   `,
   styles: [
     `
-    #zone-page {
+    #count-page {
       display: flex;
       flex-direction:row;
       justify-content: center;
@@ -42,34 +44,49 @@ import { SiteAction } from '../../modules/datas/actions/index';
     }
     `]
 })
-export class ZoneFormPageComponent implements OnInit, OnDestroy {
+export class CountFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
-  zone$: Observable<Zone | null>;
+  zone$: Observable<Zone>;
+  transect$: Observable<Transect>;
+  count$: Observable<Count>;
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
+  transectSubscription: Subscription;
+  countSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
-      .subscribe(store);
+      .subscribe(store);      
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .subscribe(store);
+    this.transectSubscription = route.params
+      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+      .subscribe(store);
+    this.countSubscription = route.params
+      .map(params => new SiteAction.SelectCountAction(params.idCount))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
+    this.transect$ = this.store.let(getSelectedTransect);
+    this.count$ = this.store.let(getSelectedCount);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
+    this.transectSubscription.unsubscribe();
+    this.countSubscription.unsubscribe();
   }
 
-  onSubmit(zone: Zone) { 
-      this.store.dispatch(new SiteAction.AddZoneAction(zone))    
+  onSubmit(count: Count) { 
+    console.log(count);
+      this.store.dispatch(new SiteAction.AddCountAction(count))
   }
 
   return() {

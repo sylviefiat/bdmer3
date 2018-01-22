@@ -103,8 +103,7 @@ export class SiteEffects {
   importSiteToList$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_SITE)    
     .map((action: SiteAction.ImportSiteAction) => action.payload)
-    .mergeMap(sitesCsv => this.csv2jsonService.csv2('site', sitesCsv))
-    //.withLatestFrom(this.store.let(getSelectedCountry))
+    .mergeMap((site: Site) => this.csv2jsonService.csv2('site', site))
     .withLatestFrom(this.store.let(getSelectedCountry))
     // fait automatiquement une boucle sur les sites retournés
     .mergeMap((value: [Site, Country]) => {
@@ -115,6 +114,7 @@ export class SiteEffects {
       if(site.codeCountry === null){
         return _throw('Import is not possible : country has not been defined');
       }
+      console.log(site);
       if (!site.zones) site.zones = [];
       return this.siteService.editSite(site)            
      })
@@ -134,23 +134,13 @@ export class SiteEffects {
 
   @Effect()
   importTransectToZone$: Observable<Action> = this.actions$
-    /*.do((action) => console.log(`Received ${action.type}`))
-    .filter((action) => action.type === SiteAction.ActionTypes.IMPORT_TRANSECT)*/
     .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT)
+    .map((action: SiteAction.ImportZoneAction) => action.payload)
+    .mergeMap((transect: Transect) => this.csv2jsonService.csv2('transect', transect))
     .withLatestFrom(this.store.let(getSelectedSite))
     .withLatestFrom(this.store.let(getSelectedZone))
-    .map(([[action, site], zone]) => [action.payload, site, zone])
-    .mergeMap((value: [Transect, Site, Zone]) => {
-      console.log(value);
-      return this.csv2jsonService.csv2('transect', value[0])
-        .mergeMap(transect => {
-          console.log(value);
-          return this.siteService
-            .editTransect(value[1], value[2], transect)
-          }        
-        )
-      
-    })
+    .map(([[transect, site], zone]) => [transect, site, zone])
+    .mergeMap((value: [Transect, Site, Zone]) => this.siteService.editTransect(value[1], value[2], value[0]))
     .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 

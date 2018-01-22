@@ -47,9 +47,12 @@ export class ViewSiteComponent implements OnInit {
             return this.remove.emit(this.site);
     }
 
-    addZone(type: string) {
-        type = type.charAt(0).toUpperCase() + type.slice(1);
-        this.routerext.navigate(['/zone' + type+'/'+this.site._id]);
+    addZone(){
+        this.routerext.navigate(['/zoneForm/'+this.site._id]);
+    }
+
+    import(type: string) {
+        this.routerext.navigate([type+'/'+this.site._id]);
     }
 
 

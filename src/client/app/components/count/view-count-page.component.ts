@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCount } from '../../modules/ngrx/index';
+import { Site, Zone, Transect, Count } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
@@ -24,24 +24,27 @@ import { SiteAction } from '../../modules/datas/actions/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-view-transect-page',
+  selector: 'bc-view-count-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-transect 
+    <bc-count 
       [site]="site$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async"
-      (remove)="removeTransect($event)">
-    </bc-transect>
+      [count]="count$ | async"
+      (remove)="removeCount($event)">
+    </bc-count>
   `,
 })
-export class ViewTransectPageComponent implements OnInit, OnDestroy {
+export class ViewCountPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
   transectSubscription: Subscription;
+  countSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
   transect$: Observable<Transect | null>;
+  count$: Observable<Count | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -53,18 +56,23 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
     this.transectSubscription = route.params
       .map(params => new SiteAction.SelectTransectAction(params.idTransect))
       .subscribe(store);
+    this.countSubscription = route.params
+      .map(params => new SiteAction.SelectCountAction(params.idCount))
+      .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
     this.transect$ = this.store.let(getSelectedTransect);
+    this.count$ = this.store.let(getSelectedCount);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.transectSubscription.unsubscribe();
+    this.countSubscription.unsubscribe();
   }
 
   removeTransect(site: Site){

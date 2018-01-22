@@ -1,0 +1,15 @@
+
+    <mat-card class="actions">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+      <mat-card-title>{{ 'COUNT' | translate}} {{ count.code }}</mat-card-title>
+      <mat-card-content>
+        <div>{{ 'COUNT_DATE' | translate }} : {{ count.date }}</div> 
+      </mat-card-content>
+      <mat-card-content>
+        <div>{{ 'COUNT_SPECIES' | translate }} : {{ count.codeSpecies }}</div> 
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="edit.emit(count)">{{ 'EDIT' | translate }}</button>
+        <button class="warn" (click)="deleteCount(transect)">{{ 'DELETE' | translate }}</button> 
+      </mat-card-actions>              
+    </mat-card>

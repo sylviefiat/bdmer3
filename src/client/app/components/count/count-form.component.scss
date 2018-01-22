@@ -1,0 +1,74 @@
+  :host {
+      display: flex;
+      justify-content: center;
+      margin: 72px 0;
+    }
+    mat-card {
+        margin-bottom:10px;
+    }
+    mat-card-title,
+    mat-card-content {
+      display: flex;
+      justify-content: center;
+    }
+    mat-card-subtitle {
+        color: #555;
+    }
+    mat-input-container {
+      padding-left: 1em;
+    }
+    mat-card-actions {
+      margin: 5px 0 0 !important;
+    }
+    input {
+      width: 300px;
+    }
+    textarea {
+      width: 650px;
+    }
+    .panel {
+      margin-bottom:5px;
+    }
+    .toolbar {
+      background-color: #106cc8;
+      color: rgba(255, 255, 255, 0.87);
+      display: block;
+      padding:10px;
+    }
+    .full {
+      width: 100%;
+    }
+    .hint {
+        /* Position the hint */
+        position: absolute;
+        left: 2px;
+        right: auto;
+        bottom: 7px;
+        /* Copy styles from ng-messages */
+        font-size: 12px;
+        line-height: 14px;
+        transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+        /* Set our own color */
+        color: grey; 
+    }
+    .warning {
+      color: red;
+      font-style: italic;
+    }
+    .action {
+        text-decoration: underline;
+        cursor: pointer;
+        color: #555;
+    }
+    .btn[disabled] {
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: .65;
+    }
+
+    .loginSpecies {
+      padding: 16px;
+      width: 300px;
+      font-color: white;
+      background-color: red;
+    }

@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
+import { Site, Zone, ZonePreference } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
@@ -24,24 +24,24 @@ import { SiteAction } from '../../modules/datas/actions/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-view-transect-page',
+  selector: 'bc-view-zone-pref-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-transect 
+    <bc-zone-pref 
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [transect]="transect$ | async"
-      (remove)="removeTransect($event)">
-    </bc-transect>
+      [zonePref]="zonePref$ | async"
+      (remove)="removeZonePref($event)">
+    </bc-zone-pref>
   `,
 })
-export class ViewTransectPageComponent implements OnInit, OnDestroy {
+export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
-  transectSubscription: Subscription;
+  zonePrefSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
-  transect$: Observable<Transect | null>;
+  zonePref$: Observable<ZonePreference | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -50,21 +50,21 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
-    this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+    this.zonePrefSubscription = route.params
+      .map(params => new SiteAction.SelectZonePrefAction(params.idZonePref))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transect$ = this.store.let(getSelectedTransect);
+    this.zonePref$ = this.store.let(getSelectedZonePref);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.transectSubscription.unsubscribe();
+    this.zonePrefSubscription.unsubscribe();
   }
 
   removeTransect(site: Site){

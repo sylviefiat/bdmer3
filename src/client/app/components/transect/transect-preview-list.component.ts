@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
-import { Transect } from './../../modules/datas/models/site';
+import { Transect, Zone, Site } from './../../modules/datas/models/site';
 
 @Component({
   selector: 'bc-transect-preview-list',
   template: `
-    <bc-transect-preview *ngFor="let transect of transects" [transect]="transect" [idZone]="idZone" [idSite]="idSite"></bc-transect-preview>
+    <bc-transect-preview *ngFor="let transect of transects" [transect]="transect" [zone]="zone" [site]="site"></bc-transect-preview>
   `,
   styles: [
     `
@@ -18,6 +18,6 @@ import { Transect } from './../../modules/datas/models/site';
 })
 export class TransectPreviewListComponent {
   @Input() transects: Transect[];
-  @Input() idZone: string;
-  @Input() idSite: string;
+  @Input() zone: Zone;
+  @Input() site: Site;
 }

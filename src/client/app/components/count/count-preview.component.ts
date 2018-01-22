@@ -1,22 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,Transect } from './../../modules/datas/models/site';
+import { Site,Zone,Transect, Count } from './../../modules/datas/models/site';
 
 @Component({
-  selector: 'bc-transect-preview',
+  selector: 'bc-count-preview',
   template: `
-    <a [routerLink]="['/transect', codeSite, codeZone, code]">
+    <a [routerLink]="['/count', codeSite, codeZone, codeTransect, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span> / <span *ngIf="codeTransect">{{ codeTransect }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ latitude }}°, {{ longitude }}°
+          {{ date }}
         </mat-card-content>
         <mat-card-content>
-          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
-          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
+          {{ codeSpecies }}
+        </mat-card-content>
+        <mat-card-content>
+          {{ 'COUNT_LONG ' | translate }}: {{ longMm }}, {{ 'COUNT_LAT ' | translate }}: {{ latMm }}
        </mat-card-content>
       </mat-card>
     </a>
@@ -60,23 +62,23 @@ import { Site,Zone,Transect } from './../../modules/datas/models/site';
   `,
   ],
 })
-export class TransectPreviewComponent implements OnInit {  
+export class CountPreviewComponent implements OnInit {  
+  @Input() count: Count;
   @Input() transect: Transect;
   @Input() zone: Zone;
   @Input() site: Site;
   nCounts: number = 0;
 
   ngOnInit(){
-    this.nCounts = this.transect.counts.length;
 
   }
 
   get id() {
-    return this.transect.code;
+    return this.count.code;
   }
 
   get code() {
-    return this.transect.code;
+    return this.count.code;
   }
 
   get codeSite() {
@@ -87,15 +89,23 @@ export class TransectPreviewComponent implements OnInit {
     return this.zone.code;
   }
 
-  get latitude() {
-    return this.transect.latitude;
+  get codeTransect() {
+    return this.transect.code;
   }
 
-  get longitude() {
-    return this.transect.longitude;
+  get date() {
+    return this.count.date;
+  }
+
+  get longMm() {
+    return this.count.longMm;
+  }
+
+  get latMm() {
+    return this.count.largMm;
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.transect.code+".jpg"; 
+    return "/assets/img/"+this.count.code+".jpg"; 
   }
 }

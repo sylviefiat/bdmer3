@@ -9,7 +9,7 @@
         <button (click)="edit.emit(zone)">{{ 'EDIT' | translate }}</button>
         <button class="warn" (click)="deleteZone(zone)">{{ 'DELETE' | translate }}</button> 
         <mat-form-field>
-          <mat-select  placeholder="{{'ADD_ZONE' | translate}}" (change)="addZone($event.value)">
+          <mat-select  placeholder="{{'ADD_TRANSECT' | translate}}" (change)="addTransect($event.value)">
               <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
               <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
           </mat-select>
@@ -17,4 +17,4 @@
       </mat-card-actions>       
     </mat-card>
 
-    <bc-transect-preview-list [transects]="transects$ | async" [idZone]="zone.code" [idSite]="idSite"></bc-transect-preview-list>  
+    <bc-transect-preview-list [transects]="transects$ | async" [zone]="zone" [site]="site"></bc-transect-preview-list>  

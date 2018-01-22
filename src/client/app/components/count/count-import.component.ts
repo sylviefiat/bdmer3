@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Site, Zone,Transect } from '../../modules/datas/models/index';
 
 import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
@@ -15,15 +15,16 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-transect-import',
-    templateUrl: './transect-import.component.html',
+    selector: 'bc-count-import',
+    templateUrl: './count-import.component.html',
     styleUrls: [
-        './transect-import.component.css',
+        './count-import.component.css',
     ],
 })
-export class TransectImportComponent implements OnInit{
+export class CountImportComponent implements OnInit{
     @Input() site: Site;
     @Input() zone: Zone;
+    @Input() transect: Transect;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();
@@ -37,7 +38,7 @@ export class TransectImportComponent implements OnInit{
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
         this.store.take(1).subscribe((s: any) => {
             this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importTransect.csv";
+            this.csvFile = "importCount.csv";
         });
     }
 
@@ -57,11 +58,11 @@ export class TransectImportComponent implements OnInit{
         this.needHelp = !this.needHelp;
     }
 
-    getCsvTransects() {
+    getCsvCounts() {
         return this.csvFile;
     }
 
-    getCsvTransectsUrl() {
+    getCsvCountsUrl() {
         return this.docs_repo + this.csvFile;
     }
 

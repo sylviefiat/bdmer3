@@ -15,13 +15,13 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-transect-import',
-    templateUrl: './transect-import.component.html',
+    selector: 'bc-zone-pref-import',
+    templateUrl: './preference-area-import.component.html',
     styleUrls: [
-        './transect-import.component.css',
+        './preference-area-import.component.css',
     ],
 })
-export class TransectImportComponent implements OnInit{
+export class PreferenceAreaImportComponent implements OnInit{
     @Input() site: Site;
     @Input() zone: Zone;
     @Input() error: string | null;
@@ -37,7 +37,7 @@ export class TransectImportComponent implements OnInit{
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
         this.store.take(1).subscribe((s: any) => {
             this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importTransect.csv";
+            this.csvFile = "importZonePref.csv";
         });
     }
 
@@ -57,11 +57,11 @@ export class TransectImportComponent implements OnInit{
         this.needHelp = !this.needHelp;
     }
 
-    getCsvTransects() {
+    getCsvZonesPref() {
         return this.csvFile;
     }
 
-    getCsvTransectsUrl() {
+    getCsvZonesPrefUrl() {
         return this.docs_repo + this.csvFile;
     }
 

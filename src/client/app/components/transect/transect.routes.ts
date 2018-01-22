@@ -8,23 +8,23 @@ export const TransectRoutes: Array<any> = [
     path: 'transect',
     component: TransectListPageComponent,
     canActivate : [AuthGuard]
-  }, */{
-    path: 'transectForm',
+  }, */
+  {
+    path: 'transectForm/:idSite/:idZone',
     component: TransectFormPageComponent,
     canActivate : [AuthGuard]
-  },
-  {
+  },{
     path: 'transectForm/:idSite/:idZone/:idTransect',
     component: TransectFormPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'transectImport',
+    path: 'transectImport/:idSite/:idZone',
     component: TransectImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'transect/:id',
+    path: 'transect/:idSite/:idZone/:idTransect',
     component: ViewTransectPageComponent,
     canActivate : [AuthGuard]
   }

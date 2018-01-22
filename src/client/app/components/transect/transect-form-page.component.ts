@@ -54,13 +54,13 @@ export class TransectFormPageComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idsite))
+      .map(params => new SiteAction.SelectSiteAction(params.idSite))
       .subscribe(store);      
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idzone))
+      .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idtransect))
+      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
       .subscribe(store);
   }
 

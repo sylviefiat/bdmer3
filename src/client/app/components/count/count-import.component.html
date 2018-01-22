@@ -1,6 +1,6 @@
 <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'IMPORT_TRANSECTS' | translate}}</mat-card-title>
+      <mat-card-title>{{ 'IMPORT_COUNTS' | translate}}</mat-card-title>
       <mat-card-content>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
@@ -18,8 +18,8 @@
       {{'IMPORT_DESC' | translate }}    
     </mat-card-content>
     <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_TRANSECTS' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvTransectsUrl()}}" download>
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
+      <a *ngIf="!isAdmin" href="{{getCsvCountsUrl()}}" download>
           <fa [name]="'download'" [border]=true [size]=1></fa>
       </a>
     </mat-card-footer>

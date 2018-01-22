@@ -13,9 +13,9 @@ import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
-    selector: 'bc-transect-import-page',
+    selector: 'bc-zone-pref-import-page',
     template: `
-    <bc-transect-import
+    <bc-zone-pref-import
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
@@ -23,11 +23,11 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [msg]="msg$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async">
-    </bc-transect-import>
+    </bc-zone-pref-import>
   `,
     styles: [``]
 })
-export class TransectImportPageComponent implements OnInit, OnDestroy {
+export class PreferenceAreaImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
     zone$: Observable<Zone>;
     error$: Observable<string | null>;
@@ -63,7 +63,7 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);
-        this.store.dispatch(new SiteAction.ImportTransectAction(csvFile));
+        this.store.dispatch(new SiteAction.ImportZonePrefAction(csvFile));
     }
 
     handleErrorUpload(msg: string) {
