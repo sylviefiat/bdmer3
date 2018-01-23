@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser } from '../../modules/ngrx/index';
+import { IAppState, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
 import { Site } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
@@ -28,8 +28,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
   template: `
     <bc-view-site 
       [site]="site$ | async"
-      [currentUser]="currentUser$ | async"
-      (edit)="editSite($event)"
+      [msg]="msg$ | async"
+      (action)="actionSite($event)"
       (remove)="removeSite($event)">
     </bc-view-site>
   `,
@@ -37,7 +37,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
 export class ViewSitePageComponent implements OnInit, OnDestroy {
   actionsSubscription: Subscription;
   site$: Observable<Site | null>;
-  currentUser$: Observable<User>;
+  msg$: Observable<string | null>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     this.actionsSubscription = route.params
@@ -47,21 +47,17 @@ export class ViewSitePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.currentUser$ = this.store.let(getAuthUser);
+    this.msg$ = this.store.let(getSitePageMsg);
   }
 
   ngOnDestroy() {
     this.actionsSubscription.unsubscribe();
   }
 
-  editSite(site: Site) {
-    this.routerext.navigate(['/siteForm/' + site._id], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
+  actionSite(redirect: String) {
+    this.routerext.navigate([redirect]);
   }
+
   removeSite(site: Site) {
     this.store.dispatch(new SiteAction.RemoveSiteAction(site));
   }

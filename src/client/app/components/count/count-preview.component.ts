@@ -18,7 +18,7 @@ import { Site,Zone,Transect, Count } from './../../modules/datas/models/site';
           {{ codeSpecies }}
         </mat-card-content>
         <mat-card-content>
-          {{ 'COUNT_LONG ' | translate }}: {{ longMm }}, {{ 'COUNT_LAT ' | translate }}: {{ latMm }}
+          {{ 'COUNT_MESURES' | translate }}: {{ mesures }}
        </mat-card-content>
       </mat-card>
     </a>
@@ -89,6 +89,10 @@ export class CountPreviewComponent implements OnInit {
     return this.zone.code;
   }
 
+  get nomTransect() {
+    return this.transect.code;
+  }
+
   get codeTransect() {
     return this.transect.code;
   }
@@ -97,12 +101,12 @@ export class CountPreviewComponent implements OnInit {
     return this.count.date;
   }
 
-  get longMm() {
-    return this.count.longMm;
+  get codeSpecies() {
+    return this.count.codeSpecies;
   }
 
-  get latMm() {
-    return this.count.largMm;
+  get mesures() {
+    return this.count.mesures;
   }
 
   get thumbnail(): string | boolean {

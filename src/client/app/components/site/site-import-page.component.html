@@ -4,8 +4,7 @@
       <mat-card-content>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
-      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>     
+      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>    
     </mat-card>
 </div>
 <div class="insideform">

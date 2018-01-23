@@ -9,6 +9,7 @@ import { _throw } from 'rxjs/observable/throw';
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
 import { Site, Zone, Transect } from '../models/site';
+import { Country } from '../../countries/models/country';
 
 @Injectable()
 export class SiteService {
@@ -57,11 +58,18 @@ export class SiteService {
       .map((sp, i) => this.addSite(sp[i]))
   }
 
-  editSite(site: Site): Observable<Site> {
+  editSite(site: Site, country: Country): Observable<Site> {
     console.log(site);
     site._id=site.code;
     return this.getSite(site.code)
-      .mergeMap(st => {    
+      .mergeMap(st => {  
+        if (!site.zones) site.zones = []; 
+        if(country !== undefined){
+          site.codeCountry = country.code;
+        }
+        if(site.codeCountry === null){
+          return _throw('Import is not possible : country has not been defined');
+        }      
         if(st) {site._rev = st._rev;}
         this.currentSite = of(site);
         return fromPromise(this.db.put(site));
@@ -80,7 +88,7 @@ export class SiteService {
       })
   }
 
-  editZone(site: Site, zone: Zone): Observable<Site> {
+  editZone(site: Site, zone: Zone): Observable<Zone> {
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {   
@@ -99,17 +107,17 @@ export class SiteService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        return  this.currentSite;
+        return  of(zone);
       })
   }
 
-  editTransect(site: Site, zone: Zone, transect: Transect): Observable<Site> {
+  editTransect(site: Site, transect: Transect): Observable<Transect> {
     console.log("Edit : "+transect);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
         if(!transect.counts) transect.counts = [];
-        let zn = st.zones.filter(z => z.code === zone.code)[0];
+        let zn = st.zones.filter(z => z.code === transect.codeZone)[0];
         if(zn){
           if(zn.transects.filter(t => t.code === transect.code).length > -1){
             zn.transects = [ ...zn.transects.filter(t => t.code !== transect.code), transect];
@@ -121,7 +129,7 @@ export class SiteService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        return  this.currentSite;
+        return  of(transect);
       })
   }
 

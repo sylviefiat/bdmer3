@@ -32,6 +32,10 @@ export function getRole(state$: Observable<IAuthState>) {
     return state$.select(state => state.role);
 }
 
+export function getRoleIsAdmin(state$: Observable<IAuthState>) {
+    return state$.select(state => state.role === 'AA');
+}
+
 export function getUser(state$: Observable<IAuthState>) {
     return state$.select(state => state.user);
 }

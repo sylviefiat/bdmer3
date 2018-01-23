@@ -19,7 +19,7 @@ export const PreferenceAreaRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'zonePrefImport/:idSite/:idZone',
+    path: 'zonePrefImport/:idSite',
     component: PreferenceAreaImportPageComponent,
     canActivate : [AuthGuard]
   },

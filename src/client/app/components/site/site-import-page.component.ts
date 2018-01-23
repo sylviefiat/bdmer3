@@ -24,7 +24,6 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class SiteImportPageComponent implements OnInit {
     error$: Observable<string | null>;
-    msg$: Observable<string | null>;
     userCountry$: Observable<Country>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
@@ -42,7 +41,7 @@ export class SiteImportPageComponent implements OnInit {
 
     ngOnInit() {
         this.error$ = this.store.let(getSitePageError);
-        this.msg$ = this.store.let(getSitePageMsg);
+        
         this.userCountry$ = this.store.let(getAuthCountry);
     }
 

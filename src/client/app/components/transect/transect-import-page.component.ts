@@ -21,15 +21,13 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       (back)="return($event)"
       [error]="error$ | async"
       [msg]="msg$ | async"
-      [site]="site$ | async"
-      [zone]="zone$ | async">
+      [site]="site$ | async">
     </bc-transect-import>
   `,
     styles: [``]
 })
 export class TransectImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
-    zone$: Observable<Zone>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
 
@@ -44,16 +42,12 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
         this.siteSubscription = route.params
             .map(params => new SiteAction.SelectSiteAction(params.idSite))
             .subscribe(store);
-        this.zoneSubscription = route.params
-            .map(params => new SiteAction.SelectZoneAction(params.idZone))
-            .subscribe(store);
     }
 
     ngOnInit() {
         this.error$ = this.store.let(getSitePageError);
         this.msg$ = this.store.let(getSitePageMsg);
         this.site$ = this.store.let(getSelectedSite);
-        this.zone$ = this.store.let(getSelectedZone);
     }
 
     ngOnDestroy() {

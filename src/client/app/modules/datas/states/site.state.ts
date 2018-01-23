@@ -59,7 +59,8 @@ export function getSiteError(state$: Observable<ISiteState>) {
 }
 
 export function getSiteMsg(state$: Observable<ISiteState>) {
-    return state$.select(state => state.msg);
+    console.log("message");
+    return state$.select(state => {console.log(state.msg); return state.msg});
 }
 
 export function getCurrentSiteId(state$: Observable<ISiteState>) {

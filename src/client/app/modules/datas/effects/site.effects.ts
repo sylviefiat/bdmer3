@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/delay';
 import { _throw } from 'rxjs/observable/throw';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -19,7 +20,7 @@ import { IAppState, getSelectedCountry, getSelectedSite, getSelectedZone } from 
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SiteService } from "../services/site.service";
 import { SiteAction } from '../actions/index';
-import { Site, Zone, Transect } from '../models/site';
+import { Site, Zone, Transect, Count, Campaign, ZonePreference } from '../models/site';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -50,119 +51,177 @@ export class SiteEffects {
     );
 
   @Effect()
-  addSiteToList$: Observable<Action> = this.actions$
+  addSite$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_SITE)
     .map((action: SiteAction.AddSiteAction) => action.payload)
-    .withLatestFrom(this.store.let(getSelectedCountry))
-    .mergeMap((value: [Site, Country]) => {
-      let site=value[0]; 
-      let country =value[1];
-      if(country !== undefined){
-        site.codeCountry = country.code;
-      }
-      if(site.codeCountry === null){
-        return _throw('Import is not possible : country has not been defined');
-      }
-      if (!site.zones) site.zones = [];
-      return this.siteService.editSite(site);
-     })
+    .withLatestFrom(this.store.let(getSelectedCountry))    
+    .mergeMap((value: [Site, Country]) => this.siteService.editSite(value[0], value[1]))
     .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-        
-    
-    ;
+  ;
 
   @Effect()
-  addZoneToSite$: Observable<Action> = this.actions$
+  addZone$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_ZONE)
+    .map((action: SiteAction.AddZoneAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedSite))
-    .map(([action, site]) => [action.payload, site])
-    .mergeMap((value: [Zone, Site]) =>
-      this.siteService
-        .editZone(value[1], value[0])
-        .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
-        .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-    );
+    .mergeMap((value: [Zone, Site]) => this.siteService.editZone(value[1], value[0]))
+    .map((zone: Zone) => new SiteAction.AddZoneSuccessAction(zone))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+  ;
 
   @Effect() 
-  addTransectToZone$: Observable<Action> = this.actions$
-    /*.do((action) => console.log(`Received ${action.type}`))
-    .filter((action) => action.type === SiteAction.ActionTypes.ADD_ZONE)*/
+  addTransect$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_TRANSECT)
+    .map((action: SiteAction.AddTransectAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedSite))
-    .withLatestFrom(this.store.let(getSelectedZone))
-    .map(([[action, site], zone]) => [action.payload, site, zone])
-    .mergeMap((value: [Transect, Site, Zone]) => 
-       this.siteService
-        .editTransect(value[1], value[2], value[0])
-        .map((site: Site) => new SiteAction.AddSiteSuccessAction(site))
-        .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
-    );
+    .mergeMap((value: [Transect, Site]) => this.siteService.editTransect(value[1], value[0]))
+    .map((transect: Transect) => new SiteAction.AddTransectSuccessAction(transect))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+  ;
 
   @Effect()
-  importSiteToList$: Observable<Action> = this.actions$
+  importSite$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_SITE)    
     .map((action: SiteAction.ImportSiteAction) => action.payload)
     .mergeMap((site: Site) => this.csv2jsonService.csv2('site', site))
     .withLatestFrom(this.store.let(getSelectedCountry))
     // fait automatiquement une boucle sur les sites retournés
-    .mergeMap((value: [Site, Country]) => {
-      let site = value[0], country=value[1];
-      if(country !== undefined){
-        site.codeCountry = country.code;
-      }
-      if(site.codeCountry === null){
-        return _throw('Import is not possible : country has not been defined');
-      }
-      console.log(site);
-      if (!site.zones) site.zones = [];
-      return this.siteService.editSite(site)            
-     })
+    .mergeMap((value: [Site, Country]) => this.siteService.editSite(value[0], value[1]))
     .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
     .catch(error => of(new SiteAction.AddSiteFailAction(error)))
   ;
 
   @Effect()
-  importZoneToSite$: Observable<Action> = this.actions$
+  importZone$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_ZONE)    
     .map((action: SiteAction.ImportZoneAction) => action.payload)
     .mergeMap((zone: Zone) => this.csv2jsonService.csv2('zone', zone))
     .withLatestFrom(this.store.let(getSelectedSite))
     .mergeMap((value: [Zone,Site]) => this.siteService.editZone(value[1], value[0]))    
-    .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
+    .map((zone: Zone) => new SiteAction.ImportZoneSuccessAction(zone))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 
   @Effect()
-  importTransectToZone$: Observable<Action> = this.actions$
+  importTransect$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT)
     .map((action: SiteAction.ImportZoneAction) => action.payload)
     .mergeMap((transect: Transect) => this.csv2jsonService.csv2('transect', transect))
     .withLatestFrom(this.store.let(getSelectedSite))
-    .withLatestFrom(this.store.let(getSelectedZone))
-    .map(([[transect, site], zone]) => [transect, site, zone])
-    .mergeMap((value: [Transect, Site, Zone]) => this.siteService.editTransect(value[1], value[2], value[0]))
-    .map((site: Site) => new SiteAction.ImportSiteSuccessAction(site))
+    .mergeMap((value: [Transect, Site]) => this.siteService.editTransect(value[1], value[0]))
+    .map((transect: Transect) => new SiteAction.ImportTransectSuccessAction(transect))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 
   @Effect()
-  removeSiteFromList$: Observable<Action> = this.actions$
+  removeSite$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.REMOVE_SITE)
     .map((action: SiteAction.RemoveSiteAction) => action.payload)
-    .mergeMap(site =>
-      this.siteService
-        .removeSite(site)
-        .map(() => new SiteAction.RemoveSiteSuccessAction(site))
-        .catch(() => of(new SiteAction.RemoveSiteFailAction(site)))
-    );
+    .mergeMap(site => this.siteService.removeSite(site))
+    .map((site) => new SiteAction.RemoveSiteSuccessAction(site))
+    .catch((error) => of(new SiteAction.RemoveSiteFailAction(error)))
+  ;
 
-  @Effect({ dispatch: false }) addSiteSuccess$ = this.actions$
+  @Effect() 
+  addSiteSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_SITE_SUCCESS)
     .map((action: SiteAction.AddSiteSuccessAction) => action.payload)
-    .mergeMap((site) => this.router.navigate(['/site/' + site._id]));
+    .mergeMap((site: Site) => this.router.navigate(['/site/' + site._id]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
 
-  @Effect({ dispatch: false }) removeSiteSuccess$ = this.actions$
+  @Effect() 
+  importSiteSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_SITE_SUCCESS)
+    .do(() => this.router.navigate(['/site']))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  addZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_ZONE_SUCCESS)
+    .map((action: SiteAction.AddZoneSuccessAction) => action.payload)
+    .mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codeSite + '/' + zone.code]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  importZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS)
+    .map((action: SiteAction.ImportZoneSuccessAction) => action.payload)
+    .mergeMap((zone: Zone) => this.router.navigate(['/site/' + zone.codeSite]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  addCampaignSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_CAMPAIGN_SUCCESS)
+    .map((action: SiteAction.AddCampaignSuccessAction) => action.payload)
+    .mergeMap((campaign: Campaign) => this.router.navigate(['/campaign/' + campaign.codeSite + '/'+ campaign.codeZone + '/' + campaign.code]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction()); 
+
+  @Effect() 
+  importCampaignSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_CAMPAIGN_SUCCESS)
+    .map((action: SiteAction.ImportCampaignSuccessAction) => action.payload)
+    .mergeMap((campaign: Campaign) => this.router.navigate(['/zone/' + campaign.codeSite + '/'+ campaign.codeZone]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  addZonePrefSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_ZONE_PREF_SUCCESS)
+    .map((action: SiteAction.AddZonePrefSuccessAction) => action.payload)
+    .mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zonePref/' + zonePref.codeSite + '/'+ zonePref.codeZone + '/' + zonePref.code]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction()); 
+
+  @Effect() 
+  importZonePrefSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS)
+    .map((action: SiteAction.ImportZonePrefSuccessAction) => action.payload)
+    .mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codeSite + '/'+ zonePref.codeZone]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  addTransectSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_TRANSECT_SUCCESS)
+    .map((action: SiteAction.AddTransectSuccessAction) => action.payload)
+    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codeSite + '/'+ transect.codeZone + '/' + transect.code]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction()); 
+
+  @Effect() 
+  importTransectSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT_SUCCESS)
+    .map((action: SiteAction.ImportTransectSuccessAction) => action.payload)
+    .mergeMap((transect: Transect) => this.router.navigate(['/zone/' + transect.codeSite + '/'+ transect.codeZone]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  addCountSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_COUNT_SUCCESS)
+    .map((action: SiteAction.AddCountSuccessAction) => action.payload)
+    .mergeMap((count:Count) => this.router.navigate(['/count/' + count.codeSite + '/'+ count.codeZone + '/' + count.codeTransect + '/' + count.code]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  importCountSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS)
+    .map((action: SiteAction.ImportCountSuccessAction) => action.payload)
+    .mergeMap((count:Count) => this.router.navigate(['/transect/' + count.codeSite + '/'+ count.codeZone + '/' + count.codeTransect]))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());
+
+  @Effect() 
+  importOrremoveSiteSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.REMOVE_SITE_SUCCESS)
-    .do(() => this.router.navigate(['/site']));
+    .do(() => this.router.navigate(['/site']))
+    .delay(3000)
+    .map(() => new SiteAction.RemoveMsgAction());     
 
   constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {
 

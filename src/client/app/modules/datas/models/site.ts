@@ -12,6 +12,7 @@ export interface Site {
 
 export interface Zone {
     code: string;
+    codeSite: string;
     surface: string;
     transects: Transect[];
     zonePreferences: ZonePreference[];
@@ -19,6 +20,8 @@ export interface Zone {
 
 export interface Transect {
     code: string;
+    codeSite: string;
+    codeZone: string;
     longitude: string;
     latitude: string;
     counts: Count[];
@@ -26,16 +29,33 @@ export interface Transect {
 
 export interface Count {
     code: string;
-    date: string;
+    codeCampagne: string;
+    codeSite: string;
+    codeZone: string;
+    nomTransect: string;
+    codeTransect: string;
+    date: Date;
     codeSpecies: string;
-    longMm: string;
-    largMm: string;
+    mesures: string;
 }
 
 export interface ZonePreference {
     code: string;
+    codeSite: string;
     codeZone: string;
     codeSpecies: string;
     presence: string;
     infoSource: string;
+}
+
+export interface Campaign {
+    code: string;
+    codeSite: string;
+    codeZone: string;
+    dateStart: Date;
+    dateEnd: Date;
+    participants: string;
+    surfaceTransect: number;
+    description: string;
+    codePays: string;
 }

@@ -38,6 +38,7 @@ export function siteReducer(
 
         case SiteAction.ActionTypes.ADD_SITE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_SITE_SUCCESS: {
+            console.log("add site(s)");
             const addedsite = action.payload;
             const sites = state.entities.filter(site => addedsite._id !== site._id);
             return {
@@ -45,12 +46,13 @@ export function siteReducer(
                 entities: [...sites,...addedsite],
                 ids: [...state.ids.filter(id => addedsite._id !== id), ...addedsite._id],
                 error: null,
-                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Sites registered with success":null
+                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Sites registered with success":"site registered with success"
             }
         }
 
         case SiteAction.ActionTypes.REMOVE_SITE_SUCCESS:
             {
+                console.log("remove site");
                 const removedSite = action.payload;
                 return {
                     ...state,
@@ -93,6 +95,15 @@ export function siteReducer(
             return {
                 ...state,
                 currentTransectId: action.payload,
+            };
+        }
+
+        case SiteAction.ActionTypes.REMOVE_MSG: {
+            console.log("remove msg");            
+            return {
+                ...state,
+                error: null,
+                msg: null
             };
         }
 

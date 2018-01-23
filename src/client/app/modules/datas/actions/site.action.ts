@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Site,Zone, Transect, ZonePreference,Count } from '../models/index';
+import { Site,Zone, Transect, ZonePreference,Count,Campaign } from '../models/index';
 import { type } from '../../core/utils/index';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,6 +24,13 @@ export namespace SiteAction {
       REMOVE_ZONE: string;
       REMOVE_ZONE_SUCCESS: string;
       REMOVE_ZONE_FAIL: string;
+      ADD_CAMPAIGN: string;
+      ADD_CAMPAIGN_SUCCESS: string;
+      IMPORT_CAMPAIGN: string;
+      IMPORT_CAMPAIGN_SUCCESS: string;
+      REMOVE_CAMPAIGN: string;
+      REMOVE_CAMPAIGN_SUCCESS: string;
+      REMOVE_CAMPAIGN_FAIL: string;
       ADD_TRANSECT: string;
       ADD_TRANSECT_SUCCESS: string;
       IMPORT_TRANSECT: string;
@@ -53,6 +60,7 @@ export namespace SiteAction {
       SELECT_TRANSECT: string;
       SELECT_ZONE_PREF: string;
       SELECT_COUNT: string;
+      REMOVE_MSG: string;
     }
 
     export const ActionTypes: ISiteActions = {
@@ -77,7 +85,14 @@ export namespace SiteAction {
       IMPORT_TRANSECT_SUCCESS:type(`${SITE} Import Transect Success`),
       REMOVE_TRANSECT: type(`${SITE} Remove Transect`),
       REMOVE_TRANSECT_SUCCESS: type(`${SITE} Remove Transect Success`),
-      REMOVE_TRANSECT_FAIL: type(`${SITE} Remove Transect Fail`),  
+      REMOVE_TRANSECT_FAIL: type(`${SITE} Remove Transect Fail`), 
+      ADD_CAMPAIGN: type(`${SITE} Add Campaign`),
+      ADD_CAMPAIGN_SUCCESS: type(`${SITE} Add Campaign Success`),
+      IMPORT_CAMPAIGN: type(`${SITE} Import Campaign`),
+      IMPORT_CAMPAIGN_SUCCESS:type(`${SITE} Import Campaign Success`),
+      REMOVE_CAMPAIGN: type(`${SITE} Remove Campaign`),
+      REMOVE_CAMPAIGN_SUCCESS: type(`${SITE} Remove Campaign Success`),
+      REMOVE_CAMPAIGN_FAIL: type(`${SITE} Remove Campaign Fail`),   
       ADD_ZONE_PREF: type(`${SITE} Add Zone Preference`),
       ADD_ZONE_PREF_SUCCESS: type(`${SITE} Add Zone Preference Success`),
       IMPORT_ZONE_PREF: type(`${SITE} Import Zone Preference`),
@@ -99,7 +114,8 @@ export namespace SiteAction {
       SELECT_ZONE: type(`${SITE} select zone`),
       SELECT_TRANSECT: type(`${SITE} select transect`),
       SELECT_ZONE_PREF: type(`${SITE} select species preference zone`),
-      SELECT_COUNT: type(`${SITE} select count`)
+      SELECT_COUNT: type(`${SITE} select count`),
+      REMOVE_MSG: type(`${SITE} remove message`)
     };
 
   /**
@@ -132,7 +148,7 @@ export namespace SiteAction {
   export class ImportSiteSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_SITE_SUCCESS;
 
-    constructor(public payload: any) {}
+    constructor(public payload: Site) {}
   }
 
   /**
@@ -168,7 +184,7 @@ export namespace SiteAction {
   export class AddZoneSuccessAction implements Action {
     readonly type = ActionTypes.ADD_ZONE_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Zone) {}
   }
 
   export class ImportZoneAction implements Action {
@@ -180,7 +196,7 @@ export namespace SiteAction {
   export class ImportZoneSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Zone) {}
   }
 
   /**
@@ -216,7 +232,7 @@ export namespace SiteAction {
   export class AddZonePrefSuccessAction implements Action {
     readonly type = ActionTypes.ADD_ZONE_PREF_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: ZonePreference) {}
   }
 
   export class ImportZonePrefAction implements Action {
@@ -228,7 +244,7 @@ export namespace SiteAction {
   export class ImportZonePrefSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_PREF_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: ZonePreference) {}
   }
 
   /**
@@ -252,6 +268,53 @@ export namespace SiteAction {
     constructor(public payload: Site) {}
   }
 
+/**
+   * Add campaign to zone  Actions
+   */
+  export class AddCampaignAction implements Action {
+    readonly type = ActionTypes.ADD_CAMPAIGN;
+
+    constructor(public payload: Campaign) {}
+  }
+
+  export class AddCampaignSuccessAction implements Action {
+    readonly type = ActionTypes.ADD_CAMPAIGN_SUCCESS;
+
+    constructor(public payload: Campaign) {}
+  }
+
+  export class ImportCampaignAction implements Action {
+    readonly type = ActionTypes.IMPORT_CAMPAIGN;
+
+    constructor(public payload: any) {}
+  }
+
+  export class ImportCampaignSuccessAction implements Action {
+    readonly type = ActionTypes.IMPORT_CAMPAIGN_SUCCESS;
+
+    constructor(public payload: Campaign) {}
+  }
+
+  /**
+   * Remove Campaign from Zone - Site  Actions
+   */
+  export class RemoveCampaignAction implements Action {
+    readonly type = ActionTypes.REMOVE_CAMPAIGN;
+
+    constructor(public payload: Campaign) {}
+  }
+
+  export class RemoveCampaignSuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_CAMPAIGN_SUCCESS;
+
+    constructor(public payload: Site) {}
+  }
+
+  export class RemoveCampaignFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_CAMPAIGN_FAIL;
+
+    constructor(public payload: Site) {}
+  }
 
   /**
    * Add transect to zone  Actions
@@ -265,7 +328,7 @@ export namespace SiteAction {
   export class AddTransectSuccessAction implements Action {
     readonly type = ActionTypes.ADD_TRANSECT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Transect) {}
   }
 
   export class ImportTransectAction implements Action {
@@ -277,7 +340,7 @@ export namespace SiteAction {
   export class ImportTransectSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_TRANSECT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Transect) {}
   }
 
   /**
@@ -313,7 +376,7 @@ export namespace SiteAction {
   export class AddCountSuccessAction implements Action {
     readonly type = ActionTypes.ADD_COUNT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Count) {}
   }
 
   export class ImportCountAction implements Action {
@@ -325,7 +388,7 @@ export namespace SiteAction {
   export class ImportCountSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_COUNT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Count) {}
   }
 
   /**
@@ -392,6 +455,11 @@ export namespace SiteAction {
     constructor(public payload: any) {}
   }
 
+  export class RemoveMsgAction implements Action {
+    readonly type = ActionTypes.REMOVE_MSG;
+    payload: string = null;
+  }
+
   export type Actions =
     | AddSiteAction
     | AddSiteSuccessAction
@@ -412,6 +480,12 @@ export namespace SiteAction {
     | RemoveTransectAction
     | RemoveTransectSuccessAction
     | RemoveTransectFailAction
+    | AddCampaignAction
+    | AddCampaignSuccessAction
+    | ImportCampaignAction
+    | RemoveCampaignAction
+    | RemoveCampaignSuccessAction
+    | RemoveCampaignFailAction
     | AddZonePrefAction
     | AddZonePrefSuccessAction
     | ImportZonePrefAction
@@ -431,5 +505,6 @@ export namespace SiteAction {
     | SelectZoneAction
     | SelectTransectAction
     | SelectZonePrefAction
-    | SelectCountAction;
+    | SelectCountAction
+    | RemoveMsgAction;
  }

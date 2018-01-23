@@ -38,7 +38,7 @@ export class TransectFormComponent implements OnInit {
                 addrCtrl = this.newCount(c);
                 control.push(addrCtrl);
             }
-        } 
+        }
     }
 
     ngOnInit() {
@@ -46,26 +46,31 @@ export class TransectFormComponent implements OnInit {
         this.initCount();
     }
 
-     newCount(count: Count) {
-         let ct = this._fb.group({
-             date: new FormControl(count && count.date||''),
-             codeSpecies: new FormControl(count && count.codeSpecies||''),
-             lonMm: new FormControl(count && count.longMm||''),
-             largMm: new FormControl(count && count.largMm||''),
-         });
-         return ct;
-     }
- 
-     addCount() {
-         const control = <FormArray>this.transectForm.controls['counts'];
-         const addrCtrl = this.newCount(null);
-         control.push(addrCtrl);
-     }
- 
-     removeCount(i: number) {
-         const control = <FormArray>this.transectForm.controls['counts'];
-         control.removeAt(i);
-     }
+    newCount(count: Count) {
+        let ct = this._fb.group({
+            code: new FormControl("", Validators.required),
+            codeCampagne: new FormControl(""),
+            codeSite: new FormControl(""),
+            codeZone: new FormControl(""),
+            nomTransect: new FormControl(""),
+            codeTransect: new FormControl(""),
+            date: new FormControl(""),
+            codeSpecies: new FormControl(""),
+            mesures: new FormControl("")
+        });
+        return ct;
+    }
+
+    addCount() {
+        const control = <FormArray>this.transectForm.controls['counts'];
+        const addrCtrl = this.newCount(null);
+        control.push(addrCtrl);
+    }
+
+    removeCount(i: number) {
+        const control = <FormArray>this.transectForm.controls['counts'];
+        control.removeAt(i);
+    }
 
     submit() {
         if (this.transectForm.valid) {

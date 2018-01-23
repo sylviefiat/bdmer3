@@ -23,7 +23,7 @@ export class SiteFormComponent implements OnInit {
     @Input() errorMessage: string | null;
     @Input() site: Site | null;
     @Input() country: Country | null;
-
+    @Input() countries: Country[];
     @Output() submitted = new EventEmitter<Site>();
 
     form: FormGroup = new FormGroup({

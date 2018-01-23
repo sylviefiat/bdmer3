@@ -23,7 +23,6 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class TransectImportComponent implements OnInit{
     @Input() site: Site;
-    @Input() zone: Zone;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();

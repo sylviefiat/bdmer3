@@ -64,10 +64,14 @@ export class CountFormFormComponent implements OnInit {
 
   countForm: FormGroup = new FormGroup({
     code: new FormControl("", Validators.required),
+    codeCampagne: new FormControl(""),
+    codeSite: new FormControl(""),
+    codeZone: new FormControl(""),
+    nomTransect: new FormControl(""),
+    codeTransect: new FormControl(""),
     date: new FormControl(""),
     codeSpecies: new FormControl(""),
-    longMm: new FormControl(""),
-    largMm: new FormControl("")
+    mesures: new FormControl("")
   });
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
@@ -79,10 +83,14 @@ export class CountFormFormComponent implements OnInit {
       this.countForm.controls.code.setValue(this.transect.code + "_C");
     } else {
       this.countForm.controls.code.setValue(this.count.code);
-      this.countForm.controls.longitude.setValue(this.count.date);
-      this.countForm.controls.latitude.setValue(this.count.codeSpecies);
-      this.countForm.controls.longMm.setValue(this.count.longMm);
-      this.countForm.controls.largMm.setValue(this.count.largMm);
+      this.countForm.controls.codeCampagne.setValue(this.count.codeCampagne);
+      this.countForm.controls.codeSite.setValue(this.count.codeSite);
+      this.countForm.controls.codeZone.setValue(this.count.codeZone);
+      this.countForm.controls.nomTransect.setValue(this.count.nomTransect);
+      this.countForm.controls.codeTransect.setValue(this.count.codeTransect);
+      this.countForm.controls.date.setValue(this.count.date);
+      this.countForm.controls.codeSpecies.setValue(this.count.codeSpecies);
+      this.countForm.controls.mesures.setValue(this.count.mesures);
     }  
   }
 

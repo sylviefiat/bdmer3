@@ -23,10 +23,10 @@ import { WindowService } from '../../modules/core/services/index';
 })
 export class ViewSiteComponent implements OnInit {
     @Input() site: Site;
+    @Input() msg: string | null;
     @Input() zones$: Observable<Zone[]>;
-    @Input() currentUser: User;
     @Output() remove = new EventEmitter<Site>();
-    @Output() edit = new EventEmitter<Site>();
+    @Output() action = new EventEmitter<String>();
 
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
@@ -34,12 +34,7 @@ export class ViewSiteComponent implements OnInit {
 
     ngOnInit() {
         this.zones$ = of(this.site.zones);
-    }
 
-
-    isUserAdmin(): boolean {
-        console.log(this.currentUser);
-        return this.currentUser && this.currentUser.role && this.currentUser.countryCode === 'AA';
     }
 
     deleteSite() {
@@ -47,12 +42,23 @@ export class ViewSiteComponent implements OnInit {
             return this.remove.emit(this.site);
     }
 
-    addZone(){
-        this.routerext.navigate(['/zoneForm/'+this.site._id]);
-    }
-
-    import(type: string) {
-        this.routerext.navigate([type+'/'+this.site._id]);
+    actions(type: string) {
+        switch (type) {
+            case "siteForm":
+            case "zoneForm":
+            case "zoneImport":
+            case "zonePrefImport":
+            case "transectImport":
+            case "countImport":
+                this.action.emit(type+'/'+this.site._id);
+                break;
+            case "deleteSite":
+                this.deleteSite();
+                break;
+            default:
+                break;
+        }
+        
     }
 
 

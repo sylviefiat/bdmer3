@@ -1,52 +1,35 @@
-<mat-card>
-  <mat-card-title class="toolbar"><fa [name]="'map-marker'" [border]=true [size]=1 > </fa><span style="text-align:center">{{ 'ADD_SITE_COUNTRY' | translate }} {{country.name}}</span></mat-card-title>
-  <mat-card-content>
+<form [formGroup]="form" (ngSubmit)="submit()">  
+  <div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'ADD_SITE' | translate}}</mat-card-title>
+      
+      <mat-card-content>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ 'SUBMIT' | translate }}</button>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-        <mat-card class="row">
-          <p>
-          <mat-input-container class="full">
-            <input class="full" type="text" matInput placeholder="Code site" formControlName="code" required>
-            <div class="hint">{{ 'EX_SITE_CODE' | translate }}
-              <span class="warning"> {{ 'EX_SITE_CODE_FORBIDDEN' | translate }} </span>
-            </div>
-          </mat-input-container>
-          </p>
-          <p>
-          <mat-input-container>
-            <textarea mat-maxlength="150" rows="5" matInput formControlName="description"  mat-select-on-focus></textarea>
-            <div class="hint">{{ 'EX_SITE_DESC' | translate }}</div> 
-          </mat-input-container>            
-        </p>
-        </mat-card>
-        <!--names-->
-        <mat-card formArrayName="zones">
-          <mat-card-subtitle>{{ 'ZONES' | translate }} </mat-card-subtitle>
-          <mat-card *ngFor="let zone of site.zones; let i=index;" class="panel"> 
+  <div class="insideform">
+    <mat-card class="row">
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'SITE_CODE' | translate }}" formControlName="code" required>
+        <div class="hint">{{ 'SITE_CODE_EX' | translate }}</div>
+      </mat-input-container>
 
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZone(i)"></fa>
-            <div [formGroupName]="i">
-              <bc-zone-form [errorMessage]="errorMessage" [site]="site" [zone]="zone" [zoneForm]="form.controls.zones.controls[i]"></bc-zone-form>
-            </div>
-          </mat-card>
-          <mat-card-actions>
-            <a class="action" (click)="addZone()">
-              {{ 'ADD_ZONE' | translate }}
-            </a>
-          </mat-card-actions>
-        </mat-card>
+      <mat-form-field>
+        <mat-select  placeholder="{{'SITE_COUNTRY' | translate}}" (change)="setCountry($event.value)" >
+          <mat-option *ngFor="let pays of countries$" [value]="country">{{ pays.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-        <p *ngIf="errorMessage" class="speciesError">
-            {{ errorMessage }}
-        </p>  
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" required>
+        <div class="hint">{{ 'SITE_DESCRIPTION_EX' | translate }}</div>     
+      </mat-input-container>
 
-        <div class="actions">
-          <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Submit</button>
-          <button (click)="return()" class="btn btn-secondary">Cancel</button>
-        </div>
-     
-    </form>
-  </mat-card-content>
-    
+    </mat-card>
+  </div>
 
-</mat-card>
+</form>
