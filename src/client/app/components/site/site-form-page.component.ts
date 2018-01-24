@@ -9,7 +9,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedCountry, getCountryList } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedCountry, getAllCountriesInApp } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -53,7 +53,7 @@ export class SiteFormPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.let(getSitePageError);
         this.site$ = this.store.let(getSelectedSite);
         this.country$ = this.store.let(getSelectedCountry);
-        this.countries$ = this.store.let(getCountryList);
+        this.countries$ = this.store.let(getAllCountriesInApp);
     }
 
     ngOnDestroy() {
