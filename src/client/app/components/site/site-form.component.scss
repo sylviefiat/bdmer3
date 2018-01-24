@@ -1,11 +1,15 @@
-  :host {
+  .insideform {
       display: flex;
+      flex-direction: column;
       justify-content: center;
+      flex-wrap: wrap;
       margin: 72px 0;
     }
-    mat-card {
-        margin-bottom:10px;
+    .insideform mat-card {
+      flex-grow: 1;
+      margin:10px 20%;
     }
+
     mat-card-title,
     mat-card-content {
       display: flex;
@@ -15,28 +19,22 @@
         color: #555;
     }
     mat-input-container {
-      padding-left: 1em;
+      padding-left: 2em;
+      flex-grow: 1;
     }
     mat-card-actions {
       margin: 5px 0 0 !important;
     }
     input {
-      width: 300px;
+      flex-grow: 1;
+      min-width: 300px;
     }
-    textarea {
-      width: 650px;
+    .column {
+      display: flex;
+      flex-direction: column;
     }
-    .panel {
-      margin-bottom:5px;
-    }
-    .toolbar {
-      background-color: #106cc8;
-      color: rgba(255, 255, 255, 0.87);
-      display: block;
-      padding:10px;
-    }
-    .full {
-      width: 100%;
+    .mat-form-field {
+      width: auto;
     }
     .hint {
         /* Position the hint */
@@ -51,24 +49,23 @@
         /* Set our own color */
         color: grey; 
     }
-    .warning {
-      color: red;
-      font-style: italic;
-    }
-    .action {
-        text-decoration: underline;
-        cursor: pointer;
-        color: #555;
-    }
     .btn[disabled] {
         cursor: not-allowed;
         box-shadow: none;
         opacity: .65;
     }
-
-    .loginSpecies {
-      padding: 16px;
-      width: 300px;
-      font-color: white;
-      background-color: red;
+    .warn {
+      color: white;
+      background-color: #d9534f;
+    }
+    .clickable {
+      padding: 0 1px 2px 2px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .actions {
+      text-align: center;
+    }
+    .back {
+      background-color: darkgrey;
     }
