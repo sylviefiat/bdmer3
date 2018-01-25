@@ -89,6 +89,8 @@ export class ZonePreviewComponent implements OnInit {
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.zone.code+".jpg"; 
+    // WAIT FOR MAP GENERATION
+    return null;
+    //return "/assets/img/"+this.zone.code+".jpg"; 
   }
 }

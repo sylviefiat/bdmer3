@@ -89,19 +89,21 @@ export class SiteService {
   }
 
   editZone(site: Site, zone: Zone): Observable<Zone> {
+    console.log(zone);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {   
-        console.log(zone); 
+        console.log(zone);
+        if(!zone.codeSite) zone.codeSite=site.code;
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
         console.log(zone);
-        if(st.zones.filter(z => z.code === zone.code).length > -1){
+        //if(st.zones.filter(z => z.code === zone.code).length > -1){
           st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
-        } else {
+        /*} else {
           st.zones.push(zone);
-        }
+        }*/
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })

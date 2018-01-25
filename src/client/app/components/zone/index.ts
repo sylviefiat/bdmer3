@@ -1,6 +1,5 @@
 import { ZonePreviewListComponent } from './zone-preview-list.component';
 import { ZonePreviewComponent } from './zone-preview.component';
-import { ZoneFormFormComponent } from './zone-form-form.component';
 import { ZoneFormPageComponent } from './zone-form-page.component';
 import { ZoneFormComponent } from './zone-form.component';
 import { ZoneImportPageComponent } from './zone-import-page.component';
@@ -11,7 +10,6 @@ import { ViewZoneComponent } from './view-zone.component';
 export const ZONE_COMPONENTS: any[] = [
   ZonePreviewListComponent,
   ZonePreviewComponent,
-  ZoneFormFormComponent,
   ZoneFormPageComponent,
   ZoneFormComponent,
   ZoneImportPageComponent,
@@ -22,7 +20,6 @@ export const ZONE_COMPONENTS: any[] = [
 
 export * from './zone-preview-list.component';
 export * from './zone-preview.component';
-export * from './zone-form-form.component';
 export * from './zone-form-page.component';
 export * from './zone-form.component';
 export * from './zone-import-page.component';

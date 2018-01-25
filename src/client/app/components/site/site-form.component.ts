@@ -30,8 +30,7 @@ export class SiteFormComponent implements OnInit {
     form: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
         codeCountry: new FormControl(""),
-        description: new FormControl(""),
-        zones: this._fb.array([]),
+        description: new FormControl("")
     });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
@@ -52,7 +51,6 @@ export class SiteFormComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.form);
         if (this.form.valid) {
             this.submitted.emit(this.form.value);
         }

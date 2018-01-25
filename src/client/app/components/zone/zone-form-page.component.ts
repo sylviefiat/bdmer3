@@ -15,31 +15,23 @@ import { SiteAction } from '../../modules/datas/actions/index';
 @Component({
   selector: 'bc-zone-page',
   template: `
-    <bc-zone-form-page
+    <bc-zone-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async">
-    </bc-zone-form-page>
+    </bc-zone-form>
   `,
   styles: [
     `
-    #zone-page {
-      display: flex;
-      flex-direction:row;
-      justify-content: center;
-      margin: 72px 0;
+   mat-card {
+      text-align: center;
     }
-    mat-card {
-      min-width: 500px;
+    mat-card-title {
+      display: flex;
+      justify-content: center;
     }
     
-    .toolbar {
-      background-color: #106cc8;
-      color: rgba(255, 255, 255, 0.87);
-      display: block;
-      padding:10px;
-    }
     `]
 })
 export class ZoneFormPageComponent implements OnInit, OnDestroy {
@@ -69,15 +61,8 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(zone: Zone) { 
-      this.store.dispatch(new SiteAction.AddZoneAction(zone))    
-  }
-
-  return() {
-    this.routerext.navigate(['/site/'], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
+    console.log(zone);
+    console.log(zone.codeSite);
+      this.store.dispatch(new SiteAction.AddZoneAction(zone))
   }
 }

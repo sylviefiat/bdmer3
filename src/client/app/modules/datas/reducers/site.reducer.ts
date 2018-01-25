@@ -32,13 +32,8 @@ export function siteReducer(
 
         }
 
-        case SiteAction.ActionTypes.ADD_SITE:{
-            return state;
-        }
-
         case SiteAction.ActionTypes.ADD_SITE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_SITE_SUCCESS: {
-            console.log("add site(s)");
             const addedsite = action.payload;
             const sites = state.entities.filter(site => addedsite._id !== site._id);
             return {
@@ -52,7 +47,36 @@ export function siteReducer(
 
         case SiteAction.ActionTypes.REMOVE_SITE_SUCCESS:
             {
-                console.log("remove site");
+                const removedSite = action.payload;
+                return {
+                    ...state,
+                    entities: state.entities.filter(site => removedSite._id !== site._id),
+                    ids: state.ids.filter(id => id !== removedSite._id),
+                    currentSiteId: null,
+                    error: null,
+                    msg: "Site removed with success"
+                };
+            }
+
+        case SiteAction.ActionTypes.ADD_ZONE_SUCCESS:
+        case SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
+            const addedzone = action.payload;
+            console.log(addedzone);
+            const sites = state.entities.filter(site => addedzone.codeSite !== site._id);
+            const modifiedSite = state.entities.filter(site => addedzone.codeSite === site._id)[0];
+            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedzone.code !== zone.code),addedzone];
+
+            return {
+                ...state,
+                entities: [...sites,modifiedSite],
+                ids: [...state.ids.filter(id => addedzone.codeSite !== id), ...addedzone.codeSite],
+                error: null,
+                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Zones registered with success":"Zone registered with success"
+            }
+        }
+
+        case SiteAction.ActionTypes.REMOVE_SITE_SUCCESS:
+            {
                 const removedSite = action.payload;
                 return {
                     ...state,

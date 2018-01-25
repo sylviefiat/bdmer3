@@ -1,47 +1,37 @@
+<form [formGroup]="zoneForm" (ngSubmit)="submit()">  
+  <div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'ADD_ZONE_TO' | translate}} {{ site.code }}</mat-card-title>
+      
+      <mat-card-content>
+        <button type="submit" class="btn btn-primary" [disabled]="!zoneForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-  <div [formGroup]="zoneForm">
-    <mat-card-content> 
+  <div class="insideform">
+    <mat-card class="column">
+      <h5 mat-subheader>{{ 'ZONE_DESC' | translate }}</h5>
+      <div class="row">
       <mat-input-container>
         <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
-        <div class="hint">{{ 'ZONE_CODE_EX' | translate }}</div>
-      </mat-input-container>          
-    
+        <div class="hint">{{ 'ZONE_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
+      </mat-input-container>
+
       <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface" required>m²
-        <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>    
-      </mat-input-container>          
-    </mat-card-content>
-    
-    <mat-card-content>
-      <mat-card formArrayName="transects" class="full">
-          <mat-card-subtitle>{{ 'TRANSECTS' | translate }}</mat-card-subtitle>
-          <div *ngFor="let transect of zoneForm.controls.transects.controls; let j=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeTansect(j)"></fa>
-            <div [formGroupName]="j">
-              <bc-transect-form [transect]="transect" [transectForm]="zoneForm.controls.transects.controls[j]"></bc-transect-form>
-            </div>
-          </div>
-          <mat-card-actions>
-            <a class="action" (click)="addTransect()">
-              {{ 'ADD_TRANSECT' | translate }}
-            </a>
-          </mat-card-actions>
-      </mat-card>    
-    </mat-card-content>
-    <mat-card-content>
-      <mat-card formArrayName="zonePreferences" class="full">
-          <mat-card-subtitle>{{ 'ZONES_PREF' | translate }}</mat-card-subtitle>
-          <div *ngFor="let zonePreference of zoneForm.controls.zonePreferences.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right (click)="removeZonePreference(i)"></fa>
-            <div [formGroupName]="i">
-              <!--<bt-zone-preference-form [group]="zoneForm.controls.transects.controls[i]"></bt-zone-preference-form>-->
-            </div>
-          </div>
-          <mat-card-actions>
-            <a class="action" (click)="addZonePreference()">
-              {{ 'ADD_ZONE_PREF' | translate }}
-            </a>
-          </mat-card-actions>
-      </mat-card>
-    </mat-card-content>
+        <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+        <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+      </mat-input-container>
+    </div>
+    <div class="row">
+      <mat-input-container>
+        <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface">
+        <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>     
+      </mat-input-container>
+    </div>
+    </mat-card>
   </div>
+
+</form>
