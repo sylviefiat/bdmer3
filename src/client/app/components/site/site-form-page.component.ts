@@ -9,7 +9,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedCountry, getAllCountriesInApp } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedCountry, getCountriesInApp, getisAdmin } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -21,7 +21,8 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [errorMessage]="error$ | async"
       [site]="site$ | async"
       [country]="country$ | async"
-      [countries]="countries$ | async">
+      [countries]="countries$ | async"
+      [isAdmin]="isAdmin$ | async">
     </bc-site-form>
   `,
   styles: [
@@ -41,6 +42,7 @@ export class SiteFormPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site | null>;
     country$: Observable<Country | null>;
     countries$: Observable<Country[]>;
+    isAdmin$: Observable<boolean>;
     actionsSubscription: Subscription;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
@@ -53,7 +55,9 @@ export class SiteFormPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.let(getSitePageError);
         this.site$ = this.store.let(getSelectedSite);
         this.country$ = this.store.let(getSelectedCountry);
-        this.countries$ = this.store.let(getAllCountriesInApp);
+        this.countries$ = this.store.let(getCountriesInApp);
+        this.isAdmin$ = this.store.let(getisAdmin);
+        this.store.dispatch(new CountriesAction.LoadAction());
     }
 
     ngOnDestroy() {

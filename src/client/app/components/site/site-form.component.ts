@@ -19,62 +19,34 @@ import { Country } from '../../modules/countries/models/country';
     ],
 })
 export class SiteFormComponent implements OnInit {
-    
+
     @Input() errorMessage: string | null;
     @Input() site: Site | null;
     @Input() country: Country | null;
     @Input() countries: Country[];
+    @Input() isAdmin: boolean;
     @Output() submitted = new EventEmitter<Site>();
 
     form: FormGroup = new FormGroup({
         code: new FormControl(this.site && this.site.code, Validators.required),
-        codeCountry: new FormControl(this.site && this.site.codeCountry),
+        codeCountry: new FormControl({ value: this.country && this.country.code, disabled: this.country !== undefined }),
         description: new FormControl(this.site && this.site.description),
-        zones: this._fb.array([]),        
+        zones: this._fb.array([]),
     });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
-    initZone() {
-        if (this.site && this.site.zones && this.site.zones.length > 0) {
-            const control = <FormArray>this.form.controls['zones'];
-            console.log(this.site.zones.length);
-            let addrCtrl;
-            for (let zone of this.site.zones) {
-                addrCtrl = this.newZone(zone);
-                control.push(addrCtrl);
-            }
-        }
-    }
 
     ngOnInit() {
-        console.log(this.country);
         if (this.site) {
             this.form.controls.code.setValue(this.site.code);
+            this.form.controls.codeCountry.setValue({ value: this.country ? this.country.code : null, disabled: this.country !== undefined });
             this.form.controls.description.setValue(this.site.description);
-            this.initZone();
         }
     }
 
-    newZone(zone: Zone) {
-        let zn = this._fb.group({
-            code: new FormControl(zone && zone.code || this.site && this.site.code && this.site.code+'_Z' || ''),
-            surface: new FormControl(zone && zone.surface||''),
-            transects: this._fb.array([]),
-            zonePreferences: this._fb.array([])
-        });        
-        return zn;
-    }
-
-    addZone() {
-        const control = <FormArray>this.form.controls['zones'];
-        const addrCtrl = this.newZone(null);
-        control.push(addrCtrl);
-    }
-
-    removeZone(i: number) {
-        const control = <FormArray>this.form.controls['zones'];
-        control.removeAt(i);
+    setCountry(country: Country){
+        this.form.controls.codeCountry.setValue(country.code);
     }
 
     submit() {

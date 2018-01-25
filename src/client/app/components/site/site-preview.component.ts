@@ -99,6 +99,8 @@ export class SitePreviewComponent implements OnInit {
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.site.code+".jpg"; 
+    // WHILE THERE IS NO GENERATED MAP OR IMAGE
+    return null;
+    //return "/assets/img/"+this.site.code+".jpg"; 
   }
 }

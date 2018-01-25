@@ -33,7 +33,7 @@ export function getRole(state$: Observable<IAuthState>) {
 }
 
 export function getRoleIsAdmin(state$: Observable<IAuthState>) {
-    return state$.select(state => state.role === 'AA');
+    return state$.select(state => {console.log(state); return state.country.code === 'AA'});
 }
 
 export function getUser(state$: Observable<IAuthState>) {

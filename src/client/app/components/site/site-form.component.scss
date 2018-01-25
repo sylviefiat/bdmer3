@@ -35,6 +35,10 @@
     }
     .mat-form-field {
       width: auto;
+      padding-left: 2em;
+    }
+    .mat-input-container {
+      width: 100%;
     }
     .hint {
         /* Position the hint */
@@ -68,4 +72,7 @@
     }
     .back {
       background-color: darkgrey;
+    }
+    .forbidden {
+      color: red;
     }
