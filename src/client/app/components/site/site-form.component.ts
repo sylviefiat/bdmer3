@@ -28,9 +28,9 @@ export class SiteFormComponent implements OnInit {
     @Output() submitted = new EventEmitter<Site>();
 
     form: FormGroup = new FormGroup({
-        code: new FormControl(this.site && this.site.code, Validators.required),
-        codeCountry: new FormControl({ value: this.country && this.country.code, disabled: this.country !== undefined }),
-        description: new FormControl(this.site && this.site.description),
+        code: new FormControl("", Validators.required),
+        codeCountry: new FormControl(""),
+        description: new FormControl(""),
         zones: this._fb.array([]),
     });
 
@@ -38,10 +38,12 @@ export class SiteFormComponent implements OnInit {
 
 
     ngOnInit() {
+        this.form.controls.codeCountry.setValue(this.country ? this.country.code : null);
+        (this.country !== undefined)?this.form.controls.codeCountry.disable():this.form.controls.codeCountry.enable();
         if (this.site) {
-            this.form.controls.code.setValue(this.site.code);
-            this.form.controls.codeCountry.setValue({ value: this.country ? this.country.code : null, disabled: this.country !== undefined });
+            this.form.controls.code.setValue(this.site.code);            
             this.form.controls.description.setValue(this.site.description);
+            console.log(this.form.controls.codeCountry);
         }
     }
 

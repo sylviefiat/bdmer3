@@ -101,6 +101,8 @@
   "EX_SITE_CODE_FORBIDDEN":"caractères interdits : espace, accent, caractères spéciaux, '_'",
   "SITE_DESC":"Description du site",
   "EX_SITE_DESC":"Ex : Pêcherie de Mangaliliu",
+  "EX_SITE_COUNTRY_ADMIN":"Sélectionner le pays",
+  "EX_SITE_COUNTRY":"Le pays n'est pas modifiable",
   "ZONE_CODE":"Code de la zone",
   "ZONE_CODE_EX":"Ex: NOMDUSITE_Z001",
   "ZONE_SURFACE":"Surface de la zone",

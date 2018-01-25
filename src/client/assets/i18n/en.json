@@ -101,6 +101,8 @@
   "EX_SITE_CODE_FORBIDDEN":"forbidden characters: space, special characters, '_'",
   "SITE_DESC":"Site description",
   "EX_SITE_DESC":"Ex : Mangaliliu fisheries",
+  "EX_SITE_COUNTRY_ADMIN":"Sélectionner le pays",
+  "EX_SITE_COUNTRY":"Le pays n'est pas modifiable",
   "ZONE_CODE":"Zone code",
   "ZONE_CODE_EX":"Ex: SITENAME_Z001",
   "ZONE_SURFACE":"Zone's surface",
