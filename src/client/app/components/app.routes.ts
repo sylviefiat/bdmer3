@@ -8,7 +8,9 @@ import { CountryRoutes } from './country/country.routes';
 import { SiteRoutes } from './site/site.routes';
 import { SpeciesRoutes } from './species/species.routes';
 import { TransectRoutes } from './transect/transect.routes';
+import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
 import { ZoneRoutes } from './zone/zone.routes';
+import { CountRoutes } from './count/count.routes';
 import { NotFoundPageComponent } from '../modules/shared/components/not-found-page';
 
 export const routes: Array<any> = [
@@ -21,6 +23,8 @@ export const routes: Array<any> = [
   ...SiteRoutes,
   ...SpeciesRoutes,
   ...TransectRoutes,
+  ...PreferenceAreaRoutes,
   ...ZoneRoutes,
+  ...CountRoutes,
   { path: '**', component: NotFoundPageComponent }
 ];

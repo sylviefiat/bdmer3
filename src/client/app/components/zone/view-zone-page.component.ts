@@ -30,6 +30,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
     <bc-zone 
       [site]="(site$ | async)"
       [zone]="zone$ | async"
+      (action)="actionZone($event)"
       (remove)="removeZone($event)">
     </bc-zone>
   `,
@@ -60,6 +61,10 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
+  }
+
+  actionZone(redirect: String) {
+    this.routerext.navigate([redirect]);
   }
 
   removeZone(site: Site){

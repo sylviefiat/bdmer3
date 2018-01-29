@@ -15,22 +15,22 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'ZONE_DESC' | translate }}</h5>
       <div class="row">
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
-        <div class="hint">{{ 'ZONE_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
-      </mat-input-container>
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
+          <div class="hint">{{ 'ZONE_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
+        </mat-input-container>
 
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
-        <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
-      </mat-input-container>
-    </div>
-    <div class="row">
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface">
-        <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>     
-      </mat-input-container>
-    </div>
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+          <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+        </mat-input-container>
+      </div>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface">
+          <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>     
+        </mat-input-container>
+      </div>
     </mat-card>
   </div>
 

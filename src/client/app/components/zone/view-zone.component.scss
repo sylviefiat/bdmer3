@@ -24,7 +24,11 @@ mat-card-actions {
 mat-form-field {
   margin-left:50px;
 }
-.warn {
+.warn:hover {
    margin-left: 10px;
    background-color: #d9534f;
+}
+.link {
+  cursor: pointer;
+  text-decoration: underline;
 }

@@ -96,6 +96,8 @@ export class TransectPreviewComponent implements OnInit {
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.transect.code+".jpg"; 
+    // WAIT FOR MAP GENERATION
+    return null;
+    //return "/assets/img/"+this.transect.code+".jpg"; 
   }
 }

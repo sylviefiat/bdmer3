@@ -1,37 +1,50 @@
-
-  <div [formGroup]="transectForm">
-    <mat-card-content> 
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'TRANSECT_CODE' | translate }}" formControlName="code" required>
-        <div class="hint">{{ 'TRANSECT_CODE_EX' | translate }}</div>
-      </mat-input-container>       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'TRANSECT_LONG' | translate }}" formControlName="longitude" required>m²
-        <div class="hint">{{ 'TRANSECT_LONG_EX' | translate }}</div>    
-      </mat-input-container>          
-       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'TRANSECT_LAT' | translate }}" formControlName="latitude" required>m²
-        <div class="hint">{{ 'TRANSECT_LAT_EX' | translate }}</div>    
-      </mat-input-container>          
-    </mat-card-content>
-    
-    <mat-card-content>
-      <mat-card formArrayName="counts" class="full">
-          <mat-card-subtitle>{{ 'COUNTS' | translate }}</mat-card-subtitle>
-          <div *ngFor="let count of transectForm.controls.counts.controls; let i=index;" class="panel">          
-            <fa [name]="'times'" [border]=true [size]=1 [pull]=right *ngIf="transectForm.controls.counts.controls.length > 1" (click)="removeCount(i)"></fa>
-            <div [formGroupName]="i">
-             <!-- <bt-count-form [group]="transectForm.controls.counts.controls[i]"></bt-count-form>-->
-            </div>
-          </div>
-          <mat-card-actions>
-            <a class="action" (click)="addCount()">
-              {{ 'ADD_COUNT' | translate }}
-            </a>
-          </mat-card-actions>
-      </mat-card>
-    </mat-card-content>
+<form [formGroup]="transectForm" (ngSubmit)="submit()">  
+  <div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'ADD_TRANSECT_TO' | translate}} {{ zone.code }}</mat-card-title>
+      
+      <mat-card-content>
+        <button type="submit" class="btn btn-primary" [disabled]="!transectForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+      </mat-card-content>
+    </mat-card>
   </div>
+
+  <div class="insideform">
+    <mat-card class="column">
+      <h5 mat-subheader>{{ 'TRANSECT_DESC' | translate }}</h5>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'TRANSECT_CODE' | translate }}" formControlName="code" required>
+          <div class="hint">{{ 'TRANSECT_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
+        </mat-input-container>
+      </div>
+      <div class="row">
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
+          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }}</div>
+        </mat-input-container>
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+          <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+        </mat-input-container>
+      </div>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'TRANSECT_LONG' | translate }}" formControlName="longitude" required>
+          <div class="hint">{{ 'TRANSECT_LONG_EX' | translate }}</div>    
+        </mat-input-container>          
+
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'TRANSECT_LAT' | translate }}" formControlName="latitude" required>
+          <div class="hint">{{ 'TRANSECT_LAT_EX' | translate }}</div>    
+        </mat-input-container> 
+      </div>
+    </mat-card>
+  </div>
+
+</form>

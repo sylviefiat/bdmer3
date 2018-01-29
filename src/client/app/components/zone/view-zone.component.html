@@ -1,20 +1,23 @@
 
     <mat-card class="actions">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title>{{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-title><a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / {{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'SURFACE' | translate }} : {{ zone.surface }} m²</div> 
       </mat-card-content>
       <mat-card-actions>
-        <button (click)="edit.emit(zone)">{{ 'EDIT' | translate }}</button>
-        <button class="warn" (click)="deleteZone(zone)">{{ 'DELETE' | translate }}</button> 
         <mat-form-field>
-          <mat-select  placeholder="{{'ADD_TRANSECT' | translate}}" (change)="addTransect($event.value)">
-              <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
-              <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+              <mat-option [value]="'zoneForm'">{{ 'EDIT_ZONE' | translate}}</mat-option>
+              <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
+              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
+              <mat-option [value]="'transectForm'">{{ 'ADD_TRANSECT' | translate}}</mat-option>
+              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option class="warn" [value]="'deleteZone'">{{ 'DELETE_ZONE' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>        
       </mat-card-actions>       
     </mat-card>
-
+    <bc-zone-preference-preview-list [zonesPref]="zonesPref$ | async" [zone]="zone" [site]="site"></bc-zone-preference-preview-list>
+    <mat-divider *ngIf="zonesPref$ && transects$"></mat-divider>
     <bc-transect-preview-list [transects]="transects$ | async" [zone]="zone" [site]="site"></bc-transect-preview-list>  

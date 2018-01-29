@@ -75,6 +75,63 @@ export function siteReducer(
             }
         }
 
+        case SiteAction.ActionTypes.ADD_TRANSECT_SUCCESS:
+        case SiteAction.ActionTypes.IMPORT_TRANSECT_SUCCESS: {
+            const addedtransect = action.payload;
+            console.log(addedtransect);
+            const sites = state.entities.filter(site => addedtransect.codeSite !== site._id);
+            const modifiedSite = state.entities.filter(site => addedtransect.codeSite === site._id)[0];
+            const modifiedZone = modifiedSite.zones.filter(zone => addedtransect.codeZone === zone.code)[0];
+            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.code !== transect.code),addedtransect];
+            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedtransect.codeZone !== zone.code),modifiedZone];
+
+            return {
+                ...state,
+                entities: [...sites,modifiedSite],
+                ids: [...state.ids.filter(id => addedtransect.codeSite !== id), ...addedtransect.codeSite],
+                error: null,
+                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Transects registered with success":"Transects registered with success"
+            }
+        }
+
+        case SiteAction.ActionTypes.ADD_ZONE_PREF_SUCCESS:
+        case SiteAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS: {
+            const addedzonepref = action.payload;
+            console.log(addedzonepref);
+            const sites = state.entities.filter(site => addedzonepref.codeSite !== site._id);
+            const modifiedSite = state.entities.filter(site => addedzonepref.codeSite === site._id)[0];
+            const modifiedZone = modifiedSite.zones.filter(zone => addedzonepref.codeZone === zone.code)[0];
+            modifiedZone.zonePreferences = [...modifiedZone.zonePreferences.filter(transect => addedzonepref.code !== transect.code),addedzonepref];
+            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedzonepref.codeZone !== zone.code),modifiedZone];
+
+            return {
+                ...state,
+                entities: [...sites,modifiedSite],
+                ids: [...state.ids.filter(id => addedzonepref.codeSite !== id), ...addedzonepref.codeSite],
+                error: null,
+                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Zones preferences registered with success":"Zone preference registered with success"
+            }
+        }
+
+        case SiteAction.ActionTypes.ADD_COUNT_SUCCESS:
+        case SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS: {
+            const addedzonepref = action.payload;
+            console.log(addedzonepref);
+            const sites = state.entities.filter(site => addedzonepref.codeSite !== site._id);
+            const modifiedSite = state.entities.filter(site => addedzonepref.codeSite === site._id)[0];
+            const modifiedZone = modifiedSite.zones.filter(zone => addedzonepref.codeZone === zone.code)[0];
+            modifiedZone.zonePreferences = [...modifiedZone.zonePreferences.filter(transect => addedzonepref.code !== transect.code),addedzonepref];
+            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedzonepref.codeZone !== zone.code),modifiedZone];
+
+            return {
+                ...state,
+                entities: [...sites,modifiedSite],
+                ids: [...state.ids.filter(id => addedzonepref.codeSite !== id), ...addedzonepref.codeSite],
+                error: null,
+                msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Zones preferences registered with success":"Zone preference registered with success"
+            }
+        }
+
         case SiteAction.ActionTypes.REMOVE_SITE_SUCCESS:
             {
                 const removedSite = action.payload;

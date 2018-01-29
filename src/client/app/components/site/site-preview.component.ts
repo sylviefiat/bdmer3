@@ -17,6 +17,7 @@ import { Site } from './../../modules/datas/models/site';
         <mat-card-content>
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
           <div>{{nZones}} {{'ZONES' | translate}}</div>
+          <div role="listitem">{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
           <div role="listitem">{{nTransects}} {{'TRANSECTS' | translate}}</div>
           <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
@@ -67,12 +68,14 @@ export class SitePreviewComponent implements OnInit {
   countries: string;
   nZones: number = 0;
   nTransects: number = 0;
+  nZonesPref: number = 0;
   nCounts: number = 0;
 
   ngOnInit(){
       this.nZones = this.site.zones ? this.site.zones.length : 0;
       for(let z of this.site.zones) {
         this.nTransects += z.transects ? z.transects.length : 0;
+        this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
         if(z.transects){
           for(let c of z.transects){
             this.nCounts += c.counts ? c.counts.length : 0;

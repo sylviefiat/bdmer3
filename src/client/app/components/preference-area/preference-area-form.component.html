@@ -1,33 +1,57 @@
-
-  <div [formGroup]="zonePrefForm">
-    <mat-card-content> 
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'ZONE_PREF_CODE' | translate }}" formControlName="code" required>
-        <div class="hint">{{ 'ZONE_PREF_CODE_EX' | translate }}</div>
-      </mat-input-container>       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>m²
-        <div class="hint">{{ 'ZONE_CODE_EX' | translate }}</div>    
-      </mat-input-container>          
-       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'SPECIES_CODE' | translate }}" formControlName="codeSpecies" required>m²
-        <div class="hint">{{ 'SPECIES_CODE_EX' | translate }}</div>    
-      </mat-input-container>          
- 
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'PRESENCE' | translate }}" formControlName="presence" required>m²
-        <div class="hint">{{ 'PRESENCE_EX' | translate }}</div>    
-      </mat-input-container>          
-       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'INFO_SOURCE' | translate }}" formControlName="infoSource" required>m²
-        <div class="hint">{{ 'INFO_SOURCE_EX' | translate }}</div>    
-      </mat-input-container>          
-    </mat-card-content>
-   
+<form [formGroup]="zonePrefForm" (ngSubmit)="submit()">  
+  <div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'ADD_ZONE_PREF_TO' | translate}} {{ zone.code }}</mat-card-title>
+      
+      <mat-card-content>
+        <button type="submit" class="btn btn-primary" [disabled]="!zonePrefForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+      </mat-card-content>
+    </mat-card>
   </div>
+
+  <div class="insideform">
+    <mat-card class="column">
+      <h5 mat-subheader>{{ 'ZONE_PREF_DESC' | translate }}</h5>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_PREF_CODE' | translate }}" formControlName="code" required>
+          <div class="hint">{{ 'ZONE_PREF_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
+        </mat-input-container> 
+      </div>
+      <div class="row">   
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
+          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }} </div>
+        </mat-input-container>
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+          <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+        </mat-input-container>
+      </div>
+      <div class="row"> 
+        <mat-form-field>
+        <mat-select  placeholder="{{'SPECIES' | translate}}" formControlName="codeSpecies" required>
+          <mat-option *ngFor="let espece of species" [value]="espece.codeSpecies">{{ espece.scientificName }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'PRESENCE' | translate }}" formControlName="presence" required>
+          <div class="hint">{{ 'PRESENCE_EX' | translate }}</div>    
+        </mat-input-container>          
+         
+      
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'INFO_SOURCE' | translate }}" formControlName="infoSource" required>
+          <div class="hint">{{ 'INFO_SOURCE_EX' | translate }}</div>    
+        </mat-input-container> 
+      </div>
+    </mat-card>
+  </div>
+
+</form>
+

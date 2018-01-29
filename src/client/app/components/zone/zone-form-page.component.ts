@@ -61,8 +61,6 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(zone: Zone) { 
-    console.log(zone);
-    console.log(zone.codeSite);
-      this.store.dispatch(new SiteAction.AddZoneAction(zone))
+   this.store.dispatch(new SiteAction.AddZoneAction(zone))
   }
 }

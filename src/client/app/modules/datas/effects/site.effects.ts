@@ -80,6 +80,26 @@ export class SiteEffects {
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
   ;
 
+  @Effect() 
+  addZonePref$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_ZONE_PREF)
+    .map((action: SiteAction.AddZonePrefAction) => action.payload)
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [ZonePreference, Site]) => this.siteService.editZonePref(value[1], value[0]))
+    .map((zonePref: ZonePreference) => new SiteAction.AddZonePrefSuccessAction(zonePref))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+  ;
+
+  @Effect() 
+  addCount$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_COUNT)
+    .map((action: SiteAction.AddCountAction) => action.payload)
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [Count, Site]) => this.siteService.editCount(value[1], value[0]))
+    .map((count: Count) => new SiteAction.AddCountSuccessAction(count))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+  ;
+
   @Effect()
   importSite$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_SITE)    
@@ -105,11 +125,31 @@ export class SiteEffects {
   @Effect()
   importTransect$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT)
-    .map((action: SiteAction.ImportZoneAction) => action.payload)
+    .map((action: SiteAction.ImportTransectAction) => action.payload)
     .mergeMap((transect: Transect) => this.csv2jsonService.csv2('transect', transect))
     .withLatestFrom(this.store.let(getSelectedSite))
     .mergeMap((value: [Transect, Site]) => this.siteService.editTransect(value[1], value[0]))
     .map((transect: Transect) => new SiteAction.ImportTransectSuccessAction(transect))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
+
+  @Effect()
+  importZonePref$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_PREF)
+    .map((action: SiteAction.ImportZonePrefAction) => action.payload)
+    .mergeMap((zonePref: ZonePreference) => this.csv2jsonService.csv2('zonePref', zonePref))
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [ZonePreference, Site]) => this.siteService.editZonePref(value[1], value[0]))
+    .map((zonePref: ZonePreference) => new SiteAction.ImportZonePrefSuccessAction(zonePref))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
+
+  @Effect()
+  importCount$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_COUNT)
+    .map((action: SiteAction.ImportCountAction) => action.payload)
+    .mergeMap((count: Count) => this.csv2jsonService.csv2('count', count))
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [Count, Site]) => this.siteService.editCount(value[1], value[0]))
+    .map((count: Count) => new SiteAction.ImportCountSuccessAction(count))
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 
   @Effect()

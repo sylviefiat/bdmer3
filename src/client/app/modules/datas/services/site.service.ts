@@ -8,7 +8,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Site, Zone, Transect } from '../models/site';
+import { Site, Zone, Transect, ZonePreference, Count } from '../models/site';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -93,17 +93,11 @@ export class SiteService {
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {   
-        console.log(zone);
         if(!zone.codeSite) zone.codeSite=site.code;
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
-        console.log(zone);
-        //if(st.zones.filter(z => z.code === zone.code).length > -1){
-          st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
-        /*} else {
-          st.zones.push(zone);
-        }*/
+        st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })
@@ -114,7 +108,7 @@ export class SiteService {
   }
 
   editTransect(site: Site, transect: Transect): Observable<Transect> {
-    console.log("Edit : "+transect);
+    console.log(transect);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
@@ -132,6 +126,52 @@ export class SiteService {
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return  of(transect);
+      })
+  }
+
+  editZonePref(site: Site, zonePref: ZonePreference): Observable<ZonePreference> {
+    console.log(zonePref);
+    return this.getSite(site.code)
+      .filter(site => site!==null)
+      .mergeMap(st => {  
+        let zn = st.zones.filter(z => z.code === zonePref.codeZone)[0];
+        if(zn){
+          if(zn.zonePreferences.filter(zp => zp.code === zonePref.code).length > -1){
+            zn.zonePreferences = [ ...zn.zonePreferences.filter(zp => zp.code !== zonePref.code), zonePref];
+          }
+          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
+        } 
+        this.currentSite = of(st);
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap((response) => {
+        return  of(zonePref);
+      })
+  }
+
+  editCount(site: Site, count: Count): Observable<Count> {
+    console.log(count);
+    return this.getSite(site.code)
+      .filter(site => site!==null)
+      .mergeMap(st => {  
+        let zn = st.zones.filter(z => z.code === count.codeZone)[0];
+        if(zn){
+          let tr = zn.transects.filter(t => t.code === count.codeTransect)[0];
+          if(tr){
+            if(tr.counts.filter(c => c.code === count.code).length > -1){
+              tr.counts = [ ...tr.counts.filter(c => c.code !== count.code), count];
+            }
+            zn.transects = [...zn.transects.filter(t => t.code != count.codeTransect), tr];
+          }          
+          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
+        } 
+        this.currentSite = of(st);
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap((response) => {
+        return  of(count);
       })
   }
 

@@ -4,11 +4,6 @@ import { ViewPreferenceAreaPageComponent } from './view-preference-area-page.com
 import { AuthGuard } from '../../modules/auth/guards/index';
 
 export const PreferenceAreaRoutes: Array<any> = [
-  /*{
-    path: 'transect',
-    component: TransectListPageComponent,
-    canActivate : [AuthGuard]
-  }, */
   {
     path: 'zonePrefForm/:idSite/:idZone',
     component: PreferenceAreaFormPageComponent,
@@ -20,6 +15,11 @@ export const PreferenceAreaRoutes: Array<any> = [
   },
   {
     path: 'zonePrefImport/:idSite',
+    component: PreferenceAreaImportPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'zonePrefImport/:idSite/:idZone',
     component: PreferenceAreaImportPageComponent,
     canActivate : [AuthGuard]
   },

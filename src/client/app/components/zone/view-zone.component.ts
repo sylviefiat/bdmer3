@@ -9,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { Site, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -25,15 +25,16 @@ export class ViewZoneComponent implements OnInit {
     @Input() zone: Zone;   
     @Input() site: Site;
     transects$: Observable<Transect[]>;
+    zonesPref$: Observable<ZonePreference[]>;
     @Output() remove = new EventEmitter<any>();
-    @Output() edit = new EventEmitter<any>();
-
+    @Output() action = new EventEmitter<String>();
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
         this.transects$ = of(this.zone.transects);
+        this.zonesPref$ = of(this.zone.zonePreferences);
     }
 
 
@@ -44,10 +45,29 @@ export class ViewZoneComponent implements OnInit {
         }
     }
 
-    addTransect(type: string) {
-        type = type.charAt(0).toUpperCase() + type.slice(1);
-        this.routerext.navigate(['/transect' + type+'/'+this.site.code+'/'+this.zone.code]);
+    actions(type: string) {
+        switch (type) {
+            case "zoneForm":
+            case "zonePrefForm":
+            case "zonePrefImport":
+            case "transectForm":
+            case "transectImport":
+                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code);
+                break;
+            case "deleteZone":
+                this.deleteZone();
+                break;
+            default:
+                break;
+        }
+        
     }
 
+    toSites(){
+        this.routerext.navigate(['site']);
+    }
 
+    toSite(){
+        this.routerext.navigate(['site/'+this.site.code]);
+    }
 }

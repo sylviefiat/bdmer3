@@ -8,46 +8,41 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site, Zone, ZonePreference } from '../../modules/datas/models/index';
+import { Species } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedZonePref, getSpeciesInApp } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
 
 @Component({
   selector: 'bc-zone-pref-page',
   template: `
-    <bc-zone-pref-form-page
+    <bc-zone-pref-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [zonePref]="zonePref$ | async">
-    </bc-zone-pref-form-page>
+      [zonePref]="zonePref$ | async"
+      [species]="speciesList$ | async">
+    </bc-zone-pref-form>
   `,
   styles: [
     `
-    #zone-pref-page {
-      display: flex;
-      flex-direction:row;
-      justify-content: center;
-      margin: 72px 0;
-    }
     mat-card {
-      min-width: 500px;
+      text-align: center;
     }
-    
-    .toolbar {
-      background-color: #106cc8;
-      color: rgba(255, 255, 255, 0.87);
-      display: block;
-      padding:10px;
+    mat-card-title {
+      display: flex;
+      justify-content: center;
     }
-    `]
+    `] 
 })
 export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
   zone$: Observable<Zone>;
   zonePref$: Observable<ZonePreference>;
+  speciesList$: Observable<Species[]>;
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
   zonePrefSubscription: Subscription;
@@ -60,7 +55,7 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.zonePrefSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idZonePref))
+      .map(params => new SiteAction.SelectZonePrefAction(params.idZonePref))
       .subscribe(store);
   }
 
@@ -68,6 +63,8 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
     this.zonePref$ = this.store.let(getSelectedZonePref);
+    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.store.dispatch(new SpeciesAction.LoadAction());  
   }
 
   ngOnDestroy() {
@@ -79,14 +76,5 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   onSubmit(zonePref: ZonePreference) { 
     console.log(zonePref);
       this.store.dispatch(new SiteAction.AddZonePrefAction(zonePref))
-  }
-
-  return() {
-    this.routerext.navigate(['/site/'], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
   }
 }

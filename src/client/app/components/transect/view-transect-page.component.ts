@@ -31,6 +31,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
       [site]="site$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async"
+      (action)="actionTransect($event)"
       (remove)="removeTransect($event)">
     </bc-transect>
   `,
@@ -65,6 +66,10 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.transectSubscription.unsubscribe();
+  }
+
+  actionTransect(redirect: String) {
+    this.routerext.navigate([redirect]);
   }
 
   removeTransect(site: Site){

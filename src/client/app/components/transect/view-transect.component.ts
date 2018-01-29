@@ -27,13 +27,16 @@ export class ViewTransectComponent implements OnInit {
     @Input() transect: Transect;
     counts$: Observable<Count[]>;
     @Output() remove = new EventEmitter<any>();
-    @Output() edit = new EventEmitter<any>();
+    @Output() action = new EventEmitter<String>();
 
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
+        console.log(this.transect);
+        console.log(this.site);
+        console.log(this.zone);
         this.counts$ = of(this.transect.counts);
     }
 
@@ -46,9 +49,32 @@ export class ViewTransectComponent implements OnInit {
         }
     }
 
-    addCount(type: string) {
-        type = type.charAt(0).toUpperCase() + type.slice(1);
-        this.routerext.navigate(['/count' + type+'/'+this.transect.code+'/'+this.site.code+'/'+this.zone.code]);
+    actions(type: string) {
+        switch (type) {
+            case "transectForm":
+            case "countForm":
+            case "countImport":
+                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.transect.code);
+                break;
+            case "deleteTransect":
+                this.deleteTransect();
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    toSites(){
+        this.routerext.navigate(['site']);
+    }
+
+    toSite(){
+        this.routerext.navigate(['site/'+this.site.code]);
+    }
+
+    toZone(){
+        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
     }
 
 }

@@ -61,5 +61,7 @@ export class ViewSiteComponent implements OnInit {
         
     }
 
-
+    toSites() {
+        this.routerext.navigate(['site']);
+    }
 }

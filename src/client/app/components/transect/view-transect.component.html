@@ -1,20 +1,20 @@
 
     <mat-card class="actions">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title>{{ 'TRANSECT' | translate}} {{ transect.code }}</mat-card-title>
+      <mat-card-title><a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / {{ 'TRANSECT' | translate}} {{ transect.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'COORDINATES' | translate }} : {{ transect.latitude }}°, {{ transect.longitude }}</div> 
       </mat-card-content>
       <mat-card-actions>
-        <button (click)="edit.emit(transect)">{{ 'EDIT' | translate }}</button>
-        <button class="warn" (click)="deleteTransect(zone)">{{ 'DELETE' | translate }}</button> 
         <mat-form-field>
-          <mat-select  placeholder="{{'ADD_COUNT' | translate}}" (change)="addCount($event.value)">
-              <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
-              <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+              <mat-option [value]="'transectForm'">{{ 'EDIT_TRANSECT' | translate}}</mat-option>
+              <mat-option [value]="'countForm'">{{ 'ADD_COUNT' | translate}}</mat-option>
+              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option class="warn" [value]="'deleteTransect'">{{ 'DELETE_TRANSECT' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>        
       </mat-card-actions>       
     </mat-card>
 
-    <!--bc-count-preview-list [counts]="counts$ | async" [transect]="transect" [zone]="zone" [site]="site"></bc-count-preview-list-->  
+    <bc-count-preview-list [counts]="counts$ | async" [transect]="transect" [zone]="zone" [site]="site"></bc-count-preview-list>  

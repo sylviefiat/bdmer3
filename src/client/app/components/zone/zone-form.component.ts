@@ -38,19 +38,20 @@ export class ZoneFormComponent implements OnInit {
         if (this.zone) {
             this.zoneForm.controls.code.setValue(this.zone.code);
             this.zoneForm.controls.surface.setValue(this.zone.surface);
+        } else {
+            this.zoneForm.controls.code.setValue(this.site.code+"_Z");
         }
     }
 
     submit() {
-        console.log(this.zoneForm);
         if (this.zoneForm.valid) {
-            console.log(this.zoneForm.value);
             this.submitted.emit(this.zoneForm.value);
         }
     }
 
     return() {
-        this.routerext.navigate(['/site/' + this.site.code], {
+        let redirect = this.zone ? '/zone/' + this.site.code + "/" + this.zone.code : '/site' + this.site.code;
+        this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

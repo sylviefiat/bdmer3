@@ -24,6 +24,11 @@ export const TransectRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
+    path: 'transectImport/:idSite/:idZone',
+    component: TransectImportPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
     path: 'transect/:idSite/:idZone/:idTransect',
     component: ViewTransectPageComponent,
     canActivate : [AuthGuard]
