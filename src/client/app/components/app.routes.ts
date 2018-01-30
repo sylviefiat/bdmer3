@@ -7,6 +7,7 @@ import { LoginRoutes } from './login/login.routes';
 import { CountryRoutes } from './country/country.routes';
 import { SiteRoutes } from './site/site.routes';
 import { SpeciesRoutes } from './species/species.routes';
+import { CampaignRoutes } from './campaign/campaign.routes';
 import { TransectRoutes } from './transect/transect.routes';
 import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
 import { ZoneRoutes } from './zone/zone.routes';
@@ -22,6 +23,7 @@ export const routes: Array<any> = [
   ...CountryRoutes,
   ...SiteRoutes,
   ...SpeciesRoutes,
+  ...CampaignRoutes,
   ...TransectRoutes,
   ...PreferenceAreaRoutes,
   ...ZoneRoutes,

@@ -15,14 +15,14 @@ import { SiteAction } from '../../modules/datas/actions/index';
 @Component({
   selector: 'bc-count-page',
   template: `
-    <bc-count-form-page
+    <bc-count-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async"
       [count]="count$ | async">
-    </bc-count-form-page>
+    </bc-count-form>
   `,
   styles: [
     `
@@ -34,13 +34,6 @@ import { SiteAction } from '../../modules/datas/actions/index';
     }
     mat-card {
       min-width: 500px;
-    }
-    
-    .toolbar {
-      background-color: #106cc8;
-      color: rgba(255, 255, 255, 0.87);
-      display: block;
-      padding:10px;
     }
     `]
 })
@@ -54,6 +47,7 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   zoneSubscription: Subscription;
   transectSubscription: Subscription;
   countSubscription: Subscription;
+
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.siteSubscription = route.params
@@ -85,8 +79,7 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(count: Count) { 
-    console.log(count);
-      this.store.dispatch(new SiteAction.AddCountAction(count))
+    this.store.dispatch(new SiteAction.AddCountAction(count))
   }
 
   return() {

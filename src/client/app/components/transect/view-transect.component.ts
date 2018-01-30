@@ -34,17 +34,12 @@ export class ViewTransectComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.transect);
-        console.log(this.site);
-        console.log(this.zone);
         this.counts$ = of(this.transect.counts);
     }
 
 
     deleteTransect() {
         if (this.windowService.confirm("Are you sure you want to delete this transect from database ?")){
-            this.zone.transects = this.zone.transects.filter(transect => transect.code !== this.transect.code);
-            this.site.zones = [...this.site.zones.filter(zone => zone.code !== this.zone.code),this.zone];
             this.remove.emit(this.site);
         }
     }

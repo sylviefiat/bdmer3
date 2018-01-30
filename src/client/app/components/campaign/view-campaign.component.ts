@@ -9,23 +9,23 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Site,Zone, Campaign } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-view-site',
-    templateUrl: 'view-site.component.html',
+    selector: 'bc-campaign',
+    templateUrl: 'view-campaign.component.html',
     styleUrls: [
-        'view-site.component.css',
+        'view-campaign.component.css',
     ],
 })
-export class ViewSiteComponent implements OnInit {
+export class ViewCampaignComponent implements OnInit {    
     @Input() site: Site;
-    @Input() msg: string | null;
-    @Input() zones$: Observable<Zone[]>;
-    @Output() remove = new EventEmitter<Site>();
+    @Input() zone: Zone;
+    @Input() campaign: Campaign;
+    @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
 
 
@@ -33,28 +33,25 @@ export class ViewSiteComponent implements OnInit {
 
 
     ngOnInit() {
-        this.zones$ = of(this.site.zones);
-
+        console.log(this.campaign);
+        console.log(this.site);
+        console.log(this.zone);
     }
 
-    deleteSite() {
-        if (this.windowService.confirm("Are you sure you want to delete this site from database ?"))
-            return this.remove.emit(this.site);
+
+    deleteCampaign() {
+        if (this.windowService.confirm("Are you sure you want to delete this campaign from database ?")){
+            this.remove.emit(this.campaign);
+        }
     }
 
     actions(type: string) {
         switch (type) {
-            case "siteForm":
-            case "zoneForm":
-            case "zoneImport":
-            case "campaignImport":
-            case "zonePrefImport":
-            case "transectImport":
-            case "countImport":
-                this.action.emit(type+'/'+this.site._id);
+            case "campaignForm":
+                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.campaign.code);
                 break;
-            case "deleteSite":
-                this.deleteSite();
+            case "deleteCampaign":
+                this.deleteCampaign();
                 break;
             default:
                 break;
@@ -62,7 +59,16 @@ export class ViewSiteComponent implements OnInit {
         
     }
 
-    toSites() {
+    toSites(){
         this.routerext.navigate(['site']);
     }
+
+    toSite(){
+        this.routerext.navigate(['site/'+this.site.code]);
+    }
+
+    toZone(){
+        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
+    }
+
 }

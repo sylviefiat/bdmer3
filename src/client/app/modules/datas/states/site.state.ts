@@ -10,6 +10,7 @@ export interface ISiteState {
     currentTransectId: string;
     currentSpPrefId: string;
     currentCountId: string;
+    currentCampaignId: string;
     entities: Site[];
     ids: string[];
     error: string | null;
@@ -24,6 +25,7 @@ export const siteInitialState: ISiteState = {
     currentTransectId: null,
     currentSpPrefId: null,
     currentCountId: null,
+    currentCampaignId: null,
     entities: [],
     ids: [],
     error: null,
@@ -80,6 +82,18 @@ export function getCurrentZone(state$: Observable<ISiteState>) {
         state.entities.filter(site =>
             site._id === state.currentSiteId)[0].zones.filter(zone =>
                 zone.code === state.currentZoneId)[0]);
+}
+
+export function getCurrentCampaignId(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentCampaignId);
+}
+
+export function getCurrentCampaign(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.currentZoneId && state.currentCampaignId &&
+        state.entities.filter(site =>
+            site._id === state.currentSiteId)[0].zones.filter(zone =>
+                zone.code === state.currentZoneId)[0].campaigns.filter(transect =>
+                    transect.code === state.currentCampaignId)[0]);
 }
 
 export function getCurrentTransectId(state$: Observable<ISiteState>) {

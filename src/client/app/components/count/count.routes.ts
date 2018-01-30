@@ -19,7 +19,7 @@ export const CountRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'countImport/:idSite/:idZone',
+    path: 'countImport/:idSite',
     component: CountImportPageComponent,
     canActivate : [AuthGuard]
   },

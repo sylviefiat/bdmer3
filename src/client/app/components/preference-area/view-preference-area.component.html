@@ -1,12 +1,17 @@
 
     <mat-card class="actions">
-      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title>{{ 'ZONE_PREF' | translate}} {{ zonePref.code }}</mat-card-title>
+      
+      <mat-card-title>
+        <a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / 
+        <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / 
+        <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> /
+        {{ 'ZONE_PREF' | translate}} {{ zonePref.code }}
+      </mat-card-title>
       <mat-card-content>
-        <div>{{ 'ZONE_CODE' | translate }} : {{ zonePref.codeZone }}</div> 
+        <div>{{ 'ZONE_CODE' | translate }} : {{ zonePref.codeZone }}</div>         
       </mat-card-content>
       <mat-card-content>
-        <div>{{ 'ZONE_SPECIES' | translate }} : {{ zonePref.codeSpecies }}</div> 
+        <div>{{ 'SPECIES_CODE' | translate }} : {{ zonePref.codeSpecies }}</div> 
       </mat-card-content>
       <mat-card-content>
         <div>{{ 'PRESENCE' | translate }} : {{ zonePref.presence }}</div> 
@@ -14,10 +19,13 @@
       <mat-card-content>
         <div>{{ 'INFO_SOURCE' | translate }} : {{ zonePref.infoSource }}</div> 
       </mat-card-content>
+      <mat-card-content>
+        <img mat-card-sm-image *ngIf="thumbnailZone" [src]="thumbnailZone"/>
+        <img mat-card-sm-image *ngIf="thumbnailSpecies" [src]="thumbnailSpecies"/>
+      </mat-card-content>
       <mat-card-actions>
         <button (click)="edit.emit(zonePref)">{{ 'EDIT' | translate }}</button>
-        <button class="warn" (click)="deleteTransect(zone)">{{ 'DELETE' | translate }}</button>        
+        <button class="warn" (click)="deleteZonePref(zonePref)">{{ 'DELETE' | translate }}</button>        
       </mat-card-actions>       
     </mat-card>
-
-    <!--bc-count-preview-list [counts]="counts$ | async" [transect]="transect" [zone]="zone" [site]="site"></bc-count-preview-list-->  
+ 

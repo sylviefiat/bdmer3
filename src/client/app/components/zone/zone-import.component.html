@@ -2,7 +2,7 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES' | translate}}</mat-card-title>
       <mat-card-content>
-        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+        <button (click)="back.emit()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
       <mat-card-content class="error" *ngIf="error" align="center">{{ error }}</mat-card-content>
       <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>     

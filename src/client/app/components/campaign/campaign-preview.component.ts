@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
+import { Site,Zone,Campaign } from './../../modules/datas/models/site';
 
 @Component({
-  selector: 'bc-zone-preference-preview',
+  selector: 'bc-campaign-preview',
   template: `
-    <a [routerLink]="['/zonePref', codeSite, codeZone, code]">
+    <a [routerLink]="['/campaign', codeSite, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
@@ -12,14 +12,13 @@ import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
           <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{'SPECIES_CODE' | translate}}: {{ codeSpecies }}
+          {{ dateStart }}, {{ dateEnd }}°
         </mat-card-content>
         <mat-card-content>
-          {{'PRESENCE' | translate}}: {{ presence }}
-        </mat-card-content>
-        <mat-card-content>
-          {{'INFO_SOURCE' | translate}}: {{ infoSource }}
-        </mat-card-content>
+          <p>{{'PARTICIPANTS' | translate}}: {{ participants }}</p>
+          <p>{{'SURFACE_TRANSECT' | translate}}: {{ surfaceTransect }}</p>
+          <p>{{'DESCRIPTION' | translate}}: {{ description }}</p>
+       </mat-card-content>
       </mat-card>
     </a>
   `,
@@ -40,8 +39,6 @@ import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
     }
     mat-card-title {
       margin-right: 10px;
-      max-length: 70%;
-      word-break: break-all;
     }
     mat-card-title-group {
       margin: 0;
@@ -64,22 +61,21 @@ import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
   `,
   ],
 })
-export class PreferenceAreaPreviewComponent implements OnInit {  
-  @Input() zonePref: ZonePreference;
+export class CampaignPreviewComponent implements OnInit {  
+  @Input() campaign: Campaign;
   @Input() zone: Zone;
   @Input() site: Site;
-  nCounts: number = 0;
 
   ngOnInit(){
 
   }
 
   get id() {
-    return this.zonePref.code;
+    return this.campaign.code;
   }
 
   get code() {
-    return this.zonePref.code;
+    return this.campaign.code;
   }
 
   get codeSite() {
@@ -90,19 +86,29 @@ export class PreferenceAreaPreviewComponent implements OnInit {
     return this.zone.code;
   }
 
-  get codeSpecies() {
-    return this.zonePref.codeSpecies;
+  get dateStart() {
+    return this.campaign.dateStart;
   }
 
-  get presence() {
-    return this.zonePref.presence;
+  get dateEnd() {
+    return this.campaign.dateEnd;
   }
 
-  get infoSource() {
-    return this.zonePref.infoSource;
+  get participants() {
+    return this.campaign.participants;
+  }
+
+  get surfaceTransect() {
+    return this.campaign.surfaceTransect;
+  }
+
+  get description() {
+    return this.campaign.description;
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+    // WAIT FOR MAP GENERATION
+    return null;
+    //return "/assets/img/"+this.transect.code+".jpg"; 
   }
 }

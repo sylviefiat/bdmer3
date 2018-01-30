@@ -4,7 +4,7 @@ import { ZonePreference, Zone, Site } from './../../modules/datas/models/site';
 @Component({
   selector: 'bc-zone-preference-preview-list',
   template: `
-    <bc-zone-preference-preview *ngFor="let zonePref of zonePrefs" [zonePref]="zonePref" [zone]="zone" [site]="site"></bc-zone-preference-preview>
+    <bc-zone-preference-preview *ngFor="let zonePref of zonesPref" [zonePref]="zonePref" [zone]="zone" [site]="site"></bc-zone-preference-preview>
   `,
   styles: [
     `

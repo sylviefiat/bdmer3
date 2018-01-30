@@ -30,8 +30,8 @@ export class PreferenceAreaFormComponent implements OnInit {
         code: new FormControl("", Validators.required),
         codeSite: new FormControl(""),
         codeZone: new FormControl(""),
-        codeSpecies: new FormControl(""),
-        presence: new FormControl(""),
+        codeSpecies: new FormControl(),
+        presence: new FormControl(),
         infoSource: new FormControl("")
     });
 
@@ -49,14 +49,28 @@ export class PreferenceAreaFormComponent implements OnInit {
             this.zonePrefForm.controls.presence.setValue(this.zonePref.presence);
             this.zonePrefForm.controls.infoSource.setValue(this.zonePref.infoSource);            
         } else {
-            this.zonePrefForm.controls.code.setValue(this.zone.code+"_PA");
+            this.zonePrefForm.controls.code.setValue(this.zone.code+"_");
         }
     }
 
     submit() {
         if (this.zonePrefForm.valid) {
+            this.zonePrefForm.value.codeSite=this.zonePrefForm.controls.codeSite.value;
+            this.zonePrefForm.value.codeZone=this.zonePrefForm.controls.codeZone.value;
             this.submitted.emit(this.zonePrefForm.value);
         }
+    }
+
+    selectSpecies(species: Species){
+        this.zonePrefForm.controls.codeSpecies.setValue(species.code);
+    }
+
+    isSelected(code: string){
+        return code === this.zonePref.codeSpecies;
+    }
+
+    selectPresence(presence: string){
+        this.zonePrefForm.controls.presence.setValue(presence);
     }
 
     return() {

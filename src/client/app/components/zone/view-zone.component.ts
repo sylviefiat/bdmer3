@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -9,7 +10,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
+import { Site, Zone, Transect, ZonePreference, Campaign } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -26,15 +27,21 @@ export class ViewZoneComponent implements OnInit {
     @Input() site: Site;
     transects$: Observable<Transect[]>;
     zonesPref$: Observable<ZonePreference[]>;
+    campaigns$: Observable<Campaign[]>;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
+    view$: Observable<string>;
+    panelDisplay = new FormControl('campaigns');
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
+        console.log(this.zone);
         this.transects$ = of(this.zone.transects);
         this.zonesPref$ = of(this.zone.zonePreferences);
+        this.campaigns$ = of(this.zone.campaigns);
+        this.view$ = of('campaigns');
     }
 
 
@@ -52,6 +59,8 @@ export class ViewZoneComponent implements OnInit {
             case "zonePrefImport":
             case "transectForm":
             case "transectImport":
+            case "campaignForm":
+            case "campaignImport":
                 this.action.emit(type+'/'+this.site._id+"/"+this.zone.code);
                 break;
             case "deleteZone":
@@ -61,6 +70,11 @@ export class ViewZoneComponent implements OnInit {
                 break;
         }
         
+    }
+
+    display(view: string){
+        console.log(view);
+        this.view$ = of(view);
     }
 
     toSites(){

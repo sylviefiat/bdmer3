@@ -13,20 +13,20 @@ import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
-    selector: 'bc-transect-import-page',
+    selector: 'bc-campaign-import-page',
     template: `
-    <bc-transect-import
+    <bc-campaign-import
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
       [error]="error$ | async"
       [msg]="msg$ | async"
       [site]="site$ | async">
-    </bc-transect-import>
+    </bc-campaign-import>
   `,
     styles: [``]
 })
-export class TransectImportPageComponent implements OnInit, OnDestroy {
+export class CampaignImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
@@ -55,7 +55,7 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);
-        this.store.dispatch(new SiteAction.ImportTransectAction(csvFile));
+        this.store.dispatch(new SiteAction.ImportCampaignAction(csvFile));
     }
 
     handleErrorUpload(msg: string) {

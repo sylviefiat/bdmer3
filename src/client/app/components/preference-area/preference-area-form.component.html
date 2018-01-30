@@ -27,23 +27,24 @@
         </mat-input-container>
 
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite" required>
           <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
         </mat-input-container>
       </div>
       <div class="row"> 
         <mat-form-field>
-        <mat-select  placeholder="{{'SPECIES' | translate}}" formControlName="codeSpecies" required>
-          <mat-option *ngFor="let espece of species" [value]="espece.codeSpecies">{{ espece.scientificName }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-select  placeholder="{{'SPECIES_SELECT' | translate}}" formControlName="codeSpecies" required>
+            <mat-option *ngFor="let espece of species" [value]="espece.code">{{ espece.scientificName }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="row">
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'PRESENCE' | translate }}" formControlName="presence" required>
-          <div class="hint">{{ 'PRESENCE_EX' | translate }}</div>    
-        </mat-input-container>          
-         
+        <mat-form-field>
+          <mat-select  placeholder="{{'PRESENCE' | translate}}" formControlName="presence" required>
+            <mat-option [value]="'yes'">{{ 'PRESENCE_YES' | translate }}</mat-option>
+            <mat-option [value]="'no'">{{ 'PRESENCE_NO' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>              
       
         <mat-input-container>
           <input type="text" matInput placeholder="{{ 'INFO_SOURCE' | translate }}" formControlName="infoSource" required>

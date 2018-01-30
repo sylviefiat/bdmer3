@@ -71,6 +71,16 @@ export class SiteEffects {
   ;
 
   @Effect() 
+  addCampaign$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.ADD_CAMPAIGN)
+    .map((action: SiteAction.AddCampaignAction) => action.payload)
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [Campaign, Site]) => this.siteService.editCampaign(value[1], value[0]))
+    .map((campaign: Campaign) => new SiteAction.AddCampaignSuccessAction(campaign))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)))
+  ;
+
+  @Effect() 
   addTransect$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_TRANSECT)
     .map((action: SiteAction.AddTransectAction) => action.payload)
@@ -123,6 +133,16 @@ export class SiteEffects {
     .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
 
   @Effect()
+  importCampaign$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_CAMPAIGN)
+    .map((action: SiteAction.ImportCampaignAction) => action.payload)
+    .mergeMap((campaign: Campaign) => this.csv2jsonService.csv2('campaign', campaign))
+    .withLatestFrom(this.store.let(getSelectedSite))
+    .mergeMap((value: [Campaign, Site]) => this.siteService.editCampaign(value[1], value[0]))
+    .map((campaign: Campaign) => new SiteAction.ImportCampaignSuccessAction(campaign))
+    .catch((error) => of(new SiteAction.AddSiteFailAction(error)));
+
+  @Effect()
   importTransect$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT)
     .map((action: SiteAction.ImportTransectAction) => action.payload)
@@ -170,8 +190,8 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction());
 
   @Effect() 
-  importSiteSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_SITE_SUCCESS)
+  importSiteOrRemoveSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_SITE_SUCCESS,SiteAction.ActionTypes.REMOVE_SITE_SUCCESS)
     .do(() => this.router.navigate(['/site']))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
@@ -185,8 +205,8 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction());
 
   @Effect() 
-  importZoneSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS)
+  importOrRemoveZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS, SiteAction.ActionTypes.REMOVE_ZONE_SUCCESS)
     .map((action: SiteAction.ImportZoneSuccessAction) => action.payload)
     .mergeMap((zone: Zone) => this.router.navigate(['/site/' + zone.codeSite]))
     .delay(3000)
@@ -201,8 +221,8 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction()); 
 
   @Effect() 
-  importCampaignSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_CAMPAIGN_SUCCESS)
+  importOrRemoveCampaignSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_CAMPAIGN_SUCCESS, SiteAction.ActionTypes.REMOVE_CAMPAIGN_SUCCESS)
     .map((action: SiteAction.ImportCampaignSuccessAction) => action.payload)
     .mergeMap((campaign: Campaign) => this.router.navigate(['/zone/' + campaign.codeSite + '/'+ campaign.codeZone]))
     .delay(3000)
@@ -217,8 +237,8 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction()); 
 
   @Effect() 
-  importZonePrefSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS)
+  importOrRemoveZonePrefSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS, SiteAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS)
     .map((action: SiteAction.ImportZonePrefSuccessAction) => action.payload)
     .mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codeSite + '/'+ zonePref.codeZone]))
     .delay(3000)
@@ -233,8 +253,8 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction()); 
 
   @Effect() 
-  importTransectSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT_SUCCESS)
+  importOrRemoveTransectSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_TRANSECT_SUCCESS, SiteAction.ActionTypes.REMOVE_TRANSECT_SUCCESS)
     .map((action: SiteAction.ImportTransectSuccessAction) => action.payload)
     .mergeMap((transect: Transect) => this.router.navigate(['/zone/' + transect.codeSite + '/'+ transect.codeZone]))
     .delay(3000)
@@ -249,19 +269,14 @@ export class SiteEffects {
     .map(() => new SiteAction.RemoveMsgAction());
 
   @Effect() 
-  importCountSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS)
+  importOrRemoveCountSuccess$: Observable<Action> = this.actions$
+    .ofType(SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS, SiteAction.ActionTypes.REMOVE_COUNT_SUCCESS)
     .map((action: SiteAction.ImportCountSuccessAction) => action.payload)
     .mergeMap((count:Count) => this.router.navigate(['/transect/' + count.codeSite + '/'+ count.codeZone + '/' + count.codeTransect]))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
+    
 
-  @Effect() 
-  importOrremoveSiteSuccess$: Observable<Action> = this.actions$
-    .ofType(SiteAction.ActionTypes.REMOVE_SITE_SUCCESS)
-    .do(() => this.router.navigate(['/site']))
-    .delay(3000)
-    .map(() => new SiteAction.RemoveMsgAction());     
 
   constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private siteService: SiteService, private csv2jsonService: Csv2JsonService) {
 

@@ -17,9 +17,10 @@ import { Site } from './../../modules/datas/models/site';
         <mat-card-content>
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
           <div>{{nZones}} {{'ZONES' | translate}}</div>
-          <div role="listitem">{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
-          <div role="listitem">{{nTransects}} {{'TRANSECTS' | translate}}</div>
-          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
+          <div>{{nCampaigns}} {{'CAMPAIGNS' | translate}}</div>
+          <div>{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
+          <div>{{nTransects}} {{'TRANSECTS' | translate}}</div>
+          <div>{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
       </mat-card>
     </a>
@@ -67,6 +68,7 @@ export class SitePreviewComponent implements OnInit {
   @Input() site: Site;
   countries: string;
   nZones: number = 0;
+  nCampaigns: number = 0;
   nTransects: number = 0;
   nZonesPref: number = 0;
   nCounts: number = 0;
@@ -74,6 +76,7 @@ export class SitePreviewComponent implements OnInit {
   ngOnInit(){
       this.nZones = this.site.zones ? this.site.zones.length : 0;
       for(let z of this.site.zones) {
+        this.nCampaigns += z.campaigns ? z.campaigns.length : 0;
         this.nTransects += z.transects ? z.transects.length : 0;
         this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
         if(z.transects){

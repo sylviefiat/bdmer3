@@ -1,7 +1,11 @@
 
     <mat-card class="actions">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title><a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / {{ 'TRANSECT' | translate}} {{ transect.code }}</mat-card-title>
+      <mat-card-title>
+        <a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / 
+        <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / 
+        <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / 
+        {{ 'TRANSECT' | translate}} {{ transect.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'COORDINATES' | translate }} : {{ transect.latitude }}°, {{ transect.longitude }}</div> 
       </mat-card-content>
@@ -10,7 +14,7 @@
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
               <mat-option [value]="'transectForm'">{{ 'EDIT_TRANSECT' | translate}}</mat-option>
               <mat-option [value]="'countForm'">{{ 'ADD_COUNT' | translate}}</mat-option>
-              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deleteTransect'">{{ 'DELETE_TRANSECT' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>        

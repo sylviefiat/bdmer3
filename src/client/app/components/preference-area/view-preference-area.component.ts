@@ -37,11 +37,30 @@ export class ViewPreferenceAreaComponent implements OnInit {
 
 
     deleteZonePref() {
-        if (this.windowService.confirm("Are you sure you want to delete this transect from database ?")){
-            this.zone.zonePreferences = this.zone.zonePreferences.filter(zonepref => zonepref.code !== this.zonePref.code);
-            this.site.zones = [...this.site.zones.filter(zone => zone.code !== this.zone.code),this.zone];
-            this.remove.emit(this.site);
+        if (this.windowService.confirm("Are you sure you want to delete this zone preference from database ?")){
+            this.remove.emit(this.zonePref);
         }
     }
 
+    toSites(){
+        this.routerext.navigate(['site']);
+    }
+
+    toSite(){
+        this.routerext.navigate(['site/'+this.site.code]);
+    }
+
+    toZone(){
+        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
+    }
+
+  get thumbnailZone(): string | boolean {
+      //WAIT FOR MAP
+      return null;
+    //return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+  }
+
+  get thumbnailSpecies(): string | boolean {
+    return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+  }
 }

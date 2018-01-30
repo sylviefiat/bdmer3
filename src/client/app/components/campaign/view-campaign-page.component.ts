@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
-import { Site, Zone, ZonePreference } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedCampaign } from '../../modules/ngrx/index';
+import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
@@ -24,25 +24,25 @@ import { SiteAction } from '../../modules/datas/actions/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-view-zone-pref-page',
+  selector: 'bc-view-campaign-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-zone-pref 
+    <bc-campaign 
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [zonePref]="zonePref$ | async"
-      (edit)="editZonePref($event)"
-      (remove)="removeZonePref($event)">
-    </bc-zone-pref>
+      [campaign]="campaign$ | async"
+      (action)="actionCampaign($event)"
+      (remove)="removeCampaign($event)">
+    </bc-campaign>
   `,
 })
-export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
+export class ViewCampaignPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
-  zonePrefSubscription: Subscription;
+  campaignSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
-  zonePref$: Observable<ZonePreference | null>;
+  campaign$: Observable<Campaign | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -51,28 +51,28 @@ export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
-    this.zonePrefSubscription = route.params
-      .map(params => new SiteAction.SelectZonePrefAction(params.idZonePref))
+    this.campaignSubscription = route.params
+      .map(params => new SiteAction.SelectTransectAction(params.idCampaign))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.zonePref$ = this.store.let(getSelectedZonePref);
+    this.campaign$ = this.store.let(getSelectedCampaign);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.zonePrefSubscription.unsubscribe();
+    this.campaignSubscription.unsubscribe();
   }
 
-  editZonePref(zonePref: ZonePreference){
-    this.routerext.navigate(['zonePrefForm/'+zonePref.codeSite+'/'+zonePref.codeZone+'/'+zonePref.code]);
+  actionCampaign(redirect: String) {
+    this.routerext.navigate([redirect]);
   }
 
-  removeZonePref(zonePref: ZonePreference){
-    this.store.dispatch(new SiteAction.RemoveZonePrefAction(zonePref));
+  removeCampaign(site: Site){
+    this.store.dispatch(new SiteAction.AddSiteAction(site));
   }
 }

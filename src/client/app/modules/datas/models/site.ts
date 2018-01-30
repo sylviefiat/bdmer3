@@ -16,6 +16,7 @@ export interface Zone {
     surface: string;
     transects: Transect[];
     zonePreferences: ZonePreference[];
+    campaigns: Campaign[];
 }
 
 export interface Transect {
@@ -29,10 +30,9 @@ export interface Transect {
 
 export interface Count {
     code: string;
-    codeCampagne: string;
+    codeCampaign: string;
     codeSite: string;
     codeZone: string;
-    nomTransect: string;
     codeTransect: string;
     date: Date;
     codeSpecies: string;
@@ -57,5 +57,5 @@ export interface Campaign {
     participants: string;
     surfaceTransect: number;
     description: string;
-    codePays: string;
+    codeCountry: string;
 }

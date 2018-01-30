@@ -147,6 +147,39 @@ export class Csv2JsonService {
         return lines;
     }
 
+    private extractCampaignData(arrayData): Zone[] { 
+        let allTextLines = arrayData;
+        let headers = allTextLines[0];
+        let lines: Zone[] = [];
+        for (let i = 1; i < allTextLines.length; i++) {            
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let st = {} as Zone;
+                let header;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "codeCountry":
+                        case "codeSite":
+                        case "codeZone":
+                        case "code":
+                        case "dateStart":
+                        case "dateEnd":
+                        case "participants":
+                        case "surfaceTransect":
+                        case "description":
+                            st[headers[j]] = data[j];
+                            break;
+                        default:                            
+                            throw new Error('Wrong CSV File Unknown field detected');
+                    }
+                }
+                lines.push(st);
+            }
+        }
+        //console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
+    }
+
     private extractTransectData(arrayData): Zone[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
@@ -158,12 +191,75 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_zone":
+                        case "codeSite":
+                        case "codeZone":
                         case "code":
                         case "nom":
                         case "latitude":
                         case "longitude":
                         case "description":
+                            st[headers[j]] = data[j];
+                            break;
+                        default:                            
+                            throw new Error('Wrong CSV File Unknown field detected');
+                    }
+                }
+                lines.push(st);
+            }
+        }
+        //console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
+    }
+
+    private extractZonePrefData(arrayData): Zone[] { 
+        let allTextLines = arrayData;
+        let headers = allTextLines[0];
+        let lines: Zone[] = [];
+        for (let i = 1; i < allTextLines.length; i++) {            
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let st = {} as Zone;
+                let header;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "codeSite":
+                        case "codeZone":
+                        case "code":
+                        case "codeSpecies":
+                        case "presence":
+                        case "infoSource":
+                            st[headers[j]] = data[j];
+                            break;
+                        default:                            
+                            throw new Error('Wrong CSV File Unknown field detected');
+                    }
+                }
+                lines.push(st);
+            }
+        }
+        //console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
+    }
+
+    private extractCountData(arrayData): Zone[] { 
+        let allTextLines = arrayData;
+        let headers = allTextLines[0];
+        let lines: Zone[] = [];
+        for (let i = 1; i < allTextLines.length; i++) {            
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let st = {} as Zone;
+                let header;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "codeSite":
+                        case "codeZone":
+                        case "codeCampaign":
+                        case "code":
+                        case "codeSpecies":
+                        case "codeTransect":
+                        case "date":
+                        case "mesures":
                             st[headers[j]] = data[j];
                             break;
                         default:                            
@@ -208,9 +304,21 @@ export class Csv2JsonService {
                     case "zone":
                         res = this.extractZoneData(data);
                         break;
+                    case "campaign":
+                        console.log(data);
+                        res = this.extractCampaignData(data);
+                        break;
+                    case "zonePref":
+                        console.log(data);
+                        res = this.extractZonePrefData(data);
+                        break;
                     case "transect":
                         console.log(data);
                         res = this.extractTransectData(data);
+                        break;
+                    case "count":
+                        console.log(data);
+                        res = this.extractCountData(data);
                         break;
                     default:
                         // code...

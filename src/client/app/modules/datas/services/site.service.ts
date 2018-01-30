@@ -8,7 +8,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Site, Zone, Transect, ZonePreference, Count } from '../models/site';
+import { Site, Zone, Campaign, Transect, ZonePreference, Count } from '../models/site';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -96,6 +96,7 @@ export class SiteService {
         if(!zone.codeSite) zone.codeSite=site.code;
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
+        if(!zone.campaigns) zone.campaigns = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
         st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
         this.currentSite = of(st);
@@ -104,6 +105,28 @@ export class SiteService {
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return  of(zone);
+      })
+  }
+
+  editCampaign(site: Site, campaign: Campaign): Observable<Campaign> {
+    console.log(campaign);
+    return this.getSite(site.code)
+      .filter(site => site!==null)
+      .mergeMap(st => {  
+        campaign.codeCountry = st.codeCountry;
+        let zn = st.zones.filter(z => z.code === campaign.codeZone)[0];
+        if(zn){
+          if(zn.campaigns.filter(t => t.code === campaign.code).length > -1){
+            zn.campaigns = [ ...zn.campaigns.filter(t => t.code !== campaign.code), campaign];
+          }
+          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
+        } 
+        this.currentSite = of(st);
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap((response) => {
+        return  of(campaign);
       })
   }
 

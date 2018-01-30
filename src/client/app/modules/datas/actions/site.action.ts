@@ -57,6 +57,7 @@ export namespace SiteAction {
       LOAD_FAIL: string;
       SELECT_SITE: string;
       SELECT_ZONE: string;
+      SELECT_CAMPAIGN: string;
       SELECT_TRANSECT: string;
       SELECT_ZONE_PREF: string;
       SELECT_COUNT: string;
@@ -112,6 +113,7 @@ export namespace SiteAction {
       LOAD_FAIL: type(`${SITE} Load Fail`),
       SELECT_SITE: type(`${SITE} select site`),
       SELECT_ZONE: type(`${SITE} select zone`),
+      SELECT_CAMPAIGN: type(`${SITE} select campaign`),
       SELECT_TRANSECT: type(`${SITE} select transect`),
       SELECT_ZONE_PREF: type(`${SITE} select species preference zone`),
       SELECT_COUNT: type(`${SITE} select count`),
@@ -440,6 +442,11 @@ export namespace SiteAction {
     constructor(public payload: any) {}
   }
 
+  export class SelectCampaignAction implements Action {
+    readonly type = ActionTypes.SELECT_CAMPAIGN;
+    constructor(public payload: any) {}
+  }
+
   export class SelectTransectAction implements Action {
     readonly type = ActionTypes.SELECT_TRANSECT;
     constructor(public payload: any) {}
@@ -503,6 +510,7 @@ export namespace SiteAction {
     | LoadFailAction
     | SelectSiteAction
     | SelectZoneAction
+    | SelectCampaignAction
     | SelectTransectAction
     | SelectZonePrefAction
     | SelectCountAction

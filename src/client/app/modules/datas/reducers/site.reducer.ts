@@ -145,6 +145,95 @@ export function siteReducer(
                 };
             }
 
+        case SiteAction.ActionTypes.REMOVE_ZONE_SUCCESS:
+            {
+                const removedZone = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedZone.codeSite)[0];
+                modifiedSite.zones = modifiedSite.zones.filter(zone => zone.code !== removedZone.code);
+                return {
+                    ...state,
+                    entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
+                    ids: [...state.ids.filter(id => id !== modifiedSite._id), modifiedSite._id],
+                    currentZoneId: null,
+                    error: null,
+                    msg: "Zone removed with success"
+                };
+            }
+
+        case SiteAction.ActionTypes.REMOVE_CAMPAIGN_SUCCESS:
+            {
+                const removedCampaign = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedCampaign.codeSite)[0];
+                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedCampaign.codeZone)[0];
+                modifiedZone.campaigns = modifiedZone.campaigns.filter(campaign => campaign.code !== removedCampaign.code);
+                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+
+                return {
+                    ...state,
+                    entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
+                    ids: [...state.ids.filter(id => id !== modifiedSite._id), modifiedSite._id],
+                    currentCampaignId: null,
+                    error: null,
+                    msg: "Campaign removed with success"
+                };
+            }
+
+        case SiteAction.ActionTypes.REMOVE_TRANSECT_SUCCESS:
+            {
+                const removedTransect = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedTransect.codeSite)[0];
+                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedTransect.codeZone)[0];
+                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.code !== removedTransect.code);
+                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+
+                return {
+                    ...state,
+                    entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
+                    ids: [...state.ids.filter(id => id !== modifiedSite._id), modifiedSite._id],
+                    currentTransectId: null,
+                    error: null,
+                    msg: "Transect removed with success"
+                };
+            }
+
+        case SiteAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS:
+            {
+                const removedZonePref = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedZonePref.codeSite)[0];
+                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedZonePref.codeZone)[0];
+                modifiedZone.zonePreferences = modifiedZone.zonePreferences.filter(zp => zp.code !== removedZonePref.code);
+                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+
+                return {
+                    ...state,
+                    entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
+                    ids: [...state.ids.filter(id => id !== modifiedSite._id), modifiedSite._id],
+                    currentSpPrefId: null,
+                    error: null,
+                    msg: "Zone preference removed with success"
+                };
+            }
+
+        case SiteAction.ActionTypes.REMOVE_COUNT_SUCCESS:
+            {
+                const removedCount = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedCount.codeSite)[0];
+                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedCount.codeZone)[0];
+                const modifiedTransect = modifiedZone.transects.filter(count => count.code === removedCount.codeTransect)[0];
+                modifiedTransect.counts = modifiedTransect.counts.filter(count => count.code !== removedCount.code)
+                modifiedZone.transects = [...modifiedZone.transects.filter(transect => transect.code !== removedCount.code), modifiedTransect];
+                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+
+                return {
+                    ...state,
+                    entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
+                    ids: [...state.ids.filter(id => id !== modifiedSite._id), modifiedSite._id],
+                    currentCountId: null,
+                    error: null,
+                    msg: "Count removed with success"
+                };
+            }
+
         case SiteAction.ActionTypes.REMOVE_SITE_FAIL:
         case SiteAction.ActionTypes.ADD_SITE_FAIL:
             {
@@ -176,6 +265,22 @@ export function siteReducer(
             return {
                 ...state,
                 currentTransectId: action.payload,
+            };
+        }
+
+        case SiteAction.ActionTypes.SELECT_ZONE_PREF: {
+            console.log("select zone pref: "+action.payload);
+            return {
+                ...state,
+                currentSpPrefId: action.payload,
+            };
+        }
+
+        case SiteAction.ActionTypes.SELECT_COUNT: {
+            console.log("select count: "+action.payload);
+            return {
+                ...state,
+                currentCountId: action.payload,
             };
         }
 
