@@ -67,7 +67,7 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
     this.routerext.navigate([redirect]);
   }
 
-  removeZone(site: Site){
-    this.store.dispatch(new SiteAction.AddSiteAction(site));
+  removeZone(zone: Zone){
+    this.store.dispatch(new SiteAction.RemoveZoneAction(zone));
   }
 }

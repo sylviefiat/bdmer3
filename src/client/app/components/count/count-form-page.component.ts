@@ -7,10 +7,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone, Transect, Count } from '../../modules/datas/models/index';
+import { Site, Zone, Campaign, Count, Species, Transect } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedTransect, getSelectedCount } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedCampaign, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
 
 @Component({
   selector: 'bc-count-page',
@@ -20,8 +21,9 @@ import { SiteAction } from '../../modules/datas/actions/index';
       [errorMessage]="error$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [transect]="transect$ | async"
-      [count]="count$ | async">
+      [campaign]="campaign$ | async"
+      [count]="count$ | async"
+      [species]="species$ | async">
     </bc-count-form>
   `,
   styles: [
@@ -41,11 +43,12 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
   zone$: Observable<Zone>;
-  transect$: Observable<Transect>;
+  campaign$: Observable<Campaign>;
   count$: Observable<Count>;
+  species$: Observable<Species[]>;
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
-  transectSubscription: Subscription;
+  campaignSubscription: Subscription;
   countSubscription: Subscription;
 
 
@@ -56,8 +59,8 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
-    this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+    this.campaignSubscription = route.params
+      .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
     this.countSubscription = route.params
       .map(params => new SiteAction.SelectCountAction(params.idCount))
@@ -67,14 +70,16 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transect$ = this.store.let(getSelectedTransect);
+    this.campaign$ = this.store.let(getSelectedCampaign);
     this.count$ = this.store.let(getSelectedCount);
+    this.species$ = this.store.let(getSpeciesInApp);
+    this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.transectSubscription.unsubscribe();
+    this.campaignSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }
 

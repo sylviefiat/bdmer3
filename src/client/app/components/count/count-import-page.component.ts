@@ -6,9 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getSelectedZone, getSelectedCampaign } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -23,7 +23,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [msg]="msg$ | async"
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [transect]="transect$ | async">
+      [campaign]="campaign$ | async">
     </bc-count-import>
   `,
     styles: [``]
@@ -31,14 +31,14 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 export class CountImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
     zone$: Observable<Zone>;
-    transect$: Observable<Transect>;
+    campaign$: Observable<Campaign>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
 
 
     siteSubscription: Subscription;
     zoneSubscription: Subscription;
-    transectSubscription: Subscription;
+    campaignSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
@@ -50,8 +50,8 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
         this.zoneSubscription = route.params
             .map(params => new SiteAction.SelectZoneAction(params.idZone))
             .subscribe(store);
-        this.transectSubscription = route.params
-            .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+        this.campaignSubscription = route.params
+            .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
             .subscribe(store);
     }
 
@@ -60,13 +60,13 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
         this.msg$ = this.store.let(getSitePageMsg);
         this.site$ = this.store.let(getSelectedSite);
         this.zone$ = this.store.let(getSelectedZone);
-        this.transect$ = this.store.let(getSelectedTransect);
+        this.campaign$ = this.store.let(getSelectedCampaign);
     }
 
     ngOnDestroy() {
         this.siteSubscription.unsubscribe();
         this.zoneSubscription.unsubscribe();
-        this.transectSubscription.unsubscribe();
+        this.campaignSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

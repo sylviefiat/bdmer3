@@ -211,5 +211,22 @@
   "DOWNLOAD_CSV_COUNTS":"Télécharger un exemple de CSV pour importer des comptages",
   "DISPLAY":"Afficher",
   "ADD_TRANSECT_TO":"Ajouter un transect à ",
-  "ADD_CAMPAIGN":"Ajouter une campagne"
+  "ADD_CAMPAIGN":"Ajouter une campagne",
+  "PARTICIPANTS":"Particpants",
+  "SURFACE_TRANSECT":"Surface transect",
+  "SURFACE_TRANSECT_EX":"En m²",
+  "DESCRIPTION":"Description",
+  "DATE_START":"Date de démarrage",
+  "DATE_END":"Date de fin",
+  "PARTICIPANTS_EX":"Noms des participants séparés par des virgules",
+  "CAMPAIGN_DESC":"Description de la campagne",
+  "CAMPAIGN_DESC_EX":"Décrivez les informations particulières relatives à la campagne",
+  "CAMPAIGN_DATES":"Dates de la campagne",
+  "EDIT_CAMPAIGN":"Editer la campagne",
+  "DELETE_CAMPAIGN":"Supprimer la campagne",
+  "COUNT_CODE":"Code comptage",
+  "COUNT_CODE_EX":"Ex: SITENAME_Z001_C001_C20111018",
+  "TRANSECT_SELECT":"Selectionner le transect",
+  "CAMPAIGN_CODE":"Code de la campagne",
+  "EX_COUNT_CAMPAIGN":"Le code de la campagne n'est pas modifiable"
 }

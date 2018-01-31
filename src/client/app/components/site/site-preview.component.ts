@@ -79,8 +79,8 @@ export class SitePreviewComponent implements OnInit {
         this.nCampaigns += z.campaigns ? z.campaigns.length : 0;
         this.nTransects += z.transects ? z.transects.length : 0;
         this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
-        if(z.transects){
-          for(let c of z.transects){
+        if(z.campaigns){
+          for(let c of z.campaigns){
             this.nCounts += c.counts ? c.counts.length : 0;
           }
         }

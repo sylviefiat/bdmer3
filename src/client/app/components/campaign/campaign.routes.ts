@@ -10,7 +10,7 @@ export const CampaignRoutes: Array<any> = [
     component: CampaignFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'campaignForm/:idSite/:idZone/:idTransect',
+    path: 'campaignForm/:idSite/:idZone/:idCampaign',
     component: CampaignFormPageComponent,
     canActivate : [AuthGuard]
   },
@@ -25,7 +25,7 @@ export const CampaignRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'campaign/:idSite/:idZone/:idTransect',
+    path: 'campaign/:idSite/:idZone/:idCampaign',
     component: ViewCampaignPageComponent,
     canActivate : [AuthGuard]
   }

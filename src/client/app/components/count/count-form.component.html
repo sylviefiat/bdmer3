@@ -1,30 +1,69 @@
-
-  <div [formGroup]="CountForm">
-    <mat-card-content> 
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'COUNT_CODE' | translate }}" formControlName="code" required>
-        <div class="hint">{{ 'COUNT_CODE_EX' | translate }}</div>
-      </mat-input-container>       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'COUNT_DATE' | translate }}" formControlName="date" required>
-        <div class="hint">{{ 'COUNT_DATE_EX' | translate }}</div>    
-      </mat-input-container>          
-       
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'COUNT_CODESPECIES' | translate }}" formControlName="codeSpecies" required>
-        <div class="hint">{{ 'COUNT_CODESPECIES_EX' | translate }}</div>    
-      </mat-input-container>
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'COUNT_LONG' | translate }}" formControlName="longMm" required>mm
-        <div class="hint">{{ 'COUNT_LONG_EX' | translate }}</div>    
-      </mat-input-container> 
-    
-      <mat-input-container>
-        <input type="text" matInput placeholder="{{ 'COUNT_LAT' | translate }}" formControlName="latMm" required>mm
-        <div class="hint">{{ 'COUNT_LAT_EX' | translate }}</div>    
-      </mat-input-container>          
-    </mat-card-content>
+<form [formGroup]="countForm" (ngSubmit)="submit()">  
+  <div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'ADD_COUNT_TO' | translate}} {{ campaign.code }}</mat-card-title>
+      
+      <mat-card-content>
+        <button type="submit" class="btn btn-primary" [disabled]="!countForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+      </mat-card-content>
+    </mat-card>
   </div>
+
+  <div class="insideform">
+    <mat-card class="column">
+      <h5 mat-subheader>{{ 'COUNT_DESC' | translate }}</h5>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'COUNT_CODE' | translate }}" formControlName="code" required>
+          <div class="hint">{{ 'COUNT_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_SITE_CODE_FORBIDDEN' | translate }}</span></div>
+        </mat-input-container>
+      </div>
+      <div class="row">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'CAMPAIGN_CODE' | translate }}" formControlName="codeCampaign" required>
+          <div class="hint">{{ 'EX_COUNT_CAMPAIGN' | translate }}</div>
+        </mat-input-container>
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
+          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }}</div>
+        </mat-input-container>
+
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
+          <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+        </mat-input-container>
+      </div>
+      <div class="row">
+        <mat-form-field>
+          <mat-select  placeholder="{{'TRANSECT_SELECT' | translate}}" formControlName="codeTransect" required>
+            <mat-option *ngFor="let tr of transects" [value]="tr.code">{{ tr.code }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field>
+          <input matInput [matDatepicker]="Datepicker" placeholder="{{ 'DATE' | translate }}" formControlName="date" required>
+          <mat-datepicker-toggle matSuffix [for]="Datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #Datepicker></mat-datepicker>
+        </mat-form-field>         
+      </div>
+      <div class="row">
+        <mat-card class="row" formArrayName="mesures">
+          <h5 mat-subheader>{{ 'MESURES' | translate }} </h5>
+          <div *ngFor="let name of form.controls.mesures.controls; let j=index;" [formGroupName]="j">          
+            <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.mesures.controls.length > 1" (click)="removeMesure(j)"></fa>
+            <bt-mesure [group]="form.controls.mesure.controls[j]"></bt-mesure>
+          </div>
+          <mat-card-actions>
+            <button mat-raised-button color="warn" (click)="addMesure()">
+             {{ 'ADD_Mesure' | translate }}
+           </button>
+         </mat-card-actions>
+        </mat-card>
+      </div>
+  </div>
+
+</form>

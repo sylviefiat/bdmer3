@@ -9,7 +9,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedCampaign } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 
 @Component({
@@ -43,7 +43,7 @@ export class CampaignFormPageComponent implements OnInit, OnDestroy {
   zoneSubscription: Subscription;
   campaignSubscription: Subscription;
 
-  constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
+  constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute,) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
       .subscribe(store);      
@@ -58,7 +58,7 @@ export class CampaignFormPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.campaign$ = this.store.let(getSelectedTransect);
+    this.campaign$ = this.store.let(getSelectedCampaign);
   }
 
   ngOnDestroy() {

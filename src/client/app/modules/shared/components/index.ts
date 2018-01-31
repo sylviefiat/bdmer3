@@ -13,7 +13,7 @@ export const SHARED_COMPONENTS: any[] = [
   EllipsisPipe,
   KeysPipe,
   HasIntersection,
-  ConfirmDirective
+  ConfirmDirective,
 ];
 
 export * from './not-found-page';

@@ -211,5 +211,22 @@
   "DOWNLOAD_CSV_COUNTS":"Download CSV example for counts import",
   "DISPLAY":"Display",
   "ADD_TRANSECT_TO":"Add transect to ",
-  "ADD_CAMPAIGN":"Add campagne"
+  "ADD_CAMPAIGN":"Add campagne",
+  "PARTICIPANTS":"Particpants",
+  "SURFACE_TRANSECT":"Transect surface",
+  "SURFACE_TRANSECT_EX":"In m²",
+  "DESCRIPTION":"Description",
+  "DATE_START":"Starting date",
+  "DATE_END":"Ending date",
+  "PARTICIPANTS_EX":"Name of the participants separated by commas",
+  "CAMPAIGN_DESC":"Description of the campaign",
+  "CAMPAIGN_DESC_EX":"Describe specials informations concerning this campaign",
+  "CAMPAIGN_DATES":"Campaign dates",
+  "EDIT_CAMPAIGN":"Edit campaign",
+  "DELETE_CAMPAIGN":"Delete campaign",
+  "COUNT_CODE":"Count code",
+  "COUNT_CODE_EX":"Ex: SITENAME_Z001_C001_C20111018",
+  "TRANSECT_SELECT":"Select transect",
+  "CAMPAIGN_CODE":"Campaign code",
+  "EX_COUNT_CAMPAIGN":"Campaign code is not editable"
 }

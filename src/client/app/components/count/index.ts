@@ -6,6 +6,7 @@ import { CountImportPageComponent } from './count-import-page.component';
 import { CountImportComponent } from './count-import.component';
 import { ViewCountPageComponent } from './view-count-page.component';
 import { ViewCountComponent } from './view-count.component';
+import { MesuresComponent } from './mesures.component';
 
 export const COUNT_COMPONENTS: any[] = [
   CountPreviewListComponent,
@@ -16,6 +17,7 @@ export const COUNT_COMPONENTS: any[] = [
   CountImportComponent,
   ViewCountPageComponent,
   ViewCountComponent,
+  MesuresComponent
 ];
 
 export * from './count-preview-list.component';
@@ -26,3 +28,4 @@ export * from './count-import-page.component';
 export * from './count-import.component';
 export * from './view-count-page.component';
 export * from './view-count.component';
+export * from './mesures.component';

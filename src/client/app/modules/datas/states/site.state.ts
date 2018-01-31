@@ -128,7 +128,7 @@ export function getCurrentCount(state$: Observable<ISiteState>) {
     return state$.select(state => state.currentSiteId && state.currentZoneId && state.currentTransectId && state.currentCountId &&
         state.entities.filter(site =>
             site._id === state.currentSiteId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0].transects.filter(transect =>
-                    transect.code === state.currentTransectId)[0].counts.filter(count =>
+                zone.code === state.currentZoneId)[0].campaigns.filter(campaign =>
+                    campaign.code === state.currentCampaignId)[0].counts.filter(count =>
                       count.code === state.currentCountId)[0]);
 }

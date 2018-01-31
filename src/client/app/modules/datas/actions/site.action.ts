@@ -213,7 +213,7 @@ export namespace SiteAction {
   export class RemoveZoneSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_ZONE_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Zone) {}
   }
 
   export class RemoveZoneFailAction implements Action {
@@ -261,7 +261,7 @@ export namespace SiteAction {
   export class RemoveZonePrefSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_ZONE_PREF_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: ZonePreference) {}
   }
 
   export class RemoveZonePrefFailAction implements Action {
@@ -309,7 +309,7 @@ export namespace SiteAction {
   export class RemoveCampaignSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_CAMPAIGN_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Campaign) {}
   }
 
   export class RemoveCampaignFailAction implements Action {
@@ -357,7 +357,7 @@ export namespace SiteAction {
   export class RemoveTransectSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_TRANSECT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Transect) {}
   }
 
   export class RemoveTransectFailAction implements Action {
@@ -405,7 +405,7 @@ export namespace SiteAction {
   export class RemoveCountSuccessAction implements Action {
     readonly type = ActionTypes.REMOVE_COUNT_SUCCESS;
 
-    constructor(public payload: Site) {}
+    constructor(public payload: Count) {}
   }
 
   export class RemoveCountFailAction implements Action {

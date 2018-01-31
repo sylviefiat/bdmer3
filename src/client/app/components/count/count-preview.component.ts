@@ -1,21 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,Transect, Count } from './../../modules/datas/models/site';
+import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
 
 @Component({
   selector: 'bc-count-preview',
   template: `
-    <a [routerLink]="['/count', codeSite, codeZone, codeTransect, code]">
+    <a [routerLink]="['/count', codeSite, codeZone, codeCampaign, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span> / <span *ngIf="codeTransect">{{ codeTransect }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span> / <span *ngIf="codeCampaign">{{ codeCampaign }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ date }}
-        </mat-card-content>
-        <mat-card-content>
-          {{ codeSpecies }}
         </mat-card-content>
         <mat-card-content>
           {{ 'COUNT_MESURES' | translate }}: {{ mesures }}
@@ -64,7 +61,7 @@ import { Site,Zone,Transect, Count } from './../../modules/datas/models/site';
 })
 export class CountPreviewComponent implements OnInit {  
   @Input() count: Count;
-  @Input() transect: Transect;
+  @Input() campaign: Campaign;
   @Input() zone: Zone;
   @Input() site: Site;
   nCounts: number = 0;
@@ -89,20 +86,12 @@ export class CountPreviewComponent implements OnInit {
     return this.zone.code;
   }
 
-  get nomTransect() {
-    return this.transect.code;
-  }
-
-  get codeTransect() {
-    return this.transect.code;
+  get codeCampaign() {
+    return this.campaign.code;
   }
 
   get date() {
     return this.count.date;
-  }
-
-  get codeSpecies() {
-    return this.count.codeSpecies;
   }
 
   get mesures() {
@@ -110,6 +99,8 @@ export class CountPreviewComponent implements OnInit {
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.count.code+".jpg"; 
+    // WAIT FOR MAP
+    return null;
+    //return "/assets/img/"+this.count.code+".jpg"; 
   }
 }

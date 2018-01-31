@@ -14,7 +14,7 @@ export const CountRoutes: Array<any> = [
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'countForm/:idSite/:idZone/:idTransect',
+    path: 'countForm/:idSite/:idZone/:idCampaign',
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },
@@ -24,7 +24,7 @@ export const CountRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'count/:idSite/:idZone/:idTransect',
+    path: 'count/:idSite/:idZone/:idCampaign',
     component: ViewCountPageComponent,
     canActivate : [AuthGuard]
   }

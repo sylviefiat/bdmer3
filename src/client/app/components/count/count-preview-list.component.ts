@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
-import { Transect, Zone, Site, Count } from './../../modules/datas/models/site';
+import { Campaign, Zone, Site, Count } from './../../modules/datas/models/site';
 
 @Component({
   selector: 'bc-count-preview-list',
   template: `
-    <bc-count-preview *ngFor="let count of counts" [count]="count" [transect]="transect" [zone]="zone" [site]="site"></bc-count-preview>
+    <bc-count-preview *ngFor="let count of counts" [count]="count" [campaign]="campaign" [zone]="zone" [site]="site"></bc-count-preview>
   `,
   styles: [
     `
@@ -18,7 +18,7 @@ import { Transect, Zone, Site, Count } from './../../modules/datas/models/site';
 })
 export class CountPreviewListComponent {
   @Input() counts: Count[];
-  @Input() transect: Transect;
+  @Input() campaign: Campaign;
   @Input() zone: Zone;
   @Input() site: Site;
 }

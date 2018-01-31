@@ -25,7 +25,7 @@ export class ViewTransectComponent implements OnInit {
     @Input() site: Site;
     @Input() zone: Zone;
     @Input() transect: Transect;
-    counts$: Observable<Count[]>;
+    
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
 
@@ -34,7 +34,7 @@ export class ViewTransectComponent implements OnInit {
 
 
     ngOnInit() {
-        this.counts$ = of(this.transect.counts);
+        
     }
 
 
@@ -47,8 +47,6 @@ export class ViewTransectComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "transectForm":
-            case "countForm":
-            case "countImport":
                 this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.transect.code);
                 break;
             case "deleteTransect":

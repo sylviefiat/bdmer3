@@ -25,18 +25,6 @@ export interface Transect {
     codeZone: string;
     longitude: string;
     latitude: string;
-    counts: Count[];
-}
-
-export interface Count {
-    code: string;
-    codeCampaign: string;
-    codeSite: string;
-    codeZone: string;
-    codeTransect: string;
-    date: Date;
-    codeSpecies: string;
-    mesures: string;
 }
 
 export interface ZonePreference {
@@ -58,4 +46,21 @@ export interface Campaign {
     surfaceTransect: number;
     description: string;
     codeCountry: string;
+    counts: Count[];
+}
+
+export interface Count {
+    code: string;
+    codeCampaign: string;
+    codeSite: string;
+    codeZone: string;
+    codeTransect: string;
+    date: Date;
+    mesures: Mesure[];    
+}
+
+export interface Mesure {
+  codeSpecies: string;
+  long: string;
+  larg: string;
 }

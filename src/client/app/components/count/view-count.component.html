@@ -1,15 +1,31 @@
 
     <mat-card class="actions">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title>{{ 'COUNT' | translate}} {{ count.code }}</mat-card-title>
+      <mat-card-title>
+        <a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / 
+        <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / 
+        <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / 
+        <a class="link" (click)="toCampaign()">{{ 'CAMPAIGN' | translate}} {{ campaign.code }}</a> /
+        {{ 'COUNT' | translate}} {{ count.code }}
+      </mat-card-title>
       <mat-card-content>
         <div>{{ 'COUNT_DATE' | translate }} : {{ count.date }}</div> 
       </mat-card-content>
       <mat-card-content>
+        <div>{{ 'COUNT_TRANSECT' | translate }} : {{ count.codeTransect }}</div> 
+      </mat-card-content>
+      <mat-card-content>
         <div>{{ 'COUNT_SPECIES' | translate }} : {{ count.codeSpecies }}</div> 
       </mat-card-content>
+      <mat-card-content>
+        <div>{{ 'MESURES' | translate }} : {{ count.mesures }}</div> 
+      </mat-card-content>
       <mat-card-actions>
-        <button (click)="edit.emit(count)">{{ 'EDIT' | translate }}</button>
-        <button class="warn" (click)="deleteCount(transect)">{{ 'DELETE' | translate }}</button> 
+        <mat-form-field>
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+              <mat-option [value]="'countForm'">{{ 'EDIT_TRANSECT' | translate}}</mat-option>
+              <mat-option class="warn" [value]="'deleteCount'">{{ 'DELETE_TRANSECT' | translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>        
       </mat-card-actions>              
     </mat-card>

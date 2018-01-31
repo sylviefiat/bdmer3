@@ -75,7 +75,7 @@ export class ZonePreviewComponent implements OnInit {
     this.nCampaigns = this.zone.campaigns ? this.zone.campaigns.length : 0;
     this.nTransects = this.zone.transects ? this.zone.transects.length : 0;
     this.nZonesPrefs = this.zone.zonePreferences ? this.zone.zonePreferences.length : 0;
-    for(let t of this.zone.transects) {
+    for(let t of this.zone.campaigns) {
       this.nCounts += t.counts ? t.counts.length : 0;
     }
 

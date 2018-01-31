@@ -72,7 +72,7 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
     this.routerext.navigate([redirect]);
   }
 
-  removeTransect(site: Site){
-    this.store.dispatch(new SiteAction.AddSiteAction(site));
+  removeTransect(transect: Transect){
+    this.store.dispatch(new SiteAction.AddTransectAction(transect));
   }
 }

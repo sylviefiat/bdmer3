@@ -9,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site,Zone, Transect, Count } from '../../modules/datas/models/index';
+import { Site,Zone, Transect,Campaign, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -24,10 +24,10 @@ import { WindowService } from '../../modules/core/services/index';
 export class ViewCountComponent implements OnInit {    
     @Input() site: Site;
     @Input() zone: Zone;
-    @Input() transect: Transect;
+    @Input() campaign: Campaign;
     @Input() count: Count;
     @Output() remove = new EventEmitter<any>();
-    @Output() edit = new EventEmitter<any>();
+    @Output() action = new EventEmitter<string>();
 
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
@@ -38,13 +38,40 @@ export class ViewCountComponent implements OnInit {
     }
 
 
-    deleteTransect() {
-        if (this.windowService.confirm("Are you sure you want to delete this transect from database ?")){
-            this.transect.counts = this.transect.counts.filter(count => count.code !== this.count.code);
-            this.zone.transects = this.zone.transects.filter(transect => transect.code !== this.transect.code);
-            this.site.zones = [...this.site.zones.filter(zone => zone.code !== this.zone.code),this.zone];
+    deleteCount() {
+        if (this.windowService.confirm("Are you sure you want to delete this count from database ?")){
             this.remove.emit(this.site);
         }
+    }
+
+    actions(type: string) {
+        switch (type) {
+            case "countForm":
+                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.campaign.code+'/'+this.count.code);
+                break;
+            case "deleteCount":
+                this.deleteCount();
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    toSites(){
+        this.routerext.navigate(['site']);
+    }
+
+    toSite(){
+        this.routerext.navigate(['site/'+this.site.code]);
+    }
+
+    toZone(){
+        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
+    }
+
+    toCampaign(){
+        this.routerext.navigate(['campaign/'+this.site.code+'/'+this.zone.code+'/'+this.campaign.code]);
     }
 
 }

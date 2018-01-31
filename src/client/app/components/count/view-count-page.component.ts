@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCount } from '../../modules/ngrx/index';
-import { Site, Zone, Transect, Count } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCampaign,getSelectedCount } from '../../modules/ngrx/index';
+import { Site, Zone, Campaign, Transect, Count } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
@@ -30,7 +30,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
     <bc-count 
       [site]="site$ | async"
       [zone]="zone$ | async"
-      [transect]="transect$ | async"
+      [campaign]="campaign$ | async"
       [count]="count$ | async"
       (remove)="removeCount($event)">
     </bc-count>
@@ -39,11 +39,11 @@ import { SiteAction } from '../../modules/datas/actions/index';
 export class ViewCountPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
   zoneSubscription: Subscription;
-  transectSubscription: Subscription;
+  campaignSubscription: Subscription;
   countSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
-  transect$: Observable<Transect | null>;
+  campaign$: Observable<Campaign | null>;
   count$: Observable<Count | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
@@ -53,8 +53,8 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription = route.params
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
-    this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+    this.campaignSubscription = route.params
+      .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
     this.countSubscription = route.params
       .map(params => new SiteAction.SelectCountAction(params.idCount))
@@ -64,18 +64,18 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transect$ = this.store.let(getSelectedTransect);
+    this.campaign$ = this.store.let(getSelectedCampaign);
     this.count$ = this.store.let(getSelectedCount);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.transectSubscription.unsubscribe();
+    this.campaignSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }
 
-  removeTransect(site: Site){
-    this.store.dispatch(new SiteAction.AddSiteAction(site));
+  removeCount(count: Count){
+    this.store.dispatch(new SiteAction.RemoveCountAction(count));
   }
 }

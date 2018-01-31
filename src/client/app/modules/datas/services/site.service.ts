@@ -108,11 +108,25 @@ export class SiteService {
       })
   }
 
+  removeZone(zone: Zone): Observable<Zone> {    
+    return this.getSite(zone.codeSite)
+      .filter(site => site!==null)
+      .mergeMap(st => {
+        st.zones = st.zones.filter(z => z.code !== zone.code);
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(zone);
+      })
+  }
+
   editCampaign(site: Site, campaign: Campaign): Observable<Campaign> {
     console.log(campaign);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
+        if(!campaign.counts) campaign.counts = [];
         campaign.codeCountry = st.codeCountry;
         let zn = st.zones.filter(z => z.code === campaign.codeZone)[0];
         if(zn){
@@ -130,12 +144,26 @@ export class SiteService {
       })
   }
 
+  removeCampaign(campaign: Campaign): Observable<Campaign> {    
+    return this.getSite(campaign.codeSite)
+      .filter(site => site!==null)
+      .mergeMap(st => {
+        let zn = st.zones.filter(z => z.code === campaign.codeZone)[0];
+        zn.campaigns = zn.campaigns.filter(c => c.code !== campaign.code);
+        st.zones = [...st.zones.filter(z => z.code !== campaign.codeZone),zn];
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(campaign);
+      })
+  }
+
   editTransect(site: Site, transect: Transect): Observable<Transect> {
     console.log(transect);
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
-        if(!transect.counts) transect.counts = [];
         let zn = st.zones.filter(z => z.code === transect.codeZone)[0];
         if(zn){
           if(zn.transects.filter(t => t.code === transect.code).length > -1){
@@ -149,6 +177,21 @@ export class SiteService {
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return  of(transect);
+      })
+  }
+
+  removeTransect(transect: Transect): Observable<Transect> {    
+    return this.getSite(transect.codeSite)
+      .filter(site => site!==null)
+      .mergeMap(st => {
+        let zn = st.zones.filter(z => z.code === transect.codeZone)[0];
+        zn.transects = zn.transects.filter(t => t.code !== transect.code);
+        st.zones = [...st.zones.filter(z => z.code !== transect.codeZone),zn];
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(transect);
       })
   }
 
@@ -173,6 +216,21 @@ export class SiteService {
       })
   }
 
+  removeZonePref(zonePref: ZonePreference): Observable<ZonePreference> {    
+    return this.getSite(zonePref.codeSite)
+      .filter(site => site!==null)
+      .mergeMap(st => {
+        let zn = st.zones.filter(z => z.code === zonePref.codeZone)[0];
+        zn.zonePreferences = zn.zonePreferences.filter(zn => zn.code !== zonePref.code);
+        st.zones = [...st.zones.filter(z => z.code !== zonePref.codeZone),zn];
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(zonePref);
+      })
+  }
+
   editCount(site: Site, count: Count): Observable<Count> {
     console.log(count);
     return this.getSite(site.code)
@@ -180,12 +238,12 @@ export class SiteService {
       .mergeMap(st => {  
         let zn = st.zones.filter(z => z.code === count.codeZone)[0];
         if(zn){
-          let tr = zn.transects.filter(t => t.code === count.codeTransect)[0];
-          if(tr){
-            if(tr.counts.filter(c => c.code === count.code).length > -1){
-              tr.counts = [ ...tr.counts.filter(c => c.code !== count.code), count];
+          let cp = zn.campaigns.filter(t => t.code === count.codeCampaign)[0];
+          if(cp){
+            if(cp.counts.filter(c => c.code === count.code).length > -1){
+              cp.counts = [ ...cp.counts.filter(c => c.code !== count.code), count];
             }
-            zn.transects = [...zn.transects.filter(t => t.code != count.codeTransect), tr];
+            zn.campaigns = [...zn.campaigns.filter(t => t.code != count.codeCampaign), cp];
           }          
           st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
         } 
@@ -195,6 +253,23 @@ export class SiteService {
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
         return  of(count);
+      })
+  }
+
+  removeCount(count: Count): Observable<Count> {    
+    return this.getSite(count.codeSite)
+      .filter(site => site!==null)
+      .mergeMap(st => {
+        let zn = st.zones.filter(z => z.code === count.codeZone)[0];
+        let ca = zn.campaigns.filter(c => c.code === count.codeCampaign)[0];
+        ca.counts = ca.counts.filter(ct => ct.code !== count.code);
+        zn.campaigns = [...zn.campaigns.filter(c => c.code !== count.codeCampaign),ca];
+        st.zones = [...st.zones.filter(z => z.code !== count.codeZone),zn];
+        return fromPromise(this.db.put(st));
+      })
+      .filter((response: ResponsePDB) => { return response.ok; })
+      .mergeMap(response => {
+        return of(count);
       })
   }
 

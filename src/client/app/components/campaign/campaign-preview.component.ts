@@ -12,12 +12,17 @@ import { Site,Zone,Campaign } from './../../modules/datas/models/site';
           <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ dateStart }}, {{ dateEnd }}°
+          {{ dateStart | date:localDate }}, {{ dateEnd | date:localDate }}
         </mat-card-content>
         <mat-card-content>
           <p>{{'PARTICIPANTS' | translate}}: {{ participants }}</p>
           <p>{{'SURFACE_TRANSECT' | translate}}: {{ surfaceTransect }}</p>
           <p>{{'DESCRIPTION' | translate}}: {{ description }}</p>
+       </mat-card-content>
+
+        <mat-card-content>
+          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
+          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
       </mat-card>
     </a>
@@ -26,7 +31,6 @@ import { Site,Zone,Campaign } from './../../modules/datas/models/site';
     `
     mat-card {
       width: 400px;
-      height: 300px;
       margin: 15px;
     }
     @media only screen and (max-width: 768px) {
@@ -65,9 +69,12 @@ export class CampaignPreviewComponent implements OnInit {
   @Input() campaign: Campaign;
   @Input() zone: Zone;
   @Input() site: Site;
+  @Input() locale: string
+  nCounts: number = 0;
 
   ngOnInit(){
-
+    this.nCounts = this.campaign.counts.length;
+    console.log(this.locale);
   }
 
   get id() {
@@ -104,6 +111,16 @@ export class CampaignPreviewComponent implements OnInit {
 
   get description() {
     return this.campaign.description;
+  }
+
+  get localDate(){
+    switch (this.locale) {
+      case "fr":
+        return 'dd-MM-yyyy';
+      case "en":
+      default:
+        return 'MM-dd-yyyy';
+    }
   }
 
   get thumbnail(): string | boolean {

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedCampaign } from '../../modules/ngrx/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedCampaign,getLangues } from '../../modules/ngrx/index';
 import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
@@ -31,6 +31,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
       [site]="site$ | async"
       [zone]="zone$ | async"
       [campaign]="campaign$ | async"
+      [locale]="local | async"
       (action)="actionCampaign($event)"
       (remove)="removeCampaign($event)">
     </bc-campaign>
@@ -43,6 +44,7 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
   campaign$: Observable<Campaign | null>;
+  locale$: Observable<string>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -52,7 +54,7 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
       .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.campaignSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idCampaign))
+      .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
   }
 
@@ -60,6 +62,7 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
     this.campaign$ = this.store.let(getSelectedCampaign);
+    this.locale$ = this.store.let(getLangues);
   }
 
   ngOnDestroy() {
@@ -72,7 +75,7 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
     this.routerext.navigate([redirect]);
   }
 
-  removeCampaign(site: Site){
-    this.store.dispatch(new SiteAction.AddSiteAction(site));
+  removeCampaign(campaign: Campaign){
+    this.store.dispatch(new SiteAction.RemoveCampaignAction(campaign));
   }
 }

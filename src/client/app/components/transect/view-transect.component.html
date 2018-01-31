@@ -13,12 +13,10 @@
         <mat-form-field>
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
               <mat-option [value]="'transectForm'">{{ 'EDIT_TRANSECT' | translate}}</mat-option>
-              <mat-option [value]="'countForm'">{{ 'ADD_COUNT' | translate}}</mat-option>
-              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deleteTransect'">{{ 'DELETE_TRANSECT' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>        
       </mat-card-actions>       
     </mat-card>
 
-    <bc-count-preview-list [counts]="counts$ | async" [transect]="transect" [zone]="zone" [site]="site"></bc-count-preview-list>  
+    

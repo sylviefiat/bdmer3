@@ -14,10 +14,6 @@ import { Site,Zone,Transect } from './../../modules/datas/models/site';
         <mat-card-content>
           {{ latitude }}°, {{ longitude }}°
         </mat-card-content>
-        <mat-card-content>
-          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
-          <div role="listitem">{{nCounts}} {{'COUNTS' | translate}}</div>
-       </mat-card-content>
       </mat-card>
     </a>
   `,
@@ -64,10 +60,10 @@ export class TransectPreviewComponent implements OnInit {
   @Input() transect: Transect;
   @Input() zone: Zone;
   @Input() site: Site;
-  nCounts: number = 0;
+  
 
   ngOnInit(){
-    this.nCounts = this.transect.counts.length;
+    
 
   }
 

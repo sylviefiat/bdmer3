@@ -34,12 +34,12 @@
       </div>
       <div class="row">
         <mat-form-field>
-          <input matInput [matDatepicker]="DatepickerStart" formControl="dateStart" required>
+          <input matInput [matDatepicker]="DatepickerStart" placeholder="{{ 'DATE_START' | translate }}" formControlName="dateStart" required>
           <mat-datepicker-toggle matSuffix [for]="DatepickerStart"></mat-datepicker-toggle>
           <mat-datepicker #DatepickerStart></mat-datepicker>
         </mat-form-field>
         <mat-form-field>
-          <input matInput [matDatepicker]="DatepickerEnd" formControl="dateEnd" required>
+          <input matInput [matDatepicker]="DatepickerEnd" placeholder="{{ 'DATE_END' | translate }}" formControlName="dateEnd" required>
           <mat-datepicker-toggle matSuffix [for]="DatepickerEnd"></mat-datepicker-toggle>
           <mat-datepicker #DatepickerEnd></mat-datepicker>
         </mat-form-field>
@@ -57,7 +57,7 @@
       </div>
       <div class="row">
         <mat-input-container>
-          <textarea mat-maxlength="150" rows="3" matInput placeholder="{{ 'CAMPAIGN_DESC' | translate }}" formControlName="description"  mat-select-on-focus required></textarea>
+          <textarea mat-maxlength="150" rows="3" matInput placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description"  mat-select-on-focus required></textarea>
           <div class="hint">{{ 'CAMPAIGN_DESC_EX' | translate }}</div>     
         </mat-input-container>
       </div>

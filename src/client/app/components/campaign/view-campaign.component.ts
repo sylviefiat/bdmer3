@@ -9,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site,Zone, Campaign } from '../../modules/datas/models/index';
+import { Site,Zone, Campaign,Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -25,17 +25,17 @@ export class ViewCampaignComponent implements OnInit {
     @Input() site: Site;
     @Input() zone: Zone;
     @Input() campaign: Campaign;
+    @Input() locale: String;
+    counts$: Observable<Count[]>;
     @Output() remove = new EventEmitter<any>();
-    @Output() action = new EventEmitter<String>();
+    @Output() action = new EventEmitter<string>();
 
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
-        console.log(this.campaign);
-        console.log(this.site);
-        console.log(this.zone);
+        this.counts$ = of(this.campaign.counts);
     }
 
 
@@ -48,6 +48,8 @@ export class ViewCampaignComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "campaignForm":
+            case "countForm":
+            case "countImport":
                 this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.campaign.code);
                 break;
             case "deleteCampaign":
@@ -70,5 +72,15 @@ export class ViewCampaignComponent implements OnInit {
     toZone(){
         this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
     }
+
+      get localDate(){
+        switch (this.locale) {
+          case "fr":
+            return 'dd-MM-yyyy';
+          case "en":
+          default:
+            return 'MM-dd-yyyy';
+        }
+      }
 
 }

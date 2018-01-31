@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone,Transect } from '../../modules/datas/models/index';
+import { Site, Zone,Campaign } from '../../modules/datas/models/index';
 
 import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
@@ -24,7 +24,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 export class CountImportComponent implements OnInit{
     @Input() site: Site;
     @Input() zone: Zone;
-    @Input() transect: Transect;
+    @Input() campaign: Campaign;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();

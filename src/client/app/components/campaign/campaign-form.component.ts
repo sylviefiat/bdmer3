@@ -46,7 +46,8 @@ export class CampaignFormComponent implements OnInit {
         if(this.campaign) {
             this.campaignForm.controls.code.setValue(this.campaign.code);
             this.campaignForm.controls.dateStart.setValue(this.campaign.dateStart);
-                this.campaignForm.controls.dateStart.setValue(this.campaign.dateStart);
+            this.campaignForm.controls.dateEnd.setValue(this.campaign.dateEnd);
+            this.campaignForm.controls.participants.setValue(this.campaign.participants);
             this.campaignForm.controls.surfaceTransect.setValue(this.campaign.surfaceTransect);
             this.campaignForm.controls.description.setValue(this.campaign.description);
         } else {
