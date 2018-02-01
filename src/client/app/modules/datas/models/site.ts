@@ -56,6 +56,7 @@ export interface Count {
     codeZone: string;
     codeTransect: string;
     date: Date;
+    monospecies?: boolean;
     mesures: Mesure[];    
 }
 

@@ -228,5 +228,14 @@
   "COUNT_CODE_EX":"Ex: SITENAME_Z001_C001_C20111018",
   "TRANSECT_SELECT":"Select transect",
   "CAMPAIGN_CODE":"Campaign code",
-  "EX_COUNT_CAMPAIGN":"Campaign code is not editable"
+  "EX_COUNT_CAMPAIGN":"Campaign code is not editable",
+  "ADD_COUNT_TO":"Add count to ",
+  "DATE":"Date",
+  "COUNT_DESC":"Count description",
+  "MESURES":"Mesures",
+  "SPECIES_LONG":"Height",
+  "SPECIES_LONG_EX":"in mm",
+  "SPECIES_LARG":"Width",
+  "SPECIES_LARG_EX":"in mm",
+  "ADD_MESURE":"Add mesure"
 }

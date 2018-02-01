@@ -36,8 +36,10 @@ export class CountFormComponent implements OnInit {
         codeZone: new FormControl(""),
         codeTransect: new FormControl(),
         date: new FormControl(""),
+        monospecies: new FormControl(),
         mesures: this._fb.array([])
     });
+    monospecies: boolean = false;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
@@ -50,7 +52,7 @@ export class CountFormComponent implements OnInit {
                 control.push(addrCtrl);
             }
         } else {
-            return this.addMesure();
+            //return this.addMesure();
         }
     }
 
@@ -66,8 +68,10 @@ export class CountFormComponent implements OnInit {
             this.countForm.controls.code.setValue(this.count.code);
             this.countForm.controls.codeTransect.setValue(this.count.codeTransect);
             this.countForm.controls.date.setValue(this.count.date);
+            this.countForm.controls.monospecies.setValue(this.count.monospecies);
         } else {
-            this.countForm.controls.code.setValue(this.zone.code + "_C");
+            this.countForm.controls.code.setValue(this.campaign.code + "_C");
+            this.countForm.controls.monospecies.setValue(false);
         }
         this.initMesures();
     }
@@ -82,8 +86,11 @@ export class CountFormComponent implements OnInit {
 
     addMesure() {
         const control = <FormArray>this.countForm.controls['mesures'];
-        const addrCtrl = this.newMesure('', '', '');
-
+       
+        let sp = this.countForm.controls.mesures && this.countForm.controls.mesures[0] && this.countForm.controls.mesures[0].controls.codeSpecies;
+        console.log(this.countForm.controls.mesures);
+        console.log(sp);
+        const addrCtrl = this.newMesure(this.countForm.controls.monospecies?sp:'', '', '');
         control.push(addrCtrl);
     }
 

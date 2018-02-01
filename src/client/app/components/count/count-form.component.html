@@ -50,20 +50,23 @@
           <mat-datepicker #Datepicker></mat-datepicker>
         </mat-form-field>         
       </div>
-      <div class="row">
-        <mat-card class="row" formArrayName="mesures">
+      <div class="column">
           <h5 mat-subheader>{{ 'MESURES' | translate }} </h5>
-          <div *ngFor="let name of form.controls.mesures.controls; let j=index;" [formGroupName]="j">          
-            <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.mesures.controls.length > 1" (click)="removeMesure(j)"></fa>
-            <bt-mesure [group]="form.controls.mesure.controls[j]"></bt-mesure>
+          <mat-checkbox *ngIf="countForm.controls.mesures.controls[0]" formControlName="monospecies">{{ 'MONOSPECIES' | translate }}</mat-checkbox>
+          <div formArrayName="mesures">
+            <div *ngFor="let name of countForm.controls.mesures.controls; let j=index; let first=first;" [formGroupName]="j">          
+              <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right (click)="removeMesure(j)"></fa>
+              <bt-mesure [group]="countForm.controls.mesures.controls[j]" [species]="species"></bt-mesure>
+            </div>
+            <div *ngIf="!countForm.controls.mesures.controls[0]">{{ 'NO_INVERTEBRATES' | translate }}</div>
+            <mat-card-actions>
+              <button mat-raised-button color="warn" (click)="addMesure()">
+               {{ 'ADD_MESURE' | translate }}
+             </button>
+           </mat-card-actions>
           </div>
-          <mat-card-actions>
-            <button mat-raised-button color="warn" (click)="addMesure()">
-             {{ 'ADD_Mesure' | translate }}
-           </button>
-         </mat-card-actions>
-        </mat-card>
       </div>
+    </mat-card>
   </div>
 
 </form>

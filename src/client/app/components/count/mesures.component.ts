@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Species } from '../../modules/datas/models/index';
 
 
 @Component({
@@ -9,12 +10,10 @@ import { FormGroup } from '@angular/forms';
     <div [formGroup]="mesureForm" class="container">
     <mat-card-content>
        <mat-form-field>
-          <mat-select  placeholder="{{'SPECIES_SELECT' | translate}}" formControlName="codeSpecies" required>
+          <mat-select placeholder="{{'SPECIES_SELECT' | translate}}" formControlName="codeSpecies" required>
             <mat-option *ngFor="let espece of species" [value]="espece.code">{{ espece.scientificName }}</mat-option>
           </mat-select>
-        </mat-form-field>          
-      </mat-card-content>
-    <mat-card-content> 
+        </mat-form-field>  
       <mat-input-container>
         <input type="text" matInput placeholder="{{ 'SPECIES_LONG' | translate }}" formControlName="long" required>
         <div class="hint">{{ 'SPECIES_LONG_EX' | translate }}</div>    
@@ -36,6 +35,7 @@ import { FormGroup } from '@angular/forms';
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      flex-grow: 1;
     }
     mat-input-container {
       padding-left: 2em;
@@ -43,7 +43,7 @@ import { FormGroup } from '@angular/forms';
     }
     
     .mat-form-field {
-      width: auto;
+      flex-grow: 1;
     }
     .hint {
       /* Position the hint */
@@ -64,4 +64,5 @@ import { FormGroup } from '@angular/forms';
 export class MesuresComponent {
     @Input('group')
     public mesureForm: FormGroup;
+    @Input() species: Species[];
 }

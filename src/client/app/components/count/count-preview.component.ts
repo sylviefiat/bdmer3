@@ -15,7 +15,9 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
           {{ date }}
         </mat-card-content>
         <mat-card-content>
-          {{ 'COUNT_MESURES' | translate }}: {{ mesures }}
+           <li *ngFor="let mesure of count.mesures; let last = last;">
+            {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}<span *ngIf="!last">&nbsp;;&nbsp;</span> 
+            </li>
        </mat-card-content>
       </mat-card>
     </a>
