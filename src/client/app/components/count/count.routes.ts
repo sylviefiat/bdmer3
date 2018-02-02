@@ -4,17 +4,18 @@ import { ViewCountPageComponent } from './view-count-page.component';
 import { AuthGuard } from '../../modules/auth/guards/index';
 
 export const CountRoutes: Array<any> = [
-  /*{
-    path: 'transect',
-    component: TransectListPageComponent,
-    canActivate : [AuthGuard]
-  }, */
+  
   {
-    path: 'countForm/:idSite/:idZone',
+    path: 'count/:idSite/:idZone/:idCampaign/:idCount',
+    component: ViewCountPageComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'countForm/:idSite/:idZone/:idCampaign',
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'countForm/:idSite/:idZone/:idCampaign',
+    path: 'countForm/:idSite/:idZone/:idCampaign/:idCount',
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },

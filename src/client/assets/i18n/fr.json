@@ -237,5 +237,9 @@
   "SPECIES_LONG_EX":"en mm",
   "SPECIES_LARG":"Largeur",
   "SPECIES_LARG_EX":"en mm",
-  "ADD_MESURE":"Ajouter une mesure"
+  "ADD_MESURE":"Ajouter une mesure",
+  "COUNT_DATE":"Date du comptage",
+  "COUNT_TRANSECT":"Transect",
+  "EDIT_COUNT":"Editer le comptage",
+  "DELETE_COUNT":"Supprimer comptage"
 }

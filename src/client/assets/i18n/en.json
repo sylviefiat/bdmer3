@@ -237,5 +237,9 @@
   "SPECIES_LONG_EX":"in mm",
   "SPECIES_LARG":"Width",
   "SPECIES_LARG_EX":"in mm",
-  "ADD_MESURE":"Add mesure"
+  "ADD_MESURE":"Add mesure",
+  "COUNT_DATE":"Count date",
+  "COUNT_TRANSECT":"Transect",
+  "EDIT_COUNT":"Edit count",
+  "DELETE_COUNT":"Delete count"
 }

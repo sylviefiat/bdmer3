@@ -86,10 +86,9 @@ export class CountFormComponent implements OnInit {
 
     addMesure() {
         const control = <FormArray>this.countForm.controls['mesures'];
+        const sp1 = <FormArray>control.controls[0];
        
-        let sp = this.countForm.controls.mesures && this.countForm.controls.mesures[0] && this.countForm.controls.mesures[0].controls.codeSpecies;
-        console.log(this.countForm.controls.mesures);
-        console.log(sp);
+        let sp = control && control.controls[0] && sp1.controls['codeSpecies'].value;
         const addrCtrl = this.newMesure(this.countForm.controls.monospecies?sp:'', '', '');
         control.push(addrCtrl);
     }
@@ -101,6 +100,9 @@ export class CountFormComponent implements OnInit {
 
     submit() {
         if (this.countForm.valid) {
+            this.countForm.value.codeSite=this.countForm.controls.codeSite.value;
+            this.countForm.value.codeZone=this.countForm.controls.codeZone.value;
+            this.countForm.value.codeCampaign=this.countForm.controls.codeCampaign.value;
             this.submitted.emit(this.countForm.value);
         }
     }

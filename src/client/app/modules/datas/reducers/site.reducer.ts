@@ -134,18 +134,20 @@ export function siteReducer(
 
         case SiteAction.ActionTypes.ADD_COUNT_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS: {
-            const addedzonepref = action.payload;
-            console.log(addedzonepref);
-            const sites = state.entities.filter(site => addedzonepref.codeSite !== site._id);
-            const modifiedSite = state.entities.filter(site => addedzonepref.codeSite === site._id)[0];
-            const modifiedZone = modifiedSite.zones.filter(zone => addedzonepref.codeZone === zone.code)[0];
-            modifiedZone.zonePreferences = [...modifiedZone.zonePreferences.filter(transect => addedzonepref.code !== transect.code),addedzonepref];
-            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedzonepref.codeZone !== zone.code),modifiedZone];
+            const addedcount = action.payload;
+            console.log(addedcount);
+            const sites = state.entities.filter(site => addedcount.codeSite !== site._id);
+            const modifiedSite = state.entities.filter(site => addedcount.codeSite === site._id)[0];
+            const modifiedZone = modifiedSite.zones.filter(zone => addedcount.codeZone === zone.code)[0];
+            const modifiedCampaign = modifiedZone.campaigns.filter(campaign => addedcount.codeCampaign === campaign.code)[0];
+            modifiedCampaign.counts = [...modifiedCampaign.counts.filter(count => count.code !== addedcount.code),addedcount];
+            modifiedZone.campaigns = [...modifiedZone.campaigns.filter(campaign => addedcount.codeCampaign !== campaign.code),modifiedCampaign];
+            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedcount.codeZone !== zone.code),modifiedZone];
 
             return {
                 ...state,
                 entities: [...sites,modifiedSite],
-                ids: [...state.ids.filter(id => addedzonepref.codeSite !== id), ...addedzonepref.codeSite],
+                ids: [...state.ids.filter(id => addedcount.codeSite !== id), ...addedcount.codeSite],
                 error: null,
                 msg: action.type===SiteAction.ActionTypes.IMPORT_SITE_SUCCESS?"Counts registered with success":"Count registered with success"
             }

@@ -6,19 +6,34 @@ mat-card {
 .actions {
   text-align: center;
 }
+.inside {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 72px 0;
+    }
+.inside mat-card {
+      flex-grow: 1;
+      margin:auto;
+      text-align: center;
+      padding: 1em 2em;
+}
 
 mat-card-title {
     font-style: italic;
 }
-mat-card-content, mat-card-actions {
+mat-card-content {
     display: flex;
     justify-content:space-around;
+    flex-direction: column;
 }
 mat-card-content.one{
     display: flex;
     justify-content:start;
 }
 mat-card-actions {
+  display: flex;
   justify-content: center;
 }
 mat-form-field {
@@ -27,4 +42,8 @@ mat-form-field {
 .warn {
    margin-left: 10px;
    background-color: #d9534f;
+}
+.link {
+  cursor: pointer;
+  text-decoration: underline;
 }

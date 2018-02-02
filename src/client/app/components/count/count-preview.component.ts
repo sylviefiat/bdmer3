@@ -12,9 +12,10 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
           <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span> / <span *ngIf="codeCampaign">{{ codeCampaign }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ date }}
+          {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
         </mat-card-content>
         <mat-card-content>
+          <div>{{ 'COUNTS' | translate }}</div>
            <li *ngFor="let mesure of count.mesures; let last = last;">
             {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}<span *ngIf="!last">&nbsp;;&nbsp;</span> 
             </li>
@@ -39,6 +40,8 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
     }
     mat-card-title {
       margin-right: 10px;
+      max-length: 70%;
+      word-break: break-all;
     }
     mat-card-title-group {
       margin: 0;
@@ -66,6 +69,7 @@ export class CountPreviewComponent implements OnInit {
   @Input() campaign: Campaign;
   @Input() zone: Zone;
   @Input() site: Site;
+  @Input() locale: string;
   nCounts: number = 0;
 
   ngOnInit(){
@@ -105,4 +109,14 @@ export class CountPreviewComponent implements OnInit {
     return null;
     //return "/assets/img/"+this.count.code+".jpg"; 
   }
+
+  get localDate(){
+        switch (this.locale) {
+          case "fr":
+            return 'dd-MM-yyyy';
+          case "en":
+          default:
+            return 'MM-dd-yyyy';
+        }
+      }
 }

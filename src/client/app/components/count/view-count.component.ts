@@ -9,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { SiteAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site,Zone, Transect,Campaign, Count } from '../../modules/datas/models/index';
+import { Site, Zone, Transect, Campaign, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -21,11 +21,12 @@ import { WindowService } from '../../modules/core/services/index';
         'view-count.component.css',
     ],
 })
-export class ViewCountComponent implements OnInit {    
+export class ViewCountComponent implements OnInit {
     @Input() site: Site;
     @Input() zone: Zone;
     @Input() campaign: Campaign;
     @Input() count: Count;
+    @Input() locale: string;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<string>();
 
@@ -34,20 +35,20 @@ export class ViewCountComponent implements OnInit {
 
 
     ngOnInit() {
-        
     }
 
 
     deleteCount() {
-        if (this.windowService.confirm("Are you sure you want to delete this count from database ?")){
+        if (this.windowService.confirm("Are you sure you want to delete this count from database ?")) {
             this.remove.emit(this.site);
         }
     }
 
     actions(type: string) {
+        console.log(type);
         switch (type) {
             case "countForm":
-                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.campaign.code+'/'+this.count.code);
+                this.action.emit(type + '/' + this.site._id + "/" + this.zone.code + '/' + this.campaign.code + '/' + this.count.code);
                 break;
             case "deleteCount":
                 this.deleteCount();
@@ -55,23 +56,33 @@ export class ViewCountComponent implements OnInit {
             default:
                 break;
         }
-        
+
     }
 
-    toSites(){
+    get localDate() {
+        switch (this.locale) {
+            case "fr":
+                return 'dd-MM-yyyy';
+            case "en":
+            default:
+                return 'MM-dd-yyyy';
+        }
+    }
+
+    toSites() {
         this.routerext.navigate(['site']);
     }
 
-    toSite(){
-        this.routerext.navigate(['site/'+this.site.code]);
+    toSite() {
+        this.routerext.navigate(['site/' + this.site.code]);
     }
 
-    toZone(){
-        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
+    toZone() {
+        this.routerext.navigate(['zone/' + this.site.code + '/' + this.zone.code]);
     }
 
-    toCampaign(){
-        this.routerext.navigate(['campaign/'+this.site.code+'/'+this.zone.code+'/'+this.campaign.code]);
+    toCampaign() {
+        this.routerext.navigate(['campaign/' + this.site.code + '/' + this.zone.code + '/' + this.campaign.code]);
     }
 
 }
