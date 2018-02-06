@@ -29,9 +29,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
   template: `
     <bc-campaign 
       [site]="site$ | async"
-      [zone]="zone$ | async"
       [campaign]="campaign$ | async"
-      [locale]="local | async"
+      [locale]="locale$ | async"
       (action)="actionCampaign($event)"
       (remove)="removeCampaign($event)">
     </bc-campaign>
@@ -39,9 +38,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
 })
 export class ViewCampaignPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
-  zoneSubscription: Subscription;
   campaignSubscription: Subscription;
-  zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
   campaign$: Observable<Campaign | null>;
   locale$: Observable<string>;
@@ -50,9 +47,6 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
       .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
-      .subscribe(store);
     this.campaignSubscription = route.params
       .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
@@ -60,14 +54,12 @@ export class ViewCampaignPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.store.let(getSelectedZone);
     this.campaign$ = this.store.let(getSelectedCampaign);
     this.locale$ = this.store.let(getLangues);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.campaignSubscription.unsubscribe();
   }
 

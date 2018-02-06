@@ -61,6 +61,10 @@ export class PreferenceAreaFormComponent implements OnInit {
         }
     }
 
+    get isNewForm(){
+        return !this.zonePref;
+    }
+
     selectSpecies(species: Species){
         this.zonePrefForm.controls.codeSpecies.setValue(species.code);
     }

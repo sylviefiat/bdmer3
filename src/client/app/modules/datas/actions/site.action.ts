@@ -472,36 +472,42 @@ export namespace SiteAction {
     | AddSiteSuccessAction
     | AddSiteFailAction
     | ImportSiteAction
+    | ImportSiteSuccessAction
     | RemoveSiteAction
     | RemoveSiteSuccessAction
     | RemoveSiteFailAction
     | AddZoneAction
     | AddZoneSuccessAction
     | ImportZoneAction
+    | ImportZoneSuccessAction
     | RemoveZoneAction
     | RemoveZoneSuccessAction
     | RemoveZoneFailAction
     | AddTransectAction
     | AddTransectSuccessAction
     | ImportTransectAction
+    | ImportTransectSuccessAction
     | RemoveTransectAction
     | RemoveTransectSuccessAction
     | RemoveTransectFailAction
     | AddCampaignAction
     | AddCampaignSuccessAction
     | ImportCampaignAction
+    | ImportCampaignSuccessAction
     | RemoveCampaignAction
     | RemoveCampaignSuccessAction
     | RemoveCampaignFailAction
     | AddZonePrefAction
     | AddZonePrefSuccessAction
     | ImportZonePrefAction
+    | ImportZonePrefSuccessAction
     | RemoveZonePrefAction
     | RemoveZonePrefSuccessAction
     | RemoveZonePrefFailAction
     | AddCountAction
     | AddCountSuccessAction
     | ImportCountAction
+    | ImportCountSuccessAction
     | RemoveCountAction
     | RemoveCountSuccessAction
     | RemoveCountFailAction

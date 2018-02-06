@@ -9,7 +9,7 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span> / <span *ngIf="codeCampaign">{{ codeCampaign }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeCampaign">{{ codeCampaign }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
@@ -67,7 +67,6 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
 export class CountPreviewComponent implements OnInit {  
   @Input() count: Count;
   @Input() campaign: Campaign;
-  @Input() zone: Zone;
   @Input() site: Site;
   @Input() locale: string;
   nCounts: number = 0;
@@ -86,10 +85,6 @@ export class CountPreviewComponent implements OnInit {
 
   get codeSite() {
     return this.site.code;
-  }
-
-  get codeZone() {
-    return this.zone.code;
   }
 
   get codeCampaign() {

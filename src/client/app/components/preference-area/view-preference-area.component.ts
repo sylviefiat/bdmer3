@@ -26,7 +26,7 @@ export class ViewPreferenceAreaComponent implements OnInit {
     @Input() zone: Zone;
     @Input() zonePref: ZonePreference;
     @Output() remove = new EventEmitter<any>();
-    @Output() edit = new EventEmitter<any>();
+    @Output() action = new EventEmitter<any>();
 
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
@@ -40,6 +40,21 @@ export class ViewPreferenceAreaComponent implements OnInit {
         if (this.windowService.confirm("Are you sure you want to delete this zone preference from database ?")){
             this.remove.emit(this.zonePref);
         }
+    }
+
+    actions(type: string) {
+        console.log(type);
+        switch (type) {
+            case "zonePrefForm":
+                this.action.emit(type + '/' + this.site._id + "/" + this.zone.code + '/' + this.zonePref.code);
+                break;
+            case "deleteZonePref":
+                this.deleteZonePref();
+                break;
+            default:
+                break;
+        }
+
     }
 
     toSites(){

@@ -1,8 +1,8 @@
 <form [formGroup]="zonePrefForm" (ngSubmit)="submit()">  
   <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'ADD_ZONE_PREF_TO' | translate}} {{ zone.code }}</mat-card-title>
-      
+      <mat-card-title *ngIf="isNewForm">{{ 'ADD_ZONE_PREF_TO' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-title *ngIf="!isNewForm">{{ 'EDIT_ZONE_PREF_TO' | translate}} {{ zonePref.code }}</mat-card-title>
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!zonePrefForm.valid">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>

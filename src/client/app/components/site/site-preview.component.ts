@@ -75,17 +75,16 @@ export class SitePreviewComponent implements OnInit {
 
   ngOnInit(){
       this.nZones = this.site.zones ? this.site.zones.length : 0;
-      for(let z of this.site.zones) {
-        this.nCampaigns += z.campaigns ? z.campaigns.length : 0;
+      this.nCampaigns += this.site.campaigns ? this.site.campaigns.length : 0;
+      for(let z of this.site.zones) {        
         this.nTransects += z.transects ? z.transects.length : 0;
         this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
-        if(z.campaigns){
-          for(let c of z.campaigns){
-            this.nCounts += c.counts ? c.counts.length : 0;
-          }
+      }
+      if(this.site.campaigns){
+        for(let c of this.site.campaigns){
+          this.nCounts += c.counts ? c.counts.length : 0;
         }
-    }
-
+      }    
   }
 
   get id() {

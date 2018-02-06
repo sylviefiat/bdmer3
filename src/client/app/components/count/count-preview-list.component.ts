@@ -7,7 +7,7 @@ import { IAppState, getLangues } from './../../modules/ngrx/index';
 @Component({
   selector: 'bc-count-preview-list',
   template: `
-    <bc-count-preview *ngFor="let count of counts" [count]="count" [campaign]="campaign" [zone]="zone" [site]="site" [locale]="locale"></bc-count-preview>
+    <bc-count-preview *ngFor="let count of counts" [count]="count" [campaign]="campaign" [site]="site" [locale]="locale$ | async"></bc-count-preview>
   `,
   styles: [
     `
@@ -22,7 +22,6 @@ import { IAppState, getLangues } from './../../modules/ngrx/index';
 export class CountPreviewListComponent implements OnInit {
   @Input() counts: Count[];
   @Input() campaign: Campaign;
-  @Input() zone: Zone;
   @Input() site: Site;
   locale$: Observable<string>;
 

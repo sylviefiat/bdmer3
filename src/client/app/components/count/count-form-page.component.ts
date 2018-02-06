@@ -20,7 +20,6 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
-      [zone]="zone$ | async"
       [campaign]="campaign$ | async"
       [count]="count$ | async"
       [species]="species$ | async">
@@ -42,12 +41,10 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
 export class CountFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
-  zone$: Observable<Zone>;
   campaign$: Observable<Campaign>;
   count$: Observable<Count>;
   species$: Observable<Species[]>;
   siteSubscription: Subscription;
-  zoneSubscription: Subscription;
   campaignSubscription: Subscription;
   countSubscription: Subscription;
 
@@ -55,10 +52,7 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
-      .subscribe(store);      
-    this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
-      .subscribe(store);
+      .subscribe(store);  
     this.campaignSubscription = route.params
       .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
@@ -69,7 +63,6 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.store.let(getSelectedZone);
     this.campaign$ = this.store.let(getSelectedCampaign);
     this.count$ = this.store.let(getSelectedCount);
     this.species$ = this.store.let(getSpeciesInApp);
@@ -78,7 +71,6 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.campaignSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }

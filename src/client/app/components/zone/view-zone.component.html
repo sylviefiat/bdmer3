@@ -10,19 +10,22 @@
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
               <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ zone.zonePreferences?zone.zonePreferences.length:0 }})</mat-option>
               <mat-option [value]="'transects'">{{ 'TRANSECTS' | translate}} ({{ zone.transects?zone.transects.length:0 }})</mat-option>
-              <mat-option [value]="'campaigns'">{{ 'CAMPAIGNS' | translate}} ({{ zone.campaigns?zone.campaigns.length:0 }})</mat-option>
           </mat-select>
         </mat-form-field> 
         <mat-form-field>
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+            <mat-optgroup [label]="'ACTION_ZONE' | translate">
               <mat-option [value]="'zoneForm'">{{ 'EDIT_ZONE' | translate}}</mat-option>
-              <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
-              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
-              <mat-option [value]="'transectForm'">{{ 'ADD_TRANSECT' | translate}}</mat-option>
-              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
-              <mat-option [value]="'campaignForm'">{{ 'ADD_CAMPAIGN' | translate}}</mat-option>
-              <mat-option [value]="'campaignImport'">{{ 'IMPORT' | translate}} {{ 'CAMPAIGNS' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deleteZone'">{{ 'DELETE_ZONE' | translate}}</mat-option>
+            </mat-optgroup>
+            <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('ZONE' | translate)">
+              <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
+              <mat-option [value]="'transectForm'">{{ 'ADD_TRANSECT' | translate}}</mat-option>
+            </mat-optgroup>
+            <mat-optgroup [label]="('IMPORT_TOE' | translate)+' '+('ZONE' | translate)">
+              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
+              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+            </mat-optgroup>          
           </mat-select>
         </mat-form-field>         
       </mat-card-actions>           
@@ -30,9 +33,7 @@
     
         <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref]="zonesPref$ | async" [zone]="zone" [site]="site"></bc-zone-preference-preview-list>
 
-        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects]="transects$ | async" [zone]="zone" [site]="site"></bc-transect-preview-list>  
-
-        <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns]="campaigns$ | async" [zone]="zone" [site]="site"></bc-campaign-preview-list>
+        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects]="transects$ | async" [zone]="zone" [site]="site"></bc-transect-preview-list>          
      
     
    

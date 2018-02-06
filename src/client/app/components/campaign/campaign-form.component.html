@@ -1,7 +1,7 @@
 <form [formGroup]="campaignForm" (ngSubmit)="submit()">  
   <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'ADD_CAMPAIGN_TO' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-title>{{ 'ADD_CAMPAIGN_TO' | translate}} {{ site.code }}</mat-card-title>
       
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!campaignForm.valid">{{ 'SUBMIT' | translate }}</button>
@@ -23,13 +23,8 @@
       <div class="row">
 
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
-          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }}</div>
-        </mat-input-container>
-
-        <mat-input-container>
           <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite" required>
-          <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
+          <div class="hint">{{ 'EX_CAMPAIGN_SITE' | translate }}</div> 
         </mat-input-container>
       </div>
       <div class="row">

@@ -4,12 +4,12 @@ import { Site,Zone,Campaign } from './../../modules/datas/models/site';
 @Component({
   selector: 'bc-campaign-preview',
   template: `
-    <a [routerLink]="['/campaign', codeSite, codeZone, code]">
+    <a [routerLink]="['/campaign', codeSite, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ dateStart | date:localDate }}, {{ dateEnd | date:localDate }}
@@ -67,7 +67,6 @@ import { Site,Zone,Campaign } from './../../modules/datas/models/site';
 })
 export class CampaignPreviewComponent implements OnInit {  
   @Input() campaign: Campaign;
-  @Input() zone: Zone;
   @Input() site: Site;
   @Input() locale: string
   nCounts: number = 0;
@@ -87,10 +86,6 @@ export class CampaignPreviewComponent implements OnInit {
 
   get codeSite() {
     return this.site.code;
-  }
-
-  get codeZone() {
-    return this.zone.code;
   }
 
   get dateStart() {

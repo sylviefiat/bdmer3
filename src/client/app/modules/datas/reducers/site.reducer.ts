@@ -45,19 +45,6 @@ export function siteReducer(
             }
         }
 
-        case SiteAction.ActionTypes.REMOVE_SITE_SUCCESS:
-            {
-                const removedSite = action.payload;
-                return {
-                    ...state,
-                    entities: state.entities.filter(site => removedSite._id !== site._id),
-                    ids: state.ids.filter(id => id !== removedSite._id),
-                    currentSiteId: null,
-                    error: null,
-                    msg: "Site removed with success"
-                };
-            }
-
         case SiteAction.ActionTypes.ADD_ZONE_SUCCESS:
         case SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
             const addedzone = action.payload;
@@ -81,9 +68,7 @@ export function siteReducer(
             console.log(addedcampaign);
             const sites = state.entities.filter(site => addedcampaign.codeSite !== site._id);
             const modifiedSite = state.entities.filter(site => addedcampaign.codeSite === site._id)[0];
-            const modifiedZone = modifiedSite.zones.filter(zone => addedcampaign.codeZone === zone.code)[0];
-            modifiedZone.campaigns = [...modifiedZone.campaigns.filter(campaign => addedcampaign.code !== campaign.code),addedcampaign];
-            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedcampaign.codeZone !== zone.code),modifiedZone];
+            modifiedSite.campaigns = [...modifiedSite.campaigns.filter(campaign => addedcampaign.code !== campaign.code),addedcampaign];
 
             return {
                 ...state,
@@ -138,11 +123,9 @@ export function siteReducer(
             console.log(addedcount);
             const sites = state.entities.filter(site => addedcount.codeSite !== site._id);
             const modifiedSite = state.entities.filter(site => addedcount.codeSite === site._id)[0];
-            const modifiedZone = modifiedSite.zones.filter(zone => addedcount.codeZone === zone.code)[0];
-            const modifiedCampaign = modifiedZone.campaigns.filter(campaign => addedcount.codeCampaign === campaign.code)[0];
+            const modifiedCampaign = modifiedSite.campaigns.filter(campaign => addedcount.codeCampaign === campaign.code)[0];
             modifiedCampaign.counts = [...modifiedCampaign.counts.filter(count => count.code !== addedcount.code),addedcount];
-            modifiedZone.campaigns = [...modifiedZone.campaigns.filter(campaign => addedcount.codeCampaign !== campaign.code),modifiedCampaign];
-            modifiedSite.zones = [...modifiedSite.zones.filter(zone => addedcount.codeZone !== zone.code),modifiedZone];
+            modifiedSite.campaigns = [...modifiedSite.campaigns.filter(campaign => addedcount.codeCampaign !== campaign.code),modifiedCampaign];
 
             return {
                 ...state,
@@ -168,7 +151,9 @@ export function siteReducer(
 
         case SiteAction.ActionTypes.REMOVE_ZONE_SUCCESS:
             {
-                const modifiedSite = action.payload;
+                const removedZone = action.payload;
+                const modifiedSite = state.entities.filter(site => site.code === removedZone.codeSite)[0];
+                modifiedSite.zones = modifiedSite.zones.filter(zone => zone.code !== removedZone.code);
                 return {
                     ...state,
                     entities: [...state.entities.filter(site => modifiedSite._id !== site._id),modifiedSite],
@@ -184,9 +169,7 @@ export function siteReducer(
                 console.log(action.payload);
                 const removedCampaign = action.payload;
                 const modifiedSite = state.entities.filter(site => site.code === removedCampaign.codeSite)[0];
-                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedCampaign.codeZone)[0];
-                modifiedZone.campaigns = modifiedZone.campaigns.filter(campaign => campaign.code !== removedCampaign.code);
-                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+                modifiedSite.campaigns = modifiedSite.campaigns.filter(campaign => campaign.code !== removedCampaign.code);
 
                 return {
                     ...state,
@@ -238,11 +221,9 @@ export function siteReducer(
             {
                 const removedCount = action.payload;
                 const modifiedSite = state.entities.filter(site => site.code === removedCount.codeSite)[0];
-                const modifiedZone = modifiedSite.zones.filter(zone => zone.code === removedCount.codeZone)[0];
-                const modifiedCampaign = modifiedZone.campaigns.filter(count => count.code === removedCount.codeCampaign)[0];
+                const modifiedCampaign = modifiedSite.campaigns.filter(count => count.code === removedCount.codeCampaign)[0];
                 modifiedCampaign.counts = modifiedCampaign.counts.filter(count => count.code !== removedCount.code)
-                modifiedZone.campaigns = [...modifiedZone.campaigns.filter(campaign => campaign.code !== removedCount.code), modifiedCampaign];
-                modifiedSite.zones = [...modifiedSite.zones.filter(zone => zone.code !== modifiedZone.code),modifiedZone];
+                modifiedSite.campaigns = [...modifiedSite.campaigns.filter(campaign => campaign.code !== removedCount.code), modifiedCampaign];
 
                 return {
                     ...state,

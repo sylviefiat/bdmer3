@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -23,7 +22,6 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class CountImportComponent implements OnInit{
     @Input() site: Site;
-    @Input() zone: Zone;
     @Input() campaign: Campaign;
     @Input() error: string | null;
     @Input() msg: string | null;

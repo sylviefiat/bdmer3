@@ -1,15 +1,16 @@
 
-    <mat-card class="actions">
-      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+    <mat-card class="actions">      
       <mat-card-title>
         <a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / 
-        <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / 
-        <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / 
+        <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> /  
         <a class="link" (click)="toCampaign()">{{ 'CAMPAIGN' | translate}} {{ campaign.code }}</a> /
         {{ 'COUNT' | translate}} {{ count.code }}
       </mat-card-title>
       <mat-card-content>
         <div>{{ 'COUNT_DATE' | translate }} : {{ count.date | date:localDate }}</div> 
+      </mat-card-content>
+      <mat-card-content>
+        <div>{{ 'COUNT_ZONE' | translate }} : {{ count.codeZone }}</div> 
       </mat-card-content>
       <mat-card-content>
         <div>{{ 'COUNT_TRANSECT' | translate }} : {{ count.codeTransect }}</div> 
@@ -24,8 +25,9 @@
       </mat-card-actions> 
     </mat-card>
     <div class="inside">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
       <mat-card>
-        <mat-card-title>{{ 'COUNTS' | translate }}</mat-card-title>
+        <mat-card-title>{{ 'COUNT' | translate }}</mat-card-title>
         <mat-card-content>
         <li *ngFor="let mesure of count.mesures;">
             {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}

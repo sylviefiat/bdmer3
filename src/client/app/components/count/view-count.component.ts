@@ -23,7 +23,6 @@ import { WindowService } from '../../modules/core/services/index';
 })
 export class ViewCountComponent implements OnInit {
     @Input() site: Site;
-    @Input() zone: Zone;
     @Input() campaign: Campaign;
     @Input() count: Count;
     @Input() locale: string;
@@ -48,7 +47,7 @@ export class ViewCountComponent implements OnInit {
         console.log(type);
         switch (type) {
             case "countForm":
-                this.action.emit(type + '/' + this.site._id + "/" + this.zone.code + '/' + this.campaign.code + '/' + this.count.code);
+                this.action.emit(type + '/' + this.site._id + "/" + this.campaign.code + '/' + this.count.code);
                 break;
             case "deleteCount":
                 this.deleteCount();
@@ -60,6 +59,7 @@ export class ViewCountComponent implements OnInit {
     }
 
     get localDate() {
+        console.log(this.locale);
         switch (this.locale) {
             case "fr":
                 return 'dd-MM-yyyy';
@@ -77,12 +77,8 @@ export class ViewCountComponent implements OnInit {
         this.routerext.navigate(['site/' + this.site.code]);
     }
 
-    toZone() {
-        this.routerext.navigate(['zone/' + this.site.code + '/' + this.zone.code]);
-    }
-
     toCampaign() {
-        this.routerext.navigate(['campaign/' + this.site.code + '/' + this.zone.code + '/' + this.campaign.code]);
+        this.routerext.navigate(['campaign/' + this.site.code + '/' + this.campaign.code]);
     }
 
 }

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAppState, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
-import { Site } from '../../modules/datas/models/index';
+import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
@@ -28,6 +28,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
   template: `
     <bc-view-site 
       [site]="site$ | async"
+      [zones$]="zones$"
+      [campaigns$]="campaigns$"
       [msg]="msg$ | async"
       (action)="actionSite($event)"
       (remove)="removeSite($event)">
@@ -37,6 +39,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
 export class ViewSitePageComponent implements OnInit, OnDestroy {
   actionsSubscription: Subscription;
   site$: Observable<Site | null>;
+  zones$: Observable<Zone[]>;
+  campaigns$: Observable<Campaign[]>;
   msg$: Observable<string | null>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
@@ -47,6 +51,8 @@ export class ViewSitePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
+    this.zones$ = this.site$.map(site => site.zones);
+    this.campaigns$ = this.site$.map(site => site.campaigns);    
     this.msg$ = this.store.let(getSitePageMsg);
   }
 

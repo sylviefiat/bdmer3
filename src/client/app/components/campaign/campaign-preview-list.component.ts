@@ -7,7 +7,7 @@ import { IAppState,getLangues } from './../../modules/ngrx/index';
 @Component({
   selector: 'bc-campaign-preview-list',
   template: `
-    <bc-campaign-preview *ngFor="let campaign of campaigns" [campaign]="campaign" [zone]="zone" [site]="site" [locale]="locale$ | async"></bc-campaign-preview>
+    <bc-campaign-preview *ngFor="let campaign of campaigns" [campaign]="campaign" [site]="site" [locale]="locale$ | async"></bc-campaign-preview>
   `,
   styles: [
     `
@@ -21,7 +21,6 @@ import { IAppState,getLangues } from './../../modules/ngrx/index';
 })
 export class CampaignPreviewListComponent implements OnInit {
   @Input() campaigns: Campaign[];
-  @Input() zone: Zone;
   @Input() site: Site;
   locale$: Observable<string>;
 

@@ -16,10 +16,8 @@ import { Site,Zone } from './../../modules/datas/models/site';
         </mat-card-content>
         <mat-card-content>
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
-          <div>{{nCampaigns}} {{'CAMPAIGNS' | translate}}</div>
           <div>{{nZonesPrefs}} {{'ZONES_PREF' | translate}}</div>
           <div>{{nTransects}} {{'TRANSECTS' | translate}}</div>
-          <div>{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
       </mat-card>
     </a>
@@ -66,18 +64,12 @@ import { Site,Zone } from './../../modules/datas/models/site';
 export class ZonePreviewComponent implements OnInit {
   @Input() zone: Zone;
   @Input() idSite: string;
-  nCampaigns: number = 0;
   nZonesPrefs: number = 0;
   nTransects: number = 0;
-  nCounts: number = 0;
 
   ngOnInit(){
-    this.nCampaigns = this.zone.campaigns ? this.zone.campaigns.length : 0;
     this.nTransects = this.zone.transects ? this.zone.transects.length : 0;
     this.nZonesPrefs = this.zone.zonePreferences ? this.zone.zonePreferences.length : 0;
-    for(let t of this.zone.campaigns) {
-      this.nCounts += t.counts ? t.counts.length : 0;
-    }
 
   }
 

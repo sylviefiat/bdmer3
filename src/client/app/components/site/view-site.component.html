@@ -8,19 +8,34 @@
       <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content> 
       <mat-card-actions>
         <mat-form-field>
+          <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
+              <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ site.zones?site.zones.length:0 }})</mat-option>
+              <mat-option [value]="'campaigns'">{{ 'CAMPAIGNS' | translate}} ({{ site.campaigns?site.campaigns.length:0 }})</mat-option>
+          </mat-select>
+        </mat-form-field> 
+        <mat-form-field>
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
-            <mat-option [value]="'siteForm'">{{ 'EDIT_SITE' | translate}}</mat-option>
-            <mat-option [value]="'zoneForm'">{{ 'ADD_ZONE' | translate}}</mat-option>
-            <mat-option [value]="'zoneImport'">{{ 'IMPORT' | translate}} {{ 'ZONES' | translate}}</mat-option>
-            <mat-option [value]="'campaignImport'">{{ 'IMPORT' | translate}} {{ 'CAMPAIGNS' | translate}}</mat-option>
-            <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
-            <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
-            <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
-            <mat-option class="warn" [value]="'deleteSite'">{{ 'DELETE_SITE' | translate}}</mat-option>
+            <mat-optgroup [label]="'ACTION_SITE' | translate">
+              <mat-option [value]="'siteForm'">{{ 'EDIT_SITE' | translate}}</mat-option>
+              <mat-option class="warn" [value]="'deleteSite'">{{ 'DELETE_SITE' | translate}}</mat-option>
+            </mat-optgroup>
+            <mat-optgroup [label]="('ADD_TO' | translate)+' '+('SITE' | translate)">
+              <mat-option [value]="'zoneForm'">{{ 'ADD_ZONE' | translate}}</mat-option>
+              <mat-option [value]="'campaignForm'">{{ 'ADD_CAMPAIGN' | translate}}</mat-option>
+            </mat-optgroup>
+            <mat-optgroup [label]="('IMPORT_TO' | translate)+' '+('SITE' | translate)">
+              <mat-option [value]="'zoneImport'">{{ 'IMPORT' | translate}} {{ 'ZONES' | translate}}</mat-option>
+              <mat-option [value]="'campaignImport'">{{ 'IMPORT' | translate}} {{ 'CAMPAIGNS' | translate}}</mat-option>
+              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
+              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
+            </mat-optgroup>
           </mat-select>
         </mat-form-field>        
       </mat-card-actions>
     </mat-card>
 
-    <bc-zone-preview-list [zones]="zones$ | async" [idSite]="site.code"></bc-zone-preview-list>  
+    <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones]="zones$ | async" [idSite]="site.code"></bc-zone-preview-list> 
+
+    <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns]="campaigns$ | async" [site]="site"></bc-campaign-preview-list> 
   

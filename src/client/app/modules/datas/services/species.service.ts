@@ -3,7 +3,6 @@ import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseConte
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
 
 
 import * as PouchDB from "pouchdb";

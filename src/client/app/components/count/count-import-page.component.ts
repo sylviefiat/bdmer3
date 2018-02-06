@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -22,7 +21,6 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [error]="error$ | async"
       [msg]="msg$ | async"
       [site]="site$ | async"
-      [zone]="zone$ | async"
       [campaign]="campaign$ | async">
     </bc-count-import>
   `,
@@ -30,14 +28,12 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class CountImportPageComponent implements OnInit, OnDestroy {
     site$: Observable<Site>;
-    zone$: Observable<Zone>;
     campaign$: Observable<Campaign>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
 
 
     siteSubscription: Subscription;
-    zoneSubscription: Subscription;
     campaignSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
@@ -46,9 +42,6 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
         this.siteSubscription = route.params
             .map(params => new SiteAction.SelectSiteAction(params.idSite))
-            .subscribe(store);
-        this.zoneSubscription = route.params
-            .map(params => new SiteAction.SelectZoneAction(params.idZone))
             .subscribe(store);
         this.campaignSubscription = route.params
             .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
@@ -59,13 +52,11 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.let(getSitePageError);
         this.msg$ = this.store.let(getSitePageMsg);
         this.site$ = this.store.let(getSelectedSite);
-        this.zone$ = this.store.let(getSelectedZone);
         this.campaign$ = this.store.let(getSelectedCampaign);
     }
 
     ngOnDestroy() {
         this.siteSubscription.unsubscribe();
-        this.zoneSubscription.unsubscribe();
         this.campaignSubscription.unsubscribe();
     }
 

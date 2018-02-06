@@ -7,7 +7,7 @@ export interface Site {
   codeCountry: string;
   description: string;
   zones: Zone[];
-
+  campaigns: Campaign[];
 }
 
 export interface Zone {
@@ -16,7 +16,6 @@ export interface Zone {
     surface: string;
     transects: Transect[];
     zonePreferences: ZonePreference[];
-    campaigns: Campaign[];
 }
 
 export interface Transect {
@@ -39,7 +38,6 @@ export interface ZonePreference {
 export interface Campaign {
     code: string;
     codeSite: string;
-    codeZone: string;
     dateStart: Date;
     dateEnd: Date;
     participants: string;

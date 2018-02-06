@@ -25,6 +25,7 @@ export class CountFormComponent implements OnInit {
     @Input() count: Count | null;
     @Input() errorMessage: string;
     @Input() species: Species[];
+    @Input() zones: Zone[];
     @Input() transects: Transect[];
 
     @Output() submitted = new EventEmitter<Campaign>();
@@ -56,21 +57,20 @@ export class CountFormComponent implements OnInit {
         }
     }
 
-    ngOnInit() {        
-        this.transects = this.zone.transects;
+    ngOnInit() {  
+        this.zones = this.site.zones;   
         this.countForm.controls.codeSite.setValue(this.site ? this.site.code : null);
-        this.countForm.controls.codeZone.setValue(this.zone ? this.zone.code : null);
         this.countForm.controls.codeCampaign.setValue(this.campaign ? this.campaign.code : null);
         (this.site !== undefined) ? this.countForm.controls.codeSite.disable() : this.countForm.controls.codeSite.enable();
-        (this.zone !== undefined) ? this.countForm.controls.codeZone.disable() : this.countForm.controls.codeZone.enable();
         (this.campaign !== undefined) ? this.countForm.controls.codeCampaign.disable() : this.countForm.controls.codeCampaign.enable();
         if(this.count) {
             this.countForm.controls.code.setValue(this.count.code);
+            this.countForm.controls.codeZone.setValue(this.count.codeZone);
             this.countForm.controls.codeTransect.setValue(this.count.codeTransect);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
         } else {
-            this.countForm.controls.code.setValue(this.campaign.code + "_C");
+            this.countForm.controls.code.setValue(this.campaign.code + "_");
             this.countForm.controls.monospecies.setValue(false);
         }
         this.initMesures();
@@ -101,7 +101,6 @@ export class CountFormComponent implements OnInit {
     submit() {
         if (this.countForm.valid) {
             this.countForm.value.codeSite=this.countForm.controls.codeSite.value;
-            this.countForm.value.codeZone=this.countForm.controls.codeZone.value;
             this.countForm.value.codeCampaign=this.countForm.controls.codeCampaign.value;
             this.submitted.emit(this.countForm.value);
         }

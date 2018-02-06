@@ -64,6 +64,7 @@ export class SiteService {
     return this.getSite(site.code)
       .mergeMap(st => {  
         if (!site.zones) site.zones = []; 
+        if(!site.campaigns) site.campaigns = [];
         if(country !== undefined){
           site.codeCountry = country.code;
         }
@@ -90,13 +91,14 @@ export class SiteService {
 
   editZone(site: Site, zone: Zone): Observable<Zone> {
     console.log(zone);
+    if(site.code !== zone.codeSite)
+      return _throw('Import is not possible : zone codeSite is different from selected site');
     return this.getSite(site.code)
       .filter(site => site!==null)
-      .mergeMap(st => {   
+      .mergeMap(st => {           
         if(!zone.codeSite) zone.codeSite=site.code;
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
-        if(!zone.campaigns) zone.campaigns = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
         st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
         this.currentSite = of(st);
@@ -117,24 +119,21 @@ export class SiteService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
+        console.log(zone);
         return of(zone);
       })
   }
 
   editCampaign(site: Site, campaign: Campaign): Observable<Campaign> {
     console.log(campaign);
+    if(site.code !== campaign.codeSite)
+      return _throw('Import is not possible : campaign codeSite is different from selected site');
     return this.getSite(site.code)
       .filter(site => site!==null)
-      .mergeMap(st => {  
+      .mergeMap(st => { 
         if(!campaign.counts) campaign.counts = [];
         campaign.codeCountry = st.codeCountry;
-        let zn = st.zones.filter(z => z.code === campaign.codeZone)[0];
-        if(zn){
-          if(zn.campaigns.filter(t => t.code === campaign.code).length > -1){
-            zn.campaigns = [ ...zn.campaigns.filter(t => t.code !== campaign.code), campaign];
-          }
-          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
-        } 
+        st.campaigns = [ ...st.campaigns.filter(c => c.code !== campaign.code), campaign];     
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })
@@ -148,9 +147,8 @@ export class SiteService {
     return this.getSite(campaign.codeSite)
       .filter(site => site!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.code === campaign.codeZone)[0];
-        zn.campaigns = zn.campaigns.filter(c => c.code !== campaign.code);
-        st.zones = [...st.zones.filter(z => z.code !== campaign.codeZone),zn];
+        let zn = st.zones.filter(z => z.code === campaign.code)[0];
+        st.campaigns = st.campaigns.filter(c => c.code !== campaign.code);
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
@@ -161,6 +159,8 @@ export class SiteService {
 
   editTransect(site: Site, transect: Transect): Observable<Transect> {
     console.log(transect);
+    if(site.code !== transect.codeSite)
+      return _throw('Import is not possible : transect codeSite is different from selected site');
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
@@ -197,6 +197,8 @@ export class SiteService {
 
   editZonePref(site: Site, zonePref: ZonePreference): Observable<ZonePreference> {
     console.log(zonePref);
+    if(site.code !== zonePref.codeSite)
+      return _throw('Import is not possible : zonePref codeSite is different from selected site');
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
@@ -233,20 +235,18 @@ export class SiteService {
 
   editCount(site: Site, count: Count): Observable<Count> {
     console.log(count);
+    if(site.code !== count.codeSite)
+      return _throw('Import is not possible : count codeSite is different from selected site');
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.code === count.codeZone)[0];
-        if(zn){
-          let cp = zn.campaigns.filter(t => t.code === count.codeCampaign)[0];
-          if(cp){
-            if(cp.counts.filter(c => c.code === count.code).length > -1){
-              cp.counts = [ ...cp.counts.filter(c => c.code !== count.code), count];
-            }
-            zn.campaigns = [...zn.campaigns.filter(t => t.code != count.codeCampaign), cp];
-          }          
-          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
-        } 
+        let cp = st.campaigns.filter(c => c.code === count.codeCampaign)[0];
+        if(cp){
+          if(cp.counts.filter(c => c.code === count.code).length > -1){
+            cp.counts = [ ...cp.counts.filter(c => c.code !== count.code), count];
+          }
+          st.campaigns = [...st.campaigns.filter(c => c.code != count.codeCampaign), cp];
+        }  
         this.currentSite = of(st);
         return fromPromise(this.db.put(st));
       })
@@ -260,11 +260,9 @@ export class SiteService {
     return this.getSite(count.codeSite)
       .filter(site => site!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.code === count.codeZone)[0];
-        let ca = zn.campaigns.filter(c => c.code === count.codeCampaign)[0];
+        let ca = st.campaigns.filter(c => c.code === count.codeCampaign)[0];
         ca.counts = ca.counts.filter(ct => ct.code !== count.code);
-        zn.campaigns = [...zn.campaigns.filter(c => c.code !== count.codeCampaign),ca];
-        st.zones = [...st.zones.filter(z => z.code !== count.codeZone),zn];
+        st.campaigns = [...st.campaigns.filter(c => c.code !== count.codeCampaign),ca];
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })

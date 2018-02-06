@@ -19,7 +19,6 @@ import { SiteAction } from '../../modules/datas/actions/index';
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [site]="site$ | async"
-      [zone]="zone$ | async"
       [campaign]="campaign$ | async">
     </bc-campaign-form>
   `,
@@ -37,19 +36,14 @@ import { SiteAction } from '../../modules/datas/actions/index';
 export class CampaignFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   site$: Observable<Site>;
-  zone$: Observable<Zone>;
   campaign$: Observable<Campaign>;
   siteSubscription: Subscription;
-  zoneSubscription: Subscription;
   campaignSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute,) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
-      .subscribe(store);      
-    this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
-      .subscribe(store);
+      .subscribe(store);  
     this.campaignSubscription = route.params
       .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
       .subscribe(store);
@@ -57,18 +51,15 @@ export class CampaignFormPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.store.let(getSelectedZone);
     this.campaign$ = this.store.let(getSelectedCampaign);
   }
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.campaignSubscription.unsubscribe();
   }
 
   onSubmit(campaign: Campaign) { 
-    console.log(campaign);
-      this.store.dispatch(new SiteAction.AddCampaignAction(campaign))
+    this.store.dispatch(new SiteAction.AddCampaignAction(campaign))
   }
 }

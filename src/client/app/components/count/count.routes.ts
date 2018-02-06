@@ -6,16 +6,16 @@ import { AuthGuard } from '../../modules/auth/guards/index';
 export const CountRoutes: Array<any> = [
   
   {
-    path: 'count/:idSite/:idZone/:idCampaign/:idCount',
+    path: 'count/:idSite/:idCampaign/:idCount',
     component: ViewCountPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'countForm/:idSite/:idZone/:idCampaign',
+    path: 'countForm/:idSite/:idCampaign',
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'countForm/:idSite/:idZone/:idCampaign/:idCount',
+    path: 'countForm/:idSite/:idCampaign/:idCount',
     component: CountFormPageComponent,
     canActivate : [AuthGuard]
   },
@@ -25,7 +25,7 @@ export const CountRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'count/:idSite/:idZone/:idCampaign',
+    path: 'count/:idSite/:idCampaign',
     component: ViewCountPageComponent,
     canActivate : [AuthGuard]
   }

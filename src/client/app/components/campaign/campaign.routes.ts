@@ -6,11 +6,11 @@ import { AuthGuard } from '../../modules/auth/guards/index';
 export const CampaignRoutes: Array<any> = [
 
   {
-    path: 'campaignForm/:idSite/:idZone',
+    path: 'campaignForm/:idSite',
     component: CampaignFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'campaignForm/:idSite/:idZone/:idCampaign',
+    path: 'campaignForm/:idSite/:idCampaign',
     component: CampaignFormPageComponent,
     canActivate : [AuthGuard]
   },
@@ -20,12 +20,7 @@ export const CampaignRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'campaignImport/:idSite/:idZone',
-    component: CampaignImportPageComponent,
-    canActivate : [AuthGuard]
-  },
-  {
-    path: 'campaign/:idSite/:idZone/:idCampaign',
+    path: 'campaign/:idSite/:idCampaign',
     component: ViewCampaignPageComponent,
     canActivate : [AuthGuard]
   }

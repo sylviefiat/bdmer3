@@ -27,11 +27,10 @@ export class ViewZoneComponent implements OnInit {
     @Input() site: Site;
     transects$: Observable<Transect[]>;
     zonesPref$: Observable<ZonePreference[]>;
-    campaigns$: Observable<Campaign[]>;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
     view$: Observable<string>;
-    panelDisplay = new FormControl('campaigns');
+    panelDisplay = new FormControl('transects');
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
@@ -40,15 +39,13 @@ export class ViewZoneComponent implements OnInit {
         console.log(this.zone);
         this.transects$ = of(this.zone.transects);
         this.zonesPref$ = of(this.zone.zonePreferences);
-        this.campaigns$ = of(this.zone.campaigns);
-        this.view$ = of('campaigns');
+        this.view$ = of('transects');
     }
 
 
     deleteZone() {
         if (this.windowService.confirm("Are you sure you want to delete this zone from database ?")){
-            this.site.zones = this.site.zones.filter(zone => zone.code !== this.zone.code);
-            this.remove.emit(this.site);
+            this.remove.emit(this.zone);
         }
     }
 
@@ -59,8 +56,6 @@ export class ViewZoneComponent implements OnInit {
             case "zonePrefImport":
             case "transectForm":
             case "transectImport":
-            case "campaignForm":
-            case "campaignImport":
                 this.action.emit(type+'/'+this.site._id+"/"+this.zone.code);
                 break;
             case "deleteZone":

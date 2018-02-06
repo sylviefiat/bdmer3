@@ -52,10 +52,7 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.site$
-      .mergeMap(site => 
-        this.route.params
-          .map(params => site.zones.filter(zone => zone.code===params.idZone)[0]));
+    this.zone$ = this.store.let(getSelectedZone);
   }
 
   ngOnDestroy() {

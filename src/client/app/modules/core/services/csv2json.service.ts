@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
-import { Site, Zone } from '../../datas/models/site';
+import { Site, Zone, Transect, Campaign, ZonePreference, Count } from '../../datas/models/site';
 
 @Injectable()
 export class Csv2JsonService {
@@ -147,14 +147,14 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractCampaignData(arrayData): Zone[] { 
+    private extractCampaignData(arrayData): Campaign[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
-        let lines: Zone[] = [];
+        let lines: Campaign[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Zone;
+                let st = {} as Campaign;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -180,14 +180,14 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractTransectData(arrayData): Zone[] { 
+    private extractTransectData(arrayData): Transect[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
-        let lines: Zone[] = [];
+        let lines: Transect[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Zone;
+                let st = {} as Transect;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -211,14 +211,14 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractZonePrefData(arrayData): Zone[] { 
+    private extractZonePrefData(arrayData): ZonePreference[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
-        let lines: Zone[] = [];
+        let lines: ZonePreference[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Zone;
+                let st = {} as ZonePreference;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -241,14 +241,14 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractCountData(arrayData): Zone[] { 
+    private extractCountData(arrayData): Count[] { 
         let allTextLines = arrayData;
         let headers = allTextLines[0];
-        let lines: Zone[] = [];
+        let lines: Count[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Zone;
+                let st = {} as Count;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {

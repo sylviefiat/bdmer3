@@ -1,7 +1,6 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angular/http';
 import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Observable } from 'rxjs/Observable';
 import { Authenticate } from '../../auth/models/user';

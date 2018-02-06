@@ -29,9 +29,9 @@ import { SiteAction } from '../../modules/datas/actions/index';
   template: `
     <bc-count 
       [site]="site$ | async"
-      [zone]="zone$ | async"
       [campaign]="campaign$ | async"
       [count]="count$ | async"
+      [locale]="locale$ | async"
       (remove)="removeCount($event)"
       (action)="actionCount($event)">
     </bc-count>
@@ -39,10 +39,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
 })
 export class ViewCountPageComponent implements OnInit, OnDestroy {
   siteSubscription: Subscription;
-  zoneSubscription: Subscription;
   campaignSubscription: Subscription;
   countSubscription: Subscription;
-  zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
   campaign$: Observable<Campaign | null>;
   count$: Observable<Count | null>;
@@ -51,9 +49,6 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
       .map(params => new SiteAction.SelectSiteAction(params.idSite))
-      .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.campaignSubscription = route.params
       .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
@@ -65,7 +60,6 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zone$ = this.store.let(getSelectedZone);
     this.campaign$ = this.store.let(getSelectedCampaign);
     this.count$ = this.store.let(getSelectedCount);
     this.locale$ = this.store.let(getLangues);
@@ -73,7 +67,6 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.siteSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.campaignSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }

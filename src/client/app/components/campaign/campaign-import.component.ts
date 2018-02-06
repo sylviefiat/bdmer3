@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Site } from '../../modules/datas/models/index';
 
 import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';

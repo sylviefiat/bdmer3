@@ -31,7 +31,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
       [site]="site$ | async"
       [zone]="zone$ | async"
       [zonePref]="zonePref$ | async"
-      (edit)="editZonePref($event)"
+      (action)="actionZonePref($event)"
       (remove)="removeZonePref($event)">
     </bc-zone-pref>
   `,
@@ -68,8 +68,8 @@ export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
     this.zonePrefSubscription.unsubscribe();
   }
 
-  editZonePref(zonePref: ZonePreference){
-    this.routerext.navigate(['zonePrefForm/'+zonePref.codeSite+'/'+zonePref.codeZone+'/'+zonePref.code]);
+  actionZonePref(redirect: String) {
+    this.routerext.navigate([redirect]);
   }
 
   removeZonePref(zonePref: ZonePreference){
