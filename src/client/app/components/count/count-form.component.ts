@@ -1,3 +1,4 @@
+import { of } from 'rxjs/observable/of';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -26,7 +27,7 @@ export class CountFormComponent implements OnInit {
     @Input() errorMessage: string;
     @Input() species: Species[];
     @Input() zones: Zone[];
-    @Input() transects: Transect[];
+    @Input() transects$: Observable<Transect[]>;
 
     @Output() submitted = new EventEmitter<Campaign>();
 
@@ -52,13 +53,11 @@ export class CountFormComponent implements OnInit {
                 addrCtrl = this.newMesure(mes.codeSpecies, mes.long, mes.larg);
                 control.push(addrCtrl);
             }
-        } else {
-            //return this.addMesure();
-        }
+        } 
     }
 
     ngOnInit() {  
-        this.zones = this.site.zones;   
+        this.zones = this.site.zones;//.filter(zone => zone.transects !== null && zone.transects.length >0);   
         this.countForm.controls.codeSite.setValue(this.site ? this.site.code : null);
         this.countForm.controls.codeCampaign.setValue(this.campaign ? this.campaign.code : null);
         (this.site !== undefined) ? this.countForm.controls.codeSite.disable() : this.countForm.controls.codeSite.enable();
@@ -98,6 +97,12 @@ export class CountFormComponent implements OnInit {
         control.removeAt(i);
     }
 
+    updateTransects(codeZone: string){
+        console.log(codeZone);
+        console.log(this.zones.filter(zone => zone.code === codeZone)[0].transects);
+        this.transects$ = of(this.zones.filter(zone => zone.code === codeZone)[0].transects);
+    }
+
     submit() {
         if (this.countForm.valid) {
             this.countForm.value.codeSite=this.countForm.controls.codeSite.value;
@@ -107,7 +112,8 @@ export class CountFormComponent implements OnInit {
     }
 
     return() {
-        this.routerext.navigate(['/site/'], {
+        let redirect = this.count ? 'count/'+this.site.code+'/'+this.campaign.code+'/'+this.count.code : '/campaign/' + this.site.code + "/" + this.campaign.code;
+        this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

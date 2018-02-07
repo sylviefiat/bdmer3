@@ -28,5 +28,10 @@ export const ZoneRoutes: Array<any> = [
     path: 'zone/:idSite/:idZone',
     component: ViewZonePageComponent,
     canActivate : [AuthGuard]
+  },
+  {
+    path: 'zone/:idSite/:idZone/:view',
+    component: ViewZonePageComponent,
+    canActivate : [AuthGuard]
   }
 ]

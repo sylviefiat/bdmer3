@@ -8,21 +8,12 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone } from '../../modules/ngrx/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedZoneTransects, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
+import { Site, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
 
-/**
- * Note: Container components are also reusable. Whether or not
- * a component is a presentation component or a container
- * component is an implementation detail.
- *
- * The View Book Page's responsibility is to map router params
- * to a 'Select' book action. Actually showing the selected
- * book remains a responsibility of the
- * SelectedBookPageComponent
- */
+
 @Component({
   selector: 'bc-view-zone-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +21,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
     <bc-zone 
       [site]="(site$ | async)"
       [zone]="zone$ | async"
+      [transects$]="transects$"
+      [zonesPref$]="zonesPref$"
       (action)="actionZone($event)"
       (remove)="removeZone($event)">
     </bc-zone>
@@ -40,6 +33,8 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   zoneSubscription: Subscription;
   zone$: Observable<Zone | null>;
   site$: Observable<Site | null>;
+  transects$: Observable<Transect[]>;
+  zonesPref$: Observable<ZonePreference[]>
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -53,6 +48,8 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
     this.zone$ = this.store.let(getSelectedZone);
+    this.transects$ = this.store.let(getSelectedZoneTransects);
+    this.zonesPref$ = this.store.let(getSelectedZoneZonePrefs);
   }
 
   ngOnDestroy() {

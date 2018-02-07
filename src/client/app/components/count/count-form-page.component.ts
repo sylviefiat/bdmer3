@@ -78,13 +78,4 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   onSubmit(count: Count) { 
     this.store.dispatch(new SiteAction.AddCountAction(count))
   }
-
-  return() {
-    this.routerext.navigate(['/site/'], {
-      transition: {
-        duration: 1000,
-        name: 'slideTop',
-      }
-    });
-  }
 }

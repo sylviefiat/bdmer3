@@ -34,6 +34,8 @@ export class ViewCampaignComponent implements OnInit {
 
 
     ngOnInit() {
+        console.log(this.site);
+        console.log(this.campaign);
         this.counts$ = of(this.campaign.counts);
     }
 

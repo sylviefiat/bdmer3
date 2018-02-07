@@ -32,6 +32,7 @@
         <li *ngFor="let mesure of count.mesures;">
             {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}
         </li> 
+        <p  *ngIf="!count.mesures || count.mesures.length<=0">{{ 'NO_INVERTEBRATES' | translate }}</p>
       </mat-card-content>
              
       </mat-card>

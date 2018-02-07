@@ -72,6 +72,14 @@ export function getCurrentSite(state$: Observable<ISiteState>) {
     return state$.select(state => state.currentSiteId && state.entities.filter(site => site._id === state.currentSiteId)[0]);
 }
 
+export function getCurrentSiteZones(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.entities.filter(site => site._id === state.currentSiteId)[0].zones);
+}
+
+export function getCurrentSiteCampaigns(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.entities.filter(site => site._id === state.currentSiteId)[0].campaigns);
+}
+
 export function getCurrentZoneId(state$: Observable<ISiteState>) {
     return state$.select(state => state.currentZoneId);
 }
@@ -83,12 +91,26 @@ export function getCurrentZone(state$: Observable<ISiteState>) {
                 zone.code === state.currentZoneId)[0]);
 }
 
+export function getCurrentZoneTransects(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.currentZoneId &&
+        state.entities.filter(site =>
+            site._id === state.currentSiteId)[0].zones.filter(zone =>
+                zone.code === state.currentZoneId)[0].transects);
+}
+
+export function getCurrentZoneZonePrefs(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.currentZoneId &&
+        state.entities.filter(site =>
+            site._id === state.currentSiteId)[0].zones.filter(zone =>
+                zone.code === state.currentZoneId)[0].zonePreferences);
+}
+
 export function getCurrentCampaignId(state$: Observable<ISiteState>) {
     return state$.select(state => state.currentCampaignId);
 }
 
 export function getCurrentCampaign(state$: Observable<ISiteState>) {
-    return state$.select(state => state.currentSiteId && state.currentZoneId && state.currentCampaignId &&
+    return state$.select(state => state.currentSiteId && state.currentCampaignId &&
         state.entities.filter(site => site._id === state.currentSiteId)[0]
             .campaigns.filter(campaign => campaign.code === state.currentCampaignId)[0]);
 }
@@ -123,7 +145,7 @@ export function getCurrentCountId(state$: Observable<ISiteState>) {
 
 export function getCurrentCount(state$: Observable<ISiteState>) {
     return state$.select(state => 
-        state.currentSiteId && state.currentZoneId && state.currentCampaignId && state.currentCountId &&
+        state.currentSiteId &&  state.currentCampaignId && state.currentCountId &&
             state.entities.filter(site => site._id === state.currentSiteId)[0]
                 .campaigns.filter(campaign => campaign.code === state.currentCampaignId)[0]
                 .counts.filter(count => count.code === state.currentCountId)[0]

@@ -66,6 +66,6 @@ export class ZoneImportComponent implements OnInit{
     }
 
     cancel() {
-        this.back.emit();
+        this.back.emit(this.site.code);
     }
 }

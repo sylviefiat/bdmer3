@@ -27,19 +27,21 @@
         </mat-input-container>
 
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
-          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }}</div>
-        </mat-input-container>
-
-        <mat-input-container>
           <input type="text" matInput placeholder="{{ 'SITE' | translate }}" formControlName="codeSite">
           <div class="hint">{{ 'EX_ZONE_SITE' | translate }}</div> 
         </mat-input-container>
       </div>
       <div class="row">
+
+        <mat-form-field>
+          <mat-select  placeholder="{{'ZONE_SELECT' | translate}}" formControlName="codeZone" (change)='updateTransects($event.value)' required>
+            <mat-option *ngFor="let zn of zones" [value]="zn.code" [disabled]="!zn.transects || zn.transects.length<=0">{{ zn.code }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field>
           <mat-select  placeholder="{{'TRANSECT_SELECT' | translate}}" formControlName="codeTransect" required>
-            <mat-option *ngFor="let tr of transects" [value]="tr.code">{{ tr.code }}</mat-option>
+            <mat-option *ngFor="let tr of (transects$ | async)" [value]="tr.code">{{ tr.code }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

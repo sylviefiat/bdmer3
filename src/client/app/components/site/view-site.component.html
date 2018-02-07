@@ -9,8 +9,8 @@
       <mat-card-actions>
         <mat-form-field>
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
-              <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ site.zones?site.zones.length:0 }})</mat-option>
-              <mat-option [value]="'campaigns'">{{ 'CAMPAIGNS' | translate}} ({{ site.campaigns?site.campaigns.length:0 }})</mat-option>
+              <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ (zones$ | async)?.length }})</mat-option>
+              <mat-option [value]="'campaigns'">{{ 'CAMPAIGNS' | translate}} ({{ (campaigns$ | async)?.length }})</mat-option>
           </mat-select>
         </mat-form-field> 
         <mat-form-field>
@@ -35,7 +35,7 @@
       </mat-card-actions>
     </mat-card>
 
-    <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones]="zones$ | async" [idSite]="site.code"></bc-zone-preview-list> 
+    <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="zones$" [idSite]="site.code"></bc-zone-preview-list> 
 
-    <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns]="campaigns$ | async" [site]="site"></bc-campaign-preview-list> 
+    <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns$]="campaigns$" [site]="site"></bc-campaign-preview-list> 
   

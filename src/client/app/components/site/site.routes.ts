@@ -9,6 +9,15 @@ export const SiteRoutes: Array<any> = [
     path: 'site',
     component: SiteListPageComponent,
     canActivate : [AuthGuard]
+  },
+  {
+    path: 'site/:id',
+    component: ViewSitePageComponent,
+    canActivate : [AuthGuard]
+  }, {
+    path: 'site/:id/:view',
+    component: ViewSitePageComponent,
+    canActivate : [AuthGuard]
   }, {
     path: 'siteForm',
     component: SiteFormPageComponent,
@@ -22,11 +31,6 @@ export const SiteRoutes: Array<any> = [
   {
     path: 'siteImport',
     component: SiteImportPageComponent,
-    canActivate : [AuthGuard]
-  },
-  {
-    path: 'site/:id',
-    component: ViewSitePageComponent,
     canActivate : [AuthGuard]
   }
 ]

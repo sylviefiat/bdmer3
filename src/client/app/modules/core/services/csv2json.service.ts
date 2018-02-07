@@ -3,18 +3,20 @@ import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
+import { MomentService } from './moment.service';
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
-import { Site, Zone, Transect, Campaign, ZonePreference, Count } from '../../datas/models/site';
+import { Site, Zone, Transect, Campaign, ZonePreference, Count, Mesure } from '../../datas/models/site';
 
 @Injectable()
 export class Csv2JsonService {
+    static COMMA = ',';
+    static SEMICOLON = ';';
 
-    constructor(private papa: PapaParseService) {
-
+    constructor(private papa: PapaParseService, private ms: MomentService) {
     }
 
     private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Species[] = [];
         // don't iclude header start from 1
@@ -95,7 +97,7 @@ export class Csv2JsonService {
     }
 
     private extractSiteData(arrayData): Site[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Site[] = [];
         for (let i = 1; i < allTextLines.length; i++) {
@@ -122,7 +124,7 @@ export class Csv2JsonService {
     }
 
     private extractZoneData(arrayData): Zone[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Zone[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
@@ -133,6 +135,7 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code":
+                        case "codeSite":
                         case "surface":
                             st[headers[j]] = data[j];
                             break;
@@ -148,7 +151,8 @@ export class Csv2JsonService {
     }
 
     private extractCampaignData(arrayData): Campaign[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
+        let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
         let lines: Campaign[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
@@ -162,12 +166,23 @@ export class Csv2JsonService {
                         case "codeSite":
                         case "codeZone":
                         case "code":
-                        case "dateStart":
-                        case "dateEnd":
                         case "participants":
                         case "surfaceTransect":
                         case "description":
                             st[headers[j]] = data[j];
+                            break;
+                        case "dateStart":
+                        case "dateEnd":
+                            let d;
+                            // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
+                            if(delimiter === Csv2JsonService.SEMICOLON){
+                                //this.ms.moment().locale("fr");
+                                d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
+                            } else {
+                                //this.ms.moment().locale("en");
+                                d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
+                            }                         
+                            st[headers[j]] = d;
                             break;
                         default:                            
                             throw new Error('Wrong CSV File Unknown field detected');
@@ -181,7 +196,7 @@ export class Csv2JsonService {
     }
 
     private extractTransectData(arrayData): Transect[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Transect[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
@@ -212,7 +227,7 @@ export class Csv2JsonService {
     }
 
     private extractZonePrefData(arrayData): ZonePreference[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: ZonePreference[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
@@ -242,13 +257,14 @@ export class Csv2JsonService {
     }
 
     private extractCountData(arrayData): Count[] { 
-        let allTextLines = arrayData;
+        let allTextLines = arrayData.data;
+        let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
         let lines: Count[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Count;
+                let ct = {} as Count;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -256,17 +272,40 @@ export class Csv2JsonService {
                         case "codeZone":
                         case "codeCampaign":
                         case "code":
-                        case "codeSpecies":
                         case "codeTransect":
+                            ct[headers[j]] = data[j];
+                            break;
                         case "date":
+                            let d;
+                            // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
+                            if(delimiter === Csv2JsonService.SEMICOLON){
+                                //this.ms.moment().locale("fr");
+                                d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
+                            } else {
+                                //this.ms.moment().locale("en");
+                                d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
+                            }                         
+                            ct[headers[j]] = d;
+                            break;
                         case "mesures":
-                            st[headers[j]] = data[j];
+                            let sp = data[headers.indexOf('codeSpecies')];
+                            if (ct.mesures == null) ct.mesures = [];
+                            let mes = data[j].split(',');
+                            console.log(mes);
+                            for(let dims in mes){
+                                let longlarg = dims.split('/');
+                                console.log(longlarg);
+                                ct.mesures.push({codeSpecies: sp, long: longlarg[0], larg: (longlarg.length>0)?longlarg[1]:'0'});
+                            }
+                            break;
+                        case "codeSpecies":
+                            ct['monospecies'] = true;
                             break;
                         default:                            
                             throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
-                lines.push(st);
+                lines.push(ct);
             }
         }
         //console.log(lines); //The data in the form of 2 dimensional array.
@@ -285,8 +324,10 @@ export class Csv2JsonService {
                     skipEmptyLines: true,
                     download: true,
                     complete: function(results) {
-                        console.log(results.data)
-                        observable.next(results.data);
+                        console.log(results);
+                        this.delimiter = results.meta.delimiter;
+                        console.log(this.delimiter);
+                        observable.next(results);
                         observable.complete();
                     }
                 });
@@ -329,4 +370,9 @@ export class Csv2JsonService {
             });
 
     }
+
+    /*convertDate(dateStr: string): Date {
+        const [day, month, year] = dateStr.split("-");
+        return new Date(year, month - 1, day);
+    }*/
 }

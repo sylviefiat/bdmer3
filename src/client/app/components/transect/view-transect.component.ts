@@ -40,7 +40,7 @@ export class ViewTransectComponent implements OnInit {
 
     deleteTransect() {
         if (this.windowService.confirm("Are you sure you want to delete this transect from database ?")){
-            this.remove.emit(this.site);
+            this.remove.emit(this.transect);
         }
     }
 

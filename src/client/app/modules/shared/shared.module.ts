@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule } from '@agm/core';
 
 // modules
@@ -31,7 +32,8 @@ const SHARED_MODULES: any[] = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatCheckboxModule,
-  Angular2FontawesomeModule
+  Angular2FontawesomeModule,
+  MomentModule
 ];
 
 /**

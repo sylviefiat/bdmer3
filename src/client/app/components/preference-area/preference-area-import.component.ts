@@ -65,6 +65,6 @@ export class PreferenceAreaImportComponent implements OnInit{
     }
 
     cancel() {
-        this.back.emit();
+        this.back.emit(this.site.code);
     }
 }

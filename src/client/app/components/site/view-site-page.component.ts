@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
+import { IAppState, getSelectedSite, getSelectedSiteZones, getSelectedSiteCampaigns, getSitePageMsg } from '../../modules/ngrx/index';
 import { Site, Zone, Campaign } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
@@ -51,8 +51,8 @@ export class ViewSitePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.site$ = this.store.let(getSelectedSite);
-    this.zones$ = this.site$.map(site => site.zones);
-    this.campaigns$ = this.site$.map(site => site.campaigns);    
+    this.zones$ = this.store.let(getSelectedSiteZones);
+    this.campaigns$ = this.store.let(getSelectedSiteCampaigns);
     this.msg$ = this.store.let(getSitePageMsg);
   }
 

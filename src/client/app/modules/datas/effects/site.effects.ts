@@ -253,7 +253,7 @@ export class SiteEffects {
   importOrRemoveZoneSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_ZONE_SUCCESS, SiteAction.ActionTypes.REMOVE_ZONE_SUCCESS)
     .map((action: SiteAction.ImportZoneSuccessAction | SiteAction.RemoveZoneSuccessAction) => action.payload)
-    .mergeMap((zone: Zone) => this.router.navigate(['/site/' + zone.codeSite]))
+    .mergeMap((zone: Zone) => this.router.navigate(['/site/' + zone.codeSite+'/zones']))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
 
@@ -269,7 +269,7 @@ export class SiteEffects {
   importOrRemoveCampaignSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_CAMPAIGN_SUCCESS, SiteAction.ActionTypes.REMOVE_CAMPAIGN_SUCCESS)
     .map((action: SiteAction.ImportCampaignSuccessAction | SiteAction.RemoveCampaignSuccessAction) => action.payload)
-    .mergeMap((campaign: Campaign) => this.router.navigate(['/zone/' + campaign.codeSite]))
+    .mergeMap((campaign: Campaign) => this.router.navigate(['/site/' + campaign.codeSite]))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
 
@@ -285,7 +285,7 @@ export class SiteEffects {
   importOrRemoveZonePrefSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS, SiteAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS)
     .map((action: SiteAction.ImportZonePrefSuccessAction | SiteAction.RemoveZonePrefSuccessAction) => action.payload)
-    .mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codeSite + '/'+ zonePref.codeZone]))
+    .mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codeSite + '/'+ zonePref.codeZone+'/zonesPref']))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
 
@@ -309,7 +309,7 @@ export class SiteEffects {
   addCountSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.ADD_COUNT_SUCCESS)
     .map((action: SiteAction.AddCountSuccessAction) => action.payload)
-    .mergeMap((count:Count) => this.router.navigate(['/count/' + count.codeSite + '/'+ count.codeZone + '/' + count.codeCampaign + '/' + count.code]))
+    .mergeMap((count:Count) => this.router.navigate(['/count/' + count.codeSite + '/' + count.codeCampaign + '/' + count.code]))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
 
@@ -317,7 +317,7 @@ export class SiteEffects {
   importOrRemoveCountSuccess$: Observable<Action> = this.actions$
     .ofType(SiteAction.ActionTypes.IMPORT_COUNT_SUCCESS, SiteAction.ActionTypes.REMOVE_COUNT_SUCCESS)
     .map((action: SiteAction.ImportCountSuccessAction | SiteAction.RemoveCountSuccessAction) => action.payload)
-    .mergeMap((count:Count) => this.router.navigate(['/transect/' + count.codeSite + '/'+ count.codeZone + '/' + count.codeTransect]))
+    .mergeMap((count:Count) => this.router.navigate(['/campaign/' + count.codeSite + '/'+ count.codeCampaign]))
     .delay(3000)
     .map(() => new SiteAction.RemoveMsgAction());
     

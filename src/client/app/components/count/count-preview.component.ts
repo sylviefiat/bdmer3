@@ -4,7 +4,7 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
 @Component({
   selector: 'bc-count-preview',
   template: `
-    <a [routerLink]="['/count', codeSite, codeZone, codeCampaign, code]">
+    <a [routerLink]="['/count', codeSite, codeCampaign, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
@@ -16,9 +16,10 @@ import { Site,Zone,Campaign, Count } from './../../modules/datas/models/site';
         </mat-card-content>
         <mat-card-content>
           <div>{{ 'COUNTS' | translate }}</div>
-           <li *ngFor="let mesure of count.mesures; let last = last;">
-            {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}<span *ngIf="!last">&nbsp;;&nbsp;</span> 
+            <li *ngFor="let mesure of count.mesures; let last = last;">
+              {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}<span *ngIf="!last">&nbsp;;&nbsp;</span> 
             </li>
+            <p  *ngIf="!count.mesures || count.mesures.length<=0">{{ 'NO_INVERTEBRATES' | translate }}</p>
        </mat-card-content>
       </mat-card>
     </a>

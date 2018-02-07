@@ -39,7 +39,7 @@ export class ViewCountComponent implements OnInit {
 
     deleteCount() {
         if (this.windowService.confirm("Are you sure you want to delete this count from database ?")) {
-            this.remove.emit(this.site);
+            this.remove.emit(this.count);
         }
     }
 
@@ -59,7 +59,6 @@ export class ViewCountComponent implements OnInit {
     }
 
     get localDate() {
-        console.log(this.locale);
         switch (this.locale) {
             case "fr":
                 return 'dd-MM-yyyy';

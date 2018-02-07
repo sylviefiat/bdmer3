@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute } from '@angular/router';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -25,21 +27,23 @@ import { WindowService } from '../../modules/core/services/index';
 export class ViewZoneComponent implements OnInit { 
     @Input() zone: Zone;   
     @Input() site: Site;
-    transects$: Observable<Transect[]>;
-    zonesPref$: Observable<ZonePreference[]>;
+    @Input() transects$: Observable<Transect[]>;
+    @Input() zonesPref$: Observable<ZonePreference[]>;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
+    actionsSubscription: Subscription;
     view$: Observable<string>;
     panelDisplay = new FormControl('transects');
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private windowService: WindowService) { 
+        this.actionsSubscription = route.params
+          .map(params => this.display(params.view))
+          .subscribe();
+    }
 
 
     ngOnInit() {
-        console.log(this.zone);
-        this.transects$ = of(this.zone.transects);
-        this.zonesPref$ = of(this.zone.zonePreferences);
-        this.view$ = of('transects');
+        //this.view$ = of('transects');
     }
 
 
@@ -68,8 +72,14 @@ export class ViewZoneComponent implements OnInit {
     }
 
     display(view: string){
-        console.log(view);
-        this.view$ = of(view);
+        if(view === "zonesPref"){
+            this.view$ = of(view);        
+            this.panelDisplay.setValue('zonesPref');
+        }
+        else {
+            this.view$ = of('transects');
+            this.panelDisplay.setValue('transects');
+        }
     }
 
     toSites(){

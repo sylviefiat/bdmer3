@@ -240,6 +240,7 @@ export class SiteService {
     return this.getSite(site.code)
       .filter(site => site!==null)
       .mergeMap(st => {  
+        if(!count.mesures) count.mesures = [];
         let cp = st.campaigns.filter(c => c.code === count.codeCampaign)[0];
         if(cp){
           if(cp.counts.filter(c => c.code === count.code).length > -1){

@@ -73,6 +73,6 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
   }
 
   removeTransect(transect: Transect){
-    this.store.dispatch(new SiteAction.AddTransectAction(transect));
+    this.store.dispatch(new SiteAction.RemoveTransectAction(transect));
   }
 }

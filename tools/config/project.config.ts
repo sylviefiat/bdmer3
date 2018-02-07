@@ -46,6 +46,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
         }, {
+            name: 'moment',
+            path: 'node_modules/moment/moment.js'
+        }, {
+            name: 'angular2-moment',
+            path: 'node_modules/angular2-moment/index.js'
+        }, {
             name: 'jquery',
             path: 'node_modules/jquery/dist/jquery.min.js'
         }, {

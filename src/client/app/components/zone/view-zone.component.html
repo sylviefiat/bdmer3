@@ -8,8 +8,8 @@
       <mat-card-actions>
         <mat-form-field>
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
-              <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ zone.zonePreferences?zone.zonePreferences.length:0 }})</mat-option>
-              <mat-option [value]="'transects'">{{ 'TRANSECTS' | translate}} ({{ zone.transects?zone.transects.length:0 }})</mat-option>
+              <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ (zonesPref$ | async).length }})</mat-option>
+              <mat-option [value]="'transects'">{{ 'TRANSECTS' | translate}} ({{ (transects$ | async).length }})</mat-option>
           </mat-select>
         </mat-form-field> 
         <mat-form-field>
@@ -31,9 +31,9 @@
       </mat-card-actions>           
     </mat-card>
     
-        <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref]="zonesPref$ | async" [zone]="zone" [site]="site"></bc-zone-preference-preview-list>
+        <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="zonesPref$" [zone]="zone" [site]="site"></bc-zone-preference-preview-list>
 
-        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects]="transects$ | async" [zone]="zone" [site]="site"></bc-transect-preview-list>          
+        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects$]="transects$" [zone]="zone" [site]="site"></bc-transect-preview-list>          
      
     
    

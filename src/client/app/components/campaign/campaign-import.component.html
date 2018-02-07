@@ -17,6 +17,9 @@
     <mat-card-content>
       {{'IMPORT_DESC' | translate }}    
     </mat-card-content>
+    <mat-card-content class="warn">
+      {{'IMPORT_DESC_DATE' | translate }}      
+    </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_CSV_CAMPAIGNS' | translate }}</h5>
       <a *ngIf="!isAdmin" href="{{getCsvCampaignsUrl()}}" download>
