@@ -29,8 +29,11 @@ export class ViewZoneComponent implements OnInit {
     @Input() site: Site;
     @Input() transects$: Observable<Transect[]>;
     @Input() zonesPref$: Observable<ZonePreference[]>;
+    filteredTransects$: Observable<Transect[]>;
+    filteredZonesPrefs$: Observable<ZonePreference[]>;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
+    filterFormControl = new FormControl('', []);
     actionsSubscription: Subscription;
     view$: Observable<string>;
     panelDisplay = new FormControl('transects');
@@ -43,7 +46,8 @@ export class ViewZoneComponent implements OnInit {
 
 
     ngOnInit() {
-        //this.view$ = of('transects');
+        this.filteredTransects$ = this.transects$;
+        this.filteredZonesPrefs$ = this.zonesPref$;
     }
 
 
@@ -51,6 +55,35 @@ export class ViewZoneComponent implements OnInit {
         if (this.windowService.confirm("Are you sure you want to delete this zone from database ?")){
             this.remove.emit(this.zone);
         }
+    }
+
+    filter(filter: string){
+        filter=filter.toLowerCase();
+        switch (this.panelDisplay.value) {
+            case "transects":
+                this.filteredTransects$ = this.transects$.map(transects => 
+                    transects.filter(transect => transect.code.toLowerCase().indexOf(filter)!==-1 || 
+                        transect.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        transect.codeZone.toLowerCase().indexOf(filter)!==-1 ||
+                        transect.latitude.toLowerCase().indexOf(filter)!==-1 ||
+                        transect.longitude.toLowerCase().indexOf(filter)!==-1
+                        )
+                    );
+                break;
+            
+            default:
+                this.filteredZonesPrefs$ = this.zonesPref$.map(zonesPref => 
+                    zonesPref.filter(zonePref => zonePref.code.toLowerCase().indexOf(filter)!==-1 || 
+                        zonePref.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        zonePref.codeZone.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        zonePref.codeSpecies.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        zonePref.presence.toLowerCase().indexOf(filter)!==-1 ||
+                        zonePref.infoSource.toString().toLowerCase().indexOf(filter)!==-1
+                        )
+                    );
+                break;
+        }
+        
     }
 
     actions(type: string) {

@@ -47,7 +47,7 @@ import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoad
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry} from '../datas/index';
-import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign } from '../datas/index';
+import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -218,5 +218,6 @@ export const getSelectedZoneZonePrefs: any = compose(getCurrentZoneZonePrefs, ge
 export const getSelectedZonePref: any = compose(getCurrentSpPref, getSiteState);
 export const getSelectedTransect: any = compose(getCurrentTransect, getSiteState);
 export const getSelectedCampaign: any = compose(getCurrentCampaign, getSiteState);
+export const getSelectedCampaignCounts: any = compose(getCurrentCampaignCounts, getSiteState);
 export const getSelectedCount: any = compose(getCurrentCount, getSiteState);
 export const getSiteListCurrentCountry: any = compose(getSiteOfCurrentCountry, getAppState);

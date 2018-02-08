@@ -115,6 +115,12 @@ export function getCurrentCampaign(state$: Observable<ISiteState>) {
             .campaigns.filter(campaign => campaign.code === state.currentCampaignId)[0]);
 }
 
+export function getCurrentCampaignCounts(state$: Observable<ISiteState>) {
+    return state$.select(state => state.currentSiteId && state.currentCampaignId &&
+        state.entities.filter(site => site._id === state.currentSiteId)[0]
+            .campaigns.filter(campaign => campaign.code === state.currentCampaignId)[0].counts);
+}
+
 export function getCurrentTransectId(state$: Observable<ISiteState>) {
     return state$.select(state => state.currentTransectId);
 }

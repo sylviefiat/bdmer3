@@ -16,15 +16,15 @@ import { Site } from '../../modules/datas/models/site';
     <mat-card>
       <mat-card-title>{{ 'SITE_LIST' | translate}}</mat-card-title>
       <mat-card-content>
-      <mat-form-field>
-      <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="addSite($event.value)">
-          <mat-option [value]="'form'">{{ 'ADD_SITE' | translate}}</mat-option>
-          <mat-option [value]="'import'">{{ 'IMPORT' | translate}} {{ 'SITES' | translate}}</mat-option>
-      </mat-select>
-      </mat-form-field>
-      <mat-form-field class="right">
-        <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filterSites($event.target.value)">
-      </mat-form-field>
+        <mat-form-field>
+          <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filterSites($event.target.value)">
+        </mat-form-field>
+        <mat-form-field class="right">
+        <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="addSite($event.value)">
+            <mat-option [value]="'form'">{{ 'ADD_SITE' | translate}}</mat-option>
+            <mat-option [value]="'import'">{{ 'IMPORT' | translate}} {{ 'SITES' | translate}}</mat-option>
+        </mat-select>
+        </mat-form-field>     
       </mat-card-content>
       <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content> 
     </mat-card>

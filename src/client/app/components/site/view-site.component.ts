@@ -21,7 +21,7 @@ import { WindowService } from '../../modules/core/services/index';
     selector: 'bc-view-site',
     templateUrl: 'view-site.component.html',
     styleUrls: [
-        'view-site.component.css',
+    'view-site.component.css',
     ],
 })
 export class ViewSiteComponent implements OnInit, OnDestroy {
@@ -29,6 +29,9 @@ export class ViewSiteComponent implements OnInit, OnDestroy {
     @Input() msg: string | null;
     @Input() zones$: Observable<Zone[]>;
     @Input() campaigns$: Observable<Campaign[]>;
+    filteredZones$: Observable<Zone[]>;
+    filteredCampaigns$: Observable<Campaign[]>;
+    filterFormControl = new FormControl('', []);
     @Output() remove = new EventEmitter<Site>();
     @Output() action = new EventEmitter<String>();
     actionsSubscription: Subscription;
@@ -38,21 +41,50 @@ export class ViewSiteComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<IAppState>, route: ActivatedRoute,public routerext: RouterExtensions, private windowService: WindowService) { 
         this.actionsSubscription = route.params
-          .map(params => this.display(params.view))
-          .subscribe();
+        .map(params => this.display(params.view))
+        .subscribe();
     }
 
     ngOnInit() {   
-        //this.view$ = of('campaigns');
+        this.filteredZones$ = this.zones$;
+        this.filteredCampaigns$ = this.campaigns$;
     }
 
-      ngOnDestroy() {
+    ngOnDestroy() {
         this.actionsSubscription.unsubscribe();
-      }
+    }
 
     deleteSite() {
         if (this.windowService.confirm("Are you sure you want to delete this site from database ?"))
             return this.remove.emit(this.site);
+    }
+
+    filter(filter: string){
+        filter=filter.toLowerCase();
+        switch (this.panelDisplay.value) {
+            case "zones":
+                this.filteredZones$ = this.zones$.map(zones => 
+                    zones.filter(zone => zone.code.toLowerCase().indexOf(filter)!==-1 || 
+                        zone.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        zone.surface.toLowerCase().indexOf(filter)!==-1
+                        )
+                    );
+                break;
+            
+            default:
+                this.filteredCampaigns$ = this.campaigns$.map(campaigns => 
+                    campaigns.filter(campaign => campaign.code.toLowerCase().indexOf(filter)!==-1 || 
+                        campaign.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        campaign.dateStart.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        campaign.dateEnd.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        campaign.participants.toLowerCase().indexOf(filter)!==-1 ||
+                        campaign.surfaceTransect.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        campaign.description.toLowerCase().indexOf(filter)!==-1
+                        )
+                    );
+                break;
+        }
+        
     }
 
     actions(type: string) {
@@ -65,13 +97,13 @@ export class ViewSiteComponent implements OnInit, OnDestroy {
             case "zonePrefImport":
             case "transectImport":
             case "countImport":
-                this.action.emit(type+'/'+this.site._id);
-                break;
+            this.action.emit(type+'/'+this.site._id);
+            break;
             case "deleteSite":
-                this.deleteSite();
-                break;
+            this.deleteSite();
+            break;
             default:
-                break;
+            break;
         }
         
     }

@@ -12,7 +12,7 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
       [count]="count" 
       [campaign]="campaign" 
       [site]="site" [locale]="locale$ | async" 
-      [species]="speciesList$ | async">
+      [species]="species$ | async">
     </bc-count-preview>
   `,
   styles: [
@@ -29,7 +29,7 @@ export class CountPreviewListComponent implements OnInit {
   @Input() counts: Count[];
   @Input() campaign: Campaign;
   @Input() site: Site;
-  speciesList$: Observable<Species[]>;
+  species$: Observable<Species[]>;
   locale$: Observable<string>;
 
   constructor(private store: Store<IAppState>) {
@@ -37,7 +37,7 @@ export class CountPreviewListComponent implements OnInit {
   }
   ngOnInit() {
     this.locale$ = this.store.let(getLangues);
-    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.species$ = this.store.let(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 }

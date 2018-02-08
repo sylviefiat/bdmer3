@@ -15,7 +15,11 @@
         {{ 'DESCRIPTION' | translate }} : {{ campaign.description }}
       </mat-card-content>
       <mat-card-actions>
+        <form>
         <mat-form-field>
+          <input matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
+        </mat-form-field> 
+        <mat-form-field class="right">
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
             <mat-optgroup [label]="'ACTION_CAMPAIGN' | translate">
               <mat-option [value]="'campaignForm'">{{ 'EDIT_CAMPAIGN' | translate}}</mat-option>
@@ -28,9 +32,10 @@
               <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
             </mat-optgroup>
           </mat-select>
-        </mat-form-field>        
+        </mat-form-field>   
+        </form>     
       </mat-card-actions>       
     </mat-card>
 
-    <bc-count-preview-list [counts]="counts$ | async" [campaign]="campaign" [site]="site"></bc-count-preview-list>  
+    <bc-count-preview-list [counts]="filteredCounts$ | async" [campaign]="campaign" [site]="site"></bc-count-preview-list>  
  

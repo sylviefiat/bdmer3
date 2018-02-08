@@ -7,13 +7,17 @@
       </mat-card-content>
       <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content> 
       <mat-card-actions>
+        <form>
         <mat-form-field>
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
               <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ (zones$ | async)?.length }})</mat-option>
               <mat-option [value]="'campaigns'">{{ 'CAMPAIGNS' | translate}} ({{ (campaigns$ | async)?.length }})</mat-option>
           </mat-select>
         </mat-form-field> 
-        <mat-form-field>
+        <mat-form-field class="right">
+          <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
+        </mat-form-field>
+        <mat-form-field class="right">
           <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
             <mat-optgroup [label]="'ACTION_SITE' | translate">
               <mat-option [value]="'siteForm'">{{ 'EDIT_SITE' | translate}}</mat-option>
@@ -30,12 +34,13 @@
               <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
               <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
             </mat-optgroup>
-          </mat-select>
+          </mat-select>          
         </mat-form-field>        
+      </form>
       </mat-card-actions>
     </mat-card>
 
-    <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="zones$" [idSite]="site.code"></bc-zone-preview-list> 
+    <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="filteredZones$" [idSite]="site.code"></bc-zone-preview-list> 
 
-    <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns$]="campaigns$" [site]="site"></bc-campaign-preview-list> 
+    <bc-campaign-preview-list *ngIf="(view$ | async)==='campaigns'" [campaigns$]="filteredCampaigns$" [site]="site"></bc-campaign-preview-list> 
   
