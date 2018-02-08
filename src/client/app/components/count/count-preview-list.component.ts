@@ -1,13 +1,19 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
-import { Campaign, Zone, Site, Count } from './../../modules/datas/models/site';
+import { Campaign, Zone, Site, Count, Species } from './../../modules/datas/models/index';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { IAppState, getLangues } from './../../modules/ngrx/index';
+import { IAppState, getLangues, getSpeciesInApp } from './../../modules/ngrx/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
 
 @Component({
   selector: 'bc-count-preview-list',
   template: `
-    <bc-count-preview *ngFor="let count of counts" [count]="count" [campaign]="campaign" [site]="site" [locale]="locale$ | async"></bc-count-preview>
+    <bc-count-preview *ngFor="let count of counts" 
+      [count]="count" 
+      [campaign]="campaign" 
+      [site]="site" [locale]="locale$ | async" 
+      [species]="speciesList$ | async">
+    </bc-count-preview>
   `,
   styles: [
     `
@@ -23,6 +29,7 @@ export class CountPreviewListComponent implements OnInit {
   @Input() counts: Count[];
   @Input() campaign: Campaign;
   @Input() site: Site;
+  speciesList$: Observable<Species[]>;
   locale$: Observable<string>;
 
   constructor(private store: Store<IAppState>) {
@@ -30,5 +37,7 @@ export class CountPreviewListComponent implements OnInit {
   }
   ngOnInit() {
     this.locale$ = this.store.let(getLangues);
+    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.store.dispatch(new SpeciesAction.LoadAction());
   }
 }

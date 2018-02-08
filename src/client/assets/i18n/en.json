@@ -259,5 +259,8 @@
   "ACTION_ZONE":"Action on Zone",
   "ADD_CAMPAIGN TO":"Add campagne to",
   "NO_INVERTEBRATES":"No invertebrates",
-  "COUNT":"Count"
+  "COUNT":"Count",
+  "MULTISPECIES":"multispecies",
+  "COUNT_DETAIL":"Count details ",
+  "TOTAL":"Total"
 }

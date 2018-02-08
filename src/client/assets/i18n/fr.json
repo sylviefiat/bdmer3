@@ -258,5 +258,8 @@
   "ACTION_ZONE":"Action sur la Zone",
   "ADD_CAMPAIGN TO":"Ajouter une campagne à",
   "NO_INVERTEBRATES":"Pas d'invertébrés",
-  "COUNT":"Comptage"
+  "COUNT":"Comptage",
+  "MULTISPECIES":"multi-espèces",
+  "COUNT_DETAIL":"Détail du comptage ",
+  "TOTAL":"Total"
 }

@@ -8,10 +8,11 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCampaign,getSelectedCount, getLangues } from '../../modules/ngrx/index';
-import { Site, Zone, Campaign, Transect, Count } from '../../modules/datas/models/index';
+import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCampaign,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
+import { Site, Zone, Campaign, Transect, Count, Species } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { SiteAction } from '../../modules/datas/actions/index';
+import { SpeciesAction } from '../../modules/datas/actions/index';
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -31,7 +32,8 @@ import { SiteAction } from '../../modules/datas/actions/index';
       [site]="site$ | async"
       [campaign]="campaign$ | async"
       [count]="count$ | async"
-      [locale]="locale$ | async"
+      [locale]="locale$ | async" 
+      [species]="speciesList$ | async"
       (remove)="removeCount($event)"
       (action)="actionCount($event)">
     </bc-count>
@@ -45,6 +47,7 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   campaign$: Observable<Campaign | null>;
   count$: Observable<Count | null>;
   locale$: Observable<string>;
+  speciesList$: Observable<Species[]>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.siteSubscription = route.params
@@ -63,6 +66,8 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
     this.campaign$ = this.store.let(getSelectedCampaign);
     this.count$ = this.store.let(getSelectedCount);
     this.locale$ = this.store.let(getLangues);
+    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
   ngOnDestroy() {

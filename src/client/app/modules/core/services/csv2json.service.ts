@@ -289,12 +289,12 @@ export class Csv2JsonService {
                             break;
                         case "mesures":
                             let sp = data[headers.indexOf('codeSpecies')];
+                            // if there is no species name (let size of 2 for undesired spaces) break;
+                            if(sp.length<2) break;
                             if (ct.mesures == null) ct.mesures = [];
                             let mes = data[j].split(',');
-                            console.log(mes);
-                            for(let dims in mes){
+                            for(let dims of mes){
                                 let longlarg = dims.split('/');
-                                console.log(longlarg);
                                 ct.mesures.push({codeSpecies: sp, long: longlarg[0], larg: (longlarg.length>0)?longlarg[1]:'0'});
                             }
                             break;
@@ -324,9 +324,8 @@ export class Csv2JsonService {
                     skipEmptyLines: true,
                     download: true,
                     complete: function(results) {
-                        console.log(results);
-                        this.delimiter = results.meta.delimiter;
-                        console.log(this.delimiter);
+                        if(!results.data[0].indexOf('codeSpecies'))
+                            throw new Error('Wrong CSV File Missing mandatory "code" column');
                         observable.next(results);
                         observable.complete();
                     }

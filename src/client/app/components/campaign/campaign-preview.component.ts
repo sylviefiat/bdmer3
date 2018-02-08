@@ -73,7 +73,6 @@ export class CampaignPreviewComponent implements OnInit {
 
   ngOnInit(){
     this.nCounts = this.campaign.counts.length;
-    console.log(this.locale);
   }
 
   get id() {

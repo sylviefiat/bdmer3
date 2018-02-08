@@ -25,15 +25,26 @@
       </mat-card-actions> 
     </mat-card>
     <div class="inside">
-      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
       <mat-card>
-        <mat-card-title>{{ 'COUNT' | translate }}</mat-card-title>
-        <mat-card-content>
-        <li *ngFor="let mesure of count.mesures;">
-            {{ mesure.codeSpecies }}: {{mesure.long}}, {{mesure.larg}}
-        </li> 
-        <p  *ngIf="!count.mesures || count.mesures.length<=0">{{ 'NO_INVERTEBRATES' | translate }}</p>
-      </mat-card-content>
-             
+        <mat-card-content *ngIf="count.mesures && count.mesures.length>0">
+          <div>{{ 'COUNT_DETAIL' | translate }}
+            <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :          
+          </div>
+          <div class="mesures" *ngFor="let mesure of count.mesures; let i = index;">            
+            <div *ngIf="writeSp(i)">
+              <hr/>
+              <span class="speciesName">
+              {{ getSpeciesName(mesure.codeSpecies) }}
+              </span>
+              ({{'TOTAL' | translate}}: {{getNMesuresSpecies(mesure.codeSpecies)}}):
+            </div>
+            <li>
+              <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm, <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
+            </li>
+          </div>
+        </mat-card-content>
+        <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
+          <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
+        </mat-card-content>
       </mat-card>
   </div>

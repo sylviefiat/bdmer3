@@ -16,7 +16,8 @@ mat-card {
 .inside mat-card {
       flex-grow: 1;
       margin:auto;
-      text-align: center;
+      min-width: 300px;
+      text-align: left;
       padding: 1em 2em;
 }
 
@@ -46,3 +47,14 @@ mat-form-field {
   cursor: pointer;
   text-decoration: underline;
 }
+.speciesName {
+ font-style: italic;
+}
+.mesures {
+  padding-top: 5px;
+  margin-left: 15px;
+}
+
+    hr {
+      border-color: #fff;
+    }
