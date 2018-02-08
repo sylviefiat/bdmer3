@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site, Zone } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getLangues } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -33,13 +33,14 @@ export class TransectImportComponent implements OnInit{
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.store.take(1).subscribe((s: any) => {
-            this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importTransect.csv";
-        });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.store.let(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importTransect-"+l+".csv";
+        });
+    }
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);

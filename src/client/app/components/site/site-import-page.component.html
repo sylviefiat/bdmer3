@@ -16,15 +16,15 @@
     <mat-card-content>
       {{'IMPORT_DESC' | translate }}    
     </mat-card-content>
-    <mat-card-content class="warn" *ngIf="isAdmin">
+    <mat-card-content class="warn" *ngIf="isAdmin$ | async">
       {{'IMPORT_DESC_ADMIN' | translate }}      
     </mat-card-content>
     <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SITES' | translate }} <span *ngIf="isAdmin">{{ 'DOWNLOAD_CSV_SITES_ADMIN' | translate }}</span></h5>
-      <a *ngIf="!isAdmin" href="{{getCsvSitesUrl()}}" download>
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SITES' | translate }} <span *ngIf="isAdmin$ | async">{{ 'DOWNLOAD_CSV_SITES_ADMIN' | translate }}</span></h5>
+      <a *ngIf="!(isAdmin$ | async)" href="{{getCsvSitesUrl()}}" download>
           <fa [name]="'download'" [border]=true [size]=1></fa>
       </a>
-      <a *ngIf="isAdmin" href="{{getCsvSitesUrlAdmin()}}" download>
+      <a *ngIf="isAdmin$ | async" href="{{getCsvSitesUrlAdmin()}}" download>
           <fa [name]="'download'" [border]=true [size]=1></fa>
       </a>
     </mat-card-footer>

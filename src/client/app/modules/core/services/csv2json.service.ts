@@ -109,7 +109,8 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "code":
                         case "description":
-                        case "codeCountry":
+                        case "code_country":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
                         default:
@@ -135,8 +136,9 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code":
-                        case "codeSite":
+                        case "code_site":
                         case "surface":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
                         default:                            
@@ -162,17 +164,19 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "codeCountry":
-                        case "codeSite":
-                        case "codeZone":
+                        case "code_country":
+                        case "code_site":
+                        case "code_zone":
                         case "code":
                         case "participants":
-                        case "surfaceTransect":
+                        case "surface_transect":
                         case "description":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
-                        case "dateStart":
-                        case "dateEnd":
+                        case "date_start":
+                        case "date_end":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
                             if(delimiter === Csv2JsonService.SEMICOLON){
@@ -206,13 +210,14 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "codeSite":
-                        case "codeZone":
+                        case "code_site":
+                        case "code_zone":
                         case "code":
                         case "nom":
                         case "latitude":
                         case "longitude":
                         case "description":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
                         default:                            
@@ -237,12 +242,13 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "codeSite":
-                        case "codeZone":
+                        case "code_site":
+                        case "code_zone":
                         case "code":
-                        case "codeSpecies":
+                        case "code_species":
                         case "presence":
-                        case "infoSource":
+                        case "info_source":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
                         default:                            
@@ -268,11 +274,12 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "codeSite":
-                        case "codeZone":
-                        case "codeCampaign":
+                        case "code_site":
+                        case "code_zone":
+                        case "code_campaign":
                         case "code":
-                        case "codeTransect":
+                        case "code_transect":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             ct[headers[j]] = data[j];
                             break;
                         case "date":
@@ -298,7 +305,7 @@ export class Csv2JsonService {
                                 ct.mesures.push({codeSpecies: sp, long: longlarg[0], larg: (longlarg.length>0)?longlarg[1]:'0'});
                             }
                             break;
-                        case "codeSpecies":
+                        case "code_species":
                             ct['monospecies'] = true;
                             break;
                         default:                            
@@ -324,7 +331,7 @@ export class Csv2JsonService {
                     skipEmptyLines: true,
                     download: true,
                     complete: function(results) {
-                        if(!results.data[0].indexOf('codeSpecies'))
+                        if(!results.data[0].indexOf('code_species'))
                             throw new Error('Wrong CSV File Missing mandatory "code" column');
                         observable.next(results);
                         observable.complete();
@@ -370,8 +377,4 @@ export class Csv2JsonService {
 
     }
 
-    /*convertDate(dateStr: string): Date {
-        const [day, month, year] = dateStr.split("-");
-        return new Date(year, month - 1, day);
-    }*/
 }

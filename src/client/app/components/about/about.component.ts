@@ -18,7 +18,7 @@ export class AboutComponent {
 
   constructor(private injector: Injector, private store: Store<IAppState>) {
     this.store.take(1).subscribe((s: any) => {
-      this.docs_repo = "../../../assets/docs/";
+      this.docs_repo = "../../../assets/files/";
       
       switch (s.i18n.lang) {
         case "fr": {

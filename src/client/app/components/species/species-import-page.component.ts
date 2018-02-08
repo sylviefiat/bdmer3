@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Species } from '../../modules/datas/models/species';
 
-import { IAppState, getSpeciesPageError, getSelectedSpecies, getSpeciesPageMsg } from '../../modules/ngrx/index';
+import { IAppState, getSpeciesPageError, getSelectedSpecies, getSpeciesPageMsg, getLangues } from '../../modules/ngrx/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -29,15 +29,15 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.store.take(1).subscribe((s: any) => {
-            this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importSpecies.csv";
-        });
     }
 
     ngOnInit() {
         this.error$ = this.store.let(getSpeciesPageError);
         this.msg$ = this.store.let(getSpeciesPageMsg);
+        this.store.let(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importSpecies-"+l+".csv";
+        });
     }
 
     ngOnDestroy() {

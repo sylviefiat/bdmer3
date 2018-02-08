@@ -261,5 +261,6 @@
   "COUNT":"Comptage",
   "MULTISPECIES":"multi-espèces",
   "COUNT_DETAIL":"Détail du comptage ",
-  "TOTAL":"Total"
+  "TOTAL":"Total",
+  "FILTER":"Filtrer"
 }

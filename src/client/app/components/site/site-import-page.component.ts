@@ -8,7 +8,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Site } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getAuthCountry } from '../../modules/ngrx/index';
+import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getisAdmin, getLangues } from '../../modules/ngrx/index';
 import { SiteAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -23,7 +23,8 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class SiteImportPageComponent implements OnInit {
     error$: Observable<string | null>;
-    userCountry$: Observable<Country>;
+    isAdmin$: Observable<Country>;
+    locale$: Observable<boolean>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
@@ -31,17 +32,16 @@ export class SiteImportPageComponent implements OnInit {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.store.take(1).subscribe((s: any) => {
-            this.docs_repo = "../../../assets/docs/";
-            this.csvFile = "importSite.csv";
-            this.csvFileAdmin = "importSiteAdmin.csv";
-        });
     }
 
     ngOnInit() {
         this.error$ = this.store.let(getSitePageError);
-        
-        this.userCountry$ = this.store.let(getAuthCountry);
+        this.isAdmin$ = this.store.let(getisAdmin);
+        this.store.let(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importSite-"+l+".csv";
+            this.csvFileAdmin = "importSiteAdmin-"+l+".csv";
+        });
     }
 
     handleUpload(csvFile: any): void {
@@ -68,10 +68,6 @@ export class SiteImportPageComponent implements OnInit {
 
     getCsvSitesUrlAdmin(){
         return this.docs_repo + this.csvFileAdmin;
-    }
-
-    get isAdmin(){
-        return this.userCountry$.map(user => user.code === "AA");
     }
 
     return() {
