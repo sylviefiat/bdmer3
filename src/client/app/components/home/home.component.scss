@@ -1,6 +1,35 @@
 :host {
-  display: block;
-  padding: 0 16px;
+  color: white;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+.background {  
+  background: url("../../../assets/img/overlay.png"), url("../../../assets/img/Ressources-6-P.DUMAS.jpg");
+  background-size: 256px 256px, cover;
+  background-attachment: fixed;
+  background-position: top,left,bottom,center;
+  background-repeat: repeat, no-repeat;
+  background-color: rgba(0,0,0,0.2);
+  width: 100vw;
+  height:100vh;
+  position: absolute;  
+  top:0;
+  left:0;
+  filter: blur(5px) brightness(80%);
+  z-index: -1;
+}
+
+
+h2 {
+  padding-top: 100px;
+  padding-bottom: 75px;
+  font-size: 56px;
+}
+
+p {
+  font-size: 36px;
 }
 
 input {
