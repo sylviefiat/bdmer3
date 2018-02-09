@@ -34,7 +34,8 @@ export class NewCountryComponent implements OnInit {
   constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
 
   ngOnInit() {
-    this.countryList$ = this.store.let(getCountryList);
+    this.countryList$ = this.store.let(getCountryList)
+      .map((countries:Country[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0)));
     this.store.dispatch(new CountriesAction.LoadAction()); 
     this.countriesIds$ = this.store.let(getCountriesIdsInApp);
   }

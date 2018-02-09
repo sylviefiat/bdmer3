@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Country } from './../../modules/countries/models/country';
 
 @Component({
@@ -17,14 +17,10 @@ import { Country } from './../../modules/countries/models/country';
   `,
   ],
 })
-export class CountryPreviewListComponent /*implements AfterViewChecked*/ {
+export class CountryPreviewListComponent implements OnInit {
   @Input() countries: Country[];
 
-  /*ngAfterViewChecked() {     
-    //console.log(this.countries);   
+  ngOnInit() {     
+    this.countries = this.countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));
   }
-
-  get pays() {
-    return this.countries;
-  }*/
 }

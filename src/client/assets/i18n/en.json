@@ -263,5 +263,9 @@
   "MULTISPECIES":"multispecies",
   "COUNT_DETAIL":"Count details ",
   "TOTAL":"Total",
-  "FILTER":"Filter"
+  "FILTER":"Filter",
+  "FUNDINGS":"Fundings",
+  "CONTACT":"Contacts",
+  "ABOUT_UMR_ENTROPIE":"UMR Entropie - IRD/UR/CNRS",
+  "ABOUT_LEOPOLD":"Marc Léopold"
 }
