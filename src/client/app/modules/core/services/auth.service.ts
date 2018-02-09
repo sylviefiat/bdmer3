@@ -21,6 +21,7 @@ export class AuthService {
   @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
   constructor(private countriesService: CountriesService) {
+    PouchDB.plugin(PouchDBAuth);
     var pouchOpts = {
       skipSetup: true
     };

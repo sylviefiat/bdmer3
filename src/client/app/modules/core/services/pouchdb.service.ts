@@ -4,8 +4,6 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import * as PouchDB from "pouchdb";
 import * as PouchDBAuth from "pouchdb-authentication";
-//import { Book } from '../../books/models/book';
-
 
 @Injectable()
 export class PouchDBService {

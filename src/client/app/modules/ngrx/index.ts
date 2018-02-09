@@ -38,10 +38,7 @@ import { combineReducers } from '@ngrx/store';
  * notation packages up all of the exports into a single object.
  */
 import { IMultilingualState, multilingualReducer, getLang } from '../i18n/index';
-import { ISampleState, reducer, getNames} from '../sample/index';
-import { IBookState, bookReducer, getBooksEntities, getBookIds, getSelectedBookId, getSelectedBook, getAll } from '../books/index';
-import { ICollectionState, collectionReducer, getCollectionLoaded, getCollectionLoading, getCollectionBookIds, getCollectionBook, isSelectedBookInCollection } from '../books/index';
-import { ISearchState, searchReducer, getSearchBookIds, getSearchResults, getSearchLoading, getSearchQuery } from '../books/index';
+import { IMainState, reducer, getNames} from '../main/index';
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
@@ -55,10 +52,7 @@ import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurren
  */
 export interface IAppState {
   i18n: IMultilingualState;
-  sample: ISampleState;
-  book: IBookState;
-  collection: ICollectionState;
-  search: ISearchState;
+  main: IMainState;
   auth: IAuthState;
   loginpage: ILoginPageState;
   countries: ICountriesState;
@@ -76,10 +70,7 @@ export interface IAppState {
  */
 const reducers = {
   i18n: multilingualReducer,
-  sample: reducer,
-  book: bookReducer,
-  collection: collectionReducer,
-  search: searchReducer,
+  main: reducer,
   auth: authReducer,
   loginpage: loginPageReducer,
   countries: countriesReducer,
@@ -106,17 +97,8 @@ export function AppReducer(state: any, action: any) {
 export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
   return state$.select(s => s.i18n);
 }
-export function getNameListState(state$: Observable<IAppState>): Observable<ISampleState> {
-  return state$.select(s => s.sample);
-}
-export function getBookState(state$: Observable<IAppState>): Observable<IBookState> {
-  return state$.select(s => s.book);
-}
-export function getCollectionState(state$: Observable<IAppState>): Observable<ICollectionState> {
-  return state$.select(s => s.collection);
-}
-export function getSearchState(state$: Observable<IAppState>): Observable<ISearchState> {
-  return state$.select(s => s.search);
+export function getNameListState(state$: Observable<IAppState>): Observable<IMainState> {
+  return state$.select(s => s.main);
 }
 export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
   return state$.select(s => s.auth);
@@ -143,26 +125,6 @@ export function getAppState(state$: Observable<IAppState>): Observable<IAppState
 // i18n
 export const getLangues: any = compose(getLang, getMultilingualState);
 export const getListNames: any = compose(getNames, getNameListState);
-
-// Book
-export const getBookEntities: any = compose(getBooksEntities, getBookState);
-export const getBooksIds: any = compose(getBookIds, getBookState);
-export const getIdBookSelected: any = compose(getSelectedBookId, getBookState);
-export const getBookSelected = compose(getSelectedBook,getBookState);
-export const getAllBooks = compose(getAll,getBookState);
-
-// Collection
-export const getCollectionisLoaded = compose(getCollectionLoaded, getCollectionState);
-export const getCollectionisLoading: any = compose(getCollectionLoading, getCollectionState);
-export const getBookIdsCollection: any = compose(getCollectionBookIds, getCollectionState);
-export const getBookCollection: any = compose(getCollectionBook,getAppState);
-export const selectedBookInCollection: any = compose(isSelectedBookInCollection,getAppState);
-
-// Search
-export const getBookIdsSearch: any = compose(getSearchBookIds, getSearchState);
-export const getQuerySearch: any = compose(getSearchQuery, getSearchState);
-export const getLoadingSearch: any = compose(getSearchLoading, getSearchState);
-export const getResultsSearch: any = compose(getSearchResults, getAppState);
 
 // Auth
 export const getisLoggedIn: any = compose(getLoggedIn, getAuthState);

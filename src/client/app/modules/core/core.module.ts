@@ -9,7 +9,6 @@ import { PapaParseModule } from 'ngx-papaparse';
 
 // module
 import { SharedModule } from '../shared/index';
-import { BooksModule } from '../books/index';
 import { CountriesModule } from '../countries/index';
 import { DatasModule } from '../datas/index';
 import { AuthModule } from '../auth/index';
@@ -30,7 +29,6 @@ interface ICoreModuleOptions {
 @NgModule({
   imports: [
     SharedModule,
-    BooksModule,
     CountriesModule,
     DatasModule,
     AuthModule,

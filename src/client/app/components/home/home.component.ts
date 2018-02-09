@@ -5,8 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getListNames  } from '../../modules/ngrx/index';
-import { NameList } from '../../modules/sample/index';
+import { IAppState  } from '../../modules/ngrx/index';
 
 
 @Component({
@@ -22,20 +21,8 @@ export class HomeComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
-    this.newName='';
-    this.names$ = this.store.let(getListNames);
-    //console.log(this.names$);
   }
 
-  /*
-   * @param newname  any text as input.
-   * @returns return false to prevent default form submit behavior to refresh the page.
-   */
-  addName(): boolean {
-    this.store.dispatch(new NameList.AddAction(this.newName));
-    this.newName = '';
-    return false;
-  }
 
   readAbout() {
     // Try this in the {N} app
