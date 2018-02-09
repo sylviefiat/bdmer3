@@ -12,9 +12,7 @@
         <fa [name]="'database'" [border]=true [size]=3></fa>
       </mat-card-title-group>
       <mat-card-content>
-        <p>
           {{'ABOUT_FEAT1' | translate}}
-        </p>
       </mat-card-content>
     </mat-card>
 
@@ -24,25 +22,34 @@
         <fa [name]="'cogs'" [border]=true [size]=3></fa> 
       </mat-card-title-group>
       <mat-card-content>
-        <p>
           {{'ABOUT_FEAT2' | translate}}
-        </p>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="content">
       <mat-card-title-group>
         <mat-card-title>{{'ABOUT_TITLE_FEAT3' | translate}}</mat-card-title>
-        <fa [name]="'file-text-o'" [border]=true [size]=3></fa>
+        <fa [name]="'graduation-cap'" [border]=true [size]=3></fa>
       </mat-card-title-group>
       <mat-card-content>
-        <p>
           {{'ABOUT_FEAT3' | translate}}
-        </p>
       </mat-card-content>
     </mat-card>
 
-    <a href="{{getPdfUrl()}}" title="{{getPdf()}}" download>
+    <mat-card class="content">
+      <mat-card-title-group>
+        <mat-card-title>{{'FUNDINGS' | translate}}</mat-card-title>
+        <fa [name]="'file-text-o'" [border]=true [size]=3></fa>
+      </mat-card-title-group>
+      <mat-card-content class="imagesContent">
+        <img src="{{logo_pn}}"/>
+        <img src="{{logo_vfd}}"/>
+        <img src="{{logo_ird}}"/>
+        <img src="{{logo_sfa}}"/>
+      </mat-card-content>
+    </mat-card>
+
+    <a href="{{PdfUrl}}" title="{{pdfFile}}" download>
       <mat-card class="content">
         <mat-card-title-group>
           <mat-card-title>{{'ABOUT_DOWNLOAD' | translate}}</mat-card-title>
@@ -55,6 +62,19 @@
         </mat-card-content>
       </mat-card>
     </a>
+
+    <mat-card class="content">
+      <mat-card-title-group>
+        <mat-card-title>{{'CONTACT' | translate}}</mat-card-title>
+        <fa [name]="'envelope'" [border]=true [size]=3></fa>
+      </mat-card-title-group>
+      <mat-card-content>
+          {{'ABOUT_UMR_ENTROPIE' | translate}} : <a href="{{siteEntropie}}"> {{siteEntropie}}</a>
+      </mat-card-content>
+      <mat-card-content>
+          {{'ABOUT_LEOPOLD' | translate}} : <a href="{{mailLeopold}}"> {{mailLeopold}}</a>
+      </mat-card-content>
+    </mat-card>
 </div>
 </div>
 

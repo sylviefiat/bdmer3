@@ -45,14 +45,25 @@
     color:white;
     border-radius: 3px;
   }
-  img {
-    width: 60px;
-    min-width: 60px;
-    margin-left: 5px;
-  }
   mat-card-content {
+    text-align: left;
     margin-top: 15px;
     margin: 15px 0 0;
+  }
+  mat-card-content a {
+    text-decoration: underline;;
+  }
+  mat-card-content.imagesContent {
+    display:flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    vertical-align: bottom;
+  }
+  mat-card-content.imagesContent img {
+    width: 22%;
+    height: 22%;
+    align-self: flex-end;
   }
   span {
     display: inline-block;
@@ -61,38 +72,3 @@
   mat-card-footer {
     padding: 0 25px 25px;
   }
-
-/*.feature-list .body {
-  font-size: 16;
-  color: #555;
-  margin: 0 0 5 0;
-}
-
-.h1 {
-  color: #106cc8;
-  font-size: 24;
-}
-
-.h4 {
-  color: #999;
-  font-size: 18;
-  }*/
-/*.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  }*/
-/*mat-card {
-      max-width: 500px;
-      margin:10px;
-      }*/
-
-/**/
-
-/*a {
-  text-decoration: none;
-}
-
-a:hover mat-card.download {
-  
-}*/
