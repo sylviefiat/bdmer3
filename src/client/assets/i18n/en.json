@@ -37,8 +37,10 @@
   "BDMER_LOGIN":"Log in to BDMER³",
   "USERNAME":"Username",
   "PASSWORD":"Password",
+  "REPASSWORD":"Retype password",
   "NAME":"Name",
   "FIRSTNAME":"First name",
+  "EMAIL":"Email",
   "FORGOT_PASSWORD":"Forgot password ?",
   "NEW_USER":"Register new user in BDMER³",
   "STATS":"Statistics",
@@ -267,5 +269,8 @@
   "FUNDINGS":"Fundings",
   "CONTACT":"Contacts",
   "ABOUT_UMR_ENTROPIE":"UMR Entropie - IRD/UR/CNRS",
-  "ABOUT_LEOPOLD":"Marc Léopold"
+  "ABOUT_LEOPOLD":"Marc Léopold",
+  "DELETE_COUNTRY":"Delete country",
+  "NO_USERS":"There is no known users for this country",
+  "COUNTRY_LIST":"Countries BDMER³"
 }

@@ -1,45 +1,88 @@
-    :host {
+  .insideform {
       display: flex;
+      flex-direction: column;
       justify-content: center;
+      flex-wrap: wrap;
       margin: 72px 0;
     }
-    mat-card {
-      margin: 15px;
-      width: 400px;
+    .insideform mat-card {
+      flex-grow: 1;
+      margin:10px 20%;
     }
+
     mat-card-title,
     mat-card-content {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
     }
-    mat-card-content form {
-      width: 100%;
+    mat-card-subtitle {
+        color: #555;
     }
-    mat-card-content .mat-card-sm-image {
-      margin-left: 10px;
-      width: 3em !important;
-      height: 2em !important;
-    }
-    mat-input-container {
+    mat-input-container, mat-form-field {
+      flex-grow: 1;
       padding-left: 1em;
     }
-    input {
-      width: 300px;
+    mat-card-actions {
+      margin: 5px 0 0 !important;
     }
-    .countryError {
-      padding: 16px;
-      width: 300px;
-      font-color: white;
-      background-color: red;
-    }
-    .countryButtons {
+    /*input {
+      flex-grow: 1;
+      min-width: 300px;
+    }*/
+    .column {
       display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
+      flex-direction: column;    
     }
-    .loginError {
-      padding: 16px;
-      width: 300px;
-      font-color: white;
-      background-color: red;
+    .row {
+      display: flex;
+      flex-grow: 1;    
+    }
+    .mat-form-field {
+      /*width: auto;
+      padding-left: 2em;*/
+    }
+    .mat-input-container {
+      /*width: auto;*/
+    }
+    .hint {
+        /* Position the hint */
+        position: absolute;
+        left: 2px;
+        right: auto;
+        bottom: 7px;
+        /* Copy styles from ng-messages */
+        font-size: 12px;
+        line-height: 14px;
+        transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+        /* Set our own color */
+        color: grey; 
+    }
+    .btn[disabled], .mat-input-element[disabled] {
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: .65;
+    }
+    .warn {
+      color: white;
+      background-color: #d9534f;
+    }
+    .clickable {
+      padding: 0 1px 2px 2px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .actions {
+      text-align: center;
+    }
+    .back {
+      background-color: darkgrey;
+    }
+    .forbidden {
+      color: red;
+    }
+    .subheader {
+      font-weight: bold;
+      font-size: 2em;
+      display: flex;
+      justify-content: space-between;
     }

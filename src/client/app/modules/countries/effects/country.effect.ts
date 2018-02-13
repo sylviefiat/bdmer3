@@ -1,6 +1,8 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/delay';
+import { Router } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
@@ -30,7 +32,6 @@ export class CountryEffects {
    * Wrapping the database open call in `defer` makes
    * effect easier to test.
    */
-
 
   @Effect()
   addUserToCountry$: Observable<Action> = this.actions$
@@ -63,17 +64,29 @@ export class CountryEffects {
 
   @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
     .ofType(CountryAction.ActionTypes.ADD_USER_SUCCESS)
-    .do(() => {
-      this.location.back();
-    });
+    .map((action: CountryAction.AddUserSuccessAction) => action.payload)
+    .mergeMap((country: Country) => this.router.navigate(['/countries/' + country.code]))
+    .delay(3000)
+    .map(() => this.store.dispatch(new CountryAction.RemoveMsgAction())); 
+
+  @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$
+    .ofType(CountryAction.ActionTypes.REMOVE_USER_SUCCESS)
+    .do(() => console.log("remove user success"))
+    .delay(3000)
+    .map(() => this.store.dispatch(new CountryAction.RemoveMsgAction())); 
 
   @Effect({ dispatch: false }) select$ = this.actions$
     .ofType(CountryAction.ActionTypes.SELECT)
-    .map(() => this.store.dispatch(new SiteAction.LoadAction()));
+    .map(() => this.store.dispatch(new CountryAction.LoadAction()));
+
+  @Effect({ dispatch: false }) selectUser$ = this.actions$
+    .ofType(CountryAction.ActionTypes.SELECT_USER)
+    .map(() => this.store.dispatch(new CountryAction.LoadUserAction()));
 
   constructor(
     private actions$: Actions,
     private store: Store<IAppState>,
+    private router: Router,
     private countriesService: CountriesService,
     private authService: AuthService,
     public location: Location) {

@@ -15,6 +15,7 @@ export interface User {
   email: string;
   countryCode: string;
   password?:string;
+  repassword?:string;
   role: string;
 }
 

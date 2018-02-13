@@ -120,7 +120,6 @@ export class CountriesService {
   }
 
   getUser(uname: string): Observable<User> {
-    console.log(uname);
     return fromPromise(this.db.query(function(doc, emit){
       doc.users && doc.users.forEach(function(user){
         emit(user.username);
@@ -130,7 +129,6 @@ export class CountriesService {
         return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
           result.rows[0].doc.users.filter(user => user.username === uname) && result.rows[0].doc.users.filter(user => user.username === uname)[0];
       })
-      .catch(err => {console.log(err); return of(err)})
   }
 
   getCountryUser(username: string): Observable<Country> {
@@ -157,8 +155,9 @@ export class CountriesService {
   }
 
   addUser(user: User): Observable<Country> {
-    //console.log(user);
+    console.log(user);
     delete user.password;
+    delete user.repassword;
     return this.getCountry(user.countryCode)
       .mergeMap(country => {
         this.currentCountry = of(country);
@@ -166,12 +165,12 @@ export class CountriesService {
           country.users = [];
         }
         country.users[country.users.length] = user;
-        //console.log(country);
+        console.log(country);
         return fromPromise(this.db.put(country));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        // console.log("here");
+        console.log("here");
         return this.currentCountry;
       })
   }

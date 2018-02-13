@@ -33,7 +33,7 @@ export function getCountriesEntities(state$: Observable<ICountriesState>){
 }
 
 export function getAllCountriesEntities(state$: Observable<ICountriesState>){
-  return state$.select(state => {console.log(state);return state.entities});
+  return state$.select(state => state.entities);
 }
 
 export function getCountriesIds(state$: Observable<ICountriesState>){

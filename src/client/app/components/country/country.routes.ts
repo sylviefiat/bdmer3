@@ -21,7 +21,12 @@ export const CountryRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'countries/:id/newuser',
+    path: 'countries/:idCountry/userForm',
+    component: NewUserPageComponent, 
+    canActivate : [AuthGuard]
+  },
+  {
+    path: 'countries/:idCountry/userForm/:idUser',
     component: NewUserPageComponent, 
     canActivate : [AuthGuard]
   }

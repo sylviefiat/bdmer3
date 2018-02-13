@@ -14,7 +14,10 @@ export namespace CountryAction {
     REMOVE_USER_SUCCESS: string;
     REMOVE_USER_FAIL: string;
     LOAD: string;
+    LOAD_USER: string;
     SELECT: string;
+    SELECT_USER: string;
+    REMOVE_MSG: string;
   }
 
   export const ActionTypes: ICountryActions = {
@@ -25,7 +28,10 @@ export namespace CountryAction {
     REMOVE_USER_SUCCESS: type(`${COUNTRY} Remove user Success`),
     REMOVE_USER_FAIL: type(`${COUNTRY} Remove user Fail`),
     LOAD: type(`${COUNTRY} Load country`),
-    SELECT: type(`${COUNTRY} Select`)
+    LOAD_USER: type(`${COUNTRY} Load user`),
+    SELECT: type(`${COUNTRY} Select`),
+    SELECT_USER: type(`${COUNTRY} Select User`),
+    REMOVE_MSG: type(`${COUNTRY} Remove msg`)
   };
 
   /**
@@ -76,12 +82,27 @@ export namespace CountryAction {
 
   export class LoadAction implements Action {
     readonly type = ActionTypes.LOAD;
-    constructor(public payload: Country) {}
+    payload: string = null;
+  }
+
+  export class LoadUserAction implements Action {
+    readonly type = ActionTypes.LOAD_USER;
+    payload: string = null;
   }
 
   export class SelectAction implements Action {
     readonly type = ActionTypes.SELECT;
     constructor(public payload: any) {}
+  }
+
+  export class SelectUserAction implements Action {
+    readonly type = ActionTypes.SELECT_USER;
+    constructor(public payload: any) {}
+  }
+
+  export class RemoveMsgAction implements Action {
+    readonly type = ActionTypes.REMOVE_MSG;
+    payload: string = null;
   }
 
   export type Actions =
@@ -91,5 +112,9 @@ export namespace CountryAction {
     | RemoveUserAction
     | RemoveUserSuccessAction
     | RemoveUserFailAction
-    | SelectAction;
+    | LoadAction
+    | LoadUserAction
+    | SelectAction
+    | SelectUserAction
+    | RemoveMsgAction;
 }

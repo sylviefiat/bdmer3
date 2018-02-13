@@ -41,7 +41,7 @@ import { IMultilingualState, multilingualReducer, getLang } from '../i18n/index'
 import { IMainState, reducer, getNames} from '../main/index';
 import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
-import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry} from '../countries/index';
+import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry} from '../datas/index';
 import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
@@ -151,9 +151,11 @@ export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesSt
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 
 // Country
-export const getSelectedCountry: any = compose(getCurrentCountry, getAppState);
+export const getSelectedCountry: any = compose(getCurrentCountry, getAppState); 
 export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
-export const getUserCountry: any = compose(getCurrentUser, getCountryState);
+export const getSelectedUser: any = compose(getCurrentUser, getAppState);
+export const getUserMessage: any = compose(getUserMsg, getCountryState);
+export const getUserErr : any = compose(getUserError,getCountryState);
 
 // Species
 export const getSpeciesisLoaded: any = compose(getSpeciesLoaded, getSpeciesState);

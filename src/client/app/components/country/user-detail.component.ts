@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../modules/ngrx/index';
+import { RouterExtensions, Config } from '../../modules/core/index';
+import { ActivatedRoute } from '@angular/router';
 
 import { User } from './../../modules/countries/models/country';
 import { CountryAction } from '../../modules/countries/actions/index';
@@ -9,9 +11,12 @@ import { CountryAction } from '../../modules/countries/actions/index';
   selector: 'bc-user-detail',
   template: `
     <li>
-      {{firstname}} {{lastname}}
+      {{firstname}} {{lastname}} ({{username}})
       <a *ngIf="hasactions" href="mailto:{{email}}">
-        <fa [name]="'envelope'" [border]=false [size]=1></fa>
+        <fa [name]="'envelope'" [border]=false [size]=1></fa> {{email}}
+      </a>
+      <a *ngIf="hasactions" href="javascript:void(0);" (click)="editUser()">
+        <fa [name]="'edit'" [border]=false [size]=1></fa>
       </a>
       <a *ngIf="hasactions && isNotAdmin()" href="javascript:void(0);" (click)="removeUserFromCountry()" >
         <fa [name]="'trash'" [border]=false [size]=1></fa>
@@ -50,7 +55,7 @@ export class UserDetailComponent {
   @Input() user: User;
   @Input() hasactions: boolean;
 
-  constructor(private store: Store<IAppState>){}
+  constructor(private store: Store<IAppState>, public activatedRoute: ActivatedRoute, public routerext: RouterExtensions){}
 
   /**
    * Tip: Utilize getters to keep templates clean
@@ -64,8 +69,22 @@ export class UserDetailComponent {
     return this.user.name;
   }
 
+  get username() {
+    return this.user.username;
+  }
+
   get email() {
     return this.user.email;
+  }
+
+  editUser() {
+    this.routerext.navigate(['userForm/'+this.user.username], {
+      relativeTo: this.activatedRoute,
+      transition: {
+        duration: 1000,
+        name: 'slideTop',
+      }
+    });
   }
 
   removeUserFromCountry() {

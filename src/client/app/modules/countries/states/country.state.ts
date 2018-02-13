@@ -7,8 +7,8 @@ export interface ICountryState {
   users: { [id: string]: User };
   currentUserId: string;
   currentCountryId: string;
-   error: string | null;
- /*pending: boolean;*/
+  error: string | null;
+  msg: string | null
 }
 
 export const countryInitialState: ICountryState = {
@@ -16,7 +16,8 @@ export const countryInitialState: ICountryState = {
   users: {},
   currentUserId: null,
   currentCountryId: null,
-  error: null
+  error: null,
+  msg: null
 };
 
 
@@ -32,8 +33,11 @@ export function getCurrentUserId(state$: Observable<ICountryState>){
   return state$.select(state => state.currentUserId);
 }
 
-export function getCurrentUser(state$: Observable<ICountryState>){
-  return state$.select(state => state.users[state.currentUserId]);
+export function getCurrentUser(state$: Observable<IAppState>){
+  return state$.select(state => state.country.currentCountryId && state.country.currentUserId &&
+    state.countries.entities
+      .filter(country => country.code === state.country.currentCountryId)[0].users
+      .filter(user => user.username === state.country.currentUserId)[0]);
 }
 
 export function getCurrentCountry(state$: Observable<IAppState>){
@@ -42,6 +46,10 @@ export function getCurrentCountry(state$: Observable<IAppState>){
 
 export function getUserError(state$: Observable<ICountryState>){
   return state$.select(state => state.error);
+}
+
+export function getUserMsg(state$: Observable<ICountryState>){
+  return state$.select(state => state.msg);
 }
 
 
