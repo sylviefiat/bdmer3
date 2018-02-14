@@ -10,35 +10,69 @@ import { CountryAction } from '../../modules/countries/actions/index';
 @Component({
   selector: 'bc-user-detail',
   template: `
-    <li>
-      {{firstname}} {{lastname}} ({{username}})
-      <a *ngIf="hasactions" href="mailto:{{email}}">
-        <fa [name]="'envelope'" [border]=false [size]=1></fa> {{email}}
-      </a>
-      <a *ngIf="hasactions" href="javascript:void(0);" (click)="editUser()">
-        <fa [name]="'edit'" [border]=false [size]=1></fa>
-      </a>
-      <a *ngIf="hasactions && isNotAdmin()" href="javascript:void(0);" (click)="removeUserFromCountry()" >
-        <fa [name]="'trash'" [border]=false [size]=1></fa>
-      </a>
-    </li>
+    <mat-card>
+      <mat-card-title-group>
+        <mat-card-title>{{ firstname }} {{lastname}}</mat-card-title>
+        <mat-card-subtitle>{{ username }}</mat-card-subtitle>
+      </mat-card-title-group>
+      <mat-card-content *ngIf="email">
+        <a *ngIf="hasactions" href="mailto:{{email}}">
+          <fa [name]="'envelope'" [border]=false [size]=1></fa> {{email}}
+        </a>
+      </mat-card-content>
+      <mat-card-actions *ngIf="hasactions">
+        <button (click)="editUser()"> 
+          <fa [name]="'edit'" [border]=false [size]=1></fa> {{'EDIT' | translate}}
+        </button>
+        <button *ngIf="isNotAdmin()" class="warn" (click)="removeUserFromCountry()" >
+          <fa [name]="'trash'" [border]=false [size]=1></fa> {{'DELETE' | translate}}
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
   `,
   styles: [
     `
-    li {
-      list-style:none;
-      margin-left:0px;
-      padding: 2px;
+    mat-card {
+      width: 400px;
+      height: 300px;
+      margin: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
     }
-    li a {
-      padding-left: 10px;
+    @media only screen and (max-width: 768px) {
+      mat-card {
+        margin: 15px 0 !important;
+      }
+    }
+    mat-card:hover {
+      box-shadow: 3px 3px 16px -2px rgba(0, 0, 0, .5);
+    }
+    mat-card-title {
+      margin-right: 10px;
+    }
+    mat-card-title-group {
+      margin: 0;
+    }
+    a {
+      color: inherit;
       text-decoration: none;
     }
-    :host {
+    img {
+      width: auto !important;
+      margin-left: 5px;
+    }
+    mat-card-content {
+      margin-top: 15px;
+      margin: 15px 0 0;
+    }
+    mat-card-actions {
+      justify-content: space-evenly;
       display: flex;
-      justify-content: left;
-      margin: 15px 0;
+    }
+    .warn {
+       background-color: #d9534f;
     }
   `,
   ],

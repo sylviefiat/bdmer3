@@ -14,7 +14,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
         </mat-card-title-group>
         <mat-card-content>
           <mat-card-subtitle>{{ 'USERS' | translate}}</mat-card-subtitle>
-          <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="false"></bc-user-detail>
+          <ul *ngFor="let user of users">
+            <li>{{user.surname}} {{user.name}}</li>
+          </ul>
         </mat-card-content>
       </mat-card>
     </a>
@@ -23,7 +25,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
     `
     mat-card {
       width: 400px;
-      height: 300px;
+      min-height: 300px;
       margin: 15px;
     }
     @media only screen and (max-width: 768px) {

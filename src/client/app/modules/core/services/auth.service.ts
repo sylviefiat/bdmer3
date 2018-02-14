@@ -29,6 +29,7 @@ export class AuthService {
   }
 
   login({ username, password }: Authenticate): Observable<any> {
+    console.log(username);
     return fromPromise(this.db.login(username, password))
       .mergeMap((result: ResponsePDB) => {
         console.log(result);

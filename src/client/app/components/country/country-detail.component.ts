@@ -31,13 +31,8 @@ import { WindowService } from './../../modules/core/services/index';
       <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content> 
     </mat-card>
     <div class="inside">
-      <mat-card>
-        <mat-card-content>
-          <mat-card-subtitle>{{ 'USERS' | translate}}</mat-card-subtitle>
           <bc-user-detail *ngFor="let user of users" [user]="user" [hasactions]="true"></bc-user-detail>
-          <div *ngIf="noUsers">{{'NO_USERS' | translate}}</div>
-        </mat-card-content>
-      </mat-card>
+          <div *ngIf="noUsers">{{'NO_USERS' | translate}}</div>    
     </div>
 
   `,
@@ -65,7 +60,7 @@ import { WindowService } from './../../modules/core/services/index';
     }
     .inside {
       display: flex;
-          flex-direction: column;
+          flex-direction: row;
           justify-content: center;
           flex-wrap: wrap;
           margin: 72px 0;

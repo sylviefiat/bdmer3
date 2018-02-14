@@ -1,5 +1,5 @@
 
-    <mat-card class="actions">
+    <mat-card class="actions" *ngIf="site">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
       <mat-card-title><a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / {{ 'SITE' | translate}} {{ site.code }}</mat-card-title>
       <mat-card-content>
