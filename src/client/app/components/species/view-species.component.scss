@@ -1,33 +1,71 @@
- :host {
-      display: flex;
-      justify-content: center;
-      margin: 72px 0;
-    }
 mat-card {
-    min-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+.msg {
+  text-align: center;
+  padding: 16px;     
+  color: white;
+  background-color: #4BB543;
+}
+
+mat-card-title-group.main-title {
+  justify-content: space-evenly;
+  flex-direction: row-reverse;
+}
+mat-card-title-group img {
+  max-width:100px;
+  max-height: 70px;
+  width: auto;
+}
+.data, .inside {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+}
+.data mat-card, .inside mat-card {
+  width: 400px;
+  min-height: 100px;
+  margin: 15px;
+}
+.data mat-card-content {
+ 
 }
 mat-card-title {
-    font-style: italic;
+  font-style: italic;
 }
-mat-card-content, mat-card-actions {
-    display: flex;
-    justify-content:space-around;
+mat-card-content {
+  display: flex;
+  justify-content:space-around;
+  flex-direction: column;
 }
 mat-card-content.one{
-    display: flex;
-    justify-content:start;
-}
-.mat-card-sm-image {
-  width: auto !important;
-  margin-left: 15px;
-}
-.actions {
   display: flex;
+  justify-content:start;
+}
+.data mat-card-content, .inside mat-card-content {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }
-.table {
-    display: flex;
-    justify-content:space-between;
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+mat-form-field {
+  margin-left:50px;
+}
+.warn:hover {
+ background-color: #d9534f;
+}
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.right {
+  margin-left:15px;
 }
 .codename {
   font-size: smaller;
@@ -35,9 +73,40 @@ mat-card-content.one{
 .smallcaps {
   font-variant: all-small-caps;
 }
-.flexcolumn {
-  flex-direction: column;
+.greyed {
+  color: darkgrey;
 }
-.warn {
-  background-color: #d9534f;
+
+.hr-text {
+  line-height: 1em;
+  position: relative;
+  outline: 0;
+  border: 0;
+  color: black;
+  text-align: center;
+  height: 1.5em;
+  opacity: .5;
+  &:before {
+    content: '';
+    // use the linear-gradient for the fading effect
+    // use a solid background color for a solid bar
+    background: linear-gradient(to right, transparent, #818078, transparent);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+  }
+  &:after {
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    color: black;
+
+    padding: 0 .5em;
+    line-height: 1.5em;
+    // this is really the only tricky part, you need to specify the background color of the container element...
+    color: #818078;
+    background-color: #fcfcfa;
+  }
 }

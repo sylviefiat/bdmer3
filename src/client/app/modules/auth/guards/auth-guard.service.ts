@@ -37,14 +37,12 @@ export class AuthGuard implements CanActivate, OnInit {
     
     return this.loggedIn$.map(loggedIn => {
       if (loggedIn) {
-        console.log(loggedIn);
         return true;
       } else {
         this.store.dispatch(new AuthAction.LoginRedirect(state.url));
         return Observable.of(false);
       }
     }).catch((err) => {
-      console.log(err)
       this.store.dispatch(new AuthAction.LoginRedirect(state.url));
       return Observable.of(false);
     }).first();

@@ -1,5 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+
+import { Country } from '../../modules/countries/models/country';
 
 
 @Component({
@@ -8,10 +11,11 @@ import { FormGroup } from '@angular/forms';
   template: `
     <div [formGroup]="dimForm" class="container">
     <mat-card-content>
-      <mat-input-container>
-        <input type="text" matInput placeholder="Country code" formControlName="codeCountry" required>
-        <div class="hint">Ex: FR</div>
-      </mat-input-container>          
+      <mat-form-field>
+        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (change)="addSetCountry($event.value)" required>
+          <mat-option *ngFor="let pays of countries" [value]="pays.code" [disabled]="alreadySetCountries$ | async | bcHasIntersection:pays.code">{{ pays.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>         
     </mat-card-content>
     <mat-card-content> 
       <mat-input-container>
@@ -60,7 +64,30 @@ import { FormGroup } from '@angular/forms';
   `,
   ],
 })
-export class DimensionsComponent {
+export class DimensionsComponent implements OnInit {
     @Input('group')
     public dimForm: FormGroup;
+    @Input() countries: Country[];
+    @Input() alreadySetCountries$: Observable<string[]>;
+    oldCountryCode: string;
+
+    ngOnInit() {
+      if(this.dimForm.controls.codeCountry.value){
+        this.oldCountryCode = this.dimForm.controls.codeCountry.value;
+      }
+    }
+
+    addSetCountry(code: string){
+      this.alreadySetCountries$ = this.alreadySetCountries$.map(countries => {
+        console.log(countries);
+        if(this.oldCountryCode){
+          countries = countries.filter(country => country !== this.oldCountryCode);
+          console.log(countries);
+        }
+        countries.push(code);
+        console.log(countries);
+        return countries;
+      });
+    }
+
 }

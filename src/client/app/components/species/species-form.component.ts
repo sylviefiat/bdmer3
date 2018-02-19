@@ -2,12 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
 import { SpeciesAction } from '../../modules/datas/actions/index';
 import { Species, NameI18N } from '../../modules/datas/models/species';
+import { Country } from '../../modules/countries/models/country';
 
 @Component({
     moduleId: module.id,
@@ -19,11 +21,11 @@ import { Species, NameI18N } from '../../modules/datas/models/species';
     ],
 })
 export class SpeciesFormComponent implements OnInit {
-    //public species$: Observable<Species[]>;
 
     @Input() errorMessage: string | null;
     @Input() species: Species | null;
-
+    @Input() countries: Country[];
+    @Input() alreadySetCountries$: Observable<string[]>;
 
     @Output() submitted = new EventEmitter<Species>();
 
@@ -57,7 +59,6 @@ export class SpeciesFormComponent implements OnInit {
     initName() {
         if (this.species && this.species.names && this.species.names.length > 0) {
             const control = <FormArray>this.form.controls['names'];
-            console.log(this.species.names.length);
             let addrCtrl;
             for (let name of this.species.names) {
                 addrCtrl = this.newName(name.lang, name.name);
@@ -82,7 +83,7 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.species);
+        
         if (this.species) {
             this.form.controls.code.setValue(this.species.code);
             this.form.controls.scientificName.setValue(this.species.scientificName);
@@ -101,6 +102,11 @@ export class SpeciesFormComponent implements OnInit {
 
             this.form.controls.distribution.setValue(this.species.distribution);
             this.form.controls.habitatPreference.setValue(this.species.habitatPreference);
+            let alreadySetCountries: string[] = [];
+            for(let dims of this.species.legalDimensions){
+                alreadySetCountries.push(dims.codeCountry);
+            }
+            this.alreadySetCountries$ = of(alreadySetCountries);
         }
         this.initName();
         this.initLegalDim();
@@ -118,11 +124,6 @@ export class SpeciesFormComponent implements OnInit {
         const addrCtrl = this.newName('', '');
 
         control.push(addrCtrl);
-
-        /* subscribe to individual address value changes */
-        // addrCtrl.valueChanges.subscribe(x => {
-        //   console.log(x);
-        // })
     }
 
     removeName(i: number) {
@@ -143,11 +144,6 @@ export class SpeciesFormComponent implements OnInit {
         const addrCtrl = this.newLegalDim('', '', '');
 
         control.push(addrCtrl);
-
-        /* subscribe to individual address value changes */
-        // addrCtrl.valueChanges.subscribe(x => {
-        //   console.log(x);
-        // })
     }
 
     removeLegalDim(i: number) {
