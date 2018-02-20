@@ -45,6 +45,7 @@ import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getC
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry} from '../datas/index';
 import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
+import { IAnalyseState, analyseReducer, getUsedCountries, getUsedCampaigns, getUsedZones, getUsedTransects, getUsedSpecies, getMethods, getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg } from '../analyse/index'
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -59,6 +60,7 @@ export interface IAppState {
   country: ICountryState;
   species: ISpeciesState;
   site: ISiteState;
+  analyse: IAnalyseState;
 }
 
 /**
@@ -76,7 +78,8 @@ const reducers = {
   countries: countriesReducer,
   country: countryReducer,
   species: speciesReducer,
-  site: siteReducer
+  site: siteReducer,
+  analyse: analyseReducer
 };
 
 // ensure state is frozen as extra level of security when developing
@@ -117,6 +120,9 @@ export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpec
 }
 export function getSiteState(state$: Observable<IAppState>): Observable<ISiteState> {
   return state$.select(s => s.site);
+}
+export function getAnalyseState(state$: Observable<IAppState>): Observable<IAnalyseState> {
+  return state$.select(s => s.analyse);
 }
 export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
   return state$.select(s => s);
@@ -185,3 +191,16 @@ export const getSelectedCampaign: any = compose(getCurrentCampaign, getSiteState
 export const getSelectedCampaignCounts: any = compose(getCurrentCampaignCounts, getSiteState);
 export const getSelectedCount: any = compose(getCurrentCount, getSiteState);
 export const getSiteListCurrentCountry: any = compose(getSiteOfCurrentCountry, getAppState);
+
+// Analyse
+export const getAnalyseCountries: any = compose(getUsedCountries, getAnalyseState);
+export const getAnalyseCampaigns: any = compose(getUsedCampaigns, getAnalyseState);
+export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
+export const getTransectZones: any = compose(getUsedTransects, getAnalyseState);
+export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
+export const getAnalyseAvailableMethods: any = compose(getMethods, getAnalyseState);
+export const getAnalyseMethod: any = compose(getUsedMethod, getAnalyseState);
+export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
+export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
+export const getAnalyseResult: any = compose(getResult, getAnalyseState);
+export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);

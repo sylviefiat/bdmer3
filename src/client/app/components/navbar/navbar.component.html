@@ -7,6 +7,12 @@
 	<fa [name]="'info-circle'" [border]=true></fa>
   	{{'ABOUT' | translate}}
   </a>
+
+  <a *ngIf="(isLogged$ | async)" [routerLink]="['/analyse']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <fa [name]="'cogs'" [border]=true></fa>
+    {{'MENU_ANALYSE' | translate}}
+  </a>
+
   <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MAP' | translate}}</a>
 
   <a *ngIf="(isLogged$ | async)" [routerLink]="['/site']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">

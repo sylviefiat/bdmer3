@@ -11,6 +11,7 @@ import { TransectRoutes } from './transect/transect.routes';
 import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
 import { ZoneRoutes } from './zone/zone.routes';
 import { CountRoutes } from './count/count.routes';
+import { AnalyseRoutes } from './analyse/analyse.routes';
 import { NotFoundPageComponent } from '../modules/shared/components/not-found-page';
 
 export const routes: Array<any> = [
@@ -26,5 +27,6 @@ export const routes: Array<any> = [
   ...PreferenceAreaRoutes,
   ...ZoneRoutes,
   ...CountRoutes,
+  ...AnalyseRoutes,
   { path: '**', component: NotFoundPageComponent }
 ];
