@@ -151,6 +151,10 @@ export class SpeciesFormComponent implements OnInit {
         control.removeAt(i);
     }
 
+    echangeCountry(codes: string[]){
+        this.alreadySetCountries$ = this.alreadySetCountries$.map(countries => [...countries.filter(code => code!==codes[0] && code!==codes[1]),codes[1]]);
+    }
+
     submit() {
         console.log("submit");
         if (this.form.valid) {

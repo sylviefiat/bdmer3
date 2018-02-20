@@ -27,7 +27,6 @@ export class AuthEffects {
     .ofType(AuthAction.ActionTypes.LOGIN)
     .map((action: AuthAction.Login) => action.payload)
     .exhaustMap(auth => {
-      console.log(auth);
       return this.authService
         .login(auth)
         .map((result: AccessToken) => {

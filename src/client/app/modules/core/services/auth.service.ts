@@ -29,15 +29,12 @@ export class AuthService {
   }
 
   login({ username, password }: Authenticate): Observable<any> {
-    console.log(username);
     return fromPromise(this.db.login(username, password))
       .mergeMap((result: ResponsePDB) => {
-        console.log(result);
         if (result.ok && result.roles.length > 0){
           return this.setUser(username);
         }
         else {
-          console.log(result);
           throw Observable.throw(result); 
         }
       });

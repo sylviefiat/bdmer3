@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
@@ -8,12 +8,14 @@ import { Country } from '../../modules/countries/models/country';
 @Component({
   moduleId: module.id,
   selector: 'bt-dim',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="dimForm" class="container">
     <mat-card-content>
       <mat-form-field>
-        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (change)="addSetCountry($event.value)" required>
-          <mat-option *ngFor="let pays of countries" [value]="pays.code" [disabled]="alreadySetCountries$ | async | bcHasIntersection:pays.code">{{ pays.name }}</mat-option>
+        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (change)="setCountry($event.value)" required>
+          <mat-option *ngFor="let pays of countries" [value]="pays.code" 
+            [disabled]="alreadySetCountries$ | async | bcHasIntersection:pays.code:dimForm.controls.codeCountry.value">{{ pays.name }}</mat-option>
         </mat-select>
       </mat-form-field>         
     </mat-card-content>
@@ -71,23 +73,17 @@ export class DimensionsComponent implements OnInit {
     @Input() alreadySetCountries$: Observable<string[]>;
     oldCountryCode: string;
 
+    @Output() changeCountry = new EventEmitter<string[]>();
+
     ngOnInit() {
       if(this.dimForm.controls.codeCountry.value){
         this.oldCountryCode = this.dimForm.controls.codeCountry.value;
       }
     }
 
-    addSetCountry(code: string){
-      this.alreadySetCountries$ = this.alreadySetCountries$.map(countries => {
-        console.log(countries);
-        if(this.oldCountryCode){
-          countries = countries.filter(country => country !== this.oldCountryCode);
-          console.log(countries);
-        }
-        countries.push(code);
-        console.log(countries);
-        return countries;
-      });
+    setCountry(code: string){
+      this.changeCountry.emit([this.oldCountryCode,code]);
+      this.oldCountryCode = code;
     }
 
 }
