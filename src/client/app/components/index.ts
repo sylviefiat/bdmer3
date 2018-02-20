@@ -28,6 +28,7 @@ import { CA_COMPONENTS } from './campaign/index';
 import { PA_COMPONENTS } from './preference-area/index';
 import { COUNT_COMPONENTS } from './count/index';
 import { SP_COMPONENTS } from './species/index';
+import { ANALYSE_COMPONENTS } from './analyse/index';
 
 export const APP_COMPONENTS: any[] = [
   ...SITE_COMPONENTS,
@@ -37,6 +38,7 @@ export const APP_COMPONENTS: any[] = [
   ...TR_COMPONENTS,
   ...PA_COMPONENTS,
   ...COUNT_COMPONENTS,
+  ...ANALYSE_COMPONENTS,
   AppComponent,
   NavbarComponent,
   ToolbarComponent,
