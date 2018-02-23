@@ -14,11 +14,10 @@ import { AnalyseEffects } from './effects/analyse.effects';
 @NgModule({
   imports: [
     CommonModule, 
-    FormsModule,
-    ReactiveFormsModule, 
     RouterModule,
     SharedModule,
-    //MultilingualModule,
+    FormsModule,
+    ReactiveFormsModule,
     EffectsModule.run(AnalyseEffects),
   ],
   declarations: [],

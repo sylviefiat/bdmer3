@@ -76,6 +76,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 defaultExtension: 'js'
             }
         }, {
+            name: '@angular/animations',
+            packageMeta: {
+                main: 'bundles/animations.umd.js',
+                defaultExtension: 'js'
+            }
+        }, {
             name: '@angular/cdk',
             packageMeta: {
                 main: 'bundles/cdk.umd.js',

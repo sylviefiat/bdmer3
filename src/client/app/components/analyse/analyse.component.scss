@@ -1,0 +1,26 @@
+ mat-card-title, mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main {
+    margin: 72px 0;
+  }
+
+  mat-accordion {
+    
+  }
+
+  mat-expansion-panel {
+    margin: 72px;
+  }
+
+  .example-headers-align .mat-expansion-panel-header-title, 
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
