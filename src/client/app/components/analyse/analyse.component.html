@@ -1,73 +1,115 @@
 <mat-card>
   <mat-card-title>{{'ANALYSE_TITLE' | translate}}</mat-card-title>
 </mat-card>
-
-    <mat-accordion class="example-headers-align">
-      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Personal data
-          </mat-panel-title>
-          <mat-panel-description>
-            Type your name and age
-            <fa [name]="'flag'" [border]=false></fa>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <mat-form-field>
-          <input matInput placeholder="First name">
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput type="number" min="1" placeholder="Age">
-        </mat-form-field>
-
-        <mat-action-row>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Destination
-          </mat-panel-title>
-          <mat-panel-description>
-            Type the country name
-            <fa [name]="'map-marker'" [border]=false></fa>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <mat-form-field>
-          <input matInput placeholder="Country">
-        </mat-form-field>
-
-        <mat-action-row>
-          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Day of the trip
-          </mat-panel-title>
-          <mat-panel-description>
-            Inform the date you wish to travel
-            <fa [name]="'map-marker'" [border]=false></fa>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <mat-form-field>
-          <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
-        </mat-form-field>
-        <mat-datepicker #picker></mat-datepicker>
-
-        <mat-action-row>
-          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">End</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-
-    </mat-accordion>
+ 
+    <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
+      <mat-step [stepControl]="optionalFormGroup">
+        <form [formGroup]="optionalFormGroup" *ngIf="isAdmin">
+          <ng-template matStepLabel>Select country</ng-template>
+          <mat-form-field>
+            <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="country" (change)="setCountry($event.value)" required>
+                <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
+            </mat-select>
+          </mat-form-field> 
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Select campaign(s)</ng-template>
+          <mat-form-field>
+            <mat-select placeholder="{{ 'SELECT_CAMPAIGNS' | translate}}" formControlName="campaigns" (change)="setCampaigns($event.value)" multiple required>
+                <mat-option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button *ngIf="isAdmin"  matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Select Zone(s)</ng-template>
+          <mat-tab-group>
+            <mat-tab *ngFor="let zones of zonesList; let i = index;">
+                <ng-template mat-tab-label>{{currentCampaigns[i].code}}</ng-template>
+                <p>
+                    {{currentCampaigns[i].dateStart | date:localDate}}, {{currentCampaigns[i].dateEnd | date:localDate}}
+                </p>
+                <p>
+                    {{'PARTICIPANTS' | translate}}: {{currentCampaigns[i].participants}}
+                </p>
+                <mat-form-field>
+                    <mat-select placeholder="{{ 'SELECT_ZONES' | translate}}" formControlName="zones" (change)="setZones($event.value)" multiple required>
+                        <mat-option *ngFor="let zone of zones" [value]="zone">{{zone.code}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-tab>
+          </mat-tab-group>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="thirdFormGroup" [optional]="true">
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>Select Transect(s)</ng-template>
+          <mat-tab-group>
+            <mat-tab *ngFor="let transects of transectsList; let j = index;">
+                <ng-template mat-tab-label>{{currentCampaigns[j].code}}</ng-template>
+                <p>
+                    {{currentCampaigns[j].dateStart | date:localDate}}, {{currentCampaigns[j].dateEnd | date:localDate}}
+                </p>
+                <p>
+                    {{'PARTICIPANTS' | translate}}: {{currentCampaigns[j].participants}}
+                </p>
+                <mat-form-field>
+                    <mat-select placeholder="{{ 'SELECT_TRANSECTS' | translate}}" formControlName="transects" multiple required>
+                        <mat-select-trigger>
+                          {{transects.value ? transects.value[0] : ''}}
+                          <span *ngIf="transects.value?.length > 1" class="example-additional-selection">
+                            (+{{transects.value.length - 1}} others)
+                          </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let transect of transects" [value]="transect">{{transect.code}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-tab>
+        </mat-tab-group>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="fourthFormGroup">
+        <form [formGroup]="fourthFormGroup">
+          <ng-template matStepLabel>Select Species</ng-template>
+          <mat-form-field>
+            <mat-select placeholder="{{ 'SELECT_SPECIES' | translate}}" formControlName="species" multiple required>
+                <mat-option *ngFor="let sp of species" [value]="sp">{{sp.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="fifthFormGroup">
+        <form [formGroup]="fifthFormGroup">
+          <ng-template matStepLabel>Start Analyse</ng-template>
+          
+          <button mat-button (click)="stepper.submit()">Start Analyse</button>
+        </form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+     

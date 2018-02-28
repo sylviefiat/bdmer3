@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { Site } from '../models/index';
+import { Site, Campaign } from '../models/index';
 import { IAppState } from '../../ngrx/index';
 
 export interface ISiteState {
@@ -50,6 +50,18 @@ export function getSiteOfCurrentCountry(state$: Observable<IAppState>) {
             return state.site.entities;
         return state.site.entities.filter(site => site.codeCountry === state.auth.country.code)
     });
+}
+
+export function getCampaignsOfCurrentCountry(state$: Observable<IAppState>) {
+    return state$
+        .select(state => state.country.currentCountryId && state.site.entities.filter(site => site.codeCountry === state.country.currentCountryId))
+        .filter(sites => sites && sites.length>0)
+        .map(sites => {
+            let campaigns: Campaign[] = [];
+            for(let site of sites) 
+                campaigns=[...campaigns,...site.campaigns];
+            return campaigns;
+        });
 }
 
 export function getSiteIds(state$: Observable<ISiteState>) {

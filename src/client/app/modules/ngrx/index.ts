@@ -43,9 +43,11 @@ import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
-import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry} from '../datas/index';
-import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
-import { IAnalyseState, analyseReducer, getUsedCountries, getUsedCampaigns, getUsedZones, getUsedTransects, getUsedSpecies, getMethods, getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg } from '../analyse/index'
+import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry, getCampaignsOfCurrentCountry} from '../datas/index';
+import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, 
+    getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
+import { IAnalyseState, analyseReducer, getUsedCountry, getUsedCampaigns, getUsedZones, getUsedTransects, getUsedSpecies, 
+    getMethods, getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables } from '../analyse/index'
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -191,9 +193,10 @@ export const getSelectedCampaign: any = compose(getCurrentCampaign, getSiteState
 export const getSelectedCampaignCounts: any = compose(getCurrentCampaignCounts, getSiteState);
 export const getSelectedCount: any = compose(getCurrentCount, getSiteState);
 export const getSiteListCurrentCountry: any = compose(getSiteOfCurrentCountry, getAppState);
+export const getSelectedCountryCampaigns: any = compose(getCampaignsOfCurrentCountry, getAppState);
 
 // Analyse
-export const getAnalyseCountries: any = compose(getUsedCountries, getAnalyseState);
+export const getAnalyseCountry: any = compose(getUsedCountry, getAnalyseState);
 export const getAnalyseCampaigns: any = compose(getUsedCampaigns, getAnalyseState);
 export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
 export const getTransectZones: any = compose(getUsedTransects, getAnalyseState);
@@ -204,3 +207,5 @@ export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
 export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
 export const getAnalyseResult: any = compose(getResult, getAnalyseState);
 export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
+export const getSelectedCampaignsZones: any = compose(getZonesAvailables, getAppState);
+export const getSelectedCampaignsTransects: any = compose(getTransectsAvailables, getAppState);

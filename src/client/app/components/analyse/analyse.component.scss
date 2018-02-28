@@ -7,20 +7,14 @@
     margin: 72px 0;
   }
 
-  mat-accordion {
-    
-  }
 
-  mat-expansion-panel {
+  mat-horizontal-stepper {
     margin: 72px;
   }
 
-  .example-headers-align .mat-expansion-panel-header-title, 
-.example-headers-align .mat-expansion-panel-header-description {
-  flex-basis: 0;
-}
+  div.row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
 
-.example-headers-align .mat-expansion-panel-header-description {
-  justify-content: space-between;
-  align-items: center;
-}

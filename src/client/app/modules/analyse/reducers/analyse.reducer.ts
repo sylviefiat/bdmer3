@@ -7,14 +7,16 @@ export function analyseReducer(
   action: AnalyseAction.Actions
 ): IAnalyseState {
   switch (action.type) {
-    case AnalyseAction.ActionTypes.SELECT_COUNTRIES: {  
+    case AnalyseAction.ActionTypes.SELECT_COUNTRY: {  
+      //console.log(action.payload);
       return {
         ...state,
-        usedCountries: action.payload
+        usedCountry: action.payload
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_CAMPAIGNS: {  
+    case AnalyseAction.ActionTypes.SELECT_CAMPAIGNS: {
+    //console.log(action.payload);  
       return {
         ...state,
         usedCampaigns: action.payload

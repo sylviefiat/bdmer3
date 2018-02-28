@@ -68,7 +68,7 @@ import { Site,Zone,Campaign } from './../../modules/datas/models/site';
 export class CampaignPreviewComponent implements OnInit {  
   @Input() campaign: Campaign;
   @Input() site: Site;
-  @Input() locale: string
+  @Input() locale: string;
   nCounts: number = 0;
 
   ngOnInit(){

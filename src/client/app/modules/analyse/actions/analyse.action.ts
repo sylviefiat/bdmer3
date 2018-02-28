@@ -10,7 +10,7 @@ export namespace AnalyseAction {
   export const AUTH: string = 'AnalyseAction';
 
   export interface IAnalyseActions {
-    SELECT_COUNTRIES: string;
+    SELECT_COUNTRY: string;
     SELECT_CAMPAIGNS: string;
     SELECT_ZONES: string;
     SELECT_TRANSECTS: string;
@@ -22,7 +22,7 @@ export namespace AnalyseAction {
   }
 
   export const ActionTypes: IAnalyseActions = {
-    SELECT_COUNTRIES : type('[Analyse] Select countries'),
+    SELECT_COUNTRY : type('[Analyse] Select country'),
     SELECT_CAMPAIGNS : type('[Analyse] Select Campaigns'),
     SELECT_ZONES : type('[Analyse] Select Zones'),
     SELECT_TRANSECTS : type('[Analyse] Select Transects'),
@@ -32,10 +32,10 @@ export namespace AnalyseAction {
     ANALYSE_SUCCESS : type('[Analyse] Analyse Success'),
     ANALYSE_FAILURE : type('[Analyse] Analyse Failure')
   }
-export class SelectCoutries implements Action {
-  readonly type = ActionTypes.SELECT_COUNTRIES;
+export class SelectCountry implements Action {
+  readonly type = ActionTypes.SELECT_COUNTRY;
 
-  constructor(public payload: Country[]) {}
+  constructor(public payload: Country) {}
 }
 
 export class SelectCampaigns implements Action {
@@ -47,18 +47,18 @@ export class SelectCampaigns implements Action {
 export class SelectZones implements Action {
   readonly type = ActionTypes.SELECT_ZONES;
 
-  constructor(public payload: Zone[]) {}
+  constructor(public payload: Zone[][]) {}
 }
 
 export class SelectTransects implements Action {
   readonly type = ActionTypes.SELECT_TRANSECTS;
-  constructor(public payload: Transect[]) {}
+  constructor(public payload: Transect[][]) {}
 }
 
 export class SelectSpecies implements Action {
   readonly type = ActionTypes.SELECT_SPECIES;
   
-  constructor(public payload: Species[]) {}
+  constructor(public payload: Species[][]) {}
 }
 
 export class SelectMethod implements Action {
@@ -86,7 +86,7 @@ export class AnalyseFailure implements Action {
 }
 
 export type Actions =
-  | SelectCoutries
+  | SelectCountry
   | SelectCampaigns
   | SelectZones
   | SelectTransects

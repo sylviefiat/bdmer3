@@ -3,9 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import { User, Country } from '../../countries/models/country';
 import { Zone, Transect, Campaign } from '../../datas/models/site';
 import { Method, Result, CampaignSpecies } from '../models/analyse';
+import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
-    usedCountries: Country[];
+    usedCountry: Country;
     usedCampaigns: Campaign[];
     usedZones: Zone[];
     usedTransects: Transect[];
@@ -19,7 +20,7 @@ export interface IAnalyseState {
 }
 
 export const analyseInitialState: IAnalyseState = {
-    usedCountries: null,
+    usedCountry: null,
     usedCampaigns: null,
     usedZones: null,
     usedTransects: null,
@@ -37,8 +38,8 @@ export const initMethods: Method[] = [
     {method: 'LONGUEUR'}
 ]
 
-export function getUsedCountries(state$: Observable<IAnalyseState>) {
-    return state$.select(state => state.usedCountries);
+export function getUsedCountry(state$: Observable<IAnalyseState>) {
+    return state$.select(state => state.usedCountry);
 }
 
 export function getUsedCampaigns(state$: Observable<IAnalyseState>) {
@@ -79,4 +80,29 @@ export function getResult(state$: Observable<IAnalyseState>) {
 
 export function getMsg(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.msg);
+}
+
+export function getZonesAvailables(state$: Observable<IAppState>) {
+    //console.log(state$);
+    return state$.select(state => {
+        let zones=[];
+        for(let i in state.analyse.usedCampaigns){
+            zones[i] = state.site.entities.filter(site => site.code === state.analyse.usedCampaigns[i].codeSite)[0].zones;
+        }
+        return zones;
+    })
+}
+
+export function getTransectsAvailables(state$: Observable<IAppState>) {
+    //console.log(state$);
+    return state$.select(state => {
+        let transects=[];
+        for(let i in state.analyse.usedCampaigns){
+            transects[i]=[];
+            for(let zone of state.site.entities.filter(site => site.code === state.analyse.usedCampaigns[i].codeSite)[0].zones){
+                transects[i] = [...transects[i],...zone.transects];
+            }
+        }
+        return transects;
+    })
 }

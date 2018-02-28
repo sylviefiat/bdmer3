@@ -5,8 +5,9 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-//import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatExpansionModule } from '@angular/material';
-import {
+import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule } from '@angular/material';
+/*import {
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -38,8 +39,8 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
-} from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
+} from '@angular/material';*/
+//import {CdkTableModule} from '@angular/cdk/table';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule } from '@agm/core';
@@ -49,38 +50,38 @@ import { SHARED_COMPONENTS } from './components/index';
 
 @NgModule({
   exports: [
-    CdkTableModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
+    //CdkTableModule,
+    //MatAutocompleteModule,
+    //MatButtonModule,
+    //MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
     MatStepperModule,
     MatDatepickerModule,
-    MatDialogModule,
+    //MatDialogModule,
     MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
+    //MatGridListModule,
+   // MatIconModule,
     MatInputModule,
     MatListModule,
-    MatMenuModule,
+    //MatMenuModule,
     MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
+    //MatPaginatorModule,
+    //MatProgressBarModule,
+    //MatProgressSpinnerModule,
     MatRadioModule,
-    MatRippleModule,
+    //MatRippleModule,
     MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
+    //MatSidenavModule,
+    //MatSliderModule,
+    //MatSlideToggleModule,
+    //MatSnackBarModule,
+    //MatSortModule,
+    //MatTableModule,
     MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
+    //MatToolbarModule,
+    //MatTooltipModule,
   ]
 })
 export class SharedMaterialModule {}
