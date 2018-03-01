@@ -3,8 +3,8 @@
 </mat-card>
  
     <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
-      <mat-step [stepControl]="optionalFormGroup">
-        <form [formGroup]="optionalFormGroup" *ngIf="isAdmin">
+      <mat-step [stepControl]="countryFormGroup">
+        <form [formGroup]="countryFormGroup" *ngIf="isAdmin">
           <ng-template matStepLabel>Select country</ng-template>
           <mat-form-field>
             <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="country" (change)="setCountry($event.value)" required>
@@ -16,11 +16,17 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup">
+      <mat-step [stepControl]="campaignsFormGroup">
+        <form [formGroup]="campaignsFormGroup">
           <ng-template matStepLabel>Select campaign(s)</ng-template>
           <mat-form-field>
             <mat-select placeholder="{{ 'SELECT_CAMPAIGNS' | translate}}" formControlName="campaigns" (change)="setCampaigns($event.value)" multiple required>
+                <mat-select-trigger>
+                  {{campaignsFormGroup.controls.campaigns.value ? campaignsFormGroup.controls.campaigns.value[0] : 'yo'}}
+                  <span *ngIf="campaignsFormGroup.controls.campaigns.value?.length > 1">
+                    (+{{campaignsFormGroup.controls.campaigns.value.length - 1}} others)
+                  </span>
+                </mat-select-trigger>
                 <mat-option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign.code}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -30,11 +36,11 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
-        <form [formGroup]="secondFormGroup">
+      <mat-step [stepControl]="zonesFormGroup">
+        <form [formGroup]="zonesFormGroup">
           <ng-template matStepLabel>Select Zone(s)</ng-template>
           <mat-tab-group>
-            <mat-tab *ngFor="let zones of zonesList; let i = index;">
+            <mat-tab *ngFor="let zones of zonesFormGroup.controls.campaigns.controls; let i = index;">
                 <ng-template mat-tab-label>{{currentCampaigns[i].code}}</ng-template>
                 <p>
                     {{currentCampaigns[i].dateStart | date:localDate}}, {{currentCampaigns[i].dateEnd | date:localDate}}
@@ -42,9 +48,9 @@
                 <p>
                     {{'PARTICIPANTS' | translate}}: {{currentCampaigns[i].participants}}
                 </p>
-                <mat-form-field>
+                <mat-form-field [formGroup]="zones">
                     <mat-select placeholder="{{ 'SELECT_ZONES' | translate}}" formControlName="zones" (change)="setZones($event.value)" multiple required>
-                        <mat-option *ngFor="let zone of zones" [value]="zone">{{zone.code}}</mat-option>
+                        <mat-option *ngFor="let zone of zonesList[i]" [value]="zone">{{zone.code}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-tab>
@@ -55,10 +61,10 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="thirdFormGroup" [optional]="true">
-        <form [formGroup]="thirdFormGroup">
+      <mat-step [stepControl]="transectsFormGroup" [optional]="true">
+        <form [formGroup]="transectsFormGroup">
           <ng-template matStepLabel>Select Transect(s)</ng-template>
-          <mat-tab-group>
+          <!--<mat-tab-group>
             <mat-tab *ngFor="let transects of transectsList; let j = index;">
                 <ng-template mat-tab-label>{{currentCampaigns[j].code}}</ng-template>
                 <p>
@@ -68,40 +74,34 @@
                     {{'PARTICIPANTS' | translate}}: {{currentCampaigns[j].participants}}
                 </p>
                 <mat-form-field>
-                    <mat-select placeholder="{{ 'SELECT_TRANSECTS' | translate}}" formControlName="transects" multiple required>
-                        <mat-select-trigger>
-                          {{transects.value ? transects.value[0] : ''}}
-                          <span *ngIf="transects.value?.length > 1" class="example-additional-selection">
-                            (+{{transects.value.length - 1}} others)
-                          </span>
-                        </mat-select-trigger>
+                    <mat-select placeholder="{{ 'SELECT_TRANSECTS' | translate}}" formControlName="transects" multiple required>                       
                         <mat-option *ngFor="let transect of transects" [value]="transect">{{transect.code}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-tab>
-        </mat-tab-group>
+        </mat-tab-group>-->
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="fourthFormGroup">
-        <form [formGroup]="fourthFormGroup">
+      <mat-step [stepControl]="speciesFormGroup">
+        <form [formGroup]="speciesFormGroup">
           <ng-template matStepLabel>Select Species</ng-template>
-          <mat-form-field>
+         <!-- <mat-form-field>
             <mat-select placeholder="{{ 'SELECT_SPECIES' | translate}}" formControlName="species" multiple required>
                 <mat-option *ngFor="let sp of species" [value]="sp">{{sp.code}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="fifthFormGroup">
-        <form [formGroup]="fifthFormGroup">
+      <mat-step [stepControl]="analyseFormGroup">
+        <form [formGroup]="analyseFormGroup">
           <ng-template matStepLabel>Start Analyse</ng-template>
           
           <button mat-button (click)="stepper.submit()">Start Analyse</button>

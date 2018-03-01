@@ -1,4 +1,4 @@
-import { Component, OnInit,AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -20,13 +20,13 @@ import { Site, Zone, Campaign, Transect, Species } from '../../modules/datas/mod
     selector: 'bc-analyse',
     templateUrl: 'analyse.component.html',
     styleUrls: [
-    'analyse.component.css',
+        'analyse.component.css',
     ],
 })
 export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() msg: string | null;
     @Input() countries: Country[];
-    @Input() campaigns: Campaign[];    
+    @Input() campaigns: Campaign[];
     @Input() zonesList: Zone[][];
     @Input() transectsList: Transect[][];
     @Input() isAdmin: boolean;
@@ -39,64 +39,127 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     currentCampaigns: Campaign[];
     currentZones: Zone[][];
 
-    optionalFormGroup: FormGroup = new FormGroup({
+    countryFormGroup: FormGroup = new FormGroup({
         country: new FormControl()
     });
-    firstFormGroup: FormGroup = new FormGroup({
-        campaigns: new FormControl([])
+    campaignsFormGroup: FormGroup = new FormGroup({
+        campaigns: new FormControl()
     });
-    secondFormGroup: FormGroup = new FormGroup({
-        zones: new FormControl()
+    zonesFormGroup: FormGroup = new FormGroup({
+        //zones: new FormControl([])
+        campaigns: this._fb.array([])
     });
-    thirdFormGroup: FormGroup;
-    fourthFormGroup: FormGroup = new FormGroup({
-        species: new FormControl()
+    transectsFormGroup: FormGroup = new FormGroup({
+        //campaigns: new FormControl([])
+        campaigns: this._fb.array([])
     });
-    fifthFormGroup: FormGroup = new FormGroup({
+    speciesFormGroup: FormGroup = new FormGroup({
+        //campaigns: new FormControl([])
+        campaigns: this._fb.array([])
+    });
+    analyseFormGroup: FormGroup = new FormGroup({
         analyseType: new FormControl()
     });
 
+    constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private _fb: FormBuilder) {
 
-
-    constructor(private store: Store<IAppState>, route: ActivatedRoute,public routerext: RouterExtensions, fb: FormBuilder) { 
-        this.thirdFormGroup = fb.group({
-          transects: [[''], Validators.required]
-        });
     }
 
     ngOnInit() {
     }
 
     ngAfterContentChecked() {
-        console.log(this.thirdFormGroup.controls.transects);
-        this.thirdFormGroup.controls.transects.value.foreach(x => x.select());
+
+    }
+
+    initZones() {
+        this.zonesFormGroup.controls['campaigns']=this._fb.array([]);
+        const controlZ = <FormArray>this.zonesFormGroup.controls['campaigns'];
+        let addrCtrl;
+        for (let i in this.currentCampaigns) {
+            addrCtrl =  this.newZones();
+            controlZ.push(addrCtrl);
+        }
+    }
+
+    newZones() {
+        return this._fb.group({
+            zones: new FormControl([])
+        });
+    }
+
+    initTransects() {
+        this.transectsFormGroup.controls['campaigns']=this._fb.array([]);
+        const controlT = <FormArray>this.transectsFormGroup.controls['campaigns'];
+        let addrCtrl;
+        for (let i in this.currentCampaigns) {
+            addrCtrl=this.newTransects();
+            controlT.push(addrCtrl);
+        }
+    }
+
+    newTransects() {
+        return this._fb.group({
+            transects: new FormControl([])
+        });
+    }
+
+    initSpecies() {
+        this.speciesFormGroup.controls['campaigns']=this._fb.array([]);
+        const controlS = <FormArray>this.speciesFormGroup.controls['campaigns'];
+        for (let i in this.currentCampaigns) {
+            controlS.push(this.newSpecies());
+        }
+    }
+
+    newSpecies() {
+        return this._fb.group({
+            species: new FormControl([])
+        });
     }
 
     setCountry(country: Country) {
         this.countryEmitter.emit(country);
-        this.firstFormGroup.controls['campaigns']=new FormControl();
+        this.campaignsFormGroup.controls['campaigns'] = new FormControl();
     }
 
     setCampaigns(campaigns: Campaign[]) {
+        let cname=[];
+        for(let c of campaigns){
+            cname.push(c.code);
+        }
         this.campaignEmitter.emit(campaigns);
-        this.secondFormGroup.controls.zones=new FormControl();
-        this.thirdFormGroup.controls.transects=new FormControl();
+        this.campaignsFormGroup.controls['campaigns'].setValue(cname);
         this.currentCampaigns = campaigns;
+        this.initZones();
+        this.initTransects();
+        this.initSpecies();
     }
 
     setZones(zones: Zone[][]) {
-        this.zoneEmitter.emit(zones);        
+        let zname=[];
+        //const control = <FormArray>this.zonesFormGroup.controls['campaigns'];
+        for(let i in zones){
+            //control.controls[i].
+            zname[i]=[];
+            for(let z of zones[i])
+                zname[i].push(z.code);
+        }
+        
+
+        this.zoneEmitter.emit(zones);
+        //this.zonesFormGroup.controls.campaigns.controls[i].zones.setValue(zname);
         this.currentZones = zones;
     }
 
-    get localDate(){
-    switch (this.locale) {
-      case "fr":
-        return 'dd-MM-yyyy';
-      case "en":
-      default:
-        return 'MM-dd-yyyy';
+    get localDate() {
+        switch (this.locale) {
+            case "fr":
+                return 'dd-MM-yyyy';
+            case "en":
+            default:
+                return 'MM-dd-yyyy';
+        }
     }
-  }
 
 }
