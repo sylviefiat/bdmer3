@@ -45,6 +45,7 @@ export class ZoneFormComponent implements OnInit {
 
     submit() {
         if (this.zoneForm.valid) {
+            this.zoneForm.value.codeSite=this.zoneForm.controls.codeSite.value;
             this.submitted.emit(this.zoneForm.value);
         }
     }
