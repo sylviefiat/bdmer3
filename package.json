@@ -202,6 +202,7 @@
     "minimatch": "^3.0.3",
     "moment": "^2.20.1",
     "ngx-papaparse": "^1.2.5",
+    "npm": "^5.7.1",
     "pouchdb": "^6.4.1",
     "pouchdb-authentication": "^0.5.5",
     "reflect-metadata": "^0.1.8",

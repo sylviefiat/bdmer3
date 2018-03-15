@@ -33,7 +33,7 @@ export class CountriesEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => { 
-    return this.countriesService.initDB('countries','http://entropie-dev:5984/');
+    return this.countriesService.initDB('countries','http://bdmerdb:5984/');
   });
 
   @Effect() init$: Observable<Action> = this.actions$

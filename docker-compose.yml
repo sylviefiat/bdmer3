@@ -1,19 +1,32 @@
 version: '2'
 
 services:
+  bdmerdb:
+    hostname: dbmerdb
+    image: couchdb:latest
+    volumes:
+      - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
+      - ./.docker/couchdb_data/config/local.d:/usr/local/etc/couchdb/local.d
+    ports:
+      - "5984:5984"
+    networks:
+      - bdmer-network
 
-  angular-seed:
+  bdmer:
+    hostname: dbmer
     build:
       context: .
       dockerfile: ./.docker/angular-seed.development.dockerfile
     command: npm start
-    container_name: angular-seed-start
-    image: angular-seed
+    container_name: bdmer3-start
+    image: bdmer3
     networks:
-      - dev-network
+      - bdmer-network
     ports:
       - '5555:5555'
+    links:
+      - bdmerdb
 
 networks:
-  dev-network:
+  bdmer-network:
     driver: bridge

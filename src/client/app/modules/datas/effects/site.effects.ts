@@ -37,7 +37,7 @@ export class SiteEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => {
-    return this.siteService.initDB('sites', 'http://entropie-dev:5984/');
+    return this.siteService.initDB('sites', 'http://bdmerdb:5984/');
   });
 
   @Effect()
