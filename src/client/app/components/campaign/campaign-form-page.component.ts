@@ -60,6 +60,6 @@ export class CampaignFormPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(campaign: Campaign) { 
-    this.store.dispatch(new SiteAction.AddCampaignAction(campaign))
+    this.store.dispatch(new SiteAction.AddCampaignAction(campaign));
   }
 }

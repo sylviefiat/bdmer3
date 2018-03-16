@@ -25,13 +25,13 @@ export class CampaignFormComponent implements OnInit {
     @Output() submitted = new EventEmitter<Campaign>();
 
     campaignForm: FormGroup = new FormGroup({
-        code: new FormControl("", Validators.required),
-        codeSite: new FormControl(""),
+        code: new FormControl('', Validators.required),
+        codeSite: new FormControl(''),
         dateStart: new FormControl(),
         dateEnd: new FormControl(),
-        participants: new FormControl(""),
-        surfaceTransect: new FormControl(""),
-        description: new FormControl("")
+        participants: new FormControl(''),
+        surfaceTransect: new FormControl(''),
+        description: new FormControl('')
     });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }

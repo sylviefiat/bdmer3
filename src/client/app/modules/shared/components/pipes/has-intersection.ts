@@ -5,6 +5,6 @@ import { Observable } from 'rxjs/Observable';
 @Pipe({ name: 'bcHasIntersection' })
 export class HasIntersection implements PipeTransform {
   transform(array: any[], item: any, selected?: any) {
-  	return array && (item !== selected) && ((item.code && array.indexOf(item.code) >= 0) || (array.indexOf(item) >= 0));
+    return array && (item !== selected) && ((item.code && array.indexOf(item.code) >= 0) || (array.indexOf(item) >= 0));
   }
 }

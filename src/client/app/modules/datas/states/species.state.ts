@@ -22,34 +22,34 @@ export const speciesInitialState: ISpeciesState = {
   msg: null
 };
 
-export function getSpeciesLoaded(state$: Observable<ISpeciesState>){
+export function getSpeciesLoaded(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.loaded);
 }
 
-export function getSpeciesLoading(state$: Observable<ISpeciesState>){
+export function getSpeciesLoading(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.loading);
 }
 
-export function getSpeciesEntities(state$: Observable<ISpeciesState>){
+export function getSpeciesEntities(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.entities);
 }
 
-export function getSpeciesIds(state$: Observable<ISpeciesState>){
+export function getSpeciesIds(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.ids);
 }
 
-export function getSpeciesError(state$: Observable<ISpeciesState>){
+export function getSpeciesError(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.error);
 }
 
-export function getSpeciesMsg(state$: Observable<ISpeciesState>){
+export function getSpeciesMsg(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.msg);
 }
 
-export function getCurrentSpeciesId(state$: Observable<ISpeciesState>){
+export function getCurrentSpeciesId(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.currentSpeciesId);
 }
 
-export function getCurrentSpecies(state$: Observable<ISpeciesState>){
+export function getCurrentSpecies(state$: Observable<ISpeciesState>) {
   return state$.select(state => state.currentSpeciesId && state.entities.filter(species => species._id === state.currentSpeciesId)[0]);
 }

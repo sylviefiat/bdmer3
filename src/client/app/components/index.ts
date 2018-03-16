@@ -74,7 +74,7 @@ export * from './map/map.component';
 export * from './login/login.component';
 export * from './login/login-page.component';
 export * from './login/logout.component';
-export * from './login/lost-password.component';;
+export * from './login/lost-password.component';
 export * from './country/country-page.component';
 export * from './country/country-preview-list.component';
 export * from './country/country-preview.component';

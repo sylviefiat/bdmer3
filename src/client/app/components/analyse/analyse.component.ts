@@ -66,10 +66,11 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     }
 
     ngOnInit() {
+        //TODO
     }
 
     ngAfterContentChecked() {
-
+        //TODO
     }
 
     initZones() {
@@ -138,9 +139,7 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
 
     setZones(zones: Zone[][]) {
         let zname=[];
-        //const control = <FormArray>this.zonesFormGroup.controls['campaigns'];
         for(let i in zones){
-            //control.controls[i].
             zname[i]=[];
             for(let z of zones[i])
                 zname[i].push(z.code);
@@ -148,7 +147,6 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
         
 
         this.zoneEmitter.emit(zones);
-        //this.zonesFormGroup.controls.campaigns.controls[i].zones.setValue(zname);
         this.currentZones = zones;
     }
 

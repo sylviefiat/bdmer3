@@ -109,7 +109,7 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "code":
                         case "description":
-                        case "code_country":
+                        case "codeCountry":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;

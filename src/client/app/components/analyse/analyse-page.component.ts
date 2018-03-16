@@ -57,24 +57,24 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new SiteAction.LoadAction());
   }
 
-  selectCountry(country: Country){
+  selectCountry(country: Country) {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
     this.campaigns$ = this.store.let(getSelectedCountryCampaigns);
   }
 
-  selectCampaign(campaigns: Campaign[]){
+  selectCampaign(campaigns: Campaign[]) {
     this.store.dispatch(new AnalyseAction.SelectCampaigns(campaigns));
     this.zones$ = this.store.let(getSelectedCampaignsZones);
     this.transects$ = this.store.let(getSelectedCampaignsTransects);
   }
 
-  selectZone(zones: Zone[][]){
+  selectZone(zones: Zone[][]) {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
   }
 
-  startAnalyse(status: string){
-
+  startAnalyse(status: string) {
+    //TODO
   }
 
 
