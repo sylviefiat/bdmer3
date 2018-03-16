@@ -25,7 +25,7 @@ export class AuthService {
     var pouchOpts = {
       skipSetup: true
     };
-    this.db = new PouchDB('http://bdmer3.ird.nc/db/', pouchOpts);   
+    this.db = new PouchDB('http://bdmer3.ird.nc/db/_users', pouchOpts);   
   }
 
   login({ username, password }: Authenticate): Observable<any> {
