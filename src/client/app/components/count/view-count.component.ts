@@ -7,9 +7,9 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState } from '../../modules/ngrx/index';
 
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site, Zone, Transect, Campaign, Count, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Transect, Survey, Count, Species } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -22,8 +22,8 @@ import { WindowService } from '../../modules/core/services/index';
     ],
 })
 export class ViewCountComponent implements OnInit {
-    @Input() site: Site;
-    @Input() campaign: Campaign;
+    @Input() platform: Platform;
+    @Input() survey: Survey;
     @Input() count: Count;
     @Input() locale: string;
     @Input() species: Species[];
@@ -62,7 +62,7 @@ export class ViewCountComponent implements OnInit {
         console.log(type);
         switch (type) {
             case "countForm":
-            this.action.emit(type + '/' + this.site._id + "/" + this.campaign.code + '/' + this.count.code);
+            this.action.emit(type + '/' + this.platform._id + "/" + this.survey.code + '/' + this.count.code);
             break;
             case "deleteCount":
             this.deleteCount();
@@ -102,16 +102,16 @@ export class ViewCountComponent implements OnInit {
     //return "/assets/img/"+this.count.code+".jpg"; 
   }
 
-    toSites() {
-        this.routerext.navigate(['site']);
+    toPlatforms() {
+        this.routerext.navigate(['platform']);
     }
 
-    toSite() {
-        this.routerext.navigate(['site/' + this.site.code]);
+    toPlatform() {
+        this.routerext.navigate(['platform/' + this.platform.code]);
     }
 
-    toCampaign() {
-        this.routerext.navigate(['campaign/' + this.site.code + '/' + this.campaign.code]);
+    toSurvey() {
+        this.routerext.navigate(['survey/' + this.platform.code + '/' + this.survey.code]);
     }
 
 }

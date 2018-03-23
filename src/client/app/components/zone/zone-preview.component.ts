@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone } from './../../modules/datas/models/site';
+import { Platform,Zone } from './../../modules/datas/models/platform';
 
 @Component({
   selector: 'bc-zone-preview',
   template: `
-    <a [routerLink]="['/zone', idSite, idZone]">
+    <a [routerLink]="['/zone', idPlatform, idZone]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle *ngIf="idSite">{{ idSite }}</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="idPlatform">{{ idPlatform }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ surface }} m²
@@ -63,7 +63,7 @@ import { Site,Zone } from './../../modules/datas/models/site';
 })
 export class ZonePreviewComponent implements OnInit {
   @Input() zone: Zone;
-  @Input() idSite: string;
+  @Input() idPlatform: string;
   nZonesPrefs: number = 0;
   nTransects: number = 0;
 

@@ -1,7 +1,7 @@
 
     <mat-card class="actions">
       <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
-      <mat-card-title><a class="link" (click)="toSites()">{{ 'SITE_LIST' | translate}}</a> / <a class="link" (click)="toSite()">{{ 'SITE' | translate}} {{ site.code }}</a> / {{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'ZONE' | translate}} {{ zone.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'SURFACE' | translate }} : {{ zone.surface }} m²</div> 
       </mat-card-content>
@@ -34,9 +34,9 @@
       </mat-card-actions>           
     </mat-card>
     
-        <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [site]="site"></bc-zone-preference-preview-list>
+        <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [platform]="platform"></bc-zone-preference-preview-list>
 
-        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects$]="filteredTransects$" [zone]="zone" [site]="site"></bc-transect-preview-list>          
+        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects$]="filteredTransects$" [zone]="zone" [platform]="platform"></bc-transect-preview-list>          
      
     
    

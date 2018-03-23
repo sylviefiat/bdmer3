@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Platform, Zone } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getSelectedZone } from '../../modules/ngrx/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getSelectedZone } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
@@ -20,49 +20,49 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       (back)="return($event)"
       [error]="error$ | async"
       [msg]="msg$ | async"
-      [site]="site$ | async">
+      [platform]="platform$ | async">
     </bc-transect-import>
   `,
     styles: [``]
 })
 export class TransectImportPageComponent implements OnInit, OnDestroy {
-    site$: Observable<Site>;
+    platform$: Observable<Platform>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
 
 
-    siteSubscription: Subscription;
+    platformSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.siteSubscription = route.params
-            .map(params => new SiteAction.SelectSiteAction(params.idSite))
+        this.platformSubscription = route.params
+            .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
             .subscribe(store);
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getSitePageError);
-        this.msg$ = this.store.let(getSitePageMsg);
-        this.site$ = this.store.let(getSelectedSite);
+        this.error$ = this.store.let(getPlatformPageError);
+        this.msg$ = this.store.let(getPlatformPageMsg);
+        this.platform$ = this.store.let(getSelectedPlatform);
     }
 
     ngOnDestroy() {
-        this.siteSubscription.unsubscribe();
+        this.platformSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);
-        this.store.dispatch(new SiteAction.ImportTransectAction(csvFile));
+        this.store.dispatch(new PlatformAction.ImportTransectAction(csvFile));
     }
 
     handleErrorUpload(msg: string) {
-        this.store.dispatch(new SiteAction.AddSiteFailAction(msg));
+        this.store.dispatch(new PlatformAction.AddPlatformFailAction(msg));
     }
 
     return(event) {
-        this.routerext.navigate(['/site/'], {
+        this.routerext.navigate(['/platform/'], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',

@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,Transect } from './../../modules/datas/models/site';
+import { Platform,Zone,Transect } from './../../modules/datas/models/platform';
 
 @Component({
   selector: 'bc-transect-preview',
   template: `
-    <a [routerLink]="['/transect', codeSite, codeZone, code]">
+    <a [routerLink]="['/transect', codePlatform, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ latitude }}°, {{ longitude }}°
@@ -59,7 +59,7 @@ import { Site,Zone,Transect } from './../../modules/datas/models/site';
 export class TransectPreviewComponent implements OnInit {  
   @Input() transect: Transect;
   @Input() zone: Zone;
-  @Input() site: Site;
+  @Input() platform: Platform;
   
 
   ngOnInit(){
@@ -75,8 +75,8 @@ export class TransectPreviewComponent implements OnInit {
     return this.transect.code;
   }
 
-  get codeSite() {
-    return this.site.code;
+  get codePlatform() {
+    return this.platform.code;
   }
 
   get codeZone() {

@@ -1,2 +1,2 @@
 export * from './species.action';
-export * from './site.action';
+export * from './platform.action';

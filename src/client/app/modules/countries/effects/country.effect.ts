@@ -17,7 +17,7 @@ import { AuthService } from "../../core/services/index";
 import { CountryAction } from '../actions/index';
 import { Country, User } from '../models/country';
 import { IAppState, getSelectedCountry } from '../../ngrx/index';
-import { SiteAction } from '../../datas/actions/index';
+import { PlatformAction } from '../../datas/actions/index';
 
 
 @Injectable()

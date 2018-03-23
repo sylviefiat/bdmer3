@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Zone } from './../../modules/datas/models/site';
+import { Zone } from './../../modules/datas/models/platform';
 
 @Component({
   selector: 'bc-zone-preview-list',
   template: `
-    <bc-zone-preview *ngFor="let zone of (zones$ | async)" [zone]="zone" [idSite]="idSite"></bc-zone-preview>
+    <bc-zone-preview *ngFor="let zone of (zones$ | async)" [zone]="zone" [idPlatform]="idPlatform"></bc-zone-preview>
   `,
   styles: [
     `
@@ -20,5 +20,5 @@ import { Zone } from './../../modules/datas/models/site';
 })
 export class ZonePreviewListComponent {
   @Input() zones$: Observable<Zone[]>;
-  @Input() idSite: string;
+  @Input() idPlatform: string;
 }

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { User, Country } from '../../countries/models/country';
-import { Site, Zone, Campaign, Transect } from '../../datas/models/site';
+import { Platform, Zone, Survey, Transect } from '../../datas/models/platform';
 import { Species } from '../../datas/models/species';
 import { Method } from '../models/analyse';
 import { type } from '../../core/utils/index';
@@ -11,7 +11,7 @@ export namespace AnalyseAction {
 
   export interface IAnalyseActions {
     SELECT_COUNTRY: string;
-    SELECT_CAMPAIGNS: string;
+    SELECT_SURVEYS: string;
     SELECT_ZONES: string;
     SELECT_TRANSECTS: string;
     SELECT_SPECIES: string;
@@ -23,7 +23,7 @@ export namespace AnalyseAction {
 
   export const ActionTypes: IAnalyseActions = {
     SELECT_COUNTRY : type('[Analyse] Select country'),
-    SELECT_CAMPAIGNS : type('[Analyse] Select Campaigns'),
+    SELECT_SURVEYS : type('[Analyse] Select Surveys'),
     SELECT_ZONES : type('[Analyse] Select Zones'),
     SELECT_TRANSECTS : type('[Analyse] Select Transects'),
     SELECT_SPECIES : type('[Analyse] Select Species'),
@@ -38,10 +38,10 @@ export class SelectCountry implements Action {
   constructor(public payload: Country) {}
 }
 
-export class SelectCampaigns implements Action {
-  readonly type = ActionTypes.SELECT_CAMPAIGNS;
+export class SelectSurveys implements Action {
+  readonly type = ActionTypes.SELECT_SURVEYS;
 
-  constructor(public payload: Campaign[] ) {}
+  constructor(public payload: Survey[] ) {}
 }
 
 export class SelectZones implements Action {
@@ -87,7 +87,7 @@ export class AnalyseFailure implements Action {
 
 export type Actions =
   | SelectCountry
-  | SelectCampaigns
+  | SelectSurveys
   | SelectZones
   | SelectTransects
   | SelectSpecies

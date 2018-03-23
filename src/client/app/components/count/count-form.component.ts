@@ -7,7 +7,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Site, Zone, Transect, Campaign, Count, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Transect, Survey, Count, Species } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -19,22 +19,22 @@ import { Site, Zone, Transect, Campaign, Count, Species } from '../../modules/da
     ],
 })
 export class CountFormComponent implements OnInit {
-    @Input() site: Site | null;
+    @Input() platform: Platform | null;
     @Input() zone: Zone | null;
     @Input() transect: Transect | null;
-    @Input() campaign: Campaign | null;
+    @Input() survey: Survey | null;
     @Input() count: Count | null;
     @Input() errorMessage: string;
     @Input() species: Species[];
     @Input() zones: Zone[];
     @Input() transects$: Observable<Transect[]>;
 
-    @Output() submitted = new EventEmitter<Campaign>();
+    @Output() submitted = new EventEmitter<Survey>();
 
     countForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
-        codeCampaign: new FormControl(),
-        codeSite: new FormControl(""),
+        codeSurvey: new FormControl(),
+        codePlatform: new FormControl(""),
         codeZone: new FormControl(""),
         codeTransect: new FormControl(),
         date: new FormControl(""),
@@ -57,11 +57,11 @@ export class CountFormComponent implements OnInit {
     }
 
     ngOnInit() {  
-        this.zones = this.site.zones;//.filter(zone => zone.transects !== null && zone.transects.length >0);   
-        this.countForm.controls.codeSite.setValue(this.site ? this.site.code : null);
-        this.countForm.controls.codeCampaign.setValue(this.campaign ? this.campaign.code : null);
-        (this.site !== undefined) ? this.countForm.controls.codeSite.disable() : this.countForm.controls.codeSite.enable();
-        (this.campaign !== undefined) ? this.countForm.controls.codeCampaign.disable() : this.countForm.controls.codeCampaign.enable();
+        this.zones = this.platform.zones;//.filter(zone => zone.transects !== null && zone.transects.length >0);   
+        this.countForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
+        this.countForm.controls.codeSurvey.setValue(this.survey ? this.survey.code : null);
+        (this.platform !== undefined) ? this.countForm.controls.codePlatform.disable() : this.countForm.controls.codePlatform.enable();
+        (this.survey !== undefined) ? this.countForm.controls.codeSurvey.disable() : this.countForm.controls.codeSurvey.enable();
         if(this.count) {
             this.countForm.controls.code.setValue(this.count.code);
             this.countForm.controls.codeZone.setValue(this.count.codeZone);
@@ -69,7 +69,7 @@ export class CountFormComponent implements OnInit {
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
         } else {
-            this.countForm.controls.code.setValue(this.campaign.code + "_");
+            this.countForm.controls.code.setValue(this.survey.code + "_");
             this.countForm.controls.monospecies.setValue(false);
         }
         this.initMesures();
@@ -105,14 +105,14 @@ export class CountFormComponent implements OnInit {
 
     submit() {
         if (this.countForm.valid) {
-            this.countForm.value.codeSite=this.countForm.controls.codeSite.value;
-            this.countForm.value.codeCampaign=this.countForm.controls.codeCampaign.value;
+            this.countForm.value.codePlatform=this.countForm.controls.codePlatform.value;
+            this.countForm.value.codeSurvey=this.countForm.controls.codeSurvey.value;
             this.submitted.emit(this.countForm.value);
         }
     }
 
     return() {
-        let redirect = this.count ? 'count/'+this.site.code+'/'+this.campaign.code+'/'+this.count.code : '/campaign/' + this.site.code + "/" + this.campaign.code;
+        let redirect = this.count ? 'count/'+this.platform.code+'/'+this.survey.code+'/'+this.count.code : '/survey/' + this.platform.code + "/" + this.survey.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

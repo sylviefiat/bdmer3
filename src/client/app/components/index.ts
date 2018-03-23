@@ -21,20 +21,20 @@ import { NewCountryPageComponent } from './country/new-country-page.component';
 import { NewCountryComponent } from './country/new-country.component';
 import { NewUserPageComponent } from './country/new-user-page.component';
 import { NewUserComponent } from './country/new-user.component';
-import { SITE_COMPONENTS } from './site/index';
+import { PLATFORM_COMPONENTS } from './platform/index';
 import { ZONE_COMPONENTS } from './zone/index';
 import { TR_COMPONENTS } from './transect/index';
-import { CA_COMPONENTS } from './campaign/index';
+import { SU_COMPONENTS } from './survey/index';
 import { PA_COMPONENTS } from './preference-area/index';
 import { COUNT_COMPONENTS } from './count/index';
 import { SP_COMPONENTS } from './species/index';
 import { ANALYSE_COMPONENTS } from './analyse/index';
 
 export const APP_COMPONENTS: any[] = [
-  ...SITE_COMPONENTS,
+  ...PLATFORM_COMPONENTS,
   ...SP_COMPONENTS,
   ...ZONE_COMPONENTS,
-  ...CA_COMPONENTS,
+  ...SU_COMPONENTS,
   ...TR_COMPONENTS,
   ...PA_COMPONENTS,
   ...COUNT_COMPONENTS,
@@ -88,9 +88,9 @@ export * from './country/new-country.component';
 export * from './country/new-country-page.component';
 export * from './country/new-user-page.component';
 export * from './country/new-user.component';
-export * from './site/index';
+export * from './platform/index';
 export * from './zone/index';
-export * from './campaign/index';
+export * from './survey/index';
 export * from './transect/index';
 export * from './preference-area/index';
 export * from './count/index';

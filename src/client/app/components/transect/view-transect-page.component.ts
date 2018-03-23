@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
+import { Platform, Zone, Transect } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -28,7 +28,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-transect 
-      [site]="site$ | async"
+      [platform]="platform$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async"
       (action)="actionTransect($event)"
@@ -37,33 +37,33 @@ import { SiteAction } from '../../modules/datas/actions/index';
   `,
 })
 export class ViewTransectPageComponent implements OnInit, OnDestroy {
-  siteSubscription: Subscription;
+  platformSubscription: Subscription;
   zoneSubscription: Subscription;
   transectSubscription: Subscription;
   zone$: Observable<Zone | null>;
-  site$: Observable<Site | null>;
+  platform$: Observable<Platform | null>;
   transect$: Observable<Transect | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+      .map(params => new PlatformAction.SelectTransectAction(params.idTransect))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
+    this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
     this.transect$ = this.store.let(getSelectedTransect);
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.transectSubscription.unsubscribe();
   }
@@ -73,6 +73,6 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
   }
 
   removeTransect(transect: Transect){
-    this.store.dispatch(new SiteAction.RemoveTransectAction(transect));
+    this.store.dispatch(new PlatformAction.RemoveTransectAction(transect));
   }
 }

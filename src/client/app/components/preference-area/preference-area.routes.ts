@@ -5,26 +5,26 @@ import { AuthGuard } from '../../modules/auth/guards/index';
 
 export const PreferenceAreaRoutes: Array<any> = [
   {
-    path: 'zonePrefForm/:idSite/:idZone',
+    path: 'zonePrefForm/:idPlatform/:idZone',
     component: PreferenceAreaFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'zonePrefForm/:idSite/:idZone/:idZonePref',
+    path: 'zonePrefForm/:idPlatform/:idZone/:idZonePref',
     component: PreferenceAreaFormPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zonePrefImport/:idSite',
+    path: 'zonePrefImport/:idPlatform',
     component: PreferenceAreaImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zonePrefImport/:idSite/:idZone',
+    path: 'zonePrefImport/:idPlatform/:idZone',
     component: PreferenceAreaImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zonePref/:idSite/:idZone/:idZonePref',
+    path: 'zonePref/:idPlatform/:idZone/:idZonePref',
     component: ViewPreferenceAreaPageComponent,
     canActivate : [AuthGuard]
   }

@@ -1,0 +1,38 @@
+<div>
+    <mat-card class="actions">
+      <mat-card-title>{{ 'IMPORT_PLATFORMS' | translate}}</mat-card-title>
+      <mat-card-content>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+      </mat-card-content>   
+      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>    
+    </mat-card>
+</div>
+<div class="insideform">
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+    </mat-card-title-group>
+    <mat-card-content>
+      {{'IMPORT_DESC' | translate }}    
+    </mat-card-content>
+    <mat-card-content class="warn" *ngIf="isAdmin$ | async">
+      {{'IMPORT_DESC_ADMIN' | translate }}      
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_PLATFORMS' | translate }} <span *ngIf="isAdmin$ | async">{{ 'DOWNLOAD_CSV_PLATFORMS_ADMIN' | translate }}</span></h5>
+      <a *ngIf="!(isAdmin$ | async)" href="{{getCsvPlatformsUrl()}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+      </a>
+      <a *ngIf="isAdmin$ | async" href="{{getCsvPlatformsUrlAdmin()}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+      </a>
+    </mat-card-footer>
+    <mat-card-actions align="start">
+      <button (click)="fileInput.click()">
+        <span>{{ 'IMPORT_CSV' | translate }}</span>
+        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

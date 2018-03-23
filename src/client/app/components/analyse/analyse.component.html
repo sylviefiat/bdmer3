@@ -5,48 +5,56 @@
     <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
       <mat-step [stepControl]="countryFormGroup">
         <form [formGroup]="countryFormGroup" *ngIf="isAdmin">
-          <ng-template matStepLabel>Select country</ng-template>
-          <mat-form-field>
-            <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="country" (change)="setCountry($event.value)" required>
-                <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
-            </mat-select>
-          </mat-form-field> 
+          <ng-template matStepLabel>{{ 'SELECT_COUNTRY' | translate}}</ng-template>
+          <bc-analyse-country [countries]="countries" (countryEmitter)="setCountry($event)" [form]="countryFormGroup" [inputName]="'country'"></bc-analyse-country>
           <div>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="campaignsFormGroup">
-        <form [formGroup]="campaignsFormGroup">
-          <ng-template matStepLabel>Select campaign(s)</ng-template>
-          <mat-form-field>
-            <mat-select placeholder="{{ 'SELECT_CAMPAIGNS' | translate}}" formControlName="campaigns" (change)="setCampaigns($event.value)" multiple required>
+      <mat-step [stepControl]="platformFormGroup">
+        <form [formGroup]="platformFormGroup">
+          <ng-template matStepLabel>{{ 'SELECT_PLATFORM' | translate}}</ng-template>
+          <bc-analyse-platform [platforms]="platforms" (platformEmitter)="setPlatform($event)" [form]="platformFormGroup" [inputName]="'platforms'"></bc-analyse-platform>
+          <div>
+            <button mat-button *ngIf="isAdmin"  matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+          </div>
+        </form>
+      </mat-step>
+
+
+      <mat-step [stepControl]="surveysFormGroup">
+        <form [formGroup]="surveysFormGroup">
+          <ng-template matStepLabel>{{ 'SELECT_SURVEYS' | translate}}</ng-template>
+          <!--<mat-form-field>
+            <mat-select placeholder="{{ 'SELECT_SURVEYS' | translate}}" formControlName="surveys" (change)="setSurveys($event.value)" multiple required>
                 <mat-select-trigger>
-                  {{campaignsFormGroup.controls.campaigns.value ? campaignsFormGroup.controls.campaigns.value[0] : 'yo'}}
-                  <span *ngIf="campaignsFormGroup.controls.campaigns.value?.length > 1">
-                    (+{{campaignsFormGroup.controls.campaigns.value.length - 1}} others)
+                  {{surveysFormGroup.controls.surveys.value ? surveysFormGroup.controls.surveys.value[0] : 'yo'}}
+                  <span *ngIf="surveysFormGroup.controls.surveys.value?.length > 1">
+                    (+{{surveysFormGroup.controls.surveys.value.length - 1}} others)
                   </span>
                 </mat-select-trigger>
-                <mat-option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign.code}}</mat-option>
+                <mat-option *ngFor="let survey of surveys" [value]="survey">{{survey.code}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field>-->
           <div>
-            <button mat-button *ngIf="isAdmin"  matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="zonesFormGroup">
         <form [formGroup]="zonesFormGroup">
-          <ng-template matStepLabel>Select Zone(s)</ng-template>
-          <mat-tab-group>
-            <mat-tab *ngFor="let zones of zonesFormGroup.controls.campaigns.controls; let i = index;">
-                <ng-template mat-tab-label>{{currentCampaigns[i].code}}</ng-template>
+          <ng-template matStepLabel>{{ 'SELECT_ZONES' | translate}}</ng-template>
+          <!--<mat-tab-group>
+            <mat-tab *ngFor="let zones of zonesFormGroup.controls.zones.controls; let i = index;">
+                <ng-template mat-tab-label>{{currentSurveys[i].code}}</ng-template>
                 <p>
-                    {{currentCampaigns[i].dateStart | date:localDate}}, {{currentCampaigns[i].dateEnd | date:localDate}}
+                    {{'SURVEY_DATES' | translate}}:{{currentSurveys[i].dateStart | date:localDate}}, {{currentSurveys[i].dateEnd | date:localDate}}
                 </p>
                 <p>
-                    {{'PARTICIPANTS' | translate}}: {{currentCampaigns[i].participants}}
+                    {{'PARTICIPANTS' | translate}}: {{currentSurveys[i].participants}}
                 </p>
                 <mat-form-field [formGroup]="zones">
                     <mat-select placeholder="{{ 'SELECT_ZONES' | translate}}" formControlName="zones" (change)="setZones($event.value)" multiple required>
@@ -54,24 +62,24 @@
                     </mat-select>
                 </mat-form-field>
             </mat-tab>
-          </mat-tab-group>
+          </mat-tab-group>-->
           <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="transectsFormGroup" [optional]="true">
         <form [formGroup]="transectsFormGroup">
-          <ng-template matStepLabel>Select Transect(s)</ng-template>
+          <ng-template matStepLabel>{{ 'SELECT_TRANSECTS' | translate}}</ng-template>
           <!--<mat-tab-group>
             <mat-tab *ngFor="let transects of transectsList; let j = index;">
-                <ng-template mat-tab-label>{{currentCampaigns[j].code}}</ng-template>
+                <ng-template mat-tab-label>{{currentSurveys[j].code}}</ng-template>
                 <p>
-                    {{currentCampaigns[j].dateStart | date:localDate}}, {{currentCampaigns[j].dateEnd | date:localDate}}
+                    {{currentSurveys[j].dateStart | date:localDate}}, {{currentSurveys[j].dateEnd | date:localDate}}
                 </p>
                 <p>
-                    {{'PARTICIPANTS' | translate}}: {{currentCampaigns[j].participants}}
+                    {{'PARTICIPANTS' | translate}}: {{currentSurveys[j].participants}}
                 </p>
                 <mat-form-field>
                     <mat-select placeholder="{{ 'SELECT_TRANSECTS' | translate}}" formControlName="transects" multiple required>                       
@@ -81,34 +89,34 @@
             </mat-tab>
         </mat-tab-group>-->
           <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="speciesFormGroup">
         <form [formGroup]="speciesFormGroup">
-          <ng-template matStepLabel>Select Species</ng-template>
+          <ng-template matStepLabel>{{ 'SELECT_SPECIES' | translate}}</ng-template>
          <!-- <mat-form-field>
             <mat-select placeholder="{{ 'SELECT_SPECIES' | translate}}" formControlName="species" multiple required>
                 <mat-option *ngFor="let sp of species" [value]="sp">{{sp.code}}</mat-option>
             </mat-select>
           </mat-form-field> -->
           <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="analyseFormGroup">
         <form [formGroup]="analyseFormGroup">
-          <ng-template matStepLabel>Start Analyse</ng-template>
+          <ng-template matStepLabel>{{ 'START_ANALYSE' | translate}}</ng-template>
           
-          <button mat-button (click)="stepper.submit()">Start Analyse</button>
+          <button mat-button (click)="stepper.submit()">{{ 'START_ANALYSE' | translate}}</button>
         </form>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
+          <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+          <button mat-button (click)="stepper.reset()">{{ 'RESET' | translate}}</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

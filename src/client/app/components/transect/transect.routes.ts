@@ -10,26 +10,26 @@ export const TransectRoutes: Array<any> = [
     canActivate : [AuthGuard]
   }, */
   {
-    path: 'transectForm/:idSite/:idZone',
+    path: 'transectForm/:idPlatform/:idZone',
     component: TransectFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'transectForm/:idSite/:idZone/:idTransect',
+    path: 'transectForm/:idPlatform/:idZone/:idTransect',
     component: TransectFormPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'transectImport/:idSite',
+    path: 'transectImport/:idPlatform',
     component: TransectImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'transectImport/:idSite/:idZone',
+    path: 'transectImport/:idPlatform/:idZone',
     component: TransectImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'transect/:idSite/:idZone/:idTransect',
+    path: 'transect/:idPlatform/:idZone/:idTransect',
     component: ViewTransectPageComponent,
     canActivate : [AuthGuard]
   }

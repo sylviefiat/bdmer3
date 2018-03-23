@@ -4,9 +4,9 @@ import { AboutRoutes } from './about/about.routes';
 import { MapRoutes } from './map/map.routes';
 import { LoginRoutes } from './login/login.routes';
 import { CountryRoutes } from './country/country.routes';
-import { SiteRoutes } from './site/site.routes';
+import { PlatformRoutes } from './platform/platform.routes';
 import { SpeciesRoutes } from './species/species.routes';
-import { CampaignRoutes } from './campaign/campaign.routes';
+import { SurveyRoutes } from './survey/survey.routes';
 import { TransectRoutes } from './transect/transect.routes';
 import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
 import { ZoneRoutes } from './zone/zone.routes';
@@ -20,9 +20,9 @@ export const routes: Array<any> = [
   ...MapRoutes,
   ...LoginRoutes,
   ...CountryRoutes,
-  ...SiteRoutes,
+  ...PlatformRoutes,
   ...SpeciesRoutes,
-  ...CampaignRoutes,
+  ...SurveyRoutes,
   ...TransectRoutes,
   ...PreferenceAreaRoutes,
   ...ZoneRoutes,

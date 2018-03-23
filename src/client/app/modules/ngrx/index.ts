@@ -43,10 +43,10 @@ import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn
 import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
-import { ISiteState, siteReducer, getSiteLoaded, getSiteLoading, getSiteEntities, getSiteIds, getSiteError, getSiteMsg, getSiteOfCurrentCountry, getCampaignsOfCurrentCountry} from '../datas/index';
-import { getCurrentSite, getCurrentSiteZones, getCurrentSiteCampaigns, getCurrentZone, getCurrentZoneTransects, 
-    getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentCampaign, getCurrentCampaignCounts } from '../datas/index';
-import { IAnalyseState, analyseReducer, getUsedCountry, getUsedCampaigns, getUsedZones, getUsedTransects, getUsedSpecies, 
+import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
+import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneTransects, 
+    getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
+import { IAnalyseState, analyseReducer, getUsedCountry, getUsedSurveys, getUsedZones, getUsedTransects, getUsedSpecies, 
     getMethods, getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables } from '../analyse/index'
 
 /**
@@ -61,7 +61,7 @@ export interface IAppState {
   countries: ICountriesState;
   country: ICountryState;
   species: ISpeciesState;
-  site: ISiteState;
+  platform: IPlatformState;
   analyse: IAnalyseState;
 }
 
@@ -80,7 +80,7 @@ const reducers = {
   countries: countriesReducer,
   country: countryReducer,
   species: speciesReducer,
-  site: siteReducer,
+  platform: platformReducer,
   analyse: analyseReducer
 };
 
@@ -120,8 +120,8 @@ export function getCountryState(state$: Observable<IAppState>): Observable<ICoun
 export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
   return state$.select(s => s.species);
 }
-export function getSiteState(state$: Observable<IAppState>): Observable<ISiteState> {
-  return state$.select(s => s.site);
+export function getPlatformState(state$: Observable<IAppState>): Observable<IPlatformState> {
+  return state$.select(s => s.platform);
 }
 export function getAnalyseState(state$: Observable<IAppState>): Observable<IAnalyseState> {
   return state$.select(s => s.analyse);
@@ -174,30 +174,31 @@ export const getSpeciesPageError: any = compose(getSpeciesError, getSpeciesState
 export const getSpeciesPageMsg: any = compose(getSpeciesMsg, getSpeciesState);
 export const getSelectedSpecies: any = compose(getCurrentSpecies, getSpeciesState);
 
-// Site
-export const getSiteisLoaded: any = compose(getSiteLoaded, getSiteState);
-export const getSiteisLoading: any = compose(getSiteLoading, getSiteState);
-export const getSiteInApp: any = compose(getSiteEntities, getSiteState);
-export const getSiteIdsInApp: any = compose(getSiteIds, getSiteState);
-export const getSitePageError: any = compose(getSiteError, getSiteState);
-export const getSitePageMsg: any = compose(getSiteMsg, getSiteState);
-export const getSelectedSite: any = compose(getCurrentSite, getSiteState);
-export const getSelectedSiteZones: any = compose(getCurrentSiteZones, getSiteState);
-export const getSelectedSiteCampaigns: any = compose(getCurrentSiteCampaigns, getSiteState);
-export const getSelectedZone: any = compose(getCurrentZone, getSiteState);
-export const getSelectedZoneTransects: any = compose(getCurrentZoneTransects, getSiteState);
-export const getSelectedZoneZonePrefs: any = compose(getCurrentZoneZonePrefs, getSiteState);
-export const getSelectedZonePref: any = compose(getCurrentSpPref, getSiteState);
-export const getSelectedTransect: any = compose(getCurrentTransect, getSiteState);
-export const getSelectedCampaign: any = compose(getCurrentCampaign, getSiteState);
-export const getSelectedCampaignCounts: any = compose(getCurrentCampaignCounts, getSiteState);
-export const getSelectedCount: any = compose(getCurrentCount, getSiteState);
-export const getSiteListCurrentCountry: any = compose(getSiteOfCurrentCountry, getAppState);
-export const getSelectedCountryCampaigns: any = compose(getCampaignsOfCurrentCountry, getAppState);
+// Platform
+export const getPlatformisLoaded: any = compose(getPlatformLoaded, getPlatformState);
+export const getPlatformisLoading: any = compose(getPlatformLoading, getPlatformState);
+export const getPlatformInApp: any = compose(getPlatformEntities, getPlatformState);
+export const getPlatformIdsInApp: any = compose(getPlatformIds, getPlatformState);
+export const getPlatformPageError: any = compose(getPlatformError, getPlatformState);
+export const getPlatformPageMsg: any = compose(getPlatformMsg, getPlatformState);
+export const getSelectedPlatform: any = compose(getCurrentPlatform, getPlatformState);
+export const getSelectedPlatformZones: any = compose(getCurrentPlatformZones, getPlatformState);
+export const getSelectedPlatformSurveys: any = compose(getCurrentPlatformSurveys, getPlatformState);
+export const getSelectedZone: any = compose(getCurrentZone, getPlatformState);
+export const getSelectedZoneTransects: any = compose(getCurrentZoneTransects, getPlatformState);
+export const getSelectedZoneZonePrefs: any = compose(getCurrentZoneZonePrefs, getPlatformState);
+export const getSelectedZonePref: any = compose(getCurrentSpPref, getPlatformState);
+export const getSelectedTransect: any = compose(getCurrentTransect, getPlatformState);
+export const getSelectedSurvey: any = compose(getCurrentSurvey, getPlatformState);
+export const getSelectedSurveyCounts: any = compose(getCurrentSurveyCounts, getPlatformState);
+export const getSelectedCount: any = compose(getCurrentCount, getPlatformState);
+export const getPlatformListCurrentCountry: any = compose(getPlatformOfCurrentCountry, getAppState);
+export const getSelectedCountryPlatforms: any = compose(getPlatformsOfCurrentCountry, getAppState);
+export const getSelectedCountrySurveys: any = compose(getSurveysOfCurrentCountry, getAppState);
 
 // Analyse
 export const getAnalyseCountry: any = compose(getUsedCountry, getAnalyseState);
-export const getAnalyseCampaigns: any = compose(getUsedCampaigns, getAnalyseState);
+export const getAnalyseSurveys: any = compose(getUsedSurveys, getAnalyseState);
 export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
 export const getTransectZones: any = compose(getUsedTransects, getAnalyseState);
 export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
@@ -207,5 +208,5 @@ export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
 export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
 export const getAnalyseResult: any = compose(getResult, getAnalyseState);
 export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
-export const getSelectedCampaignsZones: any = compose(getZonesAvailables, getAppState);
-export const getSelectedCampaignsTransects: any = compose(getTransectsAvailables, getAppState);
+export const getSelectedSurveysZones: any = compose(getZonesAvailables, getAppState);
+export const getSelectedSurveysTransects: any = compose(getTransectsAvailables, getAppState);

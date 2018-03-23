@@ -15,9 +15,9 @@
 
   <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MAP' | translate}}</a>
 
-  <a *ngIf="(isLogged$ | async)" [routerLink]="['/site']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+  <a *ngIf="(isLogged$ | async)" [routerLink]="['/platform']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
     <fa [name]="'map-marker'" [border]=true></fa>
-    {{'MENU_SITE' | translate}}
+    {{'MENU_PLATFORM' | translate}}
   </a>
 
   <a *ngIf="(isLogged$ | async) && ((currentCountry$ | async)?.code==='AA')" [routerLink]="['/species']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">

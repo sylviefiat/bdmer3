@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone } from '../../modules/datas/models/index';
+import { Platform, Zone } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSitePageMsg, getLangues } from '../../modules/ngrx/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getLangues } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
@@ -21,7 +21,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
     ],
 })
 export class PreferenceAreaImportComponent implements OnInit{
-    @Input() site: Site;
+    @Input() platform: Platform;
     @Input() zone: Zone;
     @Input() error: string | null;
     @Input() msg: string | null;
@@ -66,6 +66,6 @@ export class PreferenceAreaImportComponent implements OnInit{
     }
 
     cancel() {
-        this.back.emit(this.site.code);
+        this.back.emit(this.platform.code);
     }
 }

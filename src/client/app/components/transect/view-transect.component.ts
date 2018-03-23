@@ -7,9 +7,9 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState } from '../../modules/ngrx/index';
 
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site,Zone, Transect, Count } from '../../modules/datas/models/index';
+import { Platform,Zone, Transect, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -22,7 +22,7 @@ import { WindowService } from '../../modules/core/services/index';
     ],
 })
 export class ViewTransectComponent implements OnInit {    
-    @Input() site: Site;
+    @Input() platform: Platform;
     @Input() zone: Zone;
     @Input() transect: Transect;
     
@@ -47,7 +47,7 @@ export class ViewTransectComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "transectForm":
-                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code+'/'+this.transect.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.code+'/'+this.transect.code);
                 break;
             case "deleteTransect":
                 this.deleteTransect();
@@ -58,16 +58,16 @@ export class ViewTransectComponent implements OnInit {
         
     }
 
-    toSites(){
-        this.routerext.navigate(['site']);
+    toPlatforms(){
+        this.routerext.navigate(['platform']);
     }
 
-    toSite(){
-        this.routerext.navigate(['site/'+this.site.code]);
+    toPlatform(){
+        this.routerext.navigate(['platform/'+this.platform.code]);
     }
 
     toZone(){
-        this.routerext.navigate(['zone/'+this.site.code+'/'+this.zone.code]);
+        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.code]);
     }
 
 }

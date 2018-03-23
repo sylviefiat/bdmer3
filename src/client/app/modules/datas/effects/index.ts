@@ -1,2 +1,2 @@
 export * from './species.effects';
-export * from './site.effects';
+export * from './platform.effects';

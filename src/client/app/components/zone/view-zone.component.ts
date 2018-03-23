@@ -10,9 +10,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IAppState } from '../../modules/ngrx/index';
 
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Site, Zone, Transect, ZonePreference, Campaign } from '../../modules/datas/models/index';
+import { Platform, Zone, Transect, ZonePreference, Survey } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -26,7 +26,7 @@ import { WindowService } from '../../modules/core/services/index';
 })
 export class ViewZoneComponent implements OnInit { 
     @Input() zone: Zone;   
-    @Input() site: Site;
+    @Input() platform: Platform;
     @Input() transects$: Observable<Transect[]>;
     @Input() zonesPref$: Observable<ZonePreference[]>;
     filteredTransects$: Observable<Transect[]>;
@@ -63,7 +63,7 @@ export class ViewZoneComponent implements OnInit {
             case "transects":
                 this.filteredTransects$ = this.transects$.map(transects => 
                     transects.filter(transect => transect.code.toLowerCase().indexOf(filter)!==-1 || 
-                        transect.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        transect.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         transect.codeZone.toLowerCase().indexOf(filter)!==-1 ||
                         transect.latitude.toLowerCase().indexOf(filter)!==-1 ||
                         transect.longitude.toLowerCase().indexOf(filter)!==-1
@@ -74,7 +74,7 @@ export class ViewZoneComponent implements OnInit {
             default:
                 this.filteredZonesPrefs$ = this.zonesPref$.map(zonesPref => 
                     zonesPref.filter(zonePref => zonePref.code.toLowerCase().indexOf(filter)!==-1 || 
-                        zonePref.codeSite.toLowerCase().indexOf(filter)!==-1 || 
+                        zonePref.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         zonePref.codeZone.toString().toLowerCase().indexOf(filter)!==-1 ||
                         zonePref.codeSpecies.toString().toLowerCase().indexOf(filter)!==-1 ||
                         zonePref.presence.toLowerCase().indexOf(filter)!==-1 ||
@@ -93,7 +93,7 @@ export class ViewZoneComponent implements OnInit {
             case "zonePrefImport":
             case "transectForm":
             case "transectImport":
-                this.action.emit(type+'/'+this.site._id+"/"+this.zone.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.code);
                 break;
             case "deleteZone":
                 this.deleteZone();
@@ -115,11 +115,11 @@ export class ViewZoneComponent implements OnInit {
         }
     }
 
-    toSites(){
-        this.routerext.navigate(['site']);
+    toPlatforms(){
+        this.routerext.navigate(['platform']);
     }
 
-    toSite(){
-        this.routerext.navigate(['site/'+this.site.code]);
+    toPlatform(){
+        this.routerext.navigate(['platform/'+this.platform.code]);
     }
 }

@@ -31,7 +31,7 @@ export class SpeciesEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => { 
-    return this.speciesService.initDB('species','http://bdmer3.ird.nc/db/');
+    return this.speciesService.initDB('species','http://127.0.0.1:5984/');
   });
 
   @Effect()

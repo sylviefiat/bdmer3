@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
-import { Campaign, Zone, Site, Count, Species } from './../../modules/datas/models/index';
+import { Survey, Zone, Platform, Count, Species } from './../../modules/datas/models/index';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { IAppState, getLangues, getSpeciesInApp } from './../../modules/ngrx/index';
@@ -10,8 +10,8 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
   template: `
     <bc-count-preview *ngFor="let count of counts" 
       [count]="count" 
-      [campaign]="campaign" 
-      [site]="site" [locale]="locale$ | async" 
+      [survey]="survey" 
+      [platform]="platform" [locale]="locale$ | async" 
       [species]="species$ | async">
     </bc-count-preview>
   `,
@@ -27,8 +27,8 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
 })
 export class CountPreviewListComponent implements OnInit {
   @Input() counts: Count[];
-  @Input() campaign: Campaign;
-  @Input() site: Site;
+  @Input() survey: Survey;
+  @Input() platform: Platform;
   species$: Observable<Species[]>;
   locale$: Observable<string>;
 

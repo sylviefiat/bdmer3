@@ -1,2 +1,2 @@
 export * from './species.reducer';
-export * from './site.reducer';
+export * from './platform.reducer';

@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedCampaign,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
-import { Site, Zone, Campaign, Transect, Count, Species } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedSurvey,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
+import { Platform, Zone, Survey, Transect, Count, Species } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 
 /**
@@ -29,8 +29,8 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-count 
-      [site]="site$ | async"
-      [campaign]="campaign$ | async"
+      [platform]="platform$ | async"
+      [survey]="survey$ | async"
       [count]="count$ | async"
       [locale]="locale$ | async" 
       [species]="speciesList$ | async"
@@ -40,30 +40,30 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
   `,
 })
 export class ViewCountPageComponent implements OnInit, OnDestroy {
-  siteSubscription: Subscription;
-  campaignSubscription: Subscription;
+  platformSubscription: Subscription;
+  surveySubscription: Subscription;
   countSubscription: Subscription;
-  site$: Observable<Site | null>;
-  campaign$: Observable<Campaign | null>;
+  platform$: Observable<Platform | null>;
+  survey$: Observable<Survey | null>;
   count$: Observable<Count | null>;
   locale$: Observable<string>;
   speciesList$: Observable<Species[]>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);
-    this.campaignSubscription = route.params
-      .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
+    this.surveySubscription = route.params
+      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
       .subscribe(store);
     this.countSubscription = route.params
-      .map(params => new SiteAction.SelectCountAction(params.idCount))
+      .map(params => new PlatformAction.SelectCountAction(params.idCount))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
-    this.campaign$ = this.store.let(getSelectedCampaign);
+    this.platform$ = this.store.let(getSelectedPlatform);
+    this.survey$ = this.store.let(getSelectedSurvey);
     this.count$ = this.store.let(getSelectedCount);
     this.locale$ = this.store.let(getLangues);
     this.speciesList$ = this.store.let(getSpeciesInApp);
@@ -71,8 +71,8 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
-    this.campaignSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
+    this.surveySubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }
 
@@ -81,6 +81,6 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   }
 
   removeCount(count: Count){
-    this.store.dispatch(new SiteAction.RemoveCountAction(count));
+    this.store.dispatch(new PlatformAction.RemoveCountAction(count));
   }
 }

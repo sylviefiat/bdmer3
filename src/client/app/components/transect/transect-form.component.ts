@@ -6,7 +6,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Site, Zone, Transect, ZonePreference, Count } from '../../modules/datas/models/index';
+import { Platform, Zone, Transect, ZonePreference, Count } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +18,7 @@ import { Site, Zone, Transect, ZonePreference, Count } from '../../modules/datas
     ],
 })
 export class TransectFormComponent implements OnInit {
-    @Input() site: Site | null;
+    @Input() platform: Platform | null;
     @Input() zone: Zone | null;
     @Input() transect: Transect | null;
     @Input() errorMessage: string;
@@ -27,7 +27,7 @@ export class TransectFormComponent implements OnInit {
 
     transectForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
-        codeSite: new FormControl(""),
+        codePlatform: new FormControl(""),
         codeZone: new FormControl(""),
         latitude: new FormControl(""),
         longitude: new FormControl("")
@@ -36,9 +36,9 @@ export class TransectFormComponent implements OnInit {
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
     
     ngOnInit() {
-        this.transectForm.controls.codeSite.setValue(this.site ? this.site.code : null);
+        this.transectForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.code : null);
-        (this.site !== undefined) ? this.transectForm.controls.codeSite.disable() : this.transectForm.controls.codeSite.enable();
+        (this.platform !== undefined) ? this.transectForm.controls.codePlatform.disable() : this.transectForm.controls.codePlatform.enable();
         (this.zone !== undefined) ? this.transectForm.controls.codeZone.disable() : this.transectForm.controls.codeZone.enable();
         if(this.transect) {
             this.transectForm.controls.code.setValue(this.transect.code);
@@ -52,14 +52,14 @@ export class TransectFormComponent implements OnInit {
     submit() {
         console.log(this.transectForm);
         if (this.transectForm.valid) {
-            this.transectForm.value.codeSite=this.transectForm.controls.codeSite.value;
+            this.transectForm.value.codePlatform=this.transectForm.controls.codePlatform.value;
             this.transectForm.value.codeZone=this.transectForm.controls.codeZone.value;
             this.submitted.emit(this.transectForm.value);
         }
     }
 
     return() {
-        let redirect = this.transect ? 'transect/'+this.site.code+'/'+this.zone.code+'/'+this.transect.code : '/zone/' + this.site.code + "/" + this.zone.code;
+        let redirect = this.transect ? 'transect/'+this.platform.code+'/'+this.zone.code+'/'+this.transect.code : '/zone/' + this.platform.code + "/" + this.zone.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

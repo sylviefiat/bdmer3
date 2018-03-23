@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,Campaign, Count, Species } from './../../modules/datas/models/index';
+import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/models/index';
 
 @Component({
   selector: 'bc-count-preview',
   template: `
-    <a [routerLink]="['/count', codeSite, codeCampaign, code]">
+    <a [routerLink]="['/count', codePlatform, codeSurvey, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeCampaign">{{ codeCampaign }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeSurvey">{{ codeSurvey }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
@@ -89,8 +89,8 @@ import { Site,Zone,Campaign, Count, Species } from './../../modules/datas/models
 })
 export class CountPreviewComponent implements OnInit {  
   @Input() count: Count;
-  @Input() campaign: Campaign;
-  @Input() site: Site;
+  @Input() survey: Survey;
+  @Input() platform: Platform;
   @Input() locale: string;
   @Input() species: Species[];
 
@@ -114,12 +114,12 @@ export class CountPreviewComponent implements OnInit {
     return this.count.code;
   }
 
-  get codeSite() {
-    return this.site.code;
+  get codePlatform() {
+    return this.platform.code;
   }
 
-  get codeCampaign() {
-    return this.campaign.code;
+  get codeSurvey() {
+    return this.survey.code;
   }
 
   get date() {

@@ -7,11 +7,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone, ZonePreference } from '../../modules/datas/models/index';
+import { Platform, Zone, ZonePreference } from '../../modules/datas/models/index';
 import { Species } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedZonePref, getSpeciesInApp } from '../../modules/ngrx/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getSelectedZonePref, getSpeciesInApp } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 
 @Component({
@@ -20,7 +20,7 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
     <bc-zone-pref-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
-      [site]="site$ | async"
+      [platform]="platform$ | async"
       [zone]="zone$ | async"
       [zonePref]="zonePref$ | async"
       [species]="speciesList$ | async">
@@ -39,28 +39,28 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
 })
 export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
-  site$: Observable<Site>;
+  platform$: Observable<Platform>;
   zone$: Observable<Zone>;
   zonePref$: Observable<ZonePreference>;
   speciesList$: Observable<Species[]>;
-  siteSubscription: Subscription;
+  platformSubscription: Subscription;
   zoneSubscription: Subscription;
   zonePrefSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);      
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.zonePrefSubscription = route.params
-      .map(params => new SiteAction.SelectZonePrefAction(params.idZonePref))
+      .map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
+    this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
     this.zonePref$ = this.store.let(getSelectedZonePref);
     this.speciesList$ = this.store.let(getSpeciesInApp);
@@ -68,13 +68,13 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.zonePrefSubscription.unsubscribe();
   }
 
   onSubmit(zonePref: ZonePreference) { 
     console.log(zonePref);
-      this.store.dispatch(new SiteAction.AddZonePrefAction(zonePref))
+      this.store.dispatch(new PlatformAction.AddZonePrefAction(zonePref))
   }
 }

@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedZoneTransects, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
-import { Site, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZoneTransects, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
+import { Platform, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-zone 
-      [site]="(site$ | async)"
+      [platform]="(platform$ | async)"
       [zone]="zone$ | async"
       [transects$]="transects$"
       [zonesPref$]="zonesPref$"
@@ -29,31 +29,31 @@ import { SiteAction } from '../../modules/datas/actions/index';
   `,
 })
 export class ViewZonePageComponent implements OnInit, OnDestroy {
-  siteSubscription: Subscription;
+  platformSubscription: Subscription;
   zoneSubscription: Subscription;
   zone$: Observable<Zone | null>;
-  site$: Observable<Site | null>;
+  platform$: Observable<Platform | null>;
   transects$: Observable<Transect[]>;
   zonesPref$: Observable<ZonePreference[]>
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
+    this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
     this.transects$ = this.store.let(getSelectedZoneTransects);
     this.zonesPref$ = this.store.let(getSelectedZoneZonePrefs);
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
   }
 
@@ -62,6 +62,6 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   }
 
   removeZone(zone: Zone){
-    this.store.dispatch(new SiteAction.RemoveZoneAction(zone));
+    this.store.dispatch(new PlatformAction.RemoveZoneAction(zone));
   }
 }

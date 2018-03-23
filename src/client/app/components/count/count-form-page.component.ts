@@ -7,10 +7,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone, Campaign, Count, Species, Transect } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Count, Species, Transect } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedCampaign, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getSelectedSurvey, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 
 @Component({
@@ -19,8 +19,8 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
     <bc-count-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
-      [site]="site$ | async"
-      [campaign]="campaign$ | async"
+      [platform]="platform$ | async"
+      [survey]="survey$ | async"
       [count]="count$ | async"
       [species]="species$ | async">
     </bc-count-form>
@@ -40,42 +40,42 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
 })
 export class CountFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
-  site$: Observable<Site>;
-  campaign$: Observable<Campaign>;
+  platform$: Observable<Platform>;
+  survey$: Observable<Survey>;
   count$: Observable<Count>;
   species$: Observable<Species[]>;
-  siteSubscription: Subscription;
-  campaignSubscription: Subscription;
+  platformSubscription: Subscription;
+  surveySubscription: Subscription;
   countSubscription: Subscription;
 
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);  
-    this.campaignSubscription = route.params
-      .map(params => new SiteAction.SelectCampaignAction(params.idCampaign))
+    this.surveySubscription = route.params
+      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
       .subscribe(store);
     this.countSubscription = route.params
-      .map(params => new SiteAction.SelectCountAction(params.idCount))
+      .map(params => new PlatformAction.SelectCountAction(params.idCount))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
-    this.campaign$ = this.store.let(getSelectedCampaign);
+    this.platform$ = this.store.let(getSelectedPlatform);
+    this.survey$ = this.store.let(getSelectedSurvey);
     this.count$ = this.store.let(getSelectedCount);
     this.species$ = this.store.let(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
-    this.campaignSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
+    this.surveySubscription.unsubscribe();
     this.countSubscription.unsubscribe();
   }
 
   onSubmit(count: Count) { 
-    this.store.dispatch(new SiteAction.AddCountAction(count))
+    this.store.dispatch(new PlatformAction.AddCountAction(count))
   }
 }

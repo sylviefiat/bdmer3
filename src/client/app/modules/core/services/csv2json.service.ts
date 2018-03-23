@@ -5,7 +5,7 @@ import { of } from 'rxjs/observable/of';
 
 import { MomentService } from './moment.service';
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
-import { Site, Zone, Transect, Campaign, ZonePreference, Count, Mesure } from '../../datas/models/site';
+import { Platform, Zone, Transect, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 
 @Injectable()
 export class Csv2JsonService {
@@ -96,14 +96,14 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractSiteData(arrayData): Site[] { 
+    private extractPlatformData(arrayData): Platform[] { 
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
-        let lines: Site[] = [];
+        let lines: Platform[] = [];
         for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Site;
+                let st = {} as Platform;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -136,7 +136,7 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code":
-                        case "code_site":
+                        case "code_platform":
                         case "surface":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
@@ -152,20 +152,20 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractCampaignData(arrayData): Campaign[] { 
+    private extractSurveyData(arrayData): Survey[] { 
         let allTextLines = arrayData.data;
         let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
-        let lines: Campaign[] = [];
+        let lines: Survey[] = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Campaign;
+                let st = {} as Survey;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code_country":
-                        case "code_site":
+                        case "code_platform":
                         case "code_zone":
                         case "code":
                         case "participants":
@@ -210,7 +210,7 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_site":
+                        case "code_platform":
                         case "code_zone":
                         case "code":
                         case "nom":
@@ -242,7 +242,7 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_site":
+                        case "code_platform":
                         case "code_zone":
                         case "code":
                         case "code_species":
@@ -274,9 +274,9 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_site":
+                        case "code_platform":
                         case "code_zone":
-                        case "code_campaign":
+                        case "code_survey":
                         case "code":
                         case "code_transect":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
@@ -345,15 +345,15 @@ export class Csv2JsonService {
                     case "species":
                         res = this.extractSpeciesData(data);
                         break;
-                    case "site":
-                        res = this.extractSiteData(data);
+                    case "platform":
+                        res = this.extractPlatformData(data);
                         break;
                     case "zone":
                         res = this.extractZoneData(data);
                         break;
-                    case "campaign":
+                    case "survey":
                         console.log(data);
-                        res = this.extractCampaignData(data);
+                        res = this.extractSurveyData(data);
                         break;
                     case "zonePref":
                         console.log(data);

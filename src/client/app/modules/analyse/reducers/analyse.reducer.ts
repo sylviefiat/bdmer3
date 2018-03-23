@@ -15,11 +15,11 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_CAMPAIGNS: {
+    case AnalyseAction.ActionTypes.SELECT_SURVEYS: {
     //console.log(action.payload);  
       return {
         ...state,
-        usedCampaigns: action.payload
+        usedSurveys: action.payload
       };
     }
 

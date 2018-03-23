@@ -6,12 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryCampaigns, 
-  getSelectedCampaignsZones, getSelectedCampaignsTransects } from '../../modules/ngrx/index';
-import { Site, Zone, Campaign, Transect } from '../../modules/datas/models/index';
+import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountrySurveys, getSelectedCountryPlatforms,
+  getSelectedSurveysZones, getSelectedSurveysTransects } from '../../modules/ngrx/index';
+import { Platform, Zone, Survey, Transect } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 
 
@@ -21,14 +21,15 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   template: `
     <bc-analyse 
       [countries]="countries$ | async"
-      [campaigns]="campaigns$ | async"
+      [platforms]="platforms$ | async"
+      [surveys]="surveys$ | async"
       [zonesList]="zones$ | async"
       [transectsList]="transects$ | async"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
-      (campaignEmitter)="selectCampaign($event)"
+      (surveyEmitter)="selectSurvey($event)"
       (zoneEmitter)="selectZone($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
@@ -36,7 +37,8 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 })
 export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
-  campaigns$: Observable<Campaign[]>;
+  platforms$: Observable<Platform[]>;
+  surveys$: Observable<Survey[]>;
   transects$: Observable<Transect[]>;
   zones$: Observable<any>;
   isAdmin$: Observable<boolean>;
@@ -51,22 +53,23 @@ export class AnalysePageComponent implements OnInit {
     this.isAdmin$ = this.store.let(getisAdmin);
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
-    this.campaigns$ = this.store.let(getSelectedCountryCampaigns);
+    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
+    this.surveys$ = this.store.let(getSelectedCountrySurveys);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
-    this.store.dispatch(new SiteAction.LoadAction());
+    this.store.dispatch(new PlatformAction.LoadAction());
   }
 
   selectCountry(country: Country) {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
-    this.campaigns$ = this.store.let(getSelectedCountryCampaigns);
+    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
   }
 
-  selectCampaign(campaigns: Campaign[]) {
-    this.store.dispatch(new AnalyseAction.SelectCampaigns(campaigns));
-    this.zones$ = this.store.let(getSelectedCampaignsZones);
-    this.transects$ = this.store.let(getSelectedCampaignsTransects);
+  selectSurvey(surveys: Survey[]) {
+    this.store.dispatch(new AnalyseAction.SelectSurveys(surveys));
+    this.zones$ = this.store.let(getSelectedSurveysZones);
+    this.transects$ = this.store.let(getSelectedSurveysTransects);
   }
 
   selectZone(zones: Zone[][]) {

@@ -6,7 +6,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Site, Zone, ZonePreference, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, ZonePreference, Species } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +18,7 @@ import { Site, Zone, ZonePreference, Species } from '../../modules/datas/models/
     ],
 })
 export class PreferenceAreaFormComponent implements OnInit {
-    @Input() site: Site | null;
+    @Input() platform: Platform | null;
     @Input() zone: Zone | null;
     @Input() zonePref: ZonePreference | null;
     @Input() species: Species[];
@@ -28,7 +28,7 @@ export class PreferenceAreaFormComponent implements OnInit {
 
     zonePrefForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
-        codeSite: new FormControl(""),
+        codePlatform: new FormControl(""),
         codeZone: new FormControl(""),
         codeSpecies: new FormControl(),
         presence: new FormControl(),
@@ -39,9 +39,9 @@ export class PreferenceAreaFormComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.zonePref);
-        this.zonePrefForm.controls.codeSite.setValue(this.site ? this.site.code : null);
+        this.zonePrefForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.zonePrefForm.controls.codeZone.setValue(this.zone ? this.zone.code : null);
-        (this.site !== undefined) ? this.zonePrefForm.controls.codeSite.disable() : this.zonePrefForm.controls.codeSite.enable();
+        (this.platform !== undefined) ? this.zonePrefForm.controls.codePlatform.disable() : this.zonePrefForm.controls.codePlatform.enable();
         (this.zone !== undefined) ? this.zonePrefForm.controls.codeZone.disable() : this.zonePrefForm.controls.codeZone.enable();
         if(this.zonePref){
             this.zonePrefForm.controls.code.setValue(this.zonePref.code);
@@ -55,7 +55,7 @@ export class PreferenceAreaFormComponent implements OnInit {
 
     submit() {
         if (this.zonePrefForm.valid) {
-            this.zonePrefForm.value.codeSite=this.zonePrefForm.controls.codeSite.value;
+            this.zonePrefForm.value.codePlatform=this.zonePrefForm.controls.codePlatform.value;
             this.zonePrefForm.value.codeZone=this.zonePrefForm.controls.codeZone.value;
             this.submitted.emit(this.zonePrefForm.value);
         }
@@ -78,7 +78,7 @@ export class PreferenceAreaFormComponent implements OnInit {
     }
 
     return() {
-        let redirect = this.zonePref ? 'zonePref/'+this.site.code+'/'+this.zone.code+'/'+this.zonePref.code : '/zone/' + this.site.code + "/" + this.zone.code;
+        let redirect = this.zonePref ? 'zonePref/'+this.platform.code+'/'+this.zone.code+'/'+this.zonePref.code : '/zone/' + this.platform.code + "/" + this.zone.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

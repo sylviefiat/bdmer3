@@ -3,8 +3,8 @@ export interface Method {
     method: string;
 }
 
-export interface CampaignSpecies {
-    codeCampaign: string;
+export interface SurveySpecies {
+    codeSurvey: string;
     speciesCodes: string[];
 }
 

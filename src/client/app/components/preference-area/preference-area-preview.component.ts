@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
+import { Platform,Zone,ZonePreference } from './../../modules/datas/models/platform';
 
 @Component({
   selector: 'bc-zone-preference-preview',
   template: `
-    <a [routerLink]="['/zonePref', codeSite, codeZone, code]">
+    <a [routerLink]="['/zonePref', codePlatform, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codeSite">{{ codeSite }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{'SPECIES_CODE' | translate}}: {{ codeSpecies }}
@@ -67,7 +67,7 @@ import { Site,Zone,ZonePreference } from './../../modules/datas/models/site';
 export class PreferenceAreaPreviewComponent implements OnInit {  
   @Input() zonePref: ZonePreference;
   @Input() zone: Zone;
-  @Input() site: Site;
+  @Input() platform: Platform;
   nCounts: number = 0;
 
   ngOnInit(){
@@ -82,8 +82,8 @@ export class PreferenceAreaPreviewComponent implements OnInit {
     return this.zonePref.code;
   }
 
-  get codeSite() {
-    return this.site.code;
+  get codePlatform() {
+    return this.platform.code;
   }
 
   get codeZone() {

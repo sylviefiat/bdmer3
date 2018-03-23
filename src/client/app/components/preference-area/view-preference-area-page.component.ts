@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedSite, getAuthUser, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
-import { Site, Zone, ZonePreference } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
+import { Platform, Zone, ZonePreference } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -28,7 +28,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-zone-pref 
-      [site]="site$ | async"
+      [platform]="platform$ | async"
       [zone]="zone$ | async"
       [zonePref]="zonePref$ | async"
       (action)="actionZonePref($event)"
@@ -37,33 +37,33 @@ import { SiteAction } from '../../modules/datas/actions/index';
   `,
 })
 export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
-  siteSubscription: Subscription;
+  platformSubscription: Subscription;
   zoneSubscription: Subscription;
   zonePrefSubscription: Subscription;
   zone$: Observable<Zone | null>;
-  site$: Observable<Site | null>;
+  platform$: Observable<Platform | null>;
   zonePref$: Observable<ZonePreference | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.zonePrefSubscription = route.params
-      .map(params => new SiteAction.SelectZonePrefAction(params.idZonePref))
+      .map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
+    this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
     this.zonePref$ = this.store.let(getSelectedZonePref);
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.zonePrefSubscription.unsubscribe();
   }
@@ -73,6 +73,6 @@ export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
   }
 
   removeZonePref(zonePref: ZonePreference){
-    this.store.dispatch(new SiteAction.RemoveZonePrefAction(zonePref));
+    this.store.dispatch(new PlatformAction.RemoveZonePrefAction(zonePref));
   }
 }

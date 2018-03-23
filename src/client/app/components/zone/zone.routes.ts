@@ -10,27 +10,27 @@ export const ZoneRoutes: Array<any> = [
     canActivate : [AuthGuard]
   }, */
   {
-    path: 'zoneForm/:idSite/:idZone',
+    path: 'zoneForm/:idPlatform/:idZone',
     component: ZoneFormPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zoneForm/:idSite',
+    path: 'zoneForm/:idPlatform',
     component: ZoneFormPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zoneImport/:idSite',
+    path: 'zoneImport/:idPlatform',
     component: ZoneImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zone/:idSite/:idZone',
+    path: 'zone/:idPlatform/:idZone',
     component: ViewZonePageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'zone/:idSite/:idZone/:view',
+    path: 'zone/:idPlatform/:idZone/:view',
     component: ViewZonePageComponent,
     canActivate : [AuthGuard]
   }

@@ -7,10 +7,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Site, Zone, Transect } from '../../modules/datas/models/index';
+import { Platform, Zone, Transect } from '../../modules/datas/models/index';
 
-import { IAppState, getSitePageError, getSelectedSite, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
-import { SiteAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 @Component({
   selector: 'bc-transect-page',
@@ -18,7 +18,7 @@ import { SiteAction } from '../../modules/datas/actions/index';
     <bc-transect-form
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
-      [site]="site$ | async"
+      [platform]="platform$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async">
     </bc-transect-form>
@@ -36,38 +36,38 @@ import { SiteAction } from '../../modules/datas/actions/index';
 })
 export class TransectFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
-  site$: Observable<Site>;
+  platform$: Observable<Platform>;
   zone$: Observable<Zone>;
   transect$: Observable<Transect>;
-  siteSubscription: Subscription;
+  platformSubscription: Subscription;
   zoneSubscription: Subscription;
   transectSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.siteSubscription = route.params
-      .map(params => new SiteAction.SelectSiteAction(params.idSite))
+    this.platformSubscription = route.params
+      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
       .subscribe(store);      
     this.zoneSubscription = route.params
-      .map(params => new SiteAction.SelectZoneAction(params.idZone))
+      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.transectSubscription = route.params
-      .map(params => new SiteAction.SelectTransectAction(params.idTransect))
+      .map(params => new PlatformAction.SelectTransectAction(params.idTransect))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.site$ = this.store.let(getSelectedSite);
+    this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
     this.transect$ = this.store.let(getSelectedTransect);
   }
 
   ngOnDestroy() {
-    this.siteSubscription.unsubscribe();
+    this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
     this.transectSubscription.unsubscribe();
   }
 
   onSubmit(transect: Transect) { 
-    this.store.dispatch(new SiteAction.AddTransectAction(transect))
+    this.store.dispatch(new PlatformAction.AddTransectAction(transect))
   }
 }
