@@ -21,7 +21,7 @@ export class CountryListService {
   }
 
   getCountryList(): Observable<Country[]> {
-    return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}../node_modules/svg-country-flags/countries.json`)
+    return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countries.json`)
       .map(res => res.json())
       .map(row => {
         let keys = [];
@@ -42,7 +42,7 @@ export class CountryListService {
   }
 
   getCountrySVG(code: string): SafeUrl {
-    let url ='../node_modules/svg-country-flags/svg/'+code.toLowerCase()+'.svg';
+    let url ='assets/svg/'+code.toLowerCase()+'.svg';
     let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
     let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
 

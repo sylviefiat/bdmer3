@@ -46,22 +46,22 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
         country: new FormControl()
     });
     platformsFormGroup: FormGroup = new FormGroup({
-        platforms: this._fb.array([])
+        platforms: new FormControl()
     });
     yearFormGroup: FormGroup = new FormGroup({
-        years: this._fb.array([])
+        years: new FormControl()
     });
     surveysFormGroup: FormGroup = new FormGroup({
-        surveys: this._fb.array([])
+        surveys: new FormControl()
     });
     zonesFormGroup: FormGroup = new FormGroup({
-        zones: this._fb.array([])
+        zones: new FormControl()
     });
     transectsFormGroup: FormGroup = new FormGroup({
-        transects: this._fb.array([])
+        transects: new FormControl()
     });
     speciesFormGroup: FormGroup = new FormGroup({
-        species: this._fb.array([])
+        species: new FormControl()
     });
     analyseFormGroup: FormGroup = new FormGroup({
         analyseType: new FormControl()

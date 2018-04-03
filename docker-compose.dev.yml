@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  # When you run 2.0 as a single node, it doesn’t create system databases on startup. You have to do this manually:
+  #curl -X PUT http://admin:admin@127.0.0.1:5984/_users
+  #curl -X PUT http://admin:admin@127.0.0.1:5984/_replicator
+  #curl -X PUT http://admin:admin@127.0.0.1:5984/_global_changes
+  bdmerdb:
+    hostname: dbmerdb
+    image: couchdb:latest
+    volumes:
+      - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
+      - ./.docker/couchdb_data/config/local.d:/usr/local/etc/couchdb/local.d
+    ports:
+      - "5984:5984"
+    networks:
+      - bdmer-network
+
+networks:
+  bdmer-network:
+    driver: bridge

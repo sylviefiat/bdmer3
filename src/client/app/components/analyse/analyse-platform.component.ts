@@ -6,13 +6,13 @@ import { Platform } from '../../modules/datas/models/index';
   selector: 'bc-analyse-platform',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div [formGroup]="form">
-      
-        <mat-checkbox *ngFor="let platform of platforms" 
-          [formControlName]="inputName" required>
+    <div [formGroup]="form"> 
+      <div *ngFor="let platform of platforms; let i=index">
+        <mat-checkbox 
+          [formControl]="form.controls.platforms.controls[i]" [formControlName]="'platforms'" required>
           {{ platform.code }}
         </mat-checkbox>
-      
+      </div>
     </div>
   `,
 })
@@ -20,26 +20,27 @@ export class AnalysePlatformComponent implements OnInit {
   @Input() platforms: Platform[];
   @Input() inputName: string;
   @Output() platformEmitter = new EventEmitter<Platform>();
-  @Input() form: FormGroup;
+  @Input('group')
+    public form: FormGroup;
 
   constructor(private _fb: FormBuilder) {
     
   }
 
   ngOnInit(){
-    
+    console.log(this.form);
   }
 
   changePlatformList(platform: Platform){
     console.log(platform);
   }
 
-  checkAll(ev) {
+  /*checkAll(ev) {
     this.platforms.forEach(x => x.state = ev.target.checked)
   }
 
   isAllChecked() {
     console.log('fired');
     return this.platforms.every(_ => _.state);
-  }
+  }*/
 }
