@@ -66,10 +66,82 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
+            //path: 'node_modules/pouchdb/lib/index.js'
+        }/*, {
+            name: 'pouchdb-auth',
+            path: 'node_modules/pouchdb-auth/lib/index.js'
+            //path: 'node_modules/pouchdb/lib/index.js'
         }, {
+            name: 'pouchdb-seamless-auth',
+            path: 'node_modules/pouchdb-seamless-auth/lib/index.js'
+            //path: 'node_modules/pouchdb/lib/index.js'
+        }*/, {
             name: 'pouchdb-authentication',
-            path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
+            path: 'node_modules/pouchdb-authentication/lib/index.js'
+        }/*, {
+            name: 'pouchdb-utils',
+            path: 'node_modules/pouchdb-utils/lib/index.js'
         }, {
+            name: 'pouchdb-ajax',
+            path: 'node_modules/pouchdb-ajax/lib/index.js'
+        }, {
+            name: 'pouchdb-collection',
+            path: 'node_modules/pouchdb-collection/lib/index.js'
+        }, {
+            name: 'pouchdb-binary-utils',
+            path: 'node_modules/pouchdb-binary-utils/lib/index.js'
+        }, {
+            name: 'pouchdb-promise',
+            path: 'node_modules/pouchdb-promise/lib/index.js'
+        }, {
+            name: 'pouchdb-collections',
+            path: 'node_modules/pouchdb-collections/lib/index.js'
+        }, {
+            name: 'pouchdb-errors',
+            path: 'node_modules/pouchdb-errors/lib/index.js'
+        }, {
+            name: 'crypto',
+            path: 'node_modules/pouchdb/node_modules/hawk/lib/crypto.js'
+        }, {
+            name: 'utils',
+            path: 'node_modules/pouchdb/node_modules/hawk/lib/utils.js'
+        }, {
+            name: 'request',
+            path: 'node_modules/request/index.js'
+        }, {
+            name: 'boom',
+            path: 'node_modules/boom/lib/index.js'
+        }, {
+            name: 'sntp',
+            path: 'node_modules/sntp/index.js'
+        }, {
+            name: 'is-array-buffer-x',
+            path: 'node_modules/is-array-buffer-x/lib/is-array-buffer-x.js'
+        }, {
+            name: 'lie',
+            path: 'node_modules/lie/dist/lie.js'
+        }, {
+            name: 'uuid',
+            path: 'node_modules/uuid/index.js'
+        }, {
+            name: 'url-join',
+            path: 'node_modules/url-join/lib/url-join.js'
+        }, {
+            name: 'url-parse',
+            path: 'node_modules/url-parse/dist/url-parse.js'
+        }, {
+            name: 'inherits',
+            path: 'node_modules/inherits/inherits.js'
+        }, {
+            name: 'buffer-from',
+            path: 'node_modules/buffer-from/index.js'
+        }, {
+            name: 'clone-buffer',
+            path: 'node_modules/clone-buffer/index.js'
+        }, {
+            name: 'argsarray',
+            path: 'node_modules/argsarray/index.js'
+        }*/, {
             name: '@angular/material',
             packageMeta: {
                 main: 'bundles/material.umd.js',

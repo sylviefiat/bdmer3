@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import * as PouchDB from "pouchdb";
-import * as PouchDBAuth from "pouchdb-authentication";
+//import * as PouchDBAuth from "pouchdb-authentication";
 
 @Injectable()
 export class PouchDBService {
@@ -11,7 +11,7 @@ export class PouchDBService {
     private db: any;
 
     public constructor() { 
-        PouchDB.plugin(PouchDBAuth);
+        //PouchDB.plugin(PouchDBAuth);
     }
 
     initDB(dbname: string, remote : string) : Promise<any> {

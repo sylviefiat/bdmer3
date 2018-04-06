@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate, OnInit {
         return true;
       } else {
         this.store.dispatch(new AuthAction.LoginRedirect(state.url));
-        return Observable.of(false);
+        return false;
       }
     }).catch((err) => {
       this.store.dispatch(new AuthAction.LoginRedirect(state.url));
