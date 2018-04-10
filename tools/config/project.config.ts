@@ -20,8 +20,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
         // Add `NPM` third-party libraries to be injected/bundled.
         this.NPM_DEPENDENCIES = [
-            ...this.NPM_DEPENDENCIES,
-            // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
+            ...this.NPM_DEPENDENCIES
         ];
 
         // Add `local` third-party libraries to be injected/bundled.
@@ -77,7 +76,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
             //path: 'node_modules/pouchdb/lib/index.js'
         }*/, {
             name: 'pouchdb-authentication',
-            path: 'node_modules/pouchdb-authentication/lib/index.js'
+            path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.min.js'
         }/*, {
             name: 'pouchdb-utils',
             path: 'node_modules/pouchdb-utils/lib/index.js'
@@ -141,6 +140,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'argsarray',
             path: 'node_modules/argsarray/index.js'
+        }, {
+            name: 'traceur',
+            path: 'node_modules/traceur/bin/traceur.js'
         }*/, {
             name: '@angular/material',
             packageMeta: {
