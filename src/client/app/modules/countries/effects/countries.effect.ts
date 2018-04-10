@@ -19,6 +19,8 @@ import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
 import { CountryListService } from '../services/index';
 
+import { config } from '../../../config';
+
 @Injectable()
 export class CountriesEffects {
   /**
@@ -33,7 +35,7 @@ export class CountriesEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => { 
-    return this.countriesService.initDB('countries','http://127.0.0.1:5984/');
+    return this.countriesService.initDB('countries',config.urldb);
   });
 
   @Effect() init$: Observable<Action> = this.actions$

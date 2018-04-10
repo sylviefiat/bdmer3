@@ -17,6 +17,8 @@ import { SpeciesService } from "../services/species.service";
 import { SpeciesAction } from '../actions/index';
 import { Species } from '../models/species';
 
+import { config } from '../../../config';
+
 @Injectable()
 export class SpeciesEffects {
   /**
@@ -31,7 +33,7 @@ export class SpeciesEffects {
    */
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => { 
-    return this.speciesService.initDB('species','http://127.0.0.1:5984/');
+    return this.speciesService.initDB('species',config.urldb);
   });
 
   @Effect()

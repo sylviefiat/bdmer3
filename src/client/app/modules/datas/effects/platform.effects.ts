@@ -23,13 +23,15 @@ import { PlatformAction } from '../actions/index';
 import { Platform, Zone, Transect, Count, Survey, ZonePreference } from '../models/platform';
 import { Country } from '../../countries/models/country';
 
+import { config } from '../../../config';
+
 @Injectable()
 export class PlatformEffects {
 
 
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => {
-    return this.platformService.initDB('platforms', 'http://127.0.0.1:5984/');
+    return this.platformService.initDB('platforms', config.urldb);
   });
 
   @Effect()

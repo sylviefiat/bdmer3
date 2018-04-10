@@ -9,7 +9,9 @@ import { User, Country } from '../../countries/models/country';
 
 import { ResponsePDB } from '../models/pouchdb';
 import * as PouchDB from 'pouchdb';
-//import * as PouchDBAuth from "pouchdb-authentication";
+import * as PouchDBAuth from "pouchdb-authentication";
+
+import { config } from '../../../config';
 
 @Injectable()
 export class AuthService {
@@ -22,18 +24,14 @@ export class AuthService {
 
   constructor(private countriesService: CountriesService) {
     let dbname = "_users";
-    let remote = 'http://127.0.0.1:5984/';
-    //PouchDB.plugin(PouchDBAuth);
-    this.db = new PouchDB('http://localhost:5984/_auth', {skip_setup: true});
-    var local = new PouchDB('local_db');
-    local.sync(this.db, {live: true, retry: true}).on('error', console.log.bind(console));
-    //this.db = new PouchDB(remote+dbname, {skip_setup: true});   
-    //this.sync(dbname);
+    PouchDB.plugin(PouchDBAuth);
+    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
+    this.sync(dbname);
   }
 
   login({ username, password }: Authenticate): Observable<any> {
     console.log(username);
-    /*return fromPromise(this.db.login(username, password))
+    return fromPromise(this.db.login(username, password))
       .mergeMap((result: ResponsePDB) => {
         console.log(result);
         if (result.ok && result.roles.length > 0){
@@ -42,8 +40,7 @@ export class AuthService {
         else {
           throw Observable.throw(result); 
         }
-      });*/
-      return of(true);
+      });
   }
 
   session(): Observable<any> {
@@ -79,14 +76,13 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    /*return fromPromise(this.db.logout()) //(err, response) => {
+    return fromPromise(this.db.logout()) //(err, response) => {
       .filter((response: ResponsePDB) => response.ok)
       .map(response => {
         this.getLoggedInUser.emit(null);
         this.currentUser=null;
         return response;
-      })*/
-      return of(false);
+      })
   }
 
   signup(user: User): Observable<any> {
