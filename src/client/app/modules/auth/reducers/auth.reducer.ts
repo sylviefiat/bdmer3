@@ -9,6 +9,7 @@ export function authReducer(
 ): IAuthState {
   switch (action.type) {    
     case AuthAction.ActionTypes.LOGIN_SUCCESS: {  
+      console.log(action);
       return {
         ...state,
         loggedIn: true,

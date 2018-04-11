@@ -28,7 +28,7 @@ export class AuthService {
     console.log(config.urldb);
     console.log(config.urldb+dbname);
     this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
-    this.sync(dbname);
+    //this.sync(dbname);
   }
 
   login({ username, password }: Authenticate): Observable<any> {

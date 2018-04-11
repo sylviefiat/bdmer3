@@ -21,23 +21,16 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   template: `
     <bc-analyse 
       [countries]="countries$ | async"
-      [platforms]="platforms$ | async"
-      [surveys]="surveys$ | async"
-      [zonesList]="zones$ | async"
-      [transectsList]="transects$ | async"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
-      (surveyEmitter)="selectSurvey($event)"
-      (zoneEmitter)="selectZone($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
   `,
 })
 export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
-  platforms$: Observable<Platform[]>;
   surveys$: Observable<Survey[]>;
   transects$: Observable<Transect[]>;
   zones$: Observable<any>;
@@ -53,24 +46,20 @@ export class AnalysePageComponent implements OnInit {
     this.isAdmin$ = this.store.let(getisAdmin);
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
-    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
-    this.surveys$ = this.store.let(getSelectedCountrySurveys);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
-    this.store.dispatch(new PlatformAction.LoadAction());
   }
 
   selectCountry(country: Country) {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
-    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
   }
 
-  selectSurvey(surveys: Survey[]) {
+  /*selectSurvey(surveys: Survey[]) {
     this.store.dispatch(new AnalyseAction.SelectSurveys(surveys));
     this.zones$ = this.store.let(getSelectedSurveysZones);
     this.transects$ = this.store.let(getSelectedSurveysTransects);
-  }
+  }*/
 
   selectZone(zones: Zone[][]) {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
