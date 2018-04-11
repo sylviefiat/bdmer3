@@ -23,8 +23,10 @@ export class AuthService {
   @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
   constructor(private countriesService: CountriesService) {
-    let dbname = "_users";
+    let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
+    console.log(config.urldb);
+    console.log(config.urldb+dbname);
     this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
     this.sync(dbname);
   }
