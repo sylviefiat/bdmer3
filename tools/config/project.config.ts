@@ -92,6 +92,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
+        }/*, {
+            name: 'pouchdb-utils',
+            path: 'node_modules/pouchdb-utils/lib/index.js'
         }, {
              name: 'tslib',
              path: 'node_modules/tslib/tslib.js'

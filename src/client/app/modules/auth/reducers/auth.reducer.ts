@@ -7,7 +7,8 @@ export function authReducer(
   state : IAuthState = authInitialState,
   action: AuthAction.Actions
 ): IAuthState {
-  switch (action.type) {    
+  switch (action.type) {
+
     case AuthAction.ActionTypes.LOGIN_SUCCESS: {  
       console.log(action);
       return {
