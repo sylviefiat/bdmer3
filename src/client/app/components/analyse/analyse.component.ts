@@ -11,6 +11,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
 
 import { AnalyseAction } from '../../modules/analyse/actions/index';
+import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
 
@@ -26,10 +27,11 @@ import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/m
 export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() msg: string | null;
     @Input() countries: Country[];
-    platforms$: Observable<Platform[]>;
-    surveys: Survey[];
+    @Input() platforms$: Observable<Platform[]>;
+    
+    /*surveys: Survey[];
     zonesList: Zone[][];
-    transectsList: Transect[][];
+    transectsList: Transect[][];*/
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
@@ -68,107 +70,18 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
 
     }
 
-    ngOnInit() {
-        this.platforms$ = this.store.let(getSelectedCountryPlatforms);
-        this.initPlatforms();
+    ngOnInit() {        
+        
     }
 
     ngAfterContentChecked() {        
         
     }
 
-    newPlatform(p: Platform) {
-        return this._fb.group({
-            platform: new FormControl(p.code),
-            checked: new FormControl(false)
-        });
-    }
-
-    initPlatforms() {
-        console.log("init p");
-        this.platforms$.map(platforms => {
-            console.log(platforms);
-            this.platformsFormGroup.controls['platforms'] = this._fb.array([]);
-            for(let platform of platforms){
-                const control = <FormArray>this.platformsFormGroup.controls['platforms'];
-                control.push(this.newPlatform(platform));
-            }
-        });
-    }
-
-    initZones() {
-        this.zonesFormGroup.controls['zones'] = this._fb.array([]);
-        const controlZ = <FormArray>this.zonesFormGroup.controls['zones'];
-        let addrCtrl;
-        for (let i in this.currentSurveys) {
-            addrCtrl = this.newZones();
-            controlZ.push(addrCtrl);
-        }
-    }
-
-    newZones() {
-        return this._fb.group({
-            zones: new FormControl([])
-        });
-    }
-
-    initTransects() {
-        this.transectsFormGroup.controls['transects'] = this._fb.array([]);
-        const controlT = <FormArray>this.transectsFormGroup.controls['transects'];
-        let addrCtrl;
-        for (let i in this.currentSurveys) {
-            addrCtrl = this.newTransects();
-            controlT.push(addrCtrl);
-        }
-    }
-
-    newTransects() {
-        return this._fb.group({
-            transects: new FormControl([])
-        });
-    }
-
-    initSpecies() {
-        this.speciesFormGroup.controls['species'] = this._fb.array([]);
-        const controlS = <FormArray>this.speciesFormGroup.controls['species'];
-        for (let i in this.currentSurveys) {
-            controlS.push(this.newSpecies());
-        }
-    }
-
-    newSpecies() {
-        return this._fb.group({
-            species: new FormControl([])
-        });
-    }
+    
 
     setCountry(country: Country) {
-        this.countryEmitter.emit(country);        
-        this.initPlatforms();
-    }
-
-    setPlatforms(platforms: Platform[]) {
-        let pname = [];
-        for (let c of platforms) {
-            pname.push(c.code);
-        }
-        //this.platformEmitter.emit(platforms);
-        this.platformsFormGroup.controls['platforms'].setValue(pname);
-        this.currentPlatforms = platforms;
-        //this.initYears();
-    }
-
-    setSurveys(surveys: Survey[]) {
-        let sname = [];
-        for (let c of surveys) {
-            sname.push(c.code);
-        }
-        //this.surveyEmitter.emit(surveys);
-        this.surveysFormGroup.controls['surveys'].setValue(sname);
-        this.currentSurveys = surveys;
-        this.initZones();
-        this.initTransects();
-        this.initSpecies();
+        this.countryEmitter.emit(country);  
     }
 
     setZones(zones: Zone[][]) {

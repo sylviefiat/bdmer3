@@ -21,6 +21,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   template: `
     <bc-analyse 
       [countries]="countries$ | async"
+      [platforms$]="platforms$"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
@@ -31,6 +32,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 })
 export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
+  platforms$: Observable<Platform[]>;
   surveys$: Observable<Survey[]>;
   transects$: Observable<Transect[]>;
   zones$: Observable<any>;
@@ -46,12 +48,14 @@ export class AnalysePageComponent implements OnInit {
     this.isAdmin$ = this.store.let(getisAdmin);
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
+    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
   }
 
   selectCountry(country: Country) {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
+    this.store.dispatch(new PlatformAction.LoadAction());
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
   }
 
@@ -61,9 +65,9 @@ export class AnalysePageComponent implements OnInit {
     this.transects$ = this.store.let(getSelectedSurveysTransects);
   }*/
 
-  selectZone(zones: Zone[][]) {
+  /*selectZone(zones: Zone[][]) {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
-  }
+  }*/
 
   startAnalyse(status: string) {
     //TODO

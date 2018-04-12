@@ -16,22 +16,13 @@ import { Platform } from '../../modules/datas/models/index';
 export class PlatformComponent {
   @Input() platform: Platform;
   @Input('group') public form: FormGroup;
-  @Output() platformEmitter = new EventEmitter<any>();
+  @Output() platformEmitter = new EventEmitter<{platform:Platform,checked:boolean}>();
 
   constructor(private _fb: FormBuilder) {
     
   }
 
   change(value: any){
-    return this.platformEmitter.emit(value);
+    return this.platformEmitter.emit({platform:this.platform,checked:value.checked});
   }
-
-  /*checkAll(ev) {
-    this.platforms.forEach(x => x.state = ev.target.checked)
-  }
-
-  isAllChecked() {
-    console.log('fired');
-    return this.platforms.every(_ => _.state);
-  }*/
 }
