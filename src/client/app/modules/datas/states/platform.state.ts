@@ -54,6 +54,7 @@ export function getPlatformOfCurrentCountry(state$: Observable<IAppState>) {
 }
 
 export function getPlatformsOfCurrentCountry(state$: Observable<IAppState>) {
+    console.log(state$);
     return state$
         .select(state => state.country.currentCountryId && state.platform.entities.filter(platform => platform.codeCountry === state.country.currentCountryId));
 }
