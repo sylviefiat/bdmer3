@@ -318,4 +318,6 @@
   "LONGUEUR":"Height only",
   "RESULT_TITLE":"Analyse results",
   "RESULT_RAPPEL":"Reminder of the selection criteria"
+  "UPLOAD_PICTURE": "Import a picture",
+  "IMPORT_PICTURE": "Select"
 }

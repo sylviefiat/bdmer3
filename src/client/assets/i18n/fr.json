@@ -318,4 +318,6 @@
   "LONGUEUR":"Longueur seulement",
   "RESULT_TITLE":"Résultats de l'analyse",
   "RESULT_RAPPEL":"Rappel des critères de sélection"
+  "UPLOAD_PICTURE": "Importer une image",
+  "IMPORT_PICTURE": "Choisir"
 }
