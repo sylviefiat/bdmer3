@@ -11,6 +11,12 @@ export interface Species {
     distribution: string;
     habitatPreference: string;
     legalDimensions: LegalDimensions[];
+    _attachments: {
+      picture: {
+        type: string;
+        data: object;
+      }
+    }
 }
 
 export interface BiologicDimensions {   

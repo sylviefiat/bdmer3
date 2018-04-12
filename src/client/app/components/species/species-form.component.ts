@@ -33,6 +33,12 @@ export class SpeciesFormComponent implements OnInit {
         code: new FormControl(this.species && this.species.code, Validators.required),
         scientificName: new FormControl(this.species && this.species.scientificName, Validators.required),
         names: this._fb.array([]),
+        _attachements: this._fb.group({
+            picture: this._fb.group({
+                type: new FormControl(''),
+                data: new FormControl(''),
+            }),    
+        }),    
         LLW: this._fb.group({
             coefA: new FormControl(this.species && this.species && this.species.LLW.coefA),
             coefB: new FormControl(this.species && this.species.LLW.coefB),
@@ -112,6 +118,12 @@ export class SpeciesFormComponent implements OnInit {
         this.initLegalDim();
     }
 
+    get picture() {
+     return (
+           this.form.get('picture').value
+         )
+       }
+
     newName(lang, name) {
         return this._fb.group({
             lang: new FormControl(lang),
@@ -125,6 +137,23 @@ export class SpeciesFormComponent implements OnInit {
 
         control.push(addrCtrl);
     }
+
+    newPicture(type, data){
+        return this._fb.group({
+            picture: this._fb.group({
+                type: new FormControl(type),
+                data: new FormControl(data),
+            }),   
+        });
+    }
+
+    addPicture(pic){
+        console.log(pic.srcElement.files["0"])
+        const control = <FormArray>this.form.controls['_attachements'];
+        const addrCtrl = this.newPicture(pic.srcElement.files["0"].type, pic.srcElement.files["0"]);
+        //this.form.get('_attachements').value("pic.setValue(pic.srcElement.files["0"]);
+        console.log(this.form);
+    }    
 
     removeName(i: number) {
         const control = <FormArray>this.form.controls['names'];
@@ -156,9 +185,27 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     submit() {
-        console.log("submit");
         if (this.form.valid) {
+
+            // const control = <FormArray>this.form.controls['picture'];
+
+
+
+            // const code = control.code.value;
+
+            // const picture = control.picture.value;
+            // const blob = picture.slice(0, -1); 
+            // const typeImg = picture.type;
+            // const name = code + "." + picture.name.split(".")[1]
+            // const newPic = new File([blob], name, {type: typeImg});
+            
+            // console.log(newPic);
+            
+            // control.picture.patchValue(newPic);
+            
+            console.log(this.form.value)
             this.submitted.emit(this.form.value);
+
         }
     }
 
