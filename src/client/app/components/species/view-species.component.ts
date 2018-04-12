@@ -38,6 +38,10 @@ export class ViewSpeciesComponent implements OnInit {
         this.routerext.navigate(['/species/']);
     }
 
+    get picture(){
+        return this.species.picture;
+    }
+
     get flag() {
         // TO BE CHANGED WITH PHOTOS IN DATABASE
         return "../../../assets/img/"+this.species.code+".jpg";

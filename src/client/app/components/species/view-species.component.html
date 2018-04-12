@@ -6,6 +6,7 @@
         </div>
           <img mat-card-sm-image *ngIf="flag" [src]="flag">
           <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
+          <img mat-card-sm-image *ngIf="picture" [src]="picture">
       </mat-card-title-group>
       <mat-card-actions>
         <mat-form-field>
