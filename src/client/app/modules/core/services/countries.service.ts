@@ -45,9 +45,6 @@ export class CountriesService {
         }));
   }
 
-  getAttachment(countryId): Observable<any> {
-    return fromPromise(this.db.getAttachment(countryId, 'flag'));
-  }
 
   getCountry(countrycode: string): Observable<Country> {
     return fromPromise(this.db.query(function(doc, emit) {
@@ -72,40 +69,13 @@ export class CountriesService {
       })
   }
 
-  addAttachment(countryId: string, image: any): Observable<any> {
-    return this.getCountry(countryId)
-      .mergeMap((country: Country) => {
-        this.currentCountry = of(country);
-        return fromPromise(this.db.putAttachment(country._id, "flag", country._rev, image, image.type))
-      })
-      .filter((response: ResponsePDB) => response.ok)
-      .mergeMap((response) => {
-        return this.currentCountry;
-      })
-  }
-
   addCountry(countryJson: any): Observable<Country> {
+    console.log(countryJson)
     let country = countryJson.pays;
-    let url = '../node_modules/svg-country-flags/svg/' + country.code.toLowerCase() + '.svg';
-    let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
-    let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
-    let fullCountry: Country = { _id: country.code, code: country.code, name: country.name, users: null }
+    let fullCountry: Country = { _id: country.code, code: country.code, name: country.name, flag: countryJson.flag, users: null }
     this.currentCountry = of(fullCountry);
 
     return fromPromise(this.db.put(fullCountry))
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return this.http
-          .get(url, {
-            headers: headers,
-            responseType: ResponseContentType.Blob
-          })
-      })
-      .map(res =>
-        res.blob())
-      .mergeMap(blob => {
-        return this.addAttachment(fullCountry._id, blob);
-      })
   }
 
   removeCountry(country: Country): Observable<Country> {

@@ -26,6 +26,7 @@ export class NewCountryPageComponent implements OnInit {
   }
 
   onSubmit(country: Country) {
+    console.log(country)
     console.log(this.store);
     this.store.dispatch(new CountriesAction.AddCountryAction(country));
   }

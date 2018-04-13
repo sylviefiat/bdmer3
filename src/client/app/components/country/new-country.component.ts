@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IAppState, getCountryList, getCountriesIdsInApp  } from '../../modules/ngrx/index';
 
 import { CountriesAction } from '../../modules/countries/actions/index';
-import { Country, Flagimg } from '../../modules/countries/models/country';
+import { Country } from '../../modules/countries/models/country';
 
 @Component({
   moduleId: module.id,
@@ -29,6 +29,7 @@ export class NewCountryComponent implements OnInit {
 
   form: FormGroup = new FormGroup({
     pays: new FormControl(''),
+    flag: new FormControl(''),
   });
 
   constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
@@ -40,10 +41,22 @@ export class NewCountryComponent implements OnInit {
     this.countriesIds$ = this.store.let(getCountriesIdsInApp);
   }
 
+  svgToB64(){
+      const url = '../node_modules/svg-country-flags/svg/' + this.form.value.pays.code.toLowerCase() + '.svg';
+      return new Promise((resolve) =>{
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", url, true);
+        ajax.send();
+        ajax.onload = () => resolve("data:image/svg+xml;base64," + window.btoa(ajax.responseText))
+      })
+  }
+
   submit() {
     if (this.form.valid) {
-      console.log(this.submitted);
-      this.submitted.emit(this.form.value);
+      this.svgToB64().then( (data) => {
+        this.form.controls.flag.setValue(data);
+        this.submitted.emit(this.form.value);
+      });
     }
   }
 
