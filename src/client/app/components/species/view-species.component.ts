@@ -42,11 +42,6 @@ export class ViewSpeciesComponent implements OnInit {
         return this.species.picture;
     }
 
-    get flag() {
-        // TO BE CHANGED WITH PHOTOS IN DATABASE
-        return "../../../assets/img/"+this.species.code+".jpg";
-    }
-
     getCountryName(code: string) {
         return (this.countries && this.countries.filter(country => country.code === code) && this.countries.filter(country => country.code === code)[0] 
         && this.countries.filter(country => country.code === code)[0].name) || code;
