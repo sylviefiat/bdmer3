@@ -4,7 +4,7 @@
           <mat-card-title><a class="link" (click)="toSpecies()">{{ 'SPECIES_LIST' | translate}}</a> /  {{ species.scientificName }} <span class="codename">({{ species.code }})</span></mat-card-title>
           <mat-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</mat-card-subtitle>
         </div>
-          <img mat-card-sm-image *ngIf="flag" [src]="flag">
+          <img mat-card-sm-image *ngIf="picture" [src]="picture">
           <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
       </mat-card-title-group>
       <mat-card-actions>

@@ -33,6 +33,7 @@ export class SpeciesFormComponent implements OnInit {
         code: new FormControl(this.species && this.species.code, Validators.required),
         scientificName: new FormControl(this.species && this.species.scientificName, Validators.required),
         names: this._fb.array([]),
+        picture: new FormControl(''),
         LLW: this._fb.group({
             coefA: new FormControl(this.species && this.species && this.species.LLW.coefA),
             coefB: new FormControl(this.species && this.species.LLW.coefB),
@@ -126,6 +127,22 @@ export class SpeciesFormComponent implements OnInit {
         control.push(addrCtrl);
     }
 
+    imgToB64(pic){
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(pic);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+          });
+    }
+
+    addPicture(pic){
+        const file = pic.srcElement.files["0"];
+        this.imgToB64(file).then(
+            data => this.form.controls.picture.setValue(data)
+        );
+    }    
+
     removeName(i: number) {
         const control = <FormArray>this.form.controls['names'];
         control.removeAt(i);
@@ -156,7 +173,6 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     submit() {
-        console.log("submit");
         if (this.form.valid) {
             this.submitted.emit(this.form.value);
         }

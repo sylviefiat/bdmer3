@@ -38,9 +38,8 @@ export class ViewSpeciesComponent implements OnInit {
         this.routerext.navigate(['/species/']);
     }
 
-    get flag() {
-        // TO BE CHANGED WITH PHOTOS IN DATABASE
-        return "../../../assets/img/"+this.species.code+".jpg";
+    get picture(){
+        return this.species.picture;
     }
 
     getCountryName(code: string) {

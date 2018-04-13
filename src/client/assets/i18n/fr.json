@@ -275,5 +275,7 @@
   "ABOUT_LEOPOLD":"Marc Léopold",
   "DELETE_COUNTRY":"Supprimer le pays",
   "NO_USERS":"Il n'y a pas d'utilisateurs enregistrés pour ce pays",
-  "COUNTRY_LIST":"Pays BDMER³"
+  "COUNTRY_LIST":"Pays BDMER³",
+  "UPLOAD_PICTURE": "Importer une image",
+  "IMPORT_PICTURE": "Choisir"
 }

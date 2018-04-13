@@ -7,7 +7,7 @@ import { Species } from './../../modules/datas/models/species';
     <a [routerLink]="['/species', id]">
       <mat-card>
         <mat-card-title-group>
-          <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+          <img mat-card-sm-image [src]="picture"/>
           <mat-card-title>{{ scientificName }}</mat-card-title>
           <mat-card-subtitle *ngIf="code">{{ code }}</mat-card-subtitle>
         </mat-card-title-group>
@@ -82,7 +82,7 @@ export class SpeciesPreviewComponent{
     return this.species.code;
   }
 
-  get thumbnail(): string | boolean {
-    return "/assets/img/"+this.species.code+".jpg"; 
+  get picture(): string | boolean {
+    return this.species.picture; 
   }
 }
