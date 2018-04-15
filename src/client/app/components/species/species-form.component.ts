@@ -164,9 +164,9 @@ export class SpeciesFormComponent implements OnInit {
             var dataUrl = canvas.toDataURL('image/jpeg');
             return dataURItoBlob(dataUrl);
         };
-        return new Promise(function (ok, no) {
+        return new Promise(function (resolve) {
             reader.onload = function (readerEvent) {
-                image.onload = function () { return ok(resize()); };
+                image.onload = function () { return resolve(resize()); };
                 image.src = readerEvent.target.result;
             };
             reader.readAsDataURL(file);
