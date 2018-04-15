@@ -127,20 +127,83 @@ export class SpeciesFormComponent implements OnInit {
         control.push(addrCtrl);
     }
 
+    resizeImage (settings) {
+        var file = settings.file;
+        var maxSize = settings.maxSize;
+        var reader = new FileReader();
+        var image = new Image();
+        var canvas = document.createElement('canvas');
+        var dataURItoBlob = function (dataURI) {
+            var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+                atob(dataURI.split(',')[1]) :
+                unescape(dataURI.split(',')[1]);
+            var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            var max = bytes.length;
+            var ia = new Uint8Array(max);
+            for (var i = 0; i < max; i++)
+                ia[i] = bytes.charCodeAt(i);
+            return new Blob([ia], { type: mime });
+        };
+        var resize = function () {
+            var width = image.width;
+            var height = image.height;
+            if (width > height) {
+                if (width > maxSize) {
+                    height *= maxSize / width;
+                    width = maxSize;
+                }
+            } else {
+                if (height > maxSize) {
+                    width *= maxSize / height;
+                    height = maxSize;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            return dataURItoBlob(dataUrl);
+        };
+        return new Promise(function (ok, no) {
+            reader.onload = function (readerEvent) {
+                image.onload = function () { return ok(resize()); };
+                image.src = readerEvent.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
     imgToB64(pic){
         return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(pic);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            if(pic.size > 512000){
+                this.resizeImage({
+                    file: pic,
+                    maxSize: 500
+                }).then(function (resizedImage) {
+                    pic=resizedImage
+
+                    const reader = new FileReader();
+                    reader.readAsDataURL(pic);
+
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                })
+            }else{
+                const reader = new FileReader();
+                reader.readAsDataURL(pic);
+
+
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }
           });
     }
 
     addPicture(pic){
         const file = pic.srcElement.files["0"];
-        this.imgToB64(file).then(
-            data => this.form.controls.picture.setValue(data)
-        );
+        this.imgToB64(file).then((data) => {
+            this.form.controls.picture.setValue(data);
+        })
     }    
 
     removeName(i: number) {
