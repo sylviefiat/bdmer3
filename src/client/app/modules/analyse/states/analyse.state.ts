@@ -38,8 +38,8 @@ export const analyseInitialState: IAnalyseState = {
 };
 
 export const initMethods: Method[] = [
-    {method: 'LONGLARG'},
-    {method: 'LONGUEUR'}
+    { method: 'LONGLARG' },
+    { method: 'LONGUEUR' }
 ]
 
 export function getUsedCountry(state$: Observable<IAnalyseState>) {
@@ -95,22 +95,45 @@ export function getMsg(state$: Observable<IAnalyseState>) {
 }
 
 export function getYearsAvailables(state$: Observable<IAppState>) {
-    //console.log(state$);
-    /*return state$.select(state => {
-        let years=[];
-        for(let i in state.analyse.usedPlatforms){
-            years[i] = state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones;
+    return state$.select(state => {
+        let years: string[] = [];
+        if(state.analyse.usedPlatforms){
+            for(let p of state.analyse.usedPlatforms){
+                for(let s of p.surveys){
+                    let y = new Date(s.dateStart).getFullYear().toString();
+                    if(years.indexOf(y)<0){
+                        years.push(y);
+                    }
+                }
+            }
         }
-        return zones;
-    })*/
-    // TODO
+        return years.sort();
+    })
+}
+
+export function getSurveysAvailables(state$: Observable<IAppState>) {
+    console.log(state$);
+    return state$.select(state => {
+        let surveys: Survey[] = [];
+        if(state.analyse.usedPlatforms){
+            for(let p of state.analyse.usedPlatforms){
+                for(let s of p.surveys){
+                    let surveyYear = new Date(s.dateStart).getFullYear().toString();
+                    if(state.analyse.usedYears && state.analyse.usedYears.indexOf(surveyYear)>=0){
+                        surveys.push(s);
+                    }
+                }
+            }
+        }
+        return surveys;
+    })
 }
 
 export function getZonesAvailables(state$: Observable<IAppState>) {
     //console.log(state$);
     return state$.select(state => {
-        let zones=[];
-        for(let i in state.analyse.usedSurveys){
+        let zones = [];
+        for (let i in state.analyse.usedSurveys) {
             zones[i] = state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones;
         }
         return zones;
@@ -120,11 +143,11 @@ export function getZonesAvailables(state$: Observable<IAppState>) {
 export function getTransectsAvailables(state$: Observable<IAppState>) {
     //console.log(state$);
     return state$.select(state => {
-        let transects=[];
-        for(let i in state.analyse.usedSurveys){
-            transects[i]=[];
-            for(let zone of state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones){
-                transects[i] = [...transects[i],...zone.transects];
+        let transects = [];
+        for (let i in state.analyse.usedSurveys) {
+            transects[i] = [];
+            for (let zone of state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones) {
+                transects[i] = [...transects[i], ...zone.transects];
             }
         }
         return transects;

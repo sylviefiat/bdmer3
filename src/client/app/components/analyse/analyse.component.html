@@ -13,7 +13,6 @@
         </form>
       </mat-step>
       
-
       <mat-step [stepControl]="platformsFormGroup">
         <form [formGroup]="platformsFormGroup">
           <ng-template matStepLabel>{{ 'SELECT_PLATFORM' | translate}}</ng-template>
@@ -25,14 +24,10 @@
         </form>
       </mat-step>
       
-
-
-
-
-      <mat-step [stepControl]="yearFormGroup">
-        <form [formGroup]="yearFormGroup">
+      <mat-step [stepControl]="yearsFormGroup">
+        <form [formGroup]="yearsFormGroup">
           <ng-template matStepLabel>{{ 'SELECT_YEAR' | translate}}</ng-template>
-          <!--<bc-analyse-platform [platforms]="platforms" (platformEmitter)="setPlatform($event)" [group]="platformsFormGroup" [inputName]="'platforms'"></bc-analyse-platform>-->
+          <bc-analyse-year [years$]="years$" (yearEmitter)="setYears($event)" [group]="yearsFormGroup"></bc-analyse-year>
           <div>
             <button mat-button  matStepperPrevious>{{ 'BACK' | translate}}</button>
             <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
@@ -43,6 +38,9 @@
       <mat-step [stepControl]="surveysFormGroup">
         <form [formGroup]="surveysFormGroup">
           <ng-template matStepLabel>{{ 'SELECT_SURVEYS' | translate}}</ng-template>
+          <div *ngFor="let survey of surveys$ | async">
+            {{ survey.code }}
+          </div>
           <!--<mat-form-field>
             <mat-select placeholder="{{ 'SELECT_SURVEYS' | translate}}" formControlName="surveys" (change)="setSurveys($event.value)" multiple required>
                 <mat-select-trigger>

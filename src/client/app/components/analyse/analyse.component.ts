@@ -28,7 +28,8 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() msg: string | null;
     @Input() countries: Country[];
     @Input() platforms$: Observable<Platform[]>;
-    
+    @Input() years$: Observable<string[]>;
+    @Input() surveys$: Observable<Survey[]>;
     /*surveys: Survey[];
     zonesList: Zone[][];
     transectsList: Transect[][];*/
@@ -36,7 +37,8 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
     @Output() platformEmitter = new EventEmitter<Platform[]>();
-    @Output() analyse = new EventEmitter<String>();
+    @Output() yearEmitter = new EventEmitter<string[]>();
+    @Output() analyse = new EventEmitter<string>();
 
     currentPlatforms: Platform[];
     currentSurveys: Survey[];
@@ -48,7 +50,7 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     platformsFormGroup: FormGroup = new FormGroup({
         platforms: this._fb.array([])
     });
-    yearFormGroup: FormGroup = new FormGroup({
+    yearsFormGroup: FormGroup = new FormGroup({
         years: new FormControl()
     });
     surveysFormGroup: FormGroup = new FormGroup({
@@ -94,6 +96,10 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
         }
         //this.zoneEmitter.emit(zones);
         this.currentZones = zones;
+    }
+
+    setYears(years: string[]) {
+        this.yearEmitter.emit(years); 
     }
 
     get localDate() {

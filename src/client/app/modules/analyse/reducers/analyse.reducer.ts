@@ -1,5 +1,5 @@
 import { IAnalyseState, analyseInitialState } from '../states/index';
-
+import { Platform, Zone, Transect, Survey } from '../../datas/models/platform';
 import { AnalyseAction } from '../actions/index';
 
 export function analyseReducer(
@@ -12,6 +12,24 @@ export function analyseReducer(
       return {
         ...state,
         usedCountry: action.payload
+      };
+    }
+
+    case AnalyseAction.ActionTypes.SELECT_PLATFORMS: {
+      let platforms = action.payload;
+
+      return {
+        ...state,
+        usedPlatforms: platforms
+      };
+    }
+
+    case AnalyseAction.ActionTypes.SELECT_YEARS: {
+      let years = action.payload;
+
+      return {
+        ...state,
+        usedYears: years
       };
     }
 

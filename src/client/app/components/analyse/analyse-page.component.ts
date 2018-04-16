@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountrySurveys, getSelectedCountryPlatforms,
-  getSelectedSurveysZones, getSelectedSurveysTransects, getSelectedPlatformYears } from '../../modules/ngrx/index';
+  getSelectedSurveysZones, getSelectedSurveysTransects, getSelectedPlatformYears, getSelectedPlatformYearSurveys } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Transect } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
@@ -22,11 +22,14 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
     <bc-analyse 
       [countries]="countries$ | async"
       [platforms$]="platforms$"
+      [years$]="years$"
+      [surveys$]="surveys$"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
       (platformEmitter)="selectPlatform($event)"
+      (yearEmitter)="selectYear($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
   `,
@@ -51,6 +54,8 @@ export class AnalysePageComponent implements OnInit {
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
     this.platforms$ = this.store.let(getSelectedCountryPlatforms);
+    this.years$ = this.store.let(getSelectedPlatformYears);
+    this.surveys$ = this.store.let(getSelectedPlatformYearSurveys);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
   }
@@ -63,7 +68,10 @@ export class AnalysePageComponent implements OnInit {
 
   selectPlatform(platforms: Platform[]) {
     this.store.dispatch(new AnalyseAction.SelectPlatforms(platforms));
-    this.years$ = this.store.let(getSelectedPlatformYears);
+  }
+
+  selectYear(years: string[]) {
+    this.store.dispatch(new AnalyseAction.SelectYears(years));
   }
 
   /*selectSurvey(surveys: Survey[]) {
