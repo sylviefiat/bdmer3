@@ -323,5 +323,6 @@
   "ZONE_NAME": "Nom de la zone",
   "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML",
   "ZONE_COORD": "Coordonnées de la zone",
-  "MODAL_CLOSE": "Fermer"
+  "POLYGON_ERROR": "Le polygone n'est pas valide",
+  "CHECK_ALL":"Sélectionner tout"
 }
