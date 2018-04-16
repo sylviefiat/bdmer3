@@ -91,7 +91,7 @@ export class CountryPreviewComponent {
 
   get flag() {
     if(this.country.flag){
-      const flag = this.country.flag.slice(0, -2);
+      const flag = this.country.flag;
       return this.sanitizer.bypassSecurityTrustResourceUrl(flag);
     }else{
       return this.country.flag
