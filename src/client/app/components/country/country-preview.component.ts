@@ -90,16 +90,12 @@ export class CountryPreviewComponent {
   }
 
   get flag() {
-    if(this.country._attachments &&
-      this.country._attachments.flag.data){
-      let blob = this.country._attachments.flag;
-      var file = new Blob([ blob.data ], {
-        type : blob.content_type
-      });
-      return this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
-
-    }    
-    return null;
+    if(this.country.flag){
+      const flag = this.country.flag;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(flag);
+    }else{
+      return this.country.flag
+    }
   }
 
 }

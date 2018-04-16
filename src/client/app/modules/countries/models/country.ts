@@ -5,6 +5,7 @@ export interface Country {
 	name: string;
 	_attachments?: any;
 	users: User[];
+  flag: string;
 }
 
 export interface User {
@@ -17,14 +18,4 @@ export interface User {
   password?:string;
   repassword?:string;
   role: string;
-}
-
-export interface Flagimg {
-	_id: string;
-	_attachments: {
-		flag: {
-        type: string;
-        data: object;
-      }
-	};
 }
