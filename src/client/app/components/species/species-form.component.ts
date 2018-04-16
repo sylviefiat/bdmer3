@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -56,7 +56,7 @@ export class SpeciesFormComponent implements OnInit {
         legalDimensions: this._fb.array([]),
     });
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
+    constructor(private cdr: ChangeDetectorRef, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     initName() {
         if (this.species && this.species.names && this.species.names.length > 0) {
@@ -88,6 +88,9 @@ export class SpeciesFormComponent implements OnInit {
         
         if (this.species) {
             this.form.controls.code.setValue(this.species.code);
+            this.form.controls.picture.setValue(this.species.picture);
+            this.url = this.species.picture;
+
             this.form.controls.scientificName.setValue(this.species.scientificName);
 
             this.form.patchValue({ LLW: { coefA: this.species.LLW.coefA } });
@@ -112,6 +115,7 @@ export class SpeciesFormComponent implements OnInit {
         }
         this.initName();
         this.initLegalDim();
+        this.cdr.detectChanges();
     }
 
     newName(lang, name) {
@@ -126,6 +130,7 @@ export class SpeciesFormComponent implements OnInit {
         const addrCtrl = this.newName('', '');
 
         control.push(addrCtrl);
+        this.cdr.detectChanges();
     }
 
     resizeImage (settings) {
@@ -210,7 +215,6 @@ export class SpeciesFormComponent implements OnInit {
 
     addPicture(event:any){
         if (event.target.files && event.target.files[0]){
-            console.log("ca passe")
             this.showPic(event)
             const file = event.srcElement.files["0"];
             
@@ -236,8 +240,8 @@ export class SpeciesFormComponent implements OnInit {
     addLegalDim() {
         const control = <FormArray>this.form.controls['legalDimensions'];
         const addrCtrl = this.newLegalDim('', '', '');
-
         control.push(addrCtrl);
+        this.cdr.detectChanges();
     }
 
     removeLegalDim(i: number) {

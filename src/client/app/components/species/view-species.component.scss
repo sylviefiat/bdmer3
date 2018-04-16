@@ -14,10 +14,14 @@ mat-card-title-group.main-title {
   flex-direction: row-reverse;
 }
 mat-card-title-group img {
-  max-width:100px;
   max-height: 70px;
-  width: auto;
+  width: auto!important;
 }
+
+// img{
+//   width: 100%!important;
+// }
+
 .data, .inside {
   display: flex;
   flex-direction: row;
