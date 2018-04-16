@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountrySurveys, getSelectedCountryPlatforms,
-  getSelectedSurveysZones, getSelectedSurveysTransects } from '../../modules/ngrx/index';
+  getSelectedSurveysZones, getSelectedSurveysTransects, getSelectedPlatformYears } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Transect } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
@@ -26,6 +26,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
+      (platformEmitter)="selectPlatform($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
   `,
@@ -33,6 +34,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
   platforms$: Observable<Platform[]>;
+  years$: Observable<string[]>;
   surveys$: Observable<Survey[]>;
   transects$: Observable<Transect[]>;
   zones$: Observable<any>;
@@ -57,6 +59,11 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
     this.store.dispatch(new PlatformAction.LoadAction());
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
+  }
+
+  selectPlatform(platforms: Platform[]) {
+    this.store.dispatch(new AnalyseAction.SelectPlatforms(platforms));
+    this.years$ = this.store.let(getSelectedPlatformYears);
   }
 
   /*selectSurvey(surveys: Survey[]) {

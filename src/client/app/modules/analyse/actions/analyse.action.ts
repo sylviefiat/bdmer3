@@ -11,6 +11,8 @@ export namespace AnalyseAction {
 
   export interface IAnalyseActions {
     SELECT_COUNTRY: string;
+    SELECT_PLATFORMS: string;
+    SELECT_YEARS: string;
     SELECT_SURVEYS: string;
     SELECT_ZONES: string;
     SELECT_TRANSECTS: string;
@@ -23,6 +25,8 @@ export namespace AnalyseAction {
 
   export const ActionTypes: IAnalyseActions = {
     SELECT_COUNTRY : type('[Analyse] Select country'),
+    SELECT_PLATFORMS : type('[Analyse] Select Platforms'),
+    SELECT_YEARS : type('[Analyse] Select years'),
     SELECT_SURVEYS : type('[Analyse] Select Surveys'),
     SELECT_ZONES : type('[Analyse] Select Zones'),
     SELECT_TRANSECTS : type('[Analyse] Select Transects'),
@@ -36,6 +40,18 @@ export class SelectCountry implements Action {
   readonly type = ActionTypes.SELECT_COUNTRY;
 
   constructor(public payload: Country) {}
+}
+
+export class SelectPlatforms implements Action {
+  readonly type = ActionTypes.SELECT_PLATFORMS;
+
+  constructor(public payload: Platform[] ) {}
+}
+
+export class SelectYears implements Action {
+  readonly type = ActionTypes.SELECT_YEARS;
+
+  constructor(public payload: string[]) {}
 }
 
 export class SelectSurveys implements Action {
@@ -87,6 +103,8 @@ export class AnalyseFailure implements Action {
 
 export type Actions =
   | SelectCountry
+  | SelectPlatforms
+  | SelectYears
   | SelectSurveys
   | SelectZones
   | SelectTransects

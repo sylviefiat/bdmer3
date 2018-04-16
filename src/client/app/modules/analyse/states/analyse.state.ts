@@ -1,12 +1,14 @@
 import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
-import { Zone, Transect, Survey } from '../../datas/models/platform';
+import { Platform, Zone, Transect, Survey } from '../../datas/models/platform';
 import { Method, Result, SurveySpecies } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
     usedCountry: Country;
+    usedPlatforms: Platform[];
+    usedYears: string[];
     usedSurveys: Survey[];
     usedZones: Zone[];
     usedTransects: Transect[];
@@ -21,6 +23,8 @@ export interface IAnalyseState {
 
 export const analyseInitialState: IAnalyseState = {
     usedCountry: null,
+    usedPlatforms: null,
+    usedYears: null,
     usedSurveys: null,
     usedZones: null,
     usedTransects: null,
@@ -40,6 +44,14 @@ export const initMethods: Method[] = [
 
 export function getUsedCountry(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedCountry);
+}
+
+export function getUsedPlatforms(state$: Observable<IAnalyseState>) {
+    return state$.select(state => state.usedPlatforms);
+}
+
+export function getUsedYears(state$: Observable<IAnalyseState>) {
+    return state$.select(state => state.usedYears);
 }
 
 export function getUsedSurveys(state$: Observable<IAnalyseState>) {
@@ -80,6 +92,18 @@ export function getResult(state$: Observable<IAnalyseState>) {
 
 export function getMsg(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.msg);
+}
+
+export function getYearsAvailables(state$: Observable<IAppState>) {
+    //console.log(state$);
+    /*return state$.select(state => {
+        let years=[];
+        for(let i in state.analyse.usedPlatforms){
+            years[i] = state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones;
+        }
+        return zones;
+    })*/
+    // TODO
 }
 
 export function getZonesAvailables(state$: Observable<IAppState>) {

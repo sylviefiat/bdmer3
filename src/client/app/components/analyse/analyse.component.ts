@@ -35,6 +35,7 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
+    @Output() platformEmitter = new EventEmitter<Platform[]>();
     @Output() analyse = new EventEmitter<String>();
 
     currentPlatforms: Platform[];

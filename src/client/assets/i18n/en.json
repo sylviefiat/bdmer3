@@ -291,5 +291,6 @@
   "TRANSECT_COORD": "Coordinates of transect",
   "TRANSECT_ERROR": "Transect not valid.",
   "TRANSECT_ERROR_LNG": "Longitude of transect isn't valid",
-  "TRANSECT_ERROR_LAT": "Latitude of transect isn't valid"
+  "TRANSECT_ERROR_LAT": "Latitude of transect isn't valid",
+  "CHECK_ALL":"Select all"
 }

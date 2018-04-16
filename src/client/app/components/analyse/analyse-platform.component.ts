@@ -8,16 +8,33 @@ import { Platform } from '../../modules/datas/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="form"> 
-      <div *ngFor="let platform of platforms$ | async; let i=index">
-        <bc-platform [group]="form.controls.platforms.controls[i]" [platform]="platform" (platformEmitter)="changeValue($event)"></bc-platform>
+      <h2>{{ 'SELECT_PLATFORM' | translate }}</h2>
+      <mat-checkbox (change)="checkAll($event)">
+          {{ 'CHECK_ALL' | translate }}
+        </mat-checkbox>
+      <div  class="platforms">
+        <div *ngFor="let platform of platforms$ | async; let i=index">
+          <bc-platform [group]="form.controls.platforms.controls[i]" [platform]="platform" (platformEmitter)="changeValue($event)"></bc-platform>
+        </div>
       </div>
     </div>
   `,
+
+  styles: [
+    `
+    .platforms {
+      margin-top:10px;
+      margin-bottom:10px;
+      padding:5px;
+      border: 1px solid grey;
+    }
+    `]
 })
 export class AnalysePlatformComponent implements OnInit {
   @Input() platforms$: Observable<Platform[]>;
+  defaultPlatforms: Platform[] = [];
   checkedPlatforms: Platform[] = [];
-  @Output() platformEmitter = new EventEmitter<Platform>();
+  @Output() platformEmitter = new EventEmitter<Platform[]>();
   @Input('group') public form: FormGroup;
 
   constructor(private _fb: FormBuilder) {
@@ -38,24 +55,31 @@ export class AnalysePlatformComponent implements OnInit {
     this.platforms$
       .filter(platforms => platforms !== null)
       .subscribe(platforms => {
+        this.defaultPlatforms=[];
         this.form.controls['platforms'] = this._fb.array([]);
         for (let platform of platforms) {
+          this.defaultPlatforms.push(platform);
           const control = <FormArray>this.form.controls['platforms'];
           control.push(this.newPlatform(platform));
         }
       })
   }
 
-  changeValue(bool: any) {
-    console.log(bool);
+  changeValue(platCheck: any) {
+    console.log(platCheck);
+    this.checkedPlatforms=[...this.checkedPlatforms.filter(p => p.code!==platCheck.platform.code)];
+    if(platCheck.checked){
+      this.checkedPlatforms.push(platCheck.platform);
+    }
+    this.platformEmitter.emit(this.checkedPlatforms);
   }
 
-  /*checkAll(ev) {
-    this.platforms.forEach(x => x.state = ev.target.checked)
+  checkAll(ev) {
+    const control = <FormArray>this.form.controls['platforms'];
+    control.value.forEach(x => x.platform = ev.checked)
+    control.setValue(control.value);
+    this.checkedPlatforms=(ev.checked)?this.defaultPlatforms:[];
+    this.platformEmitter.emit(this.checkedPlatforms);
   }
 
-  isAllChecked() {
-    console.log('fired');
-    return this.platforms.every(_ => _.state);
-  }*/
 }
