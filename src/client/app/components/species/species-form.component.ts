@@ -13,7 +13,7 @@ import { Country } from '../../modules/countries/models/country';
 
 @Component({
     moduleId: module.id,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    //changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'bc-species-form',
     templateUrl: 'species-form.component.html',
     styleUrls: [
@@ -26,6 +26,7 @@ export class SpeciesFormComponent implements OnInit {
     @Input() species: Species | null;
     @Input() countries: Country[];
     @Input() alreadySetCountries$: Observable<string[]>;
+    url = '';
 
     @Output() submitted = new EventEmitter<Species>();
 
@@ -165,7 +166,7 @@ export class SpeciesFormComponent implements OnInit {
             return dataURItoBlob(dataUrl);
         };
         return new Promise(function (resolve) {
-            reader.onload = function (readerEvent) {
+            reader.onload = function (readerEvent:any) {
                 image.onload = function () { return resolve(resize()); };
                 image.src = readerEvent.target.result;
             };
@@ -191,19 +192,32 @@ export class SpeciesFormComponent implements OnInit {
             }else{
                 const reader = new FileReader();
                 reader.readAsDataURL(pic);
-
-
                 reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
             }
           });
     }
 
-    addPicture(pic){
-        const file = pic.srcElement.files["0"];
-        this.imgToB64(file).then((data) => {
-            this.form.controls.picture.setValue(data);
-        })
+    showPic(event:any){
+            var reader = new FileReader();
+
+
+              reader.onload = (event: any) => { // called once readAsDataURL is completed
+                this.url = event.target.result;
+            }
+              reader.readAsDataURL(event.target.files[0]); // read file as data url
+    }
+
+    addPicture(event:any){
+        if (event.target.files && event.target.files[0]){
+            console.log("ca passe")
+            this.showPic(event)
+            const file = event.srcElement.files["0"];
+            
+            this.imgToB64(file).then((data) => {
+                this.form.controls.picture.setValue(data);
+            })
+        }
     }    
 
     removeName(i: number) {
@@ -249,5 +263,4 @@ export class SpeciesFormComponent implements OnInit {
             }
         });
     }
-
 }
