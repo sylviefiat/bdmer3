@@ -1,4 +1,4 @@
-import { Component, AfterViewChecked, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, AfterViewChecked, ChangeDetectorRef, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -51,7 +51,7 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
     role: new FormControl(''),
   });
 
-  constructor(private sanitizer: DomSanitizer ) {}
+  constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer ) {}
 
   ngOnInit(){
     console.log(this.user);
@@ -73,6 +73,7 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
   checkPasswords(c: FormControl) {
     let repass = c.value;
     let password = this.form.controls.password.value;
+    this.cdr.detectChanges();
     return repass === password ? null : { notSame: true }
   }
 
@@ -91,17 +92,12 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
   }
 
   get flag() {
-    //console.log(this.country._attachments);
-    if(this.country._attachments &&
-      this.country._attachments.flag){
-      let blob = this.country._attachments.flag;
-      var file = new Blob([ blob.data ], {
-        type : blob.content_type
-      });
-      return this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
-
-    }    
-    return null;
+    if(this.country.flag){
+      const flag = this.country.flag;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(flag);
+    }else{
+      return this.country.flag
+    }
   }
 
 }

@@ -46,7 +46,7 @@ export class NewUserPageComponent implements OnInit {
     this.country$ =this.store.let(getSelectedCountry);   
     this.user$ =this.store.let(getSelectedUser);
     this.isAdmin$ =this.store.let(getisAdmin);
-
+    
   }
 
   ngOnDestroy() {
