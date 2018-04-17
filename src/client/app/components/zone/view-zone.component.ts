@@ -20,7 +20,7 @@ import { zoneMapModal } from './zone-map-modal.component';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-zone',
+    selector: 'bc-view-zone',
     templateUrl: 'view-zone.component.html',
     styleUrls: [
         'view-zone.component.css',

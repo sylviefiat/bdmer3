@@ -17,7 +17,7 @@ import { transectMapModal } from './transect-map-modal.component';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-transect',
+    selector: 'bc-view-transect',
     templateUrl: 'view-transect.component.html',
     styleUrls: [
         'view-transect.component.css',

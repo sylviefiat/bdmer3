@@ -34,7 +34,6 @@ export function analyseReducer(
     }
 
     case AnalyseAction.ActionTypes.SELECT_SURVEYS: {
-    //console.log(action.payload);  
       return {
         ...state,
         usedSurveys: action.payload

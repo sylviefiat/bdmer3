@@ -16,7 +16,7 @@ import { WindowService } from '../../modules/core/services/index';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-survey',
+    selector: 'bc-view-survey',
     templateUrl: 'view-survey.component.html',
     styleUrls: [
         'view-survey.component.css',

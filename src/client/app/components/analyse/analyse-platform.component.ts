@@ -8,7 +8,7 @@ import { Platform } from '../../modules/datas/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="form"> 
-      <h2>{{ 'SELECT_PLATFORM' | translate }}</h2>
+      <h2>{{ 'SELECT_PLATFORMS' | translate }}</h2>
       <mat-checkbox (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>

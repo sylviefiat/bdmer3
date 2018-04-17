@@ -6,12 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountrySurveys, getSelectedCountryPlatforms,
-  getSelectedSurveysZones, getSelectedSurveysTransects, getSelectedPlatformYears, getSelectedPlatformYearSurveys } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey, Transect } from '../../modules/datas/models/index';
+import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
+  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseTransects, getSelectedAnalyseSpecies } from '../../modules/ngrx/index';
+import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
-import { PlatformAction } from '../../modules/datas/actions/index';
+import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 
 
@@ -24,12 +24,19 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [platforms$]="platforms$"
       [years$]="years$"
       [surveys$]="surveys$"
+      [zones$]="zones$"
+      [transects$]="transects$"
+      [species$]="species$"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
       (platformEmitter)="selectPlatform($event)"
       (yearEmitter)="selectYear($event)"
+      (surveyEmitter)="selectSurvey($event)"
+      (zoneEmitter)="selectZone($event)"
+      (transectEmitter)="selectTransect($event)"
+      (speciesEmitter)="selectSpecies($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
   `,
@@ -39,8 +46,9 @@ export class AnalysePageComponent implements OnInit {
   platforms$: Observable<Platform[]>;
   years$: Observable<string[]>;
   surveys$: Observable<Survey[]>;
+  zones$: Observable<Zone[]>;
   transects$: Observable<Transect[]>;
-  zones$: Observable<any>;
+  species$: Observable<Species[]>;
   isAdmin$: Observable<boolean>;
   locale$: Observable<string>;
   msg$: Observable<string>;
@@ -54,10 +62,14 @@ export class AnalysePageComponent implements OnInit {
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
     this.platforms$ = this.store.let(getSelectedCountryPlatforms);
-    this.years$ = this.store.let(getSelectedPlatformYears);
-    this.surveys$ = this.store.let(getSelectedPlatformYearSurveys);
+    this.years$ = this.store.let(getSelectedAnalyseYears);
+    this.surveys$ = this.store.let(getSelectedAnalyseSurveys);
+    this.zones$ = this.store.let(getSelectedAnalyseZones);
+    this.transects$ = this.store.let(getSelectedAnalyseTransects);
+    this.species$ = this.store.let(getSelectedAnalyseSpecies);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
+    this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
   selectCountry(country: Country) {
@@ -74,15 +86,21 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new AnalyseAction.SelectYears(years));
   }
 
-  /*selectSurvey(surveys: Survey[]) {
+  selectSurvey(surveys: Survey[]) {
     this.store.dispatch(new AnalyseAction.SelectSurveys(surveys));
-    this.zones$ = this.store.let(getSelectedSurveysZones);
-    this.transects$ = this.store.let(getSelectedSurveysTransects);
-  }*/
+  }
 
-  /*selectZone(zones: Zone[][]) {
+  selectZone(zones: Zone[]) {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
-  }*/
+  }
+
+  selectTransect(transects: Transect[]) {
+    this.store.dispatch(new AnalyseAction.SelectTransects(transects));    
+  }
+
+  selectSpecies(species: Species[]) {
+    this.store.dispatch(new AnalyseAction.SelectSpecies(species));    
+  }
 
   startAnalyse(status: string) {
     //TODO

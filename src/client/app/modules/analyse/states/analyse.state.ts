@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
-import { Platform, Zone, Transect, Survey } from '../../datas/models/platform';
+import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
 import { Method, Result, SurveySpecies } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
@@ -112,7 +112,6 @@ export function getYearsAvailables(state$: Observable<IAppState>) {
 }
 
 export function getSurveysAvailables(state$: Observable<IAppState>) {
-    console.log(state$);
     return state$.select(state => {
         let surveys: Survey[] = [];
         if(state.analyse.usedPlatforms){
@@ -130,26 +129,50 @@ export function getSurveysAvailables(state$: Observable<IAppState>) {
 }
 
 export function getZonesAvailables(state$: Observable<IAppState>) {
-    //console.log(state$);
     return state$.select(state => {
-        let zones = [];
+        let zones: Zone[] = [];
         for (let i in state.analyse.usedSurveys) {
-            zones[i] = state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones;
+            let sz: Zone[] = state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones;
+            for(let z of sz){
+                if(zones.indexOf(z)<0){
+                    zones.push(z);
+                }
+            }           
         }
         return zones;
     })
 }
 
 export function getTransectsAvailables(state$: Observable<IAppState>) {
-    //console.log(state$);
     return state$.select(state => {
         let transects = [];
-        for (let i in state.analyse.usedSurveys) {
-            transects[i] = [];
-            for (let zone of state.platform.entities.filter(platform => platform.code === state.analyse.usedSurveys[i].codePlatform)[0].zones) {
-                transects[i] = [...transects[i], ...zone.transects];
+        for (let i in state.analyse.usedZones) {
+            let zt: Transect[] = state.analyse.usedZones[i].transects;
+            for(let t of zt){
+                if(transects.indexOf(t)<0){
+                    transects.push(t);
+                }
             }
         }
         return transects;
+    })
+}
+
+export function getSpeciesAvailables(state$: Observable<IAppState>) {
+    return state$.select(state => {
+        let species = [];
+        for (let i in state.analyse.usedSurveys) {
+            for(let j in state.analyse.usedSurveys[i].counts){
+                for(let k in state.analyse.usedSurveys[i].counts[j].mesures){
+                    let cs: Species[] = state.species.entities.filter(sp => sp.code === state.analyse.usedSurveys[i].counts[j].mesures[k].codeSpecies);
+                    for(let s of cs){
+                        if(species.indexOf(s)<0){
+                            species.push(s);
+                        }
+                    }
+                }
+            }
+        }
+        return species;
     })
 }

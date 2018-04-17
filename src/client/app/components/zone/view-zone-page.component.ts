@@ -18,14 +18,14 @@ import { PlatformAction } from '../../modules/datas/actions/index';
   selector: 'bc-view-zone-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-zone 
+    <bc-view-zone 
       [platform]="(platform$ | async)"
       [zone]="zone$ | async"
       [transects$]="transects$"
       [zonesPref$]="zonesPref$"
       (action)="actionZone($event)"
       (remove)="removeZone($event)">
-    </bc-zone>
+    </bc-view-zone>
   `,
 })
 export class ViewZonePageComponent implements OnInit, OnDestroy {

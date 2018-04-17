@@ -63,18 +63,18 @@ export class SelectSurveys implements Action {
 export class SelectZones implements Action {
   readonly type = ActionTypes.SELECT_ZONES;
 
-  constructor(public payload: Zone[][]) {}
+  constructor(public payload: Zone[]) {}
 }
 
 export class SelectTransects implements Action {
   readonly type = ActionTypes.SELECT_TRANSECTS;
-  constructor(public payload: Transect[][]) {}
+  constructor(public payload: Transect[]) {}
 }
 
 export class SelectSpecies implements Action {
   readonly type = ActionTypes.SELECT_SPECIES;
   
-  constructor(public payload: Species[][]) {}
+  constructor(public payload: Species[]) {}
 }
 
 export class SelectMethod implements Action {

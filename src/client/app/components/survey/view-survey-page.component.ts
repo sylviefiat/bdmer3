@@ -18,7 +18,7 @@ import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index
   selector: 'bc-view-survey-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-survey 
+    <bc-view-survey 
       [platform]="platform$ | async"
       [survey]="survey$ | async"
       [counts$]="counts$"
@@ -26,7 +26,7 @@ import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index
       [species]="species$ | async"
       (action)="actionSurvey($event)"
       (remove)="removeSurvey($event)">
-    </bc-survey>
+    </bc-view-survey>
   `,
 })
 export class ViewSurveyPageComponent implements OnInit, OnDestroy {

@@ -30,19 +30,19 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Input() platforms$: Observable<Platform[]>;
     @Input() years$: Observable<string[]>;
     @Input() surveys$: Observable<Survey[]>;
-    /*surveys: Survey[];
-    zonesList: Zone[][];
-    transectsList: Transect[][];*/
+    @Input() zones$: Observable<Zone[]>;
+    @Input() transects$: Observable<Transect[]>;
+    @Input() species$: Observable<Species[]>;
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
     @Output() platformEmitter = new EventEmitter<Platform[]>();
     @Output() yearEmitter = new EventEmitter<string[]>();
+    @Output() surveyEmitter = new EventEmitter<Survey[]>();
+    @Output() zoneEmitter = new EventEmitter<Zone[]>();
+    @Output() transectEmitter = new EventEmitter<Transect[]>();
+    @Output() speciesEmitter = new EventEmitter<Species[]>();
     @Output() analyse = new EventEmitter<string>();
-
-    currentPlatforms: Platform[];
-    currentSurveys: Survey[];
-    currentZones: Zone[][];
 
     countryFormGroup: FormGroup = new FormGroup({
         country: new FormControl()
@@ -100,6 +100,22 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
 
     setYears(years: string[]) {
         this.yearEmitter.emit(years); 
+    }
+
+    setSurveys(surveys: Survey[]) {
+        this.surveyEmitter.emit(surveys);
+    }
+
+    setZones(zones: Zone[]) {
+        this.zoneEmitter.emit(zones); 
+    }
+
+    setTransects(transects: Transect[]) {
+        this.transectEmitter.emit(transects); 
+    }
+
+    setSpecies(species: Species[]) {
+        this.speciesEmitter.emit(species); 
     }
 
     get localDate() {

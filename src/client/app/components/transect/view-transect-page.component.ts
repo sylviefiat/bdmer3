@@ -27,13 +27,13 @@ import { PlatformAction } from '../../modules/datas/actions/index';
   selector: 'bc-view-transect-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-transect 
+    <bc-view-transect 
       [platform]="platform$ | async"
       [zone]="zone$ | async"
       [transect]="transect$ | async"
       (action)="actionTransect($event)"
       (remove)="removeTransect($event)">
-    </bc-transect>
+    </bc-view-transect>
   `,
 })
 export class ViewTransectPageComponent implements OnInit, OnDestroy {

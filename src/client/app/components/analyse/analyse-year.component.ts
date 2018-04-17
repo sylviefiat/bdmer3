@@ -8,7 +8,7 @@ import { Platform } from '../../modules/datas/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="form"> 
-      <h2>{{ 'SELECT_YEAR' | translate }}</h2>
+      <h2>{{ 'SELECT_YEARS' | translate }}</h2>
       <mat-checkbox (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
@@ -52,7 +52,6 @@ export class AnalyseYearComponent implements OnInit {
   }
 
   initYears() {
-    console.log(this.years$);
     this.years$
       .filter(years => years !== null)
       .subscribe(years => {
