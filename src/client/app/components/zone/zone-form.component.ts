@@ -33,7 +33,7 @@ export class ZoneFormComponent implements OnInit {
         geojson: new FormGroup({
             type: new FormControl("Zone"),
             geometry: new FormGroup({
-                type: new FormControl("", Validators.required),
+                type: new FormControl("Polygon"),
                 coordinates: new FormControl("",Validators.required)
             }),
         }),
