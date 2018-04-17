@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +13,7 @@ import { Country } from '../../modules/countries/models/country';
 
 @Component({
     moduleId: module.id,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    //changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'bc-species-form',
     templateUrl: 'species-form.component.html',
     styleUrls: [
@@ -26,6 +26,7 @@ export class SpeciesFormComponent implements OnInit {
     @Input() species: Species | null;
     @Input() countries: Country[];
     @Input() alreadySetCountries$: Observable<string[]>;
+    url = '';
 
     @Output() submitted = new EventEmitter<Species>();
 
@@ -55,7 +56,7 @@ export class SpeciesFormComponent implements OnInit {
         legalDimensions: this._fb.array([]),
     });
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
+    constructor(private cdr: ChangeDetectorRef, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     initName() {
         if (this.species && this.species.names && this.species.names.length > 0) {
@@ -87,6 +88,9 @@ export class SpeciesFormComponent implements OnInit {
         
         if (this.species) {
             this.form.controls.code.setValue(this.species.code);
+            this.form.controls.picture.setValue(this.species.picture);
+            this.url = this.species.picture;
+
             this.form.controls.scientificName.setValue(this.species.scientificName);
 
             this.form.patchValue({ LLW: { coefA: this.species.LLW.coefA } });
@@ -111,6 +115,7 @@ export class SpeciesFormComponent implements OnInit {
         }
         this.initName();
         this.initLegalDim();
+        this.cdr.detectChanges();
     }
 
     newName(lang, name) {
@@ -125,22 +130,98 @@ export class SpeciesFormComponent implements OnInit {
         const addrCtrl = this.newName('', '');
 
         control.push(addrCtrl);
+        this.cdr.detectChanges();
+    }
+
+    resizeImage (settings) {
+        var file = settings.file;
+        var maxSize = settings.maxSize;
+        var reader = new FileReader();
+        var image = new Image();
+        var canvas = document.createElement('canvas');
+        var dataURItoBlob = function (dataURI) {
+            var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+                atob(dataURI.split(',')[1]) :
+                unescape(dataURI.split(',')[1]);
+            var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            var max = bytes.length;
+            var ia = new Uint8Array(max);
+            for (var i = 0; i < max; i++)
+                ia[i] = bytes.charCodeAt(i);
+            return new Blob([ia], { type: mime });
+        };
+        var resize = function () {
+            var width = image.width;
+            var height = image.height;
+            if (width > height) {
+                if (width > maxSize) {
+                    height *= maxSize / width;
+                    width = maxSize;
+                }
+            } else {
+                if (height > maxSize) {
+                    width *= maxSize / height;
+                    height = maxSize;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            return dataURItoBlob(dataUrl);
+        };
+        return new Promise(function (resolve) {
+            reader.onload = function (readerEvent:any) {
+                image.onload = function () { return resolve(resize()); };
+                image.src = readerEvent.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
     }
 
     imgToB64(pic){
         return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(pic);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            if(pic.size > 512000){
+                this.resizeImage({
+                    file: pic,
+                    maxSize: 500
+                }).then(function (resizedImage) {
+                    pic=resizedImage
+
+                    const reader = new FileReader();
+                    reader.readAsDataURL(pic);
+
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                })
+            }else{
+                const reader = new FileReader();
+                reader.readAsDataURL(pic);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            }
           });
     }
 
-    addPicture(pic){
-        const file = pic.srcElement.files["0"];
-        this.imgToB64(file).then(
-            data => this.form.controls.picture.setValue(data)
-        );
+    showPic(event:any){
+            var reader = new FileReader();
+
+
+              reader.onload = (event: any) => { // called once readAsDataURL is completed
+                this.url = event.target.result;
+            }
+              reader.readAsDataURL(event.target.files[0]); // read file as data url
+    }
+
+    addPicture(event:any){
+        if (event.target.files && event.target.files[0]){
+            this.showPic(event)
+            const file = event.srcElement.files["0"];
+            
+            this.imgToB64(file).then((data) => {
+                this.form.controls.picture.setValue(data);
+            })
+        }
     }    
 
     removeName(i: number) {
@@ -159,8 +240,8 @@ export class SpeciesFormComponent implements OnInit {
     addLegalDim() {
         const control = <FormArray>this.form.controls['legalDimensions'];
         const addrCtrl = this.newLegalDim('', '', '');
-
         control.push(addrCtrl);
+        this.cdr.detectChanges();
     }
 
     removeLegalDim(i: number) {
@@ -186,5 +267,4 @@ export class SpeciesFormComponent implements OnInit {
             }
         });
     }
-
 }

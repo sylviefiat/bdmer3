@@ -42,10 +42,13 @@
 
   <mat-card class="row" id="SPECIES_PICTURE">
     <h5 mat-subheader>{{ 'UPLOAD_PICTURE' | translate }}</h5>
-    <button (click)="pictureInput.click()">
-      <span>{{ 'IMPORT_PICTURE' | translate }}</span>
-      <input #pictureInput name="picture" (change)="addPicture($event)" type="file" style="display:none;"  accept="image/*"/>
-    </button>
+    <mat-card-actions>
+      <button  type="button" (click)="pictureInput.click()">
+        <span>{{ 'IMPORT_PICTURE' | translate }}</span>
+        <input #pictureInput name="picture" (change)="addPicture($event)" type="file" style="display:none;"  accept="image/*"/>
+      </button>
+    </mat-card-actions>
+    <img mat-card-sm-image *ngIf="url" [src]="url" />
   </mat-card>
 
  <bt-chips (send)="submit()" id="SPECIES_COEFS"></bt-chips>
