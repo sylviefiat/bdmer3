@@ -196,6 +196,7 @@
     "@types/pouchdb": "^6.3.2",
     "@types/pouchdb-core": "^6.1.13",
     "angular-ts-math": "^1.0.7",
+    "angular-material-icons": "^0.7.1",
     "angular2-fontawesome": "^0.9.3",
     "angular2-jwt": "^0.2.3",
     "angular2-moment": "^1.8.0",

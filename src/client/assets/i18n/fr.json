@@ -324,5 +324,9 @@
   "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML",
   "ZONE_COORD": "Coordonnées de la zone",
   "POLYGON_ERROR": "Le polygone n'est pas valide",
-  "CHECK_ALL":"Sélectionner tout"
+  "CHECK_ALL":"Sélectionner tout",
+  "START_ANALYSE":"Lancer l'analyse",
+  "BACK":"précédent",
+  "NEXT":"suivant",
+  "RESET":"réinitialiser"
 }

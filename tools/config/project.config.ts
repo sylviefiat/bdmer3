@@ -195,6 +195,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: 'angular-ts-math',
             path: 'node_modules/angular-ts-math/dist/angular-ts-math.js'
+        },
+        {
+            name: 'angular-material-icons',
+            path: 'node_modules/angular-material-icons/angular-material-icons.js'
         }, {
             name: '@ngrx/db',
             packageMeta: {

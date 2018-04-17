@@ -324,5 +324,9 @@
   "ZONE_COORD_EX": "Copy and past coordonates from a KML file",
   "ZONE_COORD": "Coordinates of the zone",
   "POLYGON_ERROR": "Polygon isn't valid",
-  "CHECK_ALL":"Select all"
+  "CHECK_ALL":"Select all",
+  "START_ANALYSE":"Start analysis",
+  "BACK":"back",
+  "NEXT":"next",
+  "RESET":"reinitialize"
 }
