@@ -48,6 +48,14 @@ export class ZoneFormComponent implements OnInit {
         codePlatform: new FormControl(""),
         transects: new FormArray([]),
         zonePreferences: new FormArray([])
+        surface: new FormControl(""),
+        geojson: new FormGroup({
+            type: new FormControl("Zone"),
+            geometry: new FormGroup({
+                type: new FormControl("", Validators.required),
+                coordinates: new FormControl("",Validators.required)
+            }),
+        }),
     });
 
     constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }

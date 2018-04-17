@@ -16,6 +16,8 @@ export interface Zone {
     staticmap: string;
     properties: Property;
     codePlatform: string;
+    surface: string;
+    geojson: object;
     transects: Transect[];
     zonePreferences: ZonePreference[];
 }
