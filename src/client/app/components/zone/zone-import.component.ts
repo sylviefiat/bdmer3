@@ -42,12 +42,15 @@ export class ZoneImportComponent implements OnInit{
         });
     }
 
-    handleUpload(csvFile: any): void {
+    xmlToJson(kml){
+        console.log(kml)
+    }
+
+
+    handleUpload(kmlFile: any): void {
         let reader = new FileReader();
-        if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.upload.emit(csvFile.target.files[0]);
-        } else {
-            this.err.emit('No csv file found');
+        if (kmlFile.target.files && kmlFile.target.files.length > 0) {
+            console.log(this.xmlToJson(kmlFile.target.files['0']));
         }
     }
 

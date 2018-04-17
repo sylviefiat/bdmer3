@@ -30,6 +30,26 @@
           <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface">
           <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>     
         </mat-input-container>
+
+      </div>
+      <div formGroupName="geojson">
+        <div formGroupName="geometry">
+          <div class="row">
+            <mat-input-container>
+              <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates">
+              <div class="hint">[lng, lat], ...</div>     
+            </mat-input-container>
+          </div>
+          <div class="row" >
+              <mat-input-container>
+                <mat-select placeholder="Type" formControlName="type" required>
+                  <mat-option value="point">Point</mat-option>
+                  <mat-option value="line">Line</mat-option>
+                  <mat-option value="polygon">Polygon</mat-option>
+                </mat-select>   
+              </mat-input-container>
+          </div>
+        </div>
       </div>
     </mat-card>
   </div>

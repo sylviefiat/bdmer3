@@ -24,10 +24,19 @@ export class ZoneFormComponent implements OnInit {
 
     @Output() submitted = new EventEmitter<Zone>();
 
+    code: string;
+
     zoneForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
         codePlatform: new FormControl(""),
-        surface: new FormControl("")
+        surface: new FormControl(""),
+        geojson: new FormGroup({
+            type: new FormControl("Zone"),
+            geometry: new FormGroup({
+                type: new FormControl("", Validators.required),
+                coordinates: new FormControl("",Validators.required)
+            }),
+        }),
     });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
@@ -44,6 +53,7 @@ export class ZoneFormComponent implements OnInit {
     }
 
     submit() {
+
         if (this.zoneForm.valid) {
             this.zoneForm.value.codePlatform=this.zoneForm.controls.codePlatform.value;
             this.submitted.emit(this.zoneForm.value);

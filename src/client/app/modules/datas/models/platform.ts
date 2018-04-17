@@ -14,6 +14,7 @@ export interface Zone {
     code: string;
     codePlatform: string;
     surface: string;
+    geojson: object;
     transects: Transect[];
     zonePreferences: ZonePreference[];
 }
