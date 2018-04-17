@@ -100,6 +100,7 @@
   "ADD_ZONE_TO":"Add zone to platform ",
   "IMPORT_ZONE":"Importer one or many zone",
   "SELECT_SPECIES":"Select species",
+  "SELECT_MANY_SPECIES":"Select species",
   "SELECT_PLATFORM":"Select platform",
   "SELECT_PLATFORMS":"Select study platforms",
   "SELECT_YEARS":"Select years",
@@ -293,11 +294,14 @@
   "MODAL_CLOSE": "Close",
   "ZONE_COORD_EX": "Structure of polygon coordinates : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordinates of the zone",
-  "POLYGON_ERROR": "Polygon isn't valid",
   "TRANSECT_NAME": "Name of transect",
   "TRANSECT_COORD": "Coordinates of transect",
   "TRANSECT_ERROR": "Transect not valid.",
   "TRANSECT_ERROR_LNG": "Longitude of transect isn't valid",
   "TRANSECT_ERROR_LAT": "Latitude of transect isn't valid",
-  "CHECK_ALL":"Select all"
+  "CHECK_ALL":"Select all",
+  "START_ANALYSE":"Start analysis",
+  "BACK":"back",
+  "NEXT":"next",
+  "RESET":"reinitialize"
 }

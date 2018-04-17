@@ -139,7 +139,7 @@ export function getZonesAvailables(state$: Observable<IAppState>) {
                 }
             }           
         }
-        return zones;
+        return zones.sort();
     })
 }
 
@@ -154,7 +154,7 @@ export function getTransectsAvailables(state$: Observable<IAppState>) {
                 }
             }
         }
-        return transects;
+        return transects.sort();
     })
 }
 
@@ -173,6 +173,6 @@ export function getSpeciesAvailables(state$: Observable<IAppState>) {
                 }
             }
         }
-        return species;
+        return species.sort();
     })
 }

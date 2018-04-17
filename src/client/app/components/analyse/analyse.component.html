@@ -3,6 +3,18 @@
 </mat-card>
  
     <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
+      <ng-template matStepperIcon="edit">
+        <mat-icon>insert_drive_file</mat-icon>
+      </ng-template>
+
+      <ng-template matStepperIcon="done">
+        <fa [name]="'file-pdf-o'" [border]=true [size]=3></fa>
+      </ng-template>
+
+      <!-- Custom icon with a context variable. -->
+      <ng-template matStepperIcon="number" let-index="index">
+        {{index + 10}}
+      </ng-template>
       <mat-step [stepControl]="countryFormGroup">
         <form [formGroup]="countryFormGroup" *ngIf="isAdmin">
           <ng-template matStepLabel>{{ 'SELECT_COUNTRY' | translate}}</ng-template>
@@ -68,15 +80,8 @@
       </mat-step>
       <mat-step [stepControl]="speciesFormGroup">
         <form [formGroup]="speciesFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_SPECIES' | translate}}</ng-template>
-          <div *ngFor="let sp of species$ | async">
-            {{ sp.code }}
-          </div>
-         <!-- <mat-form-field>
-            <mat-select placeholder="{{ 'SELECT_SPECIES' | translate}}" formControlName="species" multiple required>
-                <mat-option *ngFor="let sp of species" [value]="sp">{{sp.code}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <ng-template matStepLabel>{{ 'SELECT_MANY_SPECIES' | translate}}</ng-template>
+          <bc-analyse-species [species$]="species$" (speciesEmitter)="setSpecies($event)" [group]="speciesFormGroup"></bc-analyse-species>
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
             <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>

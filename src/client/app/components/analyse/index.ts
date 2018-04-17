@@ -11,6 +11,8 @@ import { AnalyseZoneComponent } from './analyse-zone.component';
 import { ZoneComponent } from './zone.component';
 import { AnalyseTransectComponent } from './analyse-transect.component';
 import { TransectComponent } from './transect.component';
+import { AnalyseSpeciesComponent } from './analyse-species.component';
+import { SpeciesComponent } from './species.component';
 
 
 export const ANALYSE_COMPONENTS: any[] = [
@@ -26,7 +28,9 @@ export const ANALYSE_COMPONENTS: any[] = [
   AnalyseZoneComponent,
   ZoneComponent,
   AnalyseTransectComponent,
-  TransectComponent
+  TransectComponent,
+  AnalyseSpeciesComponent,
+  SpeciesComponent
   ];
 
 export * from './analyse-page.component';
@@ -42,3 +46,5 @@ export * from './analyse-zone.component';
 export * from './zone.component';
 export * from './analyse-transect.component';
 export * from './transect.component';
+export * from './analyse-species.component';
+export * from './species.component';

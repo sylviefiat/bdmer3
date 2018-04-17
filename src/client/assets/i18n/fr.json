@@ -99,6 +99,7 @@
   "ADD_ZONE_TO":"Ajouter une zone à la plateforme ",
   "IMPORT_ZONE":"Importer une ou plusieurs zone",
   "SELECT_SPECIES":"Selectionner une espèce",
+  "SELECT_MANY_SPECIES":"Selectionner les espèces",
   "SELECT_PLATFORM":"Sélectionner une plateforme",
   "SELECT_PLATFORMS":"Sélectionner les plateformes",
   "SELECT_YEARS":"Sélectionner les années",
@@ -298,5 +299,9 @@
   "TRANSECT_ERROR": "Transect non valide.",
   "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
   "TRANSECT_ERROR_LAT": "Latitude du transect non valide",
-  "CHECK_ALL":"Sélectionner tout"
+  "CHECK_ALL":"Sélectionner tout",
+  "START_ANALYSE":"Lancer l'analyse",
+  "BACK":"précédent",
+  "NEXT":"suivant",
+  "RESET":"réinitialiser"
 }

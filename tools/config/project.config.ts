@@ -239,6 +239,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@angular/cdk/table',
             path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
+        },
+        {
+            name: 'angular-material-icons',
+            path: 'node_modules/angular-material-icons/angular-material-icons.js'
         }, {
             name: '@ngrx/db',
             packageMeta: {
