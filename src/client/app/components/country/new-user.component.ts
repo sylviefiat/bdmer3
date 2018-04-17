@@ -63,11 +63,13 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
       this.form.controls.role.setValue(this.user.role);
       this.form.controls.password.setValue(this.user.password);
       this.form.controls.repassword.setValue(this.user.password);
+      this.cdr.detectChanges();
     }
   }
 
   ngAfterViewChecked() {    
     this.form.controls['countryCode'].setValue(this.country.code);
+    this.cdr.detectChanges();
   }
 
   checkPasswords(c: FormControl) {
