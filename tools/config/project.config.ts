@@ -93,85 +93,22 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
-            //path: 'node_modules/pouchdb/lib/index.js'
-        }/*, {
-            name: 'pouchdb-auth',
-            path: 'node_modules/pouchdb-auth/lib/index.js'
-            //path: 'node_modules/pouchdb/lib/index.js'
         }, {
-            name: 'pouchdb-seamless-auth',
-            path: 'node_modules/pouchdb-seamless-auth/lib/index.js'
-            //path: 'node_modules/pouchdb/lib/index.js'
-        }*/, {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
-        }/*, {
-            name: 'pouchdb-utils',
-            path: 'node_modules/pouchdb-utils/lib/index.js'
         }, {
-            name: 'pouchdb-ajax',
-            path: 'node_modules/pouchdb-ajax/lib/index.js'
+             name: 'tslib',
+             path: 'node_modules/tslib/tslib.js'
+        },{
+            name: '@angular/common',
+            path: 'node_modules/@angular/common/bundles/common.umd.js'
+        },{
+            name: '@angular/http',
+            path: 'node_modules/@angular/http/bundles/http.umd.js'
+        },{
+            name: '@angular/common/http',
+            path: 'node_modules/@angular/common/bundles/common-http.umd.js'
         }, {
-            name: 'pouchdb-collection',
-            path: 'node_modules/pouchdb-collection/lib/index.js'
-        }, {
-            name: 'pouchdb-binary-utils',
-            path: 'node_modules/pouchdb-binary-utils/lib/index.js'
-        }, {
-            name: 'pouchdb-promise',
-            path: 'node_modules/pouchdb-promise/lib/index.js'
-        }, {
-            name: 'pouchdb-collections',
-            path: 'node_modules/pouchdb-collections/lib/index.js'
-        }, {
-            name: 'pouchdb-errors',
-            path: 'node_modules/pouchdb-errors/lib/index.js'
-        }, {
-            name: 'crypto',
-            path: 'node_modules/pouchdb/node_modules/hawk/lib/crypto.js'
-        }, {
-            name: 'utils',
-            path: 'node_modules/pouchdb/node_modules/hawk/lib/utils.js'
-        }, {
-            name: 'request',
-            path: 'node_modules/request/index.js'
-        }, {
-            name: 'boom',
-            path: 'node_modules/boom/lib/index.js'
-        }, {
-            name: 'sntp',
-            path: 'node_modules/sntp/index.js'
-        }, {
-            name: 'is-array-buffer-x',
-            path: 'node_modules/is-array-buffer-x/lib/is-array-buffer-x.js'
-        }, {
-            name: 'lie',
-            path: 'node_modules/lie/dist/lie.js'
-        }, {
-            name: 'uuid',
-            path: 'node_modules/uuid/index.js'
-        }, {
-            name: 'url-join',
-            path: 'node_modules/url-join/lib/url-join.js'
-        }, {
-            name: 'url-parse',
-            path: 'node_modules/url-parse/dist/url-parse.js'
-        }, {
-            name: 'inherits',
-            path: 'node_modules/inherits/inherits.js'
-        }, {
-            name: 'buffer-from',
-            path: 'node_modules/buffer-from/index.js'
-        }, {
-            name: 'clone-buffer',
-            path: 'node_modules/clone-buffer/index.js'
-        }, {
-            name: 'argsarray',
-            path: 'node_modules/argsarray/index.js'
-        }, {
-            name: 'traceur',
-            path: 'node_modules/traceur/bin/traceur.js'
-        }*/, {
             name: '@angular/material',
             packageMeta: {
                 main: 'bundles/material.umd.js',
@@ -190,12 +127,32 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 defaultExtension: 'js'
             }
         },
+        { name: 'rxjs/operators', path: 'node_modules/rxjs/operators.js'},
+       /* { name: 'rxjs/operators/filter', path: 'node_modules/rxjs/operator/filter.js'},
+        { name: 'rxjs/operators/switchMap', path: 'node_modules/rxjs/operator/switchMap.js'},
+        { name: 'rxjs/operators/take', path: 'node_modules/rxjs/operator/take.js'},
+        { name: 'rxjs/operators/delay', path: 'node_modules/rxjs/operator/delay.js'},
+        { name: 'rxjs/operators/startWith', path: 'node_modules/rxjs/operator/startWith.js'},
+        { name: 'rxjs/operators/auditTime', path: 'node_modules/rxjs/operator/auditTime.js'},
+        { name: 'rxjs/operators/takeUntil', path: 'node_modules/rxjs/operator/takeUntil.js'},
+        { name: 'rxjs/operators/catchError', path: 'node_modules/rxjs/operator/catchError.js'},
+        { name: 'rxjs/operators/debounceTime', path: 'node_modules/rxjs/operator/debounceTime.js'},
+        { name: 'rxjs/operators/accordion', path: 'node_modules/rxjs/operator/accordion.js'},
+        { name: 'rxjs/operators/combineLatest', path: 'node_modules/rxjs/operator/combineLatest.js'},
+        { name: 'rxjs/operators/share', path: 'node_modules/rxjs/operator/share.js'},
+        { name: 'rxjs/operators/map', path: 'node_modules/rxjs/operator/map.js'},*/
         {
             name: '@angular/cdk/a11y',
             path: 'node_modules/@angular/cdk/bundles/cdk-a11y.umd.js'
         }, {
             name: '@angular/cdk/bidi',
             path: 'node_modules/@angular/cdk/bundles/cdk-bidi.umd.js'
+        }, {
+            name: '@angular/cdk/layout',
+            path: 'node_modules/@angular/cdk/bundles/cdk-layout.umd.js'
+        }, {
+            name: '@angular/cdk/accordion',
+            path: 'node_modules/@angular/cdk/bundles/cdk-accordion.umd.js'
         }, {
             name: '@angular/cdk/coercion',
             path: 'node_modules/@angular/cdk/bundles/cdk-coercion.umd.js'
@@ -225,10 +182,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/@angular/cdk/bundles/cdk-portal.umd.js'
         },
         {
-            name: '@angular/cdk/rxjs',
-            path: 'node_modules/@angular/cdk/bundles/cdk-rxjs.umd.js'
-        },
-        {
             name: '@angular/cdk/scrolling',
             path: 'node_modules/@angular/cdk/bundles/cdk-scrolling.umd.js'
         },
@@ -239,10 +192,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@angular/cdk/table',
             path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
-        },
-        {
-            name: 'angular-material-icons',
-            path: 'node_modules/angular-material-icons/angular-material-icons.js'
         }, {
             name: '@ngrx/db',
             packageMeta: {
