@@ -13,8 +13,8 @@ import { Survey } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="surveys">
-        <div *ngFor="let survey of surveys$ | async; let i=index">
-          <bc-survey [group]="form.controls.surveys.controls[i]" [survey]="survey" (surveyEmitter)="changeValue($event)"></bc-survey>
+        <div *ngFor="let survey of surveys$ | async; let i=index; let e=even" [class.even]="e"> 
+          <bc-survey  [group]="form.controls.surveys.controls[i]" [survey]="survey" [locale]="locale" (surveyEmitter)="changeValue($event)"></bc-survey>
         </div>
       </div>
     </div>
@@ -28,10 +28,14 @@ import { Survey } from '../../modules/datas/models/index';
       padding:5px;
       border: 1px solid grey;
     }
+    .even {
+      background-color: lightgrey;
+    }
     `]
 })
 export class AnalyseSurveyComponent implements OnInit {
   @Input() surveys$: Observable<Survey[]>;
+  @Input() locale: string;
   defaultSurveys: Survey[] = [];
   checkedSurveys: Survey[] = [];
   @Output() surveyEmitter = new EventEmitter<Survey[]>();

@@ -47,7 +47,7 @@ import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading,
 import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneTransects, 
     getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
 import { IAnalyseState, analyseReducer, getUsedCountry, getUsedSurveys, getUsedZones, getUsedTransects, getUsedSpecies, 
-    getMethods, getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
+    getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -201,7 +201,6 @@ export const getAnalyseSurveys: any = compose(getUsedSurveys, getAnalyseState);
 export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
 export const getTransectZones: any = compose(getUsedTransects, getAnalyseState);
 export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
-export const getAnalyseAvailableMethods: any = compose(getMethods, getAnalyseState);
 export const getAnalyseMethod: any = compose(getUsedMethod, getAnalyseState);
 export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
 export const isAnalysed: any = compose(getAnalysed, getAnalyseState);

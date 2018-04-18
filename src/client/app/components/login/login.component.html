@@ -5,13 +5,13 @@
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="text" matInput placeholder="{{'USERNAME' | translate}}" formControlName="username">
+              <input matInput type="text" matInput placeholder="{{'USERNAME' | translate}}" formControlName="username">
             </mat-input-container>
           </p>
           <p>
             <fa [name]="'key'" [border]=false [size]=2></fa>
             <mat-input-container>
-              <input type="password" matInput placeholder="{{'PASSWORD' | translate}}" formControlName="password">
+              <input matInput type="password" matInput placeholder="{{'PASSWORD' | translate}}" formControlName="password">
             </mat-input-container>
           </p>
           <p *ngIf="errorMessage" class="loginError">

@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Species } from '../../modules/datas/models/index';
+import { Country } from '../../modules/countries/models/country';
 
 @Component({
   selector: 'bc-analyse-species',
@@ -14,7 +15,8 @@ import { Species } from '../../modules/datas/models/index';
         </mat-checkbox>
       <div  class="species">
         <div *ngFor="let species of species$ | async; let i=index">
-          <bc-species [group]="form.controls.species.controls[i]" [species]="species" (speciesEmitter)="changeValue($event)"></bc-species>
+          <bc-species [group]="form.controls.species.controls[i]" [species]="species" [currentCountry]="currentCountry$ | async"
+            [locale]="locale" (speciesEmitter)="changeValue($event)"></bc-species>
         </div>
       </div>
     </div>
@@ -32,6 +34,8 @@ import { Species } from '../../modules/datas/models/index';
 })
 export class AnalyseSpeciesComponent implements OnInit {
   @Input() species$: Observable<Species[]>;
+  @Input() currentCountry$: Observable<Country>;
+  @Input() locale: string;
   defaultSpecies: Species[] = [];
   checkedSpecies: Species[] = [];
   @Output() speciesEmitter = new EventEmitter<Species[]>();

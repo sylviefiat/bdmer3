@@ -7,6 +7,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 
 import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
 
@@ -14,6 +15,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Method } from '../../modules/analyse/models/index';
 
 @Component({
     moduleId: module.id,
@@ -24,9 +26,10 @@ import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/m
         'analyse.component.css',
     ],
 })
-export class AnalyseComponent implements OnInit, AfterContentChecked {
+export class AnalyseComponent {
     @Input() msg: string | null;
     @Input() countries: Country[];
+    @Input() currentCountry$: Observable<Country>;
     @Input() platforms$: Observable<Platform[]>;
     @Input() years$: Observable<string[]>;
     @Input() surveys$: Observable<Survey[]>;
@@ -42,7 +45,9 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Output() transectEmitter = new EventEmitter<Transect[]>();
     @Output() speciesEmitter = new EventEmitter<Species[]>();
+    @Output() methodEmitter = new EventEmitter<Method>();
     @Output() analyse = new EventEmitter<string>();
+    nspecies : number = 0;
 
     countryFormGroup: FormGroup = new FormGroup({
         country: new FormControl()
@@ -71,17 +76,7 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
 
     constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private _fb: FormBuilder) {
 
-    }
-
-    ngOnInit() {        
-        
-    }
-
-    ngAfterContentChecked() {        
-        
-    }
-
-    
+    }    
 
     setCountry(country: Country) {
         this.countryEmitter.emit(country);  
@@ -115,7 +110,12 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
     }
 
     setSpecies(species: Species[]) {
+        this.nspecies = species.length;
         this.speciesEmitter.emit(species); 
+    }
+
+    setMethod(method: Method) {
+        this.methodEmitter.emit(method); 
     }
 
     get localDate() {
@@ -126,6 +126,10 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
             default:
                 return 'MM-dd-yyyy';
         }
+    }
+
+    submit(){
+
     }
 
 }

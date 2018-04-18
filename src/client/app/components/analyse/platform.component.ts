@@ -8,7 +8,7 @@ import { Platform } from '../../modules/datas/models/index';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'platform'" (change)="change($event)">
-          {{ platform.code }}
+          {{ platform.code }} - {{ platform.description }} ({{ platform.zones.length }} {{'ZONES' | translate}}, {{ platform.surveys.length}} {{'SURVEYS' | translate}})
         </mat-checkbox>
     </div>
   `,

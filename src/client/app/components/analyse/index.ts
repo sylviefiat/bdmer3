@@ -13,6 +13,7 @@ import { AnalyseTransectComponent } from './analyse-transect.component';
 import { TransectComponent } from './transect.component';
 import { AnalyseSpeciesComponent } from './analyse-species.component';
 import { SpeciesComponent } from './species.component';
+import { AnalyseMethodComponent } from './analyse-method.component';
 
 
 export const ANALYSE_COMPONENTS: any[] = [
@@ -30,7 +31,8 @@ export const ANALYSE_COMPONENTS: any[] = [
   AnalyseTransectComponent,
   TransectComponent,
   AnalyseSpeciesComponent,
-  SpeciesComponent
+  SpeciesComponent,
+  AnalyseMethodComponent
   ];
 
 export * from './analyse-page.component';
@@ -48,3 +50,4 @@ export * from './analyse-transect.component';
 export * from './transect.component';
 export * from './analyse-species.component';
 export * from './species.component';
+export * from './analyse-method.component';

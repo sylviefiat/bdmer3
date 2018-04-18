@@ -17,3 +17,17 @@
     flex-direction: row;
     align-items: stretch;
   }
+
+.norecord {
+  color: orange;
+  padding-bottom:10px;
+  font-size: smaller;
+  font-style: italic;
+}
+
+
+button[disabled] {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: .65;
+}

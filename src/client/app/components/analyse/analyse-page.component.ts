@@ -7,8 +7,10 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
-  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseTransects, getSelectedAnalyseSpecies } from '../../modules/ngrx/index';
+  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseTransects, 
+  getSelectedAnalyseSpecies, getAnalyseCountry } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Method } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
@@ -21,11 +23,13 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   template: `
     <bc-analyse 
       [countries]="countries$ | async"
+      [currentCountry$]="currentCountry$"
       [platforms$]="platforms$"
       [years$]="years$"
       [surveys$]="surveys$"
       [zones$]="zones$"
       [transects$]="transects$"
+      [species$]="species$"
       [species$]="species$"
       [isAdmin]="isAdmin$ | async"
       [locale]="locale$ | async"
@@ -37,12 +41,14 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       (zoneEmitter)="selectZone($event)"
       (transectEmitter)="selectTransect($event)"
       (speciesEmitter)="selectSpecies($event)"
+      (methodEmitter)="selectMethod($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
   `,
 })
 export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
+  currentCountry$: Observable<Country>;
   platforms$: Observable<Platform[]>;
   years$: Observable<string[]>;
   surveys$: Observable<Survey[]>;
@@ -61,6 +67,7 @@ export class AnalysePageComponent implements OnInit {
     this.isAdmin$ = this.store.let(getisAdmin);
     this.locale$ = this.store.let(getLangues);
     this.countries$ = this.store.let(getCountriesInApp);
+    this.currentCountry$ = this.store.let(getAnalyseCountry);
     this.platforms$ = this.store.let(getSelectedCountryPlatforms);
     this.years$ = this.store.let(getSelectedAnalyseYears);
     this.surveys$ = this.store.let(getSelectedAnalyseSurveys);
@@ -100,6 +107,10 @@ export class AnalysePageComponent implements OnInit {
 
   selectSpecies(species: Species[]) {
     this.store.dispatch(new AnalyseAction.SelectSpecies(species));    
+  }
+
+  selectMethod(method: Method) {
+    this.store.dispatch(new AnalyseAction.SelectMethod(method));    
   }
 
   startAnalyse(status: string) {

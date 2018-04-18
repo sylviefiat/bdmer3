@@ -13,7 +13,6 @@ export interface IAnalyseState {
     usedZones: Zone[];
     usedTransects: Transect[];
     usedSpecies: SurveySpecies[];
-    methods: Method[],
     usedMethod: Method;
     analysing: boolean;
     analysed: boolean;
@@ -29,7 +28,6 @@ export const analyseInitialState: IAnalyseState = {
     usedZones: null,
     usedTransects: null,
     usedSpecies: null,
-    methods: this.initMethods,
     usedMethod: null,
     analysing: false,
     analysed: false,
@@ -68,10 +66,6 @@ export function getUsedTransects(state$: Observable<IAnalyseState>) {
 
 export function getUsedSpecies(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedSpecies);
-}
-
-export function getMethods(state$: Observable<IAnalyseState>) {
-    return state$.select(state => state.methods);
 }
 
 export function getUsedMethod(state$: Observable<IAnalyseState>) {
