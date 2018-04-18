@@ -44,7 +44,13 @@ export class ProjectConfig extends SeedAdvancedConfig {
         let additionalPackages: ExtendPackages[] = [{
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
-        }, {
+        },{
+            name: '@mapbox/togeojson',
+            path: 'node_modules/@mapbox/togeojson/togeojson.js'
+        },{
+            name: 'xmldom',
+            path: 'node_modules/xmldom/dom.js'
+        },{
             name: 'moment',
             path: 'node_modules/moment/moment.js'
         }, {

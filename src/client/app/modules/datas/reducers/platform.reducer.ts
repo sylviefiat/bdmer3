@@ -48,6 +48,7 @@ export function platformReducer(
         case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
             const addedzone = action.payload;
             console.log(addedzone);
+            console.log('ici')
             const platforms = state.entities.filter(platform => addedzone.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedzone.codePlatform === platform._id)[0];
             modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone.code !== zone.code),addedzone];
