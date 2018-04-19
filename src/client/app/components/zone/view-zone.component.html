@@ -1,8 +1,13 @@
     <mat-card class="actions">
+<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
       <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'ZONE' | translate}} {{ zone.properties.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'SURFACE' | translate }} : {{ zone.properties.surface }} m²</div> 
       </mat-card-content>
+=======
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+      <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'ZONE' | translate}} {{ zone.properties.code }}</mat-card-title>
+>>>>>>> feat (add surface for import) / refactor (zone model)
       <mat-card-content>
         <img mat-card-sm-image *ngIf="zone.staticmap" (click)="openDialog()" [src]="zone.staticmap"/>
       </mat-card-content>

@@ -8,9 +8,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { MapStaticService } from '../../modules/core/services/map-static.service';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
+<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
 =======
 import * as togeojson from '@mapbox/togeojson';
 >>>>>>> feat (add xml -> parse to Geojson -> refactor the geojson)
+=======
+>>>>>>> feat (add surface for import) / refactor (zone model)
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -70,8 +73,18 @@ export class ZoneImportComponent implements OnInit {
                 delete geojson[i].properties['styleHash'];
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
+<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
 
                 geojson[i].properties.codezone = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+=======
+                geojson[i].properties.code = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+                 
+                var surface = area.geometry(geojson[i].geometry);
+
+                geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
+
+                self.upload.emit(geojson[i]);
+>>>>>>> feat (add surface for import) / refactor (zone model)
 
               }
               resolve();
@@ -79,7 +92,6 @@ export class ZoneImportComponent implements OnInit {
       });
         
     }
-
 
     handleUpload(kmlFile: any): void {
         if (kmlFile.target.files && kmlFile.target.files.length > 0) {

@@ -63,6 +63,7 @@ export class ZoneFormComponent implements OnInit {
 
     ngOnInit() {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
+<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
         if(this.zone){
             this.zoneForm.controls.properties.get("name").setValue(this.zone.properties.name) 
             let coordAr = this.zone.geometry["coordinates"]["0"];
@@ -71,6 +72,14 @@ export class ZoneFormComponent implements OnInit {
             }
             this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordStringRefactor);
             this.zoneForm.controls.properties.get("name").disable();
+=======
+        (this.platform !== undefined) ? this.zoneForm.controls.codePlatform.disable() : this.zoneForm.controls.codePlatform.enable();
+        if (this.zone) {
+            this.zoneForm.controls.code.setValue(this.zone.properties.code);
+            this.zoneForm.controls.surface.setValue(this.zone.properties.surface);
+        } else {
+            this.zoneForm.controls.code.setValue(this.platform.code+"_Z");
+>>>>>>> feat (add surface for import) / refactor (zone model)
         }
     }
 
