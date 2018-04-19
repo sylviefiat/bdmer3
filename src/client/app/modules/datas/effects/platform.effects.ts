@@ -59,7 +59,7 @@ export class PlatformEffects {
     .ofType(PlatformAction.ActionTypes.ADD_ZONE)
     .map((action: PlatformAction.AddZoneAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[1], value[0]))
+    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1]))
     .map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
@@ -121,7 +121,7 @@ export class PlatformEffects {
     .ofType(PlatformAction.ActionTypes.IMPORT_ZONE)    
     .map((action: PlatformAction.ImportZoneAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Platform, Zone]) => this.platformService.editZone(value[0], value[1]))    
+    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1]))    
     .map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 

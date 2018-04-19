@@ -43,6 +43,7 @@ export class PlatformService {
   }
 
   addPlatform(platform: Platform): Observable<Platform> {
+    console.log("sfsfgsdhjfgjh")
     platform._id=platform.code;
     this.currentPlatform = of(platform);
     return fromPromise(this.db.put(platform))
@@ -59,7 +60,6 @@ export class PlatformService {
   }
 
   editPlatform(platform: Platform, country: Country): Observable<Platform> {
-    console.log(platform);
     platform._id=platform.code;
     return this.getPlatform(platform.code)
       .mergeMap(st => {  
@@ -89,10 +89,7 @@ export class PlatformService {
       })
   }
 
-  editZone(platform: Platform, zone: Zone): Observable<Zone> {
-    console.log(zone);
-    if(platform.code !== zone.codePlatform)
-      return _throw('Import is not possible : zone codePlatform is different from selected platform');
+  editZone(zone: Zone, platform: Platform): Observable<Zone> {
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {           
@@ -100,7 +97,7 @@ export class PlatformService {
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
-        st.zones = [ ...st.zones.filter(z => z.code !== zone.code), zone];
+        st.zones.push(zone);
         this.currentPlatform = of(st);
         return fromPromise(this.db.put(st));
       })

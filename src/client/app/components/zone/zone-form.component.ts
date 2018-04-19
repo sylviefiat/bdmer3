@@ -42,6 +42,7 @@ export class ZoneFormComponent implements OnInit {
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     ngOnInit() {
+        console.log(this.platform)
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         (this.platform !== undefined) ? this.zoneForm.controls.codePlatform.disable() : this.zoneForm.controls.codePlatform.enable();
         if (this.zone) {

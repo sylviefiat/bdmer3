@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as togeojson from '@mapbox/togeojson';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform } from '../../modules/datas/models/index';
+import { Platform, Zone } from '../../modules/datas/models/index';
 
 import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getLangues } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
@@ -23,6 +24,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 })
 export class ZoneImportComponent implements OnInit{
     @Input() platform: Platform;
+    @Input() zone: Zone | null;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();
@@ -30,23 +32,21 @@ export class ZoneImportComponent implements OnInit{
     @Output() back = new EventEmitter();
 
     needHelp: boolean = false;
-    private csvFile: string;
+    private kmlFile: string;
     private docs_repo: string;
+
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
-
-        console.log(this.platform)
-        // this.store.let(getLangues).subscribe((l: any) => {
-        //     this.docs_repo = "../../../assets/files/";
-        //     this.csvFile = "importZone-"+l+".csv";
-        // });
+      this.store.let(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.kmlFile = "importZone-"+l+".csv";
+        });
     }
 
     kmlToGeoJson(kml){
-      return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsText(kml);
 
@@ -58,29 +58,21 @@ export class ZoneImportComponent implements OnInit{
               const geojson = togeojson.kml(x).features;
 
               for(var i  in geojson){
-
                 delete geojson[i].properties['styleHash'];
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
-
                 geojson[i].properties.codezone = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+                self.upload.emit(geojson[i]);
 
               }
-              resolve();
-            };
-      });
-        
+            }
     }
 
 
     handleUpload(kmlFile: any): void {
-      const self = this;
-        if (kmlFile.target.files && kmlFile.target.files.length > 0) {
-          this.kmlToGeoJson(kmlFile.target.files['0']).then(function(data){
-            //console.log(data)
-            //self.upload.emit(data);
-          })
-        }
+      if (kmlFile.target.files && kmlFile.target.files.length > 0) {
+        this.kmlToGeoJson(kmlFile.target.files['0']);
+      }
     }
 
     convertName(str){
@@ -144,25 +136,16 @@ export class ZoneImportComponent implements OnInit{
       return str;
   }
 
-    // submit() {
-
-    //     if (this.zoneForm.valid) {
-    //         this.zoneForm.value.codePlatform=this.zoneForm.controls.codePlatform.value;
-    //         this.submitted.emit(this.zoneForm.value);
-    //     }
-    // }
-
-
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
     }
 
     getCsvZones() {
-        return this.csvFile;
+        return this.kmlFile;
     }
 
     getCsvZonesUrl() {
-        return this.docs_repo + this.csvFile;
+        return this.docs_repo + this.kmlFile;
     }
 
     cancel() {
