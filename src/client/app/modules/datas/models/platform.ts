@@ -11,12 +11,18 @@ export interface Platform {
 }
 
 export interface Zone {
-    code: string;
+    type: string;
+    geometry: object;
+    properties: Property;
     codePlatform: string;
-    surface: string;
-    geojson: object;
     transects: Transect[];
     zonePreferences: ZonePreference[];
+}
+
+export interface Property{
+  name: string;
+  code: string;
+  surface: number;
 }
 
 export interface Transect {

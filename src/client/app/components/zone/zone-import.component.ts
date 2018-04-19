@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import * as togeojson from '@mapbox/togeojson';
+import * as area from '@mapbox/geojson-area';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -61,13 +62,17 @@ export class ZoneImportComponent implements OnInit{
                 delete geojson[i].properties['styleHash'];
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
-                geojson[i].properties.codezone = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+                geojson[i].properties.code = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+                 
+                var surface = area.geometry(geojson[i].geometry);
+
+                geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
+
                 self.upload.emit(geojson[i]);
 
               }
             }
     }
-
 
     handleUpload(kmlFile: any): void {
       if (kmlFile.target.files && kmlFile.target.files.length > 0) {

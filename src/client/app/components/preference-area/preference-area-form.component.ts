@@ -40,7 +40,7 @@ export class PreferenceAreaFormComponent implements OnInit {
     ngOnInit() {
         console.log(this.zonePref);
         this.zonePrefForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        this.zonePrefForm.controls.codeZone.setValue(this.zone ? this.zone.code : null);
+        this.zonePrefForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
         (this.platform !== undefined) ? this.zonePrefForm.controls.codePlatform.disable() : this.zonePrefForm.controls.codePlatform.enable();
         (this.zone !== undefined) ? this.zonePrefForm.controls.codeZone.disable() : this.zonePrefForm.controls.codeZone.enable();
         if(this.zonePref){
@@ -49,7 +49,7 @@ export class PreferenceAreaFormComponent implements OnInit {
             this.zonePrefForm.controls.presence.setValue(this.zonePref.presence);
             this.zonePrefForm.controls.infoSource.setValue(this.zonePref.infoSource);            
         } else {
-            this.zonePrefForm.controls.code.setValue(this.zone.code+"_");
+            this.zonePrefForm.controls.code.setValue(this.zone.properties.code+"_");
         }
     }
 
@@ -78,7 +78,7 @@ export class PreferenceAreaFormComponent implements OnInit {
     }
 
     return() {
-        let redirect = this.zonePref ? 'zonePref/'+this.platform.code+'/'+this.zone.code+'/'+this.zonePref.code : '/zone/' + this.platform.code + "/" + this.zone.code;
+        let redirect = this.zonePref ? 'zonePref/'+this.platform.code+'/'+this.zone.properties.code+'/'+this.zonePref.code : '/zone/' + this.platform.code + "/" + this.zone.properties.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

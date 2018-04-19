@@ -8,7 +8,7 @@ import { _throw } from 'rxjs/observable/throw';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Platform, Zone, Survey, Transect, ZonePreference, Count } from '../models/platform';
+import { Platform, Zone, Property, Survey, Transect, ZonePreference, Count } from '../models/platform';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -111,7 +111,7 @@ export class PlatformService {
     return this.getPlatform(zone.codePlatform)
       .filter(platform => platform!==null)
       .mergeMap(st => {
-        st.zones = st.zones.filter(z => z.code !== zone.code);
+        st.zones = st.zones.filter(z => z.properties.code !== zone.properties.code);
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
@@ -144,7 +144,7 @@ export class PlatformService {
     return this.getPlatform(survey.codePlatform)
       .filter(platform => platform!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.code === survey.code)[0];
+        let zn = st.zones.filter(z => z.properties.code === survey.code)[0];
         st.surveys = st.surveys.filter(c => c.code !== survey.code);
         return fromPromise(this.db.put(st));
       })
@@ -161,12 +161,12 @@ export class PlatformService {
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.code === transect.codeZone)[0];
+        let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
         if(zn){
           if(zn.transects.filter(t => t.code === transect.code).length > -1){
             zn.transects = [ ...zn.transects.filter(t => t.code !== transect.code), transect];
           }
-          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
+          st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
         } 
         this.currentPlatform = of(st);
         return fromPromise(this.db.put(st));
@@ -181,9 +181,9 @@ export class PlatformService {
     return this.getPlatform(transect.codePlatform)
       .filter(platform => platform!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.code === transect.codeZone)[0];
+        let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
         zn.transects = zn.transects.filter(t => t.code !== transect.code);
-        st.zones = [...st.zones.filter(z => z.code !== transect.codeZone),zn];
+        st.zones = [...st.zones.filter(z => z.properties.code !== transect.codeZone),zn];
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
@@ -199,12 +199,12 @@ export class PlatformService {
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.code === zonePref.codeZone)[0];
+        let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
         if(zn){
           if(zn.zonePreferences.filter(zp => zp.code === zonePref.code).length > -1){
             zn.zonePreferences = [ ...zn.zonePreferences.filter(zp => zp.code !== zonePref.code), zonePref];
           }
-          st.zones = [ ...st.zones.filter(z => z.code !== zn.code), zn];
+          st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
         } 
         this.currentPlatform = of(st);
         return fromPromise(this.db.put(st));
@@ -219,9 +219,9 @@ export class PlatformService {
     return this.getPlatform(zonePref.codePlatform)
       .filter(platform => platform!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.code === zonePref.codeZone)[0];
+        let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
         zn.zonePreferences = zn.zonePreferences.filter(zn => zn.code !== zonePref.code);
-        st.zones = [...st.zones.filter(z => z.code !== zonePref.codeZone),zn];
+        st.zones = [...st.zones.filter(z => z.properties  .code !== zonePref.codeZone),zn];
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })

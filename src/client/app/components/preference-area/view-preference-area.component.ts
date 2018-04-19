@@ -46,7 +46,7 @@ export class ViewPreferenceAreaComponent implements OnInit {
         console.log(type);
         switch (type) {
             case "zonePrefForm":
-                this.action.emit(type + '/' + this.platform._id + "/" + this.zone.code + '/' + this.zonePref.code);
+                this.action.emit(type + '/' + this.platform._id + "/" + this.zone.properties.code + '/' + this.zonePref.code);
                 break;
             case "deleteZonePref":
                 this.deleteZonePref();
@@ -66,7 +66,7 @@ export class ViewPreferenceAreaComponent implements OnInit {
     }
 
     toZone(){
-        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.code]);
+        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.properties.code]);
     }
 
   get thumbnailZone(): string | boolean {

@@ -175,7 +175,7 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
         for(let i in zones){
             zname[i]=[];
             for(let z of zones[i])
-                zname[i].push(z.code);
+                zname[i].push(z.properties.code);
         }
         
 

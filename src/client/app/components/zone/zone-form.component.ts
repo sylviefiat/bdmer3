@@ -46,8 +46,8 @@ export class ZoneFormComponent implements OnInit {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         (this.platform !== undefined) ? this.zoneForm.controls.codePlatform.disable() : this.zoneForm.controls.codePlatform.enable();
         if (this.zone) {
-            this.zoneForm.controls.code.setValue(this.zone.code);
-            this.zoneForm.controls.surface.setValue(this.zone.surface);
+            this.zoneForm.controls.code.setValue(this.zone.properties.code);
+            this.zoneForm.controls.surface.setValue(this.zone.properties.surface);
         } else {
             this.zoneForm.controls.code.setValue(this.platform.code+"_Z");
         }
@@ -62,7 +62,7 @@ export class ZoneFormComponent implements OnInit {
     }
 
     return() {
-        let redirect = this.zone ? '/zone/' + this.platform.code + "/" + this.zone.code : '/platform' + this.platform.code;
+        let redirect = this.zone ? '/zone/' + this.platform.code + "/" + this.zone.properties.code : '/platform' + this.platform.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

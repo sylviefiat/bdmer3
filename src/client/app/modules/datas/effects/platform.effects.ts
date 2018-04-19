@@ -238,7 +238,7 @@ export class PlatformEffects {
   addZoneSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS)
     .map((action: PlatformAction.AddZoneSuccessAction) => action.payload)
-    .mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.code]))
+    .mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 

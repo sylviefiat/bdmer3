@@ -12,7 +12,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform, Zone, Transect, ZonePreference, Survey } from '../../modules/datas/models/index';
+import { Platform, Zone, Property, Transect, ZonePreference, Survey } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -93,7 +93,7 @@ export class ViewZoneComponent implements OnInit {
             case "zonePrefImport":
             case "transectForm":
             case "transectImport":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code);
                 break;
             case "deleteZone":
                 this.deleteZone();

@@ -51,6 +51,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'xmldom',
             path: 'node_modules/xmldom/dom.js'
         },{
+            name: '@mapbox/geojson-area',
+            path: 'node_modules/@mapbox/geojson-area/index.js'
+        },{
+            name: 'wgs84',
+            path: 'node_modules/wgs84/index.js'
+        },{
             name: 'moment',
             path: 'node_modules/moment/moment.js'
         }, {
