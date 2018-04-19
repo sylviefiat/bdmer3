@@ -63,7 +63,8 @@ export class ZoneImportComponent implements OnInit{
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
                 geojson[i].properties.code = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
-                 
+                
+                console.log(geojson[i].geometry)
                 var surface = area.geometry(geojson[i].geometry);
 
                 geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
