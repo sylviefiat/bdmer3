@@ -42,7 +42,7 @@ export class ZoneImportComponent implements OnInit{
     ngOnInit() {
       this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
-            this.kmlFile = "importZone-"+l+".csv";
+            this.kmlFile = "Sample.kml";
         });
     }
 
@@ -140,11 +140,11 @@ export class ZoneImportComponent implements OnInit{
         this.needHelp = !this.needHelp;
     }
 
-    getCsvZones() {
+    getKmlZones() {
         return this.kmlFile;
     }
 
-    getCsvZonesUrl() {
+    getKmlZonesUrl() {
         return this.docs_repo + this.kmlFile;
     }
 
