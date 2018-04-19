@@ -317,7 +317,10 @@
   "LONGLARG":"Longueur et largeur",
   "LONGUEUR":"Longueur seulement",
   "RESULT_TITLE":"Résultats de l'analyse",
-  "RESULT_RAPPEL":"Rappel des critères de sélection"
+  "RESULT_RAPPEL":"Rappel des critères de sélection",
   "UPLOAD_PICTURE": "Importer une image",
-  "IMPORT_PICTURE": "Choisir"
+  "IMPORT_PICTURE": "Choisir",
+  "ZONE_NAME": "Nom de la zone",
+  "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML",
+  "ZONE_COORD": "Coordonnées de la zone"
 }

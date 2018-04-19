@@ -317,7 +317,10 @@
   "LONGLARG":"Height and width",
   "LONGUEUR":"Height only",
   "RESULT_TITLE":"Analyse results",
-  "RESULT_RAPPEL":"Reminder of the selection criteria"
+  "RESULT_RAPPEL":"Reminder of the selection criteria",
   "UPLOAD_PICTURE": "Import a picture",
-  "IMPORT_PICTURE": "Select"
+  "IMPORT_PICTURE": "Select",
+  "ZONE_NAME": "Name of the zone",
+  "ZONE_COORD_EX": "Copy and past coordonates from a KML file",
+  "ZONE_COORD": "Coordinates of the zone"
 }
