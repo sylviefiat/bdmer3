@@ -29,6 +29,7 @@ export class ZoneFormComponent implements OnInit {
 
     zoneForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
+        staticmap: new FormControl(""),
         geometry: new FormGroup({
             type: new FormControl("Polygon"),
             coordinates: new FormControl(),
@@ -54,12 +55,15 @@ export class ZoneFormComponent implements OnInit {
         this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
         this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.convertName(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
 
-        this.refactorCoordinates();
-        this.setSurface();
-                   
-        if (this.zoneForm.valid) {
-            this.submitted.emit(this.zoneForm.value);
-        }
+        this.setStaticMap().then((data) => {
+          this.zoneForm.controls.staticmap.setValue(data);
+          this.refactorCoordinates();
+          this.setSurface();
+          if (this.zoneForm.valid) {
+              this.submitted.emit(this.zoneForm.value);
+          }
+        });
+        
     }
 
     return() {
@@ -70,6 +74,50 @@ export class ZoneFormComponent implements OnInit {
                 name: 'slideTop',
             }
         });
+    }
+
+    setStaticMap(){
+      return new Promise((resolve, reject) => {
+        var string = this.zoneForm.controls.geometry.get("coordinates").value.split(' ');
+        var a = string.length; 
+        var ar = [];
+        for (var i = 0; i < a; i++) {
+            var tempo = string[i].split(',')
+
+            for(var j = 0; j < tempo.length; j++){
+                tempo[j] = parseFloat(tempo[j])
+            }
+            tempo.splice(2, 1)
+            ar.push(tempo)
+        }
+
+        var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
+
+        for(var i=0; i<ar.length; i++){
+          url += ar[i][1] + "," + ar[i][0]; 
+          if(i !== ar.length - 1){
+            url+="|"
+          }
+        }
+
+        url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g"
+
+        var img = new Image();
+        img.src = url;
+
+        var xhr = new XMLHttpRequest();
+        var self= this;
+        xhr.onload = function() {
+          var reader = new FileReader();
+          reader.onloadend = function() {
+            resolve(reader.result);
+          }
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+       });
     }
 
     setSurface(){
