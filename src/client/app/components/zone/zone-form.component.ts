@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import * as area from '@mapbox/geojson-area';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -24,40 +25,133 @@ export class ZoneFormComponent implements OnInit {
 
     @Output() submitted = new EventEmitter<Zone>();
 
+    code: string;
+
     zoneForm: FormGroup = new FormGroup({
-        code: new FormControl("", Validators.required),
+        type: new FormControl("Feature"),
+        geometry: new FormGroup({
+            type: new FormControl("Polygon"),
+            coordinates: new FormControl(),
+        }),
+        properties: new FormGroup({
+            name: new FormControl(""),
+            code: new FormControl(""),
+            surface: new FormControl(),
+        }),
         codePlatform: new FormControl(""),
-        surface: new FormControl("")
+        transects: new FormArray([]),
+        zonePreferences: new FormArray([])
     });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     ngOnInit() {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        (this.platform !== undefined) ? this.zoneForm.controls.codePlatform.disable() : this.zoneForm.controls.codePlatform.enable();
-        if (this.zone) {
-            this.zoneForm.controls.code.setValue(this.zone.code);
-            this.zoneForm.controls.surface.setValue(this.zone.surface);
-        } else {
-            this.zoneForm.controls.code.setValue(this.platform.code+"_Z");
-        }
     }
 
     submit() {
+
+        this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
+        this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.convertName(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+
+        this.refactorCoordinates();
+        this.setSurface();
+                   
         if (this.zoneForm.valid) {
-            this.zoneForm.value.codePlatform=this.zoneForm.controls.codePlatform.value;
             this.submitted.emit(this.zoneForm.value);
         }
     }
 
     return() {
-        let redirect = this.zone ? '/zone/' + this.platform.code + "/" + this.zone.code : '/platform' + this.platform.code;
+        let redirect = this.zone ? '/zone/' + this.platform.code + "/" + this.zone.properties.code : '/platform' + this.platform.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,
                 name: 'slideTop',
             }
         });
+    }
+
+    setSurface(){
+        var surface = area.geometry(this.zoneForm.controls.geometry.value);
+        this.zoneForm.controls.properties.get("surface").setValue(parseInt(surface.toString().split('.')['0']));
+    }
+
+    refactorCoordinates(){
+        var string = this.zoneForm.controls.geometry.get("coordinates").value.split(' ');
+        var a = string.length; 
+        var ar = [];
+        for (var i = 0; i < a; i++) {
+            var tempo = string[i].split(',')
+            for(var j = 0; j < tempo.length; j++){
+                tempo[j] = parseFloat(tempo[j])
+            }
+            ar.push(tempo)
+        }
+        var res = [];
+        res.push(ar)
+        this.zoneForm.controls.geometry.get("coordinates").setValue(res);
+    }
+
+    convertName(str){
+      var conversions = new Object();
+      conversions['ae'] = 'ä|æ|ǽ';
+      conversions['oe'] = 'ö|œ';
+      conversions['ue'] = 'ü';
+      conversions['Ae'] = 'Ä';
+      conversions['Ue'] = 'Ü';
+      conversions['Oe'] = 'Ö';
+      conversions['A'] = 'À|Á|Â|Ã|Ä|Å|Ǻ|Ā|Ă|Ą|Ǎ';
+      conversions['a'] = 'à|á|â|ã|å|ǻ|ā|ă|ą|ǎ|ª';
+      conversions['C'] = 'Ç|Ć|Ĉ|Ċ|Č';
+      conversions['c'] = 'ç|ć|ĉ|ċ|č';
+      conversions['D'] = 'Ð|Ď|Đ';
+      conversions['d'] = 'ð|ď|đ';
+      conversions['E'] = 'È|É|Ê|Ë|Ē|Ĕ|Ė|Ę|Ě';
+      conversions['e'] = 'è|é|ê|ë|ē|ĕ|ė|ę|ě';
+      conversions['G'] = 'Ĝ|Ğ|Ġ|Ģ';
+      conversions['g'] = 'ĝ|ğ|ġ|ģ';
+      conversions['H'] = 'Ĥ|Ħ';
+      conversions['h'] = 'ĥ|ħ';
+      conversions['I'] = 'Ì|Í|Î|Ï|Ĩ|Ī|Ĭ|Ǐ|Į|İ';
+      conversions['i'] = 'ì|í|î|ï|ĩ|ī|ĭ|ǐ|į|ı';
+      conversions['J'] = 'Ĵ';
+      conversions['j'] = 'ĵ';
+      conversions['K'] = 'Ķ';
+      conversions['k'] = 'ķ';
+      conversions['L'] = 'Ĺ|Ļ|Ľ|Ŀ|Ł';
+      conversions['l'] = 'ĺ|ļ|ľ|ŀ|ł';
+      conversions['N'] = 'Ñ|Ń|Ņ|Ň';
+      conversions['n'] = 'ñ|ń|ņ|ň|ŉ';
+      conversions['O'] = 'Ò|Ó|Ô|Õ|Ō|Ŏ|Ǒ|Ő|Ơ|Ø|Ǿ';
+      conversions['o'] = 'ò|ó|ô|õ|ō|ŏ|ǒ|ő|ơ|ø|ǿ|º';
+      conversions['R'] = 'Ŕ|Ŗ|Ř';
+      conversions['r'] = 'ŕ|ŗ|ř';
+      conversions['S'] = 'Ś|Ŝ|Ş|Š';
+      conversions['s'] = 'ś|ŝ|ş|š|ſ';
+      conversions['T'] = 'Ţ|Ť|Ŧ';
+      conversions['t'] = 'ţ|ť|ŧ';
+      conversions['U'] = 'Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ';
+      conversions['u'] = 'ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ';
+      conversions['Y'] = 'Ý|Ÿ|Ŷ';
+      conversions['y'] = 'ý|ÿ|ŷ';
+      conversions['W'] = 'Ŵ';
+      conversions['w'] = 'ŵ';
+      conversions['Z'] = 'Ź|Ż|Ž';
+      conversions['z'] = 'ź|ż|ž';
+      conversions['AE'] = 'Æ|Ǽ';
+      conversions['ss'] = 'ß';
+      conversions['IJ'] = 'Ĳ';
+      conversions['ij'] = 'ĳ';
+      conversions['OE'] = 'Œ';
+      conversions['f'] = 'ƒ';
+
+      for(var i in conversions){
+          var re = new RegExp(conversions[i],"g");
+          str = str.replace(re,i);
+      }
+
+      return str;
     }
 
 }

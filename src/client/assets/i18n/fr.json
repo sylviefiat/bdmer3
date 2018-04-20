@@ -148,6 +148,8 @@
   "IMPORT_PLATFORMS_DESC":"Importer un fichier CSV contenant des plateformes pour ",
   "CSV_IMPORT":"Import CSV",
   "IMPORT_CSV":"Importer CSV",
+  "IMPORT_KML":"Importer KML",
+  "IMPORT_DESC_KML": "Un fichier KML est un fichier de valeurs sous formes de balise. Télécharger l'example ci dessous pour connaître le format exact attendu pour cet import.",
   "IMPORT_DESC":"Un fichier CSV est un fichier de valeurs séparées par des points virgules. Les valeurs d'un même objet sont sur une même ligne, séparés par des points virgules et les objets sont séparés par des retours à la ligne: 1 objet par ligne et 1 valeur par point virgule. Une ligne d'entête peut être inclue en haut du fichier. Télécharger l'example ci dessous pour connaître le format exact attendu pour cet import.",
   "IMPORT_DESC_ADMIN":"En tant qu'administrateur, le format du fichier d'import est différent du format pour les autres utilisateurs, votre import nécéssite une colonne 'codeCountry' permettant de spécifier le pays",
   "IMPORT_DESC_DATE":"ATTENTION : soyez vigilants concernant le format de date, si votre fichier est au format anglosaxon et utilise des virgules comme séparateurs csv le format de date attendu est 'MM/DD/YYYY', si vous utilisez le format francophone, avec des points-virgules comme séparateurs, le format de date attendu est 'DD/MM/YYYY'",
@@ -157,6 +159,7 @@
   "IMPORT_ZONES":"Import zones",
   "IMPORT_ZONES_DESC":"Importer un fichier CSV contenant des zones pour ",
   "DOWNLOAD_CSV_ZONES":"Télécharger un exemple de CSV pour importer des zones",
+  "DOWNLOAD_KML_ZONES":"Télécharger un exemple de KML pour importer des zones",
   "IMPORT_SPECIES":"Importer une ou plusieurs espèces",
   "IMPORT_SPECIES_DESC":"Importer un fichier CSV contenant des nouvelles espèces",
   "DOWNLOAD_CSV_SPECIES":"Télécharger un exemple de CSV pour importer des espèces",
@@ -277,5 +280,8 @@
   "NO_USERS":"Il n'y a pas d'utilisateurs enregistrés pour ce pays",
   "COUNTRY_LIST":"Pays BDMER³",
   "UPLOAD_PICTURE": "Importer une image",
-  "IMPORT_PICTURE": "Choisir"
+  "IMPORT_PICTURE": "Choisir",
+  "ZONE_NAME": "Nom de la zone",
+  "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML",
+  "ZONE_COORD": "Coordonnées de la zone"
 }

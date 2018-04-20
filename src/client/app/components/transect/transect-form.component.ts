@@ -37,7 +37,7 @@ export class TransectFormComponent implements OnInit {
     
     ngOnInit() {
         this.transectForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.code : null);
+        this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
         (this.platform !== undefined) ? this.transectForm.controls.codePlatform.disable() : this.transectForm.controls.codePlatform.enable();
         (this.zone !== undefined) ? this.transectForm.controls.codeZone.disable() : this.transectForm.controls.codeZone.enable();
         if(this.transect) {
@@ -45,7 +45,7 @@ export class TransectFormComponent implements OnInit {
             this.transectForm.controls.latitude.setValue(this.transect.latitude);
             this.transectForm.controls.longitude.setValue(this.transect.longitude);
         } else {
-            this.transectForm.controls.code.setValue(this.zone.code + "_T");
+            this.transectForm.controls.code.setValue(this.zone.properties.code + "_T");
         }
     }
 
@@ -59,7 +59,7 @@ export class TransectFormComponent implements OnInit {
     }
 
     return() {
-        let redirect = this.transect ? 'transect/'+this.platform.code+'/'+this.zone.code+'/'+this.transect.code : '/zone/' + this.platform.code + "/" + this.zone.code;
+        let redirect = this.transect ? 'transect/'+this.platform.code+'/'+this.zone.properties.code+'/'+this.transect.code : '/zone/' + this.platform.code + "/" + this.zone.properties.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

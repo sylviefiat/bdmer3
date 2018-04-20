@@ -80,7 +80,7 @@ export class TransectPreviewComponent implements OnInit {
   }
 
   get codeZone() {
-    return this.zone.code;
+    return this.zone.properties.code;
   }
 
   get latitude() {

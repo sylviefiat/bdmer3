@@ -106,21 +106,21 @@ export function getCurrentZone(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0]);
+                zone.properties.code === state.currentZoneId)[0]);
 }
 
 export function getCurrentZoneTransects(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0].transects);
+                zone.properties.code === state.currentZoneId)[0].transects);
 }
 
 export function getCurrentZoneZonePrefs(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0].zonePreferences);
+                zone.properties.code === state.currentZoneId)[0].zonePreferences);
 }
 
 export function getCurrentSurveyId(state$: Observable<IPlatformState>) {
@@ -147,7 +147,7 @@ export function getCurrentTransect(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId && state.currentTransectId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0].transects.filter(transect =>
+                zone.properties.code === state.currentZoneId)[0].transects.filter(transect =>
                     transect.code === state.currentTransectId)[0]);
 }
 
@@ -159,7 +159,7 @@ export function getCurrentSpPref(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId && state.currentSpPrefId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.code === state.currentZoneId)[0].zonePreferences.filter(sppref =>
+                zone.properties.code === state.currentZoneId)[0].zonePreferences.filter(sppref =>
                     sppref.code === state.currentSpPrefId)[0]);
 }
 

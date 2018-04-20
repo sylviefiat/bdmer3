@@ -47,7 +47,7 @@ export class ViewTransectComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "transectForm":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.code+'/'+this.transect.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.code);
                 break;
             case "deleteTransect":
                 this.deleteTransect();
@@ -67,7 +67,7 @@ export class ViewTransectComponent implements OnInit {
     }
 
     toZone(){
-        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.code]);
+        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.properties.code]);
     }
 
 }

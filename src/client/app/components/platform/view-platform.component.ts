@@ -64,9 +64,9 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
         switch (this.panelDisplay.value) {
             case "zones":
                 this.filteredZones$ = this.zones$.map(zones => 
-                    zones.filter(zone => zone.code.toLowerCase().indexOf(filter)!==-1 || 
+                    zones.filter(zone => zone.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         zone.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
-                        zone.surface.toLowerCase().indexOf(filter)!==-1
+                        zone.properties.surface.toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );
                 break;

@@ -14,21 +14,16 @@
   <div class="insideform">
     <mat-card class="column">
       <h5 mat-subheader>{{ 'ZONE_DESC' | translate }}</h5>
-      <div class="row">
+      <div class="row" formGroupName="properties">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="code" required>
-          <div class="hint">{{ 'ZONE_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
-        </mat-input-container>
-
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'PLATFORM' | translate }}" formControlName="codePlatform">
-          <div class="hint">{{ 'EX_ZONE_PLATFORM' | translate }}</div> 
+          <input type="text" matInput placeholder="{{ 'ZONE_NAME' | translate }}" formControlName="name" required>
         </mat-input-container>
       </div>
-      <div class="row">
+
+      <div class="row" formGroupName="geometry">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_SURFACE' | translate }}" formControlName="surface">
-          <div class="hint">{{ 'ZONE_SURFACE_EX' | translate }}</div>     
+          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates" required>
+          <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>     
         </mat-input-container>
       </div>
     </mat-card>

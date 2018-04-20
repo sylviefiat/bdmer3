@@ -59,7 +59,7 @@ export class PlatformEffects {
     .ofType(PlatformAction.ActionTypes.ADD_ZONE)
     .map((action: PlatformAction.AddZoneAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[1], value[0]))
+    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1]))
     .map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
@@ -120,9 +120,8 @@ export class PlatformEffects {
   importZone$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_ZONE)    
     .map((action: PlatformAction.ImportZoneAction) => action.payload)
-    .mergeMap((zone: Zone) => this.csv2jsonService.csv2('zone', zone))
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Zone,Platform]) => this.platformService.editZone(value[1], value[0]))    
+    .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1]))    
     .map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
@@ -239,7 +238,7 @@ export class PlatformEffects {
   addZoneSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS)
     .map((action: PlatformAction.AddZoneSuccessAction) => action.payload)
-    .mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.code]))
+    .mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 

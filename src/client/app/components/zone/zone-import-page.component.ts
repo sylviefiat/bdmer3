@@ -32,7 +32,7 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
 
     actionsSubscription: Subscription;
     needHelp: boolean = false;
-    private csvFile: string;
+    private kmlFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
@@ -51,8 +51,8 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
         this.actionsSubscription.unsubscribe();
     }
 
-    handleUpload(csvFile: any): void {
-        this.store.dispatch(new PlatformAction.ImportZoneAction(csvFile));
+    handleUpload(kmlFile: any): void {
+        this.store.dispatch(new PlatformAction.ImportZoneAction(kmlFile));
     }
 
     handleErrorUpload(msg: string){

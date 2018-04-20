@@ -99,8 +99,8 @@ export class CountFormComponent implements OnInit {
 
     updateTransects(codeZone: string){
         console.log(codeZone);
-        console.log(this.zones.filter(zone => zone.code === codeZone)[0].transects);
-        this.transects$ = of(this.zones.filter(zone => zone.code === codeZone)[0].transects);
+        console.log(this.zones.filter(zone => zone.properties.code === codeZone)[0].transects);
+        this.transects$ = of(this.zones.filter(zone => zone.properties.code === codeZone)[0].transects);
     }
 
     submit() {
