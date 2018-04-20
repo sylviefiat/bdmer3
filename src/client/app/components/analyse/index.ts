@@ -1,4 +1,5 @@
 import { AnalysePageComponent } from './analyse-page.component';
+import { ResultPageComponent } from './result-page.component';
 import { AnalyseComponent } from './analyse.component';
 import { AnalyseCountryComponent } from './analyse-country.component';
 import { AnalysePlatformComponent } from './analyse-platform.component';
@@ -32,10 +33,12 @@ export const ANALYSE_COMPONENTS: any[] = [
   TransectComponent,
   AnalyseSpeciesComponent,
   SpeciesComponent,
-  AnalyseMethodComponent
+  AnalyseMethodComponent,
+  ResultPageComponent
   ];
 
 export * from './analyse-page.component';
+export * from './result-page.component';
 export * from './analyse.component';
 export * from './analyse-country.component';
 export * from './analyse-platform.component';

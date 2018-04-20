@@ -114,7 +114,8 @@ export class AnalysePageComponent implements OnInit {
   }
 
   startAnalyse(status: string) {
-    //TODO
+    console.log(status);
+    this.store.dispatch(new AnalyseAction.Analyse(status)); 
   }
 
 

@@ -9,7 +9,7 @@ import { Country } from '../../modules/countries/models/country';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'species'" (change)="change($event)">
-          {{ name }}
+          <i>{{ species.scientificName }}</i> {{ name }}
         </mat-checkbox>
     </div>
   `,
@@ -35,12 +35,12 @@ export class SpeciesComponent {
   }
 
   get name(){
-    let name = this.species.scientificName;
+    let name = "";
     if(this.species.names.filter(name => name.lang === this.currentCountry.code).length > 0){
-      name += ", "+this.species.names.filter(name => name.lang === this.currentCountry.code)[0].name+"</i>";
+      name += ", "+this.species.names.filter(name => name.lang === this.currentCountry.code)[0].name;
     }
-    if(this.species.names.filter(name => name.lang === this.locale).length > 0){
-      name += ", <i>"+this.species.names.filter(name => name.lang === this.currentCountry.code)[0].name+"</i>";
+    if(this.species.names.filter(name => name.lang.toLowerCase() === this.locale).length > 0){
+      name += ", "+this.species.names.filter(name => name.lang.toLowerCase() === this.locale)[0].name;
     }
     return name;
   }

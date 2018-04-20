@@ -192,6 +192,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@angular/cdk/table',
             path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
+        },
+        {
+            name: 'angular-ts-math',
+            path: 'node_modules/angular-ts-math/dist/angular-ts-math.js'
         }, {
             name: '@ngrx/db',
             packageMeta: {

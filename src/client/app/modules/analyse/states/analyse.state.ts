@@ -12,7 +12,7 @@ export interface IAnalyseState {
     usedSurveys: Survey[];
     usedZones: Zone[];
     usedTransects: Transect[];
-    usedSpecies: SurveySpecies[];
+    usedSpecies: Species[];
     usedMethod: Method;
     analysing: boolean;
     analysed: boolean;

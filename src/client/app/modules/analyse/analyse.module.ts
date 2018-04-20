@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
 import { AnalyseEffects } from './effects/analyse.effects';
+import { AnalyseService } from './services/analyse.service';
 
 
 @NgModule({
@@ -21,13 +22,13 @@ import { AnalyseEffects } from './effects/analyse.effects';
     EffectsModule.run(AnalyseEffects),
   ],
   declarations: [],
-  providers: [],
+  providers: [AnalyseService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
   ],
   exports: [
-    SharedModule
+    SharedModule,    
   ],
 })
 export class AnalyseModule {

@@ -128,8 +128,9 @@ export class AnalyseComponent {
         }
     }
 
-    submit(){
-
+    startAnalyse(){
+        console.log("go");
+        this.analyse.emit("ok");
     }
 
 }
