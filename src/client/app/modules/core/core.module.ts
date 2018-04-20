@@ -37,7 +37,8 @@ interface ICoreModuleOptions {
     AuthModule,
     PapaParseModule,
     DBModule.provideDB(schema),
-    MatDialogModule
+    MatDialogModule,
+    AnalyseModule
   ],
   declarations: [
     ...CORE_DIRECTIVES,

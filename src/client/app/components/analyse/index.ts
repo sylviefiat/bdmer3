@@ -1,4 +1,5 @@
 import { AnalysePageComponent } from './analyse-page.component';
+import { ResultPageComponent } from './result-page.component';
 import { AnalyseComponent } from './analyse.component';
 import { AnalyseCountryComponent } from './analyse-country.component';
 import { AnalysePlatformComponent } from './analyse-platform.component';
