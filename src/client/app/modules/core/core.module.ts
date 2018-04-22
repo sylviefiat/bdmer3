@@ -9,12 +9,12 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { MatDialogModule } from '@angular/material';
 // module
 import { SharedModule } from '../shared/index';
-import { AnalyseModule } from '../analyse/index';
 import { CountriesModule } from '../countries/index';
 import { DatasModule } from '../datas/index';
 import { AuthModule } from '../auth/index';
 import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
+import { Config } from './utils/index';
 import { schema } from '../db/index';
 
 import { zoneMapModal } from '../../components/zone/zone-map-modal.component'
@@ -37,8 +37,7 @@ interface ICoreModuleOptions {
     AuthModule,
     PapaParseModule,
     DBModule.provideDB(schema),
-    MatDialogModule,
-    AnalyseModule
+    MatDialogModule
   ],
   declarations: [
     ...CORE_DIRECTIVES,
@@ -50,8 +49,7 @@ interface ICoreModuleOptions {
   ],
   providers: [
     ...CORE_PROVIDERS,
-    SharedModule,
-    AnalyseModule
+    SharedModule
   ],
   entryComponents: [zoneMapModal, transectMapModal]
 })
