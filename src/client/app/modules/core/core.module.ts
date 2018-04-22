@@ -16,6 +16,7 @@ import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
 import { schema } from '../db/index';
+import { MapStaticService} from './services/map-static.service';
 
 interface ICoreModuleOptions {
   window?: any;
@@ -43,7 +44,8 @@ interface ICoreModuleOptions {
   ],
   providers: [
     ...CORE_PROVIDERS,
-    SharedModule
+    SharedModule,
+    MapStaticService
   ]
 })
 export class CoreModule {

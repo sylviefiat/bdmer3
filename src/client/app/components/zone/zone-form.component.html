@@ -22,10 +22,12 @@
 
       <div class="row" formGroupName="geometry">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates" required>
+          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" (change)="coordChange($event)" formControlName="coordinates" required>
           <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>     
         </mat-input-container>
       </div>
+      
+      <img mat-card-sm-image *ngIf="url" [src]="url" />
     </mat-card>
   </div>
 

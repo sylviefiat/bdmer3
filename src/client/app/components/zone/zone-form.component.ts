@@ -3,7 +3,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import * as area from '@mapbox/geojson-area';
+import { MapStaticService} from '../../modules/core/services/map-static.service';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -25,6 +25,7 @@ export class ZoneFormComponent implements OnInit {
 
     @Output() submitted = new EventEmitter<Zone>();
 
+    url: string;
     code: string;
 
     zoneForm: FormGroup = new FormGroup({
@@ -44,7 +45,7 @@ export class ZoneFormComponent implements OnInit {
         zonePreferences: new FormArray([])
     });
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
+    constructor(private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     ngOnInit() {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
@@ -55,10 +56,9 @@ export class ZoneFormComponent implements OnInit {
         this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
         this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.convertName(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
 
-        this.setStaticMap().then((data) => {
+        this.mapStaticService.staticMapToB64(this.url).then((data) => {
           this.zoneForm.controls.staticmap.setValue(data);
-          this.refactorCoordinates();
-          this.setSurface();
+          this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
           if (this.zoneForm.valid) {
               this.submitted.emit(this.zoneForm.value);
           }
@@ -76,69 +76,10 @@ export class ZoneFormComponent implements OnInit {
         });
     }
 
-    setStaticMap(){
-      return new Promise((resolve, reject) => {
-        var string = this.zoneForm.controls.geometry.get("coordinates").value.split(' ');
-        var a = string.length; 
-        var ar = [];
-        for (var i = 0; i < a; i++) {
-            var tempo = string[i].split(',')
-
-            for(var j = 0; j < tempo.length; j++){
-                tempo[j] = parseFloat(tempo[j])
-            }
-            tempo.splice(2, 1)
-            ar.push(tempo)
-        }
-
-        var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
-
-        for(var i=0; i<ar.length; i++){
-          url += ar[i][1] + "," + ar[i][0]; 
-          if(i !== ar.length - 1){
-            url+="|"
-          }
-        }
-
-        url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g"
-
-        var img = new Image();
-        img.src = url;
-
-        var xhr = new XMLHttpRequest();
-        var self= this;
-        xhr.onload = function() {
-          var reader = new FileReader();
-          reader.onloadend = function() {
-            resolve(reader.result);
-          }
-          reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.send();
-       });
-    }
-
-    setSurface(){
-        var surface = area.geometry(this.zoneForm.controls.geometry.value);
-        this.zoneForm.controls.properties.get("surface").setValue(parseInt(surface.toString().split('.')['0']));
-    }
-
-    refactorCoordinates(){
-        var string = this.zoneForm.controls.geometry.get("coordinates").value.split(' ');
-        var a = string.length; 
-        var ar = [];
-        for (var i = 0; i < a; i++) {
-            var tempo = string[i].split(',')
-            for(var j = 0; j < tempo.length; j++){
-                tempo[j] = parseFloat(tempo[j])
-            }
-            ar.push(tempo)
-        }
-        var res = [];
-        res.push(ar)
-        this.zoneForm.controls.geometry.get("coordinates").setValue(res);
+    coordChange(coords){
+        var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
+        this.zoneForm.controls.geometry.get("coordinates").setValue(ar);
+        this.url = this.mapStaticService.googleMapUrl(ar);
     }
 
     convertName(str){
