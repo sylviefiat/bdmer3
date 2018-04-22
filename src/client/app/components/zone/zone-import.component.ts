@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { MapStaticService} from '../../modules/core/services/map-static.service';
 import * as togeojson from '@mapbox/togeojson';
-import * as area from '@mapbox/geojson-area';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -37,7 +37,7 @@ export class ZoneImportComponent implements OnInit{
     private docs_repo: string;
 
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -63,14 +63,8 @@ export class ZoneImportComponent implements OnInit{
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
                 geojson[i].properties.code = self.platform.code+"_"+self.convertName(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
-                
-                console.log(geojson[i].geometry)
-                var surface = area.geometry(geojson[i].geometry);
-
-                geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
-
+                geojson[i].properties.surface = self.mapStaticService.setSurface(geojson[i].geometry);
                 self.upload.emit(geojson[i]);
-
               }
             }
     }

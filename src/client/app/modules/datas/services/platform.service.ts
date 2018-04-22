@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
+import { MapStaticService} from '../../core/services/map-static.service';
 
 
 import * as PouchDB from "pouchdb";
@@ -16,7 +17,7 @@ export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
 
-  constructor(private http: Http) {
+  constructor(private mapStaticService: MapStaticService, private http: Http) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -43,7 +44,6 @@ export class PlatformService {
   }
 
   addPlatform(platform: Platform): Observable<Platform> {
-    console.log("sfsfgsdhjfgjh")
     platform._id=platform.code;
     this.currentPlatform = of(platform);
     return fromPromise(this.db.put(platform))
@@ -90,6 +90,12 @@ export class PlatformService {
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
+    var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"])
+
+    this.mapStaticService.staticMapToB64(url).then(function(data){
+      zone.staticmap = data.toString();
+    })
+
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {           
