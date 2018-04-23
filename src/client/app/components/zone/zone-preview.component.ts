@@ -84,6 +84,10 @@ export class ZonePreviewComponent implements OnInit {
 >>>>>>> feat (add surface for import) / refactor (zone model)
   }
 
+  get map(){
+    return this.zone.staticmap;
+  }
+
   get surface() {
     return this.zone.properties.surface;
   }

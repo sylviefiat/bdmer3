@@ -322,5 +322,6 @@
   "IMPORT_PICTURE": "Select",
   "ZONE_NAME": "Name of the zone",
   "ZONE_COORD_EX": "Copy and past coordonates from a KML file",
-  "ZONE_COORD": "Coordinates of the zone"
+  "ZONE_COORD": "Coordinates of the zone",
+  "MODAL_CLOSE": "Close"
 }
