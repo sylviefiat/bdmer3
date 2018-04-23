@@ -7,7 +7,7 @@ import { Platform,Zone } from './../../modules/datas/models/platform';
     <a [routerLink]="['/zone', idPlatform, idZone]">
       <mat-card>
         <mat-card-title-group>
-          <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+          <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
           <mat-card-subtitle *ngIf="idPlatform">{{ idPlatform }}</mat-card-subtitle>
         </mat-card-title-group>
@@ -75,6 +75,10 @@ export class ZonePreviewComponent implements OnInit {
 
   get idZone() {
     return this.zone.properties.code;
+  }
+
+  get map(){
+    return this.zone.staticmap;
   }
 
   get surface() {
