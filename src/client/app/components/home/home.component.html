@@ -1,11 +1,29 @@
-<div class="background"></div>
+<div *ngIf="loggedIn;else notloggedin">
+	<div *ngIf="onlineOffline;else nomap">
+		<h1>{{ title }}</h1>
 
-<h2>
-  {{ 'APP_TITLE' | translate }}
-</h2>
+		<agm-map [latitude]="lat" [longitude]="lng">
+		  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+		</agm-map>
+	</div>
 
-<p>
-  {{'APP_SUBTITLE' | translate}}
-</p>
+	<ng-template #nomap>
+		<div class="background"></div>
+		<h2>
+		  {{ 'APP_TITLE' | translate }}
+		</h2>
+		<p>
+		  {{'APP_SUBTITLE' | translate}}
+		</p>
+	</ng-template>
+</div>
 
-
+<ng-template #notloggedin>
+	<div class="background"></div>
+	<h2>
+	  {{ 'APP_TITLE' | translate }}
+	</h2>
+	<p>
+	  {{'APP_SUBTITLE' | translate}}
+	</p>
+</ng-template>
