@@ -282,6 +282,6 @@
   "UPLOAD_PICTURE": "Importer une image",
   "IMPORT_PICTURE": "Choisir",
   "ZONE_NAME": "Nom de la zone",
-  "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML",
+  "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML. Format des coordonnées: une ligne par point du polygone au format: 'longitude, latitude, altitude'",
   "ZONE_COORD": "Coordonnées de la zone"
 }

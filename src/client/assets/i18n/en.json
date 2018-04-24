@@ -283,6 +283,6 @@
   "UPLOAD_PICTURE": "Import a picture",
   "IMPORT_PICTURE": "Select",
   "ZONE_NAME": "Name of the zone",
-  "ZONE_COORD_EX": "Copy and past coordonates from a KML file",
+  "ZONE_COORD_EX": "Copy and past coordonates from a KML file. Structure of coordinates: one line for each point of the polygon: 'lat, lng, alt'",
   "ZONE_COORD": "Coordinates of the zone"
 }
