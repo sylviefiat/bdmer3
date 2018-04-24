@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { MailService } from './mail.service';
 import { MomentService } from './moment.service';
 import { Csv2JsonService } from './csv2json.service';
+import { MapStaticService} from './map-static.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,
@@ -24,7 +25,8 @@ export const CORE_PROVIDERS: any[] = [
   AuthService,
   MailService,
   MomentService,
-  Csv2JsonService
+  Csv2JsonService,
+  MapStaticService  
 ];
 
 export * from './console.service';
@@ -39,3 +41,4 @@ export * from './auth.service';
 export * from './mail.service';
 export * from './moment.service';
 export * from './csv2json.service';
+export * from './map-static.service';

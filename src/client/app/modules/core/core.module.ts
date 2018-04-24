@@ -16,7 +16,7 @@ import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
 import { schema } from '../db/index';
-import { MapStaticService} from './services/map-static.service';
+
 import { zoneMapModal } from '../../components/zone/zone-map-modal.component'
 
 interface ICoreModuleOptions {
@@ -47,8 +47,7 @@ interface ICoreModuleOptions {
   ],
   providers: [
     ...CORE_PROVIDERS,
-    SharedModule,
-    MapStaticService
+    SharedModule
   ],
   entryComponents: [zoneMapModal]
 })

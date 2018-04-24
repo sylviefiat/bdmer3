@@ -43,7 +43,8 @@ import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptio
 //import {CdkTableModule} from '@angular/cdk/table';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
-import { AgmCoreModule } from '@agm/core';
+import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
+import { AgmJsMarkerClustererModule } from "@agm/js-marker-clusterer";
 
 // modules
 import { SHARED_COMPONENTS } from './components/index';
@@ -112,6 +113,7 @@ const SHARED_MODULES: any[] = [
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g'
     }),
+    AgmJsMarkerClustererModule
   ],
   declarations: [
     ...SHARED_COMPONENTS
@@ -124,7 +126,11 @@ const SHARED_MODULES: any[] = [
     ...SHARED_MODULES,
     SharedMaterialModule,
     ...SHARED_COMPONENTS,
-    AgmCoreModule
+    AgmCoreModule,
+    AgmJsMarkerClustererModule
+  ],
+  providers: [
+    GoogleMapsAPIWrapper
   ]
 })
 export class SharedModule {}

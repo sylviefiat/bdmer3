@@ -1,10 +1,25 @@
+<ng-template #notloggedin>
+	<div class="background"></div>
+	<h2>
+	  {{ 'APP_TITLE' | translate }}
+	</h2>
+	<p>
+	  {{'APP_SUBTITLE' | translate}}
+	</p>
+</ng-template>
+
 <div *ngIf="loggedIn;else notloggedin">
 	<div *ngIf="onlineOffline;else nomap">
-		<h1>{{ title }}</h1>
-
 		<agm-map [latitude]="lat" [longitude]="lng">
-		  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+			<div *ngFor="let platform of (platforms$ | async)"> 
+				<div *ngFor="let zone of (platform.zones)">
+					<agm-data-layer *ngIf="zone" [geoJson]="zone" (layerClick)="clicked($event)" [style]="styleFunc" >
+		     		</agm-data-layer>
+						<!-- <agm-marker [latitude]="zone.geometry.coordinates['0']['0']['1']" [longitude]="zone.geometry.coordinates['0']['0']['0']"></agm-marker> -->
+				</div>
+			</div>
 		</agm-map>
+
 	</div>
 
 	<ng-template #nomap>
@@ -17,13 +32,3 @@
 		</p>
 	</ng-template>
 </div>
-
-<ng-template #notloggedin>
-	<div class="background"></div>
-	<h2>
-	  {{ 'APP_TITLE' | translate }}
-	</h2>
-	<p>
-	  {{'APP_SUBTITLE' | translate}}
-	</p>
-</ng-template>
