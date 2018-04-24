@@ -12,7 +12,7 @@ import { MailService } from './mail.service';
 import { MomentService } from './moment.service';
 import { Csv2JsonService } from './csv2json.service';
 import { MapStaticService} from './map-static.service';
-import { NameRefactorService } from './nameRefactor.service'
+import { NameRefactorService } from './nameRefactor.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,

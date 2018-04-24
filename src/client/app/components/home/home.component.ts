@@ -46,13 +46,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public onlineOffline: boolean = navigator.onLine;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, 
-  	googleMapsAPIWrapper: GoogleMapsAPIWrapper, private countryListService: CountryListService) {}
+    googleMapsAPIWrapper: GoogleMapsAPIWrapper, private countryListService: CountryListService) {}
 
   ngOnInit() {
-  	this.loggedIn = this.store["source"]["value"]["auth"]["loggedIn"];
-  	if(this.loggedIn){
+    this.loggedIn = this.store["source"]["value"]["auth"]["loggedIn"];
+    if(this.loggedIn){
       this.platforms$ = this.store.let(getPlatformInApp);
-  		this.store.dispatch(new PlatformAction.LoadAction());
+      this.store.dispatch(new PlatformAction.LoadAction());
 
       this.userCountry$ = this.store.let(getAuthCountry);
 
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
         } 
       );
-  	}
+    }
   }
 
   ngAfterViewInit() {
