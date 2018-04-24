@@ -19,6 +19,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
         'zone-form.component.css',
     ],
 })
+
 export class ZoneFormComponent implements OnInit {
     @Input() platform: Platform;
     @Input() zone: Zone | null;
