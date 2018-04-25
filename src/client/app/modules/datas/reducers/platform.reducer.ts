@@ -151,7 +151,7 @@ export function platformReducer(
             {
                 const removedZone = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone.codePlatform)[0];
-                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.code);
+                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.properties.code);
                 return {
                     ...state,
                     entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
