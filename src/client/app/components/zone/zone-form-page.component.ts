@@ -60,7 +60,7 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription.unsubscribe();
   }
 
-  onSubmit(zone: Zone) { 
+  onSubmit(zone: Zone) {
    this.store.dispatch(new PlatformAction.AddZoneAction(zone))
   }
 }

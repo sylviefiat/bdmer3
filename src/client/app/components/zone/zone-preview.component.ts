@@ -74,15 +74,15 @@ export class ZonePreviewComponent implements OnInit {
   }
 
   get idZone() {
-    return this.zone.code;
+    return this.zone.properties.code;
   }
 
   get surface() {
-    return this.zone.surface;
+    return this.zone.properties.surface;
   }
 
   get code() {
-    return this.zone.code;
+    return this.zone.properties.code;
   }
 
   get thumbnail(): string | boolean {

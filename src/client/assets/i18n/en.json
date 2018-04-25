@@ -149,8 +149,10 @@
   "IMPORT_PLATFORMS_DESC":"Import CSV file with new platforms ",
   "CSV_IMPORT":"CSV import",
   "IMPORT_CSV":"Import CSV",
-  "IMPORT_DESC":"A CSV file is a comma-separated values file where values of a same object are on a same line separated by commas and back line characters delimits different objects: 1 object per line and 1 value per comma. It can have header included. Download the example below to know the exact format for this import.",
+  "IMPORT_KML":"Import KML",
+  "IMPORT_DESC_KML": "A KML file is an XML notation for expressing geographic annotation and visualization within Internet-based, two-dimensional maps and three-dimensional Earth browsers. Download the example below to know the exact format for this import.",
   "IMPORT_DESC_ADMIN":"As an Admin, beware that import file format are slightly different from common users, your import require a column with the codeCOuntry",
+  "IMPORT_DESC":"A CSV file is a comma-separated values file where values of a same object are on a same line separated by commas and back line characters delimits different objects: 1 object per line and 1 value per comma. It can have header included. Download the example below to know the exact format for this import.",
   "IMPORT_DESC_DATE":"CAUTION: beware of date format, if your file is in 'english' format using comma-separated-values, expected date format is 'MM/DD/YYYY, if your file is in 'french' format using semicolons as limiter expected date format is 'DD/MM/YYY'",
   "DOWNLOAD_CSV_PLATFORMS":"Download CSV example for platforms import",
   "DOWNLOAD_CSV_PLATFORMS_ADMIN": " (Admin version)",
@@ -158,6 +160,7 @@
   "IMPORT_ZONES":"Zones import",
   "IMPORT_ZONES_DESC":"Import CSV file with zones for ",
   "DOWNLOAD_CSV_ZONES":"Download CSV example for zones import",
+  "DOWNLOAD_KML_ZONES":"Download KML example for zones import",
   "IMPORT_SPECIES":"Species import",
   "IMPORT_SPECIES_DESC":"Import CSV file with species",
   "DOWNLOAD_CSV_SPECIES":"Download CSV example for species import",
@@ -278,5 +281,8 @@
   "NO_USERS":"There is no known users for this country",
   "COUNTRY_LIST":"Countries BDMER³",
   "UPLOAD_PICTURE": "Import a picture",
-  "IMPORT_PICTURE": "Select"
+  "IMPORT_PICTURE": "Select",
+  "ZONE_NAME": "Name of the zone",
+  "ZONE_COORD_EX": "Structure of polygon coordinates : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
+  "ZONE_COORD": "Coordinates of the zone"
 }

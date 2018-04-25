@@ -87,7 +87,7 @@ export class PreferenceAreaPreviewComponent implements OnInit {
   }
 
   get codeZone() {
-    return this.zone.code;
+    return this.zone.properties.code;
   }
 
   get codeSpecies() {
