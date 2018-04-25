@@ -10,15 +10,20 @@
 
 <div *ngIf="loggedIn;else notloggedin">
 	<div *ngIf="onlineOffline;else nomap">
-		<agm-map [latitude]="lat" [longitude]="lng">
+		<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
 			<div *ngFor="let platform of (platforms$ | async)"> 
 				<div *ngFor="let zone of (platform.zones)">
-					<agm-data-layer *ngIf="zone" [geoJson]="zone" (layerClick)="clicked($event)" [style]="styleFunc" >
+					<agm-data-layer [geoJson]="zone">
 		     		</agm-data-layer>
-						<!-- <agm-marker [latitude]="zone.geometry.coordinates['0']['0']['1']" [longitude]="zone.geometry.coordinates['0']['0']['0']"></agm-marker> -->
 				</div>
 			</div>
 		</agm-map>
+
+		<div class="test">
+			<div *ngFor="let platform of (platforms | async)">
+				{{ platform.code }}
+			</div>
+		</div>
 
 	</div>
 

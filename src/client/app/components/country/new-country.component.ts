@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -21,7 +22,7 @@ export class NewCountryComponent implements OnInit {
   public countryList$: Observable<any[]>;
   public countriesIds$: Observable<any[]>;
   public image: any;
-
+  results: any[];
   @Input() errorMessage: string | null;
   
 
@@ -30,9 +31,13 @@ export class NewCountryComponent implements OnInit {
   form: FormGroup = new FormGroup({
     pays: new FormControl(''),
     flag: new FormControl(''),
+    coordinates: new FormGroup({
+      lat: new FormControl(),
+      lng: new FormControl()
+    })
   });
 
-  constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
+  constructor(private http: HttpClient, private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
 
   ngOnInit() {
     this.countryList$ = this.store.let(getCountryList)
@@ -54,9 +59,15 @@ export class NewCountryComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       this.svgToB64().then( (data) => {
-        this.form.controls.flag.setValue(data);
-        this.submitted.emit(this.form.value);
-      });
+        this.http.get('http://maps.googleapis.com/maps/api/geocode/json?address='+ this.form.controls.pays.value["name"] +'&sensor=false&apiKey=AIzaSyBSEMJ07KVIWdyD0uTKaO75UYsIMMCi69w')
+          .subscribe(coord => {
+            this.form.controls.coordinates.get("lat").setValue(coord["results"]["0"].geometry.location.lat);
+            this.form.controls.coordinates.get("lng").setValue(coord["results"]["0"].geometry.location.lng);
+            this.form.controls.flag.setValue(data);
+
+            this.submitted.emit(this.form.value);
+        });
+        });
     }
   }
 

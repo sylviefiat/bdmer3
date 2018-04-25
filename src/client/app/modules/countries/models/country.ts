@@ -6,6 +6,12 @@ export interface Country {
 	_attachments?: any;
 	users: User[];
   flag: string;
+  coordinates: Coordinates;
+}
+
+export interface Coordinates{
+  lat: number;
+  lng: number;
 }
 
 export interface User {

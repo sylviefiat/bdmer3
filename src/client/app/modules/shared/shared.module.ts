@@ -2,6 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -44,8 +45,6 @@ import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptio
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
-import { AgmJsMarkerClustererModule } from "@agm/js-marker-clusterer";
-
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -97,7 +96,8 @@ const SHARED_MODULES: any[] = [
   MatNativeDateModule,
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
-  MomentModule
+  MomentModule,
+  HttpClientModule
 ];
 
 /**
@@ -113,7 +113,6 @@ const SHARED_MODULES: any[] = [
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g'
     }),
-    AgmJsMarkerClustererModule
   ],
   declarations: [
     ...SHARED_COMPONENTS
@@ -126,8 +125,7 @@ const SHARED_MODULES: any[] = [
     ...SHARED_MODULES,
     SharedMaterialModule,
     ...SHARED_COMPONENTS,
-    AgmCoreModule,
-    AgmJsMarkerClustererModule
+    AgmCoreModule
   ],
   providers: [
     GoogleMapsAPIWrapper

@@ -68,18 +68,22 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'jquery-confirm',
             path: 'node_modules/jquery-confirm/dist/jquery-confirm.min.js'
+        },{
+            name: 'tslib',
+            path: 'node_modules/tslib/tslib.js'
         },
-        {
-            name: '@agm/js-marker-clusterer',
-            path: 'node_modules/@agm/js-marker-clusterer/index.js'
-        }, {
+        // {
+        //     name: '@agm/js-marker-clusterer',
+        //     path: 'node_modules/@agm/js-marker-clusterer/index.js'
+        // },
+         {
             name: 'traceur',
             path: 'node_modules/traceur/bin/traceur.js'
         },
-        {
-            name: 'js-marker-clusterer',
-            path: 'node_modules/js-marker-clusterer/src/markerclusterer.js'
-        }, 
+        // {
+        //     name: 'js-marker-clusterer',
+        //     path: 'node_modules/js-marker-clusterer/src/markerclusterer.js'
+        // }, 
         {
             name: '@agm/core',
             packageMeta: {

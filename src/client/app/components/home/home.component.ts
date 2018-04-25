@@ -6,9 +6,11 @@ import { GoogleMapsAPIWrapper } from '@agm/core';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getisLoggedIn, getAuthState, getAuthCountry, getPlatformListCurrentCountry } from '../../modules/ngrx/index';
+import { IAppState, getisLoggedIn, getAuthState, getAuthCountry, getPlatformInApp, getSelectedUser, getPlatformListCurrentCountry } from '../../modules/ngrx/index';
 import { Platform } from '../../modules/datas/models/index';
+import { Country } from '../../modules/countries/models/country'
 import { PlatformAction } from '../../modules/datas/actions/index';
+import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
   moduleId: module.id,
@@ -19,26 +21,15 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 
 export class HomeComponent implements OnInit {
 
-  title: string = 'My first AGM project';
-  lat: number = -4.6838871;
-  lng: number = 55.4494781;
-
-  point: Object = {
-  	lng: 55.48547651530164,
-    lat: -4.595906847190321
-  }
-
-  point2: Object = {
-  	lng: 55.19794810211319,
-    lat: -4.45897887407234
-  }
-
-  
-              
+  lat: number;
+  lng: number;
 
   geoJsonObject: Object;
   loggedIn: boolean;
   platforms$: Observable<Platform[]>;
+  userCountry$: Observable<Country>
+  platforms: any;
+  zoom: number = 9;
 
   public onlineOffline: boolean = navigator.onLine;
 
@@ -48,8 +39,23 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   	this.loggedIn = this.store["source"]["value"]["auth"]["loggedIn"];
   	if(this.loggedIn){
-  		this.platforms$ = this.store.let(getPlatformListCurrentCountry);
+      this.platforms$ = this.store.let(getPlatformInApp);
   		this.store.dispatch(new PlatformAction.LoadAction());
+
+      this.userCountry$ = this.store.let(getAuthCountry);
+
+      this.userCountry$.subscribe(
+        (res) => {
+          if(res.code !== "AA"){
+            this.platforms$ = this.platforms$
+              .map(platforms => platforms.filter(platform => platform.codeCountry === res.code));
+            this.lat = res.coordinates.lat;
+            this.lng = res.coordinates.lng;
+          }else{
+            this.zoom = 3
+          }
+        } 
+      );
   	}
   }
 }
