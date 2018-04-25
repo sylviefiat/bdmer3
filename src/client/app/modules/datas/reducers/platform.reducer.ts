@@ -49,7 +49,7 @@ export function platformReducer(
             const addedzone = action.payload;
             const platforms = state.entities.filter(platform => addedzone.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedzone.codePlatform === platform._id)[0];
-            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone.code !== zone.properties.code),addedzone];
+            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone.properties.code !== zone.properties.code),addedzone];
 
             return {
                 ...state,
