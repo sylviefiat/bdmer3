@@ -47,6 +47,9 @@ export class ZoneFormComponent implements OnInit {
 
     ngOnInit() {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
+        this.zoneForm.controls.properties.get("name").setValue(this.zone ? this.zone.properties.name : "")
+        this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone ? this.zone.geometry["coordinates"] : "");
+        (this.zone !== undefined)?this.zoneForm.controls.properties.get("name").disable():this.zoneForm.controls.properties.get("name").enable();        
     }
 
     submit() {
