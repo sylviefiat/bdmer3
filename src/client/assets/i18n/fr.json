@@ -283,6 +283,6 @@
   "IMPORT_PICTURE": "Choisir",
   "ZONE_NAME": "Nom de la zone",
   "MODAL_CLOSE": "Fermer",
-  "ZONE_COORD_EX": "Copier et coller les coordonnées d'un fichier KML. Format des coordonnées: une ligne par point du polygone au format: 'longitude, latitude, altitude'",
+  "ZONE_COORD_EX": "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordonnées de la zone"
 }
