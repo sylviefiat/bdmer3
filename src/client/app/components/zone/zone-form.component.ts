@@ -68,12 +68,8 @@ export class ZoneFormComponent implements OnInit {
     }
 
     submit() {
-        if(!this.errorCoord){
-            this.errorMessage = false;
-
-            this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
-            this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
-            this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
+        this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
+        this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.convertName(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
 
             this.mapStaticService.staticMapToB64(this.url).then((data) => {
               this.zoneForm.controls.staticmap.setValue(data);
