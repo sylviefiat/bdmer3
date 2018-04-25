@@ -27,9 +27,8 @@ export class AnalyseService {
             let resultSurvey: ResultSurvey = {name:result.name+"_"+survey.code, resultPerSpecies:[]};
             for(let sp of analyseState.usedSpecies){
                 let resultSp: ResultSpecies = {name:resultSurvey.name+"_"+sp.code, resultPerTransect:[], indicators: [], interpretation:[], stock:[]};
-                for(let t of surveyTransects){
-                    let resultTransect : ResultTransect = {codeTransect: t.code, numberIndividual:0, biomassTotal:0, biomassPerSquareMeter:0, density:0};
-                    // TO BE CONTINUED
+                for(let transect of surveyTransects){                    
+                    resultSp.resultPerTransect.push(this.getResultPerTransect(survey,sp,transect));
                 }
                 resultSurvey.resultPerSpecies.push(resultSp);
             }
@@ -47,7 +46,16 @@ export class AnalyseService {
         return result;
     }
 
-    
+    getResultPerTransect(survey: Survey, species: Species, transect: Transect): ResultTransect{
+        let resultTransect : ResultTransect = {codeTransect: transect.code, numberIndividual:0, biomassTotal:0, biomassPerSquareMeter:0, density:0};
+        let mesures = [];
+        for(let c of survey.counts){
+            mesures = [...mesures, ...survey.counts.mesures.filter(m => m.codeSpecies === species.code)]
+        }
+        resultTransect.numberIndividual = mesures.length;
+        
+        return resultTransect;
+    }
 
     /*calculate_indicators(species: Species, mesures: Mesure[], method: Method): Indicators {
         let indicators: Indicators = {biomasses:[],biomass_total: 0, biomass_salt: 0,biomass_dry: 0,abundancy_calcul: 0, density_total_calcul_individual: 0, density_total_calcul_weight:0};

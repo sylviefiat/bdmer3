@@ -16,7 +16,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 
 
 @Component({
-  selector: 'bc-result-page',
+  selector: 'bc-result-rappel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div>
@@ -25,15 +25,14 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   `,
 })
 export class ResultPageComponent implements OnInit {
-  results$: Observable<Results[]>;
-
+  
+  
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     
   }
 
   ngOnInit() {
     
-    this.results$ = this.store.let(getAnalyseResult);
   }
 
 
