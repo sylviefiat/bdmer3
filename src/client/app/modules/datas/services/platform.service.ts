@@ -103,7 +103,7 @@ export class PlatformService {
         if(!st.zones) st.zones = [];
         if(!zone.transects) zone.transects = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
-        st.zones.push(zone);
+        st.zones = [ ...st.zones.filter(z => z.properties.code !== zone.properties.code), zone];
         this.currentPlatform = of(st);
         return fromPromise(this.db.put(st));
       })
