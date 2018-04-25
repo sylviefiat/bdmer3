@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getAnalyseResult } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
-import { Method, Result } from '../../modules/analyse/models/index';
+import { Method, Results } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
@@ -25,7 +25,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   `,
 })
 export class ResultPageComponent implements OnInit {
-  results$: Observable<Result[]>;
+  results$: Observable<Results[]>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     

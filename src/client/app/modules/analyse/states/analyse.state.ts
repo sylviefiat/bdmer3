@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
-import { Method, Result, SurveySpecies } from '../models/analyse';
+import { Method, Results, SurveySpecies } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
@@ -16,7 +16,7 @@ export interface IAnalyseState {
     usedMethod: Method;
     analysing: boolean;
     analysed: boolean;
-    result: Result;
+    result: Results;
     msg: string;
 }
 
