@@ -6,7 +6,6 @@
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!zoneForm.valid">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
-        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
       </mat-card-content>
     </mat-card>
   </div>
@@ -22,10 +21,11 @@
 
       <div class="row" formGroupName="geometry">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates" required>
-          <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>     
+          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates" [errorStateMatcher]="matcher" required>
+          <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>
         </mat-input-container>
       </div>
+      <p *ngIf="errorMessage" class="error">{{ 'POLYGON_ERROR' | translate }}</p>     
     </mat-card>
   </div>
 

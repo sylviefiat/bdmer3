@@ -8,6 +8,7 @@ import * as area from '@mapbox/geojson-area';
 import { IAppState } from '../../modules/ngrx/index';
 import { NameRefactorService } from '../../modules/core/services/nameRefactor.service';
 import { Platform, Zone } from '../../modules/datas/models/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 @Component({
     moduleId: module.id,
@@ -69,8 +70,12 @@ export class ZoneFormComponent implements OnInit {
         this.setSurface();
                    
         if (this.zoneForm.valid) {
-            this.zoneForm.controls.properties.get("name").enable();
-            this.submitted.emit(this.zoneForm.value);
+            if(this.zoneForm.controls.properties.get("surface").value === 0){
+                this.errorMessage = "qsfdhjksdhfjksd"
+            }else{
+                this.zoneForm.controls.properties.get("name").enable();
+                this.submitted.emit(this.zoneForm.value);
+            }
         }
     }
 
