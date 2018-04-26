@@ -8,6 +8,7 @@ import { MapStaticService} from '../../modules/core/services/map-static.service'
 import { IAppState } from '../../modules/ngrx/index';
 import { NameRefactorService } from '../../modules/core/services/nameRefactor.service';
 import { Platform, Zone } from '../../modules/datas/models/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 @Component({
     moduleId: module.id,
@@ -21,7 +22,7 @@ import { Platform, Zone } from '../../modules/datas/models/index';
 export class ZoneFormComponent implements OnInit {
     @Input() platform: Platform;
     @Input() zone: Zone | null;
-    @Input() errorMessage: string;
+    @Input() errorMessage: boolean;
 
     @Output() submitted = new EventEmitter<Zone>();
 
@@ -72,8 +73,12 @@ export class ZoneFormComponent implements OnInit {
           this.zoneForm.controls.staticmap.setValue(data);
           this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
           if (this.zoneForm.valid) {
-              this.zoneForm.controls.properties.get("name").enable();
-              this.submitted.emit(this.zoneForm.value);
+            if(this.zoneForm.controls.properties.get("surface").value === 0){
+                this.errorMessage = true
+            }else{
+                this.zoneForm.controls.properties.get("name").enable();
+                this.submitted.emit(this.zoneForm.value);
+            }
           }
         });
        

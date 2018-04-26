@@ -19,6 +19,7 @@ export namespace PlatformAction {
       REMOVE_PLATFORM_FAIL: string;
       ADD_ZONE: string;
       ADD_ZONE_SUCCESS: string;
+      ADD_ZONE_FAIL: string;
       IMPORT_ZONE: string;
       IMPORT_ZONE_SUCCESS: string;
       REMOVE_ZONE: string;
@@ -75,6 +76,7 @@ export namespace PlatformAction {
       REMOVE_PLATFORM_FAIL: type(`${PLATFORM} Remove Platform Fail`),
       ADD_ZONE: type(`${PLATFORM} Add Zone`),
       ADD_ZONE_SUCCESS: type(`${PLATFORM} Add Zone Success`),
+      ADD_ZONE_FAIL: type(`${PLATFORM} Add Zone Fail`),
       IMPORT_ZONE: type(`${PLATFORM} Import Zone`),
       IMPORT_ZONE_SUCCESS:type(`${PLATFORM} Import Zone Success`),
       REMOVE_ZONE: type(`${PLATFORM} Remove Zone`),
@@ -187,6 +189,12 @@ export namespace PlatformAction {
     readonly type = ActionTypes.ADD_ZONE_SUCCESS;
 
     constructor(public payload: Zone) {}
+  }
+
+  export class AddZoneFailAction implements Action {
+    readonly type = ActionTypes.ADD_ZONE_FAIL;
+
+    constructor(public payload: Platform) {}
   }
 
   export class ImportZoneAction implements Action {
