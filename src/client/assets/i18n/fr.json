@@ -53,6 +53,7 @@
   "ACTIONS":"Actions",
   "MENU_SPECIES":"Gestion espèces",
   "SPECIES": "Espèces",
+  "SP": "Espèce",
   "SPECIES_SELECT": "Sélectionner l'espèce",
   "SPECIES_LIST": "Espèces monitorées dans BDMER³",
   "SPECIES_COUNTRIES": "Codes pays référencés: ",
@@ -314,5 +315,7 @@
   "NO_SP_SELECTED":"Aucune espèce sélectionnée",
   "SELECT_METHOD":"Selectionner le type d'analyse",
   "LONGLARG":"Longueur et largeur",
-  "LONGUEUR":"Longueur seulement"
+  "LONGUEUR":"Longueur seulement",
+  "RESULT_TITLE":"Résultats de l'analyse",
+  "RESULT_RAPPEL":"Rappel des critères de sélection"
 }

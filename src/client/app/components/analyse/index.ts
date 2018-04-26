@@ -1,5 +1,4 @@
 import { AnalysePageComponent } from './analyse-page.component';
-import { ResultPageComponent } from './result-page.component';
 import { AnalyseComponent } from './analyse.component';
 import { AnalyseCountryComponent } from './analyse-country.component';
 import { AnalysePlatformComponent } from './analyse-platform.component';
@@ -15,6 +14,8 @@ import { TransectComponent } from './transect.component';
 import { AnalyseSpeciesComponent } from './analyse-species.component';
 import { SpeciesComponent } from './species.component';
 import { AnalyseMethodComponent } from './analyse-method.component';
+import { ResultPageComponent } from './result-page.component';
+import { ResultRappelComponent } from './result-rappel.component';
 
 
 export const ANALYSE_COMPONENTS: any[] = [
@@ -34,7 +35,8 @@ export const ANALYSE_COMPONENTS: any[] = [
   AnalyseSpeciesComponent,
   SpeciesComponent,
   AnalyseMethodComponent,
-  ResultPageComponent
+  ResultPageComponent,
+  ResultRappelComponent
   ];
 
 export * from './analyse-page.component';
@@ -54,3 +56,4 @@ export * from './transect.component';
 export * from './analyse-species.component';
 export * from './species.component';
 export * from './analyse-method.component';
+export * from './result-rappel.component';

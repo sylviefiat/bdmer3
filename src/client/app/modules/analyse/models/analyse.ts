@@ -1,11 +1,19 @@
+import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
+import { Country } from '../../countries/models/country';
 
 export interface Method {
     method: string;
 }
 
-export interface SurveySpecies {
-    codeSurvey: string;
-    speciesCodes: string[];
+export interface Data {
+    usedCountry: Country;
+    usedPlatforms: Platform[];
+    usedYears: string[];
+    usedSurveys: Survey[];
+    usedZones: Zone[];
+    usedTransects: Transect[];
+    usedSpecies: Species[];
+    usedMethod: Method;
 }
 
 export interface Results {
@@ -29,6 +37,7 @@ export interface ResultSpecies {
 export interface ResultTransect {
     codeTransect: string;
     numberIndividual: number;        // nombre d'invidus
+    biomasses: number[];             // biomasse par individu
     biomassTotal: number;            // somme des biomasses
     biomassPerSquareMeter: number;   // biomasse par m²
     density: number;                 // density = nb individus par m²

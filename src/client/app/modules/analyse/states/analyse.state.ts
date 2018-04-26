@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
-import { Method, Results, SurveySpecies } from '../models/analyse';
+import { Method, Results, Data } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
@@ -78,6 +78,21 @@ export function getAnalysing(state$: Observable<IAnalyseState>) {
 
 export function getAnalysed(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.analysed);
+}
+
+export function getData(state$: Observable<IAnalyseState>) {
+    return state$.select(state => {
+        return {
+            usedCountry: state.usedCountry, 
+            usedPlatforms: state.usedPlatforms, 
+            usedYears: state.usedYears,
+            usedSurveys: state.usedSurveys,
+            usedZones: state.usedZones,
+            usedTransects: state.usedTransects,
+            usedSpecies: state.usedSpecies,
+            usedMethod: state.usedMethod
+        }
+    });
 }
 
 export function getResult(state$: Observable<IAnalyseState>) {

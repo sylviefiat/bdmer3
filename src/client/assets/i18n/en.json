@@ -53,6 +53,7 @@
   "ACTIONS":"Actions",
   "MENU_SPECIES":"Species management",
   "SPECIES": "Species",
+  "SP": "Species",
   "SPECIES_SELECT": "Select species",
   "SPECIES_LIST": "Monitored species in BDMER³",
   "SPECIES_COUNTRIES": "Referenced country Codes : ",
@@ -314,5 +315,7 @@
   "NO_SP_SELECTED":"No species selected",
   "SELECT_METHOD":"Select analyse type",
   "LONGLARG":"Height and width",
-  "LONGUEUR":"Height only"
+  "LONGUEUR":"Height only",
+  "RESULT_TITLE":"Analyse results",
+  "RESULT_RAPPEL":"Reminder of the selection criteria"
 }

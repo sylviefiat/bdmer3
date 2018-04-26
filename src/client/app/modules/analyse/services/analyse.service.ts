@@ -19,20 +19,20 @@ export class AnalyseService {
     }
 
     analyse(analyseState: IAnalyseState): Results {
-        let result: Results = {name:"", resultPerSurvey:[]};
-        result.name="ANALYSE_BDMER_";
+        let result: Results = { name: "", resultPerSurvey: [] };
+        result.name = "ANALYSE_BDMER_";
         // resultats par relevé
-        for(let survey of analyseState.usedSurveys){
+        for (let survey of analyseState.usedSurveys) {
             let surveyTransects = analyseState.usedTransects.filter(t => t.codePlatform === survey.codePlatform);
-            let resultSurvey: ResultSurvey = {name:result.name+"_"+survey.code, resultPerSpecies:[]};
-            for(let sp of analyseState.usedSpecies){
-                let resultSp: ResultSpecies = {name:resultSurvey.name+"_"+sp.code, resultPerTransect:[], indicators: [], interpretation:[], stock:[]};
-                for(let transect of surveyTransects){                    
-                    resultSp.resultPerTransect.push(this.getResultPerTransect(survey,sp,transect));
+            let resultSurvey: ResultSurvey = { name: result.name + "_" + survey.code, resultPerSpecies: [] };
+            for (let sp of analyseState.usedSpecies) {
+                let resultSp: ResultSpecies = { name: resultSurvey.name + "_" + sp.code, resultPerTransect: [], indicators: [], interpretation: [], stock: [] };
+                for (let transect of surveyTransects) {
+                    resultSp.resultPerTransect.push(this.getResultPerTransect(survey, sp, transect, analyseState.usedMethod));
                 }
                 resultSurvey.resultPerSpecies.push(resultSp);
             }
-            result.resultPerSurvey.push(resultSurvey);            
+            result.resultPerSurvey.push(resultSurvey);
         }
 
         let total_mesures: Mesure[] = this.getTotalMesures(analyseState.usedSurveys);
@@ -46,11 +46,17 @@ export class AnalyseService {
         return result;
     }
 
-    getResultPerTransect(survey: Survey, species: Species, transect: Transect): ResultTransect{
-        let resultTransect : ResultTransect = {codeTransect: transect.code, numberIndividual:0, biomassTotal:0, biomassPerSquareMeter:0, density:0};
+    getResultPerTransect(survey: Survey, species: Species, transect: Transect, method: Method): ResultTransect {
+        let resultTransect: ResultTransect = { codeTransect: transect.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerSquareMeter: 0, density: 0 };
         let mesures = [];
-        for(let c of survey.counts){
-            mesures = [...mesures, ...survey.counts.mesures.filter(m => m.codeSpecies === species.code)]
+        for (let c of survey.counts) {
+            mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
+        }
+        for (let i in mesures) {
+            // calcul biomass depending on method
+            let x = (method.method === "LONGLARG") ? ((angularMath.getPi() * Number(mesures[i].long) * Number(mesures[i].larg)) / 4) : (Number(mesures[i].long));
+            resultTransect.biomasses[i] = Number(species.LLW.coefA) * angularMath.powerOfNumber(x, Number(species.LLW.coefB));
+            resultTransect.biomassTotal += resultTransect.biomasses[i];
         }
         resultTransect.numberIndividual = mesures.length;
         
@@ -77,8 +83,8 @@ export class AnalyseService {
     getTotalMesures(surveys: Survey[]): Mesure[] {
         let total_mesures: Mesure[] = [];
         for (let s of surveys) {
-            for(let c of s.counts){
-                total_mesures=[...total_mesures,...c.mesures];
+            for (let c of s.counts) {
+                total_mesures = [...total_mesures, ...c.mesures];
             }
         }
         return total_mesures;

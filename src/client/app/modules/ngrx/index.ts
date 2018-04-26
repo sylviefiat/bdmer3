@@ -46,7 +46,7 @@ import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, get
 import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
 import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneTransects, 
     getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
-import { IAnalyseState, analyseReducer, getUsedCountry, getUsedSurveys, getUsedZones, getUsedTransects, getUsedSpecies, 
+import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedTransects, getUsedSpecies, 
     getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
 
 /**
@@ -204,6 +204,7 @@ export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
 export const getAnalyseMethod: any = compose(getUsedMethod, getAnalyseState);
 export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
 export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
+export const getAnalyseData: any = compose(getData, getAnalyseState);
 export const getAnalyseResult: any = compose(getResult, getAnalyseState);
 export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
 export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getAppState);
