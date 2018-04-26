@@ -28,6 +28,7 @@ export class ZoneFormComponent implements OnInit {
 
     url: string;
     code: string;
+    coords: string;
 
     zoneForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -69,12 +70,14 @@ export class ZoneFormComponent implements OnInit {
 
         this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
         this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+        this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
 
         this.mapStaticService.staticMapToB64(this.url).then((data) => {
           this.zoneForm.controls.staticmap.setValue(data);
           this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
           if (this.zoneForm.valid) {
             if(this.zoneForm.controls.properties.get("surface").value === 0){
+                this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
                 this.errorMessage = true
             }else{
                 this.zoneForm.controls.properties.get("name").enable();
