@@ -50,9 +50,17 @@ export class ZoneFormComponent implements OnInit {
 
     ngOnInit() {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        this.zoneForm.controls.properties.get("name").setValue(this.zone ? this.zone.properties.name : "")
-        this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone ? this.zone.geometry["coordinates"] : "");
-        (this.zone !== undefined)?this.zoneForm.controls.properties.get("name").disable():this.zoneForm.controls.properties.get("name").enable();        
+        if(this.zone){
+            this.zoneForm.controls.properties.get("name").setValue(this.zone.properties.name) 
+            let string = '';
+            let coordAr = this.zone.geometry["coordinates"]["0"];
+            for(let i = 0; i < coordAr.length; i++){
+                string += (coordAr[i]["0"].toString() + "," + coordAr[i]["1"].toString() + "," + coordAr[i]["2"].toString() + " ");
+            }
+            this.zoneForm.controls.geometry.get("coordinates").setValue(string);
+            this.zoneForm.controls.properties.get("name").disable();
+
+        }
     }
 
     submit() {
@@ -64,10 +72,11 @@ export class ZoneFormComponent implements OnInit {
           this.zoneForm.controls.staticmap.setValue(data);
           this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
           if (this.zoneForm.valid) {
+              this.zoneForm.controls.properties.get("name").enable();
               this.submitted.emit(this.zoneForm.value);
           }
         });
-        
+       
     }
 
     return() {
