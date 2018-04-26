@@ -22,7 +22,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 export class ZoneFormComponent implements OnInit {
     @Input() platform: Platform;
     @Input() zone: Zone | null;
-    @Input() errorMessage: string;
+    @Input() errorMessage: boolean;
 
     @Output() submitted = new EventEmitter<Zone>();
 
@@ -71,7 +71,7 @@ export class ZoneFormComponent implements OnInit {
                    
         if (this.zoneForm.valid) {
             if(this.zoneForm.controls.properties.get("surface").value === 0){
-                this.errorMessage = "qsfdhjksdhfjksd"
+                this.errorMessage = true;
             }else{
                 this.zoneForm.controls.properties.get("name").enable();
                 this.submitted.emit(this.zoneForm.value);
