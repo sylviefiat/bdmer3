@@ -122,7 +122,6 @@ export class PlatformService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
-        console.log(zone);
         return of(zone);
       })
   }
