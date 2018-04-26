@@ -46,13 +46,15 @@ export class HomeComponent implements OnInit {
 
       this.userCountry$.subscribe(
         (res) => {
-          if(res.code !== "AA"){
-            this.platforms$ = this.platforms$
-              .map(platforms => platforms.filter(platform => platform.codeCountry === res.code));
-            this.lat = res.coordinates.lat;
-            this.lng = res.coordinates.lng;
-          }else{
-            this.zoom = 3
+          if(res){
+            if(res.code !== "AA"){
+              this.platforms$ = this.platforms$
+                .map(platforms => platforms.filter(platform => platform.codeCountry === res.code));
+              this.lat = res.coordinates.lat;
+              this.lng = res.coordinates.lng;
+            }else{
+              this.zoom = 3
+            }
           }
         } 
       );

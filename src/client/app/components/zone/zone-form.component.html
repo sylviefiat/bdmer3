@@ -21,7 +21,7 @@
 
       <div class="row" formGroupName="geometry">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" formControlName="coordinates" [errorStateMatcher]="matcher" required>
+          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" (change)="coordChange($event)" formControlName="coordinates" [errorStateMatcher]="matcher" required>
           <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>
         </mat-input-container>
       </div>

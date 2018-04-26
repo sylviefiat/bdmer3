@@ -12,7 +12,7 @@
   background-position: top,left,bottom,center;
   background-repeat: repeat, no-repeat;
   background-color: rgba(0,0,0,0.2);
-  width: 100vw;
+  width: 98vw;
   height:100vh;
   position: absolute;  
   top:0;
@@ -63,14 +63,37 @@ a.link:hover {
 }
 
 agm-map {
-  height: 89vh;
-  width: 99vw;
-}
-
-div{
+  height: 90vh;
   width: 100%;
 }
 
-.test{
-  color: black;
+.home{
+  width: 100%;
+}
+
+.wrapper{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wrapp_left{
+  flex: 40%;
+  max-width: 40%;
+}
+
+.wrapp_right{
+  flex: 60%;
+  max-width: 60%;
+}
+
+@media screen and (max-width: 800px) {
+  .wrapp_left{
+    flex: 100%;
+    max-width: 100%;
+  }
+
+  .wrapp_right{
+    flex: 100%;
+    max-width: 100%;
+  }
 }

@@ -1,39 +1,44 @@
 <ng-template #notloggedin>
 	<div class="background"></div>
 	<h2>
-	  {{ 'APP_TITLE' | translate }}
+	{{ 'APP_TITLE' | translate }}
 	</h2>
 	<p>
-	  {{'APP_SUBTITLE' | translate}}
+		{{'APP_SUBTITLE' | translate}}
 	</p>
 </ng-template>
 
-<div *ngIf="loggedIn;else notloggedin">
-	<div *ngIf="onlineOffline;else nomap">
-		<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-			<div *ngFor="let platform of (platforms$ | async)"> 
-				<div *ngFor="let zone of (platform.zones)">
-					<agm-data-layer [geoJson]="zone">
-		     		</agm-data-layer>
-				</div>
-			</div>
-		</agm-map>
-
-		<div class="test">
-			<div *ngFor="let platform of (platforms | async)">
-				{{ platform.code }}
-			</div>
+<div class="home" *ngIf="loggedIn;else notloggedin">
+	<div class="background">
+	</div>
+	<div class="wrapper" *ngIf="onlineOffline;else nomap">
+		<div class="wrapp_left">
+			<h2>
+			{{ 'APP_TITLE' | translate }}
+			</h2>
+			<p>
+				{{'APP_SUBTITLE' | translate}}
+			</p>
 		</div>
-
+		<div class="wrapp_right">
+			<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+				<div *ngFor="let platform of (platforms$ | async)">
+					<div *ngFor="let zone of (platform.zones)">
+						<agm-data-layer [geoJson]="zone">
+						</agm-data-layer>
+					</div>
+				</div>
+			</agm-map>
+		</div>
 	</div>
 
 	<ng-template #nomap>
 		<div class="background"></div>
 		<h2>
-		  {{ 'APP_TITLE' | translate }}
+		{{ 'APP_TITLE' | translate }}
 		</h2>
 		<p>
-		  {{'APP_SUBTITLE' | translate}}
+			{{'APP_SUBTITLE' | translate}}
 		</p>
 	</ng-template>
 </div>

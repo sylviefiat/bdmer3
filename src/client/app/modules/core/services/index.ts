@@ -27,7 +27,7 @@ export const CORE_PROVIDERS: any[] = [
   MailService,
   MomentService,
   Csv2JsonService,
-  MapStaticService  
+  MapStaticService,
   NameRefactorService
 ];
 

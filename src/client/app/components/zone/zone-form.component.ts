@@ -28,6 +28,8 @@ export class ZoneFormComponent implements OnInit {
 
     url: string;
     code: string;
+    coords: string;
+    coordStringRefactor: string = '';
 
     zoneForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -53,14 +55,12 @@ export class ZoneFormComponent implements OnInit {
         this.zoneForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         if(this.zone){
             this.zoneForm.controls.properties.get("name").setValue(this.zone.properties.name) 
-            let string = '';
             let coordAr = this.zone.geometry["coordinates"]["0"];
             for(let i = 0; i < coordAr.length; i++){
-                string += (coordAr[i]["0"].toString() + "," + coordAr[i]["1"].toString() + "," + coordAr[i]["2"].toString() + " ");
+                this.coordStringRefactor += (coordAr[i]["0"].toString() + "," + coordAr[i]["1"].toString() + "," + coordAr[i]["2"].toString() + " ");
             }
-            this.zoneForm.controls.geometry.get("coordinates").setValue(string);
+            this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordStringRefactor);
             this.zoneForm.controls.properties.get("name").disable();
-
         }
     }
 
@@ -69,18 +69,28 @@ export class ZoneFormComponent implements OnInit {
 
         this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
         this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+        this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
 
         this.mapStaticService.staticMapToB64(this.url).then((data) => {
           this.zoneForm.controls.staticmap.setValue(data);
-          this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
+
+
+          if(this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value){
+            this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone.geometry["coordinates"])
+            this.zoneForm.controls.properties.get("surface").setValue(this.zone.properties["surface"])
+          }else{
+            this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
+          }
+
           if (this.zoneForm.valid) {
             if(this.zoneForm.controls.properties.get("surface").value === 0){
-                this.errorMessage = true;
+                this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
+                this.errorMessage = true
             }else{
                 this.zoneForm.controls.properties.get("name").enable();
                 this.submitted.emit(this.zoneForm.value);
             }
-        }
+          }
         });
     }
 
