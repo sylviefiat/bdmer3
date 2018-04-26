@@ -27,6 +27,7 @@ export class ZoneFormComponent implements OnInit {
     @Output() submitted = new EventEmitter<Zone>();
 
     code: string;
+    coords: string;
 
     zoneForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -66,12 +67,13 @@ export class ZoneFormComponent implements OnInit {
 
         this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
         this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
-
+        this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
         this.refactorCoordinates();
         this.setSurface();
         if (this.zoneForm.valid) {
             if(this.zoneForm.controls.properties.get("surface").value === 0){
                 this.errorMessage = true;
+                this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
             }else{
                 this.zoneForm.controls.properties.get("name").enable();
                 this.submitted.emit(this.zoneForm.value);
