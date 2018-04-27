@@ -165,7 +165,6 @@
     "supports-color": "^3.1.2",
     "systemjs-builder": "0.15.34",
     "tildify": "^1.2.0",
-    "traceur": "^0.0.111",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "typedoc": "^0.6.0",
@@ -175,6 +174,7 @@
   },
   "dependencies": {
     "@agm/core": "^1.0.0-beta.2",
+    "@agm/js-marker-clusterer": "^1.0.0-beta.2",
     "@angular/animations": "^4.4.6",
     "@angular/cdk": "^2.0.0-beta.12",
     "@angular/common": "~4.4.6",
@@ -204,6 +204,7 @@
     "file-system": "^2.2.2",
     "intl": "^1.2.5",
     "jquery-confirm": "^3.3.2",
+    "js-marker-clusterer": "^1.0.0",
     "lodash": "^4.17.5",
     "minimatch": "^3.0.3",
     "moment": "^2.22.0",
@@ -215,6 +216,7 @@
     "rxjs": "~5.4.2",
     "svg-country-flags": "^1.2.1",
     "systemjs": "0.19.41",
+    "traceur": "0.0.111",
     "wgs84": "0.0.0",
     "zone.js": "^0.8.25"
   }

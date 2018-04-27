@@ -13,6 +13,7 @@ export interface Platform {
 export interface Zone {
     type: string;
     geometry: object;
+    staticmap: string;
     properties: Property;
     codePlatform: string;
     transects: Transect[];

@@ -61,3 +61,39 @@ a.link {
 a.link:hover {
   color: #f00;
 }
+
+agm-map {
+  height: 90vh;
+  width: 100%;
+}
+
+.home{
+  width: 100%;
+}
+
+.wrapper{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wrapp_left{
+  flex: 50%;
+  max-width: 50%;
+}
+
+.wrapp_right{
+  flex: 50%;
+  max-width: 50%;
+}
+
+@media screen and (max-width: 800px) {
+  .wrapp_left{
+    flex: 100%;
+    max-width: 100%;
+  }
+
+  .wrapp_right{
+    flex: 100%;
+    max-width: 100%;
+  }
+}

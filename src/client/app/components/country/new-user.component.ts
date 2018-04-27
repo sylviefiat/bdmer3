@@ -51,7 +51,7 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
     role: new FormControl(''),
   });
 
-  constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer ) {}
+  constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
 
   ngOnInit(){
     console.log(this.user);

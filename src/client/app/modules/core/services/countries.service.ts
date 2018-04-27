@@ -16,7 +16,7 @@ export class CountriesService {
   public currentCountry: Observable<Country>;
   public currentUser: Observable<User>;
   public adminUser = { _id: 'admin', name: 'admin', surname: 'ad', username: 'admin', email: null, countryCode: 'AA', password: null, role: 'EDITOR' };
-  public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', users: null, flag: null };
+  public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', users: null, coordinates: {lat: null, lng:null }, flag: null };
 
   private db: any;
 
@@ -71,7 +71,7 @@ export class CountriesService {
 
   addCountry(countryJson: any): Observable<Country> {
     let country = countryJson.pays;
-    let fullCountry: Country = { _id: country.code, code: country.code, name: country.name, flag: countryJson.flag, users: null }
+    let fullCountry: Country = { _id: country.code, code: country.code, name: country.name, flag: countryJson.flag, coordinates: {lat: countryJson.coordinates.lat, lng: countryJson.coordinates.lng},users: null }
     this.currentCountry = of(fullCountry);
 
     return fromPromise(this.db.put(fullCountry))

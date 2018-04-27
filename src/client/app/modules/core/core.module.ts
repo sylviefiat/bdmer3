@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { DBModule } from '@ngrx/db';
 import { PapaParseModule } from 'ngx-papaparse';
-
+import { MatDialogModule } from '@angular/material';
 // module
 import { SharedModule } from '../shared/index';
 import { CountriesModule } from '../countries/index';
@@ -16,6 +16,8 @@ import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
 import { schema } from '../db/index';
+
+import { zoneMapModal } from '../../components/zone/zone-map-modal.component'
 
 interface ICoreModuleOptions {
   window?: any;
@@ -33,10 +35,12 @@ interface ICoreModuleOptions {
     DatasModule,
     AuthModule,
     PapaParseModule,
-    DBModule.provideDB(schema)
+    DBModule.provideDB(schema),
+    MatDialogModule
   ],
   declarations: [
-    ...CORE_DIRECTIVES
+    ...CORE_DIRECTIVES,
+    zoneMapModal
   ],
   exports: [
     ...CORE_DIRECTIVES
@@ -44,7 +48,8 @@ interface ICoreModuleOptions {
   providers: [
     ...CORE_PROVIDERS,
     SharedModule
-  ]
+  ],
+  entryComponents: [zoneMapModal]
 })
 export class CoreModule {
   // configuredProviders: *required to configure WindowService and ConsoleService per platform

@@ -282,6 +282,8 @@
   "UPLOAD_PICTURE": "Importer une image",
   "IMPORT_PICTURE": "Choisir",
   "ZONE_NAME": "Nom de la zone",
+  "MODAL_CLOSE": "Fermer",
   "ZONE_COORD_EX": "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
-  "ZONE_COORD": "Coordonnées de la zone"
+  "ZONE_COORD": "Coordonnées de la zone",
+  "POLYGON_ERROR": "Le polygone n'est pas valide"
 }

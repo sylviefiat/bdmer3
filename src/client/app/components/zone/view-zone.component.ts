@@ -7,6 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialogRef, MatDialog, MatDialogConfig} from "@angular/material";
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -14,6 +15,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
 import { Platform, Zone, Property, Transect, ZonePreference, Survey } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
+import { zoneMapModal } from './zone-map-modal.component';
 
 @Component({
     moduleId: module.id,
@@ -38,7 +40,9 @@ export class ViewZoneComponent implements OnInit {
     view$: Observable<string>;
     panelDisplay = new FormControl('transects');
 
-    constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private windowService: WindowService) { 
+    fileNameDialogRef: MatDialogRef<zoneMapModal>;
+
+    constructor(private dialog: MatDialog, private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private windowService: WindowService) { 
         this.actionsSubscription = route.params
           .map(params => this.display(params.view))
           .subscribe();
@@ -121,5 +125,11 @@ export class ViewZoneComponent implements OnInit {
 
     toPlatform(){
         this.routerext.navigate(['platform/'+this.platform.code]);
+    }
+
+    openDialog() {
+        this.fileNameDialogRef = this.dialog.open(zoneMapModal, {
+            data: this.zone.staticmap
+        });
     }
 }

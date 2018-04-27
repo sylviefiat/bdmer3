@@ -10,6 +10,11 @@
       margin:10px 20%;
     }
 
+    img{
+      width: 100%;
+      height: auto;
+    }
+    
     mat-card-title,
     mat-card-content {
       display: flex;
@@ -29,6 +34,10 @@
       flex-grow: 1;
       min-width: 300px;
     }*/
+    .error{
+      font-style: bold;
+      color: red;
+    }
     .column {
       display: flex;
       flex-direction: column;    

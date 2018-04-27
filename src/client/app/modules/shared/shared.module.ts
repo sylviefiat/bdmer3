@@ -2,6 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -43,8 +44,7 @@ import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptio
 //import {CdkTableModule} from '@angular/cdk/table';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
-import { AgmCoreModule } from '@agm/core';
-
+import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -96,7 +96,8 @@ const SHARED_MODULES: any[] = [
   MatNativeDateModule,
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
-  MomentModule
+  MomentModule,
+  HttpClientModule
 ];
 
 /**
@@ -125,6 +126,9 @@ const SHARED_MODULES: any[] = [
     SharedMaterialModule,
     ...SHARED_COMPONENTS,
     AgmCoreModule
+  ],
+  providers: [
+    GoogleMapsAPIWrapper
   ]
 })
 export class SharedModule {}

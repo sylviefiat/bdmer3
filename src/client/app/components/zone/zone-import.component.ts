@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { MapStaticService} from '../../modules/core/services/map-static.service';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
 
@@ -37,8 +38,8 @@ export class ZoneImportComponent implements OnInit{
     private kmlFile: string;
     private docs_repo: string;
 
+    constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
 
-    constructor(private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -63,6 +64,7 @@ export class ZoneImportComponent implements OnInit{
                 delete geojson[i].properties['styleHash'];
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
+
                 geojson[i].properties.code = self.platform.code+"_"+self.nameRefactorService.convertAccent(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
                 
                 console.log(geojson[i].geometry)
@@ -71,7 +73,6 @@ export class ZoneImportComponent implements OnInit{
                 geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
 
                 self.upload.emit(geojson[i]);
-
               }
             }
     }
