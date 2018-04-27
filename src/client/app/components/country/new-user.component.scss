@@ -9,7 +9,9 @@
       flex-grow: 1;
       margin:10px 20%;
     }
-
+    .mat-card-sm-image{
+      width: auto!important;
+    }
     mat-card-title,
     mat-card-content {
       display: flex;

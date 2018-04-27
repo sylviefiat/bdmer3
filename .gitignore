@@ -47,6 +47,7 @@ lib
 test
 tmp
 
+package-lock.json
 src/**/*.js
 src/**/*.js.map
 !src/client/app/modules/test

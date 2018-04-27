@@ -42,7 +42,6 @@ export class PlatformFormComponent implements OnInit {
         if (this.platform) {
             this.form.controls.code.setValue(this.platform.code);            
             this.form.controls.description.setValue(this.platform.description);
-            console.log(this.form.controls.codeCountry);
         }
     }
 
@@ -52,6 +51,7 @@ export class PlatformFormComponent implements OnInit {
 
     submit() {
         if (this.form.valid) {
+            this.form.value.codeCountry=this.form.controls.codeCountry.value;
             this.submitted.emit(this.form.value);
         }
     }
