@@ -4,12 +4,19 @@ export class MapStaticService {
 
   refactorCoordinates(coordinates){
         var string = coordinates.split(' ');
-
+        
         while(string[string.length - 1] == ""){
           string.splice(string.length - 1, 1)
         } 
 
         var a = string.length; 
+
+        for(var i = 0; i < a; i++){
+          if(parseFloat(string[i].split(',')["0"]) < -90 || parseFloat(string[i].split(',')["0"]) > 90 || parseFloat(string[i].split(',')["1"]) < -180 || parseFloat(string[i].split(',')["1"]) > 180){
+            return "error"
+          }
+        }
+
         var ar = [];
         for (var i = 0; i < a; i++) {
             var tempo = string[i].split(',')

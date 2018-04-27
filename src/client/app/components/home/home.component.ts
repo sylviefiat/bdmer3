@@ -6,11 +6,12 @@ import { GoogleMapsAPIWrapper } from '@agm/core';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getisLoggedIn, getAuthState, getAuthCountry, getPlatformInApp, getSelectedUser, getPlatformListCurrentCountry } from '../../modules/ngrx/index';
+import { IAppState, getisLoggedIn, getAuthState, getAuthCountry, getPlatformInApp, getSelectedUser, getSelectedCountryPlatforms, getAllCountriesInApp} from '../../modules/ngrx/index';
 import { Platform } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country'
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
+import { CountryListService} from '../../modules/countries/services/country-list.service';
 
 @Component({
   moduleId: module.id,
@@ -30,11 +31,13 @@ export class HomeComponent implements OnInit {
   userCountry$: Observable<Country>
   platforms: any;
   zoom: number = 9;
+  countries$: Observable<Country[]>;
+  markers: any[] = [];
 
   public onlineOffline: boolean = navigator.onLine;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, 
-  	googleMapsAPIWrapper: GoogleMapsAPIWrapper) {}
+  	googleMapsAPIWrapper: GoogleMapsAPIWrapper, private countryListService: CountryListService) {}
 
   ngOnInit() {
   	this.loggedIn = this.store["source"]["value"]["auth"]["loggedIn"];
@@ -44,6 +47,9 @@ export class HomeComponent implements OnInit {
 
       this.userCountry$ = this.store.let(getAuthCountry);
 
+      this.countries$ = this.store.let(getAllCountriesInApp);
+      this.store.dispatch(new CountriesAction.LoadAction()); 
+
       this.userCountry$.subscribe(
         (res) => {
           if(res){
@@ -52,12 +58,33 @@ export class HomeComponent implements OnInit {
                 .map(platforms => platforms.filter(platform => platform.codeCountry === res.code));
               this.lat = res.coordinates.lat;
               this.lng = res.coordinates.lng;
+              this.initMarkers();
             }else{
+              this.initMarkers();
               this.zoom = 3
             }
           }
         } 
       );
   	}
+  }
+
+  zoomChange(event){
+    this.zoom = event;
+  }
+
+  initMarkers(){
+    this.platforms$.subscribe(
+      (platforms) => {
+        this.countries$.subscribe((countries) =>{
+          for(let i = 0; i < countries.length; i++){
+            for(let y = 0; y < platforms.length; y++){
+              if(countries[i].code === platforms[y].codeCountry){
+                this.markers.push(countries[i].coordinates)
+              }
+            }
+          }
+        })
+      });
   }
 }

@@ -29,7 +29,9 @@ export class ZoneFormComponent implements OnInit {
     url: string;
     code: string;
     coords: string;
+    coordsRefactor: any;
     coordStringRefactor: string = '';
+    errorCoord: boolean;
 
     zoneForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -65,33 +67,36 @@ export class ZoneFormComponent implements OnInit {
     }
 
     submit() {
-        this.errorMessage = false;
+        if(!this.errorCoord){
+            this.errorMessage = false;
 
-        this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
-        this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
-        this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
+            this.zoneForm.controls.properties.get("surface").setValue(parseInt(this.zoneForm.controls.properties.get("surface").value));
+            this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+            this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
 
-        this.mapStaticService.staticMapToB64(this.url).then((data) => {
-          this.zoneForm.controls.staticmap.setValue(data);
+            this.mapStaticService.staticMapToB64(this.url).then((data) => {
+              this.zoneForm.controls.staticmap.setValue(data);
 
 
-          if(this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value){
-            this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone.geometry["coordinates"])
-            this.zoneForm.controls.properties.get("surface").setValue(this.zone.properties["surface"])
-          }else{
-            this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
-          }
+              if(this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value){
+                this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone.geometry["coordinates"])
+                this.zoneForm.controls.properties.get("surface").setValue(this.zone.properties["surface"])
+              }else{
+                    this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordsRefactor);
+                this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
+              }
 
-          if (this.zoneForm.valid) {
-            if(this.zoneForm.controls.properties.get("surface").value === 0){
-                this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
-                this.errorMessage = true
-            }else{
-                this.zoneForm.controls.properties.get("name").enable();
-                this.submitted.emit(this.zoneForm.value);
-            }
-          }
-        });
+              if (this.zoneForm.valid) {
+                if(this.zoneForm.controls.properties.get("surface").value === 0){
+                    this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
+                    this.errorMessage = true
+                }else{
+                    this.zoneForm.controls.properties.get("name").enable();
+                    this.submitted.emit(this.zoneForm.value);
+                }
+              }
+            });
+        }
     }
 
     return() {
@@ -105,8 +110,13 @@ export class ZoneFormComponent implements OnInit {
     }
 
     coordChange(coords){
+        this.errorCoord = false;
         var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
-        this.zoneForm.controls.geometry.get("coordinates").setValue(ar);
-        this.url = this.mapStaticService.googleMapUrl(ar);
+        if(ar !== "error"){
+            this.url = this.mapStaticService.googleMapUrl(ar);
+            this.coordsRefactor = ar;
+        }else{
+            this.errorCoord = true;
+        }
     }
 }

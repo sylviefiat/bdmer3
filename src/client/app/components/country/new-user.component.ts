@@ -1,4 +1,4 @@
-import { Component, AfterViewChecked, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, AfterViewChecked, ChangeDetectorRef, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -51,7 +51,7 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
     role: new FormControl(''),
   });
 
-  constructor(private sanitizer: DomSanitizer ) {}
+  constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
 
   ngOnInit(){
     console.log(this.user);
@@ -63,16 +63,19 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
       this.form.controls.role.setValue(this.user.role);
       this.form.controls.password.setValue(this.user.password);
       this.form.controls.repassword.setValue(this.user.password);
+      this.cdr.detectChanges();
     }
   }
 
   ngAfterViewChecked() {    
     this.form.controls['countryCode'].setValue(this.country.code);
+    this.cdr.detectChanges();
   }
 
   checkPasswords(c: FormControl) {
     let repass = c.value;
     let password = this.form.controls.password.value;
+    this.cdr.detectChanges();
     return repass === password ? null : { notSame: true }
   }
 
