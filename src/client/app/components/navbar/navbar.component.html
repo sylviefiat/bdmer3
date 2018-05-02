@@ -1,11 +1,11 @@
 <nav>
   <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-  	<fa [name]="'home'" [border]=true></fa>
-  	{{'HOME' | translate}}
+    <fa [name]="'home'" [border]=true></fa>
+    {{'HOME' | translate}}
   </a>
   <a [routerLink]="['/about']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-	<fa [name]="'info-circle'" [border]=true></fa>
-  	{{'ABOUT' | translate}}
+    <fa [name]="'info-circle'" [border]=true></fa>
+    {{'ABOUT' | translate}}
   </a>
 
   <a *ngIf="(isLogged$ | async)" [routerLink]="['/analyse']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
@@ -13,7 +13,10 @@
     {{'MENU_ANALYSE' | translate}}
   </a>
 
-  <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">{{'MAP' | translate}}</a>
+  <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <fa [name]="'map-marker'" [border]=true></fa>
+    {{'MAP' | translate}}
+  </a>
 
   <a *ngIf="(isLogged$ | async)" [routerLink]="['/platform']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
     <fa [name]="'map-marker'" [border]=true></fa>
@@ -31,15 +34,90 @@
   </a>
 
   <a *ngIf="!(isLogged$ | async)" [routerLink]="['/login']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-	<fa [name]="'sign-in'" [border]=true></fa>
-  	{{'LOGIN' | translate}}
+    <fa [name]="'sign-in'" [border]=true></fa>
+    {{'LOGIN' | translate}}
   </a>
 
   <a *ngIf="(isLogged$ | async)" [routerLink]="['/logout']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-  <fa [name]="'sign-out'" [border]=true></fa>
+    <fa [name]="'sign-out'" [border]=true></fa>
     {{'LOGOUT' | translate}}
   </a>
 
   <a class="hello" *ngIf="currentUser$ | async; let user">Bonjour {{user.surname}} {{user.name}}</a>
 </nav>
 
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [(opened)]="open">
+    <mat-list>
+      <mat-list-item>
+        <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" (click)="open = !open"  [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'home'" [border]=true></fa>
+          {{'HOME' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a [routerLink]="['/about']" [routerLinkActive]="['router-link-active']" (click)="open = !open"  [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'info-circle'" [border]=true></fa>
+          {{'ABOUT' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="(isLogged$ | async)">
+        <a [routerLink]="['/analyse']" (click)="open = !open"  [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'cogs'" [border]=true></fa>
+          {{'MENU_ANALYSE' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" (click)="open = !open"  [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'map-marker'" [border]=true></fa>
+          {{'MAP' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="(isLogged$ | async)">
+        <a [routerLink]="['/platform']" (click)="open = !open"  [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'map-marker'" [border]=true></fa>
+          {{'MENU_PLATFORM' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="(isLogged$ | async) && ((currentCountry$ | async)?.code==='AA')">
+        <a (click)="open = !open"  [routerLink]="['/species']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'paw'" [border]=true></fa>
+          {{'MENU_SPECIES' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item  *ngIf="(isLogged$ | async) && ((currentCountry$ | async)?.code==='AA')">
+        <a (click)="open = !open"  [routerLink]="['/countries']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'flag'" [border]=true></fa>
+          {{'MENU_COUNTRIES' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="!(isLogged$ | async)">
+        <a [routerLink]="['/login']" (click)="open = !open"  [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'sign-in'" [border]=true></fa>
+          {{'LOGIN' | translate}}
+        </a>
+      </mat-list-item>
+      <mat-list-item  *ngIf="(isLogged$ | async)">
+        <a [routerLink]="['/logout']" (click)="open = !open" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+          <fa [name]="'sign-out'" [border]=true></fa>
+          {{'LOGOUT' | translate}}
+        </a>
+      </mat-list-item>
+
+      <mat-list-item  *ngIf="currentUser$ | async; let user">
+          <a class="hello" >Bonjour {{user.surname}} {{user.name}}</a>
+      </mat-list-item>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content >
+    <div (click)="open = !open" [ngClass]="{'open': open === true }" >
+      <fa *ngIf="open === false; else close" [name]="'bars'"></fa>
+      <ng-template #close>
+        <fa [name]="'times'"></fa>
+      </ng-template>
+
+      Menu
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

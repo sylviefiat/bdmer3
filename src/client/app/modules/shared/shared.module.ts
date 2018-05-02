@@ -7,7 +7,8 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
-  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule } from '@angular/material';
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule } from '@angular/material';
+  
 /*import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -73,7 +74,7 @@ import { SHARED_COMPONENTS } from './components/index';
     MatRadioModule,
     //MatRippleModule,
     MatSelectModule,
-    //MatSidenavModule,
+    MatSidenavModule,
     //MatSliderModule,
     //MatSlideToggleModule,
     //MatSnackBarModule,
