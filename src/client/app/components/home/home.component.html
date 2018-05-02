@@ -1,24 +1,28 @@
 <ng-template #notloggedin>
 	<div class="background"></div>
-	<h2>
-	{{ 'APP_TITLE' | translate }}
-	</h2>
-	<p>
-		{{'APP_SUBTITLE' | translate}}
-	</p>
+	<div class="title_without_map">
+				<h2>
+				{{ 'APP_TITLE' | translate }}
+				</h2>
+				<p>
+					{{'APP_SUBTITLE' | translate}}
+				</p>
+			</div>
 </ng-template>
 
 <div class="home" *ngIf="loggedIn;else notloggedin">
-	<div class="background">
-	</div>
 	<div class="wrapper" *ngIf="onlineOffline;else nomap">
 		<div class="wrapp_left">
-			<h2>
-			{{ 'APP_TITLE' | translate }}
-			</h2>
-			<p>
-				{{'APP_SUBTITLE' | translate}}
-			</p>
+			<div class="background_left">
+			</div>
+			<div class="title">
+				<h2>
+				{{ 'APP_TITLE' | translate }}
+				</h2>
+				<p>
+					{{'APP_SUBTITLE' | translate}}
+				</p>
+			</div>
 		</div>
 		<div class="wrapp_right">
 			<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
@@ -44,11 +48,13 @@
 
 	<ng-template #nomap>
 		<div class="background"></div>
-		<h2>
-		{{ 'APP_TITLE' | translate }}
-		</h2>
-		<p>
-			{{'APP_SUBTITLE' | translate}}
-		</p>
+		<div class="title_without_map">
+				<h2>
+				{{ 'APP_TITLE' | translate }}
+				</h2>
+				<p>
+					{{'APP_SUBTITLE' | translate}}
+				</p>
+			</div>
 	</ng-template>
 </div>
