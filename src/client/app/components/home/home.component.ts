@@ -87,4 +87,16 @@ export class HomeComponent implements OnInit {
         })
       });
   }
+
+  zoomMarker(marker){
+    this.lat = marker.lat;
+    this.lng = marker.lng; 
+    this.zoom = 6;
+  }
+
+  zoomLayer(event){
+    this.lat = event.latLng.lat();
+    this.lng = event.latLng.lng();
+    this.zoom = 9;
+  }
 }
