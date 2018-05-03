@@ -173,6 +173,15 @@ export class PlatformEffects {
     .map((platform:Platform) => new PlatformAction.RemovePlatformSuccessAction(platform))
     .catch((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
   ;
+
+  @Effect()
+  removePlatformCountry$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY)
+    .map((action: PlatformAction.RemovePlatformCountryAction) => action.payload)
+    .mergeMap(platform => this.platformService.removePlatform(platform))
+    .map((platform:Platform) => new PlatformAction.RemovePlatformCountrySuccessAction(platform))
+    .catch((error) => of(new PlatformAction.RemovePlatformCountryFailAction(error)))
+  ;
   
   @Effect()
   removeZone$: Observable<Action> = this.actions$
@@ -233,6 +242,11 @@ export class PlatformEffects {
     .do(() => this.router.navigate(['/platform']))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
+
+    @Effect() 
+  removePlatformCountrySuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS)
+    .do(() => console.log("delete"));
 
   @Effect() 
   addZoneSuccess$: Observable<Action> = this.actions$

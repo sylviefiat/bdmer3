@@ -14,6 +14,9 @@ export namespace PlatformAction {
       ADD_PLATFORM_FAIL: string;
       IMPORT_PLATFORM: string;
       IMPORT_PLATFORM_SUCCESS: string;
+      REMOVE_PLATFORM_COUNTRY: string;
+      REMOVE_PLATFORM_COUNTRY_SUCCESS: string;
+      REMOVE_PLATFORM_COUNTRY_FAIL: string;
       REMOVE_PLATFORM: string;
       REMOVE_PLATFORM_SUCCESS: string;
       REMOVE_PLATFORM_FAIL: string;
@@ -71,6 +74,9 @@ export namespace PlatformAction {
       ADD_PLATFORM_FAIL: type(`${PLATFORM} Add Platform Fail`),
       IMPORT_PLATFORM: type(`${PLATFORM} Import Platform`),
       IMPORT_PLATFORM_SUCCESS:type(`${PLATFORM} Import Platform Success`),
+      REMOVE_PLATFORM_COUNTRY: type(`${PLATFORM} Remove Platform Country`),
+      REMOVE_PLATFORM_COUNTRY_SUCCESS: type(`${PLATFORM} Remove Platform Country Success`),
+      REMOVE_PLATFORM_COUNTRY_FAIL: type(`${PLATFORM} Remove Platform Country Fail`),
       REMOVE_PLATFORM: type(`${PLATFORM} Remove Platform`),
       REMOVE_PLATFORM_SUCCESS: type(`${PLATFORM} Remove Platform Success`),
       REMOVE_PLATFORM_FAIL: type(`${PLATFORM} Remove Platform Fail`),
@@ -158,6 +164,25 @@ export namespace PlatformAction {
   /**
    * Remove platform from Platform list Actions
    */
+
+  export class RemovePlatformCountryAction implements Action {
+    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY;
+
+    constructor(public payload: Platform) {}
+  }
+
+  export class RemovePlatformCountrySuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS;
+
+    constructor(public payload: Platform) {}
+  }
+
+  export class RemovePlatformCountryFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_FAIL;
+
+    constructor(public payload: Platform) {}
+  }
+
   export class RemovePlatformAction implements Action {
     readonly type = ActionTypes.REMOVE_PLATFORM;
 

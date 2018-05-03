@@ -134,6 +134,18 @@ export function platformReducer(
             }
         }
 
+        case PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS:
+            {
+                const removedPlatform = action.payload;
+                return {
+                    ...state,
+                    entities: state.entities.filter(platform => removedPlatform._id !== platform._id),
+                    ids: state.ids.filter(id => id !== removedPlatform._id),
+                    currentPlatformId: null,
+                    error: null
+                };
+            }
+
         case PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS:
             {
                 const removedPlatform = action.payload;

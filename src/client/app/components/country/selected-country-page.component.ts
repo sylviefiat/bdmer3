@@ -40,8 +40,9 @@ export class SelectedCountryPageComponent implements OnInit {
     console.log(data.platforms.length)
     for(let i = 0; i < data.platforms.length; i++){
       console.log(data.platforms[i])
-      this.platformService.removeTest(data.platforms[i]);
+      //this.platformService.removeTest(data.platforms[i]);
     }
     this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));  
+      this.store.dispatch(new PlatformAction.RemovePlatformCountryAction(data.platforms[0]));
   }
 }
