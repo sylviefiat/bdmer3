@@ -89,6 +89,19 @@ export class PlatformService {
       })
   }
 
+  removeTest(platform: Platform): Observable<Platform> {
+    console.log(typeof platform._id)
+    let self = this;
+      this.db.get(platform._id, function(err, doc) {
+        if (err) { return console.log(err); }
+        self.db.remove(doc._id, doc._rev, function(err, response) {
+          if (err) { return console.log(err); }
+          if (response) { console.log(response);}
+        });
+      });
+    return of(platform);
+  }
+
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
     var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"])
 

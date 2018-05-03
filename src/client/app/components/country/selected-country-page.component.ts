@@ -7,6 +7,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform } from '../../modules/datas/models/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
+import { PlatformService } from '../../modules/datas/services/platform.service';
 
 @Component({
   selector: 'bc-selected-country-page',
@@ -25,7 +26,7 @@ export class SelectedCountryPageComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   msg$: Observable<string>;
 
-  constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {            
+  constructor(private platformService: PlatformService, private store: Store<IAppState>, public routerext: RouterExtensions) {            
   }
 
   ngOnInit() {
@@ -36,11 +37,11 @@ export class SelectedCountryPageComponent implements OnInit {
   }
 
   removeFromCountries(data) {
+    console.log(data.platforms.length)
     for(let i = 0; i < data.platforms.length; i++){
-      this.store.dispatch(new PlatformAction.RemovePlatformAction(data.platforms[i]));
+      console.log(data.platforms[i])
+      this.platformService.removeTest(data.platforms[i]);
     }
-
-    this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));
-    
+    this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));  
   }
 }
