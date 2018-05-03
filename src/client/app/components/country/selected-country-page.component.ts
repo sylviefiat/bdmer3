@@ -5,6 +5,8 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
+import { Platform } from '../../modules/datas/models/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
 
 @Component({
   selector: 'bc-selected-country-page',
@@ -33,7 +35,12 @@ export class SelectedCountryPageComponent implements OnInit {
     this.msg$ = this.store.let(getUserMessage);
   }
 
-  removeFromCountries(country: Country) {
-    this.store.dispatch(new CountriesAction.RemoveCountryAction(country));
+  removeFromCountries(data) {
+    for(let i = 0; i < data.platforms.length; i++){
+      this.store.dispatch(new PlatformAction.RemovePlatformAction(data.platforms[i]));
+    }
+
+    this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));
+    
   }
 }
