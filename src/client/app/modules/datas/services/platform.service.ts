@@ -81,33 +81,12 @@ export class PlatformService {
       })
   }
 
-  removePlatform(platform: Platform): Observable<Platform> {   
-    console.log(platform) 
+  removePlatform(platform: Platform): Observable<Platform> {    
     return fromPromise(this.db.remove(platform))
-      .filter((response: ResponsePDB) => { console.log(response); return response.ok; })
+      .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
-        console.log(response);
         return of(platform);
       })
-  }
-
-  removeTest(platform: Platform){
-    // let self = this;
-    //   this.db.get(platform._id, function(err, doc) {
-    //     if (err) { return console.log(err); }
-    //     self.db.remove(doc._id, doc._rev, function(err, response) {
-    //       if (err) { console.log(err); return err;}
-    //       if (response) { console.log(response); return response;}
-    //     });
-    //   });
-    this.db.get(platform._id, function(err, doc) {
-      console.log(doc)
-      return fromPromise(this.db.remove(doc._id, doc._rev))
-        .filter((response: ResponsePDB) => { return response.ok; })
-        .mergeMap(response => {
-          return of(platform);
-        })
-    });
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {

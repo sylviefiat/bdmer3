@@ -243,10 +243,10 @@ export class PlatformEffects {
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 
-    @Effect() 
+   @Effect() 
   removePlatformCountrySuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS)
-    .do(() => console.log("delete"));
+    .map(() => new PlatformAction.RemoveMsgAction());
 
   @Effect() 
   addZoneSuccess$: Observable<Action> = this.actions$

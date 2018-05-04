@@ -138,17 +138,15 @@ export class CountryDetailComponent implements OnInit{
      
      this.platforms$.subscribe(
        (res) => {
-         console.log(res)
          if(!this.platforms)
            this.platforms = res;
-         
          this.stringDelete = "Are you sure you want to delete this country from database ? ";
          for(let i = 0; i < res.length; i++){
            if(i == 0){
              if(i == res.length - 1){
                this.stringDelete += "It will also delete platform(s): " + res[i].code + ".";
              }else{
-               this.stringDelete += "It will also delete platform(s): " + res[i].code;
+               this.stringDelete += "It will also delete platform(s): " + res[i].code + ",";
              }
            }else if(i == res.length - 1 && i != 0){
              this.stringDelete += " " + res[i].code + ".";

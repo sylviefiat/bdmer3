@@ -37,12 +37,14 @@ export class SelectedCountryPageComponent implements OnInit {
   }
 
   removeFromCountries(data) {
-    console.log(data.platforms.length)
     for(let i = 0; i < data.platforms.length; i++){
-      console.log(data.platforms[i])
-      //this.platformService.removeTest(data.platforms[i]);
+      let platforms$ = this.platformService.getPlatform(data.platforms[i].code);
+      platforms$.subscribe(
+          (res) => {
+           this.store.dispatch(new PlatformAction.RemovePlatformCountryAction(res));
+          }
+      );
     }
     this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));  
-      this.store.dispatch(new PlatformAction.RemovePlatformCountryAction(data.platforms[0]));
   }
 }
