@@ -26,7 +26,7 @@
         </mat-input-container>
       </div>
       <p *ngIf="errorMessage" class="error">{{ 'POLYGON_ERROR' | translate }}</p>     
-      <p *ngIf="errorCoord" class="error">marche pas{{ 'POLYGON_ERROR' | translate }}</p>  
+      <p *ngIf="errorCoord" class="error">{{ 'POLYGON_ERROR' | translate }}</p>  
       <img mat-card-sm-image *ngIf="url" [src]="url" />
     </mat-card>
   </div>

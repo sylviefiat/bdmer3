@@ -11,7 +11,7 @@
     </mat-card>
   </div>
 
-  <div class="insideform">
+<!--   <div class="insideform">
     <mat-card class="column">
       <h5 mat-subheader>{{ 'TRANSECT_DESC' | translate }}</h5>
       <div class="row">
@@ -44,6 +44,28 @@
           <div class="hint">{{ 'TRANSECT_LAT_EX' | translate }}</div>    
         </mat-input-container> 
       </div>
+      <img mat-card-sm-image *ngIf="url" [src]="url" />
+    </mat-card>
+  </div> -->
+
+  <div class="insideform">
+    <mat-card class="column">
+      <h5 mat-subheader>{{ 'ZONE_DESC' | translate }}</h5>
+      <div class="row" formGroupName="properties">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_NAME' | translate }}" formControlName="name" required>
+        </mat-input-container>
+      </div>
+
+      <div class="row" formGroupName="geometry">
+        <mat-input-container>
+          <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" (change)="coordChange($event)" formControlName="coordinates" [errorStateMatcher]="matcher" required>
+          <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>
+        </mat-input-container>
+      </div>
+      <p *ngIf="errorMessage" class="error">{{ 'POLYGON_ERROR' | translate }}</p>     
+      <p *ngIf="errorCoord" class="error">marche pas{{ 'POLYGON_ERROR' | translate }}</p>  
+      <img mat-card-sm-image *ngIf="url" [src]="url" />
     </mat-card>
   </div>
 

@@ -27,11 +27,17 @@ export interface Property{
 }
 
 export interface Transect {
-    code: string;
-    codePlatform: string;
+    type: string;
+    geometry: object;
+    properties: TransectProperties;
+    staticMapTransect: string;
     codeZone: string;
-    longitude: string;
-    latitude: string;
+    codePlatform: string;
+}
+
+export interface TransectProperties {
+    name: string;
+    code: string;
 }
 
 export interface ZonePreference {

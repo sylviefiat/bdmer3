@@ -31,10 +31,58 @@ export class MapStaticService {
         return res;
     }
 
+    refactorCoordinatesLine(coordinates){
+        var string = coordinates.split(' ');
+        
+        while(string[string.length - 1] == ""){
+          string.splice(string.length - 1, 1)
+        }
+        
+        var a = string.length; 
+
+        if(a > 2){
+          return "error"
+        }
+
+        for(var i = 0; i < a; i++){
+          if(parseFloat(string[i].split(',')["0"]) < -90 || parseFloat(string[i].split(',')["0"]) > 90 || parseFloat(string[i].split(',')["1"]) < -180 || parseFloat(string[i].split(',')["1"]) > 180){
+            return "error"
+          }
+        }
+
+        var ar = [];
+        for (var i = 0; i < a; i++) {
+            var tempo = string[i].split(',')
+            for(var j = 0; j < tempo.length; j++){
+                tempo[j] = parseFloat(tempo[j])
+            }
+            ar.push(tempo)
+        }
+
+        return ar;
+    }
+
     googleMapUrl(ar){
     	var a = ar.length; 
         ar = ar["0"]
 
+        var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
+
+        for(var i=0; i<ar.length; i++){
+          url += ar[i]["1"] + "," + ar[i]["0"]; 
+          if(i !== ar.length - 1){
+            url+="|"
+          }
+        }
+
+        url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g"
+
+        return url;
+    }
+
+    googleMapUrlLine(ar){
+        var a = ar.length; 
+        
         var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
 
         for(var i=0; i<ar.length; i++){

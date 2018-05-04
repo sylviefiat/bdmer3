@@ -47,7 +47,7 @@ export class ViewTransectComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "transectForm":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.properties.code);
                 break;
             case "deleteTransect":
                 this.deleteTransect();
