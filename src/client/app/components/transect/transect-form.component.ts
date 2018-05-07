@@ -27,14 +27,6 @@ export class TransectFormComponent implements OnInit {
 
     @Output() submitted = new EventEmitter<Transect>();
 
-    // transectForm: FormGroup = new FormGroup({
-    //     code: new FormControl("", Validators.required),
-    //     codePlatform: new FormControl(""),
-    //     codeZone: new FormControl(""),
-    //     latitude: new FormControl(""),
-    //     longitude: new FormControl("")
-    // });
-
     url: string;
     code: string;
     coords: string;
@@ -45,7 +37,7 @@ export class TransectFormComponent implements OnInit {
     transectForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
         geometry: new FormGroup({
-            type: new FormControl("LineString"),
+            type: new FormControl("Point"),
             coordinates: new FormControl(),
         }),
         properties: new FormGroup({
@@ -64,26 +56,12 @@ export class TransectFormComponent implements OnInit {
         this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
 
         if(this.transect){
-            this.transectForm.controls.properties.get("name").setValue(this.zone.properties.name) 
-            let coordAr = this.zone.geometry["coordinates"]["0"];
-            for(let i = 0; i < coordAr.length; i++){
-                this.coordStringRefactor += (coordAr[i]["0"].toString() + "," + coordAr[i]["1"].toString() + "," + coordAr[i]["2"].toString() + " ");
-            }
-            this.transectForm.controls.geometry.get("coordinates").setValue(this.coordStringRefactor);
+            this.transectForm.controls.properties.get("name").setValue(this.transect.properties.name);
+            this.transectForm.controls.properties.get("code").setValue(this.transect.properties.code);
+            this.url = this.transect.staticMapTransect;
+            this.transectForm.controls.geometry.get("coordinates").setValue(this.transect.geometry["coordinates"]["0"].toString() + "," + this.transect.geometry["coordinates"]["1"].toString()); 
             this.transectForm.controls.properties.get("name").disable();
         }
-
-        // this.transectForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        // this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
-        // (this.platform !== undefined) ? this.transectForm.controls.codePlatform.disable() : this.transectForm.controls.codePlatform.enable();
-        // (this.zone !== undefined) ? this.transectForm.controls.codeZone.disable() : this.transectForm.controls.codeZone.enable();
-        // if(this.transect) {
-        //     this.transectForm.controls.code.setValue(this.transect.code);
-        //     this.transectForm.controls.latitude.setValue(this.transect.latitude);
-        //     this.transectForm.controls.longitude.setValue(this.transect.longitude);
-        // } else {
-        //     this.transectForm.controls.code.setValue(this.zone.properties.code + "_T");
-        // }
     }
 
     submit() {

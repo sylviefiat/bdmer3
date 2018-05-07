@@ -70,7 +70,7 @@ export class MapStaticService {
   googleMapUrlPoint(ar){
     var a = ar.length; 
     var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
-    url += ar["1"] + "," + ar["0"] + "&markers=color:green%7Clabel:G%7C"+ ar["1"]+"," + ar["0"]; 
+    url += ar["1"] + "," + ar["0"] + "&markers=color:green%7Clabel:T%7C"+ ar["1"]+"," + ar["0"]; 
     url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g"
     return url;
   }
