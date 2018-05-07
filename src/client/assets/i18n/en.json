@@ -286,5 +286,8 @@
   "MODAL_CLOSE": "Close",
   "ZONE_COORD_EX": "Structure of polygon coordinates : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordinates of the zone",
-  "POLYGON_ERROR": "Polygon isn't valid"
+  "POLYGON_ERROR": "Polygon isn't valid",
+  "TRANSECT_NAME": "Name of transect",
+  "TRANSECT_COORD": "Coordinates of transect",
+  "TRANSECT_ERROR": "Transect not valid."
 }
