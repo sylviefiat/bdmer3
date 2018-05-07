@@ -122,9 +122,11 @@ export class TransectFormComponent implements OnInit {
 
     coordChange(coords){
         this.errorCoord = false;
-        var ar = this.mapStaticService.refactorCoordinatesLine(coords.target.value);
+        var ar = this.mapStaticService.refactorCoordinatesPoint(coords.target.value);
+
+        console.log(ar)
         if(ar !== "error"){
-            this.url = this.mapStaticService.googleMapUrlLine(ar);
+            this.url = this.mapStaticService.googleMapUrlPoint(ar);
             this.coordsRefactor = ar;
         }else{
             this.errorCoord = true;

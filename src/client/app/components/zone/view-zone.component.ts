@@ -69,8 +69,7 @@ export class ViewZoneComponent implements OnInit {
                     transects.filter(transect => transect.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         transect.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         transect.codeZone.toLowerCase().indexOf(filter)!==-1 ||
-                        transect.latitude.toLowerCase().indexOf(filter)!==-1 ||
-                        transect.longitude.toLowerCase().indexOf(filter)!==-1
+                        transect.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );
                 break;
