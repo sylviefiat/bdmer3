@@ -76,6 +76,7 @@ export class HomeComponent implements OnInit {
   initMarkers(){
     this.platforms$.subscribe(
       (platforms) => {
+        console.log(platforms)
         this.countries$.subscribe((countries) =>{
           for(let i = 0; i < countries.length; i++){
             for(let y = 0; y < platforms.length; y++){
