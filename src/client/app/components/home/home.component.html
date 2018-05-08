@@ -47,15 +47,6 @@
 
 			</agm-map>
 		</div>
-		<div *ngFor="let platform of (platforms$ | async)">
-					<div *ngFor="let zone of (platform.zones)">
-						<div *ngFor="let transect of (zone.transects)">
-							{{transect.properties.name}}
-							<!-- <agm-data-layer [geoJson]="transect" (layerClick)="zoomLayer($event)">
-							</agm-data-layer> -->
-						</div>
-					</div>
-				</div>
 	</div>
 
 	<ng-template #nomap>
