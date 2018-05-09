@@ -1,0 +1,60 @@
+
+.actions {
+  text-align: center;
+}
+.insideform {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 72px 0;
+}
+.insideform mat-card {
+  flex-grow: 1;
+  margin:auto;
+  max-width: 500px;
+}
+mat-card-title,
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+mat-card-subtitle {
+  color: #555;
+}
+mat-input-container {
+  padding-left: 2em;
+  flex-grow: 1;
+}
+mat-card-actions {
+  margin: 5px 0 0 !important;
+}
+mat-card-footer {
+  display: flex;
+}
+mat-card-footer a {
+  margin:1em;
+}
+.error {
+  text-align: center;
+  padding: 16px;
+  color: white;
+  background-color: red;
+}
+h5 {
+  margin-left: 15px;
+}
+.warn {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  padding: 5px;
+}
+
+.mat-card{
+  margin-bottom: 25px!important;  
+}
+
+.btn-danger{
+  background-color: red;
+}

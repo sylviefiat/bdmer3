@@ -333,5 +333,9 @@
   "TYPE":"Type de résultat",
   "FILTER":"Filtrer les resultats",
   "SPECIES_MIN_DIMS":"Choix de la taille minimale des animaux à prendre en compte dans l'analyse",
-  "LEGAL_DIMS":"Taille de pêche légale"
+  "LEGAL_DIMS":"Taille de pêche légale",
+  "IMPORT_GLOBAL": "Import global",
+  "SELECTED_CSV": "selectioné",
+  "SEND": "Envoyer",
+  "DELETE_CSV": "Supprimer"
 }

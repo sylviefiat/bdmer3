@@ -333,5 +333,10 @@
   "TYPE":"Analyse type",
   "FILTER":"Filter displayed results",
   "SPECIES_MIN_DIMS":"Choose minimum animal size to consider in analysis",
-  "LEGAL_DIMS":"Legal fishing size"
+  "LEGAL_DIMS":"Legal fishing size",
+  "POLYGON_ERROR": "Polygon isn't valid",
+  "IMPORT_GLOBAL": "Global import",
+  "SELECTED_CSV": "selected",
+  "SEND": "Send",
+  "DELETE_CSV": "Delete"
 }
