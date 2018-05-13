@@ -67,7 +67,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
               this.initMarkers();
             }else{
               this.initMarkers();
-              this.zoom = 3
             }
           }
         } 
@@ -79,10 +78,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if(this.loggedIn && this.codeCountryUser === "AA"){
       this.agmMap.mapReady.subscribe(map => {
         let bounds: LatLngBounds = new google.maps.LatLngBounds();
-        for(let i = 0; i < this.markers.length; i++){
-          bounds.extend(new google.maps.LatLng(this.markers[i].lat, this.markers[i].lng))
+        if(this.markers.length > 1){
+          for(let i = 0; i < this.markers.length; i++){
+            bounds.extend(new google.maps.LatLng(this.markers[i].lat, this.markers[i].lng));
+          }
+          map.fitBounds(bounds);
         }
-        map.fitBounds(bounds);
       });
     }
   }
@@ -101,6 +102,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 this.markers.push(countries[i].coordinates)
               }
             }
+          }
+
+          if(this.markers.length == 1 && this.codeCountryUser === "AA"){
+            this.lat = this.markers["0"].lat;
+            this.lng = this.markers["0"].lng;
+            this.zoom = 9;
+          }
+
+          if(platforms.length == 0){
+            this.zoom = 3;
           }
         })
       });
