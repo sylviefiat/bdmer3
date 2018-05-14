@@ -82,7 +82,8 @@ export function platformReducer(
             const addedtransect = action.payload;
             console.log(addedtransect);
             const platforms = state.entities.filter(platform => addedtransect.codePlatform !== platform._id);
-            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform._id)[0];
+            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform.code)[0];
+
             const modifiedZone = modifiedPlatform.zones.filter(zone => addedtransect.codeZone === zone.properties.code)[0];
             modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.code !== transect.properties.code),addedtransect];
             modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedtransect.codeZone !== zone.properties.code),modifiedZone];

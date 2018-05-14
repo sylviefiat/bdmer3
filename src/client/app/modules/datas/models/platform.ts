@@ -38,6 +38,7 @@ export interface Transect {
 export interface TransectProperties {
     name: string;
     code: string;
+    description: string;
 }
 
 export interface ZonePreference {

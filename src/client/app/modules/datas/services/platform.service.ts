@@ -160,7 +160,6 @@ export class PlatformService {
   }
 
   editTransect(platform: Platform, transect: Transect): Observable<Transect> {
-    console.log(transect);
     if(platform.code !== transect.codePlatform)
       return _throw('Import is not possible : transect codePlatform is different from selected platform');
     return this.getPlatform(platform.code)

@@ -7,7 +7,7 @@ import { Platform,Zone,Transect } from './../../modules/datas/models/platform';
     <a [routerLink]="['/transect', codePlatform, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
-          <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+          <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
           <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
@@ -85,6 +85,10 @@ export class TransectPreviewComponent implements OnInit {
 
   get coord(){
     return this.transect.geometry["coordinates"];
+  }
+
+  get map(){
+    return this.transect.staticMapTransect;
   }
 
   // get latitude() {
