@@ -34,5 +34,10 @@
         <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
     </mat-card-actions>
+    <mat-list *ngIf="error | async">
+     <mat-list-item> Pepper </mat-list-item>
+     <mat-list-item> Salt </mat-list-item>
+     <mat-list-item> Paprika </mat-list-item>
+    </mat-list>
   </mat-card>
 </div>
