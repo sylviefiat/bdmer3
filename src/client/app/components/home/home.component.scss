@@ -63,7 +63,9 @@ a.link:hover {
 }
 
 agm-map {
-  height: 90vh;
+  height: -webkit-calc(100vh - 96px);
+  height:    -moz-calc(100vh - 96px);
+  height:         calc(100vh - 96px);
   width: 100%;
 }
 
