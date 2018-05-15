@@ -1,8 +1,8 @@
 // libs
-import { Component, ElementRef, ViewChild, OnInit, Input} from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, Input, AfterViewInit} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { GoogleMapsAPIWrapper } from '@agm/core';
+import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from '@agm/core';
 
 // app
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -13,6 +13,8 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { CountryListService} from '../../modules/countries/services/country-list.service';
 
+declare var google: any;
+
 @Component({
   moduleId: module.id,
   selector: 'sd-home',
@@ -20,7 +22,7 @@ import { CountryListService} from '../../modules/countries/services/country-list
   styleUrls: ['home.component.css']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
 
   lat: number;
   lng: number;
@@ -33,6 +35,9 @@ export class HomeComponent implements OnInit {
   zoom: number = 9;
   countries$: Observable<Country[]>;
   markers: any[] = [];
+  codeCountryUser: string;
+
+  @ViewChild('AgmMap') agmMap: AgmMap;
 
   public onlineOffline: boolean = navigator.onLine;
 
@@ -53,6 +58,7 @@ export class HomeComponent implements OnInit {
       this.userCountry$.subscribe(
         (res) => {
           if(res){
+            this.codeCountryUser = res.code;
             if(res.code !== "AA"){
               this.platforms$ = this.platforms$
                 .map(platforms => platforms.filter(platform => platform.codeCountry === res.code));
@@ -61,12 +67,25 @@ export class HomeComponent implements OnInit {
               this.initMarkers();
             }else{
               this.initMarkers();
-              this.zoom = 3
             }
           }
         } 
       );
   	}
+  }
+
+  ngAfterViewInit() {
+    if(this.loggedIn && this.codeCountryUser === "AA"){
+      this.agmMap.mapReady.subscribe(map => {
+        let bounds: LatLngBounds = new google.maps.LatLngBounds();
+        if(this.markers.length > 1){
+          for(let i = 0; i < this.markers.length; i++){
+            bounds.extend(new google.maps.LatLng(this.markers[i].lat, this.markers[i].lng));
+          }
+          map.fitBounds(bounds);
+        }
+      });
+    }
   }
 
   zoomChange(event){
@@ -83,6 +102,16 @@ export class HomeComponent implements OnInit {
                 this.markers.push(countries[i].coordinates)
               }
             }
+          }
+
+          if(this.markers.length == 1 && this.codeCountryUser === "AA"){
+            this.lat = this.markers["0"].lat;
+            this.lng = this.markers["0"].lng;
+            this.zoom = 9;
+          }
+
+          if(platforms.length == 0){
+            this.zoom = 3;
           }
         })
       });

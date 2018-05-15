@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="wrapp_right">
-			<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
+			<agm-map #AgmMap [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
 				<div *ngFor="let platform of (platforms$ | async)">
 					<div *ngFor="let zone of (platform.zones)">
 						<agm-data-layer [geoJson]="zone">
@@ -36,6 +36,7 @@
 
 				<div *ngIf="zoom < 6" >
 					<agm-marker *ngFor="let marker of (markers)"
+						fit="true"
 						[latitude]="marker.lat"
 				   		[longitude]="marker.lng">
 					</agm-marker>
