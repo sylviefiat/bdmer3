@@ -2,7 +2,8 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_PLATFORMS' | translate}}</mat-card-title>
       <mat-card-content>
-        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+        <button (click)="send()" class="btn btn-primary" [disabled]="(importError$ | async)">{{ 'SEND' | translate }}</button> 
+        <button (click)="return()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
       <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>    
     </mat-card>
@@ -34,10 +35,12 @@
         <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
     </mat-card-actions>
-    <mat-list *ngIf="error | async">
-     <mat-list-item> Pepper </mat-list-item>
-     <mat-list-item> Salt </mat-list-item>
-     <mat-list-item> Paprika </mat-list-item>
-    </mat-list>
+    <mat-card-actions align="start">
+      <mat-list *ngFor="let plat of (importError$ | async)">
+       <mat-list-item class="errorPlat" *ngIf="plat != ''"> {{plat}}</mat-list-item>
+      </mat-list>
+    </mat-card-actions>
+  <!--   <mat-card-content class="error" *ngIf="importError$ | async" align="center">{{ importError$ | async }}</mat-card-content>  -->   
   </mat-card>
+
 </div>

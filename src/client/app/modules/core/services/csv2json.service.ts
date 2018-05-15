@@ -121,6 +121,7 @@ export class Csv2JsonService {
                 lines.push(st);
             }
         }
+        console.log(lines);
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
@@ -391,7 +392,6 @@ export class Csv2JsonService {
                         // code...
                         break;
                 }
-                console.log(res);
                 return res;
             });
 

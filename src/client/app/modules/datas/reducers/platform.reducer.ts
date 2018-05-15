@@ -44,6 +44,24 @@ export function platformReducer(
             }
         }
 
+        case PlatformAction.ActionTypes.CHECK_PLATFORM_ADD_ERROR: {
+            return {
+                ...state,
+                error: (action.payload !== '' && action.payload.length >0)?"Import cannot be perform before errors below are resolved":null,
+                msg: (action.payload === '' || action.payload.length === 0)?"Import can be performed":null,
+                importErrors: [...state.importErrors, action.payload]
+            }
+        }
+
+        case PlatformAction.ActionTypes.CHECK_PLATFORM_SUCCESS: {
+            console.log("here");
+            console.log(action.payload);
+            return {
+                ...state,
+                msg: "CSV file is ready to be imported"
+            }
+        }
+
         case PlatformAction.ActionTypes.ADD_ZONE_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
             const addedzone = action.payload;
@@ -303,8 +321,9 @@ export function platformReducer(
         case PlatformAction.ActionTypes.REMOVE_MSG: {
             console.log("remove msg");            
             return {
-                ...state,
+                ...state,                
                 error: null,
+                importErrors: [],
                 msg: null
             };
         }

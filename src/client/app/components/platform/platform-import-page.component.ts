@@ -8,11 +8,12 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin,getAllCountriesInApp, getLangues } from '../../modules/ngrx/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin,getAllCountriesInApp, getLangues, getPlatformImpErrors } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Csv2JsonService } from '../../modules/core/services/csv2json.service';
 import { CountryListService} from '../../modules/countries/services/country-list.service';
+import { PlatformService } from '../../modules/datas/services/platform.service'
 
 @Component({
     moduleId: module.id,
@@ -25,22 +26,25 @@ import { CountryListService} from '../../modules/countries/services/country-list
 })
 export class PlatformImportPageComponent implements OnInit {
     error$: Observable<string | null>;
-    isAdmin$: Observable<Country>;
+    importError$: Observable<string[]>;
+    isAdmin$: Observable<boolean>;
     locale$: Observable<boolean>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
-    private csvFile: string;
     private csvFileAdmin: string;
     private docs_repo: string;
     countries$: Observable<Country[]>;
     platformsErr = [];
-    error = false;
-    constructor(private countryListService: CountryListService, private csv2JsonService: Csv2JsonService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    error = true;
+    csvFile: any;
+
+    constructor(private platformService: PlatformService, private countryListService: CountryListService, private csv2JsonService: Csv2JsonService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
         this.countries$ = this.store.let(getAllCountriesInApp);
         this.error$ = this.store.let(getPlatformPageError);
+        this.importError$ = this.store.let(getPlatformImpErrors);
         this.isAdmin$ = this.store.let(getisAdmin);
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
@@ -50,35 +54,25 @@ export class PlatformImportPageComponent implements OnInit {
     }
 
     handleUpload(csvFile: any): void {
-        this.platformsErr = [];
-        this.error = false;
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.isAdmin$.subscribe((isAdmin) =>{
-                if(isAdmin){
-                    this.countries$.subscribe((countries) =>{
-                        this.csv2JsonService.csv2('platform', csvFile.target.files["0"]).subscribe((data) =>{
-                            for(let i = 0; i < countries.length; i++){
-                                if(data.codeCountry === countries[i].code){
-                                    break;
-                                } 
-                                if(data.codeCountry !== countries[i].code && i === countries.length - 1){
-                                    this.platformsErr.push(data)
-                                }
-                            }
-                        })
-                        if(this.platformsErr.length > 0){
-                            this.error = true;
-                        }
-                    })
-                }
-            })
+            this.check(csvFile);
         } else {
             this.store.dispatch(new PlatformAction.AddPlatformFailAction('No csv file found'));
         }
     }
 
+    check(csvFile){
+        this.isAdmin$
+            .filter(isAdmin => isAdmin)
+            .subscribe(isAdmin => this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile.target.files["0"])));
+    }
+
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
+    }
+
+    send(){
+        this.store.dispatch(new PlatformAction.ImportPlatformAction(this.csvFile.target.files[0]));
     }
 
     getCsvPlatform() {

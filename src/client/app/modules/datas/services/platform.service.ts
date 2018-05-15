@@ -27,9 +27,9 @@ export class PlatformService {
   }
 
   public getAll(): Observable<any> {
-   return fromPromise(this.db.allDocs({ include_docs: true }))
-      .map((result: ResponsePDB) => 
-        result.rows.map(row => row.doc)
+    return fromPromise(this.db.allDocs({ include_docs: true }))
+    .map((result: ResponsePDB) => 
+      result.rows.map(row => row.doc)
       )
   }
 
@@ -39,7 +39,7 @@ export class PlatformService {
     }, { key: platformCode, include_docs: true }))
     .map((result: ResponsePDB) => {
       return result.rows && result.rows[0] && result.rows[0].doc;
-    
+
     })
   }
 
@@ -47,46 +47,52 @@ export class PlatformService {
     platform._id=platform.code;
     this.currentPlatform = of(platform);
     return fromPromise(this.db.put(platform))
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        console.log(response);
-        return  this.currentPlatform;
-      })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      console.log(response);
+      return  this.currentPlatform;
+    })
   }
 
   importPlatform(platform: Platform[]): Observable<Observable<Platform>> {
     return of(platform)
-      .map((sp, i) => this.addPlatform(sp[i]))
+    .map((sp, i) => this.addPlatform(sp[i]))
+  }
+
+  importPlatformVerification(platform, countries: Country[]): Observable<string> {
+    if(countries.filter(country => country.code === platform.codeCountry).length===0)
+      return of('Platform '+platform.code+' cannot be inserted because country '+platform.codeCountry+' is not in the database');  
+    return of(''); 
   }
 
   editPlatform(platform: Platform, country: Country): Observable<Platform> {
     platform._id=platform.code;
     return this.getPlatform(platform.code)
-      .mergeMap(st => {  
-        if (!platform.zones) platform.zones = []; 
-        if(!platform.surveys) platform.surveys = [];
-        if(country !== undefined){
-          platform.codeCountry = country.code;
-        }
-        if(platform.codeCountry === null){
-          return _throw('Import is not possible : country has not been defined');
-        }      
-        if(st) {platform._rev = st._rev;}
-        this.currentPlatform = of(platform);
-        return fromPromise(this.db.put(platform));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  this.currentPlatform;
-      })
+    .mergeMap(st => {  
+      if (!platform.zones) platform.zones = []; 
+      if(!platform.surveys) platform.surveys = [];
+      if(country !== undefined){
+        platform.codeCountry = country.code;
+      }
+      if(platform.codeCountry === null){
+        return _throw('Import is not possible : country has not been defined');
+      }      
+      if(st) {platform._rev = st._rev;}
+      this.currentPlatform = of(platform);
+      return fromPromise(this.db.put(platform));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  this.currentPlatform;
+    })
   }
 
   removePlatform(platform: Platform): Observable<Platform> {    
     return fromPromise(this.db.remove(platform))
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(platform);
-      })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(platform);
+    })
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
@@ -193,37 +199,37 @@ export class PlatformService {
     if(platform.code !== zonePref.codePlatform)
       return _throw('Import is not possible : zonePref codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
-      .filter(platform => platform!==null)
-      .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
-        if(zn){
-          if(zn.zonePreferences.filter(zp => zp.code === zonePref.code).length > -1){
-            zn.zonePreferences = [ ...zn.zonePreferences.filter(zp => zp.code !== zonePref.code), zonePref];
-          }
-          st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
-        } 
-        this.currentPlatform = of(st);
-        return fromPromise(this.db.put(st));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  of(zonePref);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(st => {  
+      let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
+      if(zn){
+        if(zn.zonePreferences.filter(zp => zp.code === zonePref.code).length > -1){
+          zn.zonePreferences = [ ...zn.zonePreferences.filter(zp => zp.code !== zonePref.code), zonePref];
+        }
+        st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
+      } 
+      this.currentPlatform = of(st);
+      return fromPromise(this.db.put(st));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  of(zonePref);
+    })
   }
 
   removeZonePref(zonePref: ZonePreference): Observable<ZonePreference> {    
     return this.getPlatform(zonePref.codePlatform)
-      .filter(platform => platform!==null)
-      .mergeMap(st => {
-        let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
-        zn.zonePreferences = zn.zonePreferences.filter(zn => zn.code !== zonePref.code);
-        st.zones = [...st.zones.filter(z => z.properties  .code !== zonePref.codeZone),zn];
-        return fromPromise(this.db.put(st));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(zonePref);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(st => {
+      let zn = st.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
+      zn.zonePreferences = zn.zonePreferences.filter(zn => zn.code !== zonePref.code);
+      st.zones = [...st.zones.filter(z => z.properties  .code !== zonePref.codeZone),zn];
+      return fromPromise(this.db.put(st));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(zonePref);
+    })
   }
 
   editCount(platform: Platform, count: Count): Observable<Count> {
@@ -231,38 +237,38 @@ export class PlatformService {
     if(platform.code !== count.codePlatform)
       return _throw('Import is not possible : count codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
-      .filter(platform => platform!==null)
-      .mergeMap(st => {  
-        if(!count.mesures) count.mesures = [];
-        let cp = st.surveys.filter(c => c.code === count.codeSurvey)[0];
-        if(cp){
-          if(cp.counts.filter(c => c.code === count.code).length > -1){
-            cp.counts = [ ...cp.counts.filter(c => c.code !== count.code), count];
-          }
-          st.surveys = [...st.surveys.filter(c => c.code != count.codeSurvey), cp];
-        }  
-        this.currentPlatform = of(st);
-        return fromPromise(this.db.put(st));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  of(count);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(st => {  
+      if(!count.mesures) count.mesures = [];
+      let cp = st.surveys.filter(c => c.code === count.codeSurvey)[0];
+      if(cp){
+        if(cp.counts.filter(c => c.code === count.code).length > -1){
+          cp.counts = [ ...cp.counts.filter(c => c.code !== count.code), count];
+        }
+        st.surveys = [...st.surveys.filter(c => c.code != count.codeSurvey), cp];
+      }  
+      this.currentPlatform = of(st);
+      return fromPromise(this.db.put(st));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  of(count);
+    })
   }
 
   removeCount(count: Count): Observable<Count> {    
     return this.getPlatform(count.codePlatform)
-      .filter(platform => platform!==null)
-      .mergeMap(st => {
-        let ca = st.surveys.filter(c => c.code === count.codeSurvey)[0];
-        ca.counts = ca.counts.filter(ct => ct.code !== count.code);
-        st.surveys = [...st.surveys.filter(c => c.code !== count.codeSurvey),ca];
-        return fromPromise(this.db.put(st));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(count);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(st => {
+      let ca = st.surveys.filter(c => c.code === count.codeSurvey)[0];
+      ca.counts = ca.counts.filter(ct => ct.code !== count.code);
+      st.surveys = [...st.surveys.filter(c => c.code !== count.codeSurvey),ca];
+      return fromPromise(this.db.put(st));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(count);
+    })
   }
 
   public sync(remote: string): Promise<any> {

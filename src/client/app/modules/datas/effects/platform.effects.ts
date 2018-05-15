@@ -16,7 +16,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 
-import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone } from '../../ngrx/index';
+import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAllCountriesInApp } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from '../actions/index';
@@ -110,11 +110,24 @@ export class PlatformEffects {
     .map((action: PlatformAction.ImportPlatformAction) => action.payload)
     .mergeMap((platform: Platform) => this.csv2jsonService.csv2('platform', platform))
     .withLatestFrom(this.store.let(getSelectedCountry))
-    // fait automatiquement une boucle sur les platforms retournés
+    // fait automatiquement une boucle sur les platforms retournées
     .mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1]))
     .map((platform: Platform) => new PlatformAction.ImportPlatformSuccessAction(platform))
     .catch(error => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
+
+  @Effect()
+  checkPlatformCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_PLATFORM_CSV_FILE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.CheckPlatformCsvFile) => action.payload)
+    .mergeMap((platform: Platform) =>this.csv2jsonService.csv2('platform', platform))
+    // fait automatiquement une boucle sur les platforms retournées
+    //.mergeMap((platform: any) => platform)  
+    .withLatestFrom(this.store.let(getAllCountriesInApp))
+    .mergeMap((value: [any, Country[]]) => {console.log(value); return this.platformService.importPlatformVerification(value[0], value[1])})
+    .map(error => new PlatformAction.CheckPlatformAddErrorAction(error));
+
 
   @Effect()
   importZone$: Observable<Action> = this.actions$

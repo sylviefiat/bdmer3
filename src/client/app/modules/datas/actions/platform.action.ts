@@ -17,6 +17,9 @@ export namespace PlatformAction {
       REMOVE_PLATFORM_COUNTRY: string;
       REMOVE_PLATFORM_COUNTRY_SUCCESS: string;
       REMOVE_PLATFORM_COUNTRY_FAIL: string;
+      CHECK_PLATFORM_CSV_FILE: string;
+      CHECK_PLATFORM_ADD_ERROR: string;
+      CHECK_PLATFORM_SUCCESS: string;
       REMOVE_PLATFORM: string;
       REMOVE_PLATFORM_SUCCESS: string;
       REMOVE_PLATFORM_FAIL: string;
@@ -77,6 +80,9 @@ export namespace PlatformAction {
       REMOVE_PLATFORM_COUNTRY: type(`${PLATFORM} Remove Platform Country`),
       REMOVE_PLATFORM_COUNTRY_SUCCESS: type(`${PLATFORM} Remove Platform Country Success`),
       REMOVE_PLATFORM_COUNTRY_FAIL: type(`${PLATFORM} Remove Platform Country Fail`),
+      CHECK_PLATFORM_CSV_FILE:type(`${PLATFORM} Check Platform Csv file`),
+      CHECK_PLATFORM_ADD_ERROR:type(`${PLATFORM} Check Platform Csv file add error`),
+      CHECK_PLATFORM_SUCCESS:type(`${PLATFORM} Check Platform Csv file success`),
       REMOVE_PLATFORM: type(`${PLATFORM} Remove Platform`),
       REMOVE_PLATFORM_SUCCESS: type(`${PLATFORM} Remove Platform Success`),
       REMOVE_PLATFORM_FAIL: type(`${PLATFORM} Remove Platform Fail`),
@@ -159,6 +165,24 @@ export namespace PlatformAction {
     readonly type = ActionTypes.IMPORT_PLATFORM_SUCCESS;
 
     constructor(public payload: Platform) {}
+  }
+
+  export class CheckPlatformCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_PLATFORM_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckPlatformAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_PLATFORM_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckPlatformSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_PLATFORM_SUCCESS;
+
+    constructor(public payload: any) {}
   }
 
   /**
@@ -506,6 +530,9 @@ export namespace PlatformAction {
     | AddPlatformFailAction
     | ImportPlatformAction
     | ImportPlatformSuccessAction
+    | CheckPlatformCsvFile
+    | CheckPlatformAddErrorAction
+    | CheckPlatformSuccessAction
     | RemovePlatformAction
     | RemovePlatformSuccessAction
     | RemovePlatformFailAction
