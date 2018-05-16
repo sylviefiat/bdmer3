@@ -338,5 +338,6 @@
   "IMPORT_GLOBAL": "Global import",
   "SELECTED_CSV": "selected",
   "SEND": "Send",
-  "DELETE_CSV": "Delete"
+  "DELETE_CSV": "Delete",
+  "LIST_ERROR_PLATFORM": "List of concerned platforms"
 }

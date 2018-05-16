@@ -337,5 +337,6 @@
   "IMPORT_GLOBAL": "Import global",
   "SELECTED_CSV": "selectioné",
   "SEND": "Envoyer",
-  "DELETE_CSV": "Supprimer"
+  "DELETE_CSV": "Supprimer",
+  "LIST_ERROR_PLATFORM": "Liste des plateformes concernées"
 }

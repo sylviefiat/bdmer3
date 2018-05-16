@@ -118,6 +118,12 @@ export class Csv2JsonService {
                             throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
+                if(!st.codeCountry){
+                    this.store.let(getAuthCountry).subscribe((res)=>{
+                        st.codeCountry = res["code"];
+                    })
+                }
+                lines.push(st);
             }
         }
 
