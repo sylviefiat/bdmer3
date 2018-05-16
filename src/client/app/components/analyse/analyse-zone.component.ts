@@ -47,7 +47,7 @@ export class AnalyseZoneComponent implements OnInit {
 
   newZone(s: Zone) {
     return this._fb.group({
-      zone: new FormControl(this.checkedZones.filter(survey => survey.code === s.code).length > 0)
+      zone: new FormControl(this.checkedZones.filter(zone => zone.properties.code === s.properties.code).length > 0)
     });
   }
 
@@ -67,7 +67,7 @@ export class AnalyseZoneComponent implements OnInit {
 
   changeValue(zoneCheck: any) {
     console.log(zoneCheck);
-    this.checkedZones=[...this.checkedZones.filter(z => z.code!==zoneCheck.zone.code)];
+    this.checkedZones=[...this.checkedZones.filter(z => z.properties.code!==zoneCheck.zone.properties.code)];
     if(zoneCheck.checked){
       this.checkedZones.push(zoneCheck.zone);
     }

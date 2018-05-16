@@ -42,7 +42,7 @@ export class AnalyseService {
             let ind = this.calculate_indicators(species, mesures_sp, analyseState.usedMethod);
             result.indicators.push(ind);
         }*/
-        console.log("here");
+        console.log(result);
         return result;
     }
 

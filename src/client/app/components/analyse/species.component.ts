@@ -9,10 +9,19 @@ import { Country } from '../../modules/countries/models/country';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'species'" (change)="change($event)">
-          <i>{{ species.scientificName }}</i> {{ name }}
+        <div class="label">
+          <i>{{ species.scientificName }}</i><span> {{ name }}</span>
+        </div>
         </mat-checkbox>
     </div>
   `,
+  styles: [
+  `
+    mat-checkbox .mat-checkbox-label {
+      display: flex;
+      flex-direction: row;
+    }
+  `]
 })
 export class SpeciesComponent {
   @Input() species: Species;
@@ -43,5 +52,9 @@ export class SpeciesComponent {
       name += ", "+this.species.names.filter(name => name.lang.toLowerCase() === this.locale)[0].name;
     }
     return name;
+  }
+
+  get picture(): string | boolean {
+    return this.species.picture; 
   }
 }

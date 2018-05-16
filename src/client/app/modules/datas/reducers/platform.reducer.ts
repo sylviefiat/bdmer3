@@ -164,11 +164,7 @@ export function platformReducer(
             {
                 const removedZone = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone.codePlatform)[0];
-<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
                 modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.properties.code);
-=======
-                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.code);
->>>>>>> feat (add surface for import) / refactor (zone model)
                 return {
                     ...state,
                     entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],

@@ -74,7 +74,7 @@ export class AnalyseComponent {
         analyseType: new FormControl()
     });
 
-    constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private _fb: FormBuilder) {
+    constructor(private _fb: FormBuilder) {
 
     }    
 
@@ -82,15 +82,8 @@ export class AnalyseComponent {
         this.countryEmitter.emit(country);  
     }
 
-    setZones(zones: Zone[][]) {
-        let zname=[];
-        for(let i in zones){
-            zname[i]=[];
-            for(let z of zones[i])
-                zname[i].push(z.properties.code);
-        }
-        //this.zoneEmitter.emit(zones);
-        this.currentZones = zones;
+    setPlatforms(platforms: Platform[]) {
+        this.platformEmitter.emit(platforms); 
     }
 
     setYears(years: string[]) {

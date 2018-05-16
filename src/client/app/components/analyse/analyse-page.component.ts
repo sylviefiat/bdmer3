@@ -99,7 +99,7 @@ export class AnalysePageComponent implements OnInit {
 
   selectZone(zones: Zone[]) {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
-  }*/
+  }
 
   selectTransect(transects: Transect[]) {
     this.store.dispatch(new AnalyseAction.SelectTransects(transects));    

@@ -12,6 +12,7 @@ import { SharedModule } from '../shared/index';
 import { CountriesModule } from '../countries/index';
 import { DatasModule } from '../datas/index';
 import { AuthModule } from '../auth/index';
+import { AnalyseModule } from '../analyse/index';
 import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';

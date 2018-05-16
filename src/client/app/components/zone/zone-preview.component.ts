@@ -75,13 +75,6 @@ export class ZonePreviewComponent implements OnInit {
 
   get idZone() {
     return this.zone.properties.code;
-<<<<<<< 70625b19cf0ae816ff5cf78455915e7a149258b6
-  }
-
-  get map(){
-    return this.zone.staticmap;
-=======
->>>>>>> feat (add surface for import) / refactor (zone model)
   }
 
   get map(){

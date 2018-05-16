@@ -11,7 +11,6 @@ import { AuthService } from './auth.service';
 import { MailService } from './mail.service';
 import { MomentService } from './moment.service';
 import { Csv2JsonService } from './csv2json.service';
-import { NameRefactorService } from './nameRefactor.service'
 import { MapStaticService} from './map-static.service';
 import { NameRefactorService } from './nameRefactor.service';
 

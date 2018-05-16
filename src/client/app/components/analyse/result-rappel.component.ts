@@ -10,25 +10,29 @@ import { IAnalyseState } from '../../modules/analyse/states/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2>{{ 'RESULT_RAPPEL' | translate }}</h2>
-    <mat-tab-group class="primer">
+    <p class="subtitle">{{ 'NUMBER_SURVEYS_SELECT' | translate }}: {{ analyseData.usedSurveys.length }}</p>
+    <mat-tab-group class="primer">    
       <mat-tab *ngFor="let survey of analyseData.usedSurveys; let i=index" label="{{survey.code}}">
-        <div>{{ 'SURVEY_CODE' | translate}}: {{survey.code}}, {{ survey.dateStart  | date:localDate }}, {{ survey.dateEnd  | date:localDate }}</div>
-        <div>{{ 'PARTICIPANTS' | translate}}: {{survey.participants}}</div>
-        <mat-tab-group>
-          <mat-tab *ngFor="let sp of spInSurveys[i]" label="{{sp.scientificName}}">
-            <!-- PHOTO -->
-            <div>{{ 'SP' | translate }}: {{ sp.scientificName }}</div>
-            <div>{{ 'SPECIES_VERNACULAR_NAME' | translate }}: 
-              <span *ngFor="let name of sp.names;let i=index">{{(i>0)?',':''}} {{name.name}} ({{name.lang}})</span>
-            </div>
-            <div>{{ 'DISTRIBUTION' | translate }}: {{ sp.distribution }}</div>
-            <div>{{ 'HABITAT_PREF' | translate }}: {{ sp.habitatPreference }}</div>
-            <div>{{ 'LEGAL_DIM_COUNTRIES' | translate }}: 
-              <span *ngFor="let ld of sp.legalDimensions;let i=index">{{(i>0)?',':''}} {{ld.longMin}}/{{ld.longMax}} ({{ld.codeCountry}})</span>
+        <p><label>{{ 'SURVEY_CODE' | translate}}:</label> {{survey.code}}, {{ survey.dateStart  | date:localDate }}, {{ survey.dateEnd  | date:localDate }}</p>
+        <p><label>{{ 'PARTICIPANTS' | translate}}:</label> {{survey.participants}}</p>
+        <p class="subtitle">{{ 'NUMBER_SP_SELECT' | translate}}: {{spInSurveys[i].length}}</p>
+        <mat-tab-group class="spDisplay">
+          <mat-tab *ngFor="let sp of spInSurveys[i]" label="{{sp.scientificName}}"> 
+            <div class="spimage"><img [src]="sp.picture"/></div>           
+            <div>
+              <p><label>{{ 'SP' | translate }}:</label> {{ sp.scientificName }}</p>
+              <p><label>{{ 'SPECIES_VERNACULAR_NAME' | translate }}:</label> 
+                <span *ngFor="let name of sp.names;let i=index">{{(i>0)?',':''}} {{name.name}} ({{name.lang}})</span>
+              </p>
+              <p><label>{{ 'DISTRIBUTION' | translate }}:</label> {{ sp.distribution }}</p>
+              <p><label>{{ 'HABITAT_PREF' | translate }}:</label> {{ sp.habitatPreference }}</p>
+              <p><label>{{ 'LEGAL_DIM_COUNTRIES' | translate }}:</label> 
+                <span *ngFor="let ld of sp.legalDimensions;let i=index">{{(i>0)?',':''}} {{ld.longMin}}/{{ld.longMax}}mm ({{ld.codeCountry}})</span>
+              </p>
             </div>
           </mat-tab>
         </mat-tab-group>
-        <div>{{ 'ZONES' | translate}}: <span *ngFor="let zone of znInSurveys[i];let i=index">{{(i>0)?',':''}} {{zone.code}}</span></div>
+        <p><label>{{ 'ZONES' | translate}}:</label> <span *ngFor="let zone of znInSurveys[i];let i=index">{{(i>0)?',':''}} {{zone.properties.code}}</span></p>
       </mat-tab>
     </mat-tab-group>
   `,
@@ -37,9 +41,22 @@ import { IAnalyseState } from '../../modules/analyse/states/index';
     h2 {
       margin-left: 25px;
     }
+    .subtitle {
+      margin-left: 30px;
+    }    
     mat-tab-group.primer {
       margin: 25px 72px;
       background-color: white;
+    }
+    p, .spDisplay {
+      margin-left: 10px;
+    }
+    label {
+      color:darkgrey;
+    }
+    .spimage {
+      float:left;
+      margin-right:50px;
     }
   `]
 })

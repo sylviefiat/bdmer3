@@ -8,7 +8,7 @@ import { Zone } from '../../modules/datas/models/index';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'zone'" (change)="change($event)">
-          {{ zone.code }} - ({{ zone.transects.length }} {{ 'TRANSECTS' | translate }})
+          {{ zone.properties.code }} - ({{ zone.transects.length }} {{ 'TRANSECTS' | translate }})
         </mat-checkbox>
     </div>
   `,

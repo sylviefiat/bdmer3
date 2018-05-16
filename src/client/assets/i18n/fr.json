@@ -328,5 +328,7 @@
   "START_ANALYSE":"Lancer l'analyse",
   "BACK":"précédent",
   "NEXT":"suivant",
-  "RESET":"réinitialiser"
+  "RESET":"réinitialiser",
+  "NUMBER_SURVEYS_SELECT":"Nombre de relevés sélectionnés ",
+  "NUMBER_SP_SELECT":"Nombre d'espèces sélectionnées dans ce relevé "
 }

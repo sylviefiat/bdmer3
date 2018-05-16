@@ -35,7 +35,7 @@
 
         <mat-form-field>
           <mat-select  placeholder="{{'ZONE_SELECT' | translate}}" formControlName="codeZone" (change)='updateTransects($event.value)' required>
-            <mat-option *ngFor="let zn of zones" [value]="zn.code" [disabled]="!zn.transects || zn.transects.length<=0">{{ zn.code }}</mat-option>
+            <mat-option *ngFor="let zn of zones" [value]="zn.properties.code" [disabled]="!zn.transects || zn.transects.length<=0">{{ zn.properties.code }}</mat-option>
           </mat-select>
         </mat-form-field>
 

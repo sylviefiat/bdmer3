@@ -328,5 +328,7 @@
   "START_ANALYSE":"Start analysis",
   "BACK":"back",
   "NEXT":"next",
-  "RESET":"reinitialize"
+  "RESET":"reinitialize",
+  "NUMBER_SURVEYS_SELECT":"Number of surveys selected ",
+  "NUMBER_SP_SELECT":"Number of species selected in this survey "
 }

@@ -24,7 +24,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       <mat-card-title>{{'RESULT_TITLE' | translate}}</mat-card-title>
     </mat-card>
     <bc-result-rappel [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
-    <bc-result-rappel [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+    <bc-result-synthesis [results]="results$ | async" [locale]="locale$ | async"></bc-result-synthesis>
   `,
   styles: [
     `
@@ -40,7 +40,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
 })
 export class ResultPageComponent implements OnInit {
   analyseData$: Observable<Data>;
-  results$: Observable<Results[]>;
+  results$: Observable<Results>;
   locale$: Observable<string>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {

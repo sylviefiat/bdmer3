@@ -79,6 +79,7 @@ export function analyseReducer(
     case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {  
       return {
         ...state,
+        result: action.payload,
         analysing: false,
         analysed: true,
         msg: "Analyse succeded"
