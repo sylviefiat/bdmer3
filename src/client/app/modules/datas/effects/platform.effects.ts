@@ -158,6 +158,17 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
+  checkTransectCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_TRANSECT_CSV_FILE)  
+    //.do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.CheckTransectCsvFile) => action.payload)
+    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
+    // fait automatiquement une boucle sur les platforms retournées
+    .withLatestFrom(this.store.let(getSelectedPlatform))
+    .mergeMap((value: [any, Platform]) => this.platformService.importTransectVerification(value[0], value[1]))
+    .map(error => new PlatformAction.CheckTransectAddErrorAction(error));
+
+  @Effect()
   importZonePref$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_PREF)
     .map((action: PlatformAction.ImportZonePrefAction) => action.payload)

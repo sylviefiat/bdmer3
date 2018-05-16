@@ -194,6 +194,18 @@ export class PlatformService {
       })
   }
 
+  importTransectVerification(transect, platform: Platform): Observable<string>{
+    if(transect.code_platform === platform.code && platform.zones.filter(zone => transect.code_zone === zone.properties.code)){
+      console.log("ui")
+    }
+
+    // if(countries.filter(country => country.code === platform.codeCountry).length===0)
+    //   return of('Platform '+platform.code+' cannot be inserted because country '+platform.codeCountry+' is not in the database');  
+    // return of(''); 
+    return of(''); 
+  }
+
+
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
     console.log(zonePref);
     if(platform.code !== zonePref.codePlatform)

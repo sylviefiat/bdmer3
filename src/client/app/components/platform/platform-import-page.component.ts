@@ -69,7 +69,7 @@ export class PlatformImportPageComponent implements OnInit {
     check(csvFile){
         this.userCountry$
             .subscribe(userCountry =>{
-              if(userCountry === 'AA'){
+              if(userCountry.code === 'AA'){
                   this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
               }else{
                   this.msg = "Import can be performed"

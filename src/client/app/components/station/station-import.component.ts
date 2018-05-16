@@ -43,13 +43,17 @@ export class StationImportComponent implements OnInit{
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.upload.emit(csvFile.target.files[0]);
+            this.check(csvFile.target.files[0])
+            //this.upload.emit(csvFile.target.files[0]);
         } else {
             this.err.emit('No csv file found');
         }
+    }
+
+    check(csvFile){
+        this.store.dispatch(new PlatformAction.CheckTransectCsvFile(csvFile));
     }
 
     changeNeedHelp() {

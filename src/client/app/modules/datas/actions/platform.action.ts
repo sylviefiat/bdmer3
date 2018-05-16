@@ -45,6 +45,9 @@ export namespace PlatformAction {
       REMOVE_STATION: string;
       REMOVE_STATION_SUCCESS: string;
       REMOVE_STATION_FAIL: string;
+      CHECK_STATION_CSV_FILE: string;
+      CHECK_STATION_ADD_ERROR: string;
+      CHECK_STATION_SUCCESS: string;
       ADD_ZONE_PREF: string;
       ADD_ZONE_PREF_SUCCESS: string;
       IMPORT_ZONE_PREF: string;
@@ -98,6 +101,9 @@ export namespace PlatformAction {
       ADD_STATION_SUCCESS: type(`${PLATFORM} Add Station Success`),
       IMPORT_STATION: type(`${PLATFORM} Import Station`),
       IMPORT_STATION_SUCCESS:type(`${PLATFORM} Import Station Success`),
+      CHECK_STATION_CSV_FILE:type(`${PLATFORM} Check Station Csv file`),
+      CHECK_STATION_ADD_ERROR:type(`${PLATFORM} Check Station Csv file add error`),
+      CHECK_STATION_SUCCESS:type(`${PLATFORM} Check Station Csv file success`),
       REMOVE_STATION: type(`${PLATFORM} Remove Station`),
       REMOVE_STATION_SUCCESS: type(`${PLATFORM} Remove Station Success`),
       REMOVE_STATION_FAIL: type(`${PLATFORM} Remove Station Fail`), 
@@ -402,6 +408,24 @@ export namespace PlatformAction {
     constructor(public payload: Station) {}
   }
 
+  export class CheckStationCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_STATION_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckStationAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_STATION_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckStationSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_STATION_SUCCESS;
+
+    constructor(public payload: any) {}
+  }
+
   /**
    * Remove Station from Zone - Platform  Actions
    */
@@ -547,6 +571,9 @@ export namespace PlatformAction {
     | AddStationSuccessAction
     | ImportStationAction
     | ImportStationSuccessAction
+    | CheckStationCsvFile
+    | CheckStationAddErrorAction
+    | CheckStationSuccessAction
     | RemoveStationAction
     | RemoveStationSuccessAction
     | RemoveStationFailAction

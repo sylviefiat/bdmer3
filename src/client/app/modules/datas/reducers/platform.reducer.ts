@@ -56,8 +56,6 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.CHECK_PLATFORM_SUCCESS: {
-            console.log("here");
-            console.log(action.payload);
             return {
                 ...state,
                 msg: "CSV file is ready to be imported"
@@ -112,6 +110,15 @@ export function platformReducer(
                 ids: [...state.ids.filter(id => addedstation.codePlatform !== id), ...addedstation.codePlatform],
                 error: null,
                 msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Stations registered with success":"Station registered with success"
+            }
+        }
+
+        case PlatformAction.ActionTypes.CHECK_TRANSECT_ADD_ERROR: {
+            return {
+                ...state,
+                error: (action.payload !== '' && action.payload.length >0)?"Import cannot be perform before errors below are resolved":null,
+                msg: (action.payload === '' || action.payload.length === 0)?"Import can be performed":null,
+                importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
             }
         }
 
