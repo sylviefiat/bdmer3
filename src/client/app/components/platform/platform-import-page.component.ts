@@ -8,7 +8,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin,getAllCountriesInApp, getLangues, getPlatformImpErrors, getPlatformImpMsg } from '../../modules/ngrx/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getAuthCountry, getPlatformPageMsg, getAllCountriesInApp, getLangues, getPlatformImpErrors, getPlatformImpMsg } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Csv2JsonService } from '../../modules/core/services/csv2json.service';
@@ -27,8 +27,9 @@ import { PlatformService } from '../../modules/datas/services/platform.service'
 export class PlatformImportPageComponent implements OnInit {
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
+    msg: string;
     importError$: Observable<string[]>;
-    isAdmin$: Observable<boolean>;
+    userCountry$: Observable<Country>
     locale$: Observable<boolean>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
@@ -48,7 +49,7 @@ export class PlatformImportPageComponent implements OnInit {
         this.error$ = this.store.let(getPlatformPageError);
         this.importError$ = this.store.let(getPlatformImpErrors);
         this.msg$ = this.store.let(getPlatformImpMsg);
-        this.isAdmin$ = this.store.let(getisAdmin);
+        this.userCountry$ = this.store.let(getAuthCountry);
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importPlatform-"+l+".csv";
@@ -66,9 +67,14 @@ export class PlatformImportPageComponent implements OnInit {
     }
 
     check(csvFile){
-        this.isAdmin$
-            .filter(isAdmin => isAdmin)
-            .subscribe(isAdmin => this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile)));
+        this.userCountry$
+            .subscribe(userCountry =>{
+              if(userCountry === 'AA'){
+                  this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
+              }else{
+                  this.msg = "Import can be performed"
+              }
+            });
     }
 
     changeNeedHelp() {

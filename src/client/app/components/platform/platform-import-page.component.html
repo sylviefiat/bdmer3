@@ -10,6 +10,7 @@
       </mat-card-content>   
       <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
       <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>  
+      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>  
     </mat-card>
 </div>
 <div class="insideform">
