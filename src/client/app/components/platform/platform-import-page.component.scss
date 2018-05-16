@@ -54,8 +54,20 @@ h5 {
   color: red;
 }
 .send{
-  background-color: gree
+  background-color: #4BB543;
 }
 .btn-danger{
   background-color: red;
+}
+
+.btn-disabled{
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.msg {
+  text-align: center;
+  padding: 16px;     
+  color: white;
+  background-color: #4BB543;
 }

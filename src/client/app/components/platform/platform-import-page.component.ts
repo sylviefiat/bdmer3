@@ -8,7 +8,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin,getAllCountriesInApp, getLangues, getPlatformImpErrors } from '../../modules/ngrx/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin,getAllCountriesInApp, getLangues, getPlatformImpErrors, getPlatformImpMsg } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Csv2JsonService } from '../../modules/core/services/csv2json.service';
@@ -26,6 +26,7 @@ import { PlatformService } from '../../modules/datas/services/platform.service'
 })
 export class PlatformImportPageComponent implements OnInit {
     error$: Observable<string | null>;
+    msg$: Observable<string | null>;
     importError$: Observable<string[]>;
     isAdmin$: Observable<boolean>;
     locale$: Observable<boolean>;
@@ -37,6 +38,7 @@ export class PlatformImportPageComponent implements OnInit {
     platformsErr = [];
     error = true;
     csvFile: any;
+    importCsvFile: any = null;
 
     constructor(private platformService: PlatformService, private countryListService: CountryListService, private csv2JsonService: Csv2JsonService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
@@ -45,6 +47,7 @@ export class PlatformImportPageComponent implements OnInit {
         this.countries$ = this.store.let(getAllCountriesInApp);
         this.error$ = this.store.let(getPlatformPageError);
         this.importError$ = this.store.let(getPlatformImpErrors);
+        this.msg$ = this.store.let(getPlatformImpMsg);
         this.isAdmin$ = this.store.let(getisAdmin);
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
@@ -55,7 +58,8 @@ export class PlatformImportPageComponent implements OnInit {
 
     handleUpload(csvFile: any): void {
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.check(csvFile);
+            this.importCsvFile = csvFile.target.files["0"];
+            this.check(this.importCsvFile);
         } else {
             this.store.dispatch(new PlatformAction.AddPlatformFailAction('No csv file found'));
         }
@@ -64,7 +68,7 @@ export class PlatformImportPageComponent implements OnInit {
     check(csvFile){
         this.isAdmin$
             .filter(isAdmin => isAdmin)
-            .subscribe(isAdmin => this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile.target.files["0"])));
+            .subscribe(isAdmin => this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile)));
     }
 
     changeNeedHelp() {
@@ -72,7 +76,7 @@ export class PlatformImportPageComponent implements OnInit {
     }
 
     send(){
-        this.store.dispatch(new PlatformAction.ImportPlatformAction(this.csvFile.target.files[0]));
+        this.store.dispatch(new PlatformAction.ImportPlatformAction(this.importCsvFile));
     }
 
     getCsvPlatform() {

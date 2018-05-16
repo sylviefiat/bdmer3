@@ -85,6 +85,9 @@ export function getPlatformError(state$: Observable<IPlatformState>) {
 export function getPlatformImportErrors(state$: Observable<IPlatformState>) {
     return state$.select(state => state.importErrors);
 }
+export function getPlatformImportMsg(state$: Observable<IPlatformState>) {
+    return state$.select(state => state.msg);
+}
 
 export function getPlatformMsg(state$: Observable<IPlatformState>) {
     return state$.select(state => state.msg);

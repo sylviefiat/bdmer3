@@ -125,7 +125,7 @@ export class PlatformEffects {
     // fait automatiquement une boucle sur les platforms retournées
     //.mergeMap((platform: any) => platform)  
     .withLatestFrom(this.store.let(getAllCountriesInApp))
-    .mergeMap((value: [any, Country[]]) => {console.log(value); return this.platformService.importPlatformVerification(value[0], value[1])})
+    .mergeMap((value: [any, Country[]]) => this.platformService.importPlatformVerification(value[0], value[1]))
     .map(error => new PlatformAction.CheckPlatformAddErrorAction(error));
 
 

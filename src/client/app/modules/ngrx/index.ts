@@ -49,7 +49,6 @@ import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations
 import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
     getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
 
-
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
  * our top level state interface is just a map of keys to inner state types.
@@ -181,7 +180,6 @@ export const getPlatformisLoading: any = compose(getPlatformLoading, getPlatform
 export const getPlatformInApp: any = compose(getPlatformEntities, getPlatformState);
 export const getPlatformIdsInApp: any = compose(getPlatformIds, getPlatformState);
 export const getPlatformPageError: any = compose(getPlatformError, getPlatformState);
-export const getPlatformImpErrors: any = compose(getPlatformImportErrors, getPlatformState);
 export const getPlatformPageMsg: any = compose(getPlatformMsg, getPlatformState);
 export const getSelectedPlatform: any = compose(getCurrentPlatform, getPlatformState);
 export const getSelectedPlatformZones: any = compose(getCurrentPlatformZones, getPlatformState);

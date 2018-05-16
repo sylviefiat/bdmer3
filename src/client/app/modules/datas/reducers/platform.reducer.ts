@@ -26,7 +26,9 @@ export function platformReducer(
                 loaded: true,
                 entities: [...state.entities, ...newPlatforms],
                 ids: [...state.ids, ...newPlatformIds],
-                error: null
+                error: null,
+                msg: null,
+                importErrors: []
             };
 
         }
@@ -49,7 +51,7 @@ export function platformReducer(
                 ...state,
                 error: (action.payload !== '' && action.payload.length >0)?"Import cannot be perform before errors below are resolved":null,
                 msg: (action.payload === '' || action.payload.length === 0)?"Import can be performed":null,
-                importErrors: [...state.importErrors, action.payload]
+                importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
             }
         }
 

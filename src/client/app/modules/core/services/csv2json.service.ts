@@ -118,11 +118,11 @@ export class Csv2JsonService {
                             throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
-                lines.push(st);
             }
         }
-        console.log(lines);
-        //console.log(lines); //The data in the form of 2 dimensional array.
+
+        //if(lines.codeCountry)
+        console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
 
