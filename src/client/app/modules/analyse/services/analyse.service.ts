@@ -20,7 +20,8 @@ export class AnalyseService {
 
     analyse(analyseState: IAnalyseState): Results {
         let result: Results = { name: "", resultPerSurvey: [] };
-        result.name = "ANALYSE_BDMER_";
+        let today = new Date();
+        result.name = "ANALYSE BDMER "+today;
         // resultats par relevé
         for (let survey of analyseState.usedSurveys) {
             let surveyTransects = analyseState.usedTransects.filter(t => t.codePlatform === survey.codePlatform);

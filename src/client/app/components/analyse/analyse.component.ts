@@ -14,7 +14,7 @@ import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
-import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Transect, Species, Dimensions } from '../../modules/datas/models/index';
 import { Method } from '../../modules/analyse/models/index';
 
 @Component({
@@ -36,6 +36,7 @@ export class AnalyseComponent {
     @Input() zones$: Observable<Zone[]>;
     @Input() transects$: Observable<Transect[]>;
     @Input() species$: Observable<Species[]>;
+    @Input() dimensions$: Observable<Dimensions[]>;
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
@@ -45,6 +46,7 @@ export class AnalyseComponent {
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Output() transectEmitter = new EventEmitter<Transect[]>();
     @Output() speciesEmitter = new EventEmitter<Species[]>();
+    @Output() dimensionsEmitter = new EventEmitter<Dimensions[]>();
     @Output() methodEmitter = new EventEmitter<Method>();
     @Output() analyse = new EventEmitter<string>();
     nspecies : number = 0;
@@ -68,7 +70,8 @@ export class AnalyseComponent {
         transects: new FormControl()
     });
     speciesFormGroup: FormGroup = new FormGroup({
-        species: new FormControl()
+        species: new FormControl(),
+        dimensions: new FormControl()
     });
     analyseFormGroup: FormGroup = new FormGroup({
         analyseType: new FormControl()
@@ -105,6 +108,10 @@ export class AnalyseComponent {
     setSpecies(species: Species[]) {
         this.nspecies = species.length;
         this.speciesEmitter.emit(species); 
+    }
+
+    setDimensions(dimensions: Dimensions[]) {
+        this.dimensionsEmitter.emit(dimensions); 
     }
 
     setMethod(method: Method) {

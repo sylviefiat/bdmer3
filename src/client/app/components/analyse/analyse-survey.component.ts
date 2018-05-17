@@ -13,7 +13,7 @@ import { Survey } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="surveys">
-        <div *ngFor="let survey of surveys$ | async; let i=index; let e=even" [class.even]="e"> 
+        <div *ngFor="let survey of surveys$ | async; let i=index;"> 
           <bc-survey  [group]="form.controls.surveys.controls[i]" [survey]="survey" [locale]="locale" (surveyEmitter)="changeValue($event)"></bc-survey>
         </div>
       </div>
@@ -27,9 +27,9 @@ import { Survey } from '../../modules/datas/models/index';
       margin-bottom:10px;
       padding:5px;
       border: 1px solid grey;
-    }
-    .even {
-      background-color: lightgrey;
+      display:flex;
+      flex-direction: row;
+      flex-wrap:wrap;
     }
     `]
 })

@@ -34,6 +34,11 @@ export interface ResultSpecies {
     stock: Stock[];
 }
 
+export interface DimensionsAnalyse {   
+    longMin: number;
+    largMin: number;
+}
+
 export interface ResultTransect {
     codeTransect: string;
     numberIndividual: number;        // nombre d'invidus

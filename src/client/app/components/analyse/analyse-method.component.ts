@@ -9,7 +9,7 @@ import { initMethods } from '../../modules/analyse/states/index';
   template: `
     <h2>{{ 'SELECT_METHOD' | translate }}</h2>
     <mat-form-field [formGroup]="form">    
-      <mat-select placeholder="{{ 'SELECT_METHOD' | translate}}" [formControlName]="inputName" (change)="methodEmitter.emit($event.value)" required>
+      <mat-select placeholder="{{ 'SELECT_METHOD' | translate}}" [formControlName]="inputName" (change)="methodEmitter.emit($event.value)" [value]="methods[0].method" required>
         <mat-option *ngFor="let method of methods" [value]="method">{{ method.method | translate }}</mat-option>
       </mat-select>
     </mat-form-field> 

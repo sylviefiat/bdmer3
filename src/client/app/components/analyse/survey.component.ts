@@ -8,10 +8,20 @@ import { Survey } from '../../modules/datas/models/index';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'survey'" (change)="change($event)">  
-          <strong>{{ survey.code }}</strong> <br/>         
-          {{ 'DATE_START' | translate }}: {{ survey.dateStart  | date:localDate }},
-          {{ 'DATE_END' | translate }}: {{ survey.dateEnd  | date:localDate }} <br/>
-          {{ 'PARTICIPANTS' | translate }}:{{ survey.participants }}
+          <mat-card>
+            <mat-card-title-group>
+              <mat-card-title>{{ survey.code }}</mat-card-title>
+              <mat-card-subtitle>{{ survey.codePlatform }}</mat-card-subtitle>
+            </mat-card-title-group>
+            <mat-card-content>
+              {{ survey.dateStart | date:localDate }}, {{ survey.dateEnd | date:localDate }}
+            </mat-card-content>
+            <mat-card-content>
+              <p>{{'PARTICIPANTS' | translate}}: {{ survey.participants }}</p>
+              <p>{{'SURFACE_TRANSECT' | translate}}: {{ survey.surfaceTransect }}</p>
+              <p>{{'DESCRIPTION' | translate}}: {{ survey.description }}</p>
+           </mat-card-content>
+          </mat-card>
         </mat-checkbox>
     </div>
   `,

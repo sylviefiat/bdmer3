@@ -330,5 +330,7 @@
   "NEXT":"suivant",
   "RESET":"réinitialiser",
   "NUMBER_SURVEYS_SELECT":"Nombre de relevés sélectionnés ",
-  "NUMBER_SP_SELECT":"Nombre d'espèces sélectionnées dans ce relevé "
+  "NUMBER_SP_SELECT":"Nombre d'espèces sélectionnées dans ce relevé ",
+  "HIDE_RECAP":"Cacher le récapitulatif",
+  "SHOW_RECAP":"Afficher le récapitulatif"
 }

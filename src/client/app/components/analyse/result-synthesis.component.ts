@@ -10,10 +10,13 @@ import { Results } from '../../modules/analyse/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
    <h2>{{ results.name }}</h2>
+   
   `,
   styles: [
   `
-    
+   h2 {
+      margin-left: 25px;
+    } 
   `]
 })
 export class ResultSynthesisComponent implements OnInit {

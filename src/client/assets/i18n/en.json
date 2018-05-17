@@ -330,5 +330,7 @@
   "NEXT":"next",
   "RESET":"reinitialize",
   "NUMBER_SURVEYS_SELECT":"Number of surveys selected ",
-  "NUMBER_SP_SELECT":"Number of species selected in this survey "
+  "NUMBER_SP_SELECT":"Number of species selected in this survey ",
+  "HIDE_RECAP":"Hide summary",
+  "SHOW_RECAP":"Show summary"
 }

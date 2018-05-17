@@ -10,8 +10,16 @@ import { IAnalyseState } from '../../modules/analyse/states/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2>{{ 'RESULT_RAPPEL' | translate }}</h2>
-    <p class="subtitle">{{ 'NUMBER_SURVEYS_SELECT' | translate }}: {{ analyseData.usedSurveys.length }}</p>
-    <mat-tab-group class="primer">    
+    <p class="subtitle">
+      <span> {{ 'NUMBER_SURVEYS_SELECT' | translate }}: {{ analyseData.usedSurveys.length }} <fa [name]="'check'" [border]=false [size]=1></fa></span>
+    </p>
+    <p class="displayer">
+      <a (click)="changeDisplay()">
+        <span [class.show]="showRecap" [class.hide]="!showRecap">{{ 'HIDE_RECAP' | translate }}&nbsp;&nbsp;<fa [name]="'angle-double-down'" [border]=false [size]=1></fa></span>
+        <span [class.show]="!showRecap" [class.hide]="showRecap">{{ 'SHOW_RECAP' | translate }}&nbsp;&nbsp;<fa [name]="'angle-double-right'" [border]=false [size]=1></fa></span>
+      </a>
+    </p>
+    <mat-tab-group class="primer" [class.show]="showRecap" [class.hide]="!showRecap">    
       <mat-tab *ngFor="let survey of analyseData.usedSurveys; let i=index" label="{{survey.code}}">
         <p><label>{{ 'SURVEY_CODE' | translate}}:</label> {{survey.code}}, {{ survey.dateStart  | date:localDate }}, {{ survey.dateEnd  | date:localDate }}</p>
         <p><label>{{ 'PARTICIPANTS' | translate}}:</label> {{survey.participants}}</p>
@@ -41,15 +49,23 @@ import { IAnalyseState } from '../../modules/analyse/states/index';
     h2 {
       margin-left: 25px;
     }
-    .subtitle {
+    .subtitle, .displayer {
       margin-left: 30px;
-    }    
+    }   
+    .displayer {
+      color: darkgrey;
+      font-style: italic;
+      cursor: pointer
+    }
     mat-tab-group.primer {
       margin: 25px 72px;
       background-color: white;
     }
     p, .spDisplay {
       margin-left: 10px;
+    }
+    .spDisplay {
+      font-size: smaller;
     }
     label {
       color:darkgrey;
@@ -58,6 +74,12 @@ import { IAnalyseState } from '../../modules/analyse/states/index';
       float:left;
       margin-right:50px;
     }
+    .show {
+      display: block;
+    }
+    .hide {
+      display: none;
+    }
   `]
 })
 export class ResultRappelComponent implements OnInit {
@@ -65,9 +87,9 @@ export class ResultRappelComponent implements OnInit {
   @Input() locale: string;
   spInSurveys: Species[][];
   znInSurveys: Zone[][];
+  showRecap: boolean = true;
 
-  constructor() {
-
+  constructor() {  
   }
 
   ngOnInit() {
@@ -95,6 +117,10 @@ export class ResultRappelComponent implements OnInit {
     for(let i in this.analyseData.usedSurveys){
       this.znInSurveys[i] = this.analyseData.usedZones.filter(z => z.codePlatform == this.analyseData.usedSurveys[i].codePlatform);
     }
+  }
+
+  changeDisplay(){
+    this.showRecap = !this.showRecap;
   }
 
   get localDate() {

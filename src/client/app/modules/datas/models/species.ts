@@ -7,14 +7,14 @@ export interface Species {
     LLW: CoefsAB;
     LW: CoefsAB;
     conversions: Conversion;
-    biologicDimensions: BiologicDimensions;
+    biologicDimensions: Dimensions;
     distribution: string;
     habitatPreference: string;
     legalDimensions: LegalDimensions[];
     picture: string;
 }
 
-export interface BiologicDimensions {   
+export interface Dimensions {   
     longMax: string;
     largMax: string;
 }

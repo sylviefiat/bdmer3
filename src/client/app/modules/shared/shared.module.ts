@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
+import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
   MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule } from '@angular/material';
   
 /*import {
@@ -52,7 +52,7 @@ import { SHARED_COMPONENTS } from './components/index';
 @NgModule({
   exports: [
     //CdkTableModule,
-    //MatAutocompleteModule,
+    MatAutocompleteModule,
     //MatButtonModule,
     //MatButtonToggleModule,
     MatCardModule,
