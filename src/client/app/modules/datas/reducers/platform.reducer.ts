@@ -85,7 +85,7 @@ export function platformReducer(
             const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform.code)[0];
 
             const modifiedZone = modifiedPlatform.zones.filter(zone => addedtransect.codeZone === zone.properties.code)[0];
-            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.code !== transect.properties.code),addedtransect];
+            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.properties.code !== transect.properties.code),addedtransect];
             modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedtransect.codeZone !== zone.properties.code),modifiedZone];
 
             return {
@@ -185,7 +185,7 @@ export function platformReducer(
                 const removedTransect = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedTransect.codePlatform)[0];
                 const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedTransect.codeZone)[0];
-                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.properties.code !== removedTransect.code);
+                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.properties.code !== removedTransect.properties.code);
                 modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
 
                 return {

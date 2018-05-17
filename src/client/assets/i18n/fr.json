@@ -288,5 +288,7 @@
   "POLYGON_ERROR": "Le polygone n'est pas valide",
   "TRANSECT_NAME": "Nom du transect",
   "TRANSECT_COORD": "Coordonnées du transect",
-  "TRANSECT_ERROR": "Transect non valide."
+  "TRANSECT_ERROR": "Transect non valide.",
+  "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
+  "TRANSECT_ERROR_LAT": "Latitude du transect non valide"
 }

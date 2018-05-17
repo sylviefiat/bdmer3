@@ -31,22 +31,19 @@ export class MapStaticService {
     return res;
   }
 
-  refactorCoordinatesPoint(coordinates){
-    var string = coordinates.replace(/ /g,'');
-    var a = string.length;
+  checkIsValidCoordinate(coord, type){
+    let isValid;
     
-    if(string.split(',').length > 2){
-      return "error"
+    switch (type) {
+      case 'lat':
+      isValid = (coord <= 90 && coord >= -90);
+      break;
+      case 'lng':
+      isValid = (coord <= 180 && coord >= -180);
+      break;
     }
 
-    if(parseFloat(string.split(',')["0"]) < -90 || parseFloat(string.split(',')["0"]) > 90 || parseFloat(string.split(',')["1"]) < -180 || parseFloat(string.split(',')["1"]) > 180){
-      return "error"
-    }
-
-
-    let ar = [parseFloat(string.split(',')["0"]), parseFloat(string.split(',')["1"])]
-
-    return ar;
+    return isValid;
   }
 
   googleMapUrl(ar){

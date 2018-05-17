@@ -29,10 +29,11 @@ export class TransectFormComponent implements OnInit {
 
     url: string;
     code: string;
-    coords: string;
-    coordsRefactor: any;
-    coordStringRefactor: string = '';
-    errorCoord: boolean;
+    longitude: any;
+    latitude: any;
+    errorLat: boolean;
+    errorLng: boolean;
+    canSubmit: boolean;
 
     transectForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -54,31 +55,26 @@ export class TransectFormComponent implements OnInit {
     ngOnInit() {
         this.transectForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
+        this.zone ? this.zone: null;
 
         if(this.transect){
             this.transectForm.controls.properties.get("name").setValue(this.transect.properties.name);
             this.transectForm.controls.properties.get("code").setValue(this.transect.properties.code);
             this.url = this.transect.staticMapTransect;
-            this.transectForm.controls.geometry.get("coordinates").setValue(this.transect.geometry["coordinates"]["0"].toString() + "," + this.transect.geometry["coordinates"]["1"].toString()); 
+            this.longitude = this.transect.geometry["coordinates"]["0"];
+            this.latitude = this.transect.geometry["coordinates"]["1"]
             this.transectForm.controls.properties.get("name").disable();
         }
     }
 
     submit() {
-        if(!this.errorCoord){
-            this.errorMessage = false;
-            
+        if(!this.errorLat && !this.errorLng){
+
             this.transectForm.controls.properties.get("code").setValue(this.zone.properties.code + "_" +this.nameRefactorService.convertAccent(this.transectForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
-            this.coords = this.transectForm.controls.geometry.get("coordinates").value;
+            this.transectForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude])
 
             this.mapStaticService.staticMapToB64(this.url).then((data) => {
                 this.transectForm.controls.staticMapTransect.setValue(data);
-
-                if(this.coordStringRefactor === this.transectForm.controls.geometry.get("coordinates").value){
-                    this.transectForm.controls.geometry.get("coordinates").setValue(this.transect.geometry["coordinates"])
-                }else{
-                    this.transectForm.controls.geometry.get("coordinates").setValue(this.coordsRefactor);
-                }
 
                 if (this.transectForm.valid) {
                     this.transectForm.controls.properties.get("name").enable();
@@ -98,15 +94,24 @@ export class TransectFormComponent implements OnInit {
         });
     }
 
-    coordChange(coords){
-        this.errorCoord = false;
-        var ar = this.mapStaticService.refactorCoordinatesPoint(coords.target.value);
-        if(ar !== "error"){
-            this.url = this.mapStaticService.googleMapUrlPoint(ar);
-            this.coordsRefactor = ar;
+    coordChange(){
+        this.errorLat = false; 
+        this.errorLng = false;
+
+        if(this.latitude){
+            this.errorLat = !this.mapStaticService.checkIsValidCoordinate(this.latitude, 'lat');
+        }
+
+        if(this.longitude){
+            this.errorLng = !this.mapStaticService.checkIsValidCoordinate(this.longitude, 'lng');
+        }
+
+        if(!this.errorLat && !this.errorLng && this.latitude && this.longitude){
+            this.url = this.mapStaticService.googleMapUrlPoint([this.longitude, this.latitude]);
+            this.canSubmit = true;
         }else{
-            this.errorCoord = true;
             this.url = ""
+            this.canSubmit = false;
         }
     }
 
