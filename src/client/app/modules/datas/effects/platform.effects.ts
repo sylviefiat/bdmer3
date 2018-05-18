@@ -16,12 +16,13 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 
-import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp } from '../../ngrx/index';
+import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp,getSpeciesInApp } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from '../actions/index';
 import { Platform, Zone, Station, Count, Survey, ZonePreference } from '../models/platform';
 import { Country } from '../../countries/models/country';
+import { Species } from '../../datas/models/species';
 
 import { config } from '../../../config';
 
@@ -94,6 +95,16 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
 
+  @Effect()
+  checkZonePrefCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_ZONE_PREF_CSV_FILE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.CheckPlatformCsvFile) => action.payload)
+    .mergeMap((zonePref: ZonePreference) =>this.csv2jsonService.csv2('zonePref', zonePref))
+    .withLatestFrom(this.store.let(getSelectedPlatform), this.store.let(getSpeciesInApp))
+    .mergeMap((value: [ZonePreference, Platform, Species[]]) => this.platformService.importZonePrefVerification(value[0], value[1], value[2]))
+    .map(error => new PlatformAction.CheckZonePrefAddErrorAction(error));
+
   @Effect() 
   addCount$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_COUNT)
@@ -148,7 +159,7 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
-  checksURVEYCsv$: Observable<Action> = this.actions$
+  checkSurveyCsv$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.CHECK_SURVEY_CSV_FILE)  
     .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
     .map((action: PlatformAction.CheckSurveyCsvFile) => action.payload)

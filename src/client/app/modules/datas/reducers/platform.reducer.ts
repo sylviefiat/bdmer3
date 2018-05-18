@@ -49,8 +49,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.CHECK_PLATFORM_ADD_ERROR: {
             return {
                 ...state,
-                error: (action.payload !== '' && action.payload.length >0)?"Import cannot be perform before errors below are resolved":null,
-                msg: (action.payload === '' || action.payload.length === 0)?"Import can be performed":null,
                 importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
             }
         }
@@ -94,6 +92,13 @@ export function platformReducer(
             }
         }
 
+        case PlatformAction.ActionTypes.CHECK_SURVEY_ADD_ERROR: {
+            return {
+                ...state,
+                importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
+            }
+        }
+
         case PlatformAction.ActionTypes.ADD_STATION_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS: {
             const addedstation = action.payload;
@@ -115,8 +120,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.CHECK_TRANSECT_ADD_ERROR: {
             return {
                 ...state,
-                error: (action.payload !== '' && action.payload.length >0)?"Import cannot be perform before errors below are resolved":null,
-                msg: (action.payload === '' || action.payload.length === 0)?"Import can be performed":null,
                 importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
             }
         }
@@ -137,6 +140,13 @@ export function platformReducer(
                 ids: [...state.ids.filter(id => addedzonepref.codePlatform !== id), ...addedzonepref.codePlatform],
                 error: null,
                 msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Zones preferences registered with success":"Zone preference registered with success"
+            }
+        }
+
+        case PlatformAction.ActionTypes.CHECK_ZONE_PREF_ADD_ERROR: {
+            return {
+                ...state,
+                importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
             }
         }
 

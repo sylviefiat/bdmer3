@@ -8,7 +8,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
 
 import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getPlatformImpErrors, getLangues } from '../../modules/ngrx/index';
-import { PlatformAction } from '../../modules/datas/actions/index';
+import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
@@ -40,6 +40,7 @@ export class PreferenceAreaImportComponent implements OnInit{
 
     ngOnInit() {
         this.importError$ = this.store.let(getPlatformImpErrors);
+        this.store.dispatch(new SpeciesAction.LoadAction())
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importZonePref-"+l+".csv";
@@ -56,7 +57,7 @@ export class PreferenceAreaImportComponent implements OnInit{
     }
 
     check(csvFile){
-        this.store.dispatch(new PlatformAction.CheckZonePreCsvFile(csvFile));
+        this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(csvFile));
     }
 
     send(){

@@ -55,6 +55,9 @@ export namespace PlatformAction {
       ADD_ZONE_PREF_SUCCESS: string;
       IMPORT_ZONE_PREF: string;
       IMPORT_ZONE_PREF_SUCCESS: string;
+      CHECK_ZONE_PREF_CSV_FILE: string;
+      CHECK_ZONE_PREF_ADD_ERROR: string;
+      CHECK_ZONE_PREF_SUCCESS: string;
       REMOVE_ZONE_PREF: string;
       REMOVE_ZONE_PREF_SUCCESS: string;
       REMOVE_ZONE_PREF_FAIL: string;
@@ -124,6 +127,9 @@ export namespace PlatformAction {
       ADD_ZONE_PREF_SUCCESS: type(`${PLATFORM} Add Zone Preference Success`),
       IMPORT_ZONE_PREF: type(`${PLATFORM} Import Zone Preference`),
       IMPORT_ZONE_PREF_SUCCESS:type(`${PLATFORM} Import Zone Preference Success`),
+      CHECK_ZONE_PREF_CSV_FILE:type(`${PLATFORM} Check Zone Preference Csv file`),
+      CHECK_ZONE_PREF_ADD_ERROR:type(`${PLATFORM} Check Zone Preference Csv file add error`),
+      CHECK_ZONE_PREF_SUCCESS:type(`${PLATFORM} Check Zone Preference Csv file success`),
       REMOVE_ZONE_PREF: type(`${PLATFORM} Remove Zone Preference`),
       REMOVE_ZONE_PREF_SUCCESS: type(`${PLATFORM} Remove Zone Preference Success`),
       REMOVE_ZONE_PREF_FAIL: type(`${PLATFORM} Remove Zone Preference Fail`),  
@@ -316,6 +322,24 @@ export namespace PlatformAction {
     readonly type = ActionTypes.IMPORT_ZONE_PREF_SUCCESS;
 
     constructor(public payload: ZonePreference) {}
+  }
+
+  export class CheckZonePrefCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_ZONE_PREF_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckZonePrefAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_ZONE_PREF_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckZonePrefSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_ZONE_PREF_SUCCESS;
+
+    constructor(public payload: any) {}
   }
 
   /**

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import { Store } from '@ngrx/store';
 
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
@@ -13,7 +14,7 @@ export class Csv2JsonService {
     static COMMA = ',';
     static SEMICOLON = ';';
 
-    constructor(private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+    constructor(private store: Store<IAppState>, private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
     }
 
     private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
@@ -258,6 +259,7 @@ export class Csv2JsonService {
     }
 
     private extractZonePrefData(arrayData): ZonePreference[] { 
+        let species$: Observable<Species[]> = this.store.let(getSpeciesInApp);
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: ZonePreference[] = [];
@@ -274,6 +276,7 @@ export class Csv2JsonService {
                         case "codeSpecies":
                         case "presence":
                         case "infoSource":
+                        case "picture":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
@@ -281,6 +284,13 @@ export class Csv2JsonService {
                             throw new Error('Wrong CSV File Unknown field detected');
                     }
                 }
+                species$.subscribe((species) =>{
+                    for(let i = 0; i < species.length; i++){
+                        if(st.codeSpecies === species[i].code){
+                            st.picture = species[i].picture;
+                        }
+                    }
+                })
                 lines.push(st);
             }
         }

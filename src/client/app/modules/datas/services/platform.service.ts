@@ -11,6 +11,7 @@ import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
 import { Platform, Zone, Property, Survey, Station, ZonePreference, Count } from '../models/platform';
 import { Country } from '../../countries/models/country';
+import { Species } from '../../datas/models/species';
 
 @Injectable()
 export class PlatformService {
@@ -222,7 +223,6 @@ export class PlatformService {
 
 
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
-    console.log(zonePref);
     if(platform.code !== zonePref.codePlatform)
       return _throw('Import is not possible : zonePref codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
@@ -242,6 +242,30 @@ export class PlatformService {
     .mergeMap((response) => {
       return  of(zonePref);
     })
+  }
+
+  importZonePrefVerification(zonePref: ZonePreference, platform: Platform, species: Species[]): Observable<string>{
+    if(zonePref.codePlatform === platform.code){
+      for(let i = 0; i < platform.zones.length; i++){
+        if(zonePref.codeZone === platform.zones[i].properties.code){
+          for(let y = 0; i < species.length; y++){
+            if(zonePref.codeSpecies === species[y].code){
+              return of('');
+            }
+            if(zonePref.codeSpecies !== species[y].code && y === species.length - 1){
+              return of("CodeSpecies "+zonePref.codeSpecies+" cannot be inserted because it doesn't exist in database");
+            }
+          }
+        }
+        if(zonePref.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1){
+          return of('ZonePref '+zonePref.code+' cannot be inserted because codeZone '+ zonePref.codeZone+' is not in the database');
+        }
+      }
+    }else{
+      return of('ZonePref '+zonePref.code+' cannot be inserted because codePlatform '+zonePref.codePlatform+' is not in the database');
+    }
+
+    return of('')
   }
 
   removeZonePref(zonePref: ZonePreference): Observable<ZonePreference> {    

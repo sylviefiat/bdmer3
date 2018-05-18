@@ -1,11 +1,15 @@
 <div>
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES_PREF' | translate}}</mat-card-title>
-      <mat-card-content>
-        <button (click)="back.emit()" class="back">{{ 'CANCEL' | translate }}</button>        
+       <mat-card-content>
+        <button *ngIf="importCsvFile === null || (importError$ | async)?.length !== 0; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
+        <ng-template #activedbutton>
+          <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
+        </ng-template>
+        <button (click)="cancel()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
-      <mat-card-content class="error" *ngIf="error" align="center">{{ error }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>     
+      <mat-card-content class="error" *ngIf="(importError$ | async)?.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>   
     </mat-card>
 </div>
 <div class="insideform">
@@ -28,6 +32,17 @@
         <span>{{ 'IMPORT_CSV' | translate }}</span>
         <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
+    </mat-card-actions>
+
+    <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
+      <h2 class="errorZonePref">{{'LIST_ERROR_ZONE_PREF' | translate}}</h2>
+      <mat-list>
+        <div *ngFor="let zonePref of (importError$ | async)">
+          <mat-list-item class="errorZonePref"> 
+              {{zonePref}}
+          </mat-list-item>
+        </div>
+      </mat-list>
     </mat-card-actions>
   </mat-card>
 </div>

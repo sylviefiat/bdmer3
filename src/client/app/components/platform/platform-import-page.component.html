@@ -8,9 +8,8 @@
         </ng-template>
         <button (click)="return()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
-      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>  
-      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>  
+      <mat-card-content class="error" *ngIf="(importError$ | async)?.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>  
     </mat-card>
 </div>
 <div class="insideform">
