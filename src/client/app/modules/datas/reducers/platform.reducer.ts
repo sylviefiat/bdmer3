@@ -81,7 +81,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS: {
             const addedsurvey = action.payload;
-            console.log(addedsurvey);
             const platforms = state.entities.filter(platform => addedsurvey.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedsurvey.codePlatform === platform._id)[0];
             modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => addedsurvey.code !== survey.code),addedsurvey];

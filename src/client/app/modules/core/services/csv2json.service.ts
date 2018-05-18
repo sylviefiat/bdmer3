@@ -166,17 +166,18 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_country":
-                        case "code_platform":
+                        case "codeCountry":
+                        case "codePlatform":
+                        case "codeZone":
                         case "code":
                         case "participants":
-                        case "surface_station":
+                        case "surfaceTransect":
                         case "description":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
-                        case "date_start":
-                        case "date_end":
+                        case "dateStart":
+                        case "dateEnd":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
@@ -267,12 +268,12 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_platform":
-                        case "code_zone":
+                        case "codePlatform":
+                        case "codeZone":
                         case "code":
-                        case "code_species":
+                        case "codeSpecies":
                         case "presence":
-                        case "info_source":
+                        case "infoSource":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
@@ -373,7 +374,6 @@ export class Csv2JsonService {
                         res = this.extractZoneData(data);
                         break;
                     case "survey":
-                        console.log(data);
                         res = this.extractSurveyData(data);
                         break;
                     case "zonePref":

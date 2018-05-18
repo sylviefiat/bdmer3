@@ -338,5 +338,12 @@
   "SELECTED_CSV": "selectioné",
   "SEND": "Envoyer",
   "DELETE_CSV": "Supprimer",
-  "LIST_ERROR_PLATFORM": "Liste des plateformes concernées"
+  "LIST_ERROR_PLATFORM": "Liste des plateformes concernées",
+  "LIST_ERROR_SURVEY": "Liste des relevés concernés",
+  "LIST_ERROR_TRANSECT": "Liste des transects concernés",
+  "TRANSECT_NAME": "Nom du transect",
+  "TRANSECT_COORD": "Coordonnées du transect",
+  "TRANSECT_ERROR": "Transect non valide.",
+  "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
+  "TRANSECT_ERROR_LAT": "Latitude du transect non valide"
 }

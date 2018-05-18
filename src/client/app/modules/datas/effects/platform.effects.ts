@@ -148,6 +148,17 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
+  checksURVEYCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_SURVEY_CSV_FILE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.CheckSurveyCsvFile) => action.payload)
+    .mergeMap((survey: Survey) =>this.csv2jsonService.csv2('survey', survey))
+    // fait automatiquement une boucle sur les platforms retournées
+    .withLatestFrom(this.store.let(getSelectedPlatform))
+    .mergeMap((value: [Survey, Platform]) => this.platformService.importSurveyVerification(value[0], value[1]))
+    .map(error => new PlatformAction.CheckPlatformAddErrorAction(error));
+
+  @Effect()
   importStation$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_STATION)
     .map((action: PlatformAction.ImportStationAction) => action.payload)

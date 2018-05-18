@@ -133,7 +133,6 @@ export class PlatformService {
   }
 
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {
-    console.log(survey);
     if(platform.code !== survey.codePlatform)
       return _throw('Import is not possible : survey codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
@@ -149,6 +148,22 @@ export class PlatformService {
       .mergeMap((response) => {
         return  of(survey);
       })
+  }
+
+  importSurveyVerification(survey: Survey, platform: Platform): Observable<string>{
+    if(survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry){
+      return of('There is no platform ' + survey.codePlatform + ' for country ' + survey.codeCountry);
+    }
+
+    if(survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry){
+      return of('Platform ' + survey.codePlatform + " isn't part of country " + survey.codeCountry);
+    }
+
+    if(survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry){
+      return of('Platform ' + survey.codePlatform + " and country " + survey.codeCountry + " are not in database");
+    }
+
+    return of('');
   }
 
   removeSurvey(survey: Survey): Observable<Survey> {    
