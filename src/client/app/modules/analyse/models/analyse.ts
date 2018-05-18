@@ -35,8 +35,9 @@ export interface ResultSpecies {
 }
 
 export interface DimensionsAnalyse {   
-    longMin: number;
-    largMin: number;
+    codeSp: string;
+    longMin: string;
+    largMin: string;
 }
 
 export interface ResultTransect {

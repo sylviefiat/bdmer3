@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import {map, startWith} from 'rxjs/operators';
 import { Species, Dimensions, LegalDimensions } from '../../modules/datas/models/index';
 import { DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
@@ -9,7 +11,7 @@ import { Country } from '../../modules/countries/models/country';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="formSp"> 
-        <mat-checkbox [formControlName]="'species'" (change)="changeCheck($event)">
+        <mat-checkbox [formControlName]="'species'">
           <mat-card>
             <mat-card-title-group>
               <img mat-card-sm-image [src]="species.picture"/>
@@ -25,17 +27,17 @@ import { Country } from '../../modules/countries/models/country';
             <mat-card-content [formGroup]="formDims">
               <h5 mat-subheader>{{ 'SPECIES_MIN_DIMS' | translate }}</h5>
               <mat-form-field>
-                <input (change)="changeMins($event)" type="text" placeholder="{{'LONG_MIN' | translate}}" aria-label="Number" matInput [formControlName]="'longMin'" [matAutocomplete]="auto1">
+                <input type="text" placeholder="{{'LONG_MIN' | translate}}" matInput formControlName="longMin" [matAutocomplete]="auto1">
                 <mat-autocomplete #auto1="matAutocomplete">
-                  <mat-option *ngFor="let option of lenghtOptions" [value]="option">
+                  <mat-option *ngFor="let option of optionsL" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field> 
               <mat-form-field>
-                <input (change)="changeMins($event)" type="text" placeholder="{{'LARG_MIN' | translate}}" aria-label="Number" matInput [formControlName]="'largMin'" [matAutocomplete]="auto2">
+                <input type="text" placeholder="{{'LARG_MIN' | translate}}" matInput formControlName="largMin" [matAutocomplete]="auto2">
                 <mat-autocomplete #auto2="matAutocomplete">
-                  <mat-option *ngFor="let option of widthOptions" [value]="option">
+                  <mat-option *ngFor="let option of optionsW" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
@@ -56,35 +58,57 @@ import { Country } from '../../modules/countries/models/country';
 export class SpeciesComponent implements OnInit {
   MAX_LENGTH = 1000;
   MAX_WIDTH = 500;
+  MIN = 5;
   @Input() species: Species;
   @Input() locale: string;
   @Input() currentCountry: Country;
   @Input('group') public formSp: FormGroup;
   @Input('dims') public formDims: FormGroup;
   @Output() speciesEmitter = new EventEmitter<{species:Species,dims:DimensionsAnalyse,checked:boolean}>();
-  dimensions: DimensionsAnalyse = { longMin:0,largMin:0 };
+  dimensions: DimensionsAnalyse = { codeSp:null,longMin:"0",largMin:"0" };
   legalDims: LegalDimensions;
-  isChecked: boolean;
+  isChecked: boolean = false;
+  optionsL : string[] = [];
+  optionsW : string[] = [];
 
+  constructor(private _fb: FormBuilder) {    
+      
+  }
 
-  constructor(private _fb: FormBuilder) {
-    
+  filter(option: string, options: string[]){
+    console.log(option);
+    return options.filter(opt => opt.startsWith(option));
   }
 
   ngOnInit(){
     this.legalDims = this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code) && 
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code).length>0 && 
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code)[0];
+    
+    for(let i=this.MIN; i<Math.max(this.MAX_LENGTH,this.MAX_WIDTH); i+=5){
+      if(i<this.MAX_LENGTH) this.optionsL.push(i+"");
+      if(i<this.MAX_WIDTH) this.optionsW.push(i+"");
+    }
+
+    this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
+    this.formDims.controls['largMin'].valueChanges.subscribe(option => this.changeWMins(option));
+    this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
   }
 
   changeCheck(value: any){
-    this.isChecked = value.checked;
+    this.isChecked = value;
+    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:this.formDims.value.largMin};
     return this.send();
   }
 
-  changeMins(value: any){
-    console.log(this.formDims.value);
-    this.dimensions=this.formDims.value;
+  changeLMins(value: any){
+    this.dimensions={codeSp: this.species.code,longMin:value,largMin:this.formDims.value.largMin};
+    if(this.isChecked)
+      return this.send();
+  }
+
+  changeWMins(value: any){
+    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:value};
     if(this.isChecked)
       return this.send();
   }
@@ -93,12 +117,7 @@ export class SpeciesComponent implements OnInit {
     return this.speciesEmitter.emit({species:this.species,dims:this.dimensions,checked:this.isChecked});
   }
 
-  get haveVernacular(){
-    return this.currentCountry && this.species.names.filter(name => name.lang === this.currentCountry.code).length > 0;
-  }
-
   get name(){
-    console.log(this.currentCountry);
     let name = "";
     if(this.species.names.filter(name => name.lang === this.currentCountry.code).length > 0){
       name += ", "+this.species.names.filter(name => name.lang === this.currentCountry.code)[0].name;
@@ -111,21 +130,5 @@ export class SpeciesComponent implements OnInit {
 
   get picture(): string | boolean {
     return this.species.picture; 
-  }
-
-  get lenghtOptions(){
-    let options : number[] = [];
-    for(let i=5; i<this.MAX_LENGTH; i+=5){
-      options.push(i);
-    }
-    return options;
-  }
-
-  get widthOptions(){
-    let options : number[] = [];
-    for(let i=5; i<this.MAX_WIDTH; i+=5){
-      options.push(i);
-    }
-    return options;
   }
 }

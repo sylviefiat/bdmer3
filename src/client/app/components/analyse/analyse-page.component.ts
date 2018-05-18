@@ -8,9 +8,9 @@ import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
   getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseTransects, 
-  getSelectedAnalyseSpecies, getAnalyseCountry } from '../../modules/ngrx/index';
+  getSelectedAnalyseSpecies,getAnalyseCountry } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
-import { Method } from '../../modules/analyse/models/index';
+import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
@@ -41,6 +41,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       (zoneEmitter)="selectZone($event)"
       (transectEmitter)="selectTransect($event)"
       (speciesEmitter)="selectSpecies($event)"
+      (dimensionsEmitter)="setDimensions($event)"
       (methodEmitter)="selectMethod($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
@@ -55,6 +56,7 @@ export class AnalysePageComponent implements OnInit {
   zones$: Observable<Zone[]>;
   transects$: Observable<Transect[]>;
   species$: Observable<Species[]>;
+  dimensions$: Observable<DimensionsAnalyse[]>;
   isAdmin$: Observable<boolean>;
   locale$: Observable<string>;
   msg$: Observable<string>;
@@ -107,6 +109,10 @@ export class AnalysePageComponent implements OnInit {
 
   selectSpecies(species: Species[]) {
     this.store.dispatch(new AnalyseAction.SelectSpecies(species));    
+  }
+
+  setDimensions(dims: DimensionsAnalyse[]) {
+    this.store.dispatch(new AnalyseAction.SelectDims(dims));    
   }
 
   selectMethod(method: Method) {

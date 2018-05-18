@@ -61,6 +61,13 @@ export function analyseReducer(
       };
     }
 
+    case AnalyseAction.ActionTypes.SELECT_DIMS: {  
+      return {
+        ...state,
+        usedDims: action.payload
+      };
+    }
+
     case AnalyseAction.ActionTypes.SELECT_METHOD: {  
       return {
         ...state,

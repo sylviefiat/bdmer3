@@ -80,6 +80,7 @@
   "LONG_MAX": "Maximal lenght",
   "LARG_MAX": "Maximal width",
   "LONG_MIN": "Minimal lenght",
+  "LARG_MIN": "Minimal width",
   "DISTRIBUTION": "Distribution",
   "HABITAT_PREF": "Species best habitats",
   "LEGAL_DIM":"Legal fishing dimensions for",

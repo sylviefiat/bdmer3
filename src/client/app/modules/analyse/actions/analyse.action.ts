@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Survey, Transect } from '../../datas/models/platform';
 import { Species } from '../../datas/models/species';
-import { Method } from '../models/analyse';
+import { Method, DimensionsAnalyse } from '../models/analyse';
 import { type } from '../../core/utils/index';
   
 export namespace AnalyseAction {
@@ -17,6 +17,7 @@ export namespace AnalyseAction {
     SELECT_ZONES: string;
     SELECT_TRANSECTS: string;
     SELECT_SPECIES: string;
+    SELECT_DIMS: string;
     SELECT_METHOD: string;
     ANALYSE: string;
     ANALYSE_SUCCESS: string;
@@ -31,6 +32,7 @@ export namespace AnalyseAction {
     SELECT_ZONES : type('[Analyse] Select Zones'),
     SELECT_TRANSECTS : type('[Analyse] Select Transects'),
     SELECT_SPECIES : type('[Analyse] Select Species'),
+    SELECT_DIMS : type('[Analyse] Select Species dimensions'),
     SELECT_METHOD : type('[Analyse] Select method'),
     ANALYSE: type('[Analyse] Start analyse'),
     ANALYSE_SUCCESS : type('[Analyse] Analyse Success'),
@@ -77,6 +79,12 @@ export class SelectSpecies implements Action {
   constructor(public payload: Species[]) {}
 }
 
+export class SelectDims implements Action {
+  readonly type = ActionTypes.SELECT_DIMS;
+  
+  constructor(public payload: DimensionsAnalyse[]) {}
+}
+
 export class SelectMethod implements Action {
   readonly type = ActionTypes.SELECT_METHOD;
 
@@ -109,6 +117,7 @@ export type Actions =
   | SelectZones
   | SelectTransects
   | SelectSpecies
+  | SelectDims
   | SelectMethod
   | Analyse
   | AnalyseSuccess

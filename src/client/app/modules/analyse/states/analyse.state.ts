@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
-import { Method, Results, Data } from '../models/analyse';
+import { Method, Results, Data, DimensionsAnalyse } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
@@ -13,6 +13,7 @@ export interface IAnalyseState {
     usedZones: Zone[];
     usedTransects: Transect[];
     usedSpecies: Species[];
+    usedDims: DimensionsAnalyse[];
     usedMethod: Method;
     analysing: boolean;
     analysed: boolean;
@@ -28,6 +29,7 @@ export const analyseInitialState: IAnalyseState = {
     usedZones: null,
     usedTransects: null,
     usedSpecies: null,
+    usedDims: null,
     usedMethod: null,
     analysing: false,
     analysed: false,
@@ -66,6 +68,10 @@ export function getUsedTransects(state$: Observable<IAnalyseState>) {
 
 export function getUsedSpecies(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedSpecies);
+}
+
+export function getUsedDims(state$: Observable<IAnalyseState>) {
+    return state$.select(state => state.usedDims);
 }
 
 export function getUsedMethod(state$: Observable<IAnalyseState>) {

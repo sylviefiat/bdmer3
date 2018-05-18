@@ -14,8 +14,8 @@ import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
-import { Platform, Zone, Survey, Transect, Species, Dimensions } from '../../modules/datas/models/index';
-import { Method } from '../../modules/analyse/models/index';
+import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 
 @Component({
     moduleId: module.id,
@@ -36,7 +36,7 @@ export class AnalyseComponent {
     @Input() zones$: Observable<Zone[]>;
     @Input() transects$: Observable<Transect[]>;
     @Input() species$: Observable<Species[]>;
-    @Input() dimensions$: Observable<Dimensions[]>;
+    @Input() dimensions$: Observable<DimensionsAnalyse[]>;
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
@@ -46,7 +46,7 @@ export class AnalyseComponent {
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Output() transectEmitter = new EventEmitter<Transect[]>();
     @Output() speciesEmitter = new EventEmitter<Species[]>();
-    @Output() dimensionsEmitter = new EventEmitter<Dimensions[]>();
+    @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
     @Output() methodEmitter = new EventEmitter<Method>();
     @Output() analyse = new EventEmitter<string>();
     nspecies : number = 0;
@@ -110,7 +110,7 @@ export class AnalyseComponent {
         this.speciesEmitter.emit(species); 
     }
 
-    setDimensions(dimensions: Dimensions[]) {
+    setDimensions(dimensions: DimensionsAnalyse[]) {
         this.dimensionsEmitter.emit(dimensions); 
     }
 
