@@ -65,6 +65,9 @@ export namespace PlatformAction {
       ADD_COUNT_SUCCESS: string;
       IMPORT_COUNT: string;
       IMPORT_COUNT_SUCCESS: string;
+      CHECK_COUNT_CSV_FILE: string;
+      CHECK_COUNT_ADD_ERROR: string;
+      CHECK_COUNT_SUCCESS: string;
       REMOVE_COUNT: string;
       REMOVE_COUNT_SUCCESS: string;
       REMOVE_COUNT_FAIL: string;
@@ -137,6 +140,9 @@ export namespace PlatformAction {
       ADD_COUNT_SUCCESS: type(`${PLATFORM} Add Count Success`),
       IMPORT_COUNT: type(`${PLATFORM} Import Count`),
       IMPORT_COUNT_SUCCESS:type(`${PLATFORM} Import Count Success`),
+      CHECK_COUNT_CSV_FILE:type(`${PLATFORM} Check Count Csv file`),
+      CHECK_COUNT_ADD_ERROR:type(`${PLATFORM} Check Count Csv file add error`),
+      CHECK_COUNT_SUCCESS:type(`${PLATFORM} Check Count Csv file success`),
       REMOVE_COUNT: type(`${PLATFORM} Remove Count`),
       REMOVE_COUNT_SUCCESS: type(`${PLATFORM} Remove Count Success`),
       REMOVE_COUNT_FAIL: type(`${PLATFORM} Remove Count Fail`),       
@@ -522,6 +528,24 @@ export namespace PlatformAction {
     constructor(public payload: Count) {}
   }
 
+  export class CheckCountCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_COUNT_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckCountAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_COUNT_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckCountSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_COUNT_SUCCESS;
+
+    constructor(public payload: any) {}
+  }
+
   /**
    * Remove Count from station - Platform  Actions
    */
@@ -643,6 +667,9 @@ export namespace PlatformAction {
     | AddCountSuccessAction
     | ImportCountAction
     | ImportCountSuccessAction
+    | CheckCountCsvFile
+    | CheckCountAddErrorAction
+    | CheckCountSuccessAction
     | RemoveCountAction
     | RemoveCountSuccessAction
     | RemoveCountFailAction

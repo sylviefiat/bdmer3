@@ -180,6 +180,13 @@ export function platformReducer(
                     error: null
                 };
             }
+            
+        case PlatformAction.ActionTypes.CHECK_COUNT_ADD_ERROR: {
+            return {
+                ...state,
+                importErrors: (action.payload !== '' && action.payload.length >0)?[...state.importErrors, action.payload]:[...state.importErrors]
+            }
+        }
 
         case PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS:
             {
@@ -336,8 +343,7 @@ export function platformReducer(
             };
         }
 
-        case PlatformAction.ActionTypes.REMOVE_MSG: {
-            console.log("remove msg");            
+        case PlatformAction.ActionTypes.REMOVE_MSG: {           
             return {
                 ...state,                
                 error: null,

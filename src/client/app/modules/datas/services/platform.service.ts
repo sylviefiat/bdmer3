@@ -307,6 +307,44 @@ export class PlatformService {
     })
   }
 
+  importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string>{
+    if(count.codePlatform === platform.code){
+      for(let i = 0; i < platform.zones.length; i++){
+        if(count.codeZone === platform.zones[i].properties.code){
+          for(let x = 0; x < platform.zones[i].transects.length; x++){
+            if(count.codeTransect === platform.zones[i].transects[x].properties.code){
+              for(let y = 0; i < species.length; y++){
+                if(count.mesures[0].codeSpecies === species[y].code){
+                  for(let z = 0; z < platform.surveys.length; z++){
+                    if(count.codeSurvey === platform.surveys[z].code){
+                      return of('');
+                    }
+                    if(count.codeSurvey !== platform.surveys[i].code && z === platform.surveys.length - 1){
+                      return of("CodeSurvey "+count.codeSurvey+" cannot be inserted because it doesn't exist in database for zone " + count.codeZone);
+                    }
+                  }
+                }
+                if(count.mesures[0].codeSpecies !== species[y].code && y === species.length - 1){
+                  return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
+                }
+              }
+            }
+            if(count.codeTransect !== platform.zones[i].transects[x].properties.code && x === platform.zones[i].transects.length - 1){
+              return of("CodeTransect "+count.codeTransect+" cannot be inserted because it doesn't exist in database for zone " + count.codeZone);
+            }
+          }
+        }
+        if(count.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1){
+          return of('Zone '+count.codeZone+ " cannot be inserted because it doesn't exist in database for platform " + count.codePlatform);
+        }
+      }
+    }else{
+      return of('Platform '+count.codePlatform+" cannot be inserted because it doesn't exist in the database");
+    }
+
+    return of('')
+  }
+
   removeCount(count: Count): Observable<Count> {    
     return this.getPlatform(count.codePlatform)
     .filter(platform => platform!==null)

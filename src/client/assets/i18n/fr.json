@@ -345,5 +345,7 @@
   "TRANSECT_COORD": "Coordonnées du transect",
   "TRANSECT_ERROR": "Transect non valide.",
   "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
-  "TRANSECT_ERROR_LAT": "Latitude du transect non valide"
+  "TRANSECT_ERROR_LAT": "Latitude du transect non valide",
+  "LIST_ERROR_ZONE_PREF": "Liste des Zones Préférées concernées",
+  "LIST_ERROR_COUNT": "Liste des Comptages concernés"
 }

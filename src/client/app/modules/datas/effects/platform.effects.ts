@@ -99,7 +99,7 @@ export class PlatformEffects {
   checkZonePrefCsv$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.CHECK_ZONE_PREF_CSV_FILE)  
     .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.CheckPlatformCsvFile) => action.payload)
+    .map((action: PlatformAction.CheckZonePrefCsvFile) => action.payload)
     .mergeMap((zonePref: ZonePreference) =>this.csv2jsonService.csv2('zonePref', zonePref))
     .withLatestFrom(this.store.let(getSelectedPlatform), this.store.let(getSpeciesInApp))
     .mergeMap((value: [ZonePreference, Platform, Species[]]) => this.platformService.importZonePrefVerification(value[0], value[1], value[2]))
@@ -209,6 +209,16 @@ export class PlatformEffects {
     .mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0]))
     .map((count: Count) => new PlatformAction.ImportCountSuccessAction(count))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
+
+  @Effect()
+  checkCountCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.CheckCountCsvFile) => action.payload)
+    .mergeMap((count: Count) =>this.csv2jsonService.csv2('count', count))
+    .withLatestFrom(this.store.let(getSelectedPlatform), this.store.let(getSpeciesInApp))
+    .mergeMap((value: [Count, Platform, Species[]]) => this.platformService.importCountVerification(value[0], value[1], value[2]))
+    .map(error => new PlatformAction.CheckCountAddErrorAction(error));
 
   @Effect()
   removePlatform$: Observable<Action> = this.actions$
