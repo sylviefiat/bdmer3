@@ -1,16 +1,16 @@
 <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'IMPORT_COUNTS' | translate}}</mat-card-title>
+      <mat-card-title>{{ 'IMPORT_TRANSECTS' | translate}}</mat-card-title>
       <mat-card-content>
         <button *ngIf="importCsvFile === null || (importError$ | async)?.length !== 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
-        <button (click)="cancel()" class="back">{{ 'CANCEL' | translate }}</button>        
+        <button (click)="back.emit()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
       <mat-card-content class="error" *ngIf="error !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
       <mat-card-content class="error" *ngIf="(importError$ | async)?.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>     
     </mat-card>
 </div>
 <div class="insideform">
@@ -22,12 +22,9 @@
     <mat-card-content>
       {{'IMPORT_DESC' | translate }}    
     </mat-card-content>
-    <mat-card-content class="warn">
-      {{'IMPORT_DESC_DATE' | translate }}      
-    </mat-card-content>
     <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvCountsUrl()}}" download>
+      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_TRANSECTS' | translate }}</h5>
+      <a *ngIf="!isAdmin" href="{{getCsvTransectsUrl()}}" download>
           <fa [name]="'download'" [border]=true [size]=1></fa>
       </a>
     </mat-card-footer>
@@ -39,11 +36,11 @@
     </mat-card-actions>
 
     <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
-      <h2 class="errorCount">{{'LIST_ERROR_COUNT' | translate}}</h2>
+      <h2 class="errorTransect">{{'LIST_ERROR_TRANSECT' | translate}}</h2>
       <mat-list>
-        <div *ngFor="let count of (importError$ | async)">
-          <mat-list-item class="errorCount"> 
-              {{count}}
+        <div *ngFor="let transect of (importError$ | async)">
+          <mat-list-item class="errorTransect"> 
+              {{transect}}
           </mat-list-item>
         </div>
       </mat-list>

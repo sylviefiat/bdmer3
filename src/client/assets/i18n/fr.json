@@ -347,5 +347,8 @@
   "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
   "TRANSECT_ERROR_LAT": "Latitude du transect non valide",
   "LIST_ERROR_ZONE_PREF": "Liste des Zones Préférées concernées",
-  "LIST_ERROR_COUNT": "Liste des Comptages concernés"
+  "LIST_ERROR_COUNT": "Liste des Comptages concernés",
+  "ERROR_CSV_FIELD": "Erreur lors de la vérification du CSV, les champs suivant ne sont pas connus: ",
+  "ERROR_IMPORT": "Erreur lors de la vérification des données du CSV, voir le détails ci dessous.",
+  "VALID_IMPORT": "CSV valide et prêt à être envoyé."
 }

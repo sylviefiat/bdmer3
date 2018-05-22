@@ -284,7 +284,6 @@ export class PlatformService {
   }
 
   editCount(platform: Platform, count: Count): Observable<Count> {
-    console.log(count);
     if(platform.code !== count.codePlatform)
       return _throw('Import is not possible : count codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
