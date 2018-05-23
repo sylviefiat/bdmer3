@@ -12,6 +12,9 @@ export namespace PlatformAction {
       ADD_PLATFORM: string;
       ADD_PLATFORM_SUCCESS: string;
       ADD_PLATFORM_FAIL: string;
+      ADD_PENDING_ZONE: string;
+      ADD_PENDING_ZONE_SUCCESS: string;
+      ADD_PENDING_ZONE_FAIL: string;
       IMPORT_PLATFORM: string;
       IMPORT_PLATFORM_SUCCESS: string;
       REMOVE_PLATFORM_COUNTRY: string;
@@ -81,12 +84,16 @@ export namespace PlatformAction {
       SELECT_ZONE_PREF: string;
       SELECT_COUNT: string;
       REMOVE_MSG: string;
+      RESET_ALL_PENDING: string;
     }
 
     export const ActionTypes: IPlatformActions = {
       ADD_PLATFORM: type(`${PLATFORM} Add Platform`),
       ADD_PLATFORM_SUCCESS: type(`${PLATFORM} Add Platform Success`),
       ADD_PLATFORM_FAIL: type(`${PLATFORM} Add Platform Fail`),
+      ADD_PENDING_ZONE: type(`${PLATFORM} Add Pending Zone`),
+      ADD_PENDING_ZONE_SUCCESS: type(`${PLATFORM} Add Pending Zone Success`),
+      ADD_PENDING_ZONE_FAIL: type(`${PLATFORM} Add Pending Zone Fail`),
       IMPORT_PLATFORM: type(`${PLATFORM} Import Platform`),
       IMPORT_PLATFORM_SUCCESS:type(`${PLATFORM} Import Platform Success`),
       REMOVE_PLATFORM_COUNTRY: type(`${PLATFORM} Remove Platform Country`),
@@ -155,8 +162,28 @@ export namespace PlatformAction {
       SELECT_STATION: type(`${PLATFORM} select station`),
       SELECT_ZONE_PREF: type(`${PLATFORM} select species preference zone`),
       SELECT_COUNT: type(`${PLATFORM} select count`),
-      REMOVE_MSG: type(`${PLATFORM} remove message`)
+      REMOVE_MSG: type(`${PLATFORM} remove message`),
+      RESET_ALL_PENDING: type(`${PLATFORM} remove all pending`)
     };
+
+
+  export class AddPendingZoneAction implements Action {
+    readonly type = ActionTypes.ADD_PENDING_ZONE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class AddPendingZoneSuccessAction implements Action {
+    readonly type = ActionTypes.ADD_PENDING_ZONE_SUCCESS;
+
+    constructor(public payload: any) {}
+  }
+
+  export class AddPendingZoneFailAction implements Action {
+    readonly type = ActionTypes.ADD_PENDING_ZONE_FAIL;
+
+    constructor(public payload: any) {}
+  }
 
   /**
    * Add platform to Platform list Actions
@@ -620,10 +647,18 @@ export namespace PlatformAction {
     payload: string = null;
   }
 
+  export class ResetAllPendingAction implements Action {
+    readonly type = ActionTypes.RESET_ALL_PENDING;
+    payload: string = null;
+  }
+
   export type Actions =
     | AddPlatformAction
     | AddPlatformSuccessAction
     | AddPlatformFailAction
+    | AddPendingZoneAction
+    | AddPendingZoneSuccessAction
+    | AddPendingZoneFailAction
     | ImportPlatformAction
     | ImportPlatformSuccessAction
     | CheckPlatformCsvFile

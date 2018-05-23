@@ -115,6 +115,7 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
 
+
   @Effect()
   importPlatform$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_PLATFORM)    
@@ -147,6 +148,15 @@ export class PlatformEffects {
     .mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1]))    
     .map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
+
+  @Effect()
+  addPendingZone$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_PENDING_ZONE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.AddPendingZoneAction) => action.payload)
+    .withLatestFrom(this.store.let(getSelectedPlatform))
+    .mergeMap((value: [any, Platform]) => this.platformService.addToPendingZone(value[0], value[1]))
+    .map((zones) => new PlatformAction.AddPendingZoneSuccessAction(zones));
 
   @Effect()
   importSurvey$: Observable<Action> = this.actions$

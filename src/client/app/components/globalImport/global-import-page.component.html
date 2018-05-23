@@ -9,152 +9,204 @@
   </mat-card>
 </div>
 <div class="insideform">
-  <mat-card>
-    <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_KML' | translate }} Zone</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-    </mat-card-title-group>
-    <mat-card-content>
-      {{'IMPORT_DESC_KML' | translate }}    
-    </mat-card-content>
-    <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_KML_ZONES' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getKmlUrl('Zones')}}" download>
-        <fa [name]="'download'" [border]=true [size]=1></fa>
-      </a>
-    </mat-card-footer>
-    <mat-card-actions align="start">
-      <button (click)="fileInputZone.click()">
-        <span>{{ 'IMPORT_KML' | translate }}</span>
-        <input #fileInputZone type="file" (change)="handleUploadKml($event)" style="display:none;"  accept=".kml"/>
-      </button>
-      <button class="btn-danger" *ngIf="kmlFileZones" (click)="deleteKml()">
-        <span>{{ 'DELETE_CSV' | translate }}</span>
-      </button>
-      <div *ngIf="kmlFileZones">
-        {{kmlFileZones.name}} {{ 'SELECTED_CSV' | translate }}
+  <mat-horizontal-stepper >
+    <mat-step [optional]="true">
+      <ng-template matStepLabel>Zone</ng-template>
+
+      <div>
+        <mat-card class="no-box-shadow">
+          <mat-card-title-group>
+            <mat-card-title>{{'IMPORT_KML' | translate }} Zone</mat-card-title> 
+            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+          </mat-card-title-group>
+          <mat-card-content>
+            {{'IMPORT_DESC_KML' | translate }}    
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <h5 mat-subheader>{{ 'DOWNLOAD_KML_ZONES' | translate }}</h5>
+            <a *ngIf="!isAdmin" href="{{getKmlUrl('Zones')}}" download>
+              <fa [name]="'download'" [border]=true [size]=1></fa>
+            </a>
+          </mat-card-footer>
+          <mat-card-actions align="start">
+            <button (click)="fileInputZone.click()">
+              <span>{{ 'IMPORT_KML' | translate }}</span>
+              <input #fileInputZone type="file" (change)="handleUploadKml($event)" style="display:none;"  accept=".kml"/>
+            </button>
+            <button class="btn-danger" *ngIf="kmlFileZones" (click)="deleteKml()">
+              <span>{{ 'DELETE_CSV' | translate }}</span>
+            </button>
+            <div *ngIf="kmlFileZones">
+              {{kmlFileZones.name}} {{ 'SELECTED_CSV' | translate }}
+            </div>
+          </mat-card-actions>
+          <mat-card-content class="msg" *ngIf="next" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content> 
+        </mat-card>
       </div>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-    </mat-card-title-group>
-    <mat-card-content>
-      {{'IMPORT_DESC' | translate }}    
-    </mat-card-content>
-    <mat-card-content class="warn">
-      {{'IMPORT_DESC_DATE' | translate }}      
-    </mat-card-content>
-    <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvUrl('Survey')}}" download>
-        <fa [name]="'download'" [border]=true [size]=1></fa>
-      </a>
-    </mat-card-footer>
-    <mat-card-actions align="start">
-      <button (click)="fileInputSurvey.click()">
-        <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInputSurvey type="file" (change)="handleUploadCsv($event, 'Survey')" style="display:none;"  accept=".csv"/>
-      </button>
-
-      <button class="btn-danger" *ngIf="csvFileSurvey" (click)="deleteCsv('Survey')">
-        <span>{{ 'DELETE_CSV' | translate }}</span>
-      </button>
-      <div *ngIf="csvFileSurvey">
-        {{csvFileSurvey.name}} {{ 'SELECTED_CSV' | translate }}
+      <div class="align-right">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
-    </mat-card-actions>
-  </mat-card>
+    </mat-step>
 
-  <mat-card>
-    <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }} Zones Preferences</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-    </mat-card-title-group>
-    <mat-card-content>
-      {{'IMPORT_DESC' | translate }}    
-    </mat-card-content>
-    <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_ZONES_PREF' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvUrl('ZonePref')}}" download>
-        <fa [name]="'download'" [border]=true [size]=1></fa>
-      </a>
-    </mat-card-footer>
-    <mat-card-actions align="start">
-      <button (click)="fileInputZonePre.click()">
-        <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInputZonePre type="file" (change)="handleUploadCsv($event, 'ZonePref')" style="display:none;"  accept=".csv"/>
-      </button>
+    <mat-step [optional]="true">
+      <ng-template matStepLabel>Zone Pref</ng-template>
+      <div>
 
-      <button class="btn-danger" *ngIf="csvFileZonePre" (click)="deleteCsv('ZonePref')">
-        <span>{{ 'DELETE_CSV' | translate }}</span>
-      </button>
-      <div *ngIf="csvFileZonePre">
-        {{csvFileZonePre.name}} {{ 'SELECTED_CSV' | translate }}
+        <mat-card class="no-box-shadow">
+          <mat-card-title-group>
+            <mat-card-title>{{'IMPORT_CSV' | translate }} Zones Preferences</mat-card-title> 
+            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+          </mat-card-title-group>
+          <mat-card-content>
+            {{'IMPORT_DESC' | translate }}    
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_ZONES_PREF' | translate }}</h5>
+            <a *ngIf="!isAdmin" href="{{getCsvUrl('ZonePref')}}" download>
+              <fa [name]="'download'" [border]=true [size]=1></fa>
+            </a>
+          </mat-card-footer>
+          <mat-card-actions align="start">
+            <button (click)="fileInputZonePre.click()">
+              <span>{{ 'IMPORT_CSV' | translate }}</span>
+              <input #fileInputZonePre type="file" (change)="handleUploadCsv($event, 'ZonePref')" style="display:none;"  accept=".csv"/>
+            </button>
+
+            <button class="btn-danger" *ngIf="csvFileZonePre" (click)="deleteCsv('ZonePref')">
+              <span>{{ 'DELETE_CSV' | translate }}</span>
+            </button>
+            <div *ngIf="csvFileZonePre">
+              {{csvFileZonePre.name}} {{ 'SELECTED_CSV' | translate }}
+            </div>
+          </mat-card-actions>
+        </mat-card>
       </div>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }} Transects</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-    </mat-card-title-group>
-    <mat-card-content>
-      {{'IMPORT_DESC' | translate }}    
-    </mat-card-content>
-    <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_TRANSECTS' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvUrl('Transect')}}" download>
-        <fa [name]="'download'" [border]=true [size]=1></fa>
-      </a>
-    </mat-card-footer>
-    <mat-card-actions align="start">
-      <button (click)="fileInputTransect.click()">
-        <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInputTransect type="file" (change)="handleUploadCsv($event, 'Transect')" style="display:none;"  accept=".csv"/>
-      </button>
-
-      <button class="btn-danger" *ngIf="csvFileTransect" (click)="deleteCsv('Transect')">
-        <span>{{ 'DELETE_CSV' | translate }}</span>
-      </button>
-      <div *ngIf="csvFileTransect">
-        {{csvFileTransect.name}} {{ 'SELECTED_CSV' | translate }}
+      <div class="align-right">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
-    </mat-card-actions>
-  </mat-card>
+    </mat-step>
 
-  <mat-card>
-    <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-    </mat-card-title-group>
-    <mat-card-content>
-      {{'IMPORT_DESC' | translate }}    
-    </mat-card-content>
-    <mat-card-content class="warn">
-      {{'IMPORT_DESC_DATE' | translate }}      
-    </mat-card-content>
-    <mat-card-footer class="footer">
-      <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-      <a *ngIf="!isAdmin" href="{{getCsvUrl('Count')}}" download>
-        <fa [name]="'download'" [border]=true [size]=1></fa>
-      </a>
-    </mat-card-footer>
-    <mat-card-actions align="start">
-      <button (click)="fileInputCount.click()">
-        <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInputCount type="file" (change)="handleUploadCsv($event, 'Count')" style="display:none;"  accept=".csv"/>
-      </button>
-      <button class="btn-danger" *ngIf="csvFileCount" (click)="deleteCsv('Count')">
-        <span>{{ 'DELETE_CSV' | translate }}</span>
-      </button>
-      <div *ngIf="csvFileCount">
-        {{csvFileCount.name}} {{ 'SELECTED_CSV' | translate }}
+    <mat-step [optional]="true">
+      <ng-template matStepLabel>Transects</ng-template>
+
+      <div>
+        <mat-card class="no-box-shadow">
+          <mat-card-title-group>
+            <mat-card-title>{{'IMPORT_CSV' | translate }} Transects</mat-card-title> 
+            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+          </mat-card-title-group>
+          <mat-card-content>
+            {{'IMPORT_DESC' | translate }}    
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_TRANSECTS' | translate }}</h5>
+            <a *ngIf="!isAdmin" href="{{getCsvUrl('Transect')}}" download>
+              <fa [name]="'download'" [border]=true [size]=1></fa>
+            </a>
+          </mat-card-footer>
+          <mat-card-actions align="start">
+            <button (click)="fileInputTransect.click()">
+              <span>{{ 'IMPORT_CSV' | translate }}</span>
+              <input #fileInputTransect type="file" (change)="handleUploadCsv($event, 'Transect')" style="display:none;"  accept=".csv"/>
+            </button>
+
+            <button class="btn-danger" *ngIf="csvFileTransect" (click)="deleteCsv('Transect')">
+              <span>{{ 'DELETE_CSV' | translate }}</span>
+            </button>
+            <div *ngIf="csvFileTransect">
+              {{csvFileTransect.name}} {{ 'SELECTED_CSV' | translate }}
+            </div>
+          </mat-card-actions>
+        </mat-card>
       </div>
-    </mat-card-actions>
-  </mat-card>
+      <div class="align-right">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+
+    <mat-step [optional]="true">
+      <ng-template matStepLabel>Surveys</ng-template>
+
+      <div>
+        <mat-card class="no-box-shadow">
+          <mat-card-title-group>
+            <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title> 
+            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+          </mat-card-title-group>
+          <mat-card-content>
+            {{'IMPORT_DESC' | translate }}    
+          </mat-card-content>
+          <mat-card-content class="warn">
+            {{'IMPORT_DESC_DATE' | translate }}      
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
+            <a *ngIf="!isAdmin" href="{{getCsvUrl('Survey')}}" download>
+              <fa [name]="'download'" [border]=true [size]=1></fa>
+            </a>
+          </mat-card-footer>
+          <mat-card-actions align="start">
+            <button (click)="fileInputSurvey.click()">
+              <span>{{ 'IMPORT_CSV' | translate }}</span>
+              <input #fileInputSurvey type="file" (change)="handleUploadCsv($event, 'Survey')" style="display:none;"  accept=".csv"/>
+            </button>
+
+            <button class="btn-danger" *ngIf="csvFileSurvey" (click)="deleteCsv('Survey')">
+              <span>{{ 'DELETE_CSV' | translate }}</span>
+            </button>
+            <div *ngIf="csvFileSurvey">
+              {{csvFileSurvey.name}} {{ 'SELECTED_CSV' | translate }}
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="align-right">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+
+    <mat-step [optional]="true">
+      <ng-template matStepLabel>Counts</ng-template>
+      <div>
+        <mat-card class="no-box-shadow">
+          <mat-card-title-group>
+            <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title> 
+            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+          </mat-card-title-group>
+          <mat-card-content>
+            {{'IMPORT_DESC' | translate }}    
+          </mat-card-content>
+          <mat-card-content class="warn">
+            {{'IMPORT_DESC_DATE' | translate }}      
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
+            <a *ngIf="!isAdmin" href="{{getCsvUrl('Count')}}" download>
+              <fa [name]="'download'" [border]=true [size]=1></fa>
+            </a>
+          </mat-card-footer>
+          <mat-card-actions align="start">
+            <button (click)="fileInputCount.click()">
+              <span>{{ 'IMPORT_CSV' | translate }}</span>
+              <input #fileInputCount type="file" (change)="handleUploadCsv($event, 'Count')" style="display:none;"  accept=".csv"/>
+            </button>
+            <button class="btn-danger" *ngIf="csvFileCount" (click)="deleteCsv('Count')">
+              <span>{{ 'DELETE_CSV' | translate }}</span>
+            </button>
+            <div *ngIf="csvFileCount">
+              {{csvFileCount.name}} {{ 'SELECTED_CSV' | translate }}
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="align-right">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>

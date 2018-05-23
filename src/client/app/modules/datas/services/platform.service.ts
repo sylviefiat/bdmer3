@@ -5,7 +5,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 import { MapStaticService} from '../../core/services/map-static.service';
-
+import { GeojsonService } from '../../core/services/geojson.service';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
@@ -18,7 +18,7 @@ export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
 
-  constructor(private mapStaticService: MapStaticService, private http: Http) {
+  constructor(private mapStaticService: MapStaticService, private geojsonService: GeojsonService, private http: Http) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -131,6 +131,23 @@ export class PlatformService {
       .mergeMap(response => {
         return of(zone);
       })
+  }
+
+  addToPendingZone(obj: any, platform: Platform){
+    return this.geojsonService.kmlToGeoJson(obj.file, platform).then((zones) => {
+      for(let i in zones){
+        var url = this.mapStaticService.googleMapUrl(zones[i].geometry["coordinates"])
+        this.mapStaticService.staticMapToB64(url).then(function(data){
+          zones[i].staticmap = data.toString();
+        })
+
+        if(!zones[i].codePlatform) zones[i].codePlatform=platform.code;
+        if(!zones[i].transects) zones[i].transects = [];
+        if(!zones[i].zonePreferences) zones[i].zonePreferences = [];
+      }
+
+      return zones
+    });
   }
 
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute } from '@angular/router';
+import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
@@ -39,11 +39,13 @@ export class GlobalImportPageComponent implements OnInit {
     csvFileTransect: object;
     csvFileCount: object;
     kmlFileZones: object;
+    next: boolean = false;
 
-    constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
     }
 
     ngOnInit() {
+
         this.store.let(getSelectedPlatform).subscribe((platform) =>{
           this.platform = platform;
         });
@@ -58,7 +60,10 @@ export class GlobalImportPageComponent implements OnInit {
 
     handleUploadKml(kmlFile: any): void {
       if (kmlFile.target.files && kmlFile.target.files.length > 0) {
+
           this.kmlFileZones = kmlFile.target.files['0'];
+          this.store.dispatch(new PlatformAction.AddPendingZoneAction({file: this.kmlFileZones, type: 'zone'}));
+          this.next = true;
       }
     }
 
@@ -71,6 +76,7 @@ export class GlobalImportPageComponent implements OnInit {
                 break;
                 case "ZonePref":
                 this.csvFileZonePre = csvFile.target.files["0"];
+                this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(this.csvFileZonePre));
                 break;
                 case "Transect":
                 this.csvFileTransect = csvFile.target.files["0"];
@@ -82,33 +88,6 @@ export class GlobalImportPageComponent implements OnInit {
         } else {
             this.store.dispatch(new PlatformAction.AddPlatformFailAction('No csv file found'));
         }
-    }
-
-    kmlToGeoJson(kml){
-            const reader = new FileReader();
-            reader.readAsText(kml);
-
-            const self = this;
-
-            reader.onload = function(event) {
-              const parser = new DOMParser();
-              const x = parser.parseFromString(reader.result, 'application/xml')
-              const geojson = togeojson.kml(x).features;
-
-              for(let i  in geojson){
-                delete geojson[i].properties['styleHash'];
-                delete geojson[i].properties['styleMapHash'];
-                delete geojson[i].properties['styleUrl'];
-
-                geojson[i].properties.code = self.platform["code"]+"_"+self.nameRefactorService.convertAccent(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
-                
-                const surface = area.geometry(geojson[i].geometry);
-
-                geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
-
-                self.store.dispatch(new PlatformAction.ImportZoneAction(geojson[i]))
-              }
-            }
     }
 
     deleteCsv(type: string){
@@ -146,7 +125,6 @@ export class GlobalImportPageComponent implements OnInit {
             this.store.dispatch(new PlatformAction.ImportCountAction(this.csvFileCount));
 
         if(this.kmlFileZones)
-            this.kmlToGeoJson(this.kmlFileZones)
 
         this.return();
     }
@@ -170,5 +148,9 @@ export class GlobalImportPageComponent implements OnInit {
                 name: 'slideTop',
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.store.dispatch(new PlatformAction.ResetAllPendingAction());
     }
 }

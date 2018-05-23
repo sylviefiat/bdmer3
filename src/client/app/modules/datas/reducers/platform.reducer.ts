@@ -60,6 +60,28 @@ export function platformReducer(
             }
         }
 
+        case PlatformAction.ActionTypes.ADD_PENDING_ZONE_SUCCESS:{
+            let entities = [];
+            let ids = [];
+            const addedzone = action.payload;
+
+            for(let i in addedzone){
+                const platforms = state.entities.filter(platform => addedzone[i].codePlatform !== platform._id);
+                const modifiedPlatform = state.entities.filter(platform => addedzone[i].codePlatform === platform._id)[0];
+                modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone[i].properties.code !== zone.properties.code),addedzone[i]];
+            
+                entities.push(...platforms, modifiedPlatform)
+                ids.push(...state.ids.filter(id => addedzone[i].codePlatform !== id), ...addedzone[i].codePlatform)
+            }
+
+            return {
+                ...state,
+                entities: entities,
+                ids: ids,
+                error: null
+            }
+        }
+
         case PlatformAction.ActionTypes.ADD_ZONE_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
             const addedzone = action.payload;
@@ -347,6 +369,10 @@ export function platformReducer(
                 importErrors: [],
                 msg: null
             };
+        }
+
+        case PlatformAction.ActionTypes.RESET_ALL_PENDING:{
+            return platformInitialState;
         }
 
         default: {
