@@ -86,8 +86,9 @@ export function getAnalysed(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.analysed);
 }
 
-export function getData(state$: Observable<IAnalyseState>) {
+export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
     return state$.select(state => {
+        console.log(state.usedDims);
         return {
             usedCountry: state.usedCountry, 
             usedPlatforms: state.usedPlatforms, 
@@ -96,6 +97,7 @@ export function getData(state$: Observable<IAnalyseState>) {
             usedZones: state.usedZones,
             usedTransects: state.usedTransects,
             usedSpecies: state.usedSpecies,
+            usedDims: state.usedDims,
             usedMethod: state.usedMethod
         }
     });

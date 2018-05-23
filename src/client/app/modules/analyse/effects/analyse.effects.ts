@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
 
-import { IAppState, getAnalyseState } from '../../ngrx/index';
+import { IAppState, getAnalyseData } from '../../ngrx/index';
 import { AnalyseAction } from '../actions/index';
-import { IAnalyseState } from '../states/index';
+import { Data } from '../models/index';
 import { AnalyseService } from '../services/index';
 
 @Injectable()
@@ -21,13 +21,13 @@ export class AnalyseEffects {
   @Effect() analyse$ = this.actions$    
     .ofType(AnalyseAction.ActionTypes.ANALYSE)
     .map((action: AnalyseAction.Analyse) => action.payload)
-    .withLatestFrom(this.store.let(getAnalyseState))
-    .map((value: [string, IAnalyseState]) => {
+    .withLatestFrom(this.store.let(getAnalyseData))
+    .map((value: [string, Data]) => {
       console.log(value[0]);
       return this.analyseService.analyse(value[1]);
     })
     .map(result => new AnalyseAction.AnalyseSuccess(result))
-    .catch((error) => of(new AnalyseAction.AnalyseFailure(error)))
+    .catch((error) => {console.log(error);return of(new AnalyseAction.AnalyseFailure(error))})
 
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
     .ofType(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)

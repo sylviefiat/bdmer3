@@ -111,6 +111,7 @@ export class AnalyseComponent {
     }
 
     setDimensions(dimensions: DimensionsAnalyse[]) {
+        console.log(dimensions);
         this.dimensionsEmitter.emit(dimensions); 
     }
 

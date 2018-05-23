@@ -13,6 +13,7 @@ export interface Data {
     usedZones: Zone[];
     usedTransects: Transect[];
     usedSpecies: Species[];
+    usedDims: DimensionsAnalyse[];
     usedMethod: Method;
 }
 
@@ -22,12 +23,12 @@ export interface Results {
 }
 
 export interface ResultSurvey{
-    name: string;
+    codeSurvey: string;
     resultPerSpecies:ResultSpecies[];
 }
 
 export interface ResultSpecies {
-    name: string;
+    codeSpecies: string;
     resultPerTransect: ResultTransect[];
     indicators: Indicators[];
     interpretation: Interpretation[];

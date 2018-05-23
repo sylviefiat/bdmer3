@@ -3,14 +3,14 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
-import { Results } from '../../modules/analyse/models/index';
+import { Results, Data } from '../../modules/analyse/models/index';
 
 @Component({
   selector: 'bc-result-synthesis',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
    <h2>{{ results.name }}</h2>
-   
+   <bc-result-map [results]="results" [data]="data"></bc-result-map>
   `,
   styles: [
   `
@@ -21,6 +21,7 @@ import { Results } from '../../modules/analyse/models/index';
 })
 export class ResultSynthesisComponent implements OnInit {
   @Input() results: Results;
+  @Input() data: Data;
   @Input() locale: string;
 
   constructor() {

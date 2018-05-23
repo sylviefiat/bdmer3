@@ -82,7 +82,7 @@
       <mat-step [stepControl]="speciesFormGroup">
         <form [formGroup]="speciesFormGroup">
           <ng-template matStepLabel>{{ 'SPECIES' | translate}}</ng-template>
-          <bc-analyse-species [species$]="species$" [currentCountry$]="currentCountry$" [locale]="locale" (speciesEmitter)="setSpecies($event)" [group]="speciesFormGroup"></bc-analyse-species>
+          <bc-analyse-species [species$]="species$" [currentCountry$]="currentCountry$" [locale]="locale" (speciesEmitter)="setSpecies($event)" (dimensionsEmitter)="setDimensions($event)" [group]="speciesFormGroup"></bc-analyse-species>
           <div *ngIf="nspecies<=0" class="norecord">{{ 'NO_SP_SELECTED' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
