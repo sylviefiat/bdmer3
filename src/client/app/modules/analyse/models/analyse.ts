@@ -46,8 +46,8 @@ export interface ResultTransect {
     numberIndividual: number;        // nombre d'invidus
     biomasses: number[];             // biomasse par individu
     biomassTotal: number;            // somme des biomasses
-    biomassPerSquareMeter: number;   // biomasse par m²
-    density: number;                 // density = nb individus par m²
+    biomassPerHA: number;            // biomasse par hectare
+    densityPerHA: number;            // density = nb individus par hectare
 }
 
 export interface Indicators {

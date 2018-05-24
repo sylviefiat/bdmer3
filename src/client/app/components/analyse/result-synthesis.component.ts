@@ -10,7 +10,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
    <h2>{{ results.name }}</h2>
-   <bc-result-map [results]="results" [data]="data"></bc-result-map>
+   <bc-result-map [results]="results" [analyseData]="analyseData"></bc-result-map>
+   <bc-result-chart [results]="results" [analyseData]="analyseData"></bc-result-chart>
   `,
   styles: [
   `
@@ -21,7 +22,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
 })
 export class ResultSynthesisComponent implements OnInit {
   @Input() results: Results;
-  @Input() data: Data;
+  @Input() analyseData: Data;
   @Input() locale: string;
 
   constructor() {

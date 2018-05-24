@@ -46,6 +46,7 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -83,6 +84,7 @@ import { SHARED_COMPONENTS } from './components/index';
     MatTabsModule,
     //MatToolbarModule,
     //MatTooltipModule,
+    Ng2GoogleChartsModule,
   ]
 })
 export class SharedMaterialModule {}

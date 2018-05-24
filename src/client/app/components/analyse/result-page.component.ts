@@ -24,7 +24,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       <mat-card-title>{{'RESULT_TITLE' | translate}}</mat-card-title>
     </mat-card>
     <bc-result-rappel [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
-    <bc-result-synthesis [results]="results$ | async" [data]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
+    <bc-result-synthesis [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
   `,
   styles: [
     `

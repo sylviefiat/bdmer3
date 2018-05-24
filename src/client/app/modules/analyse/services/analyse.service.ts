@@ -51,7 +51,7 @@ export class AnalyseService {
     }
 
     getResultPerTransect(survey: Survey, species: Species, spDim: DimensionsAnalyse, transect: Transect, method: Method): ResultTransect {
-        let resultTransect: ResultTransect = { codeTransect: transect.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerSquareMeter: 0, density: 0 };
+        let resultTransect: ResultTransect = { codeTransect: transect.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
         let mesures = [];
         for (let c of survey.counts.filter(c => c.codeTransect === transect.code)) {
             mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
@@ -70,8 +70,8 @@ export class AnalyseService {
         
         resultTransect.numberIndividual = mesures.length;
         if(survey.surfaceTransect > 0){
-            resultTransect.biomassPerSquareMeter = resultTransect.biomassTotal / Number(survey.surfaceTransect);
-            resultTransect.density = resultTransect.numberIndividual / Number(survey.surfaceTransect);
+            resultTransect.biomassPerHA = resultTransect.biomassTotal * (10000 / Number(survey.surfaceTransect));
+            resultTransect.densityPerHA = resultTransect.numberIndividual * (10000 / Number(survey.surfaceTransect));
         }
         return resultTransect;
     }

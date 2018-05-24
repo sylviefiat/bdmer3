@@ -208,6 +208,13 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 main: 'bundles/ngx-papaparse.umd.js',
                 defaultExtension: 'js'
             }
+        },
+        {
+            name: 'ng2-google-charts',
+            packageMeta: {
+                main: 'bundles/ng2-google-charts.umd.js',
+                defaultExtension: 'js'
+            }
         }];
 
         this.addPackagesBundles(additionalPackages);
