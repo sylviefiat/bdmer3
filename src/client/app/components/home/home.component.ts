@@ -25,6 +25,10 @@ export class HomeComponent implements OnInit {
   lat: number;
   lng: number;
 
+  zoomMarkerConst: number = 8;
+  zoomLayerConst: number = 11;
+  zoomAdmin: number = 3;
+
   geoJsonObject: Object;
   loggedIn: boolean;
   platforms$: Observable<Platform[]>;
@@ -61,7 +65,7 @@ export class HomeComponent implements OnInit {
               this.initMarkers();
             }else{
               this.initMarkers();
-              this.zoom = 3
+              this.zoom = this.zoomAdmin;
             }
           }
         } 
@@ -76,7 +80,6 @@ export class HomeComponent implements OnInit {
   initMarkers(){
     this.platforms$.subscribe(
       (platforms) => {
-        console.log(platforms)
         this.countries$.subscribe((countries) =>{
           for(let i = 0; i < countries.length; i++){
             for(let y = 0; y < platforms.length; y++){
@@ -92,12 +95,12 @@ export class HomeComponent implements OnInit {
   zoomMarker(marker){
     this.lat = marker.lat;
     this.lng = marker.lng; 
-    this.zoom = 6;
+    this.zoom = this.zoomMarkerConst;
   }
 
   zoomLayer(event){
     this.lat = event.latLng.lat();
     this.lng = event.latLng.lng();
-    this.zoom = 9;
+    this.zoom = this.zoomLayerConst;
   }
 }
