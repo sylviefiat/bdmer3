@@ -133,8 +133,8 @@ export class PlatformService {
       })
   }
 
-  addToPendingZone(obj: any, platform: Platform){
-    return this.geojsonService.kmlToGeoJson(obj.file, platform).then((zones) => {
+  addToPendingZone(kml: any, platform: Platform){
+    return this.geojsonService.kmlToGeoJson(kml, platform).then((zones) => {
       for(let i in zones){
         var url = this.mapStaticService.googleMapUrl(zones[i].geometry["coordinates"])
         this.mapStaticService.staticMapToB64(url).then(function(data){
@@ -265,7 +265,7 @@ export class PlatformService {
     if(zonePref.codePlatform === platform.code){
       for(let i = 0; i < platform.zones.length; i++){
         if(zonePref.codeZone === platform.zones[i].properties.code){
-          for(let y = 0; i < species.length; y++){
+          for(let y = 0; y < species.length; y++){
             if(zonePref.codeSpecies === species[y].code){
               return of('');
             }
@@ -329,7 +329,7 @@ export class PlatformService {
         if(count.codeZone === platform.zones[i].properties.code){
           for(let x = 0; x < platform.zones[i].transects.length; x++){
             if(count.codeTransect === platform.zones[i].transects[x].properties.code){
-              for(let y = 0; i < species.length; y++){
+              for(let y = 0; y < species.length; y++){
                 if(count.mesures[0].codeSpecies === species[y].code){
                   for(let z = 0; z < platform.surveys.length; z++){
                     if(count.codeSurvey === platform.surveys[z].code){
@@ -345,6 +345,7 @@ export class PlatformService {
                 }
               }
             }
+
             if(count.codeTransect !== platform.zones[i].transects[x].properties.code && x === platform.zones[i].transects.length - 1){
               return of("CodeTransect "+count.codeTransect+" cannot be inserted because it doesn't exist in database for zone " + count.codeZone);
             }

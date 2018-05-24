@@ -159,6 +159,15 @@ export class PlatformEffects {
     .map((zones) => new PlatformAction.AddPendingZoneSuccessAction(zones));
 
   @Effect()
+  removePendingZone$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_ZONE)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.AddPendingTransectAction) => action.payload)
+    .withLatestFrom(this.store.let(getSelectedPlatform))
+    .mergeMap((value: [any, Platform]) => this.platformService.addToPendingZone(value[0], value[1]))
+    .map((zone: Zone) => new PlatformAction.RemovePendingZoneSuccessAction(zone));
+
+  @Effect()
   importSurvey$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_SURVEY)
     .map((action: PlatformAction.ImportSurveyAction) => action.payload)
@@ -178,6 +187,22 @@ export class PlatformEffects {
     .withLatestFrom(this.store.let(getSelectedPlatform))
     .mergeMap((value: [Survey, Platform]) => this.platformService.importSurveyVerification(value[0], value[1]))
     .map(error => new PlatformAction.CheckPlatformAddErrorAction(error));
+
+  @Effect()
+  addPendingSurvey$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_PENDING_SURVEY)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.AddPendingSurveyAction) => action.payload)
+    .mergeMap((survey: Survey) =>this.csv2jsonService.csv2('survey', survey))
+    .map((survey) => new PlatformAction.AddPendingSurveySuccessAction(survey));
+
+  @Effect()
+  removePendingSurvey$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_SURVEY)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.RemovePendingSurveyAction) => action.payload)
+    .mergeMap((survey: Survey) =>this.csv2jsonService.csv2('survey', survey))
+    .map((survey: Survey) => new PlatformAction.RemovePendingSurveySuccessAction(survey));
 
   @Effect()
   importStation$: Observable<Action> = this.actions$
@@ -201,6 +226,22 @@ export class PlatformEffects {
     .map(error => new PlatformAction.CheckTransectAddErrorAction(error));
 
   @Effect()
+  addPendingTransect$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_PENDING_TRANSECT)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.AddPendingTransectAction) => action.payload)
+    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
+    .map((transect: Transect) => new PlatformAction.AddPendingTransectSuccessAction(transect));
+
+  @Effect()
+  removePendingTransect$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_TRANSECT)  
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .map((action: PlatformAction.RemovePendingTransectAction) => action.payload)
+    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
+    .map((transect: Transect) => new PlatformAction.RemovePendingTransectSuccessAction(transect));
+
+  @Effect()
   importZonePref$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_PREF)
     .map((action: PlatformAction.ImportZonePrefAction) => action.payload)
@@ -209,6 +250,7 @@ export class PlatformEffects {
     .mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0]))
     .map((zonePref: ZonePreference) => new PlatformAction.ImportZonePrefSuccessAction(zonePref))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
+
 
   @Effect()
   importCount$: Observable<Action> = this.actions$

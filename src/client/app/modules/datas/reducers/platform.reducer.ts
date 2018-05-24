@@ -5,7 +5,7 @@ import { Platform } from '../models/index';
 export function platformReducer(
     state: IPlatformState = platformInitialState,
     action: PlatformAction.Actions
-): IPlatformState {
+    ): IPlatformState {
 
     switch (action.type) {
         case PlatformAction.ActionTypes.LOAD: {
@@ -69,7 +69,7 @@ export function platformReducer(
                 const platforms = state.entities.filter(platform => addedzone[i].codePlatform !== platform._id);
                 const modifiedPlatform = state.entities.filter(platform => addedzone[i].codePlatform === platform._id)[0];
                 modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone[i].properties.code !== zone.properties.code),addedzone[i]];
-            
+
                 entities.push(...platforms, modifiedPlatform)
                 ids.push(...state.ids.filter(id => addedzone[i].codePlatform !== id), ...addedzone[i].codePlatform)
             }
@@ -114,6 +114,20 @@ export function platformReducer(
             }
         }
 
+        case PlatformAction.ActionTypes.ADD_PENDING_SURVEY_SUCCESS: {
+            const addedsurvey = action.payload;
+            const platforms = state.entities.filter(platform => addedsurvey.codePlatform !== platform._id);
+            const modifiedPlatform = state.entities.filter(platform => addedsurvey.codePlatform === platform._id)[0];
+            modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => addedsurvey.code !== survey.code),addedsurvey];
+
+            return {
+                ...state,
+                entities: [...platforms,modifiedPlatform],
+                ids: [...state.ids.filter(id => addedsurvey.codePlatform !== id), ...addedsurvey.codePlatform],
+                error: null
+            }
+        }
+
         case PlatformAction.ActionTypes.CHECK_SURVEY_ADD_ERROR: {
             return {
                 ...state,
@@ -136,6 +150,23 @@ export function platformReducer(
                 ids: [...state.ids.filter(id => addedstation.codePlatform !== id), ...addedstation.codePlatform],
                 error: null,
                 msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Stations registered with success":"Station registered with success"
+            }
+        }
+
+        case PlatformAction.ActionTypes.ADD_PENDING_TRANSECT_SUCCESS: {
+            const addedtransect = action.payload;
+            const platforms = state.entities.filter(platform => addedtransect.codePlatform !== platform._id);
+            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform.code)[0];
+
+            const modifiedZone = modifiedPlatform.zones.filter(zone => addedtransect.codeZone === zone.properties.code)[0];
+            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.properties.code !== transect.properties.code),addedtransect];
+            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedtransect.codeZone !== zone.properties.code),modifiedZone];
+
+            return {
+                ...state,
+                entities: [...platforms,modifiedPlatform],
+                ids: [...state.ids.filter(id => addedtransect.codePlatform !== id), ...addedtransect.codePlatform],
+                error: null
             }
         }
 
@@ -209,48 +240,84 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS:
-            {
-                const removedPlatform = action.payload;
-                return {
-                    ...state,
-                    entities: state.entities.filter(platform => removedPlatform._id !== platform._id),
-                    ids: state.ids.filter(id => id !== removedPlatform._id),
-                    currentPlatformId: null,
-                    error: null,
-                    msg: "Platform removed with success"
-                };
-            }
+        {
+            const removedPlatform = action.payload;
+            return {
+                ...state,
+                entities: state.entities.filter(platform => removedPlatform._id !== platform._id),
+                ids: state.ids.filter(id => id !== removedPlatform._id),
+                currentPlatformId: null,
+                error: null,
+                msg: "Platform removed with success"
+            };
+        }
 
         case PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS:
-            {
-                const removedZone = action.payload;
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone.codePlatform)[0];
-                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.properties.code);
-                return {
-                    ...state,
-                    entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
-                    ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
-                    currentZoneId: null,
-                    error: null,
-                    msg: "Zone removed with success"
-                };
+        {
+            const removedZone = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone.codePlatform)[0];
+            modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone.properties.code);
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                currentZoneId: null,
+                error: null,
+                msg: "Zone removed with success"
+            };
+        }
+
+        case PlatformAction.ActionTypes.REMOVE_PENDING_ZONE_SUCCESS:
+        {
+            let entities = [];
+            let ids = [];
+            const removedZone = action.payload;
+
+            for(let i in removedZone){
+                const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone[i].codePlatform)[0];
+                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone[i].properties.code);
+                
+                entities.push(...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform);
+                ids.push(...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id)
             }
+
+            return {
+                ...state,
+                entities: entities,
+                ids: ids,
+                error: null
+            };
+        }
 
         case PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS:
-            {
-                const removedSurvey = action.payload;
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
-                modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);
+        {
+            const removedSurvey = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
+            modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);
 
-                return {
-                    ...state,
-                    entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
-                    ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
-                    currentSurveyId: null,
-                    error: null,
-                    msg: "Survey removed with success"
-                };
-            }
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                currentSurveyId: null,
+                error: null,
+                msg: "Survey removed with success"
+            };
+        }
+
+        case PlatformAction.ActionTypes.REMOVE_PENDING_SURVEY_SUCCESS:
+        {
+            const removedSurvey = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
+            modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);
+
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                error: null
+            };
+        }
 
         case PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS:
             {
@@ -268,51 +335,68 @@ export function platformReducer(
                 };
             }
 
-        case PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS:
-            {
-                const removedZonePref = action.payload;
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedZonePref.codePlatform)[0];
-                const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedZonePref.codeZone)[0];
-                modifiedZone.zonePreferences = modifiedZone.zonePreferences.filter(zp => zp.code !== removedZonePref.code);
-                modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
+        case PlatformAction.ActionTypes.REMOVE_PENDING_TRANSECT_SUCCESS:
+        {
+            const removedTransect = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedTransect.codePlatform)[0];
+            const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedTransect.codeZone)[0];
+            modifiedZone.transects = modifiedZone.transects.filter(transect => transect.properties.code !== removedTransect.properties.code);
+            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
 
-                return {
-                    ...state,
-                    entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
-                    ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
-                    currentSpPrefId: null,
-                    error: null,
-                    msg: "Zone preference removed with success"
-                };
-            }
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                currentTransectId: null,
+                error: null
+            };
+        }
+
+        case PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS:
+        {
+            const removedZonePref = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedZonePref.codePlatform)[0];
+            const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedZonePref.codeZone)[0];
+            modifiedZone.zonePreferences = modifiedZone.zonePreferences.filter(zp => zp.code !== removedZonePref.code);
+            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
+
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                currentSpPrefId: null,
+                error: null,
+                msg: "Zone preference removed with success"
+            };
+        }
 
         case PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS:
-            {
-                const removedCount = action.payload;
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedCount.codePlatform)[0];
-                const modifiedSurvey = modifiedPlatform.surveys.filter(count => count.code === removedCount.codeSurvey)[0];
-                modifiedSurvey.counts = modifiedSurvey.counts.filter(count => count.code !== removedCount.code)
-                modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => survey.code !== removedCount.code), modifiedSurvey];
+        {
+            const removedCount = action.payload;
+            const modifiedPlatform = state.entities.filter(platform => platform.code === removedCount.codePlatform)[0];
+            const modifiedSurvey = modifiedPlatform.surveys.filter(count => count.code === removedCount.codeSurvey)[0];
+            modifiedSurvey.counts = modifiedSurvey.counts.filter(count => count.code !== removedCount.code)
+            modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => survey.code !== removedCount.code), modifiedSurvey];
 
-                return {
-                    ...state,
-                    entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
-                    ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
-                    currentCountId: null,
-                    error: null,
-                    msg: "Count removed with success"
-                };
-            }
+            return {
+                ...state,
+                entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
+                ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+                currentCountId: null,
+                error: null,
+                msg: "Count removed with success"
+            };
+        }
 
         case PlatformAction.ActionTypes.REMOVE_PLATFORM_FAIL:
         case PlatformAction.ActionTypes.ADD_PLATFORM_FAIL:
-            {
-                return {
-                    ...state,
-                    error: action.payload,
-                    msg: null
-                }
+        {
+            return {
+                ...state,
+                error: action.payload,
+                msg: null
             }
+        }
 
         case PlatformAction.ActionTypes.SELECT_PLATFORM: {
             console.log("select platform: "+action.payload);

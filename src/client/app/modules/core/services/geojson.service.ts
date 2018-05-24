@@ -12,7 +12,6 @@ export class GeojsonService {
 
       kmlToGeoJson(kml, platform: Platform){
 
-             console.log(platform)
             const self = this;
             
             return new Promise(function(resolve, reject) {
@@ -37,7 +36,6 @@ export class GeojsonService {
                               geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
                         }
 
-                        console.log(geojson)
                         resolve(geojson);
                   }
             });
