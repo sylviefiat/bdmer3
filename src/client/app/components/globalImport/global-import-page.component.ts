@@ -479,6 +479,6 @@ export class GlobalImportPageComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        //this.store.dispatch(new PlatformAction.ResetAllPendingAction());
+        this.store.dispatch(new PlatformAction.ResetAllPendingAction());
     }
 }
