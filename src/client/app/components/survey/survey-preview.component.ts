@@ -72,7 +72,9 @@ export class SurveyPreviewComponent implements OnInit {
   nCounts: number = 0;
 
   ngOnInit(){
-    this.nCounts = this.survey.counts.length;
+    if(this.survey.counts){
+      this.nCounts = this.survey.counts.length;
+    }
   }
 
   get id() {

@@ -71,3 +71,30 @@ h5 {
   color: white;
   background-color: #4BB543;
 }
+
+.valid{
+  color: green;
+}
+
+.disabled{
+  background-color: grey;
+  cursor: not-allowed;
+}
+.disable-click{
+    pointer-events: none!important;
+}
+.enable-click{
+  pointer-events: auto!important;
+}
+
+.send{
+  background-color: #4BB543;
+}
+.btn-danger{
+  background-color: red;
+}
+
+.btn-disabled{
+  background-color: grey;
+  cursor: not-allowed;
+}

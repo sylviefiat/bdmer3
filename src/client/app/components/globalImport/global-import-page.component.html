@@ -2,15 +2,24 @@
   <mat-card class="actions">
     <mat-card-title>{{ 'IMPORT_GLOBAL' | translate}}</mat-card-title>
     <mat-card-content>
-      <button (click)="send()" class="btn btn-primary">{{ 'SEND' | translate }}</button>   
-      <button (click)="return()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>        
-    </mat-card-content>       
+
+      <div *ngIf="(importError$ | async)?.length === 0 && csvFileZonePref !== null && (error$ | async) === null">
+        <button *ngIf=" csvFileSurvey !== null || csvFileZonePref !== null || csvFileTransect !== null || csvFileCount !== null || kmlFileZones !== null " (click)="send()" class="btn send" disabled>sqdqsdqsd {{ 'SEND' | translate }}</button>   
+      </div>
+
+        <button *ngIf="(( csvFileSurvey === null && csvFileZonePref === null && csvFileTransect === null && csvFileCount === null && kmlFileZones === null ) || (importError$ | async)?.length > 0 || error !== null ); else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
+
+        <ng-template #activedbutton>
+          <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
+        </ng-template>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+      </mat-card-content>
   </mat-card>
 </div>
 <div class="insideform" [formGroup]="inputForm">
-  <mat-horizontal-stepper (selectionChange)="changeIndex($event)">
-    <mat-step [optional]="true">
-      <ng-template matStepLabel>Zone</ng-template>
+  <mat-horizontal-stepper #stepper (selectionChange)="changeIndex($event)">
+    <mat-step [optional]="true">     
+        <ng-template matStepLabel><div [ngClass]="(kmlFileZones) ? 'valid' : ''">Zone</div></ng-template>
 
       <div>
         <mat-card class="no-box-shadow">
@@ -42,14 +51,14 @@
           <mat-card-content class="msg" *ngIf="next" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content> 
         </mat-card>
       </div>
-      <div class="align-right">
+      <div class="align-right enable-click">
         <button mat-button matStepperNext>Next</button>
       </div>
     </mat-step>
 
-    <mat-step [optional]="true">
-      <ng-template matStepLabel>Zone Pref</ng-template>
-      <div>
+    <mat-step [optional]="true" class="zonePref">
+      <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileZonePref !== null && (error$ | async) === null) ? 'valid' : ''">Zone Pref</div></ng-template>
+      <div >
 
         <mat-card class="no-box-shadow">
           <mat-card-title-group>
@@ -93,16 +102,23 @@
           </mat-card-actions>
         </mat-card>
       </div>
-      <div class="align-right">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+      <div class="align-right" *ngIf="(error$ | async)  !== null || (importError$ | async)?.length > 0; else navigate">
+        <button mat-button matStepperPrevious class="disabled" disabled>Back</button>
+        <button mat-button matStepperNext class="disabled" disabled>Next</button>
       </div>
+      
+      <ng-template #navigate>
+        <div class="align-right">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </ng-template>
     </mat-step>
 
-    <mat-step [optional]="true">
-        <ng-template matStepLabel>Transects</ng-template>
+    <mat-step [optional]="true" class="transect">
+        <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileTransect !== null && (error$ | async) === null) ? 'valid' : ''">Transects</div></ng-template>
 
-      <div>
+      <div >
         <mat-card class="no-box-shadow">
           <mat-card-title-group>
             <mat-card-title>{{'IMPORT_CSV' | translate }} Transects</mat-card-title> 
@@ -153,10 +169,10 @@
       </div>
     </mat-step>
 
-    <mat-step [optional]="true">
-      <ng-template matStepLabel>Surveys</ng-template>
+    <mat-step [optional]="true" class="survey">
+      <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileSurvey !== null && (error$ | async) === null) ? 'valid' : ''">Surveys</div></ng-template>
 
-      <div>
+      <div >
         <mat-card class="no-box-shadow">
           <mat-card-title-group>
             <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title> 
@@ -208,9 +224,9 @@
       </div>
     </mat-step>
 
-    <mat-step [optional]="true">
-      <ng-template matStepLabel>Counts</ng-template>
-      <div>
+    <mat-step [optional]="true" class="count">
+      <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileCount !== null && (error$ | async) === null) ? 'valid' : ''">Counts</div></ng-template>
+      <div >
         <mat-card class="no-box-shadow">
           <mat-card-title-group>
             <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title> 
@@ -258,7 +274,6 @@
       </div>
       <div class="align-right">
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

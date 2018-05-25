@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, ISubscription } from 'rxjs/Subscription';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
 
@@ -15,21 +16,27 @@ import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMs
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { NameRefactorService } from '../../modules/core/services/nameRefactor.service';
-import { MapStaticService} from '../../modules/core/services/map-static.service';
+import { MapStaticService } from '../../modules/core/services/map-static.service';
+import { GeojsonService } from '../../modules/core/services/geojson.service';
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-global-import-page',
+    selector: 'bc-global-import',
     templateUrl: './global-import-page.component.html',
     styleUrls: [
     './global-import-page.component.css',
     ],
+    styles: [
+    '.mat-horizontal-stepper-header-container{pointer-events: none!important;}'
+    ]
 })
 export class GlobalImportPageComponent implements OnInit {
+    @ViewChild('stepper') stepper: MatStepper;
+
     platform: object;
     error$: Observable<string | null>;
-    importError$: Observable<string | null>;
+    importError$: Observable<string[]>;
     isAdmin$: Observable<Country>;
     locale$: Observable<boolean>;
     actionsSubscription: Subscription;
@@ -45,7 +52,7 @@ export class GlobalImportPageComponent implements OnInit {
     kmlFileZones: object = null;
     kmlFileZonesPending: boolean = false;
     next: boolean = false;
-    fromto = {from: 'zone', to: null};
+    fromto = { from: 'zone', to: null };
 
     inputForm: FormGroup = new FormGroup({
         zoneInputFile: new FormControl(),
@@ -56,12 +63,11 @@ export class GlobalImportPageComponent implements OnInit {
     });
 
 
-    constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
+    constructor(private geojsonService: GeojsonService, private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
     }
 
     ngOnInit() {
-
-        this.store.let(getSelectedPlatform).subscribe((platform) =>{
+        this.store.let(getSelectedPlatform).subscribe((platform) => {
             this.platform = platform;
         });
 
@@ -75,38 +81,96 @@ export class GlobalImportPageComponent implements OnInit {
         });
     }
 
+    selectIndex(i){
+        setTimeout(()=>{
+            this.stepper.selectedIndex = i; 
+        },0);
+    }
+
     handleUploadKml(kmlFile: any): void {
+        let kml = kmlFile;
         if (kmlFile.target.files && kmlFile.target.files.length > 0) {
 
-            this.kmlFileZonesPending = false;
-            this.kmlFileZones = kmlFile.target.files['0'];
-            this.next = true;
+            if (this.kmlFileZonesPending) {
+
+                let stringTab = [];
+                let string = "It will delete file(s) : ";
+
+
+                if (this.csvFileZonePref !== null)
+                    stringTab.push("zonePref")
+
+                if (this.csvFileCount !== null)
+                    stringTab.push("count")
+
+                if (this.csvFileTransect !== null)
+                    stringTab.push("transect")
+
+
+                for (let i in stringTab) {
+                    if (parseInt(i) === stringTab.length - 1) {
+                        string += (stringTab[i] + ".")
+                    } else {
+                        string += (stringTab[i] + ", ")
+                    }
+                }
+
+                if (stringTab.length !== 0) {
+                    let r = confirm(string + ' Are you sure to continue?');
+
+                    if (r) {
+                        this.clearFile(stringTab, true);
+                    }
+                }
+
+                this.clearFile(["zone"], false);
+            }
+
+            this.kmlFileZones = kml.target.files['0'];
         }
     }
 
     handleUploadCsv(csvFile: any, type: string): void {
-        let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
             switch (type) {
-                case "survey":{
-                    this.csvFileSurveyPending = false;
+                case "survey": {
+                    if (this.csvFileSurveyPending) {
+                        if (this.csvFileCount !== null) {
+                            let confirmSurvey = confirm('It will delete file : Count. Are you sure to continue?');
+                            if (confirmSurvey) {
+                                this.clearFile(["count"], true);
+                                this.clearFile(["survey"], false);
+                            }
+                        } else {
+                            this.clearFile(["survey"], false);
+                        }
+                    }
                     this.csvFileSurvey = csvFile.target.files["0"];
                     this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(this.csvFileSurvey));
                     break;
                 }
-                case "zonePref":{
+                case "zonePref": {
                     this.csvFileZonePref = csvFile.target.files["0"];
                     this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(this.csvFileZonePref));
                     break;
                 }
-                case "transect":{
-                    this.csvFileTransectPending = false;
+                case "transect": {
+                    if (this.csvFileTransectPending) {
+                        if (this.csvFileCount !== null) {
+                            let confirmTransect = confirm('It will delete file : Count. Are you sure to continue?');
+                            if (confirmTransect) {
+                                this.clearFile(["count"], true);
+                                this.clearFile(["transect"], false);
+                            }
+                        } else {
+                            this.clearFile(["transect"], true);
+                        }
+                    }
                     this.csvFileTransect = csvFile.target.files["0"];
                     this.store.dispatch(new PlatformAction.CheckTransectCsvFile(this.csvFileTransect));
                     break;
                 }
-                case "count":{
-
+                case "count": {
                     this.csvFileCount = csvFile.target.files["0"];
                     this.store.dispatch(new PlatformAction.CheckCountCsvFile(this.csvFileCount));
                     break;
@@ -117,214 +181,292 @@ export class GlobalImportPageComponent implements OnInit {
         }
     }
 
-    clearFile(types){
-        for(let i in types){
+    clearFile(types, reset: boolean) {
+        for (let i in types) {
             switch (types[i]) {
-                case "zone":{
-                    if(this.kmlFileZonesPending){
+                case "zone": {
+                    if (this.kmlFileZonesPending) {
                         this.store.dispatch(new PlatformAction.RemovePendingZoneAction(this.kmlFileZones));
                         this.kmlFileZonesPending = false;
                     }
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    this.inputForm.get('zoneInputFile').reset();
-                    this.kmlFileZones = null;
+                    if (reset) {
+                        this.inputForm.get('zoneInputFile').reset();
+                        this.kmlFileZones = null;
+                    }
                     break;
                 }
-                case "survey":{
-                    if(this.csvFileSurveyPending){
+                case "survey": {
+                    if (this.csvFileSurveyPending) {
                         this.store.dispatch(new PlatformAction.RemovePendingSurveyAction(this.csvFileSurvey));
                         this.csvFileSurveyPending = false;
                     }
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    this.csvFileSurvey = null;
-                    this.inputForm.get('surveyInputFile').reset();
+                    if (reset) {
+                        this.csvFileSurvey = null;
+                        this.inputForm.get('surveyInputFile').reset();
+                    }
                     break;
                 }
-                case "zonePref":{
+                case "zonePref": {
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    this.csvFileZonePref = null;
-                    this.inputForm.get('zonePrefInputFile').reset();
+                    if (reset) {
+                        this.csvFileZonePref = null;
+                        this.inputForm.get('zonePrefInputFile').reset();
+                    }
                     break;
                 }
-                case "transect":{
-                    if(this.csvFileTransectPending){
+                case "transect": {
+                    if (this.csvFileTransectPending) {
                         this.store.dispatch(new PlatformAction.RemovePendingTransectAction(this.csvFileTransect));
                         this.csvFileTransectPending = false;
                     }
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    this.inputForm.get('transectInputFile').reset();
-                    this.csvFileTransect = null;
+                    if (reset) {
+                        console.log("reset transect");
+                        this.inputForm.get('transectInputFile').reset();
+                        this.csvFileTransect = null;
+                    }
                     break;
                 }
-                case "count":{
+                case "count": {
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    this.csvFileCount = null;
-                    this.inputForm.get('countInputFile').reset();
+                    if (reset) {
+                        this.csvFileCount = null;
+                        this.inputForm.get('countInputFile').reset();
+                    }
                     break;
                 }
             }
         }
     }
 
-    deleteCsv(type: string){
+    deleteCsv(type: string) {
         switch (type) {
-            case "survey":{
-                if(this.csvFileCount !== null){
-                    let confirmSurvey = confirm('It will delete file : Survey, Count. Are you sure to continue?');
-                    if (confirmSurvey) {
-                        this.clearFile(["survey", "count"]);
-                    }
-                }else{
-                    let confirmSurvey = confirm('It will delete file : Survey. Are you sure to continue?');
-                    if (confirmSurvey) {
-                        this.clearFile(["survey"]);
-                    }
-                }
-                break;
-            }
-            case "zonePref":{
+            case "zonePref": {
                 let confirmZonePref = confirm('It will delete file : Zone Pref. Are you sure to continue?');
                 if (confirmZonePref) {
-                    this.clearFile(["zonePref"]);
+                    this.clearFile(["zonePref"], true);
+                }else{
+                    this.selectIndex(1);
                 }
                 break;
             }
-            case "transect":{
-                if(this.csvFileCount !== null){
+            case "transect": {
+                if (this.csvFileCount !== null) {
                     let confirmTransect = confirm('It will delete file : Transect, Count. Are you sure to continue?');
                     if (confirmTransect) {
-                        this.clearFile(["transect", "count"]);
+                        this.clearFile(["count", "transect"], true);
+                    }else{
+                        this.selectIndex(2);
                     }
-                }else{
-                    let confirmSurvey = confirm('It will delete file : Survey. Are you sure to continue?');
+                } else {
+                    let confirmSurvey = confirm('It will delete file : Transect. Are you sure to continue?');
                     if (confirmSurvey) {
-                        this.clearFile(["transect"]);
+                        this.clearFile(["transect"], true);
+                    }else{
+                        this.selectIndex(2);
                     }
                 }
                 break;
             }
-            case "count":{
+            case "survey": {
+                if (this.csvFileCount !== null) {
+                    let confirmSurvey = confirm('It will delete file : Survey, Count. Are you sure to continue?');
+                    if (confirmSurvey) {
+                        this.clearFile(["count", "survey"], true);
+                    }else{
+                        this.selectIndex(3);
+                    }
+                } else {
+                    let confirmSurvey = confirm('It will delete file : Survey. Are you sure to continue?');
+                    if (confirmSurvey) {
+                        this.clearFile(["survey"], true);
+                    }else{
+                        this.selectIndex(3);
+                    }
+                }
+                break;
+            }
+            case "count": {
                 let confirmCount = confirm('It will delete file : Count. Are you sure to continue?');
                 if (confirmCount) {
-                    this.clearFile(["count"]);
+                    this.clearFile(["count"], true);
+                }else{
+                    this.selectIndex(4);
                 }
                 break;
             }
         }
     }
 
-    changeIndex(e){
-        this.store.dispatch(new PlatformAction.RemoveMsgAction())
-
+    changeIndex(e) {
         switch (e.selectedIndex) {
-            case 0:{
+            case 0: {
                 this.fromto.to = "zone"
                 break;
             }
-            case 1:{
+            case 1: {
                 this.fromto.to = "zonePref"
+                if (this.csvFileZonePref !== null) {
+                    this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(this.csvFileZonePref));
+                }
                 break;
             }
-            case 2:{
+            case 2: {
                 this.fromto.to = "transect"
+                if (this.csvFileTransect !== null) {
+                    this.store.dispatch(new PlatformAction.CheckTransectCsvFile(this.csvFileTransect));
+                }
                 break;
             }
-            case 3:{
+            case 3: {
                 this.fromto.to = "survey"
+                if (this.csvFileSurvey !== null) {
+                    this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(this.csvFileSurvey));
+                }
                 break;
             }
-            case 4:{
+            case 4: {
                 this.fromto.to = "count"
+                if (this.csvFileCount !== null) {
+                    this.store.dispatch(new PlatformAction.CheckCountCsvFile(this.csvFileCount));
+                }
                 break;
             }
         }
 
         switch (e.previouslySelectedIndex) {
-            case 0:{
-                this.fromto.from = "zone"
-                if(this.kmlFileZones !== null && !this.kmlFileZonesPending){console.log("pending zone"); this.kmlFileZonesPending = true; this.store.dispatch(new PlatformAction.AddPendingZoneAction(this.kmlFileZones));}
+            case 0: {
+                this.fromto.from = "zone";
+                if (this.kmlFileZones !== null && !this.kmlFileZonesPending) {
+                    console.log("pending zone");
+                    this.kmlFileZonesPending = true;
+                    this.store.dispatch(new PlatformAction.AddPendingZoneAction(this.kmlFileZones));
+                }
                 break;
             }
-            case 1:{
-                this.fromto.from = "zonePref"
+            case 1: {
+                this.fromto.from = "zonePref";
+                this.error$.first().subscribe(e =>{
+                    this.importError$.first().subscribe(ie => {
+                        if (this.csvFileZonePref !== null && (e !== null || ie.length > 0)) {
+                            this.deleteCsv('zonePref');
+                        }
+                    })
+                });
                 break;
             }
-            case 2:{
-                this.fromto.from = "transect"
-                if(this.csvFileTransect !== null && !this.csvFileTransectPending){ console.log("pending transect"); this.csvFileTransectPending = true; this.store.dispatch(new PlatformAction.AddPendingTransectAction(this.csvFileTransect));}
+            case 2: {
+                this.fromto.from = "transect";
+                this.error$.first().subscribe(e =>{
+                    this.importError$.first().subscribe(ie => {
+                        if (this.csvFileTransect !== null && (e !== null || ie.length > 0)) {
+                            this.deleteCsv('transect');
+                        }else if(this.csvFileTransect !== null && !this.csvFileTransectPending){
+                            console.log("pending transect");
+                            this.csvFileTransectPending = true;
+                            this.store.dispatch(new PlatformAction.AddPendingTransectAction(this.csvFileTransect));
+                        }
+                    })
+                });
                 break;
             }
-            case 3:{
-                this.fromto.from = "survey"
-                if(this.csvFileSurvey !== null && !this.csvFileSurveyPending){ console.log("pending survey"); this.csvFileSurveyPending = true; this.store.dispatch(new PlatformAction.AddPendingSurveyAction(this.csvFileSurvey));}
+            case 3: {
+                this.fromto.from = "survey";
+                this.error$.first().subscribe(e =>{
+                    this.importError$.first().subscribe(ie => {
+                        if (this.csvFileSurvey !== null && (e !== null || ie.length > 0)) {
+                            this.deleteCsv('survey');
+                        }else if (this.csvFileSurvey !== null && !this.csvFileSurveyPending) {
+                            console.log("pending survey");
+                            this.csvFileSurveyPending = true;
+                            this.store.dispatch(new PlatformAction.AddPendingSurveyAction(this.csvFileSurvey));
+                        }
+                    })
+                });
                 break;
             }
-            case 4:{
-                this.fromto.from = "count"
+            case 4: {
+                this.fromto.from = "count";
+                this.error$.first().subscribe(e =>{
+                    this.importError$.first().subscribe(ie => {
+                        if (this.csvFileCount !== null && (e !== null || ie.length > 0)) {
+                            this.deleteCsv('count');
+                        }
+                    })
+                });
                 break;
             }
         }
+
+        this.store.dispatch(new PlatformAction.RemoveMsgAction())
     }
 
-    deleteKml(){
+    deleteKml() {
         let stringTab = [];
         let string = "It will delete file(s) : ";
 
 
-        if(this.csvFileZonePref !== null)
+        if (this.csvFileZonePref !== null)
             stringTab.push("zonePref")
-        
-        if(this.csvFileCount !== null)
+
+        if (this.csvFileCount !== null)
             stringTab.push("count")
-        
-        if(this.csvFileTransect !== null)
+
+        if (this.csvFileTransect !== null)
             stringTab.push("transect")
 
-        if(this.kmlFileZones !== null)
+        if (this.kmlFileZones !== null)
             stringTab.push("zone")
 
-        for(let i in stringTab){
-            if(parseInt(i) === stringTab.length - 1){
+        for (let i in stringTab) {
+            if (parseInt(i) === stringTab.length - 1) {
                 string += (stringTab[i] + ".")
-            }else{
+            } else {
                 string += (stringTab[i] + ", ")
             }
         }
         let r = confirm(string + ' Are you sure to continue?');
 
         if (r) {
-            this.clearFile(stringTab);
+            this.clearFile(stringTab, true);
         }
     }
 
-    send(){
-        if(this.csvFileSurvey)
-            this.store.dispatch(new PlatformAction.ImportSurveyAction(this.csvFileSurvey));
+    send() {
+        if (this.kmlFileZones !== null)
+            this.geojsonService.kmlToGeoJson(this.kmlFileZones, this.platform).then((zone) =>{
+                for(let i in zone){
+                    this.store.dispatch(new PlatformAction.ImportZoneAction(zone[i]))
+                }
+            })
 
-        if(this.csvFileZonePref)
-            this.store.dispatch(new PlatformAction.ImportZonePrefAction(this.csvFileZonePref));
-
-        if(this.csvFileTransect)
+        if (this.csvFileTransect !== null)
             this.store.dispatch(new PlatformAction.ImportTransectAction(this.csvFileTransect));
 
-        if(this.csvFileCount)
+        if (this.csvFileSurvey !== null)
+            this.store.dispatch(new PlatformAction.ImportSurveyAction(this.csvFileSurvey));
+        
+        if (this.csvFileZonePref !== null)
+            this.store.dispatch(new PlatformAction.ImportZonePrefAction(this.csvFileZonePref));
+
+        if (this.csvFileCount !== null)
             this.store.dispatch(new PlatformAction.ImportCountAction(this.csvFileCount));
-
-        if(this.kmlFileZones)
-
-            this.return();
+        
+        this.return();
     }
 
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
     }
 
-    getCsvUrl(type){
-        return this.docs_repo + "import" + type + "-" + this.language +".csv"
+    getCsvUrl(type) {
+        return this.docs_repo + "import" + type + "-" + this.language + ".csv"
     }
 
-    getKmlUrl(type){
-        return this.docs_repo + "import" + type + "-" + this.language +".kml"
+    getKmlUrl(type) {
+        return this.docs_repo + "import" + type + "-" + this.language + ".kml"
     }
 
     return() {

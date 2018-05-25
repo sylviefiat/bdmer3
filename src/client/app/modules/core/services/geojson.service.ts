@@ -10,7 +10,7 @@ export class GeojsonService {
 
       constructor(private nameRefactorService: NameRefactorService){}
 
-      kmlToGeoJson(kml, platform: Platform){
+      kmlToGeoJson(kml, platform){
 
             const self = this;
             
