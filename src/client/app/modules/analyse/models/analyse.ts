@@ -1,4 +1,4 @@
-import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
+import { Platform, Zone, Transect, Survey, Species, LegalDimensions } from '../../datas/models/index';
 import { Country } from '../../countries/models/country';
 
 export interface Method {
@@ -29,10 +29,15 @@ export interface ResultSurvey{
 
 export interface ResultSpecies {
     codeSpecies: string;
+    numberIndividual: number;
+    biomassTotal: number;
+    biomassesPerTransect: number[];
+    individualsPerTransect: number[];
+    SDBiomassTotal: number;
+    SDAbundancyTotal: number;
     resultPerTransect: ResultTransect[];
-    indicators: Indicators[];
-    interpretation: Interpretation[];
-    stock: Stock[];
+    resultPerZone: ResultZone[];
+    legalDimensions: LegalDimensions;
 }
 
 export interface DimensionsAnalyse {   
@@ -48,6 +53,20 @@ export interface ResultTransect {
     biomassTotal: number;            // somme des biomasses
     biomassPerHA: number;            // biomasse par hectare
     densityPerHA: number;            // density = nb individus par hectare
+}
+
+export interface ResultZone {
+    codeZone: string;
+    numberIndividual: number;        // nombre d'invidus
+    biomasses: number[];             // biomasse par individu
+    biomassesPerHA: number[];        // biomasse par hectare par transect
+    densitiesPerHA: number[];        // densités par hectare par tranect
+    biomassTotal: number;            // somme des biomasses
+    biomassPerHA: number;            // biomasse par hectare
+    densityPerHA: number;            // density = nb individus par hectare
+    SDBiomassTotal: number;          // ecart type / standard deviation biomasse
+    SDBiomassPerHA: number;          // ecart type / standard deviation biomasse par hectare
+    SDDensityPerHA: number;          // ecart type / standard deviation densité par hectare
 }
 
 export interface Indicators {

@@ -19,6 +19,7 @@ import { ResultRappelComponent } from './result-rappel.component';
 import { ResultSynthesisComponent } from './result-synthesis.component';
 import { ResultMapComponent } from './result-map.component';
 import { ResultChartComponent } from './result-chart.component';
+import { ResultFilterComponent } from './result-filter.component';
 
 
 export const ANALYSE_COMPONENTS: any[] = [
@@ -43,6 +44,7 @@ export const ANALYSE_COMPONENTS: any[] = [
   ResultSynthesisComponent,
   ResultMapComponent,
   ResultChartComponent,
+  ResultFilterComponent,
   ];
 
 export * from './analyse-page.component';
@@ -66,3 +68,4 @@ export * from './result-rappel.component';
 export * from './result-synthesis.component';
 export * from './result-map.component';
 export * from './result-chart.component';
+export * from './result-filter.component';

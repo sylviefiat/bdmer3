@@ -1,5 +1,5 @@
 
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from '@agm/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -29,22 +29,6 @@ declare var google: any;
         </agm-marker>
 
      </agm-map>
-     <div class="legend">
-        <h3>{{'FILTER' | translate}}</h3>
-        <h4>{{'TYPE' | translate}}</h4>
-        <mat-radio-group (change)="changeDisplay($event)">
-          <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
-          <mat-radio-button value="A" [checked]="typeShow==='A'">{{'DISPLAY_ABUNDANCE' | translate}}</mat-radio-button>
-        </mat-radio-group>
-        <h4>{{'SPECIES' | translate}}</h4>
-        <mat-radio-group (change)="setShowSp($event)">
-          <mat-radio-button *ngFor="let sp of analyseData.usedSpecies" value="{{sp.code}}" [checked]="spShow===sp.code">{{sp.scientificName}}</mat-radio-button>
-        </mat-radio-group>
-        <h4>{{'SURVEYS' | translate}}</h4>
-        <mat-radio-group (change)="setShowSurvey($event)">
-          <mat-radio-button *ngFor="let sv of analyseData.usedSurveys" value="{{sv.code}}" [checked]="surveyShow===sv.code">{{sv.code}}</mat-radio-button>
-        </mat-radio-group>
-      </div>
    </div>
   `,
   styles: [
@@ -59,19 +43,15 @@ declare var google: any;
       margin-left: 20px;
       margin-right: 20px;
     }
-    .legend {
-      margin-left: 10px;
-      border: 1px solid black;
-    }
-    mat-radio-group{
-      display: flex;
-      flex-direction: column;
-    }
   `]
 })
 export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
   @Input() results: Results;
   @Input() analyseData: Data;
+  @Input() typeShow : string;
+  @Input() spShow: string;
+  @Input() surveyShow: string;
+
   @ViewChild('AgmMap') agmMap: AgmMap;
   mapLat: any = 0;
   mapLng: any = 0;
@@ -91,10 +71,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
     },{
       size:64,
       url:'http://maps.google.com/mapfiles/ms/micons/green.png'
-    }]
-  typeShow : string = 'B';
-  spShow: string;
-  surveyShow: string;
+    }];
 
   constructor(googleMapsAPIWrapper: GoogleMapsAPIWrapper) {
 
@@ -109,15 +86,8 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
 
   initMarkers(){
     if(this.markers.length <=0 ){
-      for(let i in this.results.resultPerSurvey){
-        
-        if(this.surveyShow === undefined) 
-          this.surveyShow=this.results.resultPerSurvey[i].codeSurvey;
-
-        for(let rsp of this.results.resultPerSurvey[i].resultPerSpecies){                  
-          if(this.spShow === undefined) 
-            this.spShow=rsp.codeSpecies;
-
+      for(let i in this.results.resultPerSurvey){      
+        for(let rsp of this.results.resultPerSurvey[i].resultPerSpecies){     
           for(let rt of rsp.resultPerTransect){
             if(rt.densityPerHA>0 && rt.biomassPerHA >0){
               let t: Transect = this.analyseData.usedTransects.filter((transect:Transect) => transect.code === rt.codeTransect) && this.analyseData.usedTransects.filter(transect => transect.code === rt.codeTransect)[0];
@@ -177,18 +147,6 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
 
   getLabel(marker){
     return this.typeShow==='A'?'Abondance par hectare: '+marker.abundancy:'Biomasse par hectare: '+marker.biomass;
-  }
-
-  changeDisplay(showAbundancy: any){
-    this.typeShow = showAbundancy.value;
-  }
-
-  setShowSp(spCode: any){
-    this.spShow=spCode.value;
-  }
-
-  setShowSurvey(svCode: any){
-    this.surveyShow=svCode.value;
   }
 
 
