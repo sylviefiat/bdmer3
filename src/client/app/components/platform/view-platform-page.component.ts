@@ -58,9 +58,7 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
 
   removePlatform(platform: Platform) {
     this.platformService.getPlatform(platform.code).subscribe(
-        (res) => {
-          this.store.dispatch(new PlatformAction.RemovePlatformAction(res));
-         }
+        (res) => this.store.dispatch(new PlatformAction.RemovePlatformAction(res))
     );
   }
 }
