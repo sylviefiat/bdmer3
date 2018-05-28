@@ -66,11 +66,10 @@ export class ViewZoneComponent implements OnInit {
         switch (this.panelDisplay.value) {
             case "transects":
                 this.filteredTransects$ = this.transects$.map(transects => 
-                    transects.filter(transect => transect.code.toLowerCase().indexOf(filter)!==-1 || 
+                    transects.filter(transect => transect.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         transect.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         transect.codeZone.toLowerCase().indexOf(filter)!==-1 ||
-                        transect.latitude.toLowerCase().indexOf(filter)!==-1 ||
-                        transect.longitude.toLowerCase().indexOf(filter)!==-1
+                        transect.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );
                 break;

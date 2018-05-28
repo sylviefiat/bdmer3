@@ -7,12 +7,12 @@ import { Platform,Zone,Transect } from './../../modules/datas/models/platform';
     <a [routerLink]="['/transect', codePlatform, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
-          <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+          <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
           <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          {{ latitude }}°, {{ longitude }}°
+          {{ coord }}
         </mat-card-content>
       </mat-card>
     </a>
@@ -68,11 +68,11 @@ export class TransectPreviewComponent implements OnInit {
   }
 
   get id() {
-    return this.transect.code;
+    return this.transect.properties.code;
   }
 
   get code() {
-    return this.transect.code;
+    return this.transect.properties.code;
   }
 
   get codePlatform() {
@@ -83,13 +83,21 @@ export class TransectPreviewComponent implements OnInit {
     return this.zone.properties.code;
   }
 
-  get latitude() {
-    return this.transect.latitude;
+  get coord(){
+    return this.transect.geometry["coordinates"];
   }
 
-  get longitude() {
-    return this.transect.longitude;
+  get map(){
+    return this.transect.staticMapTransect;
   }
+
+  // get latitude() {
+  //   return this.transect.latitude;
+  // }
+
+  // get longitude() {
+  //   return this.transect.longitude;
+  // }
 
   get thumbnail(): string | boolean {
     // WAIT FOR MAP GENERATION

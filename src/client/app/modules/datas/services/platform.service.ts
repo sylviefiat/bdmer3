@@ -160,7 +160,6 @@ export class PlatformService {
   }
 
   editTransect(platform: Platform, transect: Transect): Observable<Transect> {
-    console.log(transect);
     if(platform.code !== transect.codePlatform)
       return _throw('Import is not possible : transect codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
@@ -168,8 +167,8 @@ export class PlatformService {
       .mergeMap(st => {  
         let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
         if(zn){
-          if(zn.transects.filter(t => t.code === transect.code).length > -1){
-            zn.transects = [ ...zn.transects.filter(t => t.code !== transect.code), transect];
+          if(zn.transects.filter(t => t.properties.code === transect.properties.code).length > -1){
+            zn.transects = [ ...zn.transects.filter(t => t.properties.code !== transect.properties.code), transect];
           }
           st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
         } 
@@ -187,7 +186,7 @@ export class PlatformService {
       .filter(platform => platform!==null)
       .mergeMap(st => {
         let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
-        zn.transects = zn.transects.filter(t => t.code !== transect.code);
+        zn.transects = zn.transects.filter(t => t.properties.code !== transect.properties.code);
         st.zones = [...st.zones.filter(z => z.properties.code !== transect.codeZone),zn];
         return fromPromise(this.db.put(st));
       })

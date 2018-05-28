@@ -300,7 +300,7 @@ export class PlatformEffects {
   addTransectSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_TRANSECT_SUCCESS)
     .map((action: PlatformAction.AddTransectSuccessAction) => action.payload)
-    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codePlatform + '/'+ transect.codeZone + '/' + transect.code]))
+    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codePlatform + '/'+ transect.codeZone + '/' + transect.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction()); 
 

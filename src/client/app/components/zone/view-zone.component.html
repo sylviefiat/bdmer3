@@ -1,10 +1,10 @@
     <mat-card class="actions">
       <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'ZONE' | translate}} {{ zone.properties.code }}</mat-card-title>
       <mat-card-content>
-        <img mat-card-sm-image *ngIf="zone.staticmap" (click)="openDialog()" [src]="zone.staticmap"/>
+        <div>{{ 'SURFACE' | translate }} : {{ zone.properties.surface }} m²</div> 
       </mat-card-content>
       <mat-card-content>
-        <div>{{ 'SURFACE' | translate }} : {{ zone.properties.surface }} m²</div> 
+        <img mat-card-sm-image *ngIf="zone.staticmap" (click)="openDialog()" [src]="zone.staticmap"/>
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field>

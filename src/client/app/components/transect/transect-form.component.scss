@@ -10,6 +10,13 @@
       margin:10px 20%;
     }
 
+    img{
+      width: 100%;
+      height: auto;
+      padding-left: 17px;
+      margin-top: 25px; 
+    }
+
     mat-card-title,
     mat-card-content {
       display: flex;
@@ -78,5 +85,8 @@
       background-color: darkgrey;
     }
     .forbidden {
+      color: red;
+    }
+    .error{
       color: red;
     }

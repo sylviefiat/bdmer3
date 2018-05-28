@@ -5,9 +5,12 @@
         <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / 
         <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / 
         <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / 
-        {{ 'TRANSECT' | translate}} {{ transect.code }}</mat-card-title>
+        {{ 'TRANSECT' | translate}} {{ transect.properties.code }}</mat-card-title>
       <mat-card-content>
-        <div>{{ 'COORDINATES' | translate }} : {{ transect.latitude }}°, {{ transect.longitude }}</div> 
+        <div>{{ 'COORDINATES' | translate }} : {{ transect.geometry.coordinates }}</div> 
+      </mat-card-content>
+      <mat-card-content>
+        <img mat-card-sm-image *ngIf="transect.staticMapTransect" (click)="openDialog()" [src]="transect.staticMapTransect"/>
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field>

@@ -148,7 +148,7 @@ export function getCurrentTransect(state$: Observable<IPlatformState>) {
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
                 zone.properties.code === state.currentZoneId)[0].transects.filter(transect =>
-                    transect.code === state.currentTransectId)[0]);
+                    transect.properties.code === state.currentTransectId)[0]);
 }
 
 export function getCurrentSpPrefId(state$: Observable<IPlatformState>) {
