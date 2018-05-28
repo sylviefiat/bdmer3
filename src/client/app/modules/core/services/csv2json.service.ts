@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { MomentService } from './moment.service';
-<<<<<<< 03b87316019db6da7e4d86b63dfc515d9455e197
 import { MapStaticService} from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Transect, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
