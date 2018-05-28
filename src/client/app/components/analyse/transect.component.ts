@@ -8,7 +8,7 @@ import { Transect } from '../../modules/datas/models/index';
   template: `
     <div [formGroup]="form"> 
         <mat-checkbox [formControlName]="'transect'" (change)="change($event)">
-          {{ transect.code }}
+          {{ transect.properties.code }}
         </mat-checkbox>
     </div>
   `,

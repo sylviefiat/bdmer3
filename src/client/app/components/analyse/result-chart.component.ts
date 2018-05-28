@@ -27,36 +27,33 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
     @Input() chartType: string;
     @Input() surveyShow$: Observable<string>;
     chartData: any;
-    resultSurvey$: Observable<ResultSurvey>;
+    resultSurvey: ResultSurvey;
     title: string;
 
     header: any[]=[];
-    data: any[]=[];
+    data: Observable<any[]>;
 
     constructor() {
 
     }
 
     ngOnInit() {
-      this.resultSurvey$=this.surveyShow$.map(surveyShow => this.resultSurveys.filter(rs => rs.codeSurvey === surveyShow)[0]);
+      this.surveyShow$.map(surveyShow => this.resultSurvey=this.resultSurveys.filter(rs => rs.codeSurvey === surveyShow)[0]);
       //if(!this.chartData){        
-      this.data=this.type$.map(type => this.fillData(type));
-        console.log([
-                this.header,
-                ...this.data
-            ]);
+      this.type$.map(type => 
+
         this.chartData = {
             chartType: this.chartType,
             dataTable: [
                 this.header,
-                ...this.data
+                ...this.fillData(type)
             ],
             options: { 'legend': 'true', 'title': this.title },
-        };
-      //}
+        }
+      )
     }
 
-    fillData(type: string){
+    fillData(type: string): any[]{
       let data: any[]=[];
       for(let i in this.resultSurvey.resultPerSpecies){
         data[i]=[];

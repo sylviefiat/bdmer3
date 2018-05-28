@@ -53,6 +53,9 @@ import { Country } from '../../modules/countries/models/country';
       width: 400px;
       height: auto;
     }
+    h5 {
+      white-space:normal;      
+    }
   `]
 })
 export class SpeciesComponent implements OnInit {

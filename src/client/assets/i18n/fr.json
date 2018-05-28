@@ -337,5 +337,7 @@
   "DISPLAY_BIOMASS":"Afficher les biomasses",
   "DISPLAY_ABUNDANCE":"Afficher les abondances",
   "TYPE":"Type de résultat",
-  "FILTER":"Filtrer les resultats"
+  "FILTER":"Filtrer les resultats",
+  "SPECIES_MIN_DIMS":"Choix de la taille minimale des animaux à prendre en compte dans l'analyse",
+  "LEGAL_DIMS":"Taille de pêche légale"
 }

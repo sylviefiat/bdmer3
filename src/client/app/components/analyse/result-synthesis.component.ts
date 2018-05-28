@@ -43,9 +43,9 @@ import { Results, Data } from '../../modules/analyse/models/index';
             </bc-result-chart>
             <bc-result-chart 
               [resultSurveys]="results.resultPerSurvey" 
-              [surveyShow]="surveyShow$ | async" 
+              [surveyShow$]="surveyShow$" 
               [chartType]="'PieChart'" 
-              [type]="typeShow$ | async">
+              [type$]="typeShow$">
             </bc-result-chart>
           </div>
         </div>
