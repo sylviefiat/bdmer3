@@ -7,12 +7,15 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 
-import { IAppState } from '../../modules/ngrx/index';
+import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
 
 import { AnalyseAction } from '../../modules/analyse/actions/index';
+import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 
 @Component({
     moduleId: module.id,
@@ -23,32 +26,38 @@ import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/m
         'analyse.component.css',
     ],
 })
-export class AnalyseComponent implements OnInit, AfterContentChecked {
+export class AnalyseComponent {
     @Input() msg: string | null;
     @Input() countries: Country[];
-    @Input() platforms: Platform[];
-    @Input() surveys: Survey[];
-    @Input() zonesList: Zone[][];
-    @Input() transectsList: Transect[][];
+    @Input() currentCountry$: Observable<Country>;
+    @Input() platforms$: Observable<Platform[]>;
+    @Input() years$: Observable<string[]>;
+    @Input() surveys$: Observable<Survey[]>;
+    @Input() zones$: Observable<Zone[]>;
+    @Input() transects$: Observable<Transect[]>;
+    @Input() species$: Observable<Species[]>;
+    @Input() dimensions$: Observable<DimensionsAnalyse[]>;
     @Input() isAdmin: boolean;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
     @Output() platformEmitter = new EventEmitter<Platform[]>();
+    @Output() yearEmitter = new EventEmitter<string[]>();
     @Output() surveyEmitter = new EventEmitter<Survey[]>();
-    @Output() zoneEmitter = new EventEmitter<Zone[][]>();
-    @Output() analyse = new EventEmitter<String>();
-
-    currentPlatforms: Platform[];
-    currentSurveys: Survey[];
-    currentZones: Zone[][];
+    @Output() zoneEmitter = new EventEmitter<Zone[]>();
+    @Output() transectEmitter = new EventEmitter<Transect[]>();
+    @Output() speciesEmitter = new EventEmitter<Species[]>();
+    @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
+    @Output() methodEmitter = new EventEmitter<Method>();
+    @Output() analyse = new EventEmitter<string>();
+    nspecies : number = 0;
 
     countryFormGroup: FormGroup = new FormGroup({
         country: new FormControl()
     });
     platformsFormGroup: FormGroup = new FormGroup({
-        platforms: new FormControl()
+        platforms: this._fb.array([])
     });
-    yearFormGroup: FormGroup = new FormGroup({
+    yearsFormGroup: FormGroup = new FormGroup({
         years: new FormControl()
     });
     surveysFormGroup: FormGroup = new FormGroup({
@@ -61,126 +70,52 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
         transects: new FormControl()
     });
     speciesFormGroup: FormGroup = new FormGroup({
-        species: new FormControl()
+        species: new FormControl(),
+        dimensions: new FormControl()
     });
     analyseFormGroup: FormGroup = new FormGroup({
         analyseType: new FormControl()
     });
 
-    constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private _fb: FormBuilder) {
+    constructor(private _fb: FormBuilder) {
 
-    }
-
-    ngOnInit() {
-        //TODO
-    }
-
-    ngAfterContentChecked() {
-        //TODO
-    }
-
-    initPlatforms() {
-        this.platformsFormGroup.controls['platforms']=this._fb.array([]);
-        const controlP = <FormArray>this.platformsFormGroup.controls['platforms'];
-        let addrCtrl;
-        for (let i in this.currentPlatforms) {
-            addrCtrl =  this.newPlatforms();
-            controlP.push(addrCtrl);
-        }
-    }
-
-    initZones() {
-        this.zonesFormGroup.controls['zones']=this._fb.array([]);
-        const controlZ = <FormArray>this.zonesFormGroup.controls['zones'];
-        let addrCtrl;
-        for (let i in this.currentSurveys) {
-            addrCtrl =  this.newZones();
-            controlZ.push(addrCtrl);
-        }
-    }
-
-    newPlatforms() {
-        return this._fb.group({
-            platforms: new FormControl([])
-        });
-    }
-
-    newZones() {
-        return this._fb.group({
-            zones: new FormControl([])
-        });
-    }
-
-    initTransects() {
-        this.transectsFormGroup.controls['transects']=this._fb.array([]);
-        const controlT = <FormArray>this.transectsFormGroup.controls['transects'];
-        let addrCtrl;
-        for (let i in this.currentSurveys) {
-            addrCtrl=this.newTransects();
-            controlT.push(addrCtrl);
-        }
-    }
-
-    newTransects() {
-        return this._fb.group({
-            transects: new FormControl([])
-        });
-    }
-
-    initSpecies() {
-        this.speciesFormGroup.controls['species']=this._fb.array([]);
-        const controlS = <FormArray>this.speciesFormGroup.controls['species'];
-        for (let i in this.currentSurveys) {
-            controlS.push(this.newSpecies());
-        }
-    }
-
-    newSpecies() {
-        return this._fb.group({
-            species: new FormControl([])
-        });
-    }
+    }    
 
     setCountry(country: Country) {
-        this.countryEmitter.emit(country);
-        this.surveysFormGroup.controls['platforms'] = this._fb.array([]);
+        this.countryEmitter.emit(country);  
     }
 
     setPlatforms(platforms: Platform[]) {
-        let pname=[];
-        for(let c of platforms){
-            pname.push(c.code);
-        }
-        this.platformEmitter.emit(platforms);
-        this.platformsFormGroup.controls['platforms'].setValue(pname);
-        this.currentPlatforms = platforms;
-        //this.initYears();
+        this.platformEmitter.emit(platforms); 
+    }
+
+    setYears(years: string[]) {
+        this.yearEmitter.emit(years); 
     }
 
     setSurveys(surveys: Survey[]) {
-        let sname=[];
-        for(let c of surveys){
-            sname.push(c.code);
-        }
         this.surveyEmitter.emit(surveys);
-        this.surveysFormGroup.controls['surveys'].setValue(sname);
-        this.currentSurveys = surveys;
-        this.initZones();
-        this.initTransects();
-        this.initSpecies();
     }
 
-    setZones(zones: Zone[][]) {
-        let zname=[];
-        for(let i in zones){
-            zname[i]=[];
-            for(let z of zones[i])
-                zname[i].push(z.properties.code);
-        }
-        
+    setZones(zones: Zone[]) {
+        this.zoneEmitter.emit(zones); 
+    }
 
-        this.zoneEmitter.emit(zones);
-        this.currentZones = zones;
+    setTransects(transects: Transect[]) {
+        this.transectEmitter.emit(transects); 
+    }
+
+    setSpecies(species: Species[]) {
+        this.nspecies = species.length;
+        this.speciesEmitter.emit(species); 
+    }
+
+    setDimensions(dimensions: DimensionsAnalyse[]) {
+        this.dimensionsEmitter.emit(dimensions); 
+    }
+
+    setMethod(method: Method) {
+        this.methodEmitter.emit(method); 
     }
 
     get localDate() {
@@ -191,6 +126,10 @@ export class AnalyseComponent implements OnInit, AfterContentChecked {
             default:
                 return 'MM-dd-yyyy';
         }
+    }
+
+    startAnalyse(){
+        this.analyse.emit("ok");
     }
 
 }

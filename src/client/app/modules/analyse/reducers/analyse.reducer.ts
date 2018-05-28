@@ -1,5 +1,5 @@
 import { IAnalyseState, analyseInitialState } from '../states/index';
-
+import { Platform, Zone, Transect, Survey } from '../../datas/models/platform';
 import { AnalyseAction } from '../actions/index';
 
 export function analyseReducer(
@@ -15,8 +15,25 @@ export function analyseReducer(
       };
     }
 
+    case AnalyseAction.ActionTypes.SELECT_PLATFORMS: {
+      let platforms = action.payload;
+
+      return {
+        ...state,
+        usedPlatforms: platforms
+      };
+    }
+
+    case AnalyseAction.ActionTypes.SELECT_YEARS: {
+      let years = action.payload;
+
+      return {
+        ...state,
+        usedYears: years
+      };
+    }
+
     case AnalyseAction.ActionTypes.SELECT_SURVEYS: {
-    //console.log(action.payload);  
       return {
         ...state,
         usedSurveys: action.payload
@@ -44,6 +61,13 @@ export function analyseReducer(
       };
     }
 
+    case AnalyseAction.ActionTypes.SELECT_DIMS: {  
+      return {
+        ...state,
+        usedDims: action.payload
+      };
+    }
+
     case AnalyseAction.ActionTypes.SELECT_METHOD: {  
       return {
         ...state,
@@ -62,6 +86,7 @@ export function analyseReducer(
     case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {  
       return {
         ...state,
+        result: action.payload,
         analysing: false,
         analysed: true,
         msg: "Analyse succeded"

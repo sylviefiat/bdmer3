@@ -5,7 +5,7 @@ import { of } from 'rxjs/observable/of';
 
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
-import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
+import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Transect, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 
 @Injectable()
@@ -63,7 +63,7 @@ export class Csv2JsonService {
                         case "long_max":
                         case "larg_max":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
-                            if (sp.biologicDimensions == null) sp.biologicDimensions = {} as BiologicDimensions;
+                            if (sp.biologicDimensions == null) sp.biologicDimensions = {} as Dimensions;
                             sp.biologicDimensions[header] = data[j];
                             break;
                         case "L_min_NC":

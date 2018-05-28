@@ -118,6 +118,12 @@ export class SpeciesFormComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
+    get picture() {
+     return (
+           this.form.get('picture').value
+         )
+       }
+
     newName(lang, name) {
         return this._fb.group({
             lang: new FormControl(lang),
@@ -255,7 +261,26 @@ export class SpeciesFormComponent implements OnInit {
 
     submit() {
         if (this.form.valid) {
+
+            // const control = <FormArray>this.form.controls['picture'];
+
+
+
+            // const code = control.code.value;
+
+            // const picture = control.picture.value;
+            // const blob = picture.slice(0, -1); 
+            // const typeImg = picture.type;
+            // const name = code + "." + picture.name.split(".")[1]
+            // const newPic = new File([blob], name, {type: typeImg});
+            
+            // console.log(newPic);
+            
+            // control.picture.patchValue(newPic);
+            
+            console.log(this.form.value)
             this.submitted.emit(this.form.value);
+
         }
     }
 

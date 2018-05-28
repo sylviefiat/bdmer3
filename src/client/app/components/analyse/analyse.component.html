@@ -3,127 +3,101 @@
 </mat-card>
  
     <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
-      <mat-step [stepControl]="countryFormGroup">
-        <form [formGroup]="countryFormGroup" *ngIf="isAdmin">
-          <ng-template matStepLabel>{{ 'SELECT_COUNTRY' | translate}}</ng-template>
+      <ng-template matStepperIcon="edit">
+        <fa [name]="'check'" [border]=false [size]=1></fa>
+      </ng-template>
+
+      <ng-template matStepperIcon="done">
+        <fa [name]="'check'" [border]=false [size]=1></fa>
+      </ng-template>
+
+      <mat-step [stepControl]="countryFormGroup" *ngIf="isAdmin">
+        <form [formGroup]="countryFormGroup">
+          <ng-template matStepLabel>{{ 'COUNTRY' | translate}}</ng-template>
           <bc-analyse-country [countries]="countries" (countryEmitter)="setCountry($event)" [form]="countryFormGroup" [inputName]="'country'"></bc-analyse-country>
+          <div *ngIf="(platforms$ | async)?.length==0" class="norecord">{{ 'NO_PLATFORM' | translate}}</div> 
           <div>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(platforms$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
+      
       <mat-step [stepControl]="platformsFormGroup">
         <form [formGroup]="platformsFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_PLATFORM' | translate}}</ng-template>
-          <bc-analyse-platform [platforms]="platforms" (platformEmitter)="setPlatform($event)" [group]="platformsFormGroup" [inputName]="'platforms'"></bc-analyse-platform>
+          <ng-template matStepLabel>{{ 'PLATFORMS' | translate}}</ng-template>
+          <bc-analyse-platform [platforms$]="platforms$" (platformEmitter)="setPlatforms($event)" [group]="platformsFormGroup"></bc-analyse-platform>
+          <div *ngIf="(years$ | async)?.length==0" class="norecord">{{ 'NO_YEARS' | translate}}</div> 
           <div>
             <button mat-button *ngIf="isAdmin"  matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(years$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="yearFormGroup">
-        <form [formGroup]="yearFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_YEAR' | translate}}</ng-template>
-          <!--<bc-analyse-platform [platforms]="platforms" (platformEmitter)="setPlatform($event)" [group]="platformsFormGroup" [inputName]="'platforms'"></bc-analyse-platform>-->
+      
+      <mat-step [stepControl]="yearsFormGroup">
+        <form [formGroup]="yearsFormGroup">
+          <ng-template matStepLabel>{{ 'YEARS' | translate}}</ng-template>
+          <bc-analyse-year [years$]="years$" (yearEmitter)="setYears($event)" [group]="yearsFormGroup"></bc-analyse-year>
+          <div *ngIf="(surveys$ | async)?.length==0" class="norecord">{{ 'NO_SURVEYS' | translate}}</div> 
           <div>
-            <button mat-button  matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
+            <button mat-button [disabled]="(surveys$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="surveysFormGroup">
         <form [formGroup]="surveysFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_SURVEYS' | translate}}</ng-template>
-          <!--<mat-form-field>
-            <mat-select placeholder="{{ 'SELECT_SURVEYS' | translate}}" formControlName="surveys" (change)="setSurveys($event.value)" multiple required>
-                <mat-select-trigger>
-                  {{surveysFormGroup.controls.surveys.value ? surveysFormGroup.controls.surveys.value[0] : 'yo'}}
-                  <span *ngIf="surveysFormGroup.controls.surveys.value?.length > 1">
-                    (+{{surveysFormGroup.controls.surveys.value.length - 1}} others)
-                  </span>
-                </mat-select-trigger>
-                <mat-option *ngFor="let survey of surveys" [value]="survey">{{survey.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>-->
+          <ng-template matStepLabel>{{ 'SURVEYS' | translate}}</ng-template>
+          <bc-analyse-survey [surveys$]="surveys$" [locale]="locale" (surveyEmitter)="setSurveys($event)" [group]="surveysFormGroup"></bc-analyse-survey>
+          <div *ngIf="(zones$ | async)?.length==0" class="norecord">{{ 'NO_ZONES' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(zones$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="zonesFormGroup">
         <form [formGroup]="zonesFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_ZONES' | translate}}</ng-template>
-          <!--<mat-tab-group>
-            <mat-tab *ngFor="let zones of zonesFormGroup.controls.zones.controls; let i = index;">
-                <ng-template mat-tab-label>{{currentSurveys[i].code}}</ng-template>
-                <p>
-                    {{'SURVEY_DATES' | translate}}:{{currentSurveys[i].dateStart | date:localDate}}, {{currentSurveys[i].dateEnd | date:localDate}}
-                </p>
-                <p>
-                    {{'PARTICIPANTS' | translate}}: {{currentSurveys[i].participants}}
-                </p>
-                <mat-form-field [formGroup]="zones">
-                    <mat-select placeholder="{{ 'SELECT_ZONES' | translate}}" formControlName="zones" (change)="setZones($event.value)" multiple required>
-                        <mat-option *ngFor="let zone of zonesList[i]" [value]="zone">{{zone.code}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-tab>
-          </mat-tab-group>-->
+          <ng-template matStepLabel>{{ 'ZONES' | translate}}</ng-template>
+           <bc-analyse-zone [zones$]="zones$" (zoneEmitter)="setZones($event)" [group]="zonesFormGroup"></bc-analyse-zone>
+           <div *ngIf="(transects$ | async)?.length==0" class="norecord">{{ 'NO_TRANSECTS' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(transects$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="transectsFormGroup" [optional]="true">
         <form [formGroup]="transectsFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_TRANSECTS' | translate}}</ng-template>
-          <!--<mat-tab-group>
-            <mat-tab *ngFor="let transects of transectsList; let j = index;">
-                <ng-template mat-tab-label>{{currentSurveys[j].code}}</ng-template>
-                <p>
-                    {{currentSurveys[j].dateStart | date:localDate}}, {{currentSurveys[j].dateEnd | date:localDate}}
-                </p>
-                <p>
-                    {{'PARTICIPANTS' | translate}}: {{currentSurveys[j].participants}}
-                </p>
-                <mat-form-field>
-                    <mat-select placeholder="{{ 'SELECT_TRANSECTS' | translate}}" formControlName="transects" multiple required>                       
-                        <mat-option *ngFor="let transect of transects" [value]="transect">{{transect.code}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-tab>
-        </mat-tab-group>-->
+          <ng-template matStepLabel>{{ 'TRANSECTS' | translate}}</ng-template>
+         <bc-analyse-transect [transects$]="transects$" (transectEmitter)="setTransects($event)" [group]="transectsFormGroup"></bc-analyse-transect>
+         <div *ngIf="(species$ | async)?.length==0" class="norecord">{{ 'NO_SPECIES' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(species$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="speciesFormGroup">
         <form [formGroup]="speciesFormGroup">
-          <ng-template matStepLabel>{{ 'SELECT_SPECIES' | translate}}</ng-template>
-         <!-- <mat-form-field>
-            <mat-select placeholder="{{ 'SELECT_SPECIES' | translate}}" formControlName="species" multiple required>
-                <mat-option *ngFor="let sp of species" [value]="sp">{{sp.code}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <ng-template matStepLabel>{{ 'SPECIES' | translate}}</ng-template>
+          <bc-analyse-species [species$]="species$" [currentCountry$]="currentCountry$" [locale]="locale" (speciesEmitter)="setSpecies($event)" (dimensionsEmitter)="setDimensions($event)" [group]="speciesFormGroup"></bc-analyse-species>
+          <div *ngIf="nspecies<=0" class="norecord">{{ 'NO_SP_SELECTED' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="nspecies<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="analyseFormGroup">
         <form [formGroup]="analyseFormGroup">
           <ng-template matStepLabel>{{ 'START_ANALYSE' | translate}}</ng-template>
+          <bc-analyse-method (methodEmitter)="setMethod($event)" [form]="analyseFormGroup" [inputName]="'analyseType'"></bc-analyse-method>
           
-          <button mat-button (click)="stepper.submit()">{{ 'START_ANALYSE' | translate}}</button>
         </form>
         <div>
+          <button mat-button (click)="startAnalyse()">{{ 'START_ANALYSE' | translate}}</button>
           <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
           <button mat-button (click)="stepper.reset()">{{ 'RESET' | translate}}</button>
         </div>
