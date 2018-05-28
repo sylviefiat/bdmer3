@@ -111,7 +111,6 @@ export class AnalyseComponent {
     }
 
     setDimensions(dimensions: DimensionsAnalyse[]) {
-        console.log(dimensions);
         this.dimensionsEmitter.emit(dimensions); 
     }
 
@@ -130,7 +129,6 @@ export class AnalyseComponent {
     }
 
     startAnalyse(){
-        console.log("go");
         this.analyse.emit("ok");
     }
 

@@ -88,7 +88,6 @@ export function getAnalysed(state$: Observable<IAnalyseState>) {
 
 export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
     return state$.select(state => {
-        console.log(state.usedDims);
         return {
             usedCountry: state.usedCountry, 
             usedPlatforms: state.usedPlatforms, 

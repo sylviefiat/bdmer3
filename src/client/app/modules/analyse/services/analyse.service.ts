@@ -66,9 +66,9 @@ export class AnalyseService {
 
     getResultPerTransect(survey: Survey, species: Species, spDim: DimensionsAnalyse, transect: Transect, method: Method): ResultTransect {
         let x = 0, biom;
-        let resultTransect: ResultTransect = { codeTransect: transect.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
+        let resultTransect: ResultTransect = { codeTransect: transect.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
         let mesures = [];
-        for (let c of survey.counts.filter(c => c.codeTransect === transect.code)) {
+        for (let c of survey.counts.filter(c => c.codeTransect === transect.properties.code)) {
             mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
         }
         for (let m of mesures) {

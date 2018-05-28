@@ -78,6 +78,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
   }
 
   ngOnInit(){
+    console.log("init map");
     this.mapLat = this.analyseData.usedCountry.coordinates.lat;
     this.mapLng = this.analyseData.usedCountry.coordinates.lng;
     this.mapZoom = 9;    
@@ -90,11 +91,11 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
         for(let rsp of this.results.resultPerSurvey[i].resultPerSpecies){     
           for(let rt of rsp.resultPerTransect){
             if(rt.densityPerHA>0 && rt.biomassPerHA >0){
-              let t: Transect = this.analyseData.usedTransects.filter((transect:Transect) => transect.code === rt.codeTransect) && this.analyseData.usedTransects.filter(transect => transect.code === rt.codeTransect)[0];
+              let t: Transect = this.analyseData.usedTransects.filter((transect:Transect) => transect.properties.code === rt.codeTransect) && this.analyseData.usedTransects.filter(transect => transect.properties.code === rt.codeTransect)[0];
               let marker = {
                 fillColor:this.colors[i],
-                latitude:Number(t.latitude),
-                longitude:Number(t.longitude),
+                latitude:Number(t.geometry.coordinates[1]),
+                longitude:Number(t.geometry.coordinates[0]),
                 abundancy:rt.densityPerHA,
                 biomass:rt.biomassPerHA,
                 species:rsp.codeSpecies,

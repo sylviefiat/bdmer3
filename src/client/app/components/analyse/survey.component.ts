@@ -25,6 +25,16 @@ import { Survey } from '../../modules/datas/models/index';
         </mat-checkbox>
     </div>
   `,
+  styles: [
+  `
+    mat-card {
+      max-width: 200px;
+      height: auto;
+    }
+    mat-card-content {
+      white-space:normal;      
+    }
+  `]
 })
 export class SurveyComponent {
   @Input() survey: Survey;

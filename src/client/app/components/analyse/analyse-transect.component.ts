@@ -47,7 +47,7 @@ export class AnalyseTransectComponent implements OnInit {
 
   newTransect(t: Transect) {
     return this._fb.group({
-      transect: new FormControl(this.checkedTransects.filter(transect => transect.code === t.code).length > 0)
+      transect: new FormControl(this.checkedTransects.filter(transect => transect.properties.code === t.properties.code).length > 0)
     });
   }
 
@@ -67,11 +67,11 @@ export class AnalyseTransectComponent implements OnInit {
 
   changeValue(transCheck: any) {
     console.log(transCheck);
-    this.checkedTransects=[...this.checkedTransects.filter(t => t.code!==transCheck.transect.code)];
+    this.checkedTransects=[...this.checkedTransects.filter(t => t.properties.code!==transCheck.transect.code)];
     if(transCheck.checked){
       this.checkedTransects.push(transCheck.transect);
     }
-    this.checkedTransects=[...this.checkedTransects.filter(p => p.code!==transCheck.transects.code)];
+    this.checkedTransects=[...this.checkedTransects.filter(p => p.properties.code!==transCheck.transects.code)];
     this.transectEmitter.emit(this.checkedTransects);
   }
 

@@ -41,7 +41,7 @@
 
         <mat-form-field>
           <mat-select  placeholder="{{'TRANSECT_SELECT' | translate}}" formControlName="codeTransect" required>
-            <mat-option *ngFor="let tr of (transects$ | async)" [value]="tr.code">{{ tr.code }}</mat-option>
+            <mat-option *ngFor="let tr of (transects$ | async)" [value]="tr.code">{{ tr.properties.code }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

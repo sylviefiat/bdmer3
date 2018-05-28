@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
-import { Results, Data } from '../../modules/analyse/models/index';
+import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index';
 
 @Component({
     selector: 'bc-result-synthesis',
@@ -36,16 +36,14 @@ import { Results, Data } from '../../modules/analyse/models/index';
           <h3>{{surveyShow$ | async}}</h3>
           <div class="chart">
             <bc-result-chart 
-              [resultSurveys]="results.resultPerSurvey" 
-              [surveyShow$]="surveyShow$" 
+              [resultSurvey]="currentresultSurvey$ | async"
               [chartType]="'CandlestickChart'" 
-              [type$]="typeShow$">
+              [type]="typeShow$ | async">
             </bc-result-chart>
             <bc-result-chart 
-              [resultSurveys]="results.resultPerSurvey" 
-              [surveyShow$]="surveyShow$" 
+              [resultSurvey]="currentresultSurvey$ | async" 
               [chartType]="'PieChart'" 
-              [type$]="typeShow$">
+              [type]="typeShow$ | async">
             </bc-result-chart>
           </div>
         </div>
@@ -74,6 +72,7 @@ export class ResultSynthesisComponent implements OnInit {
     @Input() typeShow$ : Observable<string>;
     @Input() spShow$: Observable<string>;
     @Input() surveyShow$: Observable<string>;
+    currentresultSurvey$: Observable<ResultSurvey>;
 
     constructor() {
 
@@ -83,6 +82,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.typeShow$=of('B');
       this.spShow$=of(this.results.resultPerSurvey[0].resultPerSpecies[0].codeSpecies);
       this.surveyShow$=of(this.results.resultPerSurvey[0].codeSurvey);
+      this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
     }
 
     get localDate() {
@@ -105,6 +105,9 @@ export class ResultSynthesisComponent implements OnInit {
 
     selectSurveyShow(sus: string){
       this.surveyShow$ = of(sus);
+      console.log(sus);
+      console.log(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
+      this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
     }
 
 

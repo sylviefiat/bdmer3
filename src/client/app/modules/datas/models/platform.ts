@@ -10,9 +10,13 @@ export interface Platform {
   surveys: Survey[];
 }
 
+export interface Geometry {
+  coordinates: number[];
+}
+
 export interface Zone {
     type: string;
-    geometry: object;
+    geometry: Geometry;
     staticmap: string;
     properties: Property;
     codePlatform: string;
@@ -28,7 +32,7 @@ export interface Property{
 
 export interface Transect {
     type: string;
-    geometry: object;
+    geometry: Geometry;
     properties: TransectProperties;
     staticMapTransect: string;
     codeZone: string;
