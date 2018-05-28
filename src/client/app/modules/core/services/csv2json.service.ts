@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { MomentService } from './moment.service';
+import { MapStaticService} from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, BiologicDimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Transect, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 
@@ -12,7 +13,7 @@ export class Csv2JsonService {
     static COMMA = ',';
     static SEMICOLON = ';';
 
-    constructor(private papa: PapaParseService, private ms: MomentService) {
+    constructor(private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
     }
 
     private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
@@ -202,7 +203,8 @@ export class Csv2JsonService {
     private extractTransectData(arrayData): Transect[] { 
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
-        let lines: Transect[] = [];
+        let lines = [];
+        let geojsons = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -210,8 +212,8 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_platform":
-                        case "code_zone":
+                        case "codePlatform":
+                        case "codeZone":
                         case "code":
                         case "nom":
                         case "latitude":
@@ -227,8 +229,32 @@ export class Csv2JsonService {
                 lines.push(st);
             }
         }
-        //console.log(lines); //The data in the form of 2 dimensional array.
-        return lines;
+
+        for(let i = 0; i < lines.length; i++){
+            let geojson = {
+                type: "Feature",
+                geometry: {
+                    type: "Point",
+                    coordinates:[Number(lines[i]["longitude"]), Number(lines[i]["latitude"])]
+                },
+                properties: {
+                    name: lines[i]["nom"],
+                    code: lines[i]["code"],
+                    description: lines[i]["description"]
+                },
+                staticMapTransect: "",
+                codeZone: lines[i]["codeZone"],
+                codePlatform: lines[i]["codePlatform"]
+            }
+
+            this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data){
+              geojson.staticMapTransect = data.toString();
+            })
+
+            geojsons.push(geojson)
+        }
+
+        return geojsons;
     }
 
     private extractZonePrefData(arrayData): ZonePreference[] { 

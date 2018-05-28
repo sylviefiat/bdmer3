@@ -285,5 +285,10 @@
   "MODAL_CLOSE": "Fermer",
   "ZONE_COORD_EX": "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordonnées de la zone",
-  "POLYGON_ERROR": "Le polygone n'est pas valide"
+  "POLYGON_ERROR": "Le polygone n'est pas valide",
+  "TRANSECT_NAME": "Nom du transect",
+  "TRANSECT_COORD": "Coordonnées du transect",
+  "TRANSECT_ERROR": "Transect non valide.",
+  "TRANSECT_ERROR_LNG": "Longitude du transect non valide",
+  "TRANSECT_ERROR_LAT": "Latitude du transect non valide"
 }

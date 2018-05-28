@@ -23,10 +23,11 @@ export class NavbarComponent  {
   public currentCountry$: Observable<Country>;
   public isLogged$: Observable<any>;
   
+  open: boolean = false;
+
   constructor(private authenticationService: AuthService, private store: Store<IAppState>) {	 
     this.isLogged$ = this.store.let(getisLoggedIn);
     this.currentCountry$ = this.store.let(getAuthCountry);
     this.currentUser$ = this.store.let(getAuthUser);
   }
-
 }

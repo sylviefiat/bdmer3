@@ -18,6 +18,7 @@ import { Config } from './utils/index';
 import { schema } from '../db/index';
 
 import { zoneMapModal } from '../../components/zone/zone-map-modal.component'
+import { transectMapModal } from '../../components/transect/transect-map-modal.component'
 
 interface ICoreModuleOptions {
   window?: any;
@@ -40,7 +41,8 @@ interface ICoreModuleOptions {
   ],
   declarations: [
     ...CORE_DIRECTIVES,
-    zoneMapModal
+    zoneMapModal,
+    transectMapModal
   ],
   exports: [
     ...CORE_DIRECTIVES
@@ -49,7 +51,7 @@ interface ICoreModuleOptions {
     ...CORE_PROVIDERS,
     SharedModule
   ],
-  entryComponents: [zoneMapModal]
+  entryComponents: [zoneMapModal, transectMapModal]
 })
 export class CoreModule {
   // configuredProviders: *required to configure WindowService and ConsoleService per platform

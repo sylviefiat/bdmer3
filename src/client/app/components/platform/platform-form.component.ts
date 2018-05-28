@@ -41,6 +41,7 @@ export class PlatformFormComponent implements OnInit {
         (this.country !== undefined)?this.form.controls.codeCountry.disable():this.form.controls.codeCountry.enable();
         if (this.platform) {
             this.form.controls.code.setValue(this.platform.code);            
+            this.form.controls.code.disable();
             this.form.controls.description.setValue(this.platform.description);
         }
     }
@@ -50,6 +51,7 @@ export class PlatformFormComponent implements OnInit {
     }
 
     submit() {
+        this.form.controls.code.enable();
         if (this.form.valid) {
             this.form.value.codeCountry=this.form.controls.codeCountry.value;
             this.submitted.emit(this.form.value);

@@ -173,6 +173,15 @@ export class PlatformEffects {
     .map((platform:Platform) => new PlatformAction.RemovePlatformSuccessAction(platform))
     .catch((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
   ;
+
+  @Effect()
+  removePlatformCountry$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY)
+    .map((action: PlatformAction.RemovePlatformCountryAction) => action.payload)
+    .mergeMap(platform => this.platformService.removePlatform(platform))
+    .map((platform:Platform) => new PlatformAction.RemovePlatformCountrySuccessAction(platform))
+    .catch((error) => of(new PlatformAction.RemovePlatformCountryFailAction(error)))
+  ;
   
   @Effect()
   removeZone$: Observable<Action> = this.actions$
@@ -234,6 +243,11 @@ export class PlatformEffects {
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 
+   @Effect() 
+  removePlatformCountrySuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS)
+    .map(() => new PlatformAction.RemoveMsgAction());
+
   @Effect() 
   addZoneSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS)
@@ -286,7 +300,7 @@ export class PlatformEffects {
   addTransectSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_TRANSECT_SUCCESS)
     .map((action: PlatformAction.AddTransectSuccessAction) => action.payload)
-    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codePlatform + '/'+ transect.codeZone + '/' + transect.code]))
+    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codePlatform + '/'+ transect.codeZone + '/' + transect.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction()); 
 

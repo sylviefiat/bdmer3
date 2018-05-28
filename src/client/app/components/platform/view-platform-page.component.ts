@@ -11,6 +11,7 @@ import { IAppState, getSelectedPlatform, getSelectedPlatformZones, getSelectedPl
 import { Platform, Zone, Survey } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { PlatformAction } from '../../modules/datas/actions/index';
+import { PlatformService } from '../../modules/datas/services/platform.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
   surveys$: Observable<Survey[]>;
   msg$: Observable<string | null>;
 
-  constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
+  constructor(private platformService: PlatformService, private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     this.actionsSubscription = route.params
       .map(params => new PlatformAction.SelectPlatformAction(params.id))
       .subscribe(store);
@@ -56,6 +57,8 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
   }
 
   removePlatform(platform: Platform) {
-    this.store.dispatch(new PlatformAction.RemovePlatformAction(platform));
+    this.platformService.getPlatform(platform.code).subscribe(
+        (res) => this.store.dispatch(new PlatformAction.RemovePlatformAction(res))
+    );
   }
 }

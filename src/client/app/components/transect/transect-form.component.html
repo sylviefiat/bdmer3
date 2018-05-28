@@ -1,10 +1,10 @@
-<form [formGroup]="transectForm" (ngSubmit)="submit()">  
+<form (ngSubmit)="submit()">  
   <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'ADD_TRANSECT_TO' | translate}} {{ zone.code }}</mat-card-title>
+      <mat-card-title>{{ 'ADD_TRANSECT_TO' | translate}} {{ zone.properties.name }}</mat-card-title>
       
       <mat-card-content>
-        <button type="submit" class="btn btn-primary" [disabled]="!transectForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!transectForm.valid || !canSubmit">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
         <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
       </mat-card-content>
@@ -14,36 +14,25 @@
   <div class="insideform">
     <mat-card class="column">
       <h5 mat-subheader>{{ 'TRANSECT_DESC' | translate }}</h5>
-      <div class="row">
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'TRANSECT_CODE' | translate }}" formControlName="code" required>
-          <div class="hint">{{ 'TRANSECT_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
+      <div class="row" [formGroup]="transectForm">
+        <mat-input-container formGroupName="properties">
+          <input type="text" matInput placeholder="{{ 'TRANSECT_NAME' | translate }}" formControlName="name" required>
         </mat-input-container>
       </div>
-      <div class="row">
 
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
-          <div class="hint">{{ 'EX_TRANSECT_ZONE' | translate }}</div>
-        </mat-input-container>
-
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'PLATFORM' | translate }}" formControlName="codePlatform">
-          <div class="hint">{{ 'EX_ZONE_PLATFORM' | translate }}</div> 
-        </mat-input-container>
-      </div>
       <div class="row">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'TRANSECT_LONG' | translate }}" formControlName="longitude" required>
-          <div class="hint">{{ 'TRANSECT_LONG_EX' | translate }}</div>    
-        </mat-input-container>          
-
-
+          <input type="number" min="-180" max="180" matInput placeholder="{{ 'TRANSECT_LONG' | translate }}" [value]="longitude" name="longitude" [(ngModel)]="longitude" (change)="coordChange()" required>
+          <div class="hint">{{'TRANSECT_LONG_EX' | translate}}</div>
+        </mat-input-container>
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'TRANSECT_LAT' | translate }}" formControlName="latitude" required>
-          <div class="hint">{{ 'TRANSECT_LAT_EX' | translate }}</div>    
-        </mat-input-container> 
+          <input type="number" min="-90" max="90" matInput placeholder="{{ 'TRANSECT_LAT' | translate }}" [value]="latitude" name="latitude" [(ngModel)]="latitude" (change)="coordChange()" required>
+          <div class="hint">{{'TRANSECT_LAT_EX' | translate}}</div>
+        </mat-input-container>
       </div>
+      <p *ngIf="errorLng" class="error">{{ 'TRANSECT_ERROR_LNG' | translate }}</p>    
+      <p *ngIf="errorLat" class="error">{{ 'TRANSECT_ERROR_LAT' | translate }}</p>    
+      <img mat-card-sm-image *ngIf="url" [src]="url" />
     </mat-card>
   </div>
 

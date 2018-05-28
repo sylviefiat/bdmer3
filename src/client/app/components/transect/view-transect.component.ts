@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import { MatDialogRef, MatDialog, MatDialogConfig} from "@angular/material";
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -11,6 +12,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
 import { Platform,Zone, Transect, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
+import { transectMapModal } from './transect-map-modal.component';
 
 @Component({
     moduleId: module.id,
@@ -29,8 +31,9 @@ export class ViewTransectComponent implements OnInit {
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
 
+    fileNameDialogRef: MatDialogRef<transectMapModal>;
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private dialog: MatDialog, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -47,7 +50,7 @@ export class ViewTransectComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "transectForm":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.code);
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.properties.code);
                 break;
             case "deleteTransect":
                 this.deleteTransect();
@@ -68,6 +71,12 @@ export class ViewTransectComponent implements OnInit {
 
     toZone(){
         this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.properties.code]);
+    }
+
+    openDialog() {
+        this.fileNameDialogRef = this.dialog.open(transectMapModal, {
+            data: this.transect.staticMapTransect    
+        });
     }
 
 }

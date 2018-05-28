@@ -82,9 +82,10 @@ export function platformReducer(
             const addedtransect = action.payload;
             console.log(addedtransect);
             const platforms = state.entities.filter(platform => addedtransect.codePlatform !== platform._id);
-            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform._id)[0];
+            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform.code)[0];
+
             const modifiedZone = modifiedPlatform.zones.filter(zone => addedtransect.codeZone === zone.properties.code)[0];
-            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.code !== transect.code),addedtransect];
+            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.properties.code !== transect.properties.code),addedtransect];
             modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedtransect.codeZone !== zone.properties.code),modifiedZone];
 
             return {
@@ -133,6 +134,18 @@ export function platformReducer(
                 msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Counts registered with success":"Count registered with success"
             }
         }
+
+        case PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS:
+            {
+                const removedPlatform = action.payload;
+                return {
+                    ...state,
+                    entities: state.entities.filter(platform => removedPlatform._id !== platform._id),
+                    ids: state.ids.filter(id => id !== removedPlatform._id),
+                    currentPlatformId: null,
+                    error: null
+                };
+            }
 
         case PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS:
             {
@@ -184,7 +197,7 @@ export function platformReducer(
                 const removedTransect = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedTransect.codePlatform)[0];
                 const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedTransect.codeZone)[0];
-                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.code !== removedTransect.code);
+                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.properties.code !== removedTransect.properties.code);
                 modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
 
                 return {
