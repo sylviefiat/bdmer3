@@ -16,6 +16,7 @@
       </mat-card-content>
   </mat-card>
 </div>
+
 <div class="insideform" [formGroup]="inputForm">
   <mat-horizontal-stepper #stepper (selectionChange)="changeIndex($event)">
     <mat-step [optional]="true">     
@@ -32,7 +33,7 @@
           </mat-card-content>
           <mat-card-footer class="footer">
             <h5 mat-subheader>{{ 'DOWNLOAD_KML_ZONES' | translate }}</h5>
-            <a *ngIf="!isAdmin" href="{{getKmlUrl('Zones')}}" download>
+            <a href="{{getKmlUrl('Zones')}}" download>
               <fa [name]="'download'" [border]=true [size]=1></fa>
             </a>
           </mat-card-footer>
@@ -52,7 +53,7 @@
         </mat-card>
       </div>
       <div class="align-right enable-click">
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
       </div>
     </mat-step>
 
@@ -103,14 +104,14 @@
         </mat-card>
       </div>
       <div class="align-right" *ngIf="(error$ | async)  !== null || (importError$ | async)?.length > 0; else navigate">
-        <button mat-button matStepperPrevious class="disabled" disabled>Back</button>
-        <button mat-button matStepperNext class="disabled" disabled>Next</button>
+        <button mat-button matStepperPrevious class="disabled" disabled>{{ 'BACK' | translate }}</button>
+        <button mat-button matStepperNext class="disabled" disabled>{{ 'NEXT' | translate }}</button>
       </div>
       
       <ng-template #navigate>
         <div class="align-right">
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
+          <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
         </div>
       </ng-template>
     </mat-step>
@@ -164,8 +165,8 @@
         </mat-card>
       </div>
       <div class="align-right">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
+        <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
       </div>
     </mat-step>
 
@@ -219,8 +220,8 @@
         </mat-card>
       </div>
       <div class="align-right">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
+        <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
       </div>
     </mat-step>
 

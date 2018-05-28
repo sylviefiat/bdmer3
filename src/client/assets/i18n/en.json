@@ -335,7 +335,7 @@
   "SPECIES_MIN_DIMS":"Choose minimum animal size to consider in analysis",
   "LEGAL_DIMS":"Legal fishing size",
   "POLYGON_ERROR": "Polygon isn't valid",
-  "IMPORT_GLOBAL": "Global import",
+  "IMPORT_GLOBAL": "Full campaign import",
   "SELECTED_CSV": "selected",
   "SEND": "Send",
   "DELETE_CSV": "Delete",
