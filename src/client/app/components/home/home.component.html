@@ -28,9 +28,15 @@
 			<agm-map #AgmMap [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
 				<div *ngFor="let platform of (platforms$ | async)">
 					<div *ngFor="let zone of (platform.zones)">
-						<agm-data-layer [geoJson]="zone">
+						<agm-data-layer [geoJson]="zone" (layerClick)="zoomLayer($event)">
 						</agm-data-layer>
-
+						<div *ngIf="zoom > 10" >
+							<agm-marker *ngFor="let transect of (zone.transects)"
+								[latitude]="transect.geometry.coordinates[1]"
+						   		[longitude]="transect.geometry.coordinates[0]"
+						   		label="T">
+							</agm-marker>
+						</div>
 					</div>
 				</div>
 
@@ -38,7 +44,8 @@
 					<agm-marker *ngFor="let marker of (markers)"
 						fit="true"
 						[latitude]="marker.lat"
-				   		[longitude]="marker.lng">
+				   		[longitude]="marker.lng"
+				   		(markerClick)="zoomMarker(marker)">
 					</agm-marker>
 				</div>
 

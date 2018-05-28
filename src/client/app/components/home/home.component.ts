@@ -27,6 +27,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   lat: number;
   lng: number;
 
+  zoomMarkerConst: number = 8;
+  zoomLayerConst: number = 11;
+  zoomAdmin: number = 3;
+
   geoJsonObject: Object;
   loggedIn: boolean;
   platforms$: Observable<Platform[]>;
@@ -67,6 +71,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
               this.initMarkers();
             }else{
               this.initMarkers();
+              this.zoom = this.zoomAdmin;
             }
           }
         } 
@@ -115,5 +120,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
         })
       });
+  }
+
+  zoomMarker(marker){
+    this.lat = marker.lat;
+    this.lng = marker.lng; 
+    this.zoom = this.zoomMarkerConst;
+  }
+
+  zoomLayer(event){
+    this.lat = event.latLng.lat();
+    this.lng = event.latLng.lng();
+    this.zoom = this.zoomLayerConst;
   }
 }
