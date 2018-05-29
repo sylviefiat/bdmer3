@@ -29,7 +29,6 @@ import { PlatformAction } from '../../modules/datas/actions/index';
   template: `
     <bc-view-station 
       [platform]="platform$ | async"
-      [zone]="zone$ | async"
       [station]="station$ | async"
       (action)="actionStation($event)"
       (remove)="removeStation($event)">
@@ -38,18 +37,13 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 })
 export class ViewStationPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
-  zoneSubscription: Subscription;
   stationSubscription: Subscription;
-  zone$: Observable<Zone | null>;
   platform$: Observable<Platform | null>;
   station$: Observable<Station | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.platformSubscription = route.params
       .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
-      .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
     this.stationSubscription = route.params
       .map(params => new PlatformAction.SelectStationAction(params.idStation))
@@ -58,13 +52,11 @@ export class ViewStationPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
     this.station$ = this.store.let(getSelectedStation);
   }
 
   ngOnDestroy() {
     this.platformSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.stationSubscription.unsubscribe();
   }
 

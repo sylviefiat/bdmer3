@@ -10,11 +10,11 @@ export const StationRoutes: Array<any> = [
     canActivate : [AuthGuard]
   }, */
   {
-    path: 'stationForm/:idPlatform/:idZone',
+    path: 'stationForm/:idPlatform',
     component: StationFormPageComponent,
     canActivate : [AuthGuard]
   },{
-    path: 'stationForm/:idPlatform/:idZone/:idStation',
+    path: 'stationForm/:idPlatform/:idStation',
     component: StationFormPageComponent,
     canActivate : [AuthGuard]
   },
@@ -24,12 +24,12 @@ export const StationRoutes: Array<any> = [
     canActivate : [AuthGuard]
   },
   {
-    path: 'stationImport/:idPlatform/:idZone',
+    path: 'stationImport/:idPlatform',
     component: StationImportPageComponent,
     canActivate : [AuthGuard]
   },
   {
-    path: 'station/:idPlatform/:idZone/:idStation',
+    path: 'station/:idPlatform/:idStation',
     component: ViewStationPageComponent,
     canActivate : [AuthGuard]
   }

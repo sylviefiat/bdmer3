@@ -54,7 +54,6 @@ export class ViewSurveyComponent implements OnInit {
         this.filteredCounts$ = this.counts$.map(counts => 
                     counts.filter(count => count.code.toLowerCase().indexOf(filter)!==-1 || 
                         count.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
-                        count.codeZone.toLowerCase().indexOf(filter)!==-1 ||
                         count.codeSurvey.toLowerCase().indexOf(filter)!==-1 ||
                         count.codeStation.toLowerCase().indexOf(filter)!==-1 ||
                         count.date.toString().toLowerCase().indexOf(filter)!==-1 ||

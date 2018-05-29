@@ -5,7 +5,7 @@ import { Station, Zone, Platform } from './../../modules/datas/models/platform';
 @Component({
   selector: 'bc-station-preview-list',
   template: `
-    <bc-station-preview *ngFor="let station of (stations$ | async)" [station]="station" [zone]="zone" [platform]="platform"></bc-station-preview>
+    <bc-station-preview *ngFor="let station of (stations$ | async)" [station]="station" [platform]="platform"></bc-station-preview>
   `,
   styles: [
     `
@@ -19,6 +19,5 @@ import { Station, Zone, Platform } from './../../modules/datas/models/platform';
 })
 export class StationPreviewListComponent {
   @Input() stations$: Observable<Station[]>;
-  @Input() zone: Zone;
   @Input() platform: Platform;
 }

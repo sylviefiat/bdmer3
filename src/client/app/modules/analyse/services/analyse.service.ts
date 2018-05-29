@@ -5,6 +5,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 import { angularMath } from 'angular-ts-math';
+import * as Turf from '@turf/turf';
 
 import { IAnalyseState } from '../states/index';
 import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, Indicators, Method, DimensionsAnalyse } from '../models/index';
@@ -34,8 +35,9 @@ export class AnalyseService {
                 for (let station of surveyStations) {
                     // on récupère longueur et largeur min entrés par l'utilisateur pour cette espèce pour l'analyse
                     let spdim = analyseData.usedDims.filter(spd => spd.codeSp===sp.code)[0]; 
-                    // on récupère la zone du station  
-                    let zone = analyseData.usedZones.filter(uz => uz.properties.code === station.codeZone)[0];                 
+                    // on récupère la zone de la station  
+                    console.log(station);
+                    let zone = analyseData.usedZones.filter((uz:Zone) =>  station.geometry && uz.geometry && Turf.booleanPointInPolygon(station.geometry.coordinates,Turf.polygon(uz.geometry.coordinates)))[0];                 
                     // initialisation de resultZone au cas où cette zone n'ai pas encore été traitée
                     let resultZone: ResultZone = { codeZone: zone.properties.code, numberIndividual: 0, biomasses: [], biomassesPerHA: [], densitiesPerHA: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal:0, SDBiomassPerHA:0, SDDensityPerHA:0 };
                     // calcul des résultats pour ce station

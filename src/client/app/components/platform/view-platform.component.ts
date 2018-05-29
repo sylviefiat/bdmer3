@@ -12,7 +12,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform, Zone, Survey } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Station } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({
@@ -28,8 +28,10 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
     @Input() platform: Platform;
     @Input() msg: string | null;
     @Input() zones$: Observable<Zone[]>;
+    @Input() stations$: Observable<Station[]>;
     @Input() surveys$: Observable<Survey[]>;
     filteredZones$: Observable<Zone[]>;
+    filteredStations$: Observable<Station[]>;
     filteredSurveys$: Observable<Survey[]>;
     filterFormControl = new FormControl('', []);
     @Output() remove = new EventEmitter<Platform>();
@@ -47,6 +49,7 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
 
     ngOnInit() {   
         this.filteredZones$ = this.zones$;
+        this.filteredStations$ = this.stations$;
         this.filteredSurveys$ = this.surveys$;
     }
 
@@ -67,6 +70,14 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
                     zones.filter(zone => zone.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         zone.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         zone.properties.surface.toString().toLowerCase().indexOf(filter)!==-1
+                        )
+                    );
+                break;
+            case "stations":
+                this.filteredStations$ = this.stations$.map(stations => 
+                    stations.filter(station => station.properties.code.toLowerCase().indexOf(filter)!==-1 || 
+                        station.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
+                        station.properties.description.toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );
                 break;
@@ -92,10 +103,12 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
             case "platformForm":
             case "zoneForm":
             case "zoneImport":
+            case "stationForm":
             case "surveyForm":
             case "surveyImport":
-            case "zonePrefImport":
             case "stationImport":
+            case "stationImport":
+            case "zonePrefImport":
             case "countImport":
             this.action.emit(type+'/'+this.platform._id);
             break;
@@ -112,6 +125,10 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
         if(view === "zones"){
             this.view$ = of(view);        
             this.panelDisplay.setValue('zones');
+        }
+        else if(view === "stations"){
+            this.view$ = of(view);        
+            this.panelDisplay.setValue('stations');
         }
         else {
             this.view$ = of('surveys');

@@ -19,7 +19,6 @@ import { PlatformAction } from '../../modules/datas/actions/index';
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [platform]="platform$ | async"
-      [zone]="zone$ | async"
       [station]="station$ | async">
     </bc-station-form>
   `,
@@ -37,7 +36,6 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 export class StationFormPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   platform$: Observable<Platform>;
-  zone$: Observable<Zone>;
   station$: Observable<Station>;
   platformSubscription: Subscription;
   zoneSubscription: Subscription;
@@ -46,10 +44,7 @@ export class StationFormPageComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.platformSubscription = route.params
       .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
-      .subscribe(store);      
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
-      .subscribe(store);
+      .subscribe(store);  
     this.stationSubscription = route.params
       .map(params => new PlatformAction.SelectStationAction(params.idStation))
       .subscribe(store);
@@ -57,13 +52,11 @@ export class StationFormPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
     this.station$ = this.store.let(getSelectedStation);
   }
 
   ngOnDestroy() {
     this.platformSubscription.unsubscribe();
-    this.zoneSubscription.unsubscribe();
     this.stationSubscription.unsubscribe();
   }
 

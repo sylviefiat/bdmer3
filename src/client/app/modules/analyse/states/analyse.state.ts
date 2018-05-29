@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs/Observable';
+import * as Turf from '@turf/turf';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Station, Survey, Species } from '../../datas/models/index';
@@ -162,11 +163,14 @@ export function getZonesAvailables(state$: Observable<IAppState>) {
 export function getStationsAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let stations = [];
-        for (let i in state.analyse.usedZones) {
-            let zt: Station[] = state.analyse.usedZones[i].stations;
-            for(let t of zt){
-                if(stations.indexOf(t)<0){
-                    stations.push(t);
+        if(state.analyse.usedPlatforms && state.analyse.usedZones){
+            for(let p of state.analyse.usedPlatforms){
+                for(let s of p.stations){
+                    for(let z of state.analyse.usedZones.filter(zone => zone.codePlatform===p.code)){
+                        if(Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates))) {
+                            stations.push(s);
+                        }
+                    }
                 }
             }
         }

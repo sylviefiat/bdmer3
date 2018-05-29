@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Platform, Survey } from '../models/index';
 import { IAppState } from '../../ngrx/index';
+import * as Turf from '@turf/turf';
 
 export interface IPlatformState {
     loaded: boolean;
@@ -95,6 +96,10 @@ export function getCurrentPlatformZones(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].zones);
 }
 
+export function getCurrentPlatformStations(state$: Observable<IPlatformState>) {
+    return state$.select(state => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].stations);
+}
+
 export function getCurrentPlatformSurveys(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].surveys);
 }
@@ -110,11 +115,21 @@ export function getCurrentZone(state$: Observable<IPlatformState>) {
                 zone.properties.code === state.currentZoneId)[0]);
 }
 
-export function getCurrentZoneStations(state$: Observable<IPlatformState>) {
-    return state$.select(state => state.currentPlatformId && state.currentZoneId &&
-        state.entities.filter(platform =>
-            platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.properties.code === state.currentZoneId)[0].stations);
+export function getCurrentZoneStations(state$: Observable<IPlatformState>) {    
+    return state$.select(state => {
+        if(!state.currentPlatformId || !state.currentZoneId){
+            return [];            
+        }
+        let platform = state.entities.filter(platform => platform._id === state.currentPlatformId)[0];
+        let zone = platform.zones.filter(zone => zone.properties.code === state.currentZoneId)[0];
+        let stations=[];
+        for(let s of platform.stations){
+            if(Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(zone.geometry.coordinates))) {
+                stations.push(s);
+            }
+        }
+        return stations;
+    });
 }
 
 export function getCurrentZoneZonePrefs(state$: Observable<IPlatformState>) {
@@ -145,10 +160,9 @@ export function getCurrentStationId(state$: Observable<IPlatformState>) {
 }
 
 export function getCurrentStation(state$: Observable<IPlatformState>) {
-    return state$.select(state => state.currentPlatformId && state.currentZoneId && state.currentStationId &&
-        state.entities.filter(platform =>
-            platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.properties.code === state.currentZoneId)[0].stations.filter(station =>
+    return state$.select(state => state.currentPlatformId && state.currentStationId &&
+            state.entities.filter(platform =>
+            platform._id === state.currentPlatformId)[0].stations.filter(station =>
                     station.properties.code === state.currentStationId)[0]);
 }
 

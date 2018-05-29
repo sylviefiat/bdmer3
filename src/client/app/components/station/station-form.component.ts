@@ -8,7 +8,7 @@ import { NameRefactorService } from '../../modules/core/services/nameRefactor.se
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Platform, Zone, Station, ZonePreference, Count } from '../../modules/datas/models/index';
+import { Platform, Station, Count } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -21,7 +21,6 @@ import { Platform, Zone, Station, ZonePreference, Count } from '../../modules/da
 })
 export class StationFormComponent implements OnInit {
     @Input() platform: Platform | null;
-    @Input() zone: Zone | null;
     @Input() station: Station | null;
     @Input() errorMessage: boolean;
 
@@ -46,16 +45,14 @@ export class StationFormComponent implements OnInit {
             code: new FormControl("")
         }),
         staticMapStation: new FormControl(""),
-        codeZone: new FormControl(""),
         codePlatform: new FormControl(""),
     });
 
     constructor(private nameRefactorService: NameRefactorService, private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
     
     ngOnInit() {
+        console.log(this.station)
         this.stationForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        this.stationForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
-        this.zone ? this.zone: null;
 
         if(this.station){
             this.stationForm.controls.properties.get("name").setValue(this.station.properties.name);
@@ -70,7 +67,7 @@ export class StationFormComponent implements OnInit {
     submit() {
         if(!this.errorLat && !this.errorLng){
 
-            this.stationForm.controls.properties.get("code").setValue(this.zone.properties.code + "_" +this.nameRefactorService.convertAccent(this.stationForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+            this.stationForm.controls.properties.get("code").setValue(this.platform.code+"_"+this.nameRefactorService.convertAccent(this.stationForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
             this.stationForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude])
 
             this.mapStaticService.staticMapToB64(this.url).then((data) => {
@@ -85,7 +82,7 @@ export class StationFormComponent implements OnInit {
     }
 
     return() {
-        let redirect = this.station ? 'station/'+this.platform.code+'/'+this.zone.properties.code+'/'+this.station.properties.code : '/zone/' + this.platform.code + "/" + this.zone.properties.code;
+        let redirect = this.station ? 'station/'+this.platform.code+'/'+this.station.properties.code : '/platform/' + this.platform.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

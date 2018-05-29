@@ -44,7 +44,7 @@ import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoad
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
-import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
+import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
     getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
 import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
     getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
@@ -183,6 +183,7 @@ export const getPlatformPageError: any = compose(getPlatformError, getPlatformSt
 export const getPlatformPageMsg: any = compose(getPlatformMsg, getPlatformState);
 export const getSelectedPlatform: any = compose(getCurrentPlatform, getPlatformState);
 export const getSelectedPlatformZones: any = compose(getCurrentPlatformZones, getPlatformState);
+export const getSelectedPlatformStations: any = compose(getCurrentPlatformStations, getPlatformState);
 export const getSelectedPlatformSurveys: any = compose(getCurrentPlatformSurveys, getPlatformState);
 export const getSelectedZone: any = compose(getCurrentZone, getPlatformState);
 export const getSelectedZoneStations: any = compose(getCurrentZoneStations, getPlatformState);
