@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { User, Country } from '../../countries/models/country';
-import { Platform, Zone, Survey, Transect } from '../../datas/models/platform';
+import { Platform, Zone, Survey, Station } from '../../datas/models/platform';
 import { Species } from '../../datas/models/species';
 import { Method, DimensionsAnalyse } from '../models/analyse';
 import { type } from '../../core/utils/index';
@@ -15,7 +15,7 @@ export namespace AnalyseAction {
     SELECT_YEARS: string;
     SELECT_SURVEYS: string;
     SELECT_ZONES: string;
-    SELECT_TRANSECTS: string;
+    SELECT_STATIONS: string;
     SELECT_SPECIES: string;
     SELECT_DIMS: string;
     SELECT_METHOD: string;
@@ -30,7 +30,7 @@ export namespace AnalyseAction {
     SELECT_YEARS : type('[Analyse] Select years'),
     SELECT_SURVEYS : type('[Analyse] Select Surveys'),
     SELECT_ZONES : type('[Analyse] Select Zones'),
-    SELECT_TRANSECTS : type('[Analyse] Select Transects'),
+    SELECT_STATIONS : type('[Analyse] Select Stations'),
     SELECT_SPECIES : type('[Analyse] Select Species'),
     SELECT_DIMS : type('[Analyse] Select Species dimensions'),
     SELECT_METHOD : type('[Analyse] Select method'),
@@ -68,9 +68,9 @@ export class SelectZones implements Action {
   constructor(public payload: Zone[]) {}
 }
 
-export class SelectTransects implements Action {
-  readonly type = ActionTypes.SELECT_TRANSECTS;
-  constructor(public payload: Transect[]) {}
+export class SelectStations implements Action {
+  readonly type = ActionTypes.SELECT_STATIONS;
+  constructor(public payload: Station[]) {}
 }
 
 export class SelectSpecies implements Action {
@@ -115,7 +115,7 @@ export type Actions =
   | SelectYears
   | SelectSurveys
   | SelectZones
-  | SelectTransects
+  | SelectStations
   | SelectSpecies
   | SelectDims
   | SelectMethod

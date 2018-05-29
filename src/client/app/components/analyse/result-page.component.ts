@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getAnalyseData, getAnalyseResult, getLangues } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, Results, Data } from '../../modules/analyse/models/index';
 import { IAnalyseState } from '../../modules/analyse/states/index';
 import { Country } from '../../modules/countries/models/country';

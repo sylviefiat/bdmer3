@@ -8,24 +8,24 @@ import { NameRefactorService } from '../../modules/core/services/nameRefactor.se
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Platform, Zone, Transect, ZonePreference, Count } from '../../modules/datas/models/index';
+import { Platform, Zone, Station, ZonePreference, Count } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-transect-form',
-    templateUrl: 'transect-form.component.html',
+    selector: 'bc-station-form',
+    templateUrl: 'station-form.component.html',
     styleUrls: [
-    'transect-form.component.css',
+    'station-form.component.css',
     ],
 })
-export class TransectFormComponent implements OnInit {
+export class StationFormComponent implements OnInit {
     @Input() platform: Platform | null;
     @Input() zone: Zone | null;
-    @Input() transect: Transect | null;
+    @Input() station: Station | null;
     @Input() errorMessage: boolean;
 
-    @Output() submitted = new EventEmitter<Transect>();
+    @Output() submitted = new EventEmitter<Station>();
 
     url: string;
     code: string;
@@ -35,7 +35,7 @@ export class TransectFormComponent implements OnInit {
     errorLng: boolean;
     canSubmit: boolean;
 
-    transectForm: FormGroup = new FormGroup({
+    stationForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
         geometry: new FormGroup({
             type: new FormControl("Point"),
@@ -45,7 +45,7 @@ export class TransectFormComponent implements OnInit {
             name: new FormControl(""),
             code: new FormControl("")
         }),
-        staticMapTransect: new FormControl(""),
+        staticMapStation: new FormControl(""),
         codeZone: new FormControl(""),
         codePlatform: new FormControl(""),
     });
@@ -53,39 +53,39 @@ export class TransectFormComponent implements OnInit {
     constructor(private nameRefactorService: NameRefactorService, private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
     
     ngOnInit() {
-        this.transectForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
-        this.transectForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
+        this.stationForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
+        this.stationForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
         this.zone ? this.zone: null;
 
-        if(this.transect){
-            this.transectForm.controls.properties.get("name").setValue(this.transect.properties.name);
-            this.transectForm.controls.properties.get("code").setValue(this.transect.properties.code);
-            this.url = this.transect.staticMapTransect;
-            this.longitude = this.transect.geometry["coordinates"]["0"];
-            this.latitude = this.transect.geometry["coordinates"]["1"]
-            this.transectForm.controls.properties.get("name").disable();
+        if(this.station){
+            this.stationForm.controls.properties.get("name").setValue(this.station.properties.name);
+            this.stationForm.controls.properties.get("code").setValue(this.station.properties.code);
+            this.url = this.station.staticMapStation;
+            this.longitude = this.station.geometry["coordinates"]["0"];
+            this.latitude = this.station.geometry["coordinates"]["1"]
+            this.stationForm.controls.properties.get("name").disable();
         }
     }
 
     submit() {
         if(!this.errorLat && !this.errorLng){
 
-            this.transectForm.controls.properties.get("code").setValue(this.zone.properties.code + "_" +this.nameRefactorService.convertAccent(this.transectForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
-            this.transectForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude])
+            this.stationForm.controls.properties.get("code").setValue(this.zone.properties.code + "_" +this.nameRefactorService.convertAccent(this.stationForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
+            this.stationForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude])
 
             this.mapStaticService.staticMapToB64(this.url).then((data) => {
-                this.transectForm.controls.staticMapTransect.setValue(data);
+                this.stationForm.controls.staticMapStation.setValue(data);
 
-                if (this.transectForm.valid) {
-                    this.transectForm.controls.properties.get("name").enable();
-                    this.submitted.emit(this.transectForm.value);
+                if (this.stationForm.valid) {
+                    this.stationForm.controls.properties.get("name").enable();
+                    this.submitted.emit(this.stationForm.value);
                 }
             });
         }
     }
 
     return() {
-        let redirect = this.transect ? 'transect/'+this.platform.code+'/'+this.zone.properties.code+'/'+this.transect.properties.code : '/zone/' + this.platform.code + "/" + this.zone.properties.code;
+        let redirect = this.station ? 'station/'+this.platform.code+'/'+this.zone.properties.code+'/'+this.station.properties.code : '/zone/' + this.platform.code + "/" + this.zone.properties.code;
         this.routerext.navigate([redirect], {
             transition: {
                 duration: 1000,

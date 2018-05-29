@@ -16,7 +16,7 @@ import { Platform,Zone,Survey } from './../../modules/datas/models/platform';
         </mat-card-content>
         <mat-card-content>
           <p>{{'PARTICIPANTS' | translate}}: {{ participants }}</p>
-          <p>{{'SURFACE_TRANSECT' | translate}}: {{ surfaceTransect }}</p>
+          <p>{{'SURFACE_STATION' | translate}}: {{ surfaceStation }}</p>
           <p>{{'DESCRIPTION' | translate}}: {{ description }}</p>
        </mat-card-content>
 
@@ -99,8 +99,8 @@ export class SurveyPreviewComponent implements OnInit {
     return this.survey.participants;
   }
 
-  get surfaceTransect() {
-    return this.survey.surfaceTransect;
+  get surfaceStation() {
+    return this.survey.surfaceStation;
   }
 
   get description() {
@@ -120,6 +120,6 @@ export class SurveyPreviewComponent implements OnInit {
   get thumbnail(): string | boolean {
     // WAIT FOR MAP GENERATION
     return null;
-    //return "/assets/img/"+this.transect.code+".jpg"; 
+    //return "/assets/img/"+this.station.code+".jpg"; 
   }
 }

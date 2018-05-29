@@ -16,7 +16,7 @@
       <h5 mat-subheader>{{ 'SURVEY_DESC' | translate }}</h5>
       <div class="row">
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'TRANSECT_CODE' | translate }}" formControlName="code" required>
+          <input type="text" matInput placeholder="{{ 'STATION_CODE' | translate }}" formControlName="code" required>
           <div class="hint">{{ 'SURVEY_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
         </mat-input-container>
       </div>
@@ -46,8 +46,8 @@
         </mat-input-container>          
 
         <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'SURFACE_TRANSECT' | translate }}" formControlName="surfaceTransect" required>
-          <div class="hint">{{ 'SURFACE_TRANSECT_EX' | translate }}</div>    
+          <input type="text" matInput placeholder="{{ 'SURFACE_STATION' | translate }}" formControlName="surfaceStation" required>
+          <div class="hint">{{ 'SURFACE_STATION_EX' | translate }}</div>    
         </mat-input-container> 
       </div>
       <div class="row">

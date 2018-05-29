@@ -9,8 +9,8 @@ import { AnalyseSurveyComponent } from './analyse-survey.component';
 import { SurveyComponent } from './survey.component';
 import { AnalyseZoneComponent } from './analyse-zone.component';
 import { ZoneComponent } from './zone.component';
-import { AnalyseTransectComponent } from './analyse-transect.component';
-import { TransectComponent } from './transect.component';
+import { AnalyseStationComponent } from './analyse-station.component';
+import { StationComponent } from './station.component';
 import { AnalyseSpeciesComponent } from './analyse-species.component';
 import { SpeciesComponent } from './species.component';
 import { AnalyseMethodComponent } from './analyse-method.component';
@@ -34,8 +34,8 @@ export const ANALYSE_COMPONENTS: any[] = [
   SurveyComponent,
   AnalyseZoneComponent,
   ZoneComponent,
-  AnalyseTransectComponent,
-  TransectComponent,
+  AnalyseStationComponent,
+  StationComponent,
   AnalyseSpeciesComponent,
   SpeciesComponent,
   AnalyseMethodComponent,
@@ -59,8 +59,8 @@ export * from './analyse-survey.component';
 export * from './survey.component';
 export * from './analyse-zone.component';
 export * from './zone.component';
-export * from './analyse-transect.component';
-export * from './transect.component';
+export * from './analyse-station.component';
+export * from './station.component';
 export * from './analyse-species.component';
 export * from './species.component';
 export * from './analyse-method.component';

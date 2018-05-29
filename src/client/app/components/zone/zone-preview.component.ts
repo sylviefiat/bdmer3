@@ -17,7 +17,7 @@ import { Platform,Zone } from './../../modules/datas/models/platform';
         <mat-card-content>
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
           <div>{{nZonesPrefs}} {{'ZONES_PREF' | translate}}</div>
-          <div>{{nTransects}} {{'TRANSECTS' | translate}}</div>
+          <div>{{nStations}} {{'STATIONS' | translate}}</div>
        </mat-card-content>
       </mat-card>
     </a>
@@ -65,10 +65,10 @@ export class ZonePreviewComponent implements OnInit {
   @Input() zone: Zone;
   @Input() idPlatform: string;
   nZonesPrefs: number = 0;
-  nTransects: number = 0;
+  nStations: number = 0;
 
   ngOnInit(){
-    this.nTransects = this.zone.transects ? this.zone.transects.length : 0;
+    this.nStations = this.zone.stations ? this.zone.stations.length : 0;
     this.nZonesPrefs = this.zone.zonePreferences ? this.zone.zonePreferences.length : 0;
 
   }

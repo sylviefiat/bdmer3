@@ -6,7 +6,7 @@ import { of } from 'rxjs/observable/of';
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
-import { Platform, Zone, Transect, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
+import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 
 @Injectable()
 export class Csv2JsonService {
@@ -170,7 +170,7 @@ export class Csv2JsonService {
                         case "code_zone":
                         case "code":
                         case "participants":
-                        case "surface_transect":
+                        case "surface_station":
                         case "description":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
@@ -200,7 +200,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractTransectData(arrayData): Transect[] { 
+    private extractStationData(arrayData): Station[] { 
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines = [];
@@ -208,7 +208,7 @@ export class Csv2JsonService {
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
-                let st = {} as Transect;
+                let st = {} as Station;
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
@@ -242,13 +242,13 @@ export class Csv2JsonService {
                     code: lines[i]["code"],
                     description: lines[i]["description"]
                 },
-                staticMapTransect: "",
+                staticMapStation: "",
                 codeZone: lines[i]["codeZone"],
                 codePlatform: lines[i]["codePlatform"]
             }
 
             this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data){
-              geojson.staticMapTransect = data.toString();
+              geojson.staticMapStation = data.toString();
             })
 
             geojsons.push(geojson)
@@ -304,7 +304,7 @@ export class Csv2JsonService {
                         case "code_zone":
                         case "code_survey":
                         case "code":
-                        case "code_transect":
+                        case "code_station":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             ct[headers[j]] = data[j];
                             break;
@@ -385,9 +385,9 @@ export class Csv2JsonService {
                         console.log(data);
                         res = this.extractZonePrefData(data);
                         break;
-                    case "transect":
+                    case "station":
                         console.log(data);
-                        res = this.extractTransectData(data);
+                        res = this.extractStationData(data);
                         break;
                     case "count":
                         console.log(data);

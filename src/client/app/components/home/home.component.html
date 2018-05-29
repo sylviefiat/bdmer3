@@ -31,9 +31,9 @@
 						<agm-data-layer [geoJson]="zone" (layerClick)="zoomLayer($event)">
 						</agm-data-layer>
 						<div *ngIf="zoom > 10" >
-							<agm-marker *ngFor="let transect of (zone.transects)"
-								[latitude]="transect.geometry.coordinates[1]"
-						   		[longitude]="transect.geometry.coordinates[0]"
+							<agm-marker *ngFor="let station of (zone.stations)"
+								[latitude]="station.geometry.coordinates[1]"
+						   		[longitude]="station.geometry.coordinates[0]"
 						   		label="T">
 							</agm-marker>
 						</div>

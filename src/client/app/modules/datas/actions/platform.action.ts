@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Platform,Zone, Transect, ZonePreference,Count,Survey } from '../models/index';
+import { Platform,Zone, Station, ZonePreference,Count,Survey } from '../models/index';
 import { type } from '../../core/utils/index';
 import { Observable } from 'rxjs/Observable';
 
@@ -35,13 +35,13 @@ export namespace PlatformAction {
       REMOVE_SURVEY: string;
       REMOVE_SURVEY_SUCCESS: string;
       REMOVE_SURVEY_FAIL: string;
-      ADD_TRANSECT: string;
-      ADD_TRANSECT_SUCCESS: string;
-      IMPORT_TRANSECT: string;
-      IMPORT_TRANSECT_SUCCESS: string;
-      REMOVE_TRANSECT: string;
-      REMOVE_TRANSECT_SUCCESS: string;
-      REMOVE_TRANSECT_FAIL: string;
+      ADD_STATION: string;
+      ADD_STATION_SUCCESS: string;
+      IMPORT_STATION: string;
+      IMPORT_STATION_SUCCESS: string;
+      REMOVE_STATION: string;
+      REMOVE_STATION_SUCCESS: string;
+      REMOVE_STATION_FAIL: string;
       ADD_ZONE_PREF: string;
       ADD_ZONE_PREF_SUCCESS: string;
       IMPORT_ZONE_PREF: string;
@@ -62,7 +62,7 @@ export namespace PlatformAction {
       SELECT_PLATFORM: string;
       SELECT_ZONE: string;
       SELECT_SURVEY: string;
-      SELECT_TRANSECT: string;
+      SELECT_STATION: string;
       SELECT_ZONE_PREF: string;
       SELECT_COUNT: string;
       REMOVE_MSG: string;
@@ -88,13 +88,13 @@ export namespace PlatformAction {
       REMOVE_ZONE: type(`${PLATFORM} Remove Zone`),
       REMOVE_ZONE_SUCCESS: type(`${PLATFORM} Remove Zone Success`),
       REMOVE_ZONE_FAIL: type(`${PLATFORM} Remove Zone Fail`), 
-      ADD_TRANSECT: type(`${PLATFORM} Add Transect`),
-      ADD_TRANSECT_SUCCESS: type(`${PLATFORM} Add Transect Success`),
-      IMPORT_TRANSECT: type(`${PLATFORM} Import Transect`),
-      IMPORT_TRANSECT_SUCCESS:type(`${PLATFORM} Import Transect Success`),
-      REMOVE_TRANSECT: type(`${PLATFORM} Remove Transect`),
-      REMOVE_TRANSECT_SUCCESS: type(`${PLATFORM} Remove Transect Success`),
-      REMOVE_TRANSECT_FAIL: type(`${PLATFORM} Remove Transect Fail`), 
+      ADD_STATION: type(`${PLATFORM} Add Station`),
+      ADD_STATION_SUCCESS: type(`${PLATFORM} Add Station Success`),
+      IMPORT_STATION: type(`${PLATFORM} Import Station`),
+      IMPORT_STATION_SUCCESS:type(`${PLATFORM} Import Station Success`),
+      REMOVE_STATION: type(`${PLATFORM} Remove Station`),
+      REMOVE_STATION_SUCCESS: type(`${PLATFORM} Remove Station Success`),
+      REMOVE_STATION_FAIL: type(`${PLATFORM} Remove Station Fail`), 
       ADD_SURVEY: type(`${PLATFORM} Add Survey`),
       ADD_SURVEY_SUCCESS: type(`${PLATFORM} Add Survey Success`),
       IMPORT_SURVEY: type(`${PLATFORM} Import Survey`),
@@ -122,7 +122,7 @@ export namespace PlatformAction {
       SELECT_PLATFORM: type(`${PLATFORM} select platform`),
       SELECT_ZONE: type(`${PLATFORM} select zone`),
       SELECT_SURVEY: type(`${PLATFORM} select survey`),
-      SELECT_TRANSECT: type(`${PLATFORM} select transect`),
+      SELECT_STATION: type(`${PLATFORM} select station`),
       SELECT_ZONE_PREF: type(`${PLATFORM} select species preference zone`),
       SELECT_COUNT: type(`${PLATFORM} select count`),
       REMOVE_MSG: type(`${PLATFORM} remove message`)
@@ -352,55 +352,55 @@ export namespace PlatformAction {
   }
 
   /**
-   * Add transect to zone  Actions
+   * Add station to zone  Actions
    */
-  export class AddTransectAction implements Action {
-    readonly type = ActionTypes.ADD_TRANSECT;
+  export class AddStationAction implements Action {
+    readonly type = ActionTypes.ADD_STATION;
 
-    constructor(public payload: Transect) {}
+    constructor(public payload: Station) {}
   }
 
-  export class AddTransectSuccessAction implements Action {
-    readonly type = ActionTypes.ADD_TRANSECT_SUCCESS;
+  export class AddStationSuccessAction implements Action {
+    readonly type = ActionTypes.ADD_STATION_SUCCESS;
 
-    constructor(public payload: Transect) {}
+    constructor(public payload: Station) {}
   }
 
-  export class ImportTransectAction implements Action {
-    readonly type = ActionTypes.IMPORT_TRANSECT;
+  export class ImportStationAction implements Action {
+    readonly type = ActionTypes.IMPORT_STATION;
 
     constructor(public payload: any) {}
   }
 
-  export class ImportTransectSuccessAction implements Action {
-    readonly type = ActionTypes.IMPORT_TRANSECT_SUCCESS;
+  export class ImportStationSuccessAction implements Action {
+    readonly type = ActionTypes.IMPORT_STATION_SUCCESS;
 
-    constructor(public payload: Transect) {}
+    constructor(public payload: Station) {}
   }
 
   /**
-   * Remove Transect from Zone - Platform  Actions
+   * Remove Station from Zone - Platform  Actions
    */
-  export class RemoveTransectAction implements Action {
-    readonly type = ActionTypes.REMOVE_TRANSECT;
+  export class RemoveStationAction implements Action {
+    readonly type = ActionTypes.REMOVE_STATION;
 
-    constructor(public payload: Transect) {}
+    constructor(public payload: Station) {}
   }
 
-  export class RemoveTransectSuccessAction implements Action {
-    readonly type = ActionTypes.REMOVE_TRANSECT_SUCCESS;
+  export class RemoveStationSuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_STATION_SUCCESS;
 
-    constructor(public payload: Transect) {}
+    constructor(public payload: Station) {}
   }
 
-  export class RemoveTransectFailAction implements Action {
-    readonly type = ActionTypes.REMOVE_TRANSECT_FAIL;
+  export class RemoveStationFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_STATION_FAIL;
 
     constructor(public payload: Platform) {}
   }
 
   /**
-   * Add count to transect  Actions
+   * Add count to station  Actions
    */
   export class AddCountAction implements Action {
     readonly type = ActionTypes.ADD_COUNT;
@@ -427,7 +427,7 @@ export namespace PlatformAction {
   }
 
   /**
-   * Remove Count from transect - Platform  Actions
+   * Remove Count from station - Platform  Actions
    */
   export class RemoveCountAction implements Action {
     readonly type = ActionTypes.REMOVE_COUNT;
@@ -480,8 +480,8 @@ export namespace PlatformAction {
     constructor(public payload: any) {}
   }
 
-  export class SelectTransectAction implements Action {
-    readonly type = ActionTypes.SELECT_TRANSECT;
+  export class SelectStationAction implements Action {
+    readonly type = ActionTypes.SELECT_STATION;
     constructor(public payload: any) {}
   }
 
@@ -516,13 +516,13 @@ export namespace PlatformAction {
     | RemoveZoneAction
     | RemoveZoneSuccessAction
     | RemoveZoneFailAction
-    | AddTransectAction
-    | AddTransectSuccessAction
-    | ImportTransectAction
-    | ImportTransectSuccessAction
-    | RemoveTransectAction
-    | RemoveTransectSuccessAction
-    | RemoveTransectFailAction
+    | AddStationAction
+    | AddStationSuccessAction
+    | ImportStationAction
+    | ImportStationSuccessAction
+    | RemoveStationAction
+    | RemoveStationSuccessAction
+    | RemoveStationFailAction
     | AddSurveyAction
     | AddSurveySuccessAction
     | ImportSurveyAction
@@ -550,7 +550,7 @@ export namespace PlatformAction {
     | SelectPlatformAction
     | SelectZoneAction
     | SelectSurveyAction
-    | SelectTransectAction
+    | SelectStationAction
     | SelectZonePrefAction
     | SelectCountAction
     | RemoveMsgAction;

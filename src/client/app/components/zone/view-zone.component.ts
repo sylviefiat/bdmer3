@@ -13,7 +13,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform, Zone, Property, Transect, ZonePreference, Survey } from '../../modules/datas/models/index';
+import { Platform, Zone, Property, Station, ZonePreference, Survey } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 import { zoneMapModal } from './zone-map-modal.component';
 
@@ -29,16 +29,16 @@ import { zoneMapModal } from './zone-map-modal.component';
 export class ViewZoneComponent implements OnInit { 
     @Input() zone: Zone;   
     @Input() platform: Platform;
-    @Input() transects$: Observable<Transect[]>;
+    @Input() stations$: Observable<Station[]>;
     @Input() zonesPref$: Observable<ZonePreference[]>;
-    filteredTransects$: Observable<Transect[]>;
+    filteredStations$: Observable<Station[]>;
     filteredZonesPrefs$: Observable<ZonePreference[]>;
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
     filterFormControl = new FormControl('', []);
     actionsSubscription: Subscription;
     view$: Observable<string>;
-    panelDisplay = new FormControl('transects');
+    panelDisplay = new FormControl('stations');
 
     fileNameDialogRef: MatDialogRef<zoneMapModal>;
 
@@ -50,7 +50,7 @@ export class ViewZoneComponent implements OnInit {
 
 
     ngOnInit() {
-        this.filteredTransects$ = this.transects$;
+        this.filteredStations$ = this.stations$;
         this.filteredZonesPrefs$ = this.zonesPref$;
     }
 
@@ -64,12 +64,12 @@ export class ViewZoneComponent implements OnInit {
     filter(filter: string){
         filter=filter.toLowerCase();
         switch (this.panelDisplay.value) {
-            case "transects":
-                this.filteredTransects$ = this.transects$.map(transects => 
-                    transects.filter(transect => transect.properties.code.toLowerCase().indexOf(filter)!==-1 || 
-                        transect.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
-                        transect.codeZone.toLowerCase().indexOf(filter)!==-1 ||
-                        transect.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
+            case "stations":
+                this.filteredStations$ = this.stations$.map(stations => 
+                    stations.filter(station => station.properties.code.toLowerCase().indexOf(filter)!==-1 || 
+                        station.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
+                        station.codeZone.toLowerCase().indexOf(filter)!==-1 ||
+                        station.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );
                 break;
@@ -94,8 +94,8 @@ export class ViewZoneComponent implements OnInit {
             case "zoneForm":
             case "zonePrefForm":
             case "zonePrefImport":
-            case "transectForm":
-            case "transectImport":
+            case "stationForm":
+            case "stationImport":
                 this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code);
                 break;
             case "deleteZone":
@@ -113,8 +113,8 @@ export class ViewZoneComponent implements OnInit {
             this.panelDisplay.setValue('zonesPref');
         }
         else {
-            this.view$ = of('transects');
-            this.panelDisplay.setValue('transects');
+            this.view$ = of('stations');
+            this.panelDisplay.setValue('stations');
         }
     }
 

@@ -9,8 +9,8 @@
       <mat-card-actions>
         <mat-form-field>
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
-              <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ (zonesPref$ | async).length }})</mat-option>
-              <mat-option [value]="'transects'">{{ 'TRANSECTS' | translate}} ({{ (transects$ | async).length }})</mat-option>
+              <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ (zonesPref$ | async)?.length }})</mat-option>
+              <mat-option [value]="'stations'">{{ 'STATIONS' | translate}} ({{ (stations$ | async)?.length }})</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="right">
@@ -24,11 +24,11 @@
             </mat-optgroup>
             <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('ZONE' | translate)">
               <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
-              <mat-option [value]="'transectForm'">{{ 'ADD_TRANSECT' | translate}}</mat-option>
+              <mat-option [value]="'stationForm'">{{ 'ADD_STATION' | translate}}</mat-option>
             </mat-optgroup>
             <mat-optgroup [label]="('IMPORT_TOE' | translate)+' '+('ZONE' | translate)">
               <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
-              <mat-option [value]="'transectImport'">{{ 'IMPORT' | translate}} {{ 'TRANSECTS' | translate}}</mat-option>
+              <mat-option [value]="'stationImport'">{{ 'IMPORT' | translate}} {{ 'STATIONS' | translate}}</mat-option>
             </mat-optgroup>          
           </mat-select>
         </mat-form-field>         
@@ -37,7 +37,7 @@
     
         <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [platform]="platform"></bc-zone-preference-preview-list>
 
-        <bc-transect-preview-list *ngIf="(view$ | async)==='transects'" [transects$]="filteredTransects$" [zone]="zone" [platform]="platform"></bc-transect-preview-list>          
+        <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [zone]="zone" [platform]="platform"></bc-station-preview-list>          
      
     
    

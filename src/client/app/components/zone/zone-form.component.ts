@@ -47,7 +47,7 @@ export class ZoneFormComponent implements OnInit {
             surface: new FormControl(),
         }),
         codePlatform: new FormControl(""),
-        transects: new FormArray([]),
+        stations: new FormArray([]),
         zonePreferences: new FormArray([])
     });
 

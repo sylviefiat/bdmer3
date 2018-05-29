@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform, Zone, Survey, Count, Species, Transect } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Count, Species, Station } from '../../modules/datas/models/index';
 
 import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getSelectedSurvey, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';

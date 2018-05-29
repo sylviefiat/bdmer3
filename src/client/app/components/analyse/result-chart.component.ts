@@ -4,7 +4,7 @@ import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { IAppState } from '../../modules/ngrx/index';
-import { Zone, Survey, Species, Transect } from '../../modules/datas/models/index';
+import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 import { ResultSurvey } from '../../modules/analyse/models/index';
 declare var google: any;
 

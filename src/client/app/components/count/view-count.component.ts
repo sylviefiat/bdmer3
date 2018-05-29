@@ -9,7 +9,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform, Zone, Transect, Survey, Count, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Station, Survey, Count, Species } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 
 @Component({

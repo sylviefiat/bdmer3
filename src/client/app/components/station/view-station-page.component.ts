@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedTransect } from '../../modules/ngrx/index';
-import { Platform, Zone, Transect } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedStation } from '../../modules/ngrx/index';
+import { Platform, Zone, Station } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { PlatformAction } from '../../modules/datas/actions/index';
 
@@ -24,25 +24,25 @@ import { PlatformAction } from '../../modules/datas/actions/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-view-transect-page',
+  selector: 'bc-view-station-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-view-transect 
+    <bc-view-station 
       [platform]="platform$ | async"
       [zone]="zone$ | async"
-      [transect]="transect$ | async"
-      (action)="actionTransect($event)"
-      (remove)="removeTransect($event)">
-    </bc-view-transect>
+      [station]="station$ | async"
+      (action)="actionStation($event)"
+      (remove)="removeStation($event)">
+    </bc-view-station>
   `,
 })
-export class ViewTransectPageComponent implements OnInit, OnDestroy {
+export class ViewStationPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
   zoneSubscription: Subscription;
-  transectSubscription: Subscription;
+  stationSubscription: Subscription;
   zone$: Observable<Zone | null>;
   platform$: Observable<Platform | null>;
-  transect$: Observable<Transect | null>;
+  station$: Observable<Station | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
     this.platformSubscription = route.params
@@ -51,28 +51,28 @@ export class ViewTransectPageComponent implements OnInit, OnDestroy {
     this.zoneSubscription = route.params
       .map(params => new PlatformAction.SelectZoneAction(params.idZone))
       .subscribe(store);
-    this.transectSubscription = route.params
-      .map(params => new PlatformAction.SelectTransectAction(params.idTransect))
+    this.stationSubscription = route.params
+      .map(params => new PlatformAction.SelectStationAction(params.idStation))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transect$ = this.store.let(getSelectedTransect);
+    this.station$ = this.store.let(getSelectedStation);
   }
 
   ngOnDestroy() {
     this.platformSubscription.unsubscribe();
     this.zoneSubscription.unsubscribe();
-    this.transectSubscription.unsubscribe();
+    this.stationSubscription.unsubscribe();
   }
 
-  actionTransect(redirect: String) {
+  actionStation(redirect: String) {
     this.routerext.navigate([redirect]);
   }
 
-  removeTransect(transect: Transect){
-    this.store.dispatch(new PlatformAction.RemoveTransectAction(transect));
+  removeStation(station: Station){
+    this.store.dispatch(new PlatformAction.RemoveStationAction(station));
   }
 }

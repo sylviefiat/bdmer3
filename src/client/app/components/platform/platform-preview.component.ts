@@ -19,7 +19,7 @@ import { Platform } from './../../modules/datas/models/platform';
           <div>{{nZones}} {{'ZONES' | translate}}</div>
           <div>{{nSurveys}} {{'SURVEYS' | translate}}</div>
           <div>{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
-          <div>{{nTransects}} {{'TRANSECTS' | translate}}</div>
+          <div>{{nStations}} {{'STATIONS' | translate}}</div>
           <div>{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
       </mat-card>
@@ -69,7 +69,7 @@ export class PlatformPreviewComponent implements OnInit {
   countries: string;
   nZones: number = 0;
   nSurveys: number = 0;
-  nTransects: number = 0;
+  nStations: number = 0;
   nZonesPref: number = 0;
   nCounts: number = 0;
 
@@ -77,7 +77,7 @@ export class PlatformPreviewComponent implements OnInit {
       this.nZones = this.platform.zones ? this.platform.zones.length : 0;
       this.nSurveys += this.platform.surveys ? this.platform.surveys.length : 0;
       for(let z of this.platform.zones) {        
-        this.nTransects += z.transects ? z.transects.length : 0;
+        this.nStations += z.stations ? z.stations.length : 0;
         this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
       }
       if(this.platform.surveys){

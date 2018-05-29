@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZoneTransects, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
-import { Platform, Zone, Transect, ZonePreference } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZoneStations, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
+import { Platform, Zone, Station, ZonePreference } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { PlatformAction } from '../../modules/datas/actions/index';
 
@@ -21,7 +21,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
     <bc-view-zone 
       [platform]="(platform$ | async)"
       [zone]="zone$ | async"
-      [transects$]="transects$"
+      [stations$]="stations$"
       [zonesPref$]="zonesPref$"
       (action)="actionZone($event)"
       (remove)="removeZone($event)">
@@ -33,7 +33,7 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   zoneSubscription: Subscription;
   zone$: Observable<Zone | null>;
   platform$: Observable<Platform | null>;
-  transects$: Observable<Transect[]>;
+  stations$: Observable<Station[]>;
   zonesPref$: Observable<ZonePreference[]>
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
@@ -48,7 +48,7 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
     this.zone$ = this.store.let(getSelectedZone);
-    this.transects$ = this.store.let(getSelectedZoneTransects);
+    this.stations$ = this.store.let(getSelectedZoneStations);
     this.zonesPref$ = this.store.let(getSelectedZoneZonePrefs);
   }
 

@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewC
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { IAppState } from '../../modules/ngrx/index';
-import { Zone, Survey, Species, Transect } from '../../modules/datas/models/index';
+import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 
 @Component({
   selector: 'bc-result-filter',

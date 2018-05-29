@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedTransect, getSelectedSurvey,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey, Transect, Count, Species } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedStation, getSelectedSurvey,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
+import { Platform, Zone, Survey, Station, Count, Species } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';

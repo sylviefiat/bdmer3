@@ -20,7 +20,7 @@ import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone } f
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from '../actions/index';
-import { Platform, Zone, Transect, Count, Survey, ZonePreference } from '../models/platform';
+import { Platform, Zone, Station, Count, Survey, ZonePreference } from '../models/platform';
 import { Country } from '../../countries/models/country';
 
 import { config } from '../../../config';
@@ -75,12 +75,12 @@ export class PlatformEffects {
   ;
 
   @Effect() 
-  addTransect$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.ADD_TRANSECT)
-    .map((action: PlatformAction.AddTransectAction) => action.payload)
+  addStation$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_STATION)
+    .map((action: PlatformAction.AddStationAction) => action.payload)
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Transect, Platform]) => this.platformService.editTransect(value[1], value[0]))
-    .map((transect: Transect) => new PlatformAction.AddTransectSuccessAction(transect))
+    .mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0]))
+    .map((station: Station) => new PlatformAction.AddStationSuccessAction(station))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)))
   ;
 
@@ -136,13 +136,13 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
-  importTransect$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.IMPORT_TRANSECT)
-    .map((action: PlatformAction.ImportTransectAction) => action.payload)
-    .mergeMap((transect: Transect) => this.csv2jsonService.csv2('transect', transect))
+  importStation$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.IMPORT_STATION)
+    .map((action: PlatformAction.ImportStationAction) => action.payload)
+    .mergeMap((station: Station) => this.csv2jsonService.csv2('station', station))
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [Transect, Platform]) => this.platformService.editTransect(value[1], value[0]))
-    .map((transect: Transect) => new PlatformAction.ImportTransectSuccessAction(transect))
+    .mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0]))
+    .map((station: Station) => new PlatformAction.ImportStationSuccessAction(station))
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
@@ -202,11 +202,11 @@ export class PlatformEffects {
   ;
   
   @Effect()
-  removeTransect$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.REMOVE_TRANSECT)
-    .map((action: PlatformAction.RemoveTransectAction) => action.payload)
-    .mergeMap(transect => this.platformService.removeTransect(transect))
-    .map((transect:Transect) => new PlatformAction.RemoveTransectSuccessAction(transect))
+  removeStation$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_STATION)
+    .map((action: PlatformAction.RemoveStationAction) => action.payload)
+    .mergeMap(station => this.platformService.removeStation(station))
+    .map((station:Station) => new PlatformAction.RemoveStationSuccessAction(station))
     .catch((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
   ;
   
@@ -297,18 +297,18 @@ export class PlatformEffects {
     .map(() => new PlatformAction.RemoveMsgAction());
 
   @Effect() 
-  addTransectSuccess$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.ADD_TRANSECT_SUCCESS)
-    .map((action: PlatformAction.AddTransectSuccessAction) => action.payload)
-    .mergeMap((transect: Transect) => this.router.navigate(['/transect/' + transect.codePlatform + '/'+ transect.codeZone + '/' + transect.properties.code]))
+  addStationSuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_STATION_SUCCESS)
+    .map((action: PlatformAction.AddStationSuccessAction) => action.payload)
+    .mergeMap((station: Station) => this.router.navigate(['/station/' + station.codePlatform + '/'+ station.codeZone + '/' + station.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction()); 
 
   @Effect() 
-  importOrRemoveTransectSuccess$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.IMPORT_TRANSECT_SUCCESS, PlatformAction.ActionTypes.REMOVE_TRANSECT_SUCCESS)
-    .map((action: PlatformAction.ImportTransectSuccessAction | PlatformAction.RemoveTransectSuccessAction) => action.payload)
-    .mergeMap((transect: Transect) => this.router.navigate(['/zone/' + transect.codePlatform + '/'+ transect.codeZone]))
+  importOrRemoveStationSuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS, PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS)
+    .map((action: PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction) => action.payload)
+    .mergeMap((station: Station) => this.router.navigate(['/zone/' + station.codePlatform + '/'+ station.codeZone]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 

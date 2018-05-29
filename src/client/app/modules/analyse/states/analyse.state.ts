@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 
 import { User, Country } from '../../countries/models/country';
-import { Platform, Zone, Transect, Survey, Species } from '../../datas/models/index';
+import { Platform, Zone, Station, Survey, Species } from '../../datas/models/index';
 import { Method, Results, Data, DimensionsAnalyse } from '../models/analyse';
 import { IAppState } from '../../ngrx/index';
 
@@ -11,7 +11,7 @@ export interface IAnalyseState {
     usedYears: string[];
     usedSurveys: Survey[];
     usedZones: Zone[];
-    usedTransects: Transect[];
+    usedStations: Station[];
     usedSpecies: Species[];
     usedDims: DimensionsAnalyse[];
     usedMethod: Method;
@@ -27,7 +27,7 @@ export const analyseInitialState: IAnalyseState = {
     usedYears: null,
     usedSurveys: null,
     usedZones: null,
-    usedTransects: null,
+    usedStations: null,
     usedSpecies: null,
     usedDims: null,
     usedMethod: null,
@@ -62,8 +62,8 @@ export function getUsedZones(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedZones);
 }
 
-export function getUsedTransects(state$: Observable<IAnalyseState>) {
-    return state$.select(state => state.usedTransects);
+export function getUsedStations(state$: Observable<IAnalyseState>) {
+    return state$.select(state => state.usedStations);
 }
 
 export function getUsedSpecies(state$: Observable<IAnalyseState>) {
@@ -94,7 +94,7 @@ export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
             usedYears: state.usedYears,
             usedSurveys: state.usedSurveys,
             usedZones: state.usedZones,
-            usedTransects: state.usedTransects,
+            usedStations: state.usedStations,
             usedSpecies: state.usedSpecies,
             usedDims: state.usedDims,
             usedMethod: state.usedMethod
@@ -159,18 +159,18 @@ export function getZonesAvailables(state$: Observable<IAppState>) {
     })
 }
 
-export function getTransectsAvailables(state$: Observable<IAppState>) {
+export function getStationsAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
-        let transects = [];
+        let stations = [];
         for (let i in state.analyse.usedZones) {
-            let zt: Transect[] = state.analyse.usedZones[i].transects;
+            let zt: Station[] = state.analyse.usedZones[i].stations;
             for(let t of zt){
-                if(transects.indexOf(t)<0){
-                    transects.push(t);
+                if(stations.indexOf(t)<0){
+                    stations.push(t);
                 }
             }
         }
-        return transects.sort();
+        return stations.sort();
     })
 }
 

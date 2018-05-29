@@ -30,7 +30,7 @@ export class SurveyFormComponent implements OnInit {
         dateStart: new FormControl(),
         dateEnd: new FormControl(),
         participants: new FormControl(''),
-        surfaceTransect: new FormControl(''),
+        surfaceStation: new FormControl(''),
         description: new FormControl('')
     });
 
@@ -44,7 +44,7 @@ export class SurveyFormComponent implements OnInit {
             this.surveyForm.controls.dateStart.setValue(this.survey.dateStart);
             this.surveyForm.controls.dateEnd.setValue(this.survey.dateEnd);
             this.surveyForm.controls.participants.setValue(this.survey.participants);
-            this.surveyForm.controls.surfaceTransect.setValue(this.survey.surfaceTransect);
+            this.surveyForm.controls.surfaceStation.setValue(this.survey.surfaceStation);
             this.surveyForm.controls.description.setValue(this.survey.description);
         } else {
             this.surveyForm.controls.code.setValue(this.platform.code + "_");

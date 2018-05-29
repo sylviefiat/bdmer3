@@ -34,14 +34,14 @@
       <div class="row">
 
         <mat-form-field>
-          <mat-select  placeholder="{{'ZONE_SELECT' | translate}}" formControlName="codeZone" (change)='updateTransects($event.value)' required>
-            <mat-option *ngFor="let zn of zones" [value]="zn.properties.code" [disabled]="!zn.transects || zn.transects.length<=0">{{ zn.properties.code }}</mat-option>
+          <mat-select  placeholder="{{'ZONE_SELECT' | translate}}" formControlName="codeZone" (change)='updateStations($event.value)' required>
+            <mat-option *ngFor="let zn of zones" [value]="zn.properties.code" [disabled]="!zn.stations || zn.stations.length<=0">{{ zn.properties.code }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select  placeholder="{{'TRANSECT_SELECT' | translate}}" formControlName="codeTransect" required>
-            <mat-option *ngFor="let tr of (transects$ | async)" [value]="tr.code">{{ tr.properties.code }}</mat-option>
+          <mat-select  placeholder="{{'STATION_SELECT' | translate}}" formControlName="codeStation" required>
+            <mat-option *ngFor="let tr of (stations$ | async)" [value]="tr.code">{{ tr.properties.code }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

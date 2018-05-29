@@ -1,5 +1,5 @@
 import { IAnalyseState, analyseInitialState } from '../states/index';
-import { Platform, Zone, Transect, Survey } from '../../datas/models/platform';
+import { Platform, Zone, Station, Survey } from '../../datas/models/platform';
 import { AnalyseAction } from '../actions/index';
 
 export function analyseReducer(
@@ -47,10 +47,10 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_TRANSECTS: {  
+    case AnalyseAction.ActionTypes.SELECT_STATIONS: {  
       return {
         ...state,
-        usedTransects: action.payload
+        usedStations: action.payload
       };
     }
 

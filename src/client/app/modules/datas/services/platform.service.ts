@@ -9,7 +9,7 @@ import { MapStaticService} from '../../core/services/map-static.service';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
-import { Platform, Zone, Property, Survey, Transect, ZonePreference, Count } from '../models/platform';
+import { Platform, Zone, Property, Survey, Station, ZonePreference, Count } from '../models/platform';
 import { Country } from '../../countries/models/country';
 
 @Injectable()
@@ -101,7 +101,7 @@ export class PlatformService {
       .mergeMap(st => {           
         if(!zone.codePlatform) zone.codePlatform=platform.code;
         if(!st.zones) st.zones = [];
-        if(!zone.transects) zone.transects = [];
+        if(!zone.stations) zone.stations = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
         st.zones = [ ...st.zones.filter(z => z.properties.code !== zone.properties.code), zone];
         this.currentPlatform = of(st);
@@ -159,16 +159,16 @@ export class PlatformService {
       })
   }
 
-  editTransect(platform: Platform, transect: Transect): Observable<Transect> {
-    if(platform.code !== transect.codePlatform)
-      return _throw('Import is not possible : transect codePlatform is different from selected platform');
+  editStation(platform: Platform, station: Station): Observable<Station> {
+    if(platform.code !== station.codePlatform)
+      return _throw('Import is not possible : station codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
+        let zn = st.zones.filter(z => z.properties.code === station.codeZone)[0];
         if(zn){
-          if(zn.transects.filter(t => t.properties.code === transect.properties.code).length > -1){
-            zn.transects = [ ...zn.transects.filter(t => t.properties.code !== transect.properties.code), transect];
+          if(zn.stations.filter(t => t.properties.code === station.properties.code).length > -1){
+            zn.stations = [ ...zn.stations.filter(t => t.properties.code !== station.properties.code), station];
           }
           st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
         } 
@@ -177,22 +177,22 @@ export class PlatformService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        return  of(transect);
+        return  of(station);
       })
   }
 
-  removeTransect(transect: Transect): Observable<Transect> {    
-    return this.getPlatform(transect.codePlatform)
+  removeStation(station: Station): Observable<Station> {    
+    return this.getPlatform(station.codePlatform)
       .filter(platform => platform!==null)
       .mergeMap(st => {
-        let zn = st.zones.filter(z => z.properties.code === transect.codeZone)[0];
-        zn.transects = zn.transects.filter(t => t.properties.code !== transect.properties.code);
-        st.zones = [...st.zones.filter(z => z.properties.code !== transect.codeZone),zn];
+        let zn = st.zones.filter(z => z.properties.code === station.codeZone)[0];
+        zn.stations = zn.stations.filter(t => t.properties.code !== station.properties.code);
+        st.zones = [...st.zones.filter(z => z.properties.code !== station.codeZone),zn];
         return fromPromise(this.db.put(st));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
-        return of(transect);
+        return of(station);
       })
   }
 
