@@ -13,11 +13,6 @@
     {{'MENU_ANALYSE' | translate}}
   </a>
 
-  <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-    <fa [name]="'map-marker'" [border]=true></fa>
-    {{'MAP' | translate}}
-  </a>
-
   <a *ngIf="(isLogged$ | async)" [routerLink]="['/platform']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
     <fa [name]="'map-marker'" [border]=true></fa>
     {{'MENU_PLATFORM' | translate}}
