@@ -84,9 +84,7 @@ export function platformReducer(
             const platforms = state.entities.filter(platform => addedstation.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedstation.codePlatform === platform.code)[0];
 
-            const modifiedZone = modifiedPlatform.zones.filter(zone => addedstation.codeZone === zone.properties.code)[0];
-            modifiedZone.stations = [...modifiedZone.stations.filter(station => addedstation.properties.code !== station.properties.code),addedstation];
-            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedstation.codeZone !== zone.properties.code),modifiedZone];
+            modifiedPlatform.stations = [...modifiedPlatform.stations.filter(station => addedstation.properties.code !== station.properties.code),addedstation];
 
             return {
                 ...state,
@@ -196,9 +194,7 @@ export function platformReducer(
             {
                 const removedStation = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedStation.codePlatform)[0];
-                const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedStation.codeZone)[0];
-                modifiedZone.stations = modifiedZone.stations.filter(station => station.properties.code !== removedStation.properties.code);
-                modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
+                modifiedPlatform.stations = modifiedPlatform.stations.filter(station => station.properties.code !== removedStation.properties.code);
 
                 return {
                     ...state,

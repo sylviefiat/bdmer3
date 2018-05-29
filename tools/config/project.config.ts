@@ -123,20 +123,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 defaultExtension: 'js'
             }
         },
-        { name: 'rxjs/operators', path: 'node_modules/rxjs/operators.js'},
-       /* { name: 'rxjs/operators/filter', path: 'node_modules/rxjs/operator/filter.js'},
-        { name: 'rxjs/operators/switchMap', path: 'node_modules/rxjs/operator/switchMap.js'},
-        { name: 'rxjs/operators/take', path: 'node_modules/rxjs/operator/take.js'},
-        { name: 'rxjs/operators/delay', path: 'node_modules/rxjs/operator/delay.js'},
-        { name: 'rxjs/operators/startWith', path: 'node_modules/rxjs/operator/startWith.js'},
-        { name: 'rxjs/operators/auditTime', path: 'node_modules/rxjs/operator/auditTime.js'},
-        { name: 'rxjs/operators/takeUntil', path: 'node_modules/rxjs/operator/takeUntil.js'},
-        { name: 'rxjs/operators/catchError', path: 'node_modules/rxjs/operator/catchError.js'},
-        { name: 'rxjs/operators/debounceTime', path: 'node_modules/rxjs/operator/debounceTime.js'},
-        { name: 'rxjs/operators/accordion', path: 'node_modules/rxjs/operator/accordion.js'},
-        { name: 'rxjs/operators/combineLatest', path: 'node_modules/rxjs/operator/combineLatest.js'},
-        { name: 'rxjs/operators/share', path: 'node_modules/rxjs/operator/share.js'},
-        { name: 'rxjs/operators/map', path: 'node_modules/rxjs/operator/map.js'},*/
+        { 
+            name: 'rxjs/operators',
+            path: 'node_modules/rxjs/operators.js'},
         {
             name: '@angular/cdk/a11y',
             path: 'node_modules/@angular/cdk/bundles/cdk-a11y.umd.js'
@@ -196,7 +185,8 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: 'angular-material-icons',
             path: 'node_modules/angular-material-icons/angular-material-icons.js'
-        }, {
+        }, 
+        {
             name: '@ngrx/db',
             packageMeta: {
                 main: 'bundles/db.umd.js',
@@ -215,6 +205,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 main: 'bundles/ng2-google-charts.umd.js',
                 defaultExtension: 'js'
             }
+        },
+        {
+            name: '@turf/turf',
+            path: 'node_modules/@turf/turf/turf.min.js'
         }];
 
         this.addPackagesBundles(additionalPackages);

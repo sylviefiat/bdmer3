@@ -68,7 +68,6 @@ export class ViewZoneComponent implements OnInit {
                 this.filteredStations$ = this.stations$.map(stations => 
                     stations.filter(station => station.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         station.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
-                        station.codeZone.toLowerCase().indexOf(filter)!==-1 ||
                         station.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
                         )
                     );

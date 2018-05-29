@@ -98,14 +98,14 @@ export class PlatformService {
 
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
-      .mergeMap(st => {           
+      .mergeMap(pt => {           
         if(!zone.codePlatform) zone.codePlatform=platform.code;
-        if(!st.zones) st.zones = [];
-        if(!zone.stations) zone.stations = [];
+        if(!pt.zones) pt.zones = [];
+        if(!pt.stations) pt.stations = [];
         if(!zone.zonePreferences) zone.zonePreferences = [];
-        st.zones = [ ...st.zones.filter(z => z.properties.code !== zone.properties.code), zone];
-        this.currentPlatform = of(st);
-        return fromPromise(this.db.put(st));
+        pt.zones = [ ...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
+        this.currentPlatform = of(pt);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
@@ -116,9 +116,9 @@ export class PlatformService {
   removeZone(zone: Zone): Observable<Zone> {    
     return this.getPlatform(zone.codePlatform)
       .filter(platform => platform!==null)
-      .mergeMap(st => {
-        st.zones = st.zones.filter(z => z.properties.code !== zone.properties.code);
-        return fromPromise(this.db.put(st));
+      .mergeMap(pt => {
+        pt.zones = pt.zones.filter(z => z.properties.code !== zone.properties.code);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
@@ -132,12 +132,12 @@ export class PlatformService {
       return _throw('Import is not possible : survey codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
-      .mergeMap(st => { 
+      .mergeMap(pt => { 
         if(!survey.counts) survey.counts = [];
-        survey.codeCountry = st.codeCountry;
-        st.surveys = [ ...st.surveys.filter(c => c.code !== survey.code), survey];     
-        this.currentPlatform = of(st);
-        return fromPromise(this.db.put(st));
+        survey.codeCountry = pt.codeCountry;
+        pt.surveys = [ ...pt.surveys.filter(c => c.code !== survey.code), survey];     
+        this.currentPlatform = of(pt);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
@@ -148,10 +148,10 @@ export class PlatformService {
   removeSurvey(survey: Survey): Observable<Survey> {    
     return this.getPlatform(survey.codePlatform)
       .filter(platform => platform!==null)
-      .mergeMap(st => {
-        let zn = st.zones.filter(z => z.properties.code === survey.code)[0];
-        st.surveys = st.surveys.filter(c => c.code !== survey.code);
-        return fromPromise(this.db.put(st));
+      .mergeMap(pt => {
+        let zn = pt.zones.filter(z => z.properties.code === survey.code)[0];
+        pt.surveys = pt.surveys.filter(c => c.code !== survey.code);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {
@@ -164,16 +164,10 @@ export class PlatformService {
       return _throw('Import is not possible : station codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
-      .mergeMap(st => {  
-        let zn = st.zones.filter(z => z.properties.code === station.codeZone)[0];
-        if(zn){
-          if(zn.stations.filter(t => t.properties.code === station.properties.code).length > -1){
-            zn.stations = [ ...zn.stations.filter(t => t.properties.code !== station.properties.code), station];
-          }
-          st.zones = [ ...st.zones.filter(z => z.properties.code !== zn.properties.code), zn];
-        } 
-        this.currentPlatform = of(st);
-        return fromPromise(this.db.put(st));
+      .mergeMap(pt => {  
+        pt.stations = [ ...pt.stations.filter(t => t.properties.code !== station.properties.code), station];         
+        this.currentPlatform = of(pt);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
@@ -184,11 +178,9 @@ export class PlatformService {
   removeStation(station: Station): Observable<Station> {    
     return this.getPlatform(station.codePlatform)
       .filter(platform => platform!==null)
-      .mergeMap(st => {
-        let zn = st.zones.filter(z => z.properties.code === station.codeZone)[0];
-        zn.stations = zn.stations.filter(t => t.properties.code !== station.properties.code);
-        st.zones = [...st.zones.filter(z => z.properties.code !== station.codeZone),zn];
-        return fromPromise(this.db.put(st));
+      .mergeMap(pt => {
+        pt.stations = pt.stations.filter(t => t.properties.code !== station.properties.code);
+        return fromPromise(this.db.put(pt));
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap(response => {

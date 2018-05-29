@@ -7,8 +7,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IAppState, getSelectedPlatform, getSelectedPlatformZones, getSelectedPlatformSurveys, getPlatformPageMsg } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey } from '../../modules/datas/models/index';
+import { IAppState, getSelectedPlatform, getSelectedPlatformZones, getSelectedPlatformStations, getSelectedPlatformSurveys, getPlatformPageMsg } from '../../modules/ngrx/index';
+import { Platform, Zone, Survey, Station } from '../../modules/datas/models/index';
 import { User } from '../../modules/countries/models/country';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { PlatformService } from '../../modules/datas/services/platform.service';
@@ -21,6 +21,7 @@ import { PlatformService } from '../../modules/datas/services/platform.service';
     <bc-view-platform 
       [platform]="platform$ | async"
       [zones$]="zones$"
+      [stations$]="stations$"
       [surveys$]="surveys$"
       [msg]="msg$ | async"
       (action)="actionPlatform($event)"
@@ -32,6 +33,7 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
   actionsSubscription: Subscription;
   platform$: Observable<Platform | null>;
   zones$: Observable<Zone[]>;
+  stations$: Observable<Station[]>;
   surveys$: Observable<Survey[]>;
   msg$: Observable<string | null>;
 
@@ -44,6 +46,7 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
     this.zones$ = this.store.let(getSelectedPlatformZones);
+    this.stations$ = this.store.let(getSelectedPlatformStations);
     this.surveys$ = this.store.let(getSelectedPlatformSurveys);
     this.msg$ = this.store.let(getPlatformPageMsg);
   }

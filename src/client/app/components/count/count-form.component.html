@@ -26,18 +26,8 @@
           <div class="hint">{{ 'EX_COUNT_SURVEY' | translate }}</div>
         </mat-input-container>
 
-        <mat-input-container>
-          <input type="text" matInput placeholder="{{ 'PLATFORM' | translate }}" formControlName="codePlatform">
-          <div class="hint">{{ 'EX_ZONE_PLATFORM' | translate }}</div> 
-        </mat-input-container>
       </div>
       <div class="row">
-
-        <mat-form-field>
-          <mat-select  placeholder="{{'ZONE_SELECT' | translate}}" formControlName="codeZone" (change)='updateStations($event.value)' required>
-            <mat-option *ngFor="let zn of zones" [value]="zn.properties.code" [disabled]="!zn.stations || zn.stations.length<=0">{{ zn.properties.code }}</mat-option>
-          </mat-select>
-        </mat-form-field>
 
         <mat-form-field>
           <mat-select  placeholder="{{'STATION_SELECT' | translate}}" formControlName="codeStation" required>

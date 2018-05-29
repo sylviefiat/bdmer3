@@ -1,7 +1,7 @@
 <form (ngSubmit)="submit()">  
   <div>
     <mat-card class="actions">
-      <mat-card-title>{{ 'ADD_STATION_TO' | translate}} {{ zone.properties.name }}</mat-card-title>
+      <mat-card-title>{{ 'ADD_STATION_TO' | translate}} {{ platform.code }}</mat-card-title>
       
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!stationForm.valid || !canSubmit">{{ 'SUBMIT' | translate }}</button>

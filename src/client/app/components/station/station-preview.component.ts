@@ -4,12 +4,12 @@ import { Platform,Zone,Station } from './../../modules/datas/models/platform';
 @Component({
   selector: 'bc-station-preview',
   template: `
-    <a [routerLink]="['/station', codePlatform, codeZone, code]">
+    <a [routerLink]="['/station', codePlatform, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span> / <span *ngIf="codeZone">{{ codeZone }}</span></mat-card-subtitle>
+          <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span></mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ coord }}
@@ -58,12 +58,11 @@ import { Platform,Zone,Station } from './../../modules/datas/models/platform';
 })
 export class StationPreviewComponent implements OnInit {  
   @Input() station: Station;
-  @Input() zone: Zone;
   @Input() platform: Platform;
   
 
   ngOnInit(){
-    
+    console.log(this.station);
 
   }
 
@@ -79,12 +78,8 @@ export class StationPreviewComponent implements OnInit {
     return this.platform.code;
   }
 
-  get codeZone() {
-    return this.zone.properties.code;
-  }
-
   get coord(){
-    return this.station.geometry["coordinates"];
+    return this.station.geometry.coordinates;
   }
 
   get map(){

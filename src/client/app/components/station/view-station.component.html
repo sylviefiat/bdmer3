@@ -4,7 +4,6 @@
       <mat-card-title>
         <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / 
         <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / 
-        <a class="link" (click)="toZone()">{{ 'ZONE' | translate}} {{ zone.code }}</a> / 
         {{ 'STATION' | translate}} {{ station.properties.code }}</mat-card-title>
       <mat-card-content>
         <div>{{ 'COORDINATES' | translate }} : {{ station.geometry.coordinates }}</div> 

@@ -300,7 +300,7 @@ export class PlatformEffects {
   addStationSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.ADD_STATION_SUCCESS)
     .map((action: PlatformAction.AddStationSuccessAction) => action.payload)
-    .mergeMap((station: Station) => this.router.navigate(['/station/' + station.codePlatform + '/'+ station.codeZone + '/' + station.properties.code]))
+    .mergeMap((station: Station) => this.router.navigate(['/station/' + station.codePlatform + '/' + station.properties.code]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction()); 
 
@@ -308,7 +308,7 @@ export class PlatformEffects {
   importOrRemoveStationSuccess$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS, PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS)
     .map((action: PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction) => action.payload)
-    .mergeMap((station: Station) => this.router.navigate(['/zone/' + station.codePlatform + '/'+ station.codeZone]))
+    .mergeMap((station: Station) => this.router.navigate(['/platform/' + station.codePlatform]))
     .delay(3000)
     .map(() => new PlatformAction.RemoveMsgAction());
 

@@ -210,6 +210,7 @@
   "ADD_STATION":"Add Station",
   "ADD_EDIT_STATION":"Add/Edit Station",
   "SUBMIT":"Send",
+  "STATION_DESC":"Station description",
   "STATION_CODE":"Station code",
   "STATION_CODE_EX":"Ex: PLATFORMNAME_Z001_T001",
   "STATION_LONG":"Longitude",

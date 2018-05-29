@@ -7,20 +7,26 @@ export interface Platform {
   codeCountry: string;
   description: string;
   zones: Zone[];
+  stations: Station[];
   surveys: Survey[];
 }
 
-export interface Geometry {
+export interface Point {
+  type: string;
   coordinates: number[];
+}
+
+export interface Polygon {
+  type: string;
+  coordinates: number[][][];
 }
 
 export interface Zone {
     type: string;
-    geometry: Geometry;
+    geometry: Polygon;
     staticmap: string;
     properties: Property;
     codePlatform: string;
-    stations: Station[];
     zonePreferences: ZonePreference[];
 }
 
@@ -32,10 +38,9 @@ export interface Property{
 
 export interface Station {
     type: string;
-    geometry: Geometry;
+    geometry: Point;
     properties: StationProperties;
     staticMapStation: string;
-    codeZone: string;
     codePlatform: string;
 }
 
@@ -70,7 +75,6 @@ export interface Count {
     code: string;
     codeSurvey: string;
     codePlatform: string;
-    codeZone: string;
     codeStation: string;
     date: Date;
     monospecies?: boolean;

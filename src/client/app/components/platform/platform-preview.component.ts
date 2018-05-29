@@ -18,8 +18,8 @@ import { Platform } from './../../modules/datas/models/platform';
           <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
           <div>{{nZones}} {{'ZONES' | translate}}</div>
           <div>{{nSurveys}} {{'SURVEYS' | translate}}</div>
-          <div>{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
           <div>{{nStations}} {{'STATIONS' | translate}}</div>
+          <div>{{nZonesPref}} {{'ZONES_PREF' | translate}}</div>
           <div>{{nCounts}} {{'COUNTS' | translate}}</div>
        </mat-card-content>
       </mat-card>
@@ -76,8 +76,8 @@ export class PlatformPreviewComponent implements OnInit {
   ngOnInit(){
       this.nZones = this.platform.zones ? this.platform.zones.length : 0;
       this.nSurveys += this.platform.surveys ? this.platform.surveys.length : 0;
+      this.nStations += this.platform.stations ? this.platform.stations.length : 0;
       for(let z of this.platform.zones) {        
-        this.nStations += z.stations ? z.stations.length : 0;
         this.nZonesPref += z.zonePreferences ? z.zonePreferences.length : 0;
       }
       if(this.platform.surveys){

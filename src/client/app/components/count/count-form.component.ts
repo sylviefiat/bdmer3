@@ -20,7 +20,6 @@ import { Platform, Zone, Station, Survey, Count, Species } from '../../modules/d
 })
 export class CountFormComponent implements OnInit {
     @Input() platform: Platform | null;
-    @Input() zone: Zone | null;
     @Input() station: Station | null;
     @Input() survey: Survey | null;
     @Input() count: Count | null;
@@ -35,7 +34,6 @@ export class CountFormComponent implements OnInit {
         code: new FormControl("", Validators.required),
         codeSurvey: new FormControl(),
         codePlatform: new FormControl(""),
-        codeZone: new FormControl(""),
         codeStation: new FormControl(),
         date: new FormControl(""),
         monospecies: new FormControl(),
@@ -57,14 +55,13 @@ export class CountFormComponent implements OnInit {
     }
 
     ngOnInit() {  
-        this.zones = this.platform.zones;//.filter(zone => zone.stations !== null && zone.stations.length >0);   
+        this.stations$ = of(this.platform.stations); 
         this.countForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.countForm.controls.codeSurvey.setValue(this.survey ? this.survey.code : null);
         (this.platform !== undefined) ? this.countForm.controls.codePlatform.disable() : this.countForm.controls.codePlatform.enable();
         (this.survey !== undefined) ? this.countForm.controls.codeSurvey.disable() : this.countForm.controls.codeSurvey.enable();
         if(this.count) {
             this.countForm.controls.code.setValue(this.count.code);
-            this.countForm.controls.codeZone.setValue(this.count.codeZone);
             this.countForm.controls.codeStation.setValue(this.count.codeStation);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
@@ -95,12 +92,6 @@ export class CountFormComponent implements OnInit {
     removeMesure(i: number) {
         const control = <FormArray>this.countForm.controls['mesures'];
         control.removeAt(i);
-    }
-
-    updateStations(codeZone: string){
-        console.log(codeZone);
-        console.log(this.zones.filter(zone => zone.properties.code === codeZone)[0].stations);
-        this.stations$ = of(this.zones.filter(zone => zone.properties.code === codeZone)[0].stations);
     }
 
     submit() {

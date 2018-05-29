@@ -167,7 +167,6 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "code_country":
                         case "code_platform":
-                        case "code_zone":
                         case "code":
                         case "participants":
                         case "surface_station":
@@ -213,7 +212,6 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "codePlatform":
-                        case "codeZone":
                         case "code":
                         case "nom":
                         case "latitude":
@@ -301,7 +299,6 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "code_platform":
-                        case "code_zone":
                         case "code_survey":
                         case "code":
                         case "code_station":

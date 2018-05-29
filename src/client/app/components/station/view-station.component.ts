@@ -10,7 +10,7 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform,Zone, Station, Count } from '../../modules/datas/models/index';
+import { Platform, Station, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
 import { stationMapModal } from './station-map-modal.component';
 
@@ -25,7 +25,6 @@ import { stationMapModal } from './station-map-modal.component';
 })
 export class ViewStationComponent implements OnInit {    
     @Input() platform: Platform;
-    @Input() zone: Zone;
     @Input() station: Station;
     
     @Output() remove = new EventEmitter<any>();
@@ -37,7 +36,7 @@ export class ViewStationComponent implements OnInit {
 
 
     ngOnInit() {
-        
+        console.log(this.station);
     }
 
 
@@ -50,7 +49,7 @@ export class ViewStationComponent implements OnInit {
     actions(type: string) {
         switch (type) {
             case "stationForm":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.station.properties.code);
+                this.action.emit(type+'/'+this.platform._id+'/'+this.station.properties.code);
                 break;
             case "deleteStation":
                 this.deleteStation();
@@ -67,10 +66,6 @@ export class ViewStationComponent implements OnInit {
 
     toPlatform(){
         this.routerext.navigate(['platform/'+this.platform.code]);
-    }
-
-    toZone(){
-        this.routerext.navigate(['zone/'+this.platform.code+'/'+this.zone.properties.code]);
     }
 
     openDialog() {

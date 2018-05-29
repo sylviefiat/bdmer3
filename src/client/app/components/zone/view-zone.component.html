@@ -24,11 +24,9 @@
             </mat-optgroup>
             <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('ZONE' | translate)">
               <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
-              <mat-option [value]="'stationForm'">{{ 'ADD_STATION' | translate}}</mat-option>
             </mat-optgroup>
             <mat-optgroup [label]="('IMPORT_TOE' | translate)+' '+('ZONE' | translate)">
               <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
-              <mat-option [value]="'stationImport'">{{ 'IMPORT' | translate}} {{ 'STATIONS' | translate}}</mat-option>
             </mat-optgroup>          
           </mat-select>
         </mat-form-field>         
@@ -37,7 +35,7 @@
     
         <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [platform]="platform"></bc-zone-preference-preview-list>
 
-        <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [zone]="zone" [platform]="platform"></bc-station-preview-list>          
+        <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [platform]="platform"></bc-station-preview-list>          
      
     
    

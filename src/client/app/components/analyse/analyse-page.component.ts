@@ -112,7 +112,6 @@ export class AnalysePageComponent implements OnInit {
   }
 
   setDimensions(dims: DimensionsAnalyse[]) {
-    console.log(dims);
     this.store.dispatch(new AnalyseAction.SelectDims(dims));    
   }
 
@@ -121,7 +120,6 @@ export class AnalysePageComponent implements OnInit {
   }
 
   startAnalyse(status: string) {
-    console.log(status);
     this.store.dispatch(new AnalyseAction.Analyse(status)); 
   }
 

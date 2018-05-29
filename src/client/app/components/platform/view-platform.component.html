@@ -11,6 +11,7 @@
         <mat-form-field>
           <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
               <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ (zones$ | async)?.length }})</mat-option>
+              <mat-option [value]="'stations'">{{ 'STATIONS' | translate}} ({{ (stations$ | async)?.length }})</mat-option>
               <mat-option [value]="'surveys'">{{ 'SURVEYS' | translate}} ({{ (surveys$ | async)?.length }})</mat-option>
           </mat-select>
         </mat-form-field> 
@@ -25,13 +26,14 @@
             </mat-optgroup>
             <mat-optgroup [label]="('ADD_TO' | translate)+' '+('PLATFORM' | translate)">
               <mat-option [value]="'zoneForm'">{{ 'ADD_ZONE' | translate}}</mat-option>
+              <mat-option [value]="'stationForm'">{{ 'ADD_STATION' | translate}}</mat-option>
               <mat-option [value]="'surveyForm'">{{ 'ADD_SURVEY' | translate}}</mat-option>
             </mat-optgroup>
             <mat-optgroup [label]="('IMPORT_TO' | translate)+' '+('PLATFORM' | translate)">
               <mat-option [value]="'zoneImport'">{{ 'IMPORT' | translate}} {{ 'ZONES' | translate}}</mat-option>
               <mat-option [value]="'surveyImport'">{{ 'IMPORT' | translate}} {{ 'SURVEYS' | translate}}</mat-option>
-              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
               <mat-option [value]="'stationImport'">{{ 'IMPORT' | translate}} {{ 'STATIONS' | translate}}</mat-option>
+              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
               <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
             </mat-optgroup>
           </mat-select>          
@@ -41,6 +43,6 @@
     </mat-card>
 
     <bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="filteredZones$" [idPlatform]="platform.code"></bc-zone-preview-list> 
-
+    <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [platform]="platform"></bc-station-preview-list>
     <bc-survey-preview-list *ngIf="(view$ | async)==='surveys'" [surveys$]="filteredSurveys$" [platform]="platform"></bc-survey-preview-list> 
   
