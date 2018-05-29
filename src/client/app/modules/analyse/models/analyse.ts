@@ -1,4 +1,4 @@
-import { Platform, Zone, Transect, Survey, Species, LegalDimensions } from '../../datas/models/index';
+import { Platform, Zone, Station, Survey, Species, LegalDimensions } from '../../datas/models/index';
 import { Country } from '../../countries/models/country';
 
 export interface Method {
@@ -11,7 +11,7 @@ export interface Data {
     usedYears: string[];
     usedSurveys: Survey[];
     usedZones: Zone[];
-    usedTransects: Transect[];
+    usedStations: Station[];
     usedSpecies: Species[];
     usedDims: DimensionsAnalyse[];
     usedMethod: Method;
@@ -31,11 +31,11 @@ export interface ResultSpecies {
     codeSpecies: string;
     numberIndividual: number;
     biomassTotal: number;
-    biomassesPerTransect: number[];
-    individualsPerTransect: number[];
+    biomassesPerStation: number[];
+    individualsPerStation: number[];
     SDBiomassTotal: number;
     SDAbundancyTotal: number;
-    resultPerTransect: ResultTransect[];
+    resultPerStation: ResultStation[];
     resultPerZone: ResultZone[];
     legalDimensions: LegalDimensions;
 }
@@ -46,8 +46,8 @@ export interface DimensionsAnalyse {
     largMin: string;
 }
 
-export interface ResultTransect {
-    codeTransect: string;
+export interface ResultStation {
+    codeStation: string;
     numberIndividual: number;        // nombre d'invidus
     biomasses: number[];             // biomasse par individu
     biomassTotal: number;            // somme des biomasses
@@ -59,7 +59,7 @@ export interface ResultZone {
     codeZone: string;
     numberIndividual: number;        // nombre d'invidus
     biomasses: number[];             // biomasse par individu
-    biomassesPerHA: number[];        // biomasse par hectare par transect
+    biomassesPerHA: number[];        // biomasse par hectare par station
     densitiesPerHA: number[];        // densités par hectare par tranect
     biomassTotal: number;            // somme des biomasses
     biomassPerHA: number;            // biomasse par hectare

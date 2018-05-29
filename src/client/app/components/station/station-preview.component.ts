@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Platform,Zone,Transect } from './../../modules/datas/models/platform';
+import { Platform,Zone,Station } from './../../modules/datas/models/platform';
 
 @Component({
-  selector: 'bc-transect-preview',
+  selector: 'bc-station-preview',
   template: `
-    <a [routerLink]="['/transect', codePlatform, codeZone, code]">
+    <a [routerLink]="['/station', codePlatform, codeZone, code]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="map" [src]="map"/>
@@ -56,8 +56,8 @@ import { Platform,Zone,Transect } from './../../modules/datas/models/platform';
   `,
   ],
 })
-export class TransectPreviewComponent implements OnInit {  
-  @Input() transect: Transect;
+export class StationPreviewComponent implements OnInit {  
+  @Input() station: Station;
   @Input() zone: Zone;
   @Input() platform: Platform;
   
@@ -68,11 +68,11 @@ export class TransectPreviewComponent implements OnInit {
   }
 
   get id() {
-    return this.transect.properties.code;
+    return this.station.properties.code;
   }
 
   get code() {
-    return this.transect.properties.code;
+    return this.station.properties.code;
   }
 
   get codePlatform() {
@@ -84,24 +84,24 @@ export class TransectPreviewComponent implements OnInit {
   }
 
   get coord(){
-    return this.transect.geometry["coordinates"];
+    return this.station.geometry["coordinates"];
   }
 
   get map(){
-    return this.transect.staticMapTransect;
+    return this.station.staticMapStation;
   }
 
   // get latitude() {
-  //   return this.transect.latitude;
+  //   return this.station.latitude;
   // }
 
   // get longitude() {
-  //   return this.transect.longitude;
+  //   return this.station.longitude;
   // }
 
   get thumbnail(): string | boolean {
     // WAIT FOR MAP GENERATION
     return null;
-    //return "/assets/img/"+this.transect.code+".jpg"; 
+    //return "/assets/img/"+this.station.code+".jpg"; 
   }
 }

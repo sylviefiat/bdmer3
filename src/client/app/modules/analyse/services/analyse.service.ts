@@ -7,9 +7,9 @@ import { _throw } from 'rxjs/observable/throw';
 import { angularMath } from 'angular-ts-math';
 
 import { IAnalyseState } from '../states/index';
-import { Data, Results, ResultSurvey, ResultSpecies, ResultTransect, ResultZone, Indicators, Method, DimensionsAnalyse } from '../models/index';
+import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, Indicators, Method, DimensionsAnalyse } from '../models/index';
 import { Country } from '../../countries/models/country';
-import { Species, Survey, Mesure, Count, Transect, Zone } from '../../datas/models/index';
+import { Species, Survey, Mesure, Count, Station, Zone } from '../../datas/models/index';
 
 @Injectable()
 export class AnalyseService {
@@ -24,34 +24,34 @@ export class AnalyseService {
         result.name = "ANALYSE BDMER " + today;
         // resultats par relevé
         for (let survey of analyseData.usedSurveys) {
-            let surveyTransects = analyseData.usedTransects.filter(t => t.codePlatform === survey.codePlatform);
+            let surveyStations = analyseData.usedStations.filter(t => t.codePlatform === survey.codePlatform);
             let resultSurvey: ResultSurvey = { codeSurvey: survey.code, resultPerSpecies: [] };
             // par espèce
             for (let sp of analyseData.usedSpecies) {
-                let resultSp: ResultSpecies = { codeSpecies: sp.code, numberIndividual:0, biomassTotal:0, biomassesPerTransect:[], individualsPerTransect:[], SDBiomassTotal:0, SDAbundancyTotal:0, resultPerTransect: [], resultPerZone: [], legalDimensions:null};
+                let resultSp: ResultSpecies = { codeSpecies: sp.code, numberIndividual:0, biomassTotal:0, biomassesPerStation:[], individualsPerStation:[], SDBiomassTotal:0, SDAbundancyTotal:0, resultPerStation: [], resultPerZone: [], legalDimensions:null};
                 resultSp.legalDimensions=sp.legalDimensions.filter(ld => ld.codeCountry === analyseData.usedCountry.code)[0];
-                // par transect
-                for (let transect of surveyTransects) {
+                // par station
+                for (let station of surveyStations) {
                     // on récupère longueur et largeur min entrés par l'utilisateur pour cette espèce pour l'analyse
                     let spdim = analyseData.usedDims.filter(spd => spd.codeSp===sp.code)[0]; 
-                    // on récupère la zone du transect  
-                    let zone = analyseData.usedZones.filter(uz => uz.properties.code === transect.codeZone)[0];                 
+                    // on récupère la zone du station  
+                    let zone = analyseData.usedZones.filter(uz => uz.properties.code === station.codeZone)[0];                 
                     // initialisation de resultZone au cas où cette zone n'ai pas encore été traitée
                     let resultZone: ResultZone = { codeZone: zone.properties.code, numberIndividual: 0, biomasses: [], biomassesPerHA: [], densitiesPerHA: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal:0, SDBiomassPerHA:0, SDDensityPerHA:0 };
-                    // calcul des résultats pour ce transect
-                    let resultTransect: ResultTransect= this.getResultPerTransect(survey, sp, spdim, transect, analyseData.usedMethod);
-                    // ajout des résultats du transect dans le résultat de l'espère
-                    resultSp.resultPerTransect.push(resultTransect);
+                    // calcul des résultats pour ce station
+                    let resultStation: ResultStation= this.getResultPerStation(survey, sp, spdim, station, analyseData.usedMethod);
+                    // ajout des résultats du station dans le résultat de l'espère
+                    resultSp.resultPerStation.push(resultStation);
                     // si la zone a déjà commencé a etre traitée on récupère l'objet de résultat
                     if(resultSp.resultPerZone.filter(resultZone => resultZone.codeZone) && resultSp.resultPerZone.filter(resultZone => resultZone.codeZone)[0]){
                         resultZone = resultSp.resultPerZone.filter(resultZone => resultZone.codeZone)[0];
                     } 
-                    // mise à jour des résultats de la zone avec ce transect
-                    resultZone = this.updateResultPerZone(resultZone, zone, resultTransect);
+                    // mise à jour des résultats de la zone avec ce station
+                    resultZone = this.updateResultPerZone(resultZone, zone, resultStation);
                     // on met a jour le résultat de la zone dans le résultat de l'espèce
                     resultSp.resultPerZone=[...resultSp.resultPerZone.filter(rz => rz.codeZone !== resultZone.codeZone),resultZone];
-                    // on mets à jour les abondances et biomasses de l'espèce avec ce transect
-                    resultSp=this.updateResultPerSpecies(resultSp,resultTransect);
+                    // on mets à jour les abondances et biomasses de l'espèce avec ce station
+                    resultSp=this.updateResultPerSpecies(resultSp,resultStation);
                 }                
                 // on ajoute le résultat de l'espèce au résultat du relevé
                 resultSurvey.resultPerSpecies.push(resultSp);
@@ -64,11 +64,11 @@ export class AnalyseService {
         return result;
     }
 
-    getResultPerTransect(survey: Survey, species: Species, spDim: DimensionsAnalyse, transect: Transect, method: Method): ResultTransect {
+    getResultPerStation(survey: Survey, species: Species, spDim: DimensionsAnalyse, station: Station, method: Method): ResultStation {
         let x = 0, biom;
-        let resultTransect: ResultTransect = { codeTransect: transect.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
+        let resultStation: ResultStation = { codeStation: station.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
         let mesures = [];
-        for (let c of survey.counts.filter(c => c.codeTransect === transect.properties.code)) {
+        for (let c of survey.counts.filter(c => c.codeStation === station.properties.code)) {
             mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
         }
         for (let m of mesures) {
@@ -87,25 +87,25 @@ export class AnalyseService {
             } 
             if(x > 0){
                 let biom = Number(species.LLW.coefA) * angularMath.powerOfNumber(x, Number(species.LLW.coefB));
-                resultTransect.biomasses.push(biom);
-                resultTransect.biomassTotal += biom;
+                resultStation.biomasses.push(biom);
+                resultStation.biomassTotal += biom;
             }
         }
         
-        resultTransect.numberIndividual = mesures.length;
-        if(survey.surfaceTransect > 0){
-            resultTransect.biomassPerHA = resultTransect.biomassTotal * (10000 / Number(survey.surfaceTransect));
-            resultTransect.densityPerHA = resultTransect.numberIndividual * (10000 / Number(survey.surfaceTransect));
+        resultStation.numberIndividual = mesures.length;
+        if(survey.surfaceStation > 0){
+            resultStation.biomassPerHA = resultStation.biomassTotal * (10000 / Number(survey.surfaceStation));
+            resultStation.densityPerHA = resultStation.numberIndividual * (10000 / Number(survey.surfaceStation));
         }
-        return resultTransect;
+        return resultStation;
     }
 
-    updateResultPerZone(resultZone: ResultZone, zone: Zone, resultTransect: ResultTransect): ResultZone{
-        resultZone.numberIndividual += resultTransect.numberIndividual;
-        resultZone.biomasses = [...resultZone.biomasses, ...resultTransect.biomasses];
-        resultZone.biomassesPerHA = [...resultZone.biomassesPerHA, resultTransect.biomassPerHA];
-        resultZone.densitiesPerHA = [...resultZone.densitiesPerHA, resultTransect.densityPerHA];
-        resultZone.biomassTotal += resultTransect.biomassTotal;
+    updateResultPerZone(resultZone: ResultZone, zone: Zone, resultStation: ResultStation): ResultZone{
+        resultZone.numberIndividual += resultStation.numberIndividual;
+        resultZone.biomasses = [...resultZone.biomasses, ...resultStation.biomasses];
+        resultZone.biomassesPerHA = [...resultZone.biomassesPerHA, resultStation.biomassPerHA];
+        resultZone.densitiesPerHA = [...resultZone.densitiesPerHA, resultStation.densityPerHA];
+        resultZone.biomassTotal += resultStation.biomassTotal;
         resultZone.biomassPerHA = resultZone.biomassTotal * (10000 / zone.properties.surface);
         resultZone.densityPerHA = resultZone.numberIndividual * (10000 / zone.properties.surface);
         resultZone.SDBiomassTotal = this.standardDeviation(resultZone.biomasses);
@@ -114,13 +114,13 @@ export class AnalyseService {
         return resultZone;
     }
 
-    updateResultPerSpecies(resultSp: ResultSpecies, resultTransect: ResultTransect): ResultSpecies{
-        resultSp.numberIndividual += resultTransect.numberIndividual;
-        resultSp.biomassTotal += resultTransect.biomassTotal;
-        resultSp.biomassesPerTransect = [...resultSp.biomassesPerTransect, resultTransect.biomassTotal];
-        resultSp.individualsPerTransect = [...resultSp.individualsPerTransect, resultTransect.numberIndividual];
-        resultSp.SDBiomassTotal = this.standardDeviation(resultSp.biomassesPerTransect);
-        resultSp.SDAbundancyTotal = this.standardDeviation(resultSp.individualsPerTransect);
+    updateResultPerSpecies(resultSp: ResultSpecies, resultStation: ResultStation): ResultSpecies{
+        resultSp.numberIndividual += resultStation.numberIndividual;
+        resultSp.biomassTotal += resultStation.biomassTotal;
+        resultSp.biomassesPerStation = [...resultSp.biomassesPerStation, resultStation.biomassTotal];
+        resultSp.individualsPerStation = [...resultSp.individualsPerStation, resultStation.numberIndividual];
+        resultSp.SDBiomassTotal = this.standardDeviation(resultSp.biomassesPerStation);
+        resultSp.SDAbundancyTotal = this.standardDeviation(resultSp.individualsPerStation);
         return resultSp;
     }
 

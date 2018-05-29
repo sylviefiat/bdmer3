@@ -4,7 +4,7 @@ import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { IAppState } from '../../modules/ngrx/index';
-import { Zone, Survey, Species, Transect } from '../../modules/datas/models/index';
+import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 import { Results, Data } from '../../modules/analyse/models/index';
 declare var google: any;
 
@@ -89,9 +89,9 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
     if(this.markers.length <=0 ){
       for(let i in this.results.resultPerSurvey){      
         for(let rsp of this.results.resultPerSurvey[i].resultPerSpecies){     
-          for(let rt of rsp.resultPerTransect){
+          for(let rt of rsp.resultPerStation){
             if(rt.densityPerHA>0 && rt.biomassPerHA >0){
-              let t: Transect = this.analyseData.usedTransects.filter((transect:Transect) => transect.properties.code === rt.codeTransect) && this.analyseData.usedTransects.filter(transect => transect.properties.code === rt.codeTransect)[0];
+              let t: Station = this.analyseData.usedStations.filter((station:Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
               let marker = {
                 fillColor:this.colors[i],
                 latitude:Number(t.geometry.coordinates[1]),

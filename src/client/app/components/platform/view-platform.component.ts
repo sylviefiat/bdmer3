@@ -78,7 +78,7 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
                         survey.dateStart.toString().toLowerCase().indexOf(filter)!==-1 ||
                         survey.dateEnd.toString().toLowerCase().indexOf(filter)!==-1 ||
                         survey.participants.toLowerCase().indexOf(filter)!==-1 ||
-                        survey.surfaceTransect.toString().toLowerCase().indexOf(filter)!==-1 ||
+                        survey.surfaceStation.toString().toLowerCase().indexOf(filter)!==-1 ||
                         survey.description.toLowerCase().indexOf(filter)!==-1
                         )
                     );
@@ -95,7 +95,7 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
             case "surveyForm":
             case "surveyImport":
             case "zonePrefImport":
-            case "transectImport":
+            case "stationImport":
             case "countImport":
             this.action.emit(type+'/'+this.platform._id);
             break;

@@ -14,7 +14,7 @@ import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
-import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 
 @Component({
@@ -34,7 +34,7 @@ export class AnalyseComponent {
     @Input() years$: Observable<string[]>;
     @Input() surveys$: Observable<Survey[]>;
     @Input() zones$: Observable<Zone[]>;
-    @Input() transects$: Observable<Transect[]>;
+    @Input() stations$: Observable<Station[]>;
     @Input() species$: Observable<Species[]>;
     @Input() dimensions$: Observable<DimensionsAnalyse[]>;
     @Input() isAdmin: boolean;
@@ -44,7 +44,7 @@ export class AnalyseComponent {
     @Output() yearEmitter = new EventEmitter<string[]>();
     @Output() surveyEmitter = new EventEmitter<Survey[]>();
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
-    @Output() transectEmitter = new EventEmitter<Transect[]>();
+    @Output() stationEmitter = new EventEmitter<Station[]>();
     @Output() speciesEmitter = new EventEmitter<Species[]>();
     @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
     @Output() methodEmitter = new EventEmitter<Method>();
@@ -66,8 +66,8 @@ export class AnalyseComponent {
     zonesFormGroup: FormGroup = new FormGroup({
         zones: new FormControl()
     });
-    transectsFormGroup: FormGroup = new FormGroup({
-        transects: new FormControl()
+    stationsFormGroup: FormGroup = new FormGroup({
+        stations: new FormControl()
     });
     speciesFormGroup: FormGroup = new FormGroup({
         species: new FormControl(),
@@ -101,8 +101,8 @@ export class AnalyseComponent {
         this.zoneEmitter.emit(zones); 
     }
 
-    setTransects(transects: Transect[]) {
-        this.transectEmitter.emit(transects); 
+    setStations(stations: Station[]) {
+        this.stationEmitter.emit(stations); 
     }
 
     setSpecies(species: Species[]) {

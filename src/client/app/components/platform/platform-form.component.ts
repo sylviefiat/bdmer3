@@ -6,7 +6,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Platform, Zone, Transect, ZonePreference, Count } from '../../modules/datas/models/index';
+import { Platform, Zone, Station, ZonePreference, Count } from '../../modules/datas/models/index';
 import { Country } from '../../modules/countries/models/country';
 
 @Component({

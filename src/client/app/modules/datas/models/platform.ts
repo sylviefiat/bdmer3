@@ -20,7 +20,7 @@ export interface Zone {
     staticmap: string;
     properties: Property;
     codePlatform: string;
-    transects: Transect[];
+    stations: Station[];
     zonePreferences: ZonePreference[];
 }
 
@@ -30,16 +30,16 @@ export interface Property{
   surface: number;
 }
 
-export interface Transect {
+export interface Station {
     type: string;
     geometry: Geometry;
-    properties: TransectProperties;
-    staticMapTransect: string;
+    properties: StationProperties;
+    staticMapStation: string;
     codeZone: string;
     codePlatform: string;
 }
 
-export interface TransectProperties {
+export interface StationProperties {
     name: string;
     code: string;
     description: string;
@@ -60,7 +60,7 @@ export interface Survey {
     dateStart: Date;
     dateEnd: Date;
     participants: string;
-    surfaceTransect: number;
+    surfaceStation: number;
     description: string;
     codeCountry: string;
     counts: Count[];
@@ -71,7 +71,7 @@ export interface Count {
     codeSurvey: string;
     codePlatform: string;
     codeZone: string;
-    codeTransect: string;
+    codeStation: string;
     date: Date;
     monospecies?: boolean;
     mesures: Mesure[];    

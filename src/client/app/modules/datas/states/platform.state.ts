@@ -7,7 +7,7 @@ export interface IPlatformState {
     loading: boolean;
     currentPlatformId: string;
     currentZoneId: string;
-    currentTransectId: string;
+    currentStationId: string;
     currentSpPrefId: string;
     currentCountId: string;
     currentSurveyId: string;
@@ -22,7 +22,7 @@ export const platformInitialState: IPlatformState = {
     loading: false,
     currentPlatformId: null,
     currentZoneId: null,
-    currentTransectId: null,
+    currentStationId: null,
     currentSpPrefId: null,
     currentCountId: null,
     currentSurveyId: null,
@@ -110,11 +110,11 @@ export function getCurrentZone(state$: Observable<IPlatformState>) {
                 zone.properties.code === state.currentZoneId)[0]);
 }
 
-export function getCurrentZoneTransects(state$: Observable<IPlatformState>) {
+export function getCurrentZoneStations(state$: Observable<IPlatformState>) {
     return state$.select(state => state.currentPlatformId && state.currentZoneId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.properties.code === state.currentZoneId)[0].transects);
+                zone.properties.code === state.currentZoneId)[0].stations);
 }
 
 export function getCurrentZoneZonePrefs(state$: Observable<IPlatformState>) {
@@ -140,16 +140,16 @@ export function getCurrentSurveyCounts(state$: Observable<IPlatformState>) {
             .surveys.filter(survey => survey.code === state.currentSurveyId)[0].counts);
 }
 
-export function getCurrentTransectId(state$: Observable<IPlatformState>) {
-    return state$.select(state => state.currentTransectId);
+export function getCurrentStationId(state$: Observable<IPlatformState>) {
+    return state$.select(state => state.currentStationId);
 }
 
-export function getCurrentTransect(state$: Observable<IPlatformState>) {
-    return state$.select(state => state.currentPlatformId && state.currentZoneId && state.currentTransectId &&
+export function getCurrentStation(state$: Observable<IPlatformState>) {
+    return state$.select(state => state.currentPlatformId && state.currentZoneId && state.currentStationId &&
         state.entities.filter(platform =>
             platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-                zone.properties.code === state.currentZoneId)[0].transects.filter(transect =>
-                    transect.properties.code === state.currentTransectId)[0]);
+                zone.properties.code === state.currentZoneId)[0].stations.filter(station =>
+                    station.properties.code === state.currentStationId)[0]);
 }
 
 export function getCurrentSpPrefId(state$: Observable<IPlatformState>) {

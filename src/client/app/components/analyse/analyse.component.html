@@ -61,17 +61,17 @@
         <form [formGroup]="zonesFormGroup">
           <ng-template matStepLabel>{{ 'ZONES' | translate}}</ng-template>
            <bc-analyse-zone [zones$]="zones$" (zoneEmitter)="setZones($event)" [group]="zonesFormGroup"></bc-analyse-zone>
-           <div *ngIf="(transects$ | async)?.length==0" class="norecord">{{ 'NO_TRANSECTS' | translate}}</div> 
+           <div *ngIf="(stations$ | async)?.length==0" class="norecord">{{ 'NO_STATIONS' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>
-            <button mat-button [disabled]="(transects$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
+            <button mat-button [disabled]="(stations$ | async)?.length<=0" matStepperNext>{{ 'NEXT' | translate}}</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="transectsFormGroup" [optional]="true">
-        <form [formGroup]="transectsFormGroup">
-          <ng-template matStepLabel>{{ 'TRANSECTS' | translate}}</ng-template>
-         <bc-analyse-transect [transects$]="transects$" (transectEmitter)="setTransects($event)" [group]="transectsFormGroup"></bc-analyse-transect>
+      <mat-step [stepControl]="stationsFormGroup" [optional]="true">
+        <form [formGroup]="stationsFormGroup">
+          <ng-template matStepLabel>{{ 'STATIONS' | translate}}</ng-template>
+         <bc-analyse-station [stations$]="stations$" (stationEmitter)="setStations($event)" [group]="stationsFormGroup"></bc-analyse-station>
          <div *ngIf="(species$ | async)?.length==0" class="norecord">{{ 'NO_SPECIES' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>

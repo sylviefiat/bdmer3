@@ -7,9 +7,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
-  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseTransects, 
+  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseStations, 
   getSelectedAnalyseSpecies,getAnalyseCountry } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey, Transect, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
@@ -28,7 +28,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [years$]="years$"
       [surveys$]="surveys$"
       [zones$]="zones$"
-      [transects$]="transects$"
+      [stations$]="stations$"
       [species$]="species$"
       [species$]="species$"
       [isAdmin]="isAdmin$ | async"
@@ -39,7 +39,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       (yearEmitter)="selectYear($event)"
       (surveyEmitter)="selectSurvey($event)"
       (zoneEmitter)="selectZone($event)"
-      (transectEmitter)="selectTransect($event)"
+      (stationEmitter)="selectStation($event)"
       (speciesEmitter)="selectSpecies($event)"
       (dimensionsEmitter)="setDimensions($event)"
       (methodEmitter)="selectMethod($event)"
@@ -54,7 +54,7 @@ export class AnalysePageComponent implements OnInit {
   years$: Observable<string[]>;
   surveys$: Observable<Survey[]>;
   zones$: Observable<Zone[]>;
-  transects$: Observable<Transect[]>;
+  stations$: Observable<Station[]>;
   species$: Observable<Species[]>;
   dimensions$: Observable<DimensionsAnalyse[]>;
   isAdmin$: Observable<boolean>;
@@ -74,7 +74,7 @@ export class AnalysePageComponent implements OnInit {
     this.years$ = this.store.let(getSelectedAnalyseYears);
     this.surveys$ = this.store.let(getSelectedAnalyseSurveys);
     this.zones$ = this.store.let(getSelectedAnalyseZones);
-    this.transects$ = this.store.let(getSelectedAnalyseTransects);
+    this.stations$ = this.store.let(getSelectedAnalyseStations);
     this.species$ = this.store.let(getSelectedAnalyseSpecies);
     this.msg$ = this.store.let(getAnalyseMsg);
     this.store.dispatch(new CountriesAction.LoadAction());
@@ -103,8 +103,8 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
   }
 
-  selectTransect(transects: Transect[]) {
-    this.store.dispatch(new AnalyseAction.SelectTransects(transects));    
+  selectStation(stations: Station[]) {
+    this.store.dispatch(new AnalyseAction.SelectStations(stations));    
   }
 
   selectSpecies(species: Species[]) {

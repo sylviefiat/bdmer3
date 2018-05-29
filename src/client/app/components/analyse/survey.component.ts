@@ -18,7 +18,7 @@ import { Survey } from '../../modules/datas/models/index';
             </mat-card-content>
             <mat-card-content>
               <p>{{'PARTICIPANTS' | translate}}: {{ survey.participants }}</p>
-              <p>{{'SURFACE_TRANSECT' | translate}}: {{ survey.surfaceTransect }}</p>
+              <p>{{'SURFACE_STATION' | translate}}: {{ survey.surfaceStation }}</p>
               <p>{{'DESCRIPTION' | translate}}: {{ survey.description }}</p>
            </mat-card-content>
           </mat-card>

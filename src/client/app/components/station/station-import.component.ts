@@ -14,13 +14,13 @@ import { CountriesAction } from '../../modules/countries/actions/index';
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-transect-import',
-    templateUrl: './transect-import.component.html',
+    selector: 'bc-station-import',
+    templateUrl: './station-import.component.html',
     styleUrls: [
-        './transect-import.component.css',
+        './station-import.component.css',
     ],
 })
-export class TransectImportComponent implements OnInit{
+export class StationImportComponent implements OnInit{
     @Input() platform: Platform;
     @Input() error: string | null;
     @Input() msg: string | null;
@@ -38,7 +38,7 @@ export class TransectImportComponent implements OnInit{
     ngOnInit() {
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importTransect-"+l+".csv";
+            this.csvFile = "importStation-"+l+".csv";
         });
     }
 
@@ -56,11 +56,11 @@ export class TransectImportComponent implements OnInit{
         this.needHelp = !this.needHelp;
     }
 
-    getCsvTransects() {
+    getCsvStations() {
         return this.csvFile;
     }
 
-    getCsvTransectsUrl() {
+    getCsvStationsUrl() {
         return this.docs_repo + this.csvFile;
     }
 

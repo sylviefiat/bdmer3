@@ -56,7 +56,7 @@ export class ViewSurveyComponent implements OnInit {
                         count.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         count.codeZone.toLowerCase().indexOf(filter)!==-1 ||
                         count.codeSurvey.toLowerCase().indexOf(filter)!==-1 ||
-                        count.codeTransect.toLowerCase().indexOf(filter)!==-1 ||
+                        count.codeStation.toLowerCase().indexOf(filter)!==-1 ||
                         count.date.toString().toLowerCase().indexOf(filter)!==-1 ||
                         count.mesures.filter(mesure => 
                             this.species.filter(sp => sp.code===mesure.codeSpecies && 

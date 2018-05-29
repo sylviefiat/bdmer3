@@ -12,20 +12,20 @@ import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
-    selector: 'bc-transect-import-page',
+    selector: 'bc-station-import-page',
     template: `
-    <bc-transect-import
+    <bc-station-import
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
       [error]="error$ | async"
       [msg]="msg$ | async"
       [platform]="platform$ | async">
-    </bc-transect-import>
+    </bc-station-import>
   `,
     styles: [``]
 })
-export class TransectImportPageComponent implements OnInit, OnDestroy {
+export class StationImportPageComponent implements OnInit, OnDestroy {
     platform$: Observable<Platform>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
@@ -54,7 +54,7 @@ export class TransectImportPageComponent implements OnInit, OnDestroy {
 
     handleUpload(csvFile: any): void {
         console.log(csvFile);
-        this.store.dispatch(new PlatformAction.ImportTransectAction(csvFile));
+        this.store.dispatch(new PlatformAction.ImportStationAction(csvFile));
     }
 
     handleErrorUpload(msg: string) {

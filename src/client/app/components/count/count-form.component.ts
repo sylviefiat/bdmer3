@@ -7,7 +7,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
-import { Platform, Zone, Transect, Survey, Count, Species } from '../../modules/datas/models/index';
+import { Platform, Zone, Station, Survey, Count, Species } from '../../modules/datas/models/index';
 
 @Component({
     moduleId: module.id,
@@ -21,13 +21,13 @@ import { Platform, Zone, Transect, Survey, Count, Species } from '../../modules/
 export class CountFormComponent implements OnInit {
     @Input() platform: Platform | null;
     @Input() zone: Zone | null;
-    @Input() transect: Transect | null;
+    @Input() station: Station | null;
     @Input() survey: Survey | null;
     @Input() count: Count | null;
     @Input() errorMessage: string;
     @Input() species: Species[];
     @Input() zones: Zone[];
-    @Input() transects$: Observable<Transect[]>;
+    @Input() stations$: Observable<Station[]>;
 
     @Output() submitted = new EventEmitter<Survey>();
 
@@ -36,7 +36,7 @@ export class CountFormComponent implements OnInit {
         codeSurvey: new FormControl(),
         codePlatform: new FormControl(""),
         codeZone: new FormControl(""),
-        codeTransect: new FormControl(),
+        codeStation: new FormControl(),
         date: new FormControl(""),
         monospecies: new FormControl(),
         mesures: this._fb.array([])
@@ -57,7 +57,7 @@ export class CountFormComponent implements OnInit {
     }
 
     ngOnInit() {  
-        this.zones = this.platform.zones;//.filter(zone => zone.transects !== null && zone.transects.length >0);   
+        this.zones = this.platform.zones;//.filter(zone => zone.stations !== null && zone.stations.length >0);   
         this.countForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.countForm.controls.codeSurvey.setValue(this.survey ? this.survey.code : null);
         (this.platform !== undefined) ? this.countForm.controls.codePlatform.disable() : this.countForm.controls.codePlatform.enable();
@@ -65,7 +65,7 @@ export class CountFormComponent implements OnInit {
         if(this.count) {
             this.countForm.controls.code.setValue(this.count.code);
             this.countForm.controls.codeZone.setValue(this.count.codeZone);
-            this.countForm.controls.codeTransect.setValue(this.count.codeTransect);
+            this.countForm.controls.codeStation.setValue(this.count.codeStation);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
         } else {
@@ -97,10 +97,10 @@ export class CountFormComponent implements OnInit {
         control.removeAt(i);
     }
 
-    updateTransects(codeZone: string){
+    updateStations(codeZone: string){
         console.log(codeZone);
-        console.log(this.zones.filter(zone => zone.properties.code === codeZone)[0].transects);
-        this.transects$ = of(this.zones.filter(zone => zone.properties.code === codeZone)[0].transects);
+        console.log(this.zones.filter(zone => zone.properties.code === codeZone)[0].stations);
+        this.stations$ = of(this.zones.filter(zone => zone.properties.code === codeZone)[0].stations);
     }
 
     submit() {

@@ -7,7 +7,7 @@ import { CountryRoutes } from './country/country.routes';
 import { PlatformRoutes } from './platform/platform.routes';
 import { SpeciesRoutes } from './species/species.routes';
 import { SurveyRoutes } from './survey/survey.routes';
-import { TransectRoutes } from './transect/transect.routes';
+import { StationRoutes } from './station/station.routes';
 import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
 import { ZoneRoutes } from './zone/zone.routes';
 import { CountRoutes } from './count/count.routes';
@@ -23,7 +23,7 @@ export const routes: Array<any> = [
   ...PlatformRoutes,
   ...SpeciesRoutes,
   ...SurveyRoutes,
-  ...TransectRoutes,
+  ...StationRoutes,
   ...PreferenceAreaRoutes,
   ...ZoneRoutes,
   ...CountRoutes,

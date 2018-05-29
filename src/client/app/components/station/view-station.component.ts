@@ -10,28 +10,28 @@ import { IAppState } from '../../modules/ngrx/index';
 
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { User } from '../../modules/countries/models/country';
-import { Platform,Zone, Transect, Count } from '../../modules/datas/models/index';
+import { Platform,Zone, Station, Count } from '../../modules/datas/models/index';
 import { WindowService } from '../../modules/core/services/index';
-import { transectMapModal } from './transect-map-modal.component';
+import { stationMapModal } from './station-map-modal.component';
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-view-transect',
-    templateUrl: 'view-transect.component.html',
+    selector: 'bc-view-station',
+    templateUrl: 'view-station.component.html',
     styleUrls: [
-        'view-transect.component.css',
+        'view-station.component.css',
     ],
 })
-export class ViewTransectComponent implements OnInit {    
+export class ViewStationComponent implements OnInit {    
     @Input() platform: Platform;
     @Input() zone: Zone;
-    @Input() transect: Transect;
+    @Input() station: Station;
     
     @Output() remove = new EventEmitter<any>();
     @Output() action = new EventEmitter<String>();
 
-    fileNameDialogRef: MatDialogRef<transectMapModal>;
+    fileNameDialogRef: MatDialogRef<stationMapModal>;
 
     constructor(private dialog: MatDialog, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
@@ -41,19 +41,19 @@ export class ViewTransectComponent implements OnInit {
     }
 
 
-    deleteTransect() {
-        if (this.windowService.confirm("Are you sure you want to delete this transect from database ?")){
-            this.remove.emit(this.transect);
+    deleteStation() {
+        if (this.windowService.confirm("Are you sure you want to delete this station from database ?")){
+            this.remove.emit(this.station);
         }
     }
 
     actions(type: string) {
         switch (type) {
-            case "transectForm":
-                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.transect.properties.code);
+            case "stationForm":
+                this.action.emit(type+'/'+this.platform._id+"/"+this.zone.properties.code+'/'+this.station.properties.code);
                 break;
-            case "deleteTransect":
-                this.deleteTransect();
+            case "deleteStation":
+                this.deleteStation();
                 break;
             default:
                 break;
@@ -74,8 +74,8 @@ export class ViewTransectComponent implements OnInit {
     }
 
     openDialog() {
-        this.fileNameDialogRef = this.dialog.open(transectMapModal, {
-            data: this.transect.staticMapTransect    
+        this.fileNameDialogRef = this.dialog.open(stationMapModal, {
+            data: this.station.staticMapStation    
         });
     }
 

@@ -15,7 +15,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   	`
   ],
 })
-export class transectMapModal {
+export class stationMapModal {
 
-  constructor(private dialogRef: MatDialogRef<transectMapModal>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data) {}
+  constructor(private dialogRef: MatDialogRef<stationMapModal>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data) {}
 }

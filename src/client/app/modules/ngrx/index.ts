@@ -44,10 +44,10 @@ import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoad
 import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
-import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneTransects, 
-    getCurrentZoneZonePrefs, getCurrentTransect, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
-import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedTransects, getUsedSpecies, getUsedDims,
-    getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getTransectsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
+import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
+    getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
+import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
+    getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -185,10 +185,10 @@ export const getSelectedPlatform: any = compose(getCurrentPlatform, getPlatformS
 export const getSelectedPlatformZones: any = compose(getCurrentPlatformZones, getPlatformState);
 export const getSelectedPlatformSurveys: any = compose(getCurrentPlatformSurveys, getPlatformState);
 export const getSelectedZone: any = compose(getCurrentZone, getPlatformState);
-export const getSelectedZoneTransects: any = compose(getCurrentZoneTransects, getPlatformState);
+export const getSelectedZoneStations: any = compose(getCurrentZoneStations, getPlatformState);
 export const getSelectedZoneZonePrefs: any = compose(getCurrentZoneZonePrefs, getPlatformState);
 export const getSelectedZonePref: any = compose(getCurrentSpPref, getPlatformState);
-export const getSelectedTransect: any = compose(getCurrentTransect, getPlatformState);
+export const getSelectedStation: any = compose(getCurrentStation, getPlatformState);
 export const getSelectedSurvey: any = compose(getCurrentSurvey, getPlatformState);
 export const getSelectedSurveyCounts: any = compose(getCurrentSurveyCounts, getPlatformState);
 export const getSelectedCount: any = compose(getCurrentCount, getPlatformState);
@@ -199,7 +199,7 @@ export const getSelectedCountryPlatforms: any = compose(getPlatformsOfCurrentCou
 export const getAnalyseCountry: any = compose(getUsedCountry, getAnalyseState);
 export const getAnalyseSurveys: any = compose(getUsedSurveys, getAnalyseState);
 export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
-export const getTransectZones: any = compose(getUsedTransects, getAnalyseState);
+export const getStationZones: any = compose(getUsedStations, getAnalyseState);
 export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
 export const getAnalyseDims: any = compose(getUsedDims, getAnalyseState);
 export const getAnalyseMethod: any = compose(getUsedMethod, getAnalyseState);
@@ -211,5 +211,5 @@ export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
 export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getAppState);
 export const getSelectedAnalyseSurveys: any = compose(getSurveysAvailables, getAppState);
 export const getSelectedAnalyseZones: any = compose(getZonesAvailables, getAppState);
-export const getSelectedAnalyseTransects: any = compose(getTransectsAvailables, getAppState);
+export const getSelectedAnalyseStations: any = compose(getStationsAvailables, getAppState);
 export const getSelectedAnalyseSpecies: any = compose(getSpeciesAvailables, getAppState);

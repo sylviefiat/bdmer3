@@ -77,23 +77,23 @@ export function platformReducer(
             }
         }
 
-        case PlatformAction.ActionTypes.ADD_TRANSECT_SUCCESS:
-        case PlatformAction.ActionTypes.IMPORT_TRANSECT_SUCCESS: {
-            const addedtransect = action.payload;
-            console.log(addedtransect);
-            const platforms = state.entities.filter(platform => addedtransect.codePlatform !== platform._id);
-            const modifiedPlatform = state.entities.filter(platform => addedtransect.codePlatform === platform.code)[0];
+        case PlatformAction.ActionTypes.ADD_STATION_SUCCESS:
+        case PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS: {
+            const addedstation = action.payload;
+            console.log(addedstation);
+            const platforms = state.entities.filter(platform => addedstation.codePlatform !== platform._id);
+            const modifiedPlatform = state.entities.filter(platform => addedstation.codePlatform === platform.code)[0];
 
-            const modifiedZone = modifiedPlatform.zones.filter(zone => addedtransect.codeZone === zone.properties.code)[0];
-            modifiedZone.transects = [...modifiedZone.transects.filter(transect => addedtransect.properties.code !== transect.properties.code),addedtransect];
-            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedtransect.codeZone !== zone.properties.code),modifiedZone];
+            const modifiedZone = modifiedPlatform.zones.filter(zone => addedstation.codeZone === zone.properties.code)[0];
+            modifiedZone.stations = [...modifiedZone.stations.filter(station => addedstation.properties.code !== station.properties.code),addedstation];
+            modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedstation.codeZone !== zone.properties.code),modifiedZone];
 
             return {
                 ...state,
                 entities: [...platforms,modifiedPlatform],
-                ids: [...state.ids.filter(id => addedtransect.codePlatform !== id), ...addedtransect.codePlatform],
+                ids: [...state.ids.filter(id => addedstation.codePlatform !== id), ...addedstation.codePlatform],
                 error: null,
-                msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Transects registered with success":"Transect registered with success"
+                msg: action.type===PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS?"Stations registered with success":"Station registered with success"
             }
         }
 
@@ -104,7 +104,7 @@ export function platformReducer(
             const platforms = state.entities.filter(platform => addedzonepref.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedzonepref.codePlatform === platform._id)[0];
             const modifiedZone = modifiedPlatform.zones.filter(zone => addedzonepref.codeZone === zone.properties.code)[0];
-            modifiedZone.zonePreferences = [...modifiedZone.zonePreferences.filter(transect => addedzonepref.code !== transect.code),addedzonepref];
+            modifiedZone.zonePreferences = [...modifiedZone.zonePreferences.filter(station => addedzonepref.code !== station.code),addedzonepref];
             modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzonepref.codeZone !== zone.properties.code),modifiedZone];
 
             return {
@@ -192,21 +192,21 @@ export function platformReducer(
                 };
             }
 
-        case PlatformAction.ActionTypes.REMOVE_TRANSECT_SUCCESS:
+        case PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS:
             {
-                const removedTransect = action.payload;
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedTransect.codePlatform)[0];
-                const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedTransect.codeZone)[0];
-                modifiedZone.transects = modifiedZone.transects.filter(transect => transect.properties.code !== removedTransect.properties.code);
+                const removedStation = action.payload;
+                const modifiedPlatform = state.entities.filter(platform => platform.code === removedStation.codePlatform)[0];
+                const modifiedZone = modifiedPlatform.zones.filter(zone =>zone.properties.code=== removedStation.codeZone)[0];
+                modifiedZone.stations = modifiedZone.stations.filter(station => station.properties.code !== removedStation.properties.code);
                 modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone =>zone.properties.code!== modifiedZone.properties.code),modifiedZone];
 
                 return {
                     ...state,
                     entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform],
                     ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
-                    currentTransectId: null,
+                    currentStationId: null,
                     error: null,
-                    msg: "Transect removed with success"
+                    msg: "Station removed with success"
                 };
             }
 
@@ -280,11 +280,11 @@ export function platformReducer(
             };
         }
 
-        case PlatformAction.ActionTypes.SELECT_TRANSECT: {
-            console.log("select transect: "+action.payload);
+        case PlatformAction.ActionTypes.SELECT_STATION: {
+            console.log("select station: "+action.payload);
             return {
                 ...state,
-                currentTransectId: action.payload,
+                currentStationId: action.payload,
             };
         }
 
