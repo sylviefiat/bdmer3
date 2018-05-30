@@ -24,6 +24,7 @@ import { GeojsonService } from '../../modules/core/services/geojson.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-global-import 
+      (upload)="handleUpload($event)"
       [platform]="platform$ | async"
       [error]="error$ | async"
       [importError]="importError$ | async"
@@ -40,6 +41,7 @@ export class GlobalImportPageComponent implements OnInit, OnDestroy {
     isAdmin$: Observable<Country>;
     locale$: Observable<boolean>;
     docs_repo: string;
+    canDeactivateB: boolean = true;
 
     constructor(private geojsonService: GeojsonService, private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
     }
@@ -54,8 +56,30 @@ export class GlobalImportPageComponent implements OnInit, OnDestroy {
         this.docs_repo="../../../assets/files/";
     }
 
-    send() {
-        
+    handleUpload(csvFiles: any[]): void {
+      this.canDeactivateB = false;
+      for(let i in csvFiles){
+        if(csvFiles[i].file !== null){
+          switch (csvFiles[i].type) {
+            case "station":{
+              this.store.dispatch(new PlatformAction.ImportStationAction(csvFiles[i].file));
+              break;
+            }
+            case "survey":{
+              this.store.dispatch(new PlatformAction.ImportSurveyAction(csvFiles[i].file));
+              break;
+            }
+            case "count":{
+              this.store.dispatch(new PlatformAction.ImportCountAction(csvFiles[i].file));
+              break;
+            }
+            case "zonePref":{
+              this.store.dispatch(new PlatformAction.ImportZonePrefAction(csvFiles[i].file));
+              break;
+            }
+          }
+        }
+      }
     }    
 
     return() {
@@ -68,6 +92,14 @@ export class GlobalImportPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.store.dispatch(new PlatformAction.ResetAllPendingAction());
+       // this.store.dispatch(new PlatformAction.ResetAllPendingAction());
+    }
+
+    canDeactivate() {
+        if (this.canDeactivateB) {
+          return window.confirm('Discard changes?');
+        }
+
+        return true;
     }
 }

@@ -150,24 +150,6 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
-  addPendingZone$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.ADD_PENDING_ZONE)  
-    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.AddPendingZoneAction) => action.payload)
-    .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [any, Platform]) => this.platformService.addToPendingZone(value[0], value[1]))
-    .map((zones) => new PlatformAction.AddPendingZoneSuccessAction(zones));
-
-  @Effect()
-  removePendingZone$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_ZONE)  
-    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.AddPendingTransectAction) => action.payload)
-    .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [any, Platform]) => this.platformService.addToPendingZone(value[0], value[1]))
-    .map((zone: Zone) => new PlatformAction.RemovePendingZoneSuccessAction(zone));
-
-  @Effect()
   importSurvey$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.IMPORT_SURVEY)
     .map((action: PlatformAction.ImportSurveyAction) => action.payload)
@@ -215,31 +197,31 @@ export class PlatformEffects {
     .catch((error) => of(new PlatformAction.AddPlatformFailAction(error)));
 
   @Effect()
-  checkTransectCsv$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.CHECK_TRANSECT_CSV_FILE)  
+  checkStationCsv$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.CHECK_STATION_CSV_FILE)  
     //.do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.CheckTransectCsvFile) => action.payload)
-    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
+    .map((action: PlatformAction.CheckStationCsvFile) => action.payload)
+    .mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station))
     // fait automatiquement une boucle sur les platforms retournées
     .withLatestFrom(this.store.let(getSelectedPlatform))
-    .mergeMap((value: [any, Platform]) => this.platformService.importTransectVerification(value[0], value[1]))
-    .map(error => new PlatformAction.CheckTransectAddErrorAction(error));
+    .mergeMap((value: [any, Platform]) => this.platformService.importStationVerification(value[0], value[1]))
+    .map(error => new PlatformAction.CheckStationAddErrorAction(error));
 
   @Effect()
-  addPendingTransect$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.ADD_PENDING_TRANSECT)  
+  addPendingStation$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.ADD_PENDING_STATION)  
     .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.AddPendingTransectAction) => action.payload)
-    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
-    .map((transect: Transect) => new PlatformAction.AddPendingTransectSuccessAction(transect));
+    .map((action: PlatformAction.AddPendingStationAction) => action.payload)
+    .mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station))
+    .map((station: Station) => new PlatformAction.AddPendingStationSuccessAction(station));
 
   @Effect()
-  removePendingTransect$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_TRANSECT)  
+  removePendingStation$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_PENDING_STATION)  
     .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
-    .map((action: PlatformAction.RemovePendingTransectAction) => action.payload)
-    .mergeMap((transect: Transect) =>this.csv2jsonService.csv2('transect', transect))
-    .map((transect: Transect) => new PlatformAction.RemovePendingTransectSuccessAction(transect));
+    .map((action: PlatformAction.RemovePendingStationAction) => action.payload)
+    .mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station))
+    .map((station: Station) => new PlatformAction.RemovePendingStationSuccessAction(station));
 
   @Effect()
   importZonePref$: Observable<Action> = this.actions$

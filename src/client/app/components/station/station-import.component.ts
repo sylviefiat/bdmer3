@@ -24,6 +24,7 @@ export class StationImportComponent implements OnInit{
     @Input() platform: Platform;
     @Input() error: string | null;
     @Input() msg: string | null;
+    @Input() importError: string[];
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
@@ -31,6 +32,7 @@ export class StationImportComponent implements OnInit{
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
+    private importCsvFile: null;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
@@ -44,15 +46,19 @@ export class StationImportComponent implements OnInit{
 
     handleUpload(csvFile: any): void {
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.check(csvFile.target.files[0])
-            //this.upload.emit(csvFile.target.files[0]);
+            this.importCsvFile = csvFile.target.files[0];
+            this.check(this.importCsvFile);
         } else {
             this.err.emit('No csv file found');
         }
     }
 
     check(csvFile){
-        this.store.dispatch(new PlatformAction.CheckTransectCsvFile(csvFile));
+        this.store.dispatch(new PlatformAction.CheckStationCsvFile(csvFile));
+    }
+
+    send(){
+        this.upload.emit(this.importCsvFile);
     }
 
     changeNeedHelp() {

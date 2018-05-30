@@ -1,10 +1,11 @@
 import { GlobalImportPageComponent } from './global-import-page.component';
-import { AuthGuard } from '../../modules/auth/guards/index';
+import { AuthGuard, DeactivateGuardService } from '../../modules/auth/guards/index';
 
 export const GlobalImportRoutes: Array<any> = [
   {
     path: 'globalImport/:idPlatform',
     component: GlobalImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    canDeactivate: [DeactivateGuardService]
   }
 ]

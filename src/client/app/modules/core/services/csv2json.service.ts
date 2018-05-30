@@ -8,6 +8,8 @@ import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
+import { PlatformAction } from '../../datas/actions/index';
+import { IAppState, getSpeciesInApp } from '../../ngrx/index';
 
 @Injectable()
 export class Csv2JsonService {
@@ -299,7 +301,6 @@ export class Csv2JsonService {
                     description: lines[i]["description"]
                 },
                 staticMapStation: "",
-                codeZone: lines[i]["codeZone"],
                 codePlatform: lines[i]["codePlatform"]
             }
 

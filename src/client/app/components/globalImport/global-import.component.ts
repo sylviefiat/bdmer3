@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -40,22 +40,21 @@ export class GlobalImportComponent implements OnInit {
     @Input() isAdmin: Country;
     @Input() locale: boolean;
     @Input() docs_repo: string;
+    @Output() upload = new EventEmitter<any>();
     needHelp: boolean = false;
     csvFileSurvey: object = null;
     csvFileSurveyPending: boolean = false;
     csvFileZonePref: object = null;
-    csvFileTransect: object = null;
-    csvFileTransectPending: boolean = false;
+    csvFileStation: object = null;
+    csvFileStationPending: boolean = false;
     csvFileCount: object = null;
-    kmlFileZones: object = null;
-    kmlFileZonesPending: boolean = false;
     next: boolean = false;
     fromto = { from: 'zone', to: null };
 
     inputForm: FormGroup = new FormGroup({
         zoneInputFile: new FormControl(),
         zonePrefInputFile: new FormControl(),
-        transectInputFile: new FormControl(),
+        stationInputFile: new FormControl(),
         surveyInputFile: new FormControl(),
         countInputFile: new FormControl()
     });
@@ -73,48 +72,6 @@ export class GlobalImportComponent implements OnInit {
         },0);
     }
 
-    handleUploadKml(kmlFile: any): void {
-        let kml = kmlFile;
-        if (kmlFile.target.files && kmlFile.target.files.length > 0) {
-
-            if (this.kmlFileZonesPending) {
-
-                let stringTab = [];
-                let string = "It will delete file(s) : ";
-
-
-                if (this.csvFileZonePref !== null)
-                    stringTab.push("zonePref")
-
-                if (this.csvFileCount !== null)
-                    stringTab.push("count")
-
-                if (this.csvFileTransect !== null)
-                    stringTab.push("transect")
-
-
-                for (let i in stringTab) {
-                    if (parseInt(i) === stringTab.length - 1) {
-                        string += (stringTab[i] + ".")
-                    } else {
-                        string += (stringTab[i] + ", ")
-                    }
-                }
-
-                if (stringTab.length !== 0) {
-                    let r = confirm(string + ' Are you sure to continue?');
-
-                    if (r) {
-                        this.clearFile(stringTab, true);
-                    }
-                }
-
-                this.clearFile(["zone"], false);
-            }
-
-            this.kmlFileZones = kml.target.files['0'];
-        }
-    }
 
     handleUploadCsv(csvFile: any, type: string): void {
         if (csvFile.target.files && csvFile.target.files.length > 0) {
@@ -140,20 +97,20 @@ export class GlobalImportComponent implements OnInit {
                     this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(this.csvFileZonePref));
                     break;
                 }
-                case "transect": {
-                    if (this.csvFileTransectPending) {
+                case "station": {
+                    if (this.csvFileStationPending) {
                         if (this.csvFileCount !== null) {
-                            let confirmTransect = confirm('It will delete file : Count. Are you sure to continue?');
-                            if (confirmTransect) {
+                            let confirmStation = confirm('It will delete file : Count. Are you sure to continue?');
+                            if (confirmStation) {
                                 this.clearFile(["count"], true);
-                                this.clearFile(["transect"], false);
+                                this.clearFile(["station"], false);
                             }
                         } else {
-                            this.clearFile(["transect"], true);
+                            this.clearFile(["station"], true);
                         }
                     }
-                    this.csvFileTransect = csvFile.target.files["0"];
-                    this.store.dispatch(new PlatformAction.CheckTransectCsvFile(this.csvFileTransect));
+                    this.csvFileStation = csvFile.target.files["0"];
+                    this.store.dispatch(new PlatformAction.CheckStationCsvFile(this.csvFileStation));
                     break;
                 }
                 case "count": {
@@ -170,18 +127,6 @@ export class GlobalImportComponent implements OnInit {
     clearFile(types, reset: boolean) {
         for (let i in types) {
             switch (types[i]) {
-                case "zone": {
-                    if (this.kmlFileZonesPending) {
-                        this.store.dispatch(new PlatformAction.RemovePendingZoneAction(this.kmlFileZones));
-                        this.kmlFileZonesPending = false;
-                    }
-                    this.store.dispatch(new PlatformAction.RemoveMsgAction())
-                    if (reset) {
-                        this.inputForm.get('zoneInputFile').reset();
-                        this.kmlFileZones = null;
-                    }
-                    break;
-                }
                 case "survey": {
                     if (this.csvFileSurveyPending) {
                         this.store.dispatch(new PlatformAction.RemovePendingSurveyAction(this.csvFileSurvey));
@@ -202,16 +147,16 @@ export class GlobalImportComponent implements OnInit {
                     }
                     break;
                 }
-                case "transect": {
-                    if (this.csvFileTransectPending) {
-                        this.store.dispatch(new PlatformAction.RemovePendingTransectAction(this.csvFileTransect));
-                        this.csvFileTransectPending = false;
+                case "station": {
+                    if (this.csvFileStationPending) {
+                        this.store.dispatch(new PlatformAction.RemovePendingStationAction(this.csvFileStation));
+                        this.csvFileStationPending = false;
                     }
                     this.store.dispatch(new PlatformAction.RemoveMsgAction())
                     if (reset) {
-                        console.log("reset transect");
-                        this.inputForm.get('transectInputFile').reset();
-                        this.csvFileTransect = null;
+                        console.log("reset station");
+                        this.inputForm.get('stationInputFile').reset();
+                        this.csvFileStation = null;
                     }
                     break;
                 }
@@ -234,24 +179,24 @@ export class GlobalImportComponent implements OnInit {
                 if (confirmZonePref) {
                     this.clearFile(["zonePref"], true);
                 }else{
-                    this.selectIndex(1);
+                    this.selectIndex(0);
                 }
                 break;
             }
-            case "transect": {
+            case "station": {
                 if (this.csvFileCount !== null) {
-                    let confirmTransect = confirm('It will delete file : Transect, Count. Are you sure to continue?');
-                    if (confirmTransect) {
-                        this.clearFile(["count", "transect"], true);
+                    let confirmStation = confirm('It will delete file : Station, Count. Are you sure to continue?');
+                    if (confirmStation) {
+                        this.clearFile(["count", "station"], true);
                     }else{
-                        this.selectIndex(2);
+                        this.selectIndex(1);
                     }
                 } else {
-                    let confirmSurvey = confirm('It will delete file : Transect. Are you sure to continue?');
+                    let confirmSurvey = confirm('It will delete file : Station. Are you sure to continue?');
                     if (confirmSurvey) {
-                        this.clearFile(["transect"], true);
+                        this.clearFile(["station"], true);
                     }else{
-                        this.selectIndex(2);
+                        this.selectIndex(1);
                     }
                 }
                 break;
@@ -262,14 +207,14 @@ export class GlobalImportComponent implements OnInit {
                     if (confirmSurvey) {
                         this.clearFile(["count", "survey"], true);
                     }else{
-                        this.selectIndex(3);
+                        this.selectIndex(2);
                     }
                 } else {
                     let confirmSurvey = confirm('It will delete file : Survey. Are you sure to continue?');
                     if (confirmSurvey) {
                         this.clearFile(["survey"], true);
                     }else{
-                        this.selectIndex(3);
+                        this.selectIndex(2);
                     }
                 }
                 break;
@@ -279,7 +224,7 @@ export class GlobalImportComponent implements OnInit {
                 if (confirmCount) {
                     this.clearFile(["count"], true);
                 }else{
-                    this.selectIndex(4);
+                    this.selectIndex(3);
                 }
                 break;
             }
@@ -289,31 +234,27 @@ export class GlobalImportComponent implements OnInit {
     changeIndex(e) {
         switch (e.selectedIndex) {
             case 0: {
-                this.fromto.to = "zone"
-                break;
-            }
-            case 1: {
                 this.fromto.to = "zonePref"
                 if (this.csvFileZonePref !== null) {
                     this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(this.csvFileZonePref));
                 }
                 break;
             }
-            case 2: {
-                this.fromto.to = "transect"
-                if (this.csvFileTransect !== null) {
-                    this.store.dispatch(new PlatformAction.CheckTransectCsvFile(this.csvFileTransect));
+            case 1: {
+                this.fromto.to = "station"
+                if (this.csvFileStation !== null) {
+                    this.store.dispatch(new PlatformAction.CheckStationCsvFile(this.csvFileStation));
                 }
                 break;
             }
-            case 3: {
+            case 2: {
                 this.fromto.to = "survey"
                 if (this.csvFileSurvey !== null) {
                     this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(this.csvFileSurvey));
                 }
                 break;
             }
-            case 4: {
+            case 3: {
                 this.fromto.to = "count"
                 if (this.csvFileCount !== null) {
                     this.store.dispatch(new PlatformAction.CheckCountCsvFile(this.csvFileCount));
@@ -324,33 +265,24 @@ export class GlobalImportComponent implements OnInit {
 
         switch (e.previouslySelectedIndex) {
             case 0: {
-                this.fromto.from = "zone";
-                if (this.kmlFileZones !== null && !this.kmlFileZonesPending) {
-                    console.log("pending zone");
-                    this.kmlFileZonesPending = true;
-                    this.store.dispatch(new PlatformAction.AddPendingZoneAction(this.kmlFileZones));
-                }
-                break;
-            }
-            case 1: {
                 this.fromto.from = "zonePref";
                 if (this.csvFileZonePref !== null && (this.error !== null || this.importError.length > 0)) {
                     this.deleteCsv('zonePref');
                 }
                 break;
             }
-            case 2: {
-                this.fromto.from = "transect";
-                if (this.csvFileTransect !== null && (this.error !== null || this.importError.length > 0)) {
-                    this.deleteCsv('transect');
-                } else if(this.csvFileTransect !== null && !this.csvFileTransectPending){
-                            console.log("pending transect");
-                            this.csvFileTransectPending = true;
-                            this.store.dispatch(new PlatformAction.AddPendingTransectAction(this.csvFileTransect));
+            case 1: {
+                this.fromto.from = "station";
+                if (this.csvFileStation !== null && (this.error !== null || this.importError.length > 0)) {
+                    this.deleteCsv('station');
+                } else if(this.csvFileStation !== null && !this.csvFileStationPending){
+                            console.log("pending Station");
+                            this.csvFileStationPending = true;
+                            this.store.dispatch(new PlatformAction.AddPendingStationAction(this.csvFileStation));
                 }
                 break;
             }
-            case 3: {
+            case 2: {
                 this.fromto.from = "survey";
                 if (this.csvFileSurvey !== null && (this.error !== null || this.importError.length > 0)) {
                     this.deleteCsv('survey');
@@ -361,7 +293,7 @@ export class GlobalImportComponent implements OnInit {
                 }
                 break;
             }
-            case 4: {
+            case 3: {
                 this.fromto.from = "count";
                 if (this.csvFileCount !== null && (this.error !== null || this.importError.length > 0)) {
                     this.deleteCsv('count');
@@ -373,58 +305,8 @@ export class GlobalImportComponent implements OnInit {
         this.store.dispatch(new PlatformAction.RemoveMsgAction())
     }
 
-    deleteKml() {
-        let stringTab = [];
-        let string = "It will delete file(s) : ";
-
-
-        if (this.csvFileZonePref !== null)
-            stringTab.push("zonePref")
-
-        if (this.csvFileCount !== null)
-            stringTab.push("count")
-
-        if (this.csvFileTransect !== null)
-            stringTab.push("transect")
-
-        if (this.kmlFileZones !== null)
-            stringTab.push("zone")
-
-        for (let i in stringTab) {
-            if (parseInt(i) === stringTab.length - 1) {
-                string += (stringTab[i] + ".")
-            } else {
-                string += (stringTab[i] + ", ")
-            }
-        }
-        let r = confirm(string + ' Are you sure to continue?');
-
-        if (r) {
-            this.clearFile(stringTab, true);
-        }
-    }
-
-    send() {
-        if (this.kmlFileZones !== null)
-            this.geojsonService.kmlToGeoJson(this.kmlFileZones, this.platform).then((zone) =>{
-                for(let i in zone){
-                    this.store.dispatch(new PlatformAction.ImportZoneAction(zone[i]))
-                }
-            })
-
-        if (this.csvFileTransect !== null)
-            this.store.dispatch(new PlatformAction.ImportTransectAction(this.csvFileTransect));
-
-        if (this.csvFileSurvey !== null)
-            this.store.dispatch(new PlatformAction.ImportSurveyAction(this.csvFileSurvey));
-        
-        if (this.csvFileZonePref !== null)
-            this.store.dispatch(new PlatformAction.ImportZonePrefAction(this.csvFileZonePref));
-
-        if (this.csvFileCount !== null)
-            this.store.dispatch(new PlatformAction.ImportCountAction(this.csvFileCount));
-        
-        this.return();
+    send() {        
+        this.upload.emit([{type: 'survey', file: this.csvFileSurvey}, {type: 'station', file: this.csvFileStation}, {type: 'zonePref', file: this.csvFileZonePref}, {type: 'count', file: this.csvFileCount}]);
     }
 
     changeNeedHelp() {
@@ -435,10 +317,6 @@ export class GlobalImportComponent implements OnInit {
         return this.docs_repo + "import" + type + "-" + this.locale + ".csv";
     }
 
-    getKmlUrl(type) {
-        return this.docs_repo + "import" + type + "-" + this.locale + ".kml";
-    }
-
     return() {
         this.routerext.navigate(['/platform/'], {
             transition: {
@@ -446,9 +324,5 @@ export class GlobalImportComponent implements OnInit {
                 name: 'slideTop',
             }
         });
-    }
-
-    ngOnDestroy() {
-        this.store.dispatch(new PlatformAction.ResetAllPendingAction());
     }
 }

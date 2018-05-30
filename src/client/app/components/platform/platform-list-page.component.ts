@@ -61,9 +61,9 @@ export class PlatformListPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {  
+    this.store.dispatch(new PlatformAction.LoadAction()); 
     this.platforms$ = this.store.let(getPlatformListCurrentCountry);
     this.msg$ = this.store.let(getPlatformPageMsg);
-    this.store.dispatch(new PlatformAction.LoadAction()); 
     this.filteredPlatforms$ = this.platforms$; 
   }
 

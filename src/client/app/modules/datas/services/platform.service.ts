@@ -104,68 +104,51 @@ export class PlatformService {
     })
 
     return this.getPlatform(platform.code)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => {           
-        if(!zone.codePlatform) zone.codePlatform=platform.code;
-        if(!pt.zones) pt.zones = [];
-        if(!pt.stations) pt.stations = [];
-        if(!zone.zonePreferences) zone.zonePreferences = [];
-        pt.zones = [ ...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
-        this.currentPlatform = of(pt);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  of(zone);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(pt => {           
+      if(!zone.codePlatform) zone.codePlatform=platform.code;
+      if(!pt.zones) pt.zones = [];
+      if(!pt.stations) pt.stations = [];
+      if(!zone.zonePreferences) zone.zonePreferences = [];
+      pt.zones = [ ...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
+      this.currentPlatform = of(pt);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  of(zone);
+    })
   }
 
   removeZone(zone: Zone): Observable<Zone> {    
     return this.getPlatform(zone.codePlatform)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => {
-        pt.zones = pt.zones.filter(z => z.properties.code !== zone.properties.code);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(zone);
-      })
-  }
-
-  addToPendingZone(kml: any, platform: Platform){
-    return this.geojsonService.kmlToGeoJson(kml, platform).then((zones) => {
-      for(let i in zones){
-        var url = this.mapStaticService.googleMapUrl(zones[i].geometry["coordinates"])
-        this.mapStaticService.staticMapToB64(url).then(function(data){
-          zones[i].staticmap = data.toString();
-        })
-
-        if(!zones[i].codePlatform) zones[i].codePlatform=platform.code;
-        if(!zones[i].transects) zones[i].transects = [];
-        if(!zones[i].zonePreferences) zones[i].zonePreferences = [];
-      }
-
-      return zones
-    });
+    .filter(platform => platform!==null)
+    .mergeMap(pt => {
+      pt.zones = pt.zones.filter(z => z.properties.code !== zone.properties.code);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(zone);
+    })
   }
 
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {
     if(platform.code !== survey.codePlatform)
       return _throw('Import is not possible : survey codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => { 
-        if(!survey.counts) survey.counts = [];
-        survey.codeCountry = pt.codeCountry;
-        pt.surveys = [ ...pt.surveys.filter(c => c.code !== survey.code), survey];     
-        this.currentPlatform = of(pt);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  of(survey);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(pt => { 
+      if(!survey.counts) survey.counts = [];
+      survey.codeCountry = pt.codeCountry;
+      pt.surveys = [ ...pt.surveys.filter(c => c.code !== survey.code), survey];     
+      this.currentPlatform = of(pt);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  of(survey);
+    })
   }
 
   importSurveyVerification(survey: Survey, platform: Platform): Observable<string>{
@@ -186,56 +169,54 @@ export class PlatformService {
 
   removeSurvey(survey: Survey): Observable<Survey> {    
     return this.getPlatform(survey.codePlatform)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => {
-        let zn = pt.zones.filter(z => z.properties.code === survey.code)[0];
-        pt.surveys = pt.surveys.filter(c => c.code !== survey.code);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(survey);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(pt => {
+      let zn = pt.zones.filter(z => z.properties.code === survey.code)[0];
+      pt.surveys = pt.surveys.filter(c => c.code !== survey.code);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(survey);
+    })
   }
 
   editStation(platform: Platform, station: Station): Observable<Station> {
     if(platform.code !== station.codePlatform)
       return _throw('Import is not possible : station codePlatform is different from selected platform');
     return this.getPlatform(platform.code)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => {  
-        pt.stations = [ ...pt.stations.filter(t => t.properties.code !== station.properties.code), station];         
-        this.currentPlatform = of(pt);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap((response) => {
-        return  of(station);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(pt => {  
+      pt.stations = [ ...pt.stations.filter(t => t.properties.code !== station.properties.code), station];         
+      this.currentPlatform = of(pt);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap((response) => {
+      return  of(station);
+    })
   }
 
   removeStation(station: Station): Observable<Station> {    
     return this.getPlatform(station.codePlatform)
-      .filter(platform => platform!==null)
-      .mergeMap(pt => {
-        pt.stations = pt.stations.filter(t => t.properties.code !== station.properties.code);
-        return fromPromise(this.db.put(pt));
-      })
-      .filter((response: ResponsePDB) => { return response.ok; })
-      .mergeMap(response => {
-        return of(station);
-      })
+    .filter(platform => platform!==null)
+    .mergeMap(pt => {
+      pt.stations = pt.stations.filter(t => t.properties.code !== station.properties.code);
+      return fromPromise(this.db.put(pt));
+    })
+    .filter((response: ResponsePDB) => { return response.ok; })
+    .mergeMap(response => {
+      return of(station);
+    })
   }
 
-  importTransectVerification(transect, platform: Platform): Observable<string>{
-    if(transect.code_platform === platform.code && platform.zones.filter(zone => transect.code_zone === zone.properties.code)){
-      console.log("ui")
+  importStationVerification(station, platform: Platform): Observable<string>{
+    if(station.codePlatform === platform.code){
+      return of('');
+    }else{
+      return of('Station '+station.properties.name+' cannot be inserted because codePlatform '+station.codePlatform+' is not in the database');
     }
 
-    // if(countries.filter(country => country.code === platform.codeCountry).length===0)
-    //   return of('Platform '+platform.code+' cannot be inserted because country '+platform.codeCountry+' is not in the database');  
-    // return of(''); 
-    return of(''); 
   }
 
 
@@ -325,34 +306,27 @@ export class PlatformService {
 
   importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string>{
     if(count.codePlatform === platform.code){
-      for(let i = 0; i < platform.zones.length; i++){
-        if(count.codeZone === platform.zones[i].properties.code){
-          for(let x = 0; x < platform.zones[i].transects.length; x++){
-            if(count.codeTransect === platform.zones[i].transects[x].properties.code){
-              for(let y = 0; y < species.length; y++){
-                if(count.mesures[0].codeSpecies === species[y].code){
-                  for(let z = 0; z < platform.surveys.length; z++){
-                    if(count.codeSurvey === platform.surveys[z].code){
-                      return of('');
-                    }
-                    if(count.codeSurvey !== platform.surveys[i].code && z === platform.surveys.length - 1){
-                      return of("CodeSurvey "+count.codeSurvey+" cannot be inserted because it doesn't exist in database for zone " + count.codeZone);
-                    }
-                  }
+      for(let i in platform.stations){
+        if(count.codeStation === platform.stations[i].properties.code){
+          for(let y in species){
+            if(count.mesures[0].codeSpecies === species[y].code){
+              for(let z in platform.surveys){
+                if(count.codeSurvey === platform.surveys[z].code){
+                  return of('');
                 }
-                if(count.mesures[0].codeSpecies !== species[y].code && y === species.length - 1){
-                  return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
+                if(count.codeSurvey !== platform.surveys[z].code && parseInt(z) === platform.surveys.length - 1){
+                  return of("CodeSurvey "+count.codeSurvey+" cannot be inserted because it doesn't exist in database");
                 }
               }
             }
-
-            if(count.codeTransect !== platform.zones[i].transects[x].properties.code && x === platform.zones[i].transects.length - 1){
-              return of("CodeTransect "+count.codeTransect+" cannot be inserted because it doesn't exist in database for zone " + count.codeZone);
+            if(count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1){
+              return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
             }
           }
         }
-        if(count.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1){
-          return of('Zone '+count.codeZone+ " cannot be inserted because it doesn't exist in database for platform " + count.codePlatform);
+
+        if(count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1){
+          return of("CodeTransect "+count.codeStation+" cannot be inserted because it doesn't exist in database");
         }
       }
     }else{

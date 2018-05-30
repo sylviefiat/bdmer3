@@ -392,19 +392,19 @@ export namespace PlatformAction {
      constructor(public payload: ZonePreference) {}
    }
 
-   export class AddPendingSTATIONAction implements Action {
+   export class AddPendingStationAction implements Action {
      readonly type = ActionTypes.ADD_PENDING_STATION;
 
      constructor(public payload: any) {}
    }
 
-   export class AddPendingSTATIONSuccessAction implements Action {
+   export class AddPendingStationSuccessAction implements Action {
      readonly type = ActionTypes.ADD_PENDING_STATION_SUCCESS;
 
      constructor(public payload: any) {}
    }
 
-   export class AddPendingSTATIONFailAction implements Action {
+   export class AddPendingStationFailAction implements Action {
      readonly type = ActionTypes.ADD_PENDING_STATION_FAIL;
 
      constructor(public payload: any) {}
@@ -803,9 +803,9 @@ export namespace PlatformAction {
    | RemoveZoneFailAction
    | AddStationAction
    | AddStationSuccessAction
-   | AddPendingSTATIONAction
-   | AddPendingSTATIONSuccessAction
-   | AddPendingSTATIONFailAction
+   | AddPendingStationAction
+   | AddPendingStationSuccessAction
+   | AddPendingStationFailAction
    | ImportStationAction
    | ImportStationSuccessAction
    | CheckStationCsvFile
