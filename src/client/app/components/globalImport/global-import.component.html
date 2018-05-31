@@ -2,242 +2,90 @@
   <mat-card class="actions">
     <mat-card-title>{{ 'IMPORT_GLOBAL' | translate}}</mat-card-title>
     <mat-card-content>
+      <button *ngIf="(( (csvFileSurvey$ |async) === null && (csvFileStation$ | async) === null && (csvFileCount$ | async) === null ) || importError.length > 0 || error !== null ); else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
 
-<!--       <div *ngIf="importError.length === 0 && csvFileZonePref !== null && error === null">
-        <button *ngIf=" csvFileSurvey !== null || csvFileZonePref !== null || csvFileStation !== null || csvFileCount !== null || kmlFileZones !== null " (click)="send()" class="btn send" disabled>sqdqsdqsd {{ 'SEND' | translate }}</button>   
-      </div> -->
-
-        <button *ngIf="(( csvFileSurvey === null && csvFileZonePref === null && csvFileStation === null && csvFileCount === null ) || importError.length > 0 || error !== null ); else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
-
-        <ng-template #activedbutton>
-          <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
-        </ng-template>
-        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
-      </mat-card-content>
+      <ng-template #activedbutton>
+        <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
+      </ng-template>
+      <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+    </mat-card-content>
   </mat-card>
 </div>
 
-<div class="insideform" [formGroup]="inputForm">
+<div class="insideform">
   <mat-horizontal-stepper #stepper (selectionChange)="changeIndex($event)">
-    <mat-step [optional]="true" class="zonePref">
-      <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && csvFileZonePref !== null && error === null) ? 'valid' : ''">Zone Pref</div></ng-template>
-      <div >
-
-        <mat-card class="no-box-shadow">
-          <mat-card-title-group>
-            <mat-card-title>{{'IMPORT_CSV' | translate }} Zones Preferences</mat-card-title> 
-            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-          </mat-card-title-group>
-          <mat-card-content>
-            {{'IMPORT_DESC' | translate }}    
-          </mat-card-content>
-          <mat-card-footer class="footer">
-            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_ZONES_PREF' | translate }}</h5>
-            <a *ngIf="!isAdmin" href="{{getCsvUrl('ZonePref')}}" download>
-              <fa [name]="'download'" [border]=true [size]=1></fa>
-            </a>
-          </mat-card-footer>
-          <mat-card-actions align="start">
-            <button (click)="fileInputZonePre.click()">
-              <span>{{ 'IMPORT_CSV' | translate }}</span>
-              <input #fileInputZonePre type="file" (change)="handleUploadCsv($event, 'zonePref')" formControlName="zonePrefInputFile" style="display:none;"  accept=".csv"/>
-            </button>
-
-            <button class="btn-danger" *ngIf="csvFileZonePref" (click)="deleteCsv('zonePref')">
-              <span>{{ 'DELETE_CSV' | translate }}</span>
-            </button>
-            <div *ngIf="csvFileZonePref">
-              {{csvFileZonePref.name}} {{ 'SELECTED_CSV' | translate }}
-            </div>
-          </mat-card-actions>
-          <mat-card-content class="error" *ngIf="error  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-          <mat-card-content class="msg" *ngIf="importError.length === 0 && csvFileZonePref !== null && error === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
-
-          <mat-card-actions align="start" *ngIf="importError.length > 0">
-            <h2 class="errorList">{{'LIST_ERROR_ZONE_PREF' | translate}}</h2>
-            <mat-list>
-              <div *ngFor="let zonePref of importError">
-                <mat-list-item class="errorList"> 
-                  {{zonePref}}
-                </mat-list-item>
-              </div>
-            </mat-list>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-      <div class="align-right" *ngIf="error  !== null || importError.length > 0; else navigate">
-        <button mat-button matStepperPrevious class="disabled" disabled>{{ 'BACK' | translate }}</button>
-        <button mat-button matStepperNext class="disabled" disabled>{{ 'NEXT' | translate }}</button>
-      </div>
-      
-      <ng-template #navigate>
-        <div class="align-right">
-          <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
-          <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
-        </div>
-      </ng-template>
-    </mat-step>
-
     <mat-step [optional]="true" class="station">
-        <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && csvFileStation !== null && error === null) ? 'valid' : ''">Stations</div></ng-template>
+      <form [formGroup]="stationForm"> 
+        <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileStation$ | async) !== null && error === null) ? 'valid' : ''">Stations</div></ng-template>
 
-      <div >
-        <mat-card class="no-box-shadow">
-          <mat-card-title-group>
-            <mat-card-title>{{'IMPORT_CSV' | translate }} Stations</mat-card-title> 
-            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-          </mat-card-title-group>
-          <mat-card-content>
-            {{'IMPORT_DESC' | translate }}    
-          </mat-card-content>
-          <mat-card-footer class="footer">
-            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_STATIONS' | translate }}</h5>
-            <a *ngIf="!isAdmin" href="{{getCsvUrl('Station')}}" download>
-              <fa [name]="'download'" [border]=true [size]=1></fa>
-            </a>
-          </mat-card-footer>
-          <mat-card-actions align="start">
-            <button (click)="fileInputStation.click()">
-              <span>{{ 'IMPORT_CSV' | translate }}</span>
-              <input #fileInputStation type="file" (change)="handleUploadCsv($event, 'station')" formControlName="stationInputFile" style="display:none;"  accept=".csv"/>
-            </button>
+        <bc-global-import-station
+          [viewStation]="viewStation"
+          [group]="stationForm"
+          [isAdmin]="isAdmin"
+          [locale]="locale"
+          [docs_repo]="docs_repo"
+          [error]="error"
+          [importError]="importError"
+          [csvFileStation]="csvFileStation$ | async"
+          (stationFileEmitter)="setStationFile($event)"
+          (countFileEmitter)="setCountFile($event)"
+          (stayHereEmitter)="stayOn($event)">
+      </bc-global-import-station>
 
-            <button class="btn-danger" *ngIf="csvFileStation" (click)="deleteCsv('station')">
-              <span>{{ 'DELETE_CSV' | translate }}</span>
-            </button>
-            <div *ngIf="csvFileStation">
-              {{csvFileStation.name}} {{ 'SELECTED_CSV' | translate }}
-            </div>
-          </mat-card-actions>
-
-          <mat-card-content class="error" *ngIf="error  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-          <mat-card-content class="msg" *ngIf="importError.length === 0 && csvFileStation !== null && error === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
-
-          <mat-card-actions align="start" *ngIf="importError.length > 0">
-            <h2 class="errorList">{{'LIST_ERROR_STATION' | translate}}</h2>
-            <mat-list>
-              <div *ngFor="let station of importError">
-                <mat-list-item class="errorList"> 
-                  {{station}}
-                </mat-list-item>
-              </div>
-            </mat-list>
-          </mat-card-actions>
-
-        </mat-card>
-      </div>
       <div class="align-right">
-        <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
         <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <mat-step [optional]="true" class="survey">
-      <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && csvFileSurvey !== null && error === null) ? 'valid' : ''">Surveys</div></ng-template>
+  <mat-step [optional]="true" class="survey">
+    <form [formGroup]="surveyForm"> 
+      <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileSurvey$ |async) !== null && error === null) ? 'valid' : ''">Surveys</div></ng-template>
 
-      <div >
-        <mat-card class="no-box-shadow">
-          <mat-card-title-group>
-            <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title> 
-            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-          </mat-card-title-group>
-          <mat-card-content>
-            {{'IMPORT_DESC' | translate }}    
-          </mat-card-content>
-          <mat-card-content class="warn">
-            {{'IMPORT_DESC_DATE' | translate }}      
-          </mat-card-content>
-          <mat-card-footer class="footer">
-            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
-            <a *ngIf="!isAdmin" href="{{getCsvUrl('Survey')}}" download>
-              <fa [name]="'download'" [border]=true [size]=1></fa>
-            </a>
-          </mat-card-footer>
-          <mat-card-actions align="start">
-            <button (click)="fileInputSurvey.click()">
-              <span>{{ 'IMPORT_CSV' | translate }}</span>
-              <input #fileInputSurvey type="file" (change)="handleUploadCsv($event, 'survey')" formControlName="surveyInputFile" style="display:none;"  accept=".csv"/>
-            </button>
+      <bc-global-import-survey
+      [viewSurvey]="viewSurvey"
+      [group]="surveyForm"
+      [locale]="locale"
+      [docs_repo]="docs_repo"
+      [error]="error"
+      [importError]="importError"
+      [csvFileSurvey]="csvFileSurvey$ | async"
+      (surveyFileEmitter)="setSurveyFile($event)"
+      (countFileEmitter)="setCountFile($event)"
+      (stayHereEmitter)="stayOn($event)"
+      >
 
-            <button class="btn-danger" *ngIf="csvFileSurvey" (click)="deleteCsv('survey')">
-              <span>{{ 'DELETE_CSV' | translate }}</span>
-            </button>
-            <div *ngIf="csvFileSurvey">
-              {{csvFileSurvey.name}} {{ 'SELECTED_CSV' | translate }}
-            </div>
-          </mat-card-actions>
-          <mat-card-content class="error" *ngIf="error  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-          <mat-card-content class="msg" *ngIf="importError.length === 0 && csvFileSurvey !== null && error === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
+    </bc-global-import-survey>
 
-          <mat-card-actions align="start" *ngIf="importError.length > 0">
-            <h2 class="errorList">{{'LIST_ERROR_SURVEY' | translate}}</h2>
-            <mat-list>
-              <div *ngFor="let survey of importError">
-                <mat-list-item class="errorList"> 
-                  {{survey}}
-                </mat-list-item>
-              </div>
-            </mat-list>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-      <div class="align-right">
-        <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
-        <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
-      </div>
-    </mat-step>
+    <div class="align-right">
+      <button mat-button matStepperPrevious>{{ 'BACK' | translate }}</button>
+      <button mat-button matStepperNext>{{ 'NEXT' | translate }}</button>
+    </div>
+  </form>
+</mat-step>
 
-    <mat-step [optional]="true" class="count">
-      <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && csvFileCount !== null && error === null) ? 'valid' : ''">Counts</div></ng-template>
-      <div >
-        <mat-card class="no-box-shadow">
-          <mat-card-title-group>
-            <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title> 
-            <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
-          </mat-card-title-group>
-          <mat-card-content>
-            {{'IMPORT_DESC' | translate }}    
-          </mat-card-content>
-          <mat-card-content class="warn">
-            {{'IMPORT_DESC_DATE' | translate }}      
-          </mat-card-content>
-          <mat-card-footer class="footer">
-            <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-            <a *ngIf="!isAdmin" href="{{getCsvUrl('Count')}}" download>
-              <fa [name]="'download'" [border]=true [size]=1></fa>
-            </a>
-          </mat-card-footer>
-          <mat-card-actions align="start">
-            <button (click)="fileInputCount.click()">
-              <span>{{ 'IMPORT_CSV' | translate }}</span>
-              <input #fileInputCount type="file" (change)="handleUploadCsv($event, 'count')" formControlName="countInputFile" style="display:none;"  accept=".csv"/>
-            </button>
-            <button class="btn-danger" *ngIf="csvFileCount" (click)="deleteCsv('count')">
-              <span>{{ 'DELETE_CSV' | translate }}</span>
-            </button>
-            <div *ngIf="csvFileCount">
-              {{csvFileCount.name}} {{ 'SELECTED_CSV' | translate }}
-            </div>
-          </mat-card-actions>
+<mat-step [optional]="true" class="count">
+  <form [formGroup]="surveyForm"> 
+    <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileCount$ | async) !== null && error === null) ? 'valid' : ''">Counts</div></ng-template>
+    
+    <bc-global-import-count
+      [viewCount]="viewCount"
+      [group]="countForm"
+      [locale]="locale"
+      [docs_repo]="docs_repo"
+      [error]="error"
+      [importError]="importError"
+      [csvFileCount]="csvFileCount$ | async"
+      (countFileEmitter)="setCountFile($event)"
+      (stayHereEmitter)="stayOn($event)"
+      >
 
-          <mat-card-content class="error" *ngIf="error  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-          <mat-card-content class="msg" *ngIf="importError.length === 0 && csvFileCount !== null && error === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
+    </bc-global-import-count>
 
-          <mat-card-actions align="start" *ngIf="importError.length > 0">
-            <h2 class="errorList">{{'LIST_ERROR_COUNT' | translate}}</h2>
-            <mat-list>
-              <div *ngFor="let count of importError">
-                <mat-list-item class="errorList"> 
-                  {{count}}
-                </mat-list-item>
-              </div>
-            </mat-list>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-      <div class="align-right">
-        <button mat-button matStepperPrevious>Back</button>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
+    <div class="align-right">
+      <button mat-button matStepperPrevious>Back</button>
+    </div>
+  </form>
+</mat-step>
+</mat-horizontal-stepper>
 </div>

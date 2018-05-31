@@ -306,34 +306,45 @@ export class PlatformService {
 
   importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string>{
     if(count.codePlatform === platform.code){
-      for(let i in platform.stations){
-        if(count.codeStation === platform.stations[i].properties.code){
-          for(let y in species){
-            if(count.mesures[0].codeSpecies === species[y].code){
-              for(let z in platform.surveys){
-                if(count.codeSurvey === platform.surveys[z].code){
-                  return of('');
+      if(platform.stations.length > 0){
+        for(let i in platform.stations){
+          if(count.codeStation === platform.stations[i].properties.code){
+            if(platform.surveys.length > 0){
+              for(let x in platform.surveys){
+                if(count.codeSurvey === platform.surveys[x].code){
+                  if(species.length > 0){
+                    for(let y in species){
+                      if(count.mesures[0].codeSpecies === species[y].code){
+                        return of('')
+                      }
+                      if(count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1){
+                        return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
+                      }
+                    }
+                  }else{
+                    return of("There is no species in the the database");
+                  }
                 }
-                if(count.codeSurvey !== platform.surveys[z].code && parseInt(z) === platform.surveys.length - 1){
+                if(count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1){
                   return of("CodeSurvey "+count.codeSurvey+" cannot be inserted because it doesn't exist in database");
                 }
-              }
-            }
-            if(count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1){
-              return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
+              } 
+            }else{
+              return of("There is no surveys in the the database for platform " + count.codePlatform);
             }
           }
+          if(count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1){
+            return of("CodeStation "+count.codeStation+" cannot be inserted because it doesn't exist in database");
+          }
         }
-
-        if(count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1){
-          return of("CodeTransect "+count.codeStation+" cannot be inserted because it doesn't exist in database");
-        }
+      }else{
+        return of("There is no stations in the the database for platform " + count.codePlatform);
       }
     }else{
       return of('Platform '+count.codePlatform+" cannot be inserted because it doesn't exist in the database");
     }
 
-    return of('')
+    return of('');
   }
 
   removeCount(count: Count): Observable<Count> {    

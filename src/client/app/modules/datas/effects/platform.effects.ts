@@ -199,7 +199,7 @@ export class PlatformEffects {
   @Effect()
   checkStationCsv$: Observable<Action> = this.actions$
     .ofType(PlatformAction.ActionTypes.CHECK_STATION_CSV_FILE)  
-    //.do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
+    .do(() => this.store.dispatch(new PlatformAction.RemoveMsgAction()))
     .map((action: PlatformAction.CheckStationCsvFile) => action.payload)
     .mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station))
     // fait automatiquement une boucle sur les platforms retournées

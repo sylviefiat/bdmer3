@@ -23,83 +23,98 @@ import { GeojsonService } from '../../modules/core/services/geojson.service';
   selector: 'bc-global-import-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-global-import 
-      (upload)="handleUpload($event)"
-      [platform]="platform$ | async"
-      [error]="error$ | async"
-      [importError]="importError$ | async"
-      [isAdmin]="isAdmin$ | async"
-      [locale]="locale$ | async"
-      [docs_repo]="docs_repo">
-    </bc-global-import>
+  <bc-global-import 
+  (check)="handleCheck($event)"
+  (upload)="handleUpload($event)"
+  (pending)="handlePending($event)"
+  [platform]="platform$ | async"
+  [error]="error$ | async"
+  [importError]="importError$ | async"
+  [isAdmin]="isAdmin$ | async"
+  [locale]="locale$ | async"
+  [docs_repo]="docs_repo">
+  </bc-global-import>
   `,
 })
-export class GlobalImportPageComponent implements OnInit, OnDestroy {
-    platform$: Observable<Platform>;
-    error$: Observable<string | null>;
-    importError$: Observable<string[]>;
-    isAdmin$: Observable<Country>;
-    locale$: Observable<boolean>;
-    docs_repo: string;
-    canDeactivateB: boolean = true;
+export class GlobalImportPageComponent implements OnInit {
+  platform$: Observable<Platform>;
+  error$: Observable<string | null>;
+  importError$: Observable<string[]>;
+  isAdmin$: Observable<Country>;
+  locale$: Observable<boolean>;
+  docs_repo: string;
 
-    constructor(private geojsonService: GeojsonService, private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
+  constructor(private geojsonService: GeojsonService, private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
+  }
+
+  ngOnInit() {
+    this.platform$ = this.store.let(getSelectedPlatform);
+    this.importError$ = this.store.let(getPlatformImpErrors);
+    this.error$ = this.store.let(getPlatformPageError);
+    this.isAdmin$ = this.store.let(getisAdmin);
+    this.store.dispatch(new SpeciesAction.LoadAction());
+    this.locale$ = this.store.let(getLangues);
+    this.docs_repo = "../../../assets/files/";
+  }
+
+  handleCheck(setFile) {
+    switch (setFile.type) {
+      case "station":
+        this.store.dispatch(new PlatformAction.CheckStationCsvFile(setFile.file));
+        break;
+      case "survey":
+        this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(setFile.file));
+        break;
+      case "count":
+        this.store.dispatch(new PlatformAction.CheckCountCsvFile(setFile.file));
+        break;
+      default:
+        return;
     }
+  }
 
-    ngOnInit() {
-        this.platform$ = this.store.let(getSelectedPlatform);
-        this.importError$ = this.store.let(getPlatformImpErrors);
-        this.error$ = this.store.let(getPlatformPageError);
-        this.isAdmin$ = this.store.let(getisAdmin);
-        this.store.dispatch(new SpeciesAction.LoadAction());
-        this.locale$ = this.store.let(getLangues);
-        this.docs_repo="../../../assets/files/";
+  handlePending(setFile) {
+    switch (setFile.type) {
+      case "station":
+        this.store.dispatch(new PlatformAction.AddPendingStationAction(setFile.file));
+        break;
+      case "survey":
+        this.store.dispatch(new PlatformAction.AddPendingSurveyAction(setFile.file));
+        break;
+      default:
+        return;
     }
+  }
 
-    handleUpload(csvFiles: any[]): void {
-      this.canDeactivateB = false;
-      for(let i in csvFiles){
-        if(csvFiles[i].file !== null){
-          switch (csvFiles[i].type) {
-            case "station":{
-              this.store.dispatch(new PlatformAction.ImportStationAction(csvFiles[i].file));
-              break;
-            }
-            case "survey":{
-              this.store.dispatch(new PlatformAction.ImportSurveyAction(csvFiles[i].file));
-              break;
-            }
-            case "count":{
-              this.store.dispatch(new PlatformAction.ImportCountAction(csvFiles[i].file));
-              break;
-            }
-            case "zonePref":{
-              this.store.dispatch(new PlatformAction.ImportZonePrefAction(csvFiles[i].file));
-              break;
-            }
-          }
+  handleUpload(setFile: any): void {
+    if (setFile.file !== null) {
+      switch (setFile.type) {
+        case "station": {
+          this.store.dispatch(new PlatformAction.ImportStationAction(setFile.file));
+          break;
+        }
+        case "survey": {
+          this.store.dispatch(new PlatformAction.ImportSurveyAction(setFile.file));
+          break;
+        }
+        case "count": {
+          this.store.dispatch(new PlatformAction.ImportCountAction(setFile.file));
+          break;
         }
       }
-    }    
-
-    return() {
-        this.routerext.navigate(['/platform/'], {
-            transition: {
-                duration: 1000,
-                name: 'slideTop',
-            }
-        });
     }
+  }
 
-    ngOnDestroy() {
-       // this.store.dispatch(new PlatformAction.ResetAllPendingAction());
-    }
+  return() {
+    this.routerext.navigate(['/platform/'], {
+      transition: {
+        duration: 1000,
+        name: 'slideTop',
+      }
+    });
+  }
 
-    canDeactivate() {
-        if (this.canDeactivateB) {
-          return window.confirm('Discard changes?');
-        }
-
-        return true;
-    }
+  canDeactivate() {
+    return confirm('Discard changes?');
+  }
 }

@@ -387,7 +387,6 @@ export class Csv2JsonService {
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
                         case "codePlatform":
-                        case "codeZone":
                         case "codeSurvey":
                         case "code":
                         case "codeStation":
@@ -445,6 +444,7 @@ export class Csv2JsonService {
             return [];
         }
 
+        console.log(lines)
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
