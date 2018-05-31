@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs/Observable';
+import { createSelector } from '@ngrx/store';
 import * as Turf from '@turf/turf';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Station, Survey, Species } from '../../datas/models/index';
 import { Method, Results, Data, DimensionsAnalyse } from '../models/analyse';
-import { IAppState } from '../../ngrx/index';
+import { IAppState, getPlatformInApp, getSpeciesInApp } from '../../ngrx/index';
 
 export interface IAnalyseState {
     usedCountry: Country;
@@ -42,52 +43,76 @@ export const initMethods: Method[] = [
     { method: 'LONGLARG' },
     { method: 'LONGUEUR' }
 ]
-
-export function getUsedCountry(state$: Observable<IAnalyseState>) {
+export const getUsedCountry = (state: IAnalyseState) => state.usedCountry;
+/*export function getUsedCountry(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedCountry);
-}
-
-export function getUsedPlatforms(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedPlatforms = (state: IAnalyseState) => state.usedPlatforms;
+/*export function getUsedPlatforms(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedPlatforms);
-}
-
-export function getUsedYears(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedYears = (state: IAnalyseState) => state.usedYears;
+/*export function getUsedYears(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedYears);
-}
-
-export function getUsedSurveys(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedSurveys = (state: IAnalyseState) => state.usedSurveys;
+/*export function getUsedSurveys(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedSurveys);
-}
-
-export function getUsedZones(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedZones = (state: IAnalyseState) => state.usedZones;
+/*export function getUsedZones(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedZones);
-}
-
-export function getUsedStations(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedStations = (state: IAnalyseState) => state.usedStations;
+/*export function getUsedStations(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedStations);
-}
-
-export function getUsedSpecies(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedSpecies = (state: IAnalyseState) => state.usedSpecies;
+/*export function getUsedSpecies(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedSpecies);
-}
-
-export function getUsedDims(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedDims = (state: IAnalyseState) => state.usedDims;
+/*export function getUsedDims(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedDims);
-}
-
-export function getUsedMethod(state$: Observable<IAnalyseState>) {
+}*/
+export const getUsedMethod = (state: IAnalyseState) => state.usedMethod;
+/*export function getUsedMethod(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.usedMethod);
-}
-
-export function getAnalysing(state$: Observable<IAnalyseState>) {
+}*/
+export const getAnalysing = (state: IAnalyseState) => state.analysing;
+/*export function getAnalysing(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.analysing);
-}
-
-export function getAnalysed(state$: Observable<IAnalyseState>) {
+}*/
+export const getAnalysed = (state: IAnalyseState) => state.analysed;
+/*export function getAnalysed(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.analysed);
-}
-
-export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
+}*/
+export const getSelectedData = (state: IAnalyseState) => createSelector(getUsedCountry,getUsedPlatforms,getUsedYears,
+    getUsedSurveys,getUsedZones,getUsedStations,getUsedSpecies,(country,platform,years,surveys,zones,stations,species) => {
+            return {
+                usedCountry: country,
+                usedPlatforms: platform, 
+                usedYears: years,
+                usedSurveys: surveys,
+                usedZones: zones,
+                usedStations: stations,
+                usedSpecies: species
+        }});
+export const getData = createSelector(getSelectedData,getUsedDims,getUsedMethod,
+        (selectData,dims,method) => {
+            return {
+                usedCountry: selectData[1].usedCountry,
+                usedPlatforms: selectData[1].usedPlatforms,
+                usedYears: selectData[1].usedYears,
+                usedSurveys: selectData[1].usedSurveys,
+                usedZones: selectData[1].usedZones,
+                usedStations: selectData[1].usedStations,
+                usedSpecies: selectData[1].usedSpecies,
+                usedDims: dims,
+                usedMethod: method
+            }
+        });
+/*export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
     return state$.select(state => {
         return {
             usedCountry: state.usedCountry, 
@@ -101,17 +126,29 @@ export function getData(state$: Observable<IAnalyseState>): Observable<Data> {
             usedMethod: state.usedMethod
         }
     });
-}
-
-export function getResult(state$: Observable<IAnalyseState>) {
+}*/
+export const getResult = (state: IAnalyseState) => state.result;
+/*export function getResult(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.result);
-}
-
-export function getMsg(state$: Observable<IAnalyseState>) {
+}*/
+export const getMsg = (state: IAnalyseState) => state.msg;
+/*export function getMsg(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.msg);
-}
+}*/
+export const getYearsAvailables = createSelector(getUsedPlatforms,(platforms)=>{
+    let years: string[] = [];
+        for(let p of platforms){
+                for(let s of p.surveys){
+                    let y = new Date(s.dateStart).getFullYear().toString();
+                    if(years.indexOf(y)<0){
+                        years.push(y);
+                    }
+                }
+            }
+        return years.sort();
+});
 
-export function getYearsAvailables(state$: Observable<IAppState>) {
+/*export function getYearsAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let years: string[] = [];
         if(state.analyse.usedPlatforms){
@@ -126,9 +163,17 @@ export function getYearsAvailables(state$: Observable<IAppState>) {
         }
         return years.sort();
     })
-}
-
-export function getSurveysAvailables(state$: Observable<IAppState>) {
+}*/
+export const getSurveysAvailables = createSelector(getUsedPlatforms,getUsedYears,(platforms, years) => {
+    let surveys: Survey[] = [];
+    for(let p of platforms){
+        for(let y of years){
+            surveys = [...surveys,...p.surveys.filter(s => y===new Date(s.dateStart).getFullYear().toString())];
+        }
+    }
+    return surveys;
+});
+/*export function getSurveysAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let surveys: Survey[] = [];
         if(state.analyse.usedPlatforms){
@@ -143,9 +188,16 @@ export function getSurveysAvailables(state$: Observable<IAppState>) {
         }
         return surveys;
     })
-}
-
-export function getZonesAvailables(state$: Observable<IAppState>) {
+}*/
+export const getZonesAvailables = createSelector(getPlatformInApp,getUsedSurveys,(platforms:Platform[],surveys:Survey[]) => {
+    let zones: Zone[] = [];
+    for(let s of surveys){
+        let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
+        zones = [... zones, ...sz.filter(z => zones.indexOf(z)<0)];
+    }
+    return zones;
+})
+/*export function getZonesAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let zones: Zone[] = [];
         for (let i in state.analyse.usedSurveys) {
@@ -158,9 +210,18 @@ export function getZonesAvailables(state$: Observable<IAppState>) {
         }
         return zones.sort();
     })
-}
+}*/
 
-export function getStationsAvailables(state$: Observable<IAppState>) {
+export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZones,(platforms,zones)=>{
+    let stations = [];
+    for(let p of platforms){
+        for(let z of zones){
+            stations = [...stations,p.stations.filter(s => Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates)))];
+        }
+    }
+    return stations;
+})
+/*export function getStationsAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let stations = [];
         if(state.analyse.usedPlatforms && state.analyse.usedZones){
@@ -176,9 +237,21 @@ export function getStationsAvailables(state$: Observable<IAppState>) {
         }
         return stations.sort();
     })
-}
+}*/
 
-export function getSpeciesAvailables(state$: Observable<IAppState>) {
+export const getSpeciesAvailables = createSelector(getSpeciesInApp,getUsedSurveys,(speciesEntities:Species[],surveys:Survey[]) => {
+    let species = [];
+    for(let s of surveys){
+        for(let c of s.counts){            
+            for(let m of c.mesures){
+                let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies);
+                species = [...species, ...cs.filter(sp => species.indexOf(sp.code)<0)];
+            }
+        }
+    }
+    return species.sort();
+})
+/*export function getSpeciesAvailables(state$: Observable<IAppState>) {
     return state$.select(state => {
         let species = [];
         for (let i in state.analyse.usedSurveys) {
@@ -195,4 +268,4 @@ export function getSpeciesAvailables(state$: Observable<IAppState>) {
         }
         return species.sort();
     })
-}
+}*/

@@ -7,7 +7,7 @@ import { Http } from '@angular/http';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 
 // libs
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader } from '@ngx-translate/core';
@@ -59,7 +59,7 @@ let DEV_IMPORTS: any[] = [];
 if (String('<%= BUILD_TYPE %>') === 'dev') {
   DEV_IMPORTS = [
     ...DEV_IMPORTS,
-    StoreDevtoolsModule.instrumentOnlyWithExtension()
+    StoreDevtoolsModule.instrument()
   ];
 }
 
@@ -80,9 +80,8 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     }]),
     MainModule,
     // configure app state
-    StoreModule.provideStore(AppReducer),
-    EffectsModule.run(MultilingualEffects),
-    EffectsModule.run(MainEffects),
+    StoreModule.forRoot(AppReducer),
+    EffectsModule.forRoot([MultilingualEffects,MainEffects]),
     // dev environment only imports
     DEV_IMPORTS,
   ],

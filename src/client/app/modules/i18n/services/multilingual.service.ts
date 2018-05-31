@@ -13,7 +13,7 @@ import { IAppState } from '../../ngrx/index';
 // module
 import { CATEGORY } from '../common/category.common';
 import { IMultilingualState, initialState } from '../states/index';
-import { ChangeAction } from '../actions/index';
+import { MultilingualAction } from '../actions/index';
 
 // provide supported languages at runtime
 export const Languages: InjectionToken<Array<ILang>> = new InjectionToken('Languages');
@@ -48,6 +48,6 @@ export class MultilingualService {
     });
 
     // init the lang
-    this.store.dispatch(new ChangeAction(userLang));
+    this.store.dispatch(new MultilingualAction.ChangeAction(userLang));
   }
 }

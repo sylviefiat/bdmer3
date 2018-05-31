@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { CountriesAction } from '../actions/index';
-import { ICountriesState, getCountriesLoaded, getCountriesEntities  } from '../states/index';
+import { IAppState, getCountriesisLoaded, getCountriesInApp  } from '../../ngrx/index';
 
 /**
  * Guards are hooks into the route resolution process, providing an opportunity
@@ -22,7 +22,7 @@ import { ICountriesState, getCountriesLoaded, getCountriesEntities  } from '../s
 @Injectable()
 export class CountryExistsGuard implements CanActivate {
   constructor(
-    private countriesStore: Store<ICountriesState>,
+    private store: Store<IAppState>,
     private router: Router
   ) {}
 
@@ -32,9 +32,9 @@ export class CountryExistsGuard implements CanActivate {
    * has finished.
    */
   waitForCountriesToLoad(): Observable<boolean> {
-    return this.countriesStore
-      .let(getCountriesLoaded)
-      .filter(loaded => loaded)
+    return this.store
+      .let(getCountriesisLoaded)
+      .map(loaded => loaded[0])
       .take(1);
   }
 
@@ -44,8 +44,8 @@ export class CountryExistsGuard implements CanActivate {
    */
   hasCountryInDB(id: string): Observable<boolean> {
     console.log(id);
-    return this.countriesStore
-      .let(getCountriesEntities)
+    return this.store
+      .let(getCountriesInApp)
       .map(entities => !!entities[id])
       .take(1);
   }

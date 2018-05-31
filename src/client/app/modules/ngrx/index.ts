@@ -1,7 +1,7 @@
 // libs
 import { Observable } from 'rxjs/Observable';
 // import { combineLatest } from 'rxjs/observable/combineLatest';
-import { ActionReducer } from '@ngrx/store';
+
 import '@ngrx/core/add/operator/select';
 
 /**
@@ -12,7 +12,7 @@ import '@ngrx/core/add/operator/select';
  *
  * More: https://drboolean.gitbooks.io/mostly-adequate-guide/content/ch5.html
  */
-import { compose } from '@ngrx/core/compose';
+import { compose } from '@ngrx/store';
 
 /**
  * storeFreeze prevents state from being mutated. When mutation occurs, an
@@ -29,7 +29,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
  *
  * More: https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch
  */
-import { combineReducers } from '@ngrx/store';
+import { ActionReducer, combineReducers } from '@ngrx/store';
 
 /**
  * Every reducer module's default export is the reducer function itself. In
@@ -99,36 +99,55 @@ export function AppReducer(state: any, action: any) {
   }
 }
 
-export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
-  return state$.select(s => s.i18n);
-}
-export function getNameListState(state$: Observable<IAppState>): Observable<IMainState> {
-  return state$.select(s => s.main);
-}
-export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
-  return state$.select(s => s.auth);
-}
-export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
-  return state$.select(s => s.loginpage);
-}
-export function getCountriesState(state$: Observable<IAppState>): Observable<ICountriesState> {
-  return state$.select(s => s.countries);
-}
-export function getCountryState(state$: Observable<IAppState>): Observable<ICountryState> {
-  return state$.select(s => s.country);
-}
-export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
-  return state$.select(s => s.species);
-}
-export function getPlatformState(state$: Observable<IAppState>): Observable<IPlatformState> {
-  return state$.select(s => s.platform);
-}
-export function getAnalyseState(state$: Observable<IAppState>): Observable<IAnalyseState> {
-  return state$.select(s => s.analyse);
-}
-export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
-  return state$.select(s => s);
-}
+/*export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
+  return state$.let(s => s.i18n);
+}*/
+export const getMultilingualState = (state:IAppState) => state.i18n;
+
+/*export function getNameListState(state$: Observable<IAppState>): Observable<IMainState> {
+  return state$.let(s => s.main);
+}*/
+export const getNameListState = (state:IAppState) => state.main;
+
+/*export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
+  return state$.let(s => s.auth);
+}*/
+export const getAuthState = (state:IAppState) => state.auth;
+
+/*export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
+  return state$.let(s => s.loginpage);
+}*/
+export const getLoginPageState = (state:IAppState) => state.loginpage;
+
+/*export function getCountriesState(state$: Observable<IAppState>): Observable<ICountriesState> {
+  return state$.let(s => s.countries);
+}*/
+export const getCountriesState = (state:IAppState) => state.countries;
+
+/*export function getCountryState(state$: Observable<IAppState>): Observable<ICountryState> {
+  return state$.let(s => s.country);
+}*/
+export const getCountryState = (state:IAppState) => state.country;
+
+/*export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
+  return state$.let(s => s.species);
+}*/
+export const getSpeciesState = (state:IAppState) => state.species;
+
+/*export function getPlatformState(state$: Observable<IAppState>): Observable<IPlatformState> {
+  return state$.let(s => s.platform);
+}*/
+export const getPlatformState = (state:IAppState) => state.platform;
+
+/*export function getAnalyseState(state$: Observable<IAppState>): Observable<IAnalyseState> {
+  return state$.let(s => s.analyse);
+}*/
+export const getAnalyseState = (state:IAppState) => state.analyse;
+
+/*export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
+  return state$.let(s => s);
+}*/
+export const getAppState = (state:IAppState) => state;
 
 // i18n
 export const getLangues: any = compose(getLang, getMultilingualState);

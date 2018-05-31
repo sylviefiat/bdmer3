@@ -7,6 +7,9 @@ import { type } from '../../core/utils/type';
 // module
 import { CATEGORY } from '../common/category.common';
 
+export namespace MultilingualAction {
+  // Category to uniquely identify the actions
+  export const SPECIES: string = 'MultilingualAction';
 /**
  * For each action type in an action group, make a simple
  * enum object for all of this group's action types.
@@ -60,3 +63,4 @@ export type Actions
   = ChangeAction
   | LangChangedAction
   | LangUnsupportedAction;
+}

@@ -11,21 +11,22 @@ import 'rxjs/add/operator/map';
 // module
 import { MultilingualService, Languages } from '../services/multilingual.service';
 import * as multilingual from '../actions/multilingual.action';
+import { MultilingualAction } from '../actions/multilingual.action';
 
 @Injectable()
 export class MultilingualEffects {
 
   @Effect() change$: Observable<Action> = this.actions$
-    .ofType(multilingual.ActionTypes.CHANGE)
-    .map(action => {
+    .ofType(MultilingualAction.ActionTypes.CHANGE)
+    .map((action: MultilingualAction.ChangeAction) => {
       let lang = action.payload;
       if (includes(map(this.languages, 'code'), lang)) {
-        let langChangedAction = new multilingual.LangChangedAction(lang);
+        let langChangedAction = new MultilingualAction.LangChangedAction(lang);
         // change state
-        return new multilingual.LangChangedAction(lang);
+        return new MultilingualAction.LangChangedAction(lang);
       } else {
         // not supported (here for example)
-        return new multilingual.LangUnsupportedAction(lang);
+        return new MultilingualAction.LangUnsupportedAction(lang);
       }
     });
 

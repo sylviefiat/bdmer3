@@ -7,7 +7,6 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Effect, Actions } from '@ngrx/effects';
-import { Database } from '@ngrx/db';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
 import { fromPromise } from 'rxjs/observable/fromPromise';

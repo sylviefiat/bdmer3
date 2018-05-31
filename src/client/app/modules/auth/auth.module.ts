@@ -20,8 +20,7 @@ import { AuthEffects } from './effects/auth.effects';
     ReactiveFormsModule, 
     RouterModule,
     SharedModule,
-    //MultilingualModule,
-    EffectsModule.run(AuthEffects),
+    EffectsModule.forRoot([AuthEffects])
   ],
   declarations: [],
   providers: [AuthGuard],

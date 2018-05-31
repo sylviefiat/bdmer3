@@ -19,9 +19,7 @@ import { SpeciesService, PlatformService } from './services/index';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    //MultilingualModule,
-    EffectsModule.run(SpeciesEffects),
-    EffectsModule.run(PlatformEffects),
+    EffectsModule.forRoot([SpeciesEffects,PlatformEffects])
   ],
   declarations: [],
   providers:[SpeciesService, PlatformService],

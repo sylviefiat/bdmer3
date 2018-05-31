@@ -53,8 +53,9 @@ export class AuthEffects {
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
+    .map((action: AuthAction.LoginSuccess) => action.payload)
     .withLatestFrom(this.store.let(getLatestURL))
-    .map(([action, url]) => [action.payload, url])
+    .map(([authInfo, url]) => [authInfo, url])
     .mergeMap((value: [any, String]) => {      
       return this.router.navigate([value[1]])
     });

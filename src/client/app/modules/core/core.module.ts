@@ -3,8 +3,6 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
-import { DBModule } from '@ngrx/db';
 import { PapaParseModule } from 'ngx-papaparse';
 import { MatDialogModule } from '@angular/material';
 // module
@@ -16,7 +14,6 @@ import { AnalyseModule } from '../analyse/index';
 import { CORE_DIRECTIVES } from './directives/index';
 import { CORE_PROVIDERS } from './services/index';
 import { Config } from './utils/index';
-import { schema } from '../db/index';
 
 import { zoneMapModal } from '../../components/zone/zone-map-modal.component'
 import { stationMapModal } from '../../components/station/station-map-modal.component'
@@ -37,7 +34,6 @@ interface ICoreModuleOptions {
     DatasModule,
     AuthModule,
     PapaParseModule,
-    DBModule.provideDB(schema),
     MatDialogModule,
     AnalyseModule
   ],

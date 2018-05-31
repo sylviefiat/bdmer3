@@ -1,6 +1,5 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
-import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { IAppState } from '../../modules/ngrx/index';
@@ -13,7 +12,7 @@ declare var google: any;
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
   <div class="container">   
-     <google-chart [data]="chartData"></google-chart>
+     
    </div>
   `,
     styles: [
