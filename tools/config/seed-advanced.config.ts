@@ -47,11 +47,6 @@ export class SeedAdvancedConfig extends SeedConfig {
       // This is not implemented in the seed but here to show you way forward if you wanted to add
       bootstrap   = 'main.mobile.hybrid';
     }
-
-    if (argv['analytics']) {
-      this.TNS_CONFIG.ANALYTICS_TRACKING_ID = argv['analytics'];
-    }
-
     // Override seed defaults
     this.BOOTSTRAP_DIR = argv['app'] ? (argv['app'] + '/') : '';
     this.BOOTSTRAP_MODULE = `${this.BOOTSTRAP_DIR}${bootstrap}`;
@@ -67,18 +62,11 @@ export class SeedAdvancedConfig extends SeedConfig {
     let additionalPackages: ExtendPackages[] = [
       {
         name: 'lodash',
-        path: 'node_modules/lodash/lodash.js',
-        packageMeta: {
-          main: 'index.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/lodash/lodash.js'
       },
       {
-        name: '@ngrx/core',
-        packageMeta: {
-          main: 'bundles/core.umd.js',
-          defaultExtension: 'js'
-        }
+        name: 'xmldom',
+        path: 'node_modules/xmldom/dom.js'
       },
       {
         name: '@ngrx/store',
@@ -96,7 +84,7 @@ export class SeedAdvancedConfig extends SeedConfig {
       },
       {
         name: '@ngrx/effects/testing',
-        path: 'node_modules/@ngrx/effects/testing/index.js'
+        path: 'testing/index.js'
       },
       {
         name: '@ngrx/store-devtools',
@@ -107,24 +95,11 @@ export class SeedAdvancedConfig extends SeedConfig {
       },
       {
         name: '@ngx-translate/core',
-        packageMeta: {
-          main: 'bundles/core.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngx-translate/core/bundles/ngx-translate-core.umd.js'
       },
       {
         name: '@ngx-translate/http-loader',
-        packageMeta: {
-          main: 'bundles/http-loader.umd.js',
-          defaultExtension: 'js'
-        }
-      },
-      {
-        name: 'angulartics2',
-        packageMeta: {
-          main: 'dist/core.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngx-translate/http-loader/bundles/ngx-translate-http-loader.umd.js'
       },
       {
         name: 'ngrx-store-freeze',
@@ -133,6 +108,49 @@ export class SeedAdvancedConfig extends SeedConfig {
       {
         name: 'deep-freeze-strict',
         path: 'node_modules/deep-freeze-strict/index.js'
+      },
+      {
+        name: 'rxjs',
+        path: 'node_modules/rxjs/index.js'
+      },
+      {
+        name: 'rxjs/Observable',
+        path: 'node_modules/rxjs/Observable.js'
+      },
+      {
+        name: 'rxjs/Operator',
+        path: 'node_modules/rxjs/Operator.js'
+      },
+      {
+        name: 'rxjs/observable',
+        path: 'node_modules/rxjs/observable'
+      },
+      {
+        name: 'rxjs/add',
+        path: 'node_modules/rxjs/'
+      },
+      {
+        name: 'rxjs-compat',
+        path: 'node_modules/rxjs-compat/index.js'
+      },{
+        name: 'rxjs-compat/Observable',
+        path: 'node_modules/rxjs-compat/Observable.js'
+      },
+      {
+        name: 'rxjs-compat/Operator',
+        path: 'node_modules/rxjs-compat/Operator.js'
+      },
+      {
+        name: 'rxjs-compat/observable',
+        path: 'node_modules/rxjs-compat/observable'
+      },
+      {
+        name: 'rxjs-compat/operator',
+        path: 'node_modules/rxjs-compat/operator'
+      },
+      {
+        name: 'tslib',
+        path: 'node_modules/tslib/tslib.js'
       }
     ];
 

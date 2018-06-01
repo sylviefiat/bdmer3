@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { createSelector } from '@ngrx/store';
+import { createSelector, compose } from '@ngrx/store';
 import * as Turf from '@turf/turf';
 
 import { User, Country } from '../../countries/models/country';
@@ -87,7 +87,7 @@ export const getAnalysed = (state: IAnalyseState) => state.analysed;
 /*export function getAnalysed(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.analysed);
 }*/
-export const getSelectedData = (state: IAnalyseState) => createSelector(getUsedCountry,getUsedPlatforms,getUsedYears,
+export const getSelectedData = (state: IAnalyseState) => compose(getUsedCountry,getUsedPlatforms,getUsedYears,
     getUsedSurveys,getUsedZones,getUsedStations,getUsedSpecies,(country,platform,years,surveys,zones,stations,species) => {
             return {
                 usedCountry: country,
@@ -98,7 +98,7 @@ export const getSelectedData = (state: IAnalyseState) => createSelector(getUsedC
                 usedStations: stations,
                 usedSpecies: species
         }});
-export const getData = createSelector(getSelectedData,getUsedDims,getUsedMethod,
+export const getData = compose(getSelectedData,getUsedDims,getUsedMethod,
         (selectData,dims,method) => {
             return {
                 usedCountry: selectData[1].usedCountry,
@@ -135,7 +135,7 @@ export const getMsg = (state: IAnalyseState) => state.msg;
 /*export function getMsg(state$: Observable<IAnalyseState>) {
     return state$.select(state => state.msg);
 }*/
-export const getYearsAvailables = createSelector(getUsedPlatforms,(platforms)=>{
+export const getYearsAvailables = compose(getUsedPlatforms,(platforms:Platform[])=>{
     let years: string[] = [];
         for(let p of platforms){
                 for(let s of p.surveys){
@@ -164,7 +164,7 @@ export const getYearsAvailables = createSelector(getUsedPlatforms,(platforms)=>{
         return years.sort();
     })
 }*/
-export const getSurveysAvailables = createSelector(getUsedPlatforms,getUsedYears,(platforms, years) => {
+export const getSurveysAvailables = compose(getUsedPlatforms,getUsedYears,(platforms:Platform[], years:string[]) => {
     let surveys: Survey[] = [];
     for(let p of platforms){
         for(let y of years){
@@ -189,7 +189,7 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms,getUsedYears
         return surveys;
     })
 }*/
-export const getZonesAvailables = createSelector(getPlatformInApp,getUsedSurveys,(platforms:Platform[],surveys:Survey[]) => {
+export const getZonesAvailables = compose(getPlatformInApp,getUsedSurveys,(platforms:Platform[],surveys:Survey[]) => {
     let zones: Zone[] = [];
     for(let s of surveys){
         let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
@@ -212,7 +212,7 @@ export const getZonesAvailables = createSelector(getPlatformInApp,getUsedSurveys
     })
 }*/
 
-export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZones,(platforms,zones)=>{
+export const getStationsAvailables = compose(getUsedPlatforms,getUsedZones,(platforms:Platform[],zones:Zone[])=>{
     let stations = [];
     for(let p of platforms){
         for(let z of zones){
@@ -239,7 +239,7 @@ export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZone
     })
 }*/
 
-export const getSpeciesAvailables = createSelector(getSpeciesInApp,getUsedSurveys,(speciesEntities:Species[],surveys:Survey[]) => {
+export const getSpeciesAvailables = compose(getSpeciesInApp,getUsedSurveys,(speciesEntities:Species[],surveys:Survey[]) => {
     let species = [];
     for(let s of surveys){
         for(let c of s.counts){            

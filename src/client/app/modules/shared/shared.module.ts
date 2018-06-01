@@ -6,8 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
-  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule } from '@angular/material';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 // modules
@@ -32,6 +32,29 @@ import { SHARED_COMPONENTS } from './components/index';
   ]
 })
 export class SharedMaterialModule {}
+
+@NgModule({
+  imports: [
+    MatFormFieldModule,
+  ],
+  exports: [
+    MatAutocompleteModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatTabsModule,
+  ]
+})
+export class MaterialModule { }
 
 const SHARED_MODULES: any[] = [
   CommonModule,
@@ -69,7 +92,7 @@ const SHARED_MODULES: any[] = [
   ],
   exports: [
     ...SHARED_MODULES,
-    SharedMaterialModule,
+    MaterialModule,
     ...SHARED_COMPONENTS,
     AgmCoreModule
   ],

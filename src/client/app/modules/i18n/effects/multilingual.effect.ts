@@ -4,9 +4,10 @@ import { Injectable, Inject } from '@angular/core';
 // libs
 import { Store, Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
-import { includes, map } from 'lodash';
+import * as Lodash from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+//import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators/map';
 
 // module
 import { MultilingualService, Languages } from '../services/multilingual.service';
@@ -20,7 +21,7 @@ export class MultilingualEffects {
     .ofType(MultilingualAction.ActionTypes.CHANGE)
     .map((action: MultilingualAction.ChangeAction) => {
       let lang = action.payload;
-      if (includes(map(this.languages, 'code'), lang)) {
+      if (Lodash.includes(Lodash.map(this.languages, 'code'), lang)) {
         let langChangedAction = new MultilingualAction.LangChangedAction(lang);
         // change state
         return new MultilingualAction.LangChangedAction(lang);

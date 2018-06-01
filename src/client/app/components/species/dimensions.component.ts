@@ -20,14 +20,14 @@ import { Country } from '../../modules/countries/models/country';
       </mat-form-field>         
     </mat-card-content>
     <mat-card-content> 
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MIN' | translate }}" formControlName="longMin" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MIN_EX' | translate }}</div>    
-      </mat-input-container>     
-      <mat-input-container>
+      </mat-form-field>     
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX2' | translate }}</div>    
-      </mat-input-container>
+      </mat-form-field>
     </mat-card-content>
     </div>
   `,
@@ -42,7 +42,7 @@ import { Country } from '../../modules/countries/models/country';
       flex-wrap: wrap;
       justify-content: center;
     }
-    mat-input-container {
+    mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
     }

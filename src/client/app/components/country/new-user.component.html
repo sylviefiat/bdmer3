@@ -18,31 +18,31 @@
       <div class="subheader" *ngIf="isAdmin">{{ 'USER' | translate}} {{countryName}}<img mat-card-sm-image *ngIf="flag" [src]="flag"/></div>
 
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'NAME' | translate}}" formControlName="name" required>
-        </mat-input-container>
+        </mat-form-field>
 
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'FIRSTNAME' | translate}}" formControlName="surname" required>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'USERNAME' | translate }}" formControlName="username" required>
-        </mat-input-container>
-        <mat-input-container>
+        </mat-form-field>
+        <mat-form-field>
           <input type="email" matInput placeholder="{{ 'EMAIL' | translate}}" formControlName="email" required>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="password" matInput placeholder="{{ 'PASSWORD' | translate}}" formControlName="password" required>
-        </mat-input-container>
-        <mat-input-container>
+        </mat-form-field>
+        <mat-form-field>
           <input type="password" matInput placeholder="{{ 'REPASSWORD' | translate}}" formControlName="repassword" required>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div class="row">

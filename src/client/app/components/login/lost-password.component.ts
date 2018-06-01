@@ -12,9 +12,9 @@ import { Authenticate } from '../../modules/auth/models/user';
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'mail-o'" [border]=false [size]=2></fa>
-            <mat-input-container>
+            <mat-form-field>
               <input type="text" matInput placeholder="Email" formControlName="email">
-            </mat-input-container>
+            </mat-form-field>
           </p>
           
           <p *ngIf="errorMessage" class="mailError">

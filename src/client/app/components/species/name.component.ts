@@ -7,15 +7,15 @@ import { FormGroup } from '@angular/forms';
   selector: 'bt-name',
   template: `
     <mat-card-content [formGroup]="nameForm">
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="Code language" formControlName="lang" required>
         <div class="hint">Ex: FR</div>
-      </mat-input-container>
+      </mat-form-field>
           
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="Nom vernaculaire" formControlName="name" required>
         <div class="hint">Ex: Holothurie brune</div>    
-      </mat-input-container>
+      </mat-form-field>
     </mat-card-content>
   `,
   styles: [
@@ -27,7 +27,7 @@ import { FormGroup } from '@angular/forms';
       background-color: #f3f3f4;
       padding-top: 10px;
     }
-    mat-input-container {
+    mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
     }

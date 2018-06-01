@@ -15,20 +15,20 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'STATION_DESC' | translate }}</h5>
       <div class="row" [formGroup]="stationForm">
-        <mat-input-container formGroupName="properties">
+        <mat-form-field formGroupName="properties">
           <input type="text" matInput placeholder="{{ 'STATION_NAME' | translate }}" formControlName="name" required>
-        </mat-input-container>
+        </mat-form-field>
       </div>
 
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="number" min="-180" max="180" matInput placeholder="{{ 'STATION_LONG' | translate }}" [value]="longitude" name="longitude" [(ngModel)]="longitude" (change)="coordChange()" required>
           <div class="hint">{{'STATION_LONG_EX' | translate}}</div>
-        </mat-input-container>
-        <mat-input-container>
+        </mat-form-field>
+        <mat-form-field>
           <input type="number" min="-90" max="90" matInput placeholder="{{ 'STATION_LAT' | translate }}" [value]="latitude" name="latitude" [(ngModel)]="latitude" (change)="coordChange()" required>
           <div class="hint">{{'STATION_LAT_EX' | translate}}</div>
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <p *ngIf="errorLng" class="error">{{ 'STATION_ERROR_LNG' | translate }}</p>    
       <p *ngIf="errorLat" class="error">{{ 'STATION_ERROR_LAT' | translate }}</p>    

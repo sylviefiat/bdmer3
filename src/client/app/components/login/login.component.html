@@ -4,15 +4,15 @@
         <form [formGroup]="form" (ngSubmit)="submit()">
           <p>
             <fa [name]="'user-o'" [border]=false [size]=2></fa>
-            <mat-input-container>
+            <mat-form-field>
               <input matInput type="text" matInput placeholder="{{'USERNAME' | translate}}" formControlName="username">
-            </mat-input-container>
+            </mat-form-field>
           </p>
           <p>
             <fa [name]="'key'" [border]=false [size]=2></fa>
-            <mat-input-container>
+            <mat-form-field>
               <input matInput type="password" matInput placeholder="{{'PASSWORD' | translate}}" formControlName="password">
-            </mat-input-container>
+            </mat-form-field>
           </p>
           <p *ngIf="errorMessage" class="loginError">
             {{ errorMessage }}

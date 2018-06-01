@@ -15,17 +15,17 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'SURVEY_DESC' | translate }}</h5>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'STATION_CODE' | translate }}" formControlName="code" required>
           <div class="hint">{{ 'SURVEY_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div class="row">
 
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'PLATFORM' | translate }}" formControlName="codePlatform" required>
           <div class="hint">{{ 'EX_SURVEY_PLATFORM' | translate }}</div> 
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field>
@@ -40,21 +40,21 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'PARTICIPANTS' | translate }}" formControlName="participants" required>
           <div class="hint">{{ 'PARTICIPANTS_EX' | translate }}</div>    
-        </mat-input-container>          
+        </mat-form-field>          
 
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'SURFACE_STATION' | translate }}" formControlName="surfaceStation" required>
           <div class="hint">{{ 'SURFACE_STATION_EX' | translate }}</div>    
-        </mat-input-container> 
+        </mat-form-field> 
       </div>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <textarea mat-maxlength="150" rows="3" matInput placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description"  mat-select-on-focus required></textarea>
           <div class="hint">{{ 'SURVEY_DESC_EX' | translate }}</div>     
-        </mat-input-container>
+        </mat-form-field>
       </div>
     </mat-card>
   </div>

@@ -14,14 +14,14 @@ import { Species } from '../../modules/datas/models/index';
             <mat-option *ngFor="let espece of species" [value]="espece.code">{{ espece.scientificName }}</mat-option>
           </mat-select>
         </mat-form-field>  
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_LONG' | translate }}" formControlName="long" required>
         <div class="hint">{{ 'SPECIES_LONG_EX' | translate }}</div>    
-      </mat-input-container>     
-      <mat-input-container>
+      </mat-form-field>     
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_LARG' | translate }}" formControlName="larg" required>
         <div class="hint">{{ 'SPECIES_LARG_EX' | translate }}</div>    
-      </mat-input-container>
+      </mat-form-field>
     </mat-card-content>
     </div>
   `,
@@ -37,7 +37,7 @@ import { Species } from '../../modules/datas/models/index';
       justify-content: center;
       flex-grow: 1;
     }
-    mat-input-container {
+    mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
     }

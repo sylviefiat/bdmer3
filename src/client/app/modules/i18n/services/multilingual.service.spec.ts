@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 // libs
 import { Store, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { Angulartics2Module, Angulartics2Segment } from 'angulartics2';
 
 // app
 import { t } from '../../test/index';
@@ -14,7 +13,7 @@ import { TEST_CORE_PROVIDERS, WindowMockFrench } from '../../core/testing/index'
 
 // module
 import { TEST_MULTILINGUAL_PROVIDERS, getLanguages } from '../testing/index';
-import { IMultilingualState, MultilingualService, MultilingualEffects, reducer, ChangeAction, Languages } from '../index';
+import { IMultilingualState, MultilingualService, MultilingualEffects, MultilingualAction, multilingualReducer, Languages } from '../index';
 
 // test module configuration for each test
 const testModuleConfig = (options?: any) => {
@@ -31,11 +30,8 @@ const testModuleConfig = (options?: any) => {
         { provide: WindowService, useValue: window },
         { provide: ConsoleService, useValue: console }
       ]),
-      Angulartics2Module.forRoot([
-        Angulartics2Segment
-      ]),
-      StoreModule.provideStore({ i18n: reducer }),
-      EffectsModule.run(MultilingualEffects),
+      StoreModule.forRoot({ i18n:multilingualReducer }),
+      EffectsModule.forRoot([MultilingualEffects]),
       RouterTestingModule
     ],
     providers: [
@@ -65,7 +61,7 @@ export function main() {
       }));
 
       t.it('changeLang - should not switch unless supported', t.inject([MultilingualService, Store], (multilang: MultilingualService, store: Store<any>) => {
-        store.dispatch(new ChangeAction('fr'));
+        store.dispatch(new MultilingualAction.ChangeAction('fr'));
         // only 'en' supported by default so changing to 'fr' should not change state
         store.select('i18n').subscribe((i18n: IMultilingualState) => {
           t.e(i18n.lang).toBe('en');

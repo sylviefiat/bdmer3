@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { Http } from '@angular/http';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
+import { HttpClient } from '@angular/common/http';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome'
 
 // libs
 import { StoreModule, Store } from '@ngrx/store';
@@ -75,7 +75,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     routerModule,
     MultilingualModule.forRoot([{
       provide: TranslateLoader,
-      deps: [Http],
+      deps: [HttpClient],
       useFactory: (translateLoaderFactory)
     }]),
     MainModule,
