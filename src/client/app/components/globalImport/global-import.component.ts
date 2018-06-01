@@ -7,8 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 import { Subscription, ISubscription } from 'rxjs/Subscription';
-import * as togeojson from '@mapbox/togeojson';
-import * as area from '@mapbox/geojson-area';
+
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -17,9 +16,6 @@ import { Country } from '../../modules/countries/models/country';
 import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin, getLangues, getPlatformImpErrors } from '../../modules/ngrx/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
-import { NameRefactorService } from '../../modules/core/services/nameRefactor.service';
-import { MapStaticService } from '../../modules/core/services/map-static.service';
-import { GeojsonService } from '../../modules/core/services/geojson.service';
 
 @Component({
     moduleId: module.id,
@@ -29,29 +25,30 @@ import { GeojsonService } from '../../modules/core/services/geojson.service';
     styleUrls: [
     './global-import.component.css',
     ],
-    styles: [
-    '.mat-horizontal-stepper-header-container{pointer-events: none!important;}'
-    ]
 })
 export class GlobalImportComponent implements OnInit {
     @ViewChild('stepper') stepper: MatStepper;
 
     @Input() platform: Platform;
-    @Input() error: string | null;
-    @Input() importError: string[];
+    @Input() error$: Observable<string | null>;
+    @Input() importError$: Observable<string[]>;
     @Input() isAdmin: boolean;
     @Input() locale: boolean;
     @Input() docs_repo: string;
     @Output() pending = new EventEmitter<{ file: any, type: string }>(); 
     @Output() check = new EventEmitter<{ file: any, type: string }>();
     @Output() upload = new EventEmitter<{ file: any, type: string }>();
+    @Output() remove = new EventEmitter<{ file: any, type: string }>();
+    @Output() removeMsg = new EventEmitter<any>();
 
-    csvFileSurvey$: Observable<any>;
-    csvFileStation$: Observable<any>;
-    csvFileCount$: Observable<any>;
+    csvFileSurvey: any;
+    csvFileStation: any;
+    csvFileCount: any;
     viewStation: boolean = true;
     viewSurvey: boolean;
     viewCount: boolean;
+    pendingStation: boolean = false;
+    pendingSurvey: boolean = false;
 
     stationForm: FormGroup = new FormGroup({
         stationInputFile: new FormControl(),
@@ -70,40 +67,82 @@ export class GlobalImportComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.csvFileStation$ = of(null);
-        this.csvFileSurvey$ = of(null);
-        this.csvFileCount$ = of(null);
+        this.csvFileStation = null;
+        this.csvFileSurvey = null;
+        this.csvFileCount = null;
     }
 
     setStationFile(setFile) {
-        this.csvFileStation$ = of(setFile.file);
+        this.csvFileStation = setFile.file;
 
-        if (setFile.file !== null && !setFile.save) {
-            this.check.emit({ file: setFile.file, type: 'station' });
-        }else if(setFile.file !== null && setFile.save){
-            this.pending.emit({ file: setFile.file, type: 'station' });
-        }
-    }
-
-    setCountFile(setFile) {
-        this.csvFileCount$ = of(setFile.file);
-
-        if (setFile.file !== null) {
-            this.check.emit({ file: setFile.file, type: 'count' });
-        }else if(setFile.file !== null && setFile.save){
-            this.check.emit({ file: setFile.file, type: 'count' });
+        switch (setFile.action) {
+            case "check":{
+                this.csvFileStation = setFile.file;
+                this.check.emit({ file: setFile.file, type: 'station' });
+                break;
+            }
+            case "save":{
+                this.pending.emit({ file: setFile.file, type: 'station' });
+                this.pendingStation = true;
+                break;
+            }
+            case "delete":{
+                if(this.pendingStation){
+                    this.remove.emit({ file: setFile.file, type: 'station' });
+                    this.pendingStation = false;
+                }else{
+                    this.removeMsg.emit();
+                }
+                this.csvFileStation = null;
+                break;
+            }
         }
     }
 
     setSurveyFile(setFile) {
-        this.csvFileSurvey$ = of(setFile.file);
+        this.csvFileSurvey = setFile.file;
 
-        if (setFile.file !== null) {
-            this.check.emit({ file: setFile.file, type: 'survey' });
-        }else if(setFile.file !== null && setFile.save){
-            this.check.emit({ file: setFile.file, type: 'survey' });
+        switch (setFile.action) {
+            case "check":{
+                this.csvFileSurvey = setFile.file;
+                this.check.emit({ file: setFile.file, type: 'survey' });
+                break;
+            }
+            case "save":{
+                this.pending.emit({ file: setFile.file, type: 'survey' });
+                this.pendingSurvey = true;
+                break;
+            }
+            case "delete":{
+                if(this.pendingSurvey){
+                    this.remove.emit({ file: setFile.file, type: 'survey' });
+                    this.pendingSurvey = false;
+                }else{
+                    this.removeMsg.emit();
+                }
+                this.csvFileSurvey = null;
+                break;
+            }
         }
     }
+
+    setCountFile(setFile) {
+        this.csvFileCount = setFile.file;
+
+        switch (setFile.action) {
+            case "check":{
+                this.csvFileCount = setFile.file;
+                this.check.emit({ file: setFile.file, type: 'count' });
+                break;
+            }
+            case "delete":{
+                this.removeMsg.emit();
+                this.csvFileCount = null;
+                break;
+            }
+        }
+    }
+
 
     stayOn(step: string) {
         let i;
@@ -161,9 +200,9 @@ export class GlobalImportComponent implements OnInit {
     }
 
     send() {
-        this.csvFileStation$.subscribe(file => this.upload.emit({ file: file, type: 'station' }));
-        this.csvFileSurvey$.subscribe(file => this.upload.emit({ file: file, type: 'survey' }));
-        this.csvFileCount$.subscribe(file => this.upload.emit({ file: file, type: 'count' }));
+        this.upload.emit({ file: this.csvFileStation, type: 'station' });
+        this.upload.emit({ file: this.csvFileSurvey, type: 'survey' });
+        this.upload.emit({ file: this.csvFileCount, type: 'count' });
     }
 
     return() {

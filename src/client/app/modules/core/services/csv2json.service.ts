@@ -444,7 +444,6 @@ export class Csv2JsonService {
             return [];
         }
 
-        console.log(lines)
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
@@ -482,11 +481,9 @@ export class Csv2JsonService {
                         res = this.extractSurveyData(data);
                         break;
                     case "zonePref":
-                        console.log(data);
                         res = this.extractZonePrefData(data);
                         break;
                     case "station":
-                        console.log(data);
                         res = this.extractStationData(data);
                         break;
                     case "count":

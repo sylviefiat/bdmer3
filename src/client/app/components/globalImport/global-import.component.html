@@ -2,7 +2,7 @@
   <mat-card class="actions">
     <mat-card-title>{{ 'IMPORT_GLOBAL' | translate}}</mat-card-title>
     <mat-card-content>
-      <button *ngIf="(( (csvFileSurvey$ |async) === null && (csvFileStation$ | async) === null && (csvFileCount$ | async) === null ) || importError.length > 0 || error !== null ); else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
+      <button *ngIf="(( csvFileSurvey === null && csvFileStation === null && csvFileCount === null ) || (importError$ | async)?.length > 0 || (error$ | async) !== null ); else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
 
       <ng-template #activedbutton>
         <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
@@ -16,20 +16,21 @@
   <mat-horizontal-stepper #stepper (selectionChange)="changeIndex($event)">
     <mat-step [optional]="true" class="station">
       <form [formGroup]="stationForm"> 
-        <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileStation$ | async) !== null && error === null) ? 'valid' : ''">Stations</div></ng-template>
+        <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileStation !== null && (error$ | async) === null) ? 'valid' : ''">Stations</div></ng-template>
 
         <bc-global-import-station
-          [viewStation]="viewStation"
-          [group]="stationForm"
-          [isAdmin]="isAdmin"
-          [locale]="locale"
-          [docs_repo]="docs_repo"
-          [error]="error"
-          [importError]="importError"
-          [csvFileStation]="csvFileStation$ | async"
-          (stationFileEmitter)="setStationFile($event)"
-          (countFileEmitter)="setCountFile($event)"
-          (stayHereEmitter)="stayOn($event)">
+        [viewStation]="viewStation"
+        [group]="stationForm"
+        [isAdmin]="isAdmin"
+        [locale]="locale"
+        [docs_repo]="docs_repo"
+        [error$]="error$"
+        [importError$]="importError$"
+        [csvFileStation]="csvFileStation"
+        [csvFileCount]="csvFileCount"
+        (stationFileEmitter)="setStationFile($event)"
+        (countFileEmitter)="setCountFile($event)"
+        (stayHereEmitter)="stayOn($event)">
       </bc-global-import-station>
 
       <div class="align-right">
@@ -40,16 +41,17 @@
 
   <mat-step [optional]="true" class="survey">
     <form [formGroup]="surveyForm"> 
-      <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileSurvey$ |async) !== null && error === null) ? 'valid' : ''">Surveys</div></ng-template>
+      <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileSurvey !== null && (error$ | async) === null) ? 'valid' : ''">Surveys</div></ng-template>
 
       <bc-global-import-survey
       [viewSurvey]="viewSurvey"
       [group]="surveyForm"
       [locale]="locale"
       [docs_repo]="docs_repo"
-      [error]="error"
-      [importError]="importError"
-      [csvFileSurvey]="csvFileSurvey$ | async"
+      [error$]="error$"
+      [importError$]="importError$"
+      [csvFileSurvey]="csvFileSurvey"
+      [csvFileCount]="csvFileCount"
       (surveyFileEmitter)="setSurveyFile($event)"
       (countFileEmitter)="setCountFile($event)"
       (stayHereEmitter)="stayOn($event)"
@@ -65,27 +67,27 @@
 </mat-step>
 
 <mat-step [optional]="true" class="count">
-  <form [formGroup]="surveyForm"> 
-    <ng-template matStepLabel><div [ngClass]="(importError.length === 0 && (csvFileCount$ | async) !== null && error === null) ? 'valid' : ''">Counts</div></ng-template>
+  <form [formGroup]="countForm"> 
+    <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileCount !== null && (error$ | async) === null) ? 'valid' : ''">Counts</div></ng-template>
     
     <bc-global-import-count
-      [viewCount]="viewCount"
-      [group]="countForm"
-      [locale]="locale"
-      [docs_repo]="docs_repo"
-      [error]="error"
-      [importError]="importError"
-      [csvFileCount]="csvFileCount$ | async"
-      (countFileEmitter)="setCountFile($event)"
-      (stayHereEmitter)="stayOn($event)"
-      >
+    [viewCount]="viewCount"
+    [group]="countForm"
+    [locale]="locale"
+    [docs_repo]="docs_repo"
+    [error$]="error$"
+    [importError$]="importError$"
+    [csvFileCount]="csvFileCount"
+    (countFileEmitter)="setCountFile($event)"
+    (stayHereEmitter)="stayOn($event)"
+    >
 
-    </bc-global-import-count>
+  </bc-global-import-count>
 
-    <div class="align-right">
-      <button mat-button matStepperPrevious>Back</button>
-    </div>
-  </form>
+  <div class="align-right">
+    <button mat-button matStepperPrevious>Back</button>
+  </div>
+</form>
 </mat-step>
 </mat-horizontal-stepper>
 </div>

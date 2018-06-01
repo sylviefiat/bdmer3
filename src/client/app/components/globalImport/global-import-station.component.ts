@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'bc-global-import-station',
@@ -21,7 +22,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
   </a>
   </mat-card-footer>
   <mat-card-actions align="start">
-  <button (click)="fileInputStation.click()">
+  <button (click)="fileInputStation.click(); clearInput()">
   <span>{{ 'IMPORT_CSV' | translate }}</span>
   <input #fileInputStation type="file" (change)="handleUploadCsv($event)" formControlName="stationInputFile" style="display:none;"  accept=".csv"/>
   </button>
@@ -34,13 +35,13 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
   </div>
   </mat-card-actions>
 
-  <mat-card-content class="error" *ngIf="error  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-  <mat-card-content class="msg" *ngIf="importError.length === 0 && csvFileStation !== null && error === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
+  <mat-card-content class="error" *ngIf="(error$ | async) !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error$ | async }}</mat-card-content>
+  <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && csvFileStation !== null && (error$ | async) === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
 
-  <mat-card-actions align="start" *ngIf="importError.length > 0">
+  <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
   <h2 class="errorList">{{'LIST_ERROR_STATION' | translate}}</h2>
   <mat-list>
-  <div *ngFor="let e of importError">
+  <div *ngFor="let e of (importError$ | async)">
   <mat-list-item class="errorList"> 
   {{e}}
   </mat-list-item>
@@ -55,42 +56,59 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 export class GlobalImportStationComponent implements OnInit, OnChanges {
   @Input('group') public form: FormGroup;
   @Input() isAdmin: boolean;
-  @Input() importError: string[];
-  @Input() error: string | null;
+  @Input() importError$: Observable<string[]>;
+  @Input() error$: Observable<string | null>;
   @Input() docs_repo: string;
   @Input() locale: string;
   @Input() csvFileStation: any;
   @Input() csvFileCount: any;
   @Input() viewStation: boolean;
-  @Output() stationFileEmitter = new EventEmitter<{ file: any, save: boolean }>();
-  @Output() countFileEmitter = new EventEmitter<{ file: any, save: boolean }>();
+  @Output() stationFileEmitter = new EventEmitter<{ file: any, action: string }>();
+  @Output() countFileEmitter = new EventEmitter<{ file: any, action: string }>();
   @Output() stayHereEmitter = new EventEmitter<string>();
 
+  view: boolean = true;
   constructor() {
 
   }
 
   ngOnInit() {
-    if (this.csvFileStation !== null) {
-      this.stationFileEmitter.emit({ file: this.csvFileStation, save: false });
-    }
+
   }
 
-  ngOnChanges(){
-    console.log("station: " + this.viewStation)
-    if(!this.viewStation){
-      if (this.csvFileStation !== null && (this.error !== null || this.importError.length > 0)) {
+  ngOnChanges(changes){
+    if(!this.viewStation && this.view){
+      if (this.csvFileStation !== null && (this.error$.filter(err=>err!==null) || this.importError$.filter(ie=>ie.length > 0))) {
         this.deleteCsv();
       } else if (this.csvFileStation !== null) {
-        this.stationFileEmitter.emit({ file: this.csvFileStation, save: true });
+        this.stationFileEmitter.emit({ file: this.csvFileStation, action: "save" });
       }
     }
+
+    this.view = this.viewStation;
+  }
+
+  clearInput(){
+    this.form.get('stationInputFile').reset();
   }
 
   handleUploadCsv(csvFile: any) {
+    let confirmRm;
+
     if (csvFile.target.files && csvFile.target.files.length > 0) {
-      this.csvFileStation = csvFile.target.files[0];
-      this.stationFileEmitter.emit({ file: this.csvFileStation, save: false });
+      if (this.csvFileCount !== null) {
+        confirmRm = confirm('It will delete file : Count. Are you sure to continue?');
+      }else{
+        this.csvFileStation = csvFile.target.files[0];
+        this.stationFileEmitter.emit({ file: this.csvFileStation, action: "check" });
+      }
+
+      if(confirmRm){
+        this.countFileEmitter.emit({ file: null, action: "delete" });
+        this.csvFileStation = csvFile.target.files[0];
+        this.stationFileEmitter.emit({ file: this.csvFileStation, action: "check" });
+      }
+
     }
   }
 
@@ -106,10 +124,11 @@ export class GlobalImportStationComponent implements OnInit, OnChanges {
     } else {
       confirmRm = confirm('It will delete file : Station. Are you sure to continue?');
     }
+
     if (confirmRm) {
+      this.stationFileEmitter.emit({ file: this.csvFileStation, action: "delete" });
+      this.countFileEmitter.emit({ file: null, action: "delete" });
       this.form.get('stationInputFile').reset();
-      this.stationFileEmitter.emit({ file: null, save: true });
-      this.countFileEmitter.emit({ file: null, save: true });
     } else {
       this.stayHereEmitter.emit('station');
     }
