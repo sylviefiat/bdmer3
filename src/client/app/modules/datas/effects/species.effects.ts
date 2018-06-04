@@ -39,38 +39,32 @@ export class SpeciesEffects {
     );
 
   @Effect()
-  importSpeciesToList$: Observable<Action> = this.actions$
-    .ofType(SpeciesAction.ActionTypes.IMPORT_SPECIES)
-    .map((action: SpeciesAction.ImportSpeciesAction) => action.payload)
-    .mergeMap(speciesCsv => this.csv2jsonService.csv2('species',speciesCsv))
-    .mergeMap((species) => {
-      return this.speciesService
-        .editSpecies(species)
-      })
-    .map((species: Species) => new SpeciesAction.ImportSpeciesSuccessAction(species))
-    .catch((error) => {console.log(error);return of(new SpeciesAction.AddSpeciesFailAction(error))})
-    
-    ;
-
-  @Effect()
-  removeSpeciesFromList$: Observable<Action> = this.actions$
-    .ofType(SpeciesAction.ActionTypes.REMOVE_SPECIES)
-    .map((action: SpeciesAction.RemoveSpeciesAction) => action.payload)
-    .mergeMap(species =>
-      this.speciesService
-        .removeSpecies(species)
-        .map(() => new SpeciesAction.RemoveSpeciesSuccessAction(species))
-        .catch(() => of(new SpeciesAction.RemoveSpeciesFailAction(species)))
+  importSpeciesToList$: Observable<Action> = this.actions$.pipe(
+    ofType<SpeciesAction.ImportSpeciesAction>(SpeciesAction.ActionTypes.IMPORT_SPECIES),
+    map((action: SpeciesAction.ImportSpeciesAction) => action.payload),
+    mergeMap(speciesCsv => this.csv2jsonService.csv2('species',speciesCsv)),
+    mergeMap((species) => this.speciesService.editSpecies(species)),
+    map((species: Species) => new SpeciesAction.ImportSpeciesSuccessAction(species)),
+    catchError((error) => of(new SpeciesAction.AddSpeciesFailAction(error)))    
     );
 
-   @Effect({ dispatch: false }) addSpeciesSuccess$ = this.actions$
-    .ofType(SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS)
-    .map((action: SpeciesAction.AddSpeciesSuccessAction) => action.payload)
-    .mergeMap((species) =>this.router.navigate(['/species/'+species._id]));
+  @Effect()
+  removeSpeciesFromList$: Observable<Action> = this.actions$.pipe(
+    ofType<SpeciesAction.RemoveSpeciesAction>(SpeciesAction.ActionTypes.REMOVE_SPECIES),
+    map((action: SpeciesAction.RemoveSpeciesAction) => action.payload),
+    mergeMap(species => this.speciesService.removeSpecies(species)),
+    map((species) => new SpeciesAction.RemoveSpeciesSuccessAction(species)),
+    catchError((species) => of(new SpeciesAction.RemoveSpeciesFailAction(species)))
+    );
 
-  @Effect({ dispatch: false }) removeSpeciesSuccess$ = this.actions$
-    .ofType(SpeciesAction.ActionTypes.REMOVE_SPECIES_SUCCESS)
-    .do(() =>this.router.navigate(['/species']));
+   @Effect({ dispatch: false }) addSpeciesSuccess$ = this.actions$.pipe(
+    ofType<SpeciesAction.AddSpeciesSuccessAction>(SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS),
+    map((action: SpeciesAction.AddSpeciesSuccessAction) => action.payload),
+    mergeMap((species) =>this.router.navigate(['/species/'+species._id])));
+
+  @Effect({ dispatch: false }) removeSpeciesSuccess$ = this.actions$.pipe(
+    ofType<SpeciesAction.RemoveSpeciesSuccessAction>(SpeciesAction.ActionTypes.REMOVE_SPECIES_SUCCESS),
+    tap(() =>this.router.navigate(['/species'])));
 
   constructor(private actions$: Actions, private router: Router, private speciesService: SpeciesService, private csv2jsonService: Csv2JsonService) {
     
