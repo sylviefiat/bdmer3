@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -35,6 +36,10 @@ export class PreferenceAreaImportComponent implements OnInit{
     private docs_repo: string;
     importCsvFile: any = null;
 
+    zonePrefForm: FormGroup = new FormGroup({
+        zonePrefInputFile: new FormControl(),
+    });
+
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
@@ -66,6 +71,10 @@ export class PreferenceAreaImportComponent implements OnInit{
 
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
+    }
+
+    clearInput(){
+        this.zonePrefForm.get('zonePrefInputFile').reset();
     }
 
     getCsvZonesPref() {

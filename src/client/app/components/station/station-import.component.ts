@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -34,13 +35,14 @@ export class StationImportComponent implements OnInit{
     private docs_repo: string;
     private importCsvFile = null;
 
+    stationForm: FormGroup = new FormGroup({
+        stationInputFile: new FormControl(),
+    });
+
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        console.log(this.importError)
-        console.log(this.error)
-        console.log(this.importCsvFile)
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importStation-"+l+".csv";
@@ -62,6 +64,10 @@ export class StationImportComponent implements OnInit{
 
     send(){
         this.upload.emit(this.importCsvFile);
+    }
+
+    clearInput(){
+        this.stationForm.get('stationInputFile').reset();
     }
 
     changeNeedHelp() {

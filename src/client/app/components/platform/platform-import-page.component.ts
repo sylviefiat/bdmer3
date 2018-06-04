@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -40,6 +41,9 @@ export class PlatformImportPageComponent implements OnInit {
     error = true;
     csvFile: any;
     importCsvFile: any = null;
+    platformForm: FormGroup = new FormGroup({
+        platformInputFile: new FormControl(),
+    });
 
     constructor(private platformService: PlatformService, private countryListService: CountryListService, private csv2JsonService: Csv2JsonService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
@@ -83,6 +87,10 @@ export class PlatformImportPageComponent implements OnInit {
 
     send(){
         this.store.dispatch(new PlatformAction.ImportPlatformAction(this.importCsvFile));
+    }
+
+    clearInput(){
+        this.platformForm.get('platformInputFile').reset();
     }
 
     getCsvPlatform() {

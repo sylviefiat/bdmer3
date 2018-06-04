@@ -341,7 +341,7 @@
   "DELETE_CSV": "Delete",
   "LIST_ERROR_PLATFORM": "List of concerned platforms",
   "LIST_ERROR_SURVEY": "List of concerned surveys",
-  "LIST_ERROR_TRANSECT": "List of concerned transects",
+  "LIST_ERROR_STATION": "List of concerned stations",
   "TRANSECT_NAME": "Name of transect",
   "TRANSECT_COORD": "Coordinates of transect",
   "TRANSECT_ERROR": "Transect not valid.",
@@ -351,5 +351,6 @@
   "LIST_ERROR_COUNT": "List of concerned count",
   "ERROR_CSV_FIELD": "Error while checking CSV, following field(s) are unknown: ",
   "ERROR_IMPORT": "Error while checking CSV's data, see details just below.",
-  "VALID_IMPORT": "CSV valid and ready to be send."
+  "VALID_IMPORT": "CSV valid and ready to be send.",
+  "VALID_IMPORT": "CSV and data are valid."
 }

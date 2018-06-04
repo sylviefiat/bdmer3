@@ -13,7 +13,7 @@
       <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>
     </mat-card>
 </div>
-<div class="insideform">
+<div class="insideform" [formGroup]="countForm">
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
@@ -32,9 +32,9 @@
       </a>
     </mat-card-footer>
     <mat-card-actions align="start">
-      <button (click)="fileInput.click()">
+      <button (click)="fileInput.click(); clearInput()">
         <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+        <input #fileInput formControlName="countInputFile" type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
     </mat-card-actions>
 

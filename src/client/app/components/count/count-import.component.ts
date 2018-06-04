@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone,Survey } from '../../modules/datas/models/index';
@@ -34,6 +35,9 @@ export class CountImportComponent implements OnInit{
     private csvFile: string;
     private docs_repo: string;
     importCsvFile: any = null;
+    countForm: FormGroup = new FormGroup({
+        countInputFile: new FormControl(),
+    });
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
@@ -66,6 +70,10 @@ export class CountImportComponent implements OnInit{
 
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
+    }
+
+    clearInput(){
+        this.countForm.get('countInputFile').reset();
     }
 
     getCsvCounts() {

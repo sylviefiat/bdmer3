@@ -340,7 +340,7 @@
   "DELETE_CSV": "Supprimer",
   "LIST_ERROR_PLATFORM": "Liste des plateformes concernées",
   "LIST_ERROR_SURVEY": "Liste des relevés concernés",
-  "LIST_ERROR_TRANSECT": "Liste des transects concernés",
+  "LIST_ERROR_STATION": "Liste des station concernés",
   "TRANSECT_NAME": "Nom du transect",
   "TRANSECT_COORD": "Coordonnées du transect",
   "TRANSECT_ERROR": "Transect non valide.",
@@ -350,5 +350,6 @@
   "LIST_ERROR_COUNT": "Liste des Comptages concernés",
   "ERROR_CSV_FIELD": "Erreur lors de la vérification du CSV, les champs suivant ne sont pas connus: ",
   "ERROR_IMPORT": "Erreur lors de la vérification des données du CSV, voir le détails ci dessous.",
-  "VALID_IMPORT": "CSV valide et prêt à être envoyé."
+  "VALID_IMPORT": "CSV valide et prêt à être envoyé.",
+  "VALID_DATA": "CSV et données valide."
 }

@@ -95,3 +95,7 @@
   background-color: grey;
   cursor: not-allowed;
 }
+
+:host ::ng-deep .errorList{
+  color: red;
+}
