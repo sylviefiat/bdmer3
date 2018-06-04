@@ -6,6 +6,7 @@ import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 import { MapStaticService} from '../../core/services/map-static.service';
 import { GeojsonService } from '../../core/services/geojson.service';
+import {TranslateService} from '@ngx-translate/core';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
@@ -18,7 +19,7 @@ export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
 
-  constructor(private mapStaticService: MapStaticService, private geojsonService: GeojsonService, private http: Http) {
+  constructor(private translate: TranslateService, private mapStaticService: MapStaticService, private geojsonService: GeojsonService, private http: Http) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -61,8 +62,10 @@ export class PlatformService {
   }
 
   importPlatformVerification(platform, countries: Country[]): Observable<string> {
+    let msg = this.translate.instant(['PLATFORM', 'CANNOT_BE_INSERTED_COUNTRY', 'NOT_IN_DATABASE']);
+
     if(countries.filter(country => country.code === platform.codeCountry).length===0)
-      return of('Platform '+platform.code+' cannot be inserted because country '+platform.codeCountry+' is not in the database');  
+      return of(msg.PLATFORM + platform.code + msg.CANNOT_BE_INSERTED_COUNTRY + platform.codeCountry + msg.NOT_IN_DATABASE);  
     return of(''); 
   }
 
@@ -152,16 +155,18 @@ export class PlatformService {
   }
 
   importSurveyVerification(survey: Survey, platform: Platform): Observable<string>{
+    let msg = this.translate.instant(['PLATFORM', 'NO_PLATFORM', 'FOR_COUNTRY', 'AND_COUNTRY', 'NOT_PART_OF_COUNTRY', 'NOT_IN_DATABASE']);
+
     if(survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry){
-      return of('There is no platform ' + survey.codePlatform + ' for country ' + survey.codeCountry);
+      return of(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
     }
 
     if(survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry){
-      return of('Platform ' + survey.codePlatform + " isn't part of country " + survey.codeCountry);
+      return of(msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
     }
 
     if(survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry){
-      return of('Platform ' + survey.codePlatform + " and country " + survey.codeCountry + " are not in database");
+      return of(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
     }
 
     return of('');
@@ -211,10 +216,11 @@ export class PlatformService {
   }
 
   importStationVerification(station, platform: Platform): Observable<string>{
+    let msg = this.translate.instant(['STATION', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE']);
     if(station.codePlatform === platform.code){
       return of('');
     }else{
-      return of('Station '+station.properties.name+' cannot be inserted because codePlatform '+station.codePlatform+' is not in the database');
+      return of(msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
     }
 
   }
@@ -242,6 +248,8 @@ export class PlatformService {
   }
 
   importZonePrefVerification(zonePref: ZonePreference, platform: Platform, species: Species[]): Observable<string>{
+    let msg = this.translate.instant(['CODE_SPECIES', 'CANNOT_BE_INSERTED_NOT_EXIST', 'CANNOT_BE_INSERTED_CODEZONE', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE', "ZONE_PREF"]);
+
     if(zonePref.codePlatform === platform.code){
       for(let i = 0; i < platform.zones.length; i++){
         if(zonePref.codeZone === platform.zones[i].properties.code){
@@ -250,16 +258,16 @@ export class PlatformService {
               return of('');
             }
             if(zonePref.codeSpecies !== species[y].code && y === species.length - 1){
-              return of("CodeSpecies "+zonePref.codeSpecies+" cannot be inserted because it doesn't exist in database");
+              return of(msg.CODE_SPECIES + zonePref.codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
             }
           }
         }
         if(zonePref.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1){
-          return of('ZonePref '+zonePref.code+' cannot be inserted because codeZone '+ zonePref.codeZone+' is not in the database');
+          return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEZONE + zonePref.codeZone + msg.NOT_IN_DATABASE);
         }
       }
     }else{
-      return of('ZonePref '+zonePref.code+' cannot be inserted because codePlatform '+zonePref.codePlatform+' is not in the database');
+      return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEPLATFORM + zonePref.codePlatform + msg.NOT_IN_DATABASE);
     }
 
     return of('')

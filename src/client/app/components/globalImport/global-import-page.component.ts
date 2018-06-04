@@ -4,6 +4,7 @@ import { MatStepper } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -41,11 +42,10 @@ export class GlobalImportPageComponent implements OnInit {
   docs_repo: string;
   submit: boolean = false;
 
-  constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
+  constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
   }
 
   ngOnInit() {
-    console.log("here");
     this.platform$ = this.store.let(getSelectedPlatform);
     this.importError$ = this.store.let(getPlatformImpErrors);
     this.error$ = this.store.let(getPlatformPageError);
@@ -138,7 +138,9 @@ export class GlobalImportPageComponent implements OnInit {
 
   canDeactivate() {
     if(!this.submit){
-      let confirmR = confirm('Discard changes?');
+      let msg = this.translate.instant('DISCARD_CHANGE');
+
+      let confirmR = confirm(msg);
       if(confirmR){
         this.store.dispatch(new PlatformAction.ResetAllPendingAction());
         return true;

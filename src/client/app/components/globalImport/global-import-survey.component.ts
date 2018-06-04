@@ -2,6 +2,7 @@ import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionS
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'bc-global-import-survey',
@@ -74,7 +75,7 @@ export class GlobalImportSurveyComponent implements OnInit, OnChanges, OnDestroy
   hasErrSub: Subscription;
   hasIErrSub: Subscription;
 
-  constructor() {
+  constructor(private translate: TranslateService) {
 
   }
 
@@ -105,10 +106,11 @@ export class GlobalImportSurveyComponent implements OnInit, OnChanges, OnDestroy
 
   handleUploadCsv(csvFile: any) {
     let confirmRm;
+    let msg = this.translate.instant('DELETE_COUNT_CONFIRM');
 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
       if (this.csvFileCount !== null) {
-        confirmRm = confirm('It will delete file : Count. Are you sure to continue?');
+        confirmRm = confirm(msg);
       }else{
         this.csvFileSurvey = csvFile.target.files[0];
         this.surveyFileEmitter.emit({ file: this.csvFileSurvey, action: "check" });
@@ -132,11 +134,13 @@ export class GlobalImportSurveyComponent implements OnInit, OnChanges, OnDestroy
   }
 
   deleteCsv() {
+    let msg = this.translate.instant(['DELETE_SURVEY_COUNT_CONFIRM', 'DELETE_SURVEY_CONFIRM']);
+
     let confirmRm;
     if (this.csvFileCount !== null) {
-      confirmRm = confirm('It will delete file : Survey, Count. Are you sure to continue?');
+      confirmRm = confirm(msg.DELETE_SURVEY_COUNT_CONFIRM);
     } else {
-      confirmRm = confirm('It will delete file : Survey. Are you sure to continue?');
+      confirmRm = confirm(msg.DELETE_SURVEY_CONFIRM);
     }
     if (confirmRm) {
       this.surveyFileEmitter.emit({ file: this.csvFileSurvey, action: "delete" });

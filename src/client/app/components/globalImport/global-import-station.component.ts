@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import {TranslateService} from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -74,7 +75,7 @@ export class GlobalImportStationComponent implements OnInit, OnChanges, OnDestro
   hasErrSub: Subscription;
   hasIErrSub: Subscription;
 
-  constructor() {
+  constructor(private translate: TranslateService) {
 
   }
 
@@ -105,10 +106,11 @@ export class GlobalImportStationComponent implements OnInit, OnChanges, OnDestro
 
   handleUploadCsv(csvFile: any) {
     let confirmRm;
+    let msg = this.translate.instant('DELETE_COUNT_CONFIRM');
 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
       if (this.csvFileCount !== null) {
-        confirmRm = confirm('It will delete file : Count. Are you sure to continue?');
+        confirmRm = confirm(msg);
       }else{
         this.csvFileStation = csvFile.target.files[0];
         this.stationFileEmitter.emit({ file: this.csvFileStation, action: "check" });
@@ -133,11 +135,13 @@ export class GlobalImportStationComponent implements OnInit, OnChanges, OnDestro
   }
 
   deleteCsv() {
+    let msg = this.translate.instant(['DELETE_STATION_COUNT_CONFIRM', 'DELETE_STATION_CONFIRM']);
+
     let confirmRm;
     if (this.csvFileCount !== null) {
-      confirmRm = confirm('It will delete file : Station, Count. Are you sure to continue?');
+      confirmRm = confirm(msg.DELETE_STATION_COUNT_CONFIRM);
     } else {
-      confirmRm = confirm('It will delete file : Station. Are you sure to continue?');
+      confirmRm = confirm(msg.DELETE_STATION_CONFIRM);
     }
 
     if (confirmRm) {

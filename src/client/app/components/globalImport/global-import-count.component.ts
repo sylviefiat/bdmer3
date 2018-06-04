@@ -2,6 +2,7 @@ import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionS
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'bc-global-import-count',
@@ -72,7 +73,7 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy{
   hasErrSub: Subscription;
   hasIErrSub: Subscription;
 
-  constructor() {
+  constructor(private translate: TranslateService) {
 
   }
 
@@ -115,7 +116,9 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy{
   }
 
   deleteCsv() {
-    let confirmRm = confirm('It will delete file : Count. Are you sure to continue?');
+    let msg = this.translate.instant('DELETE_COUNT_CONFIRM');
+
+    let confirmRm = confirm(msg);
     if (confirmRm) {
       this.countFileEmitter.emit({ file: null, action: "delete" });
       this.form.get('countInputFile').reset();
