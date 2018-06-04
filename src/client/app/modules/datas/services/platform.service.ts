@@ -5,7 +5,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 import { MapStaticService} from '../../core/services/map-static.service';
-
+import {TranslateService} from '@ngx-translate/core';
 
 import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
@@ -17,7 +17,7 @@ export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
 
-  constructor(private mapStaticService: MapStaticService, private http: Http) {
+  constructor(private translate: TranslateService, private mapStaticService: MapStaticService, private http: Http) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -60,6 +60,7 @@ export class PlatformService {
   }
 
   editPlatform(platform: Platform, country: Country): Observable<Platform> {
+    let msg = this.translate.instant('IMPORT_ERROR_PLATFORM');
     platform._id=platform.code;
     return this.getPlatform(platform.code)
       .mergeMap(st => {  
@@ -69,7 +70,7 @@ export class PlatformService {
           platform.codeCountry = country.code;
         }
         if(platform.codeCountry === null){
-          return _throw('Import is not possible : country has not been defined');
+          return _throw(msg.IMPORT_ERROR_PLATFORM);
         }      
         if(st) {platform._rev = st._rev;}
         this.currentPlatform = of(platform);
@@ -127,9 +128,10 @@ export class PlatformService {
   }
 
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {
+    let msg = this.translate.instant('IMPORT_ERROR_SURVEY');
     console.log(survey);
     if(platform.code !== survey.codePlatform)
-      return _throw('Import is not possible : survey codePlatform is different from selected platform');
+      return _throw(msg.IMPORT_ERROR_SURVEY);
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(pt => { 
@@ -160,8 +162,9 @@ export class PlatformService {
   }
 
   editStation(platform: Platform, station: Station): Observable<Station> {
+    let msg = this.translate.instant('IMPORT_ERROR_STATION');
     if(platform.code !== station.codePlatform)
-      return _throw('Import is not possible : station codePlatform is different from selected platform');
+      return _throw(msg.IMPORT_ERROR_STATION);
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(pt => {  
@@ -190,8 +193,9 @@ export class PlatformService {
 
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
     console.log(zonePref);
+    let msg = this.translate.instant('IMPORT_ERROR_ZONEPREF');
     if(platform.code !== zonePref.codePlatform)
-      return _throw('Import is not possible : zonePref codePlatform is different from selected platform');
+      return _throw(msg.IMPORT_ERROR_ZONEPREF);
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {  
@@ -227,9 +231,10 @@ export class PlatformService {
   }
 
   editCount(platform: Platform, count: Count): Observable<Count> {
+    let msg = this.translate.instant('IMPORT_ERROR_COUNT');
     console.log(count);
     if(platform.code !== count.codePlatform)
-      return _throw('Import is not possible : count codePlatform is different from selected platform');
+      return _throw(msg.IMPORT_ERROR_COUNT);
     return this.getPlatform(platform.code)
       .filter(platform => platform!==null)
       .mergeMap(st => {  

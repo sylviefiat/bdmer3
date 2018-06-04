@@ -7,6 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -41,7 +42,7 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
     panelDisplay = new FormControl('surveys');
 
 
-    constructor(private store: Store<IAppState>, route: ActivatedRoute,public routerext: RouterExtensions, private windowService: WindowService) { 
+    constructor(private translate: TranslateService, private store: Store<IAppState>, route: ActivatedRoute,public routerext: RouterExtensions, private windowService: WindowService) { 
         this.actionsSubscription = route.params
         .map(params => this.display(params.view))
         .subscribe();
@@ -58,7 +59,9 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
     }
 
     deletePlatform() {
-        if (this.windowService.confirm("Are you sure you want to delete this platform from database ?"))
+        let deleteMsg = this.translate.instant('CONFIRM_DELETE_PLATFORM');
+
+        if (this.windowService.confirm(deleteMsg))
             return this.remove.emit(this.platform);
     }
 

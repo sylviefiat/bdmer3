@@ -5,6 +5,7 @@ import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { MatDialogRef, MatDialog, MatDialogConfig} from "@angular/material";
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -32,7 +33,7 @@ export class ViewStationComponent implements OnInit {
 
     fileNameDialogRef: MatDialogRef<stationMapModal>;
 
-    constructor(private dialog: MatDialog, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private translate: TranslateService, private dialog: MatDialog, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -41,6 +42,7 @@ export class ViewStationComponent implements OnInit {
 
 
     deleteStation() {
+        let deleteMsg = this.translate.instant('CONFIRM_DELETE_STATION');
         if (this.windowService.confirm("Are you sure you want to delete this station from database ?")){
             this.remove.emit(this.station);
         }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
+import {TranslateService} from '@ngx-translate/core';
 
 
 import * as PouchDB from "pouchdb";
@@ -20,7 +21,7 @@ export class CountriesService {
 
   private db: any;
 
-  constructor(private http: Http) {
+  constructor(private translate: TranslateService, private http: Http) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -139,7 +140,6 @@ export class CountriesService {
       })
       .filter((response: ResponsePDB) => { return response.ok; })
       .mergeMap((response) => {
-        console.log("here");
         return this.currentCountry;
       })
   }
@@ -158,12 +158,13 @@ export class CountriesService {
   }
 
   verifyMail(email: string): Observable<any> {
+    let msg = this.translate.instant('EMAIL_ERROR');
     return this.getMailUser(email)
       .filter(answer => answer && answer._id && answer._id.length > 0)
       .map((user) => {
         return user;
       })
-      .catch(e => { return of(_throw('This email is not registered in BDMer, please contact administrator')); })
+      .catch(e => { return of(_throw(msg.EMAIL_ERROR)); })
   }
 
   public sync(remote: string): Promise<any> {

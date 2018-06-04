@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import {TranslateService} from '@ngx-translate/core';
 
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
@@ -12,8 +13,10 @@ import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '
 export class Csv2JsonService {
     static COMMA = ',';
     static SEMICOLON = ';';
+    csvErrorMsg: string;
 
-    constructor(private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+    constructor(private translate: TranslateService, private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+        this.csvErrorMsg = this.translate.instant('CSV_FIELD_ERROR');
     }
 
     private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
@@ -87,7 +90,7 @@ export class Csv2JsonService {
                         case "L_max_SO":
                             break;
                         default:
-                            throw new Error('Wrong CSV File Unknown field detected');
+                            throw new Error(this.csvErrorMsg);
                     }
                 }
                 lines.push(sp);
@@ -143,7 +146,7 @@ export class Csv2JsonService {
                             st[headers[j]] = data[j];
                             break;
                         default:                            
-                            throw new Error('Wrong CSV File Unknown field detected');
+                            throw new Error(this.csvErrorMsg);
                     }
                 }
                 lines.push(st);

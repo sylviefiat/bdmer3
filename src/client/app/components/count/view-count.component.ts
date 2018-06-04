@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -31,7 +32,7 @@ export class ViewCountComponent implements OnInit {
     @Output() action = new EventEmitter<string>();
 
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -53,7 +54,9 @@ export class ViewCountComponent implements OnInit {
 
 
     deleteCount() {
-        if (this.windowService.confirm("Are you sure you want to delete this count from database ?")) {
+        let confirmationMsg = this.translate.instant('CONFIRM_DELETE_COUNT');
+
+        if (this.windowService.confirm(confirmationMsg.CONFIRM_DELETE_COUNT)) {
             this.remove.emit(this.count);
         }
     }

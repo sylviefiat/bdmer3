@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import {TranslateService} from '@ngx-translate/core';
+
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -32,7 +34,7 @@ export class StationImportComponent implements OnInit{
     private csvFile: string;
     private docs_repo: string;
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -43,12 +45,13 @@ export class StationImportComponent implements OnInit{
     }
 
     handleUpload(csvFile: any): void {
+        let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
         console.log(csvFile);
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
             this.upload.emit(csvFile.target.files[0]);
         } else {
-            this.err.emit('No csv file found');
+            this.err.emit(notFoundMsg);
         }
     }
 
