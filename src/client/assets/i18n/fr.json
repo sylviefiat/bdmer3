@@ -368,5 +368,8 @@
   "CANNOT_BE_INSERTED_CODEPLATFORM": " ne peut pas être inséré car codePlatform ",
   "CODE_SPECIES": "CodeSpecies ",
   "CANNOT_BE_INSERTED_NOT_EXIST": " ne peut pas être inséré car cela n'existe pas dans la base de donnée ",
-  "CANNOT_BE_INSERTED_CODEZONE": " ne peut pas être inséré car codeZone "
+  "CANNOT_BE_INSERTED_CODEZONE": " ne peut pas être inséré car codeZone ",
+  "NO_STATION_IN_DB":"Il n'y a pas de station dans la base de donnée pour la platforme ",
+  "NO_SPECIES_IN_DB":"Il n'y a pas d'espèce dans la base de donnée",
+  "NO_SURVEY_IN_DB":"Il n'y a pas de relevé dans la base de donnée pour la platforme "
 }

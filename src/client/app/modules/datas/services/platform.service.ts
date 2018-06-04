@@ -312,6 +312,8 @@ export class PlatformService {
   }
 
   importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string>{
+    let msg = this.translate.instant(['PLATFORM', 'CANNOT_BE_INSERTED_NOT_EXIST', 'NO_STATION_IN_DB', 'NO_SPECIES_IN_DB', 'NO_SURVEY_IN_DB']);
+
     if(count.codePlatform === platform.code){
       if(platform.stations.length > 0){
         for(let i in platform.stations){
@@ -325,30 +327,30 @@ export class PlatformService {
                         return of('')
                       }
                       if(count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1){
-                        return of("CodeSpecies "+count.mesures[0].codeSpecies+" cannot be inserted because it doesn't exist in database");
+                        return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
                       }
                     }
                   }else{
-                    return of("There is no species in the the database");
+                    return of(msg.NO_SPECIES_IN_DB);
                   }
                 }
                 if(count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1){
-                  return of("CodeSurvey "+count.codeSurvey+" cannot be inserted because it doesn't exist in database");
+                  return of("CodeSurvey " + count.codeSurvey + msg.CANNOT_BE_INSERTED_NOT_EXIST);
                 }
               } 
             }else{
-              return of("There is no surveys in the the database for platform " + count.codePlatform);
+              return of(msg.NO_SURVEY_IN_DB + count.codePlatform);
             }
           }
           if(count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1){
-            return of("CodeStation "+count.codeStation+" cannot be inserted because it doesn't exist in database");
+            return of("CodeStation "+count.codeStation+ msg.CANNOT_BE_INSERTED_NOT_EXIST);
           }
         }
       }else{
-        return of("There is no stations in the the database for platform " + count.codePlatform);
+        return of(msg.NO_STATION_IN_DB+ count.codePlatform);
       }
     }else{
-      return of('Platform '+count.codePlatform+" cannot be inserted because it doesn't exist in the database");
+      return of(msg.PLATFORM + count.codePlatform + msg.CANNOT_BE_INSERTED_NOT_EXIST);
     }
     return of('');
   }
