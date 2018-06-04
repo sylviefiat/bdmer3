@@ -2,8 +2,9 @@ import { Component, Input, Output, EventEmitter, OnInit, AfterViewChecked } from
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
+import { Observable, pipe } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { map } from 'rxjs/operators';
 
 import { Country, User } from './../../modules/countries/models/country';
 import { WindowService } from './../../modules/core/services/index';
@@ -130,11 +131,11 @@ export class CountryDetailComponent implements OnInit{
    }
 
    ngOnInit(){
-     this.platforms$ = this.store.let(getPlatformInApp);
+     this.platforms$ = this.store.select(getPlatformInApp);
      this.store.dispatch(new PlatformAction.LoadAction());
 
-     this.platforms$ = this.platforms$
-     .map(platforms => platforms.filter(platform => platform.codeCountry === this.country.code));
+     this.platforms$ = this.platforms$.pipe(
+       map(platforms => platforms.filter(platform => platform.codeCountry === this.country.code)));
      
      this.platforms$.subscribe(
        (res) => {

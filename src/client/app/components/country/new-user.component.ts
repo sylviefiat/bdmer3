@@ -1,7 +1,6 @@
 import { Component, AfterViewChecked, ChangeDetectorRef, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { IAppState  } from '../../modules/ngrx/index';

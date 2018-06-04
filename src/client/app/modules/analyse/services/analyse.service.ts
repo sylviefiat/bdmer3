@@ -1,9 +1,4 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseContentType } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
+import { Injectable } from '@angular/core';
 import { angularMath } from 'angular-ts-math';
 import * as Turf from '@turf/turf';
 

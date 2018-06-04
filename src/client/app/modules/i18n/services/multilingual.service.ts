@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 // app
 import { ILang } from '../../core/index';
 import { WindowService } from '../../core/services/window.service';
-import { IAppState } from '../../ngrx/index';
+import { IAppState, getLangues } from '../../ngrx/index';
 
 // module
 import { CATEGORY } from '../common/category.common';
@@ -41,11 +41,8 @@ export class MultilingualService {
     // use browser/platform lang if available
     let userLang = win.navigator.language.split('-')[0];
 
-    // subscribe to changes
-    store.select(s => s.i18n).subscribe((state: IMultilingualState) => {
-      // update ng2-translate which will cause translations to occur wherever the TranslatePipe is used in the view
-      this.translate.use(state.lang);
-    });
+    store.select(getLangues).subscribe(lang => this.translate.use(lang));
+
 
     // init the lang
     this.store.dispatch(new MultilingualAction.ChangeAction(userLang));

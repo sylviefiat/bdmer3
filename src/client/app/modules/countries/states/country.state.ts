@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import { Country, User } from '../models/country';
 import { IAppState } from '../../ngrx/index';
 
@@ -21,38 +20,21 @@ export const countryInitialState: ICountryState = {
 };
 
 export const getCountryUsers = (state: ICountryState) => state.users;
-/*export function getCountryUsers(state$: Observable<ICountryState>){
-  return state$.select(state => state.users);
-}*/
+
 export const getCountryUsersId = (state: ICountryState) => state.userIds;
-/*export function getCountryUsersId(state$: Observable<ICountryState>){
-  return state$.select(state => state.userIds);
-}*/
+
 export const getCurrentUserId = (state: ICountryState) => state.currentUserId;
-/*export function getCurrentUserId(state$: Observable<ICountryState>){
-  return state$.select(state => state.currentUserId);
-}*/
+
 export const getCurrentUser = (state: IAppState) => state.country.currentCountryId && state.country.currentUserId &&
                                                           state.countries.entities
                                                             .filter(country => country.code === state.country.currentCountryId)[0].users
                                                             .filter(user => user.username === state.country.currentUserId)[0];
-/*export function getCurrentUser(state$: Observable<IAppState>){
-  return state$.select(state => state.country.currentCountryId && state.country.currentUserId &&
-    state.countries.entities
-      .filter(country => country.code === state.country.currentCountryId)[0].users
-      .filter(user => user.username === state.country.currentUserId)[0]);
-}*/
+
 export const getCurrentCountry = (state: IAppState) => state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0];
-/*export function getCurrentCountry(state$: Observable<IAppState>){
-  return state$.select(state => state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0]);
-}*/
+
 export const getUserError = (state: ICountryState) => state.error;
-/*export function getUserError(state$: Observable<ICountryState>){
-  return state$.select(state => state.error);
-}*/
+
 export const getUserMsg = (state: ICountryState) => state.msg;
-/*export function getUserMsg(state$: Observable<ICountryState>){
-  return state$.select(state => state.msg);
-}*/
+
 
 

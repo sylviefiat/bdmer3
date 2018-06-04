@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Species } from '../../modules/datas/models/species';
@@ -41,16 +41,16 @@ export class SpeciesFormPageComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.actionsSubscription = route.params
-            .map(params => new SpeciesAction.SelectAction(params.id))
+        this.actionsSubscription = route.params.pipe(
+            map(params => new SpeciesAction.SelectAction(params.id)))
             .subscribe(store);
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getSpeciesPageError);
-        this.species$ = this.store.let(getSelectedSpecies);
-        this.countries$ = this.store.let(getCountriesInApp)
-          .map((countries:Country[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0)));
+        this.error$ = this.store.select(getSpeciesPageError);
+        this.species$ = this.store.select(getSelectedSpecies);
+        this.countries$ = this.store.select(getCountriesInApp).pipe(
+          map((countries:Country[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))));
         this.store.dispatch(new CountriesAction.LoadAction());
     }
 

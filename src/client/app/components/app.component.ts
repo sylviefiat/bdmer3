@@ -4,7 +4,7 @@ import './operators';
 // libs
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // app
 import { IAppState, getisLoggedIn} from '../modules/ngrx/index';
@@ -24,7 +24,6 @@ import { Config } from '../modules/core/utils/index';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  public isLoggedIn$: Observable<any>;
   
   constructor(
     public log: LogService,
@@ -39,6 +38,5 @@ export class AppComponent {
     else {
       this.store.dispatch(new AuthAction.Logout(token));
     }
-    this.isLoggedIn$ = this.store.let(getisLoggedIn);
   }
 }

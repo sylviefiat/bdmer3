@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, pipe } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -21,10 +20,9 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './platform-import-page.component.css',
     ],
 })
-export class PlatformImportPageComponent implements OnInit {
+export class PlatformImportPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;
     isAdmin$: Observable<Country>;
-    locale$: Observable<boolean>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
     private csvFile: string;
@@ -32,16 +30,20 @@ export class PlatformImportPageComponent implements OnInit {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-    }
-
-    ngOnInit() {
-        this.error$ = this.store.let(getPlatformPageError);
-        this.isAdmin$ = this.store.let(getisAdmin);
-        this.store.let(getLangues).subscribe((l: any) => {
+        this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importPlatform-"+l+".csv";
             this.csvFileAdmin = "importPlatformAdmin-"+l+".csv";
         });
+    }
+
+    ngOnInit() {
+        this.error$ = this.store.select(getPlatformPageError);
+        this.isAdmin$ = this.store.select(getisAdmin);        
+    }
+
+    ngOnDestroy(){
+        this.actionsSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

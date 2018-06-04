@@ -4,6 +4,10 @@
   justify-content: space-around;
   align-items: center;
   display: flex;
+  height: -webkit-calc(100vh - 96px);
+  height:    -moz-calc(100vh - 96px);
+  height:         calc(100vh - 96px);
+  width: 100%;
 }
 .background {  
   background: url("../../../assets/img/overlay.png"), url("../../../assets/img/Ressources-6-P.DUMAS.jpg");
@@ -21,9 +25,10 @@
   z-index: -1;
 }
 
-.title_without_map{
-  padding: 150px 0 30px;
-  text-align: center;
+.title{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   h2 {
     font-size: 56px;
@@ -45,17 +50,6 @@ ul {
   padding: 0 0 0 8px;
 }
 
-.smile {
-  background: url("./assets/svg/smile.svg");
-  height: 48px;
-  width: 48px;
-  display: inline-block;
-  transform: scale(0.6);
-  margin-top: -25px;
-  position: relative;
-  top: 16px;
-}
-
 a.link {
   color: #00e;
   cursor: pointer;
@@ -74,17 +68,16 @@ agm-map {
 }
 
 .home{
-  width: 100%;
+
 }
 
 .wrapper{
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
 }
 
 .wrapp_left{
-  flex: 50%;
-  max-width: 50%;
 
   .background_left {  
     background: url("../../../assets/img/overlay.png"), url("../../../assets/img/Ressources-6-P.DUMAS.jpg");
@@ -102,11 +95,8 @@ agm-map {
   }
 
   .title{
-    padding: 0 30px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-100%);
-    text-align: center;
+    
+    
     
     h2{
       margin:0;

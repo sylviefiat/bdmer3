@@ -4,9 +4,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, of, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZoneStations, getSelectedZoneZonePrefs } from '../../modules/ngrx/index';
 import { Platform, Zone, Station, ZonePreference } from '../../modules/datas/models/index';
@@ -37,19 +36,19 @@ export class ViewZonePageComponent implements OnInit, OnDestroy {
   zonesPref$: Observable<ZonePreference[]>
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
+    this.zoneSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZoneAction(params.idZone)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
-    this.stations$ = this.store.let(getSelectedZoneStations);
-    this.zonesPref$ = this.store.let(getSelectedZoneZonePrefs);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.zone$ = this.store.select(getSelectedZone);
+    this.stations$ = this.store.select(getSelectedZoneStations);
+    this.zonesPref$ = this.store.select(getSelectedZoneZonePrefs);
   }
 
   ngOnDestroy() {

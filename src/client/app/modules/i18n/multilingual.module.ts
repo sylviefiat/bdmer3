@@ -24,8 +24,8 @@ export function translateLoaderFactory(http: HttpClient) {
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
+    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

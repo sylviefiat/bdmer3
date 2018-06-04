@@ -27,7 +27,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
  *
  * More: https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch
  */
-import { ActionReducer, combineReducers } from '@ngrx/store';
+import { ActionReducer, combineReducers, ActionReducerMap } from '@ngrx/store';
 
 /**
  * Every reducer module's default export is the reducer function itself. In
@@ -70,7 +70,7 @@ export interface IAppState {
  * wrapping that in storeLogger. Remember that compose applies
  * the result from right to left.
  */
-const reducers = {
+export const reducers: ActionReducerMap<IAppState> = {
   i18n: multilingualReducer,
   main: reducer,
   auth: authReducer,
@@ -85,17 +85,17 @@ const reducers = {
 // ensure state is frozen as extra level of security when developing
 // helps maintain immutability
 //const developmentReducer: ActionReducer<IAppState> = compose(storeFreeze, combineReducers)(reducers);
-const developmentReducer: ActionReducer<IAppState> = combineReducers(reducers);
+//const developmentReducer: ActionReducer<IAppState> = combineReducers(reducers);
 // for production, dev has already been cleared so no need
-const productionReducer: ActionReducer<IAppState> = combineReducers(reducers);
+//const productionReducer: ActionReducer<IAppState> = combineReducers(reducers);
 
-export function AppReducer(state: any, action: any) {
+/*export function AppReducer(state: any, action: any) {
   if (String('<%= BUILD_TYPE %>') === 'dev') {
     return developmentReducer(state, action);
   } else {
     return productionReducer(state, action);
   }
-}
+}*/
 
 /*export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
   return state$.let(s => s.i18n);

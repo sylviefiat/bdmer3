@@ -21,7 +21,7 @@ import { WindowService, StorageService, ConsoleService, createConsoleTarget, pro
 import { CoreModule, Config } from './app/modules/core/index';
 import { MultilingualModule, Languages, translateLoaderFactory, MultilingualEffects } from './app/modules/i18n/index';
 import { MainModule, MainEffects } from './app/modules/main/index';
-import { AppReducer } from './app/modules/ngrx/index';
+import { reducers } from './app/modules/ngrx/index';
 
 // config
 Config.PLATFORM_TARGET = Config.PLATFORMS.WEB;
@@ -80,7 +80,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     }]),
     MainModule,
     // configure app state
-    StoreModule.forRoot(AppReducer),
+    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([MultilingualEffects,MainEffects]),
     // dev environment only imports
     DEV_IMPORTS,

@@ -1,12 +1,10 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/pluck';
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, of, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedStation, getSelectedSurvey,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Count, Species } from '../../modules/datas/models/index';
@@ -50,23 +48,23 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   speciesList$: Observable<Species[]>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.surveySubscription = route.params
-      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
+    this.surveySubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
       .subscribe(store);
-    this.countSubscription = route.params
-      .map(params => new PlatformAction.SelectCountAction(params.idCount))
+    this.countSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectCountAction(params.idCount)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.survey$ = this.store.let(getSelectedSurvey);
-    this.count$ = this.store.let(getSelectedCount);
-    this.locale$ = this.store.let(getLangues);
-    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.survey$ = this.store.select(getSelectedSurvey);
+    this.count$ = this.store.select(getSelectedCount);
+    this.locale$ = this.store.select(getLangues);
+    this.speciesList$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 

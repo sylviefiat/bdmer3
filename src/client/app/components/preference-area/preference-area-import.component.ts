@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -20,7 +19,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './preference-area-import.component.css',
     ],
 })
-export class PreferenceAreaImportComponent implements OnInit{
+export class PreferenceAreaImportComponent implements OnDestroy {
     @Input() platform: Platform;
     @Input() zone: Zone;
     @Input() error: string | null;
@@ -28,19 +27,21 @@ export class PreferenceAreaImportComponent implements OnInit{
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
+    actionSubscription: Subscription;
 
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-    }
-
-    ngOnInit() {
-        this.store.let(getLangues).subscribe((l: any) => {
+        this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importZonePref-"+l+".csv";
         });
+    }
+
+    ngOnDestroy() {
+        this.actionSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

@@ -4,9 +4,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, of, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedStation } from '../../modules/ngrx/index';
 import { Platform, Zone, Station } from '../../modules/datas/models/index';
@@ -42,17 +41,17 @@ export class ViewStationPageComponent implements OnInit, OnDestroy {
   station$: Observable<Station | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.stationSubscription = route.params
-      .map(params => new PlatformAction.SelectStationAction(params.idStation))
+    this.stationSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectStationAction(params.idStation)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.station$ = this.store.let(getSelectedStation);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.station$ = this.store.select(getSelectedStation);
   }
 
   ngOnDestroy() {

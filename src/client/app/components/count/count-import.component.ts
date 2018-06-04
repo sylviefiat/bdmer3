@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone,Survey } from '../../modules/datas/models/index';
@@ -37,7 +36,7 @@ export class CountImportComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.store.let(getLangues).subscribe((l: any) => {
+        this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importCount-"+l+".csv";
         });

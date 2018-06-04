@@ -4,9 +4,8 @@ import { Http, ResponseContentType, Headers, RequestOptions } from '@angular/htt
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 // libs
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscriber } from 'rxjs/Subscriber';
+import { Observable, of, pipe, throwError } from 'rxjs';
+import { map, filter, catchError } from 'rxjs/operators';
 
 // app
 import { Config } from '../../core/index';
@@ -22,23 +21,25 @@ export class CountryListService {
 
   getCountryList(): Observable<Country[]> {
     return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countries.json`)
-      .map(res => res.json())
-      .map(row => {
-        let keys = [];
-        for (let key in row) {
-          let pays={code: key, name: row[key], flag: this.getCountrySVG(key)};
-          keys.push(pays);
-        }
-        return keys;
-      });
-    
+      .pipe(
+        map(res => res.json()),
+        map(row => {
+          let keys = [];
+          for (let key in row) {
+            let pays={code: key, name: row[key], flag: this.getCountrySVG(key)};
+            keys.push(pays);
+          }
+          return keys;
+        })
+      );    
   }
 
   getCountryName(code: string): any {
     return this.getCountryList()
-      .map(countries => countries
-        .filter(country => country.code === code))
-        .map(countries => countries[0].name);
+      .pipe(
+        map(countries => countries.filter(country => country.code === code)),
+        map(countries => countries[0].name)
+      );
   }
 
   getCountrySVG(code: string): SafeUrl {
@@ -51,40 +52,17 @@ export class CountryListService {
             headers: headers,
             responseType: ResponseContentType.Blob
         })
-        .map(res => 
-          res.blob())
-        .map(blob => {
-          let urlCreator = window.URL;
-          let objectUrl = urlCreator.createObjectURL(blob);
-          let safeUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
-          return safeUrl;
-        })
-        .catch((error:any) => Observable.throw(error));
+        .pipe(
+          map(res => res.blob()),
+          map(blob => {
+            let urlCreator = window.URL;
+            let objectUrl = urlCreator.createObjectURL(blob);
+            let safeUrl = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+            return safeUrl;
+          }),
+          catchError((error:any) => throwError(error))
+        );
     
-    //return new Observable((observer: Subscriber<any>) => {
-    /*  let objectUrl: string = null;
-      
-      return this.http
-        .get(url,  options)
-        .subscribe(
-          (dataReceived:any) => {
-            let blob = new Blob([dataReceived._body], {
-                type: dataReceived.headers.get("Content-Type")
-            });
-            return {_attachments : {flag :{ type: blob.type, data: blob}}};
-            /*var urlCreator = window.URL;
-            objectUrl = urlCreator.createObjectURL(blob);
-            //console.log(this.sanitizer.bypassSecurityTrustUrl(objectUrl));
-            this.sanitizer.bypassSecurityTrustUrl(objectUrl);*/
-       /* });*/
-
-        /*return () => {
-                if (objectUrl) {
-                    URL.revokeObjectURL(objectUrl);
-                    objectUrl = null;
-                }
-            };
-    });*/
   }
 
   getCountrySVGBlob(code: string): Observable<Blob> {
@@ -92,14 +70,13 @@ export class CountryListService {
     let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
     let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
 
-    return this.http
-        .get(url, {
-            headers: headers,
-            responseType: ResponseContentType.Blob
-        })
-        .map(res => {
-          return res.blob()
-        })
-        .catch((error:any) => Observable.throw(error));
+    return this.http.get(url, {
+        headers: headers,
+        responseType: ResponseContentType.Blob
+      })
+      .pipe(
+          map(res => res.blob()),
+          catchError((error:any) => throwError(error))
+      );
       }
 }

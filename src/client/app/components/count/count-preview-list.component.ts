@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
 import { Survey, Zone, Platform, Count, Species } from './../../modules/datas/models/index';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IAppState, getLangues, getSpeciesInApp } from './../../modules/ngrx/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 
@@ -36,8 +36,8 @@ export class CountPreviewListComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.locale$ = this.store.let(getLangues);
-    this.species$ = this.store.let(getSpeciesInApp);
+    this.locale$ = this.store.select(getLangues);
+    this.species$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 }

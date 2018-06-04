@@ -1,15 +1,9 @@
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/let';
+
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of, pipe } from 'rxjs';
+import { map, take, switchMap } from 'rxjs/operators';
 
 import { CountriesAction } from '../actions/index';
 import { IAppState, getCountriesisLoaded, getCountriesInApp  } from '../../ngrx/index';
@@ -33,9 +27,11 @@ export class CountryExistsGuard implements CanActivate {
    */
   waitForCountriesToLoad(): Observable<boolean> {
     return this.store
-      .let(getCountriesisLoaded)
-      .map(loaded => loaded[0])
-      .take(1);
+      .select(getCountriesisLoaded)
+      .pipe(
+        map(loaded => loaded[0]),
+        take(1)
+      );
   }
 
   /**
@@ -43,11 +39,12 @@ export class CountryExistsGuard implements CanActivate {
    * in the Store
    */
   hasCountryInDB(id: string): Observable<boolean> {
-    console.log(id);
     return this.store
-      .let(getCountriesInApp)
-      .map(entities => !!entities[id])
-      .take(1);
+      .select(getCountriesInApp)
+      .pipe(
+        map(entities => !!entities[id]),
+        take(1)
+      );
   }
 
   /**
@@ -56,7 +53,6 @@ export class CountryExistsGuard implements CanActivate {
    * API.
    */
   hasCountry(id: string): Observable<boolean> {
-    console.log(id);
     return this.hasCountryInDB(id);   
   }
 
@@ -74,9 +70,9 @@ export class CountryExistsGuard implements CanActivate {
    * to the 404 page.
    */
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    console.log(route);
-    return this.waitForCountriesToLoad().switchMap(() =>
-      this.hasCountry(route.params['id'])
-    );
+    return this.waitForCountriesToLoad()
+      .pipe(switchMap(() =>
+        this.hasCountry(route.params['id'])
+      ));
   }
 }

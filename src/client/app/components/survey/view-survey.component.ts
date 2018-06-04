@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of, pipe} from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -50,8 +50,7 @@ export class ViewSurveyComponent implements OnInit {
 
     filter(filter: string){
         filter=filter.toLowerCase();
-        console.log();
-        this.filteredCounts$ = this.counts$.map(counts => 
+        this.filteredCounts$ = this.counts$.pipe(map(counts => 
                     counts.filter(count => count.code.toLowerCase().indexOf(filter)!==-1 || 
                         count.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         count.codeSurvey.toLowerCase().indexOf(filter)!==-1 ||
@@ -61,7 +60,7 @@ export class ViewSurveyComponent implements OnInit {
                             this.species.filter(sp => sp.code===mesure.codeSpecies && 
                                 sp.scientificName.toLowerCase().indexOf(filter)!==-1).length >0).length>0
                         )
-                    );                      
+                    ));                      
     }
 
     actions(type: string) {

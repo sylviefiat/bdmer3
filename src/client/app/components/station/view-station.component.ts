@@ -1,7 +1,5 @@
 import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { MatDialogRef, MatDialog, MatDialogConfig} from "@angular/material";
@@ -36,7 +34,6 @@ export class ViewStationComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.station);
     }
 
 

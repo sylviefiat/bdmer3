@@ -3,6 +3,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
+import { MapComponent } from './home/map.component';
 import { LoginComponent } from './login/login.component';
 import { LoginPageComponent } from './login/login-page.component';
 import { LostPasswordComponent } from './login/lost-password.component';
@@ -43,6 +44,7 @@ export const APP_COMPONENTS: any[] = [
   ToolbarComponent,
   AboutComponent,
   HomeComponent,
+  MapComponent,
   LoginComponent,
   LoginPageComponent,
   LostPasswordComponent,
@@ -68,6 +70,7 @@ export * from './navbar/navbar.component';
 export * from './toolbar/toolbar.component';
 export * from './about/about.component';
 export * from './home/home.component';
+export * from './home/map.component';
 export * from './login/login.component';
 export * from './login/login-page.component';
 export * from './login/logout.component';

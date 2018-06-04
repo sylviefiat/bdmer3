@@ -1,8 +1,7 @@
-import { of } from 'rxjs/observable/of';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';

@@ -4,8 +4,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedSpecies, getisAdmin, getCountriesInApp } from '../../modules/ngrx/index';
 import { Species } from '../../modules/datas/models/species';
@@ -43,15 +43,15 @@ export class ViewSpeciesPageComponent implements OnInit, OnDestroy {
   countries$: Observable<Country[]>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.actionsSubscription = route.params
-      .map(params => new SpeciesAction.SelectAction(params.id))
+    this.actionsSubscription = route.params.pipe(
+      map(params => new SpeciesAction.SelectAction(params.id)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.species$ = this.store.let(getSelectedSpecies);
-    this.isAdmin$ = this.store.let(getisAdmin);
-    this.countries$ = this.store.let(getCountriesInApp);
+    this.species$ = this.store.select(getSelectedSpecies);
+    this.isAdmin$ = this.store.select(getisAdmin);
+    this.countries$ = this.store.select(getCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction());
   }
 

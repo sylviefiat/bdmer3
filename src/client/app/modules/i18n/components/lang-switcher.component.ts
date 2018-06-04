@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 // app
 import { Config, ILang, LogService } from '../../core/index';
-import { IAppState } from '../../ngrx/index';
+import { IAppState, getLangues } from '../../ngrx/index';
 import { ElectronEventService } from '../../electron/index';
 import { MultilingualAction } from '../actions/index';
 import { MultilingualService, Languages, LanguageViewHelper } from '../services/index';
@@ -26,10 +26,7 @@ export class LangSwitcherComponent {
     @Inject(Languages) private languages,
     @Inject(LanguageViewHelper) private viewHelper
   ) {
-    store.take(1).subscribe((s: any) => {
-      // s && s.18n - ensures testing works in all cases (since some tests dont use i18n state)
-      this.lang = s && s.i18n ? s.i18n.lang : '';
-    });
+    store.select(getLangues).subscribe(language => this.lang = language);   
 
     if (Config.IS_DESKTOP()) {
       // allow electron menu to talk to component

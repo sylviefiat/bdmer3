@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/let';
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
@@ -48,12 +48,11 @@ export class SpeciesListPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
-    this.species$ = this.store.let(getSpeciesInApp);
+    this.species$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());   
   }
 
   addSpecies(type: string){
-    console.log(type);
     type = type.charAt(0).toUpperCase() + type.slice(1);
     this.routerext.navigate(['/species'+type]);
   }

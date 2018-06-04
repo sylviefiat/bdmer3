@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PapaParseService } from 'ngx-papaparse';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
@@ -360,8 +360,8 @@ export class Csv2JsonService {
                         observable.complete();
                     }
                 });
-            })
-            .mergeMap(data => {
+            }).pipe(
+            mergeMap(data => {
                 console.log(data);
                 let res;
                 switch (type) {
@@ -396,7 +396,7 @@ export class Csv2JsonService {
                 }
                 console.log(res);
                 return res;
-            });
+            }));
 
     }
 

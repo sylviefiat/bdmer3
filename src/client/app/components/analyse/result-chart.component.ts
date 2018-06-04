@@ -1,7 +1,6 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 import { ResultSurvey } from '../../modules/analyse/models/index';
@@ -26,9 +25,6 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
     @Input() chartType: string;
     chartData: any;
     title: string;
-
-    //header: any[] = [];
-    //data: Observable<any[]>;
 
     constructor() {
 

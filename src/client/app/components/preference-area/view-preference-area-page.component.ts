@@ -4,9 +4,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription, of, pipe } from 'rxjs';
+import { map, catchError, first } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedZonePref } from '../../modules/ngrx/index';
 import { Platform, Zone, ZonePreference } from '../../modules/datas/models/index';
@@ -45,21 +44,21 @@ export class ViewPreferenceAreaPageComponent implements OnInit, OnDestroy {
   zonePref$: Observable<ZonePreference | null>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
+    this.zoneSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZoneAction(params.idZone)))
       .subscribe(store);
-    this.zonePrefSubscription = route.params
-      .map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref))
+    this.zonePrefSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
-    this.zonePref$ = this.store.let(getSelectedZonePref);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.zone$ = this.store.select(getSelectedZone);
+    this.zonePref$ = this.store.select(getSelectedZonePref);
   }
 
   ngOnDestroy() {

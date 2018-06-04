@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
@@ -31,9 +31,9 @@ export class SelectedCountryPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new CountriesAction.LoadAction()); 
-    this.country$ = this.store.let(getSelectedCountry);
-    this.isAdmin$ = this.store.let(getisAdmin);
-    this.msg$ = this.store.let(getUserMessage);
+    this.country$ = this.store.select(getSelectedCountry);
+    this.isAdmin$ = this.store.select(getisAdmin);
+    this.msg$ = this.store.select(getUserMessage);
   }
 
   removeFromCountries(data) {

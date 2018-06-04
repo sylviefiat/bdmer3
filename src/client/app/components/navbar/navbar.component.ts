@@ -1,9 +1,8 @@
-// app
-import 'rxjs/add/operator/map';
-import { of } from 'rxjs/observable/of';
+
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, pipe } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { map, catchError, first } from 'rxjs/operators';
 
 import { IAppState, getisLoggedIn, getAuthCountry, getAuthUser} from '../../modules/ngrx/index';
 import { User, Country } from '../../modules/countries/models/country';
@@ -26,8 +25,8 @@ export class NavbarComponent  {
   open: boolean = false;
 
   constructor(private authenticationService: AuthService, private store: Store<IAppState>) {	 
-    this.isLogged$ = this.store.let(getisLoggedIn);
-    this.currentCountry$ = this.store.let(getAuthCountry);
-    this.currentUser$ = this.store.let(getAuthUser);
+    this.isLogged$ = this.store.select(getisLoggedIn);
+    this.currentCountry$ = this.store.select(getAuthCountry);
+    this.currentUser$ = this.store.select(getAuthUser);
   }
 }
