@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'bc-global-import-count',
@@ -20,7 +21,7 @@ import { Observable } from 'rxjs/Observable';
   </mat-card-content>
   <mat-card-footer class="footer">
   <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-  <a *ngIf="!isAdmin" href="{{getCsvUrl('Count')}}" download>
+  <a *ngIf="!isAdmin" href="{{getCsvUrl()}}" download>
   <fa [name]="'download'" [border]=true [size]=1></fa>
   </a>
   </mat-card-footer>
@@ -54,7 +55,7 @@ import { Observable } from 'rxjs/Observable';
   </div>
   `,
 })
-export class GlobalImportCountComponent implements OnInit, OnChanges {
+export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy{
   @Input('group') public form: FormGroup;
   @Input() importError$: Observable<string[]>;
   @Input() error$: Observable<string | null>;
@@ -66,17 +67,27 @@ export class GlobalImportCountComponent implements OnInit, OnChanges {
   @Output() stayHereEmitter = new EventEmitter<string>();
 
   view : boolean = false;
+  hasErr: boolean;
+  hasIErr: boolean;
+  hasErrSub: Subscription;
+  hasIErrSub: Subscription;
 
   constructor() {
 
   }
 
   ngOnInit() {
+    this.hasErrSub = this.error$.subscribe(err => {
+      this.hasErr = (err!==null);
+    });
+    this.hasIErrSub = this.importError$.subscribe(ie => {
+      this.hasIErr = (ie.length > 0);
+    })
   }
 
   ngOnChanges() {
     if(!this.viewCount && this.view){
-      if (this.csvFileCount !== null && (this.error$.filter(err=>err!==null) || this.importError$.filter(ie=>ie.length > 0))) {
+      if (this.csvFileCount !== null && (this.hasErr || this.hasIErr)) {
         this.deleteCsv();
       }
     }
@@ -96,6 +107,11 @@ export class GlobalImportCountComponent implements OnInit, OnChanges {
 
   getCsvUrl() {
     return this.docs_repo + "importCount-" + this.locale + ".csv";
+  }
+
+  ngOnDestroy(){
+    this.hasErrSub.unsubscribe();
+    this.hasIErrSub.unsubscribe();
   }
 
   deleteCsv() {

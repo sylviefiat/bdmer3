@@ -2,7 +2,7 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_STATIONS' | translate}}</mat-card-title>
       <mat-card-content>
-        <button *ngIf="importCsvFile === null || importError.length !== 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
+        <button *ngIf="importCsvFile === null || importError.length > 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
@@ -35,7 +35,7 @@
       </button>
     </mat-card-actions>
 
-    <mat-card-actions align="start" *ngIf="importErrorlength > 0">
+    <mat-card-actions align="start" *ngIf="importError.length > 0">
       <h2 class="errorStation">{{'LIST_ERROR_SURVEY' | translate}}</h2>
       <mat-list>
         <div *ngFor="let station of importError">

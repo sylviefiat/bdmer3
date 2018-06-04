@@ -1,103 +1,97 @@
 
-mat-horizontal-stepper {
+:host ::ng-deep mat-horizontal-stepper {
     margin: 72px;
   }
-.actions {
+:host ::ng-deep .actions {
   text-align: center;
 }
-.insideform {
+:host ::ng-deep .insideform {
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   margin: 72px 0;
 }
-.insideform mat-card {
+:host ::ng-deep .insideform mat-card {
   flex-grow: 1;
   margin:auto;
   max-width: 500px;
 }
-mat-card-title,
-mat-card-content {
+:host ::ng-deep mat-card-title,
+:host ::ng-deep mat-card-content {
   display: flex;
   justify-content: center;
 }
-mat-card-subtitle {
+:host ::ng-deep mat-card-subtitle {
   color: #555;
 }
-mat-input-container {
+:host ::ng-deep mat-input-container {
   padding-left: 2em;
   flex-grow: 1;
 }
-mat-card-actions {
+:host ::ng-deep mat-card-actions {
   margin: 5px 0 0 !important;
 }
-mat-card-footer {
+:host ::ng-deep mat-card-footer {
   display: flex;
 }
-mat-card-footer a {
+:host ::ng-deep mat-card-footer a {
   margin:1em;
 }
-.error {
+:host ::ng-deep .error {
   text-align: center;
   padding: 16px;
   color: white;
   background-color: red;
 }
-h5 {
+:host ::ng-deep h5 {
   margin-left: 15px;
 }
-.warn {
+:host ::ng-deep .warn {
   color: #8a6d3b;
   background-color: #fcf8e3;
   border-color: #faebcc;
   padding: 5px;
 }
 
-.mat-card{
+:host ::ng-deep .mat-card{
   margin-bottom: 25px!important;  
 }
 
-.btn-danger{
+:host ::ng-deep .btn-danger{
   background-color: red;
 }
-.no-box-shadow{
+:host ::ng-deep .no-box-shadow{
   box-shadow: none;
 }
-.align-right{
+:host ::ng-deep .align-right{
   text-align: right;
 }
 
-.msg {
+:host ::ng-deep .msg {
   text-align: center;
   padding: 16px;     
   color: white;
   background-color: #4BB543;
 }
 
-.valid{
+:host ::ng-deep .valid{
   color: green;
 }
 
-.disabled{
+:host ::ng-deep .disabled{
   background-color: grey;
   cursor: not-allowed;
 }
-.disable-click{
-    pointer-events: none!important;
-}
-.enable-click{
-  pointer-events: auto!important;
-}
 
-.send{
+:host ::ng-deep .send{
   background-color: #4BB543;
 }
-.btn-danger{
+:host ::ng-deep .btn-danger{
   background-color: red;
 }
 
-.btn-disabled{
+:host ::ng-deep .btn-disabled{
   background-color: grey;
   cursor: not-allowed;
 }

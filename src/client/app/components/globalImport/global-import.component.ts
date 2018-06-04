@@ -73,10 +73,12 @@ export class GlobalImportComponent implements OnInit {
     }
 
     setStationFile(setFile) {
-        this.csvFileStation = setFile.file;
-
         switch (setFile.action) {
             case "check":{
+                if(this.pendingStation){
+                    this.remove.emit({ file: this.csvFileStation, type: 'station' });
+                    this.pendingStation = false;
+                }
                 this.csvFileStation = setFile.file;
                 this.check.emit({ file: setFile.file, type: 'station' });
                 break;
@@ -100,10 +102,12 @@ export class GlobalImportComponent implements OnInit {
     }
 
     setSurveyFile(setFile) {
-        this.csvFileSurvey = setFile.file;
-
         switch (setFile.action) {
             case "check":{
+                if(this.pendingSurvey){
+                    this.remove.emit({ file: this.csvFileSurvey, type: 'survey' });
+                    this.pendingSurvey = false;
+                }
                 this.csvFileSurvey = setFile.file;
                 this.check.emit({ file: setFile.file, type: 'survey' });
                 break;
@@ -200,9 +204,15 @@ export class GlobalImportComponent implements OnInit {
     }
 
     send() {
-        this.upload.emit({ file: this.csvFileStation, type: 'station' });
-        this.upload.emit({ file: this.csvFileSurvey, type: 'survey' });
-        this.upload.emit({ file: this.csvFileCount, type: 'count' });
+        if(this.csvFileStation !== null){
+            this.upload.emit({ file: this.csvFileStation, type: 'station' });
+        }
+        if(this.csvFileSurvey !== null){
+            this.upload.emit({ file: this.csvFileSurvey, type: 'survey' });
+        }
+        if(this.csvFileCount !== null){
+            this.upload.emit({ file: this.csvFileCount, type: 'count' });
+        }
     }
 
     return() {

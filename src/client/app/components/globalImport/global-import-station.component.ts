@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'bc-global-import-station',
@@ -16,7 +17,7 @@ import { Observable } from 'rxjs/Observable';
   {{'IMPORT_DESC' | translate }}    
   </mat-card-content>
   <mat-card-footer class="footer">
-  <h5 mat-subheader>{{ 'DOWNLOAD_CSV_STATIONS' | translate }}</h5>
+  <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
   <a *ngIf="!isAdmin" href="{{getCsvUrl()}}" download>
   <fa [name]="'download'" [border]=true [size]=1></fa>
   </a>
@@ -53,7 +54,7 @@ import { Observable } from 'rxjs/Observable';
   </div>
   `,
 })
-export class GlobalImportStationComponent implements OnInit, OnChanges {
+export class GlobalImportStationComponent implements OnInit, OnChanges, OnDestroy {
   @Input('group') public form: FormGroup;
   @Input() isAdmin: boolean;
   @Input() importError$: Observable<string[]>;
@@ -68,17 +69,27 @@ export class GlobalImportStationComponent implements OnInit, OnChanges {
   @Output() stayHereEmitter = new EventEmitter<string>();
 
   view: boolean = true;
+  hasErr: boolean;
+  hasIErr: boolean;
+  hasErrSub: Subscription;
+  hasIErrSub: Subscription;
+
   constructor() {
 
   }
 
   ngOnInit() {
-
+    this.hasErrSub = this.error$.subscribe(err => {
+      this.hasErr = (err!==null);
+    });
+    this.hasIErrSub = this.importError$.subscribe(ie => {
+      this.hasIErr = (ie.length > 0);
+    })
   }
 
   ngOnChanges(changes){
     if(!this.viewStation && this.view){
-      if (this.csvFileStation !== null && (this.error$.filter(err=>err!==null) || this.importError$.filter(ie=>ie.length > 0))) {
+      if (this.csvFileStation !== null && (this.hasErr || this.hasIErr)) {
         this.deleteCsv();
       } else if (this.csvFileStation !== null) {
         this.stationFileEmitter.emit({ file: this.csvFileStation, action: "save" });
@@ -116,6 +127,10 @@ export class GlobalImportStationComponent implements OnInit, OnChanges {
     return this.docs_repo + "importStation-" + this.locale + ".csv";
   }
 
+  ngOnDestroy(){
+    this.hasErrSub.unsubscribe();
+    this.hasIErrSub.unsubscribe();
+  }
 
   deleteCsv() {
     let confirmRm;

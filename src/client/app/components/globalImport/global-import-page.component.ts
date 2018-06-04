@@ -39,6 +39,7 @@ export class GlobalImportPageComponent implements OnInit {
   isAdmin$: Observable<Country>;
   locale$: Observable<boolean>;
   docs_repo: string;
+  submit: boolean = false;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
   }
@@ -56,62 +57,69 @@ export class GlobalImportPageComponent implements OnInit {
 
   handleCheck(setFile) {
     switch (setFile.type) {
-      case "station":
+      case "station":{
         this.store.dispatch(new PlatformAction.CheckStationCsvFile(setFile.file));
         break;
-      case "survey":
+      }
+      case "survey":{
         this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(setFile.file));
         break;
-      case "count":
+      }
+      case "count":{
         this.store.dispatch(new PlatformAction.CheckCountCsvFile(setFile.file));
         break;
+      }
       default:
-        return;
+      return;
     }
   }
 
   handlePending(setFile) {
     switch (setFile.type) {
-      case "station":
+      case "station":{
         this.store.dispatch(new PlatformAction.AddPendingStationAction(setFile.file));
         break;
-      case "survey":
+      }
+      case "survey": {
         this.store.dispatch(new PlatformAction.AddPendingSurveyAction(setFile.file));
         break;
+      }
       default:
-        return;
+      return;
     }
   }
 
   handleUpload(setFile: any): void {
-    if (setFile.file !== null) {
-      switch (setFile.type) {
-        case "station": {
-          this.store.dispatch(new PlatformAction.ImportStationAction(setFile.file));
-          break;
-        }
-        case "survey": {
-          this.store.dispatch(new PlatformAction.ImportSurveyAction(setFile.file));
-          break;
-        }
-        case "count": {
-          this.store.dispatch(new PlatformAction.ImportCountAction(setFile.file));
-          break;
-        }
+    this.submit = true;
+
+    switch (setFile.type) {
+      case "station": {
+        this.store.dispatch(new PlatformAction.ImportStationAction(setFile.file));
+        break;
+      }
+      case "survey": {
+        this.store.dispatch(new PlatformAction.ImportSurveyAction(setFile.file));
+        break;
+      }
+      case "count": {
+        this.store.dispatch(new PlatformAction.ImportCountAction(setFile.file));
+        break;
       }
     }
   }
 
   handleRemove(setFile: any): void {
     switch (setFile.type) {
-      case "station":
+      case "station":{
         this.store.dispatch(new PlatformAction.RemovePendingStationAction(setFile.file));
         break;
-      case "survey":
+      }
+      case "survey":{
         this.store.dispatch(new PlatformAction.RemovePendingSurveyAction(setFile.file));
         break;
+      }
       default:
-        return;
+      return;
     }
   }
 
@@ -129,12 +137,16 @@ export class GlobalImportPageComponent implements OnInit {
   }
 
   canDeactivate() {
-    let confirmR = confirm('Discard changes?');
-    if(confirmR){
-      //this.store.dispatch(new PlatformAction.ResetAllPendingAction());
-      return true;
+    if(!this.submit){
+      let confirmR = confirm('Discard changes?');
+      if(confirmR){
+        this.store.dispatch(new PlatformAction.ResetAllPendingAction());
+        return true;
+      }else{
+        return false;
+      }
     }else{
-      return false;
+      return true;
     }
   }
 }

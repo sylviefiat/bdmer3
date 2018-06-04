@@ -32,12 +32,15 @@ export class StationImportComponent implements OnInit{
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
-    private importCsvFile: null;
+    private importCsvFile = null;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
+        console.log(this.importError)
+        console.log(this.error)
+        console.log(this.importCsvFile)
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importStation-"+l+".csv";
