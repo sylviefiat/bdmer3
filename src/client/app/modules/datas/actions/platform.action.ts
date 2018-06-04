@@ -12,9 +12,6 @@ export namespace PlatformAction {
     ADD_PLATFORM: string;
     ADD_PLATFORM_SUCCESS: string;
     ADD_PLATFORM_FAIL: string;
-    ADD_PENDING_ZONE: string;
-    ADD_PENDING_ZONE_SUCCESS: string;
-    ADD_PENDING_ZONE_FAIL: string;
     IMPORT_PLATFORM: string;
     IMPORT_PLATFORM_SUCCESS: string;
     CHECK_PLATFORM_CSV_FILE: string;
@@ -31,9 +28,6 @@ export namespace PlatformAction {
     ADD_ZONE_FAIL: string;
     IMPORT_ZONE: string;
     IMPORT_ZONE_SUCCESS: string;
-    REMOVE_PENDING_ZONE: string;
-    REMOVE_PENDING_ZONE_SUCCESS: string;
-    REMOVE_PENDING_ZONE_FAIL: string;
     REMOVE_ZONE: string;
     REMOVE_ZONE_SUCCESS: string;
     REMOVE_ZONE_FAIL: string;
@@ -106,9 +100,6 @@ export namespace PlatformAction {
     ADD_PLATFORM: type(`${PLATFORM} Add Platform`),
     ADD_PLATFORM_SUCCESS: type(`${PLATFORM} Add Platform Success`),
     ADD_PLATFORM_FAIL: type(`${PLATFORM} Add Platform Fail`),
-    ADD_PENDING_ZONE: type(`${PLATFORM} Add Pending Zone`),
-    ADD_PENDING_ZONE_SUCCESS: type(`${PLATFORM} Add Pending Zone Success`),
-    ADD_PENDING_ZONE_FAIL: type(`${PLATFORM} Add Pending Zone Fail`),
     IMPORT_PLATFORM: type(`${PLATFORM} Import Platform`),
     IMPORT_PLATFORM_SUCCESS:type(`${PLATFORM} Import Platform Success`),
     CHECK_PLATFORM_CSV_FILE:type(`${PLATFORM} Check Platform Csv file`),
@@ -125,9 +116,6 @@ export namespace PlatformAction {
     ADD_ZONE_FAIL: type(`${PLATFORM} Add Zone Fail`),
     IMPORT_ZONE: type(`${PLATFORM} Import Zone`),
     IMPORT_ZONE_SUCCESS:type(`${PLATFORM} Import Zone Success`),
-    REMOVE_PENDING_ZONE: type(`${PLATFORM} Remove Pending Zone`),
-    REMOVE_PENDING_ZONE_SUCCESS: type(`${PLATFORM} Remove Pending Zone Success`),
-    REMOVE_PENDING_ZONE_FAIL: type(`${PLATFORM} Remove Pending Zone Fail`),
     REMOVE_ZONE: type(`${PLATFORM} Remove Zone`),
     REMOVE_ZONE_SUCCESS: type(`${PLATFORM} Remove Zone Success`),
     REMOVE_ZONE_FAIL: type(`${PLATFORM} Remove Zone Fail`), 
@@ -196,23 +184,6 @@ export namespace PlatformAction {
     RESET_ALL_PENDING: type(`${PLATFORM} remove all pending`)
   };
 
-  export class AddPendingZoneAction implements Action {
-    readonly type = ActionTypes.ADD_PENDING_ZONE;
-
-    constructor(public payload: any) {}
-  }
-
-  export class AddPendingZoneSuccessAction implements Action {
-    readonly type = ActionTypes.ADD_PENDING_ZONE_SUCCESS;
-
-    constructor(public payload: any) {}
-  }
-
-  export class AddPendingZoneFailAction implements Action {
-    readonly type = ActionTypes.ADD_PENDING_ZONE_FAIL;
-
-    constructor(public payload: any) {}
-  }
 
   /**
    * Add platform to Platform list Actions
@@ -269,26 +240,26 @@ export namespace PlatformAction {
    * Remove platform from Platform list Actions
    */
 
-  export class RemovePlatformCountryAction implements Action {
-    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY;
+   export class RemovePlatformCountryAction implements Action {
+     readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY;
 
-    constructor(public payload: Platform) {}
-  }
+     constructor(public payload: Platform) {}
+   }
 
-  export class RemovePlatformCountrySuccessAction implements Action {
-    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS;
+   export class RemovePlatformCountrySuccessAction implements Action {
+     readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS;
 
-    constructor(public payload: Platform) {}
-  }
+     constructor(public payload: Platform) {}
+   }
 
-  export class RemovePlatformCountryFailAction implements Action {
-    readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_FAIL;
+   export class RemovePlatformCountryFailAction implements Action {
+     readonly type = ActionTypes.REMOVE_PLATFORM_COUNTRY_FAIL;
 
-    constructor(public payload: Platform) {}
-  }
+     constructor(public payload: Platform) {}
+   }
 
-  export class RemovePlatformAction implements Action {
-    readonly type = ActionTypes.REMOVE_PLATFORM;
+   export class RemovePlatformAction implements Action {
+     readonly type = ActionTypes.REMOVE_PLATFORM;
 
      constructor(public payload: Platform) {}
    }
@@ -338,24 +309,6 @@ export namespace PlatformAction {
      constructor(public payload: Zone) {}
    }
 
-   export class RemovePendingZoneAction implements Action {
-     readonly type = ActionTypes.REMOVE_PENDING_ZONE;
-
-     constructor(public payload: any) {}
-   }
-
-   export class RemovePendingZoneSuccessAction implements Action {
-     readonly type = ActionTypes.REMOVE_PENDING_ZONE_SUCCESS;
-
-     constructor(public payload: any) {}
-   }
-
-   export class RemovePendingZoneFailAction implements Action {
-     readonly type = ActionTypes.REMOVE_PENDING_ZONE_FAIL;
-
-     constructor(public payload: any) {}
-   }
-
   /**
    * Remove zone from Platform  Actions
    */
@@ -390,24 +343,6 @@ export namespace PlatformAction {
      readonly type = ActionTypes.ADD_ZONE_PREF_SUCCESS;
 
      constructor(public payload: ZonePreference) {}
-   }
-
-   export class AddPendingStationAction implements Action {
-     readonly type = ActionTypes.ADD_PENDING_STATION;
-
-     constructor(public payload: any) {}
-   }
-
-   export class AddPendingStationSuccessAction implements Action {
-     readonly type = ActionTypes.ADD_PENDING_STATION_SUCCESS;
-
-     constructor(public payload: any) {}
-   }
-
-   export class AddPendingStationFailAction implements Action {
-     readonly type = ActionTypes.ADD_PENDING_STATION_FAIL;
-
-     constructor(public payload: any) {}
    }
 
    export class ImportZonePrefAction implements Action {
@@ -567,44 +502,62 @@ export namespace PlatformAction {
   /**
    * Add station to zone  Actions
    */
-  export class AddStationAction implements Action {
-    readonly type = ActionTypes.ADD_STATION;
+   export class AddStationAction implements Action {
+     readonly type = ActionTypes.ADD_STATION;
 
-    constructor(public payload: Station) {}
-  }
+     constructor(public payload: Station) {}
+   }
 
-  export class AddStationSuccessAction implements Action {
-    readonly type = ActionTypes.ADD_STATION_SUCCESS;
+   export class AddStationSuccessAction implements Action {
+     readonly type = ActionTypes.ADD_STATION_SUCCESS;
 
-    constructor(public payload: Station) {}
-  }
+     constructor(public payload: Station) {}
+   }
 
-  export class ImportStationAction implements Action {
-    readonly type = ActionTypes.IMPORT_STATION;
+   export class AddPendingStationAction implements Action {
+     readonly type = ActionTypes.ADD_PENDING_STATION;
 
      constructor(public payload: any) {}
    }
 
-  export class ImportStationSuccessAction implements Action {
-    readonly type = ActionTypes.IMPORT_STATION_SUCCESS;
-
-    constructor(public payload: Station) {}
-  }
-
-  export class CheckStationCsvFile implements Action {
-    readonly type = ActionTypes.CHECK_STATION_CSV_FILE;
+   export class AddPendingStationSuccessAction implements Action {
+     readonly type = ActionTypes.ADD_PENDING_STATION_SUCCESS;
 
      constructor(public payload: any) {}
    }
 
-  export class CheckStationAddErrorAction implements Action {
-    readonly type = ActionTypes.CHECK_STATION_ADD_ERROR;
+   export class AddPendingStationFailAction implements Action {
+     readonly type = ActionTypes.ADD_PENDING_STATION_FAIL;
+
+     constructor(public payload: any) {}
+   }
+
+   export class ImportStationAction implements Action {
+     readonly type = ActionTypes.IMPORT_STATION;
+
+     constructor(public payload: any) {}
+   }
+
+   export class ImportStationSuccessAction implements Action {
+     readonly type = ActionTypes.IMPORT_STATION_SUCCESS;
+
+     constructor(public payload: Station) {}
+   }
+
+   export class CheckStationCsvFile implements Action {
+     readonly type = ActionTypes.CHECK_STATION_CSV_FILE;
+
+     constructor(public payload: any) {}
+   }
+
+   export class CheckStationAddErrorAction implements Action {
+     readonly type = ActionTypes.CHECK_STATION_ADD_ERROR;
 
      constructor(public payload: string) {}
    }
 
-  export class CheckStationSuccessAction implements Action {
-    readonly type = ActionTypes.CHECK_STATION_SUCCESS;
+   export class CheckStationSuccessAction implements Action {
+     readonly type = ActionTypes.CHECK_STATION_SUCCESS;
 
      constructor(public payload: any) {}
    }
@@ -630,20 +583,20 @@ export namespace PlatformAction {
   /**
    * Remove Station from Zone - Platform  Actions
    */
-  export class RemoveStationAction implements Action {
-    readonly type = ActionTypes.REMOVE_STATION;
+   export class RemoveStationAction implements Action {
+     readonly type = ActionTypes.REMOVE_STATION;
 
-    constructor(public payload: Station) {}
-  }
+     constructor(public payload: Station) {}
+   }
 
-  export class RemoveStationSuccessAction implements Action {
-    readonly type = ActionTypes.REMOVE_STATION_SUCCESS;
+   export class RemoveStationSuccessAction implements Action {
+     readonly type = ActionTypes.REMOVE_STATION_SUCCESS;
 
-    constructor(public payload: Station) {}
-  }
+     constructor(public payload: Station) {}
+   }
 
-  export class RemoveStationFailAction implements Action {
-    readonly type = ActionTypes.REMOVE_STATION_FAIL;
+   export class RemoveStationFailAction implements Action {
+     readonly type = ActionTypes.REMOVE_STATION_FAIL;
 
      constructor(public payload: Platform) {}
    }
@@ -777,9 +730,6 @@ export namespace PlatformAction {
    | AddPlatformAction
    | AddPlatformSuccessAction
    | AddPlatformFailAction
-   | AddPendingZoneAction
-   | AddPendingZoneSuccessAction
-   | AddPendingZoneFailAction
    | ImportPlatformAction
    | ImportPlatformSuccessAction
    | CheckPlatformCsvFile
@@ -795,9 +745,6 @@ export namespace PlatformAction {
    | AddZoneSuccessAction
    | ImportZoneAction
    | ImportZoneSuccessAction
-   | RemovePendingZoneAction
-   | RemovePendingZoneSuccessAction
-   | RemovePendingZoneFailAction
    | RemoveZoneAction
    | RemoveZoneSuccessAction
    | RemoveZoneFailAction

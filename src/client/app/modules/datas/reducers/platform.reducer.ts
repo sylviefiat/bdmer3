@@ -59,28 +59,6 @@ export function platformReducer(
             }
         }
 
-        case PlatformAction.ActionTypes.ADD_PENDING_ZONE_SUCCESS:{
-            let entities = [];
-            let ids = [];
-            const addedzone = action.payload;
-
-            for(let i in addedzone){
-                const platforms = state.entities.filter(platform => addedzone[i].codePlatform !== platform._id);
-                const modifiedPlatform = state.entities.filter(platform => addedzone[i].codePlatform === platform._id)[0];
-                modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzone[i].properties.code !== zone.properties.code),addedzone[i]];
-
-                entities.push(...platforms, modifiedPlatform)
-                ids.push(...state.ids.filter(id => addedzone[i].codePlatform !== id), ...addedzone[i].codePlatform)
-            }
-
-            return {
-                ...state,
-                entities: entities,
-                ids: ids,
-                error: null
-            }
-        }
-
         case PlatformAction.ActionTypes.ADD_ZONE_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
             const addedzone = action.payload;
@@ -256,28 +234,6 @@ export function platformReducer(
                 currentZoneId: null,
                 error: null,
                 msg: "Zone removed with success"
-            };
-        }
-
-        case PlatformAction.ActionTypes.REMOVE_PENDING_ZONE_SUCCESS:
-        {
-            let entities = [];
-            let ids = [];
-            const removedZone = action.payload;
-
-            for(let i in removedZone){
-                const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone[i].codePlatform)[0];
-                modifiedPlatform.zones = modifiedPlatform.zones.filter(zone =>zone.properties.code!== removedZone[i].properties.code);
-                
-                entities.push(...state.entities.filter(platform => modifiedPlatform._id !== platform._id),modifiedPlatform);
-                ids.push(...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id)
-            }
-
-            return {
-                ...state,
-                entities: entities,
-                ids: ids,
-                error: null
             };
         }
 

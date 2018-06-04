@@ -219,7 +219,6 @@ export class PlatformService {
 
   }
 
-
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
     if(platform.code !== zonePref.codePlatform)
       return _throw('Import is not possible : zonePref codePlatform is different from selected platform');
@@ -343,7 +342,6 @@ export class PlatformService {
     }else{
       return of('Platform '+count.codePlatform+" cannot be inserted because it doesn't exist in the database");
     }
-
     return of('');
   }
 
