@@ -39,10 +39,11 @@ export class AnalyseStationComponent implements OnInit {
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionsSubscription = this.stations$.subscribe(stations => this.defaultStations = [...stations]);
+        
     }
 
     ngOnInit() {
+        this.actionsSubscription = this.stations$.subscribe(stations => this.defaultStations = stations);
         this.initStations();
     }
 
@@ -57,10 +58,12 @@ export class AnalyseStationComponent implements OnInit {
     }
 
     initStations() {
-        this.form.controls['stations'] = this._fb.array([]);
-        for (let station of this.defaultStations) {
-            const control = <FormArray>this.form.controls['stations'];
-            control.push(this.newStation(station));
+        if(this.defaultStations !== null){
+            this.form.controls['stations'] = this._fb.array([]);
+            for (let station of this.defaultStations) {
+                const control = <FormArray>this.form.controls['stations'];
+                control.push(this.newStation(station));
+            }
         }
     }
 

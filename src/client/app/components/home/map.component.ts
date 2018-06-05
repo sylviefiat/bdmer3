@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,6 +14,7 @@ declare var google: any;
 
 @Component({
   selector: 'bc-home-map',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <agm-map #AgmMap [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
         <div *ngFor="let platform of (platforms$ | async)">
@@ -40,6 +41,16 @@ declare var google: any;
         </div>
       </agm-map>
   `,
+  styles: [
+    `    
+    agm-map {
+      height:         calc(100vh - 96px);
+      width: 100%;
+    }
+    @media screen and (max-width: 800px) {
+      height:50vh;
+    }
+    `]
 })
 export class MapComponent implements OnInit, AfterViewInit {
   @Input() platforms: Platform[];
@@ -62,6 +73,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    console.log(this.platforms);
     this.initMarkers();
   }
 

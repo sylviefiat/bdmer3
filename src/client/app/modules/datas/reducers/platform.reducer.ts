@@ -19,7 +19,7 @@ export function platformReducer(
             const platforms = action.payload;
             const newPlatforms = platforms.filter(platform => state.ids.includes(platform._id) ? false : platform);
             const newPlatformIds = newPlatforms.map(platform => platform._id);
-
+            console.log("platforms loaded");
             return {
                 ...state,
                 loading: false,

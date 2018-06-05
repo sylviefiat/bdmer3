@@ -22,7 +22,6 @@ export class CountriesService {
   initDB(dbname: string, remote: string): Observable<any> {
     this.db = new PouchDB(dbname, {skip_setup: true});
     this.sync(remote + dbname);
-
     return this.getCountry(this.adminCountry.code).pipe(
       filter(country => !country),
       mergeMap(() =>
@@ -78,6 +77,7 @@ export class CountriesService {
   }
 
   getUser(uname: string): Observable<User> {
+    console.log(this.db);
     return from(this.db.query(function(doc, emit){
       doc.users && doc.users.forEach(function(user){
         emit(user.username);

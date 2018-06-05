@@ -52,10 +52,11 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionsSubscription = this.species$.subscribe(species => this.defaultSpecies = [...species]);
+        
     }
 
     ngOnInit() {
+        this.actionsSubscription = this.species$.subscribe(species => this.defaultSpecies = species);
         this.initSpecies();
     }
 
@@ -78,13 +79,15 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     }
 
     initSpecies() {
-        this.form.controls['species'] = this._fb.array([]);
-        this.form.controls['dimensions'] = this._fb.array([]);
-        for (let sp of this.defaultSpecies) {
-            const controlSP = <FormArray>this.form.controls['species'];
-            controlSP.push(this.newSpecies(sp));
-            const controlDM = <FormArray>this.form.controls['dimensions'];
-            controlDM.push(this.newDimensions(sp));
+        if(this.defaultSpecies !== null){
+            this.form.controls['species'] = this._fb.array([]);
+            this.form.controls['dimensions'] = this._fb.array([]);
+            for (let sp of this.defaultSpecies) {
+                const controlSP = <FormArray>this.form.controls['species'];
+                controlSP.push(this.newSpecies(sp));
+                const controlDM = <FormArray>this.form.controls['dimensions'];
+                controlDM.push(this.newDimensions(sp));
+            }
         }
     }
 

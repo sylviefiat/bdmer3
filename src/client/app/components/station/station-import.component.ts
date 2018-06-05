@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -20,26 +19,28 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './station-import.component.css',
     ],
 })
-export class StationImportComponent implements OnInit{
+export class StationImportComponent implements OnDestroy {
     @Input() platform: Platform;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
+    actionSubscription: Subscription;
 
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-    }
-
-    ngOnInit() {
-        this.store.let(getLangues).subscribe((l: any) => {
+        this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importStation-"+l+".csv";
         });
+    }
+
+    ngOnDestroy() {
+        this.actionSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

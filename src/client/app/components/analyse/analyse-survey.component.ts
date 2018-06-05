@@ -43,10 +43,11 @@ export class AnalyseSurveyComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionsSubscription = this.surveys$.subscribe(surveys => this.defaultSurveys = [...surveys]);
+        
     }
 
     ngOnInit() {
+        this.actionsSubscription = this.surveys$.subscribe(surveys => this.defaultSurveys = surveys);
         this.initSurveys();
     }
 
@@ -61,10 +62,12 @@ export class AnalyseSurveyComponent implements OnInit, OnDestroy {
     }
 
     initSurveys() {
-        this.form.controls['surveys'] = this._fb.array([]);
-        for (let survey of this.defaultSurveys) {
-            const control = <FormArray>this.form.controls['surveys'];
-            control.push(this.newSurvey(survey));
+        if(this.defaultSurveys !== null){
+            this.form.controls['surveys'] = this._fb.array([]);
+            for (let survey of this.defaultSurveys) {
+                const control = <FormArray>this.form.controls['surveys'];
+                control.push(this.newSurvey(survey));
+            }
         }
     }
 

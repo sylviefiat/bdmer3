@@ -33,9 +33,10 @@ export class AppComponent {
     log.debug(`Config env: ${Config.ENVIRONMENT().ENV}`);
 
     let token:AuthInfo = JSON.parse(localStorage.getItem('token'));
+
     if(token && token.expires > Math.floor(Date.now() / 1000))
       this.store.dispatch(new AuthAction.LoginSuccess(token));
-    else {
+    else if(token) {
       this.store.dispatch(new AuthAction.Logout(token));
     }
   }

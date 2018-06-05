@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PapaParseService } from 'ngx-papaparse';
+import { Papa } from 'ngx-papaparse';
 import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ export class Csv2JsonService {
     static COMMA = ',';
     static SEMICOLON = ';';
 
-    constructor(private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+    constructor(private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
     }
 
     private extractSpeciesData(arrayData): Species[] { // Input csv data to the function
@@ -345,9 +345,7 @@ export class Csv2JsonService {
     csv2(type: string, csvFile: any): Observable<any> {
         console.log(type);
         console.log(csvFile);
-        return Observable.create(
-            observable => {
-                this.papa.parse(csvFile, {
+        return of(this.papa.parse(csvFile, {
                     /*delimiter: function(csvFile){
                         return ",";
                     },*/
@@ -356,11 +354,9 @@ export class Csv2JsonService {
                     complete: function(results) {
                         if(!results.data[0].indexOf('code_species'))
                             throw new Error('Wrong CSV File Missing mandatory "code" column');
-                        observable.next(results);
-                        observable.complete();
+                        return results;
                     }
-                });
-            }).pipe(
+                })).pipe(
             mergeMap(data => {
                 console.log(data);
                 let res;

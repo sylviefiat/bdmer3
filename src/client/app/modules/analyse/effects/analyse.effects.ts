@@ -14,18 +14,19 @@ import { AnalyseService } from '../services/index';
 @Injectable()
 export class AnalyseEffects {
 
-  @Effect() analyse$ = this.actions$.pipe(  
-    ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE),
-    map((action: AnalyseAction.Analyse) => action.payload),
-    withLatestFrom(this.store.select(getAnalyseData)),
-    map((value: [string, Data]) => this.analyseService.analyse(value[1])),
-    map(result => new AnalyseAction.AnalyseSuccess(result)),
-    catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
+  @Effect() analyse$ = this.actions$ 
+    .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
+    .pipe(
+      map((action: AnalyseAction.Analyse) => action.payload),
+      withLatestFrom(this.store.select(getAnalyseData)),
+      map((value: [string, Data]) => this.analyseService.analyse(value[1])),
+      map(result => new AnalyseAction.AnalyseSuccess(result)),
+      catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
   );
 
-  @Effect({ dispatch: false }) analyseSuccess$ = this.actions$.pipe(
-    ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS),
-    tap(() => this.router.navigate(['/result']))
+  @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
+    .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
+    .pipe(tap(() => this.router.navigate(['/result']))
   );
 
 

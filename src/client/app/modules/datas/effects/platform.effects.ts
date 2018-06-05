@@ -25,315 +25,347 @@ export class PlatformEffects {
   });
 
   @Effect()
-  loadPlatforms$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.LoadAction>(PlatformAction.ActionTypes.LOAD),
-    switchMap(() => this.platformService.getAll()),
-    map((platforms: Platform[]) => new PlatformAction.LoadSuccessAction(platforms)),
-    catchError(error => of(new PlatformAction.LoadFailAction(error)))
-   );
+  loadPlatforms$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.LoadAction>(PlatformAction.ActionTypes.LOAD)
+    .pipe(
+      switchMap(() => this.platformService.getAll()),
+      map((platforms: Platform[]) => new PlatformAction.LoadSuccessAction(platforms)),
+      catchError(error => of(new PlatformAction.LoadFailAction(error)))
+     );
 
   @Effect()
-  addPlatform$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddPlatformAction>(PlatformAction.ActionTypes.ADD_PLATFORM),
-    map((action: PlatformAction.AddPlatformAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedCountry))    ,
-    mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1])),
-    map((platform: Platform) => new PlatformAction.AddPlatformSuccessAction(platform)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addPlatform$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddPlatformAction>(PlatformAction.ActionTypes.ADD_PLATFORM)
+    .pipe(
+      map((action: PlatformAction.AddPlatformAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedCountry))    ,
+      mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1])),
+      map((platform: Platform) => new PlatformAction.AddPlatformSuccessAction(platform)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  addZone$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddZoneAction>(PlatformAction.ActionTypes.ADD_ZONE),
-    map((action: PlatformAction.AddZoneAction) => action.payload),
-    withLatestFrom(this.store.let(getSelectedPlatform)),
-    mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
-    map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addZone$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddZoneAction>(PlatformAction.ActionTypes.ADD_ZONE)
+    .pipe(
+      map((action: PlatformAction.AddZoneAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
+      map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect() 
-  addSurvey$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddSurveyAction>(PlatformAction.ActionTypes.ADD_SURVEY),
-    map((action: PlatformAction.AddSurveyAction) => action.payload),
-    withLatestFrom(this.store.let(getSelectedPlatform)),
-    mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
-    map((survey: Survey) => new PlatformAction.AddSurveySuccessAction(survey)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addSurvey$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddSurveyAction>(PlatformAction.ActionTypes.ADD_SURVEY)
+    .pipe(
+      map((action: PlatformAction.AddSurveyAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
+      map((survey: Survey) => new PlatformAction.AddSurveySuccessAction(survey)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect() 
-  addStation$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddStationAction>(PlatformAction.ActionTypes.ADD_STATION),
-    map((action: PlatformAction.AddStationAction) => action.payload),
-    withLatestFrom(this.store.let(getSelectedPlatform)),
-    mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
-    map((station: Station) => new PlatformAction.AddStationSuccessAction(station)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addStation$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddStationAction>(PlatformAction.ActionTypes.ADD_STATION)
+    .pipe(
+      map((action: PlatformAction.AddStationAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
+      map((station: Station) => new PlatformAction.AddStationSuccessAction(station)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect() 
-  addZonePref$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddZonePrefAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF),
-    map((action: PlatformAction.AddZonePrefAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
-    map((zonePref: ZonePreference) => new PlatformAction.AddZonePrefSuccessAction(zonePref)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addZonePref$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddZonePrefAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF)
+    .pipe(
+      map((action: PlatformAction.AddZonePrefAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
+      map((zonePref: ZonePreference) => new PlatformAction.AddZonePrefSuccessAction(zonePref)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect() 
-  addCount$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddCountAction>(PlatformAction.ActionTypes.ADD_COUNT),
-    map((action: PlatformAction.AddCountAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
-    map((count: Count) => new PlatformAction.AddCountSuccessAction(count)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  addCount$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddCountAction>(PlatformAction.ActionTypes.ADD_COUNT)
+    .pipe(
+      map((action: PlatformAction.AddCountAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
+      map((count: Count) => new PlatformAction.AddCountSuccessAction(count)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importPlatform$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportPlatformAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM) ,   
-    map((action: PlatformAction.ImportPlatformAction) => action.payload),
-    mergeMap((platform: Platform) => this.csv2jsonService.csv2('platform', platform)),
-    withLatestFrom(this.store.select(getSelectedCountry)),
-    // fait automatiquement une boucle sur les platforms retournés
-    mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1])),
-    map((platform: Platform) => new PlatformAction.ImportPlatformSuccessAction(platform)),
-    catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importPlatform$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportPlatformAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM)  
+    .pipe(
+      map((action: PlatformAction.ImportPlatformAction) => action.payload),
+      mergeMap((platform: Platform) => this.csv2jsonService.csv2('platform', platform)),
+      withLatestFrom(this.store.select(getSelectedCountry)),
+      // fait automatiquement une boucle sur les platforms retournés
+      mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1])),
+      map((platform: Platform) => new PlatformAction.ImportPlatformSuccessAction(platform)),
+      catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importZone$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE),
-    map((action: PlatformAction.ImportZoneAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
-    map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importZone$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE)
+    .pipe(
+      map((action: PlatformAction.ImportZoneAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
+      map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importSurvey$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY),
-    map((action: PlatformAction.ImportSurveyAction) => action.payload),
-    mergeMap((survey: Survey) => this.csv2jsonService.csv2('survey', survey)),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
-    map((survey: Survey) => new PlatformAction.ImportSurveySuccessAction(survey)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importSurvey$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY)
+    .pipe(
+      map((action: PlatformAction.ImportSurveyAction) => action.payload),
+      mergeMap((survey: Survey) => this.csv2jsonService.csv2('survey', survey)),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
+      map((survey: Survey) => new PlatformAction.ImportSurveySuccessAction(survey)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importStation$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION),
-    map((action: PlatformAction.ImportStationAction) => action.payload),
-    mergeMap((station: Station) => this.csv2jsonService.csv2('station', station)),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
-    map((station: Station) => new PlatformAction.ImportStationSuccessAction(station)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importStation$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION)
+    .pipe(
+      map((action: PlatformAction.ImportStationAction) => action.payload),
+      mergeMap((station: Station) => this.csv2jsonService.csv2('station', station)),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
+      map((station: Station) => new PlatformAction.ImportStationSuccessAction(station)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importZonePref$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportZonePrefAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF),
-    map((action: PlatformAction.ImportZonePrefAction) => action.payload),
-    mergeMap((zonePref: ZonePreference) => this.csv2jsonService.csv2('zonePref', zonePref)),
-    withLatestFrom(this.store.let(getSelectedPlatform)),
-    mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
-    map((zonePref: ZonePreference) => new PlatformAction.ImportZonePrefSuccessAction(zonePref)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importZonePref$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportZonePrefAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF)
+    .pipe(
+      map((action: PlatformAction.ImportZonePrefAction) => action.payload),
+      mergeMap((zonePref: ZonePreference) => this.csv2jsonService.csv2('zonePref', zonePref)),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
+      map((zonePref: ZonePreference) => new PlatformAction.ImportZonePrefSuccessAction(zonePref)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importCount$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportCountAction>(PlatformAction.ActionTypes.IMPORT_COUNT),
-    map((action: PlatformAction.ImportCountAction) => action.payload),
-    mergeMap((count: Count) => this.csv2jsonService.csv2('count', count)),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
-    map((count: Count) => new PlatformAction.ImportCountSuccessAction(count)),
-    catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importCount$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportCountAction>(PlatformAction.ActionTypes.IMPORT_COUNT)
+    .pipe(
+      map((action: PlatformAction.ImportCountAction) => action.payload),
+      mergeMap((count: Count) => this.csv2jsonService.csv2('count', count)),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
+      map((count: Count) => new PlatformAction.ImportCountSuccessAction(count)),
+      catchError((error) => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  removePlatform$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM),
-    map((action: PlatformAction.RemovePlatformAction) => action.payload),
-    mergeMap(platform => this.platformService.removePlatform(platform)),
-    map((platform:Platform) => new PlatformAction.RemovePlatformSuccessAction(platform)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removePlatform$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM)
+    .pipe(
+      map((action: PlatformAction.RemovePlatformAction) => action.payload),
+      mergeMap(platform => this.platformService.removePlatform(platform)),
+      map((platform:Platform) => new PlatformAction.RemovePlatformSuccessAction(platform)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
-  removePlatformCountry$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemovePlatformCountryAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY),
-    map((action: PlatformAction.RemovePlatformCountryAction) => action.payload),
-    mergeMap(platform => this.platformService.removePlatform(platform)),
-    map((platform:Platform) => new PlatformAction.RemovePlatformCountrySuccessAction(platform)),
-    catchError((error) => of(new PlatformAction.RemovePlatformCountryFailAction(error)))
-  );
+  removePlatformCountry$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemovePlatformCountryAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY)
+    .pipe(
+      map((action: PlatformAction.RemovePlatformCountryAction) => action.payload),
+      mergeMap(platform => this.platformService.removePlatform(platform)),
+      map((platform:Platform) => new PlatformAction.RemovePlatformCountrySuccessAction(platform)),
+      catchError((error) => of(new PlatformAction.RemovePlatformCountryFailAction(error)))
+    );
   
   @Effect()
-  removeZone$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemoveZoneAction>(PlatformAction.ActionTypes.REMOVE_ZONE),
-    map((action: PlatformAction.RemoveZoneAction) => action.payload),
-    mergeMap(zone => this.platformService.removeZone(zone)),
-    map((zone:Zone) => new PlatformAction.RemoveZoneSuccessAction(zone)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeZone$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemoveZoneAction>(PlatformAction.ActionTypes.REMOVE_ZONE)
+    .pipe(
+      map((action: PlatformAction.RemoveZoneAction) => action.payload),
+      mergeMap(zone => this.platformService.removeZone(zone)),
+      map((zone:Zone) => new PlatformAction.RemoveZoneSuccessAction(zone)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
   
   @Effect()
-  removeSurvey$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemoveSurveyAction>(PlatformAction.ActionTypes.REMOVE_SURVEY),
-    map((action: PlatformAction.RemoveSurveyAction) => action.payload),
-    mergeMap(survey => this.platformService.removeSurvey(survey)),
-    map((survey:Survey) => new PlatformAction.RemoveSurveySuccessAction(survey)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeSurvey$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemoveSurveyAction>(PlatformAction.ActionTypes.REMOVE_SURVEY)
+    .pipe(
+      map((action: PlatformAction.RemoveSurveyAction) => action.payload),
+      mergeMap(survey => this.platformService.removeSurvey(survey)),
+      map((survey:Survey) => new PlatformAction.RemoveSurveySuccessAction(survey)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
   
   @Effect()
-  removeStation$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemoveStationAction>(PlatformAction.ActionTypes.REMOVE_STATION),
-    map((action: PlatformAction.RemoveStationAction) => action.payload),
-    mergeMap(station => this.platformService.removeStation(station)),
-    map((station:Station) => new PlatformAction.RemoveStationSuccessAction(station)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeStation$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemoveStationAction>(PlatformAction.ActionTypes.REMOVE_STATION)
+    .pipe(
+      map((action: PlatformAction.RemoveStationAction) => action.payload),
+      mergeMap(station => this.platformService.removeStation(station)),
+      map((station:Station) => new PlatformAction.RemoveStationSuccessAction(station)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
   
   @Effect()
-  removeZonePref$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemoveZonePrefAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF),
-    map((action: PlatformAction.RemoveZonePrefAction) => action.payload),
-    mergeMap(zonePref => this.platformService.removeZonePref(zonePref)),
-    map((zonePref:ZonePreference) => new PlatformAction.RemoveZonePrefSuccessAction(zonePref)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeZonePref$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemoveZonePrefAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF)
+    .pipe(
+      map((action: PlatformAction.RemoveZonePrefAction) => action.payload),
+      mergeMap(zonePref => this.platformService.removeZonePref(zonePref)),
+      map((zonePref:ZonePreference) => new PlatformAction.RemoveZonePrefSuccessAction(zonePref)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
   
   @Effect()
-  removeCount$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemoveCountAction>(PlatformAction.ActionTypes.REMOVE_COUNT),
-    map((action: PlatformAction.RemoveCountAction) => action.payload),
-    mergeMap(count => this.platformService.removeCount(count)),
-    map((count:Count) => new PlatformAction.RemoveCountSuccessAction(count)),
-    catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeCount$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemoveCountAction>(PlatformAction.ActionTypes.REMOVE_COUNT)
+    .pipe(
+      map((action: PlatformAction.RemoveCountAction) => action.payload),
+      mergeMap(count => this.platformService.removeCount(count)),
+      map((count:Count) => new PlatformAction.RemoveCountSuccessAction(count)),
+      catchError((error) => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect() 
-  addPlatformSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddPlatformSuccessAction>(PlatformAction.ActionTypes.ADD_PLATFORM_SUCCESS),
-    map((action: PlatformAction.AddPlatformSuccessAction) => action.payload),
-    mergeMap((platform: Platform) => this.router.navigate(['/platform/' + platform._id])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction()),
-  );
+  addPlatformSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddPlatformSuccessAction>(PlatformAction.ActionTypes.ADD_PLATFORM_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddPlatformSuccessAction) => action.payload),
+      mergeMap((platform: Platform) => this.router.navigate(['/platform/' + platform._id])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction()),
+    );
 
   @Effect() 
-  importOrRemovePlatformSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportPlatformSuccessAction | PlatformAction.RemovePlatformSuccessAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS,PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS),
-    tap(() => this.router.navigate(['/platform'])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  importOrRemovePlatformSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportPlatformSuccessAction | PlatformAction.RemovePlatformSuccessAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS,PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS)
+    .pipe(
+      tap(() => this.router.navigate(['/platform'])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
    @Effect() 
-  removePlatformCountrySuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.RemovePlatformCountrySuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS),
-    map(() => new PlatformAction.RemoveMsgAction())
+  removePlatformCountrySuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.RemovePlatformCountrySuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS)
+    .pipe(map(() => new PlatformAction.RemoveMsgAction())
   );
 
   @Effect() 
-  addZoneSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddZoneSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS),
-    map((action: PlatformAction.AddZoneSuccessAction) => action.payload),
-    mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.properties.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  addZoneSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddZoneSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddZoneSuccessAction) => action.payload),
+      mergeMap((zone: Zone) => this.router.navigate(['/zone/' + zone.codePlatform + '/' + zone.properties.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  importOrRemoveZoneSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS, PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS),
-    map((action: PlatformAction.ImportZoneSuccessAction | PlatformAction.RemoveZoneSuccessAction) => action.payload),
-    mergeMap((zone: Zone) => this.router.navigate(['/platform/' + zone.codePlatform+'/zones'])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  importOrRemoveZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS, PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.ImportZoneSuccessAction | PlatformAction.RemoveZoneSuccessAction) => action.payload),
+      mergeMap((zone: Zone) => this.router.navigate(['/platform/' + zone.codePlatform+'/zones'])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  addSurveySuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddSurveySuccessAction>(PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS),
-    map((action: PlatformAction.AddSurveySuccessAction) => action.payload),
-    mergeMap((survey: Survey) => this.router.navigate(['/survey/' + survey.codePlatform + '/'+ survey.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  ); 
+  addSurveySuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddSurveySuccessAction>(PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddSurveySuccessAction) => action.payload),
+      mergeMap((survey: Survey) => this.router.navigate(['/survey/' + survey.codePlatform + '/'+ survey.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    ); 
 
   @Effect() 
-  importOrRemoveSurveySuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportSurveySuccessAction | PlatformAction.RemoveSurveySuccessAction>(PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS, PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS),
-    map((action: PlatformAction.ImportSurveySuccessAction | PlatformAction.RemoveSurveySuccessAction) => action.payload),
-    mergeMap((survey: Survey) => this.router.navigate(['/platform/' + survey.codePlatform])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  importOrRemoveSurveySuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportSurveySuccessAction | PlatformAction.RemoveSurveySuccessAction>(PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS, PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.ImportSurveySuccessAction | PlatformAction.RemoveSurveySuccessAction) => action.payload),
+      mergeMap((survey: Survey) => this.router.navigate(['/platform/' + survey.codePlatform])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  addZonePrefSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddZonePrefSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF_SUCCESS),
-    map((action: PlatformAction.AddZonePrefSuccessAction) => action.payload),
-    mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zonePref/' + zonePref.codePlatform + '/'+ zonePref.codeZone + '/' + zonePref.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  ); 
+  addZonePrefSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddZonePrefSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddZonePrefSuccessAction) => action.payload),
+      mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zonePref/' + zonePref.codePlatform + '/'+ zonePref.codeZone + '/' + zonePref.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    ); 
 
   @Effect() 
-  importOrRemoveZonePrefSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportZonePrefSuccessAction | PlatformAction.RemoveZonePrefSuccessAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS, PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS),
-    map((action: PlatformAction.ImportZonePrefSuccessAction | PlatformAction.RemoveZonePrefSuccessAction) => action.payload),
-    mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codePlatform + '/'+ zonePref.codeZone+'/zonesPref'])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  importOrRemoveZonePrefSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportZonePrefSuccessAction | PlatformAction.RemoveZonePrefSuccessAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS, PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.ImportZonePrefSuccessAction | PlatformAction.RemoveZonePrefSuccessAction) => action.payload),
+      mergeMap((zonePref: ZonePreference) => this.router.navigate(['/zone/' + zonePref.codePlatform + '/'+ zonePref.codeZone+'/zonesPref'])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  addStationSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddStationSuccessAction>(PlatformAction.ActionTypes.ADD_STATION_SUCCESS),
-    map((action: PlatformAction.AddStationSuccessAction) => action.payload),
-    mergeMap((station: Station) => this.router.navigate(['/station/' + station.codePlatform + '/' + station.properties.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  ); 
+  addStationSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddStationSuccessAction>(PlatformAction.ActionTypes.ADD_STATION_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddStationSuccessAction) => action.payload),
+      mergeMap((station: Station) => this.router.navigate(['/station/' + station.codePlatform + '/' + station.properties.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    ); 
 
   @Effect() 
-  importOrRemoveStationSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction>(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS, PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS),
-    map((action: PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction) => action.payload),
-    mergeMap((station: Station) => this.router.navigate(['/platform/' + station.codePlatform])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  importOrRemoveStationSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction>(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS, PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction) => action.payload),
+      mergeMap((station: Station) => this.router.navigate(['/platform/' + station.codePlatform])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  addCountSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.AddCountSuccessAction>(PlatformAction.ActionTypes.ADD_COUNT_SUCCESS),
-    map((action: PlatformAction.AddCountSuccessAction) => action.payload),
-    mergeMap((count:Count) => this.router.navigate(['/count/' + count.codePlatform + '/' + count.codeSurvey + '/' + count.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  addCountSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.AddCountSuccessAction>(PlatformAction.ActionTypes.ADD_COUNT_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.AddCountSuccessAction) => action.payload),
+      mergeMap((count:Count) => this.router.navigate(['/count/' + count.codePlatform + '/' + count.codeSurvey + '/' + count.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect() 
-  importOrRemoveCountSuccess$: Observable<Action> = this.actions$.pipe(
-    ofType<PlatformAction.ImportCountSuccessAction | PlatformAction.RemoveCountSuccessAction>(PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS, PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS),
-    map((action: PlatformAction.ImportCountSuccessAction | PlatformAction.RemoveCountSuccessAction) => action.payload),
-    mergeMap((count:Count) => this.router.navigate(['/survey/' + count.codePlatform + '/'+ count.codeSurvey])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
-    
+  importOrRemoveCountSuccess$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportCountSuccessAction | PlatformAction.RemoveCountSuccessAction>(PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS, PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.ImportCountSuccessAction | PlatformAction.RemoveCountSuccessAction) => action.payload),
+      mergeMap((count:Count) => this.router.navigate(['/survey/' + count.codePlatform + '/'+ count.codeSurvey])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
+      
 
 
   constructor(private actions$: Actions, private store: Store<IAppState>, private router: Router, private platformService: PlatformService, private csv2jsonService: Csv2JsonService) {

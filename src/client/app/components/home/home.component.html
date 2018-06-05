@@ -1,11 +1,11 @@
 
 
-<div class="home" [class.showMap]="(isLoggedIn$ | async)?true:false">
-	<div class="wrapper" >
-		<div>
-			<div class="background">
+<div class="home">
+	<div [class.wrapper]="isOnline" >
+		<div [class.wrapp_left]="(loggedIn$ | async)">
+			<div [class.background]="!(loggedIn$ | async)" [class.background_left]="(loggedIn$ | async)">
 			</div>
-			<div class="title">
+			<div [class.title_without_map]="!(loggedIn$ | async)" [class.title]="(loggedIn$ | async)">
 				<h2>
 				{{ 'APP_TITLE' | translate }}
 				</h2>
@@ -14,10 +14,10 @@
 				</p>
 			</div>
 		</div>
-		<div class="wrapp_right" *ngIf="((isLoggedIn$ | async)?true:false)&&isOnline">
-			<bc-home-map
+		<!--div class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline">-->
+			<bc-home-map class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline"
 				[platforms]="platforms$ | async"
 				[countries]="(isAdmin$ | async)?([(userCountry$ | async)]):(countries$ | async)"></bc-home-map>
-		</div>
+		<!--</div-->
 	</div>
 </div>

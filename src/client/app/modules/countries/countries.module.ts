@@ -19,7 +19,7 @@ import { CountryListService } from './services/country-list.service';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    EffectsModule.forRoot([CountriesEffects,CountryEffects])
+    EffectsModule.forFeature([CountriesEffects,CountryEffects])
   ],
   declarations: [],
   providers:[CountryExistsGuard, CountryListService],

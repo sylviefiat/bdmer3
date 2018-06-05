@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
-import { Observable, of, from, pipe } from 'rxjs';
+import { Observable, of, from, pipe, throwError } from 'rxjs';
 import { map, mergeMap, filter } from 'rxjs/operators';
 import { Authenticate } from '../../auth/models/user';
 import { CountriesService } from './countries.service';
@@ -23,22 +23,18 @@ export class AuthService {
   constructor(private countriesService: CountriesService) {
     let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
-    console.log(config.urldb);
-    console.log(config.urldb+dbname);
     this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
     //this.sync(dbname);
   }
 
   login({ username, password }: Authenticate): Observable<any> {
-    console.log(username);
     return from(this.db.login(username, password)).pipe(
       mergeMap((result: ResponsePDB) => {
-        console.log(result);
         if (result.ok && result.roles.length > 0){
           return this.setUser(username);
         }
         else {
-          throw Observable.throw(result); 
+          return throwError(result); 
         }
       }));
   }
@@ -50,7 +46,7 @@ export class AuthService {
           return this.setUser(result.userCtx.name);
         }
         else{
-          throw Observable.throw(result); 
+          return throwError(result); 
         }
       }));
   }
@@ -64,11 +60,12 @@ export class AuthService {
       }),
       mergeMap(() => {
         return this.countriesService.getCountryUser(username)
-          .map(country => {
-            this.currentCountry = country;
-            this.getCountry.emit(of(this.currentCountry));
-            return of(this.currentCountry);
-          })
+          .pipe(
+            map(country => {
+              this.currentCountry = country;
+              this.getCountry.emit(of(this.currentCountry));
+              return of(this.currentCountry);
+            }))
         }),
       mergeMap((response) => {
         return of({user: this.currentUser, country: this.currentCountry});

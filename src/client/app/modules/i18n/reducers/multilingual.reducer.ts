@@ -1,9 +1,9 @@
 // module
-import { IMultilingualState, initialState } from '../states/multilingual.state';
+import { IMultilingualState, multilingualInitialState } from '../states/multilingual.state';
 import { MultilingualAction } from '../actions/multilingual.action';
 
 export function multilingualReducer(
-    state: IMultilingualState = initialState,
+    state: IMultilingualState = multilingualInitialState,
     action: MultilingualAction.Actions
 ): IMultilingualState {
   switch (action.type) {

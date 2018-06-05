@@ -4,7 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { defer, Observable, pipe, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 
 import { IAppState, getCountryList, getCountriesIdsInApp  } from '../../modules/ngrx/index';
 
@@ -20,8 +20,8 @@ import { Country } from '../../modules/countries/models/country';
   ],
 })
 export class NewCountryComponent implements OnInit {
-  public countryList$: Observable<any[]>;
-  public countriesIds$: Observable<any[]>;
+  countryList$: Observable<any[]>;
+  countriesIds$: Observable<any[]>;
   public image: any;
   results: any[];
   @Input() errorMessage: string | null;
@@ -41,9 +41,8 @@ export class NewCountryComponent implements OnInit {
   constructor(private http: HttpClient, private store: Store<IAppState>, private sanitizer: DomSanitizer ) {}
 
   ngOnInit() {
-    this.countryList$ = this.store.select(getCountryList).pipe(
-      mergeMap((countries:any[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))));
-    this.store.dispatch(new CountriesAction.LoadAction()); 
+    this.countryList$ = this.store.select(getCountryList)/*.pipe(
+      mergeMap((countries:any[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))))*/;
     this.countriesIds$ = this.store.select(getCountriesIdsInApp);
   }
 

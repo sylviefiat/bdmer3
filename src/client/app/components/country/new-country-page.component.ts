@@ -22,6 +22,8 @@ export class NewCountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
+    this.store.dispatch(new CountriesAction.InitAction());
+    this.store.dispatch(new CountriesAction.LoadAction()); 
     this.error$ = this.store.select(getCountryPageError);    
   }
 

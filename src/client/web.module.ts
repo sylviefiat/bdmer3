@@ -4,7 +4,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome'
+import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 
 // libs
 import { StoreModule, Store } from '@ngrx/store';
@@ -21,7 +21,7 @@ import { WindowService, StorageService, ConsoleService, createConsoleTarget, pro
 import { CoreModule, Config } from './app/modules/core/index';
 import { MultilingualModule, Languages, translateLoaderFactory, MultilingualEffects } from './app/modules/i18n/index';
 import { MainModule, MainEffects } from './app/modules/main/index';
-import { reducers } from './app/modules/ngrx/index';
+import { AppReducer } from './app/modules/ngrx/index';
 
 // config
 Config.PLATFORM_TARGET = Config.PLATFORMS.WEB;
@@ -80,7 +80,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     }]),
     MainModule,
     // configure app state
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(AppReducer),
     EffectsModule.forRoot([MultilingualEffects,MainEffects]),
     // dev environment only imports
     DEV_IMPORTS,

@@ -1,6 +1,3 @@
-// libs
-import { Observable } from 'rxjs/Observable';
-// import { combineLatest } from 'rxjs/observable/combineLatest';
 
 /**
  * The compose function is one of our most handy tools. In basic terms, you give
@@ -35,16 +32,16 @@ import { ActionReducer, combineReducers, ActionReducerMap } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-import { IMultilingualState, multilingualReducer, getLang } from '../i18n/index';
-import { IMainState, reducer, getNames} from '../main/index';
-import { IAuthState, ILoginPageState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
-import { ICountriesState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
-import { ICountryState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
-import { ISpeciesState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
-import { IPlatformState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
+import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
+import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
+import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
+import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
+import { ICountryState, countryInitialState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
+import { ISpeciesState, speciesInitialState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
+import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
 import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
     getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
-import { IAnalyseState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
+import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
     getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
 
 /**
@@ -70,7 +67,7 @@ export interface IAppState {
  * wrapping that in storeLogger. Remember that compose applies
  * the result from right to left.
  */
-export const reducers: ActionReducerMap<IAppState> = {
+export const AppReducer: ActionReducerMap<IAppState> = {
   i18n: multilingualReducer,
   main: reducer,
   auth: authReducer,
@@ -81,6 +78,18 @@ export const reducers: ActionReducerMap<IAppState> = {
   platform: platformReducer,
   analyse: analyseReducer
 };
+
+export const initialState: IAppState = {
+  i18n: multilingualInitialState,
+  main: mainInitialState,
+  auth: authInitialState,
+  loginpage: loginPageInitialState,
+  countries: countriesInitialState,
+  country: countryInitialState,
+  species: speciesInitialState,
+  platform: platformInitialState,
+  analyse: analyseInitialState
+}
 
 // ensure state is frozen as extra level of security when developing
 // helps maintain immutability
@@ -97,54 +106,24 @@ export const reducers: ActionReducerMap<IAppState> = {
   }
 }*/
 
-/*export function getMultilingualState(state$: Observable<IAppState>): Observable<IMultilingualState> {
-  return state$.let(s => s.i18n);
-}*/
 export const getMultilingualState = (state:IAppState) => state.i18n;
 
-/*export function getNameListState(state$: Observable<IAppState>): Observable<IMainState> {
-  return state$.let(s => s.main);
-}*/
 export const getNameListState = (state:IAppState) => state.main;
 
-/*export function getAuthState(state$: Observable<IAppState>): Observable<IAuthState> {
-  return state$.let(s => s.auth);
-}*/
 export const getAuthState = (state:IAppState) => state.auth;
 
-/*export function getLoginPageState(state$: Observable<IAppState>): Observable<ILoginPageState> {
-  return state$.let(s => s.loginpage);
-}*/
 export const getLoginPageState = (state:IAppState) => state.loginpage;
 
-/*export function getCountriesState(state$: Observable<IAppState>): Observable<ICountriesState> {
-  return state$.let(s => s.countries);
-}*/
 export const getCountriesState = (state:IAppState) => state.countries;
 
-/*export function getCountryState(state$: Observable<IAppState>): Observable<ICountryState> {
-  return state$.let(s => s.country);
-}*/
 export const getCountryState = (state:IAppState) => state.country;
 
-/*export function getSpeciesState(state$: Observable<IAppState>): Observable<ISpeciesState> {
-  return state$.let(s => s.species);
-}*/
 export const getSpeciesState = (state:IAppState) => state.species;
 
-/*export function getPlatformState(state$: Observable<IAppState>): Observable<IPlatformState> {
-  return state$.let(s => s.platform);
-}*/
 export const getPlatformState = (state:IAppState) => state.platform;
 
-/*export function getAnalyseState(state$: Observable<IAppState>): Observable<IAnalyseState> {
-  return state$.let(s => s.analyse);
-}*/
 export const getAnalyseState = (state:IAppState) => state.analyse;
 
-/*export function getAppState(state$: Observable<IAppState>): Observable<IAppState> {
-  return state$.let(s => s);
-}*/
 export const getAppState = (state:IAppState) => state;
 
 // i18n

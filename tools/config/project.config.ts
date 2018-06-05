@@ -178,12 +178,12 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'angular-material-icons',
             path: 'node_modules/angular-material-icons/angular-material-icons.js'
         },
-        /*{
-            name: '@ngrx/store',
-            path: "node_modules/@ngrx/store/bundles/store.umd.js"
-        }*/, {
+        {
+            name: 'papaparse',
+            path: "node_modules/papaparse"
+        }, {
             name: 'ngx-papaparse',
-            path: 'node_modules/ngx-papaparse/bundles/ngx-papaparse.umd.js'
+            path: 'node_modules/ngx-papaparse/bundles/ngx-papaparse.umd.min.js'
         },
         {
             name: '@turf/turf',

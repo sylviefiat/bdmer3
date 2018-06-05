@@ -1,5 +1,4 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams, RequestOptions, ResponseContentType } from '@angular/http';
 import { Observable, of, from, pipe, throwError } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
 import { MapStaticService} from '../../core/services/map-static.service';
@@ -15,7 +14,7 @@ export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
 
-  constructor(private mapStaticService: MapStaticService, private http: Http) {
+  constructor(private mapStaticService: MapStaticService) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {

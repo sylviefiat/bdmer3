@@ -1,6 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
 
 @Pipe({ name: 'bcHasIntersection' })
 export class HasIntersection implements PipeTransform {

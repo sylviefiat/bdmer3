@@ -39,10 +39,11 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionsSubscription = this.years$.subscribe(years => this.defaultYears = [...years]);
+        
     }
 
     ngOnInit() {
+        this.actionsSubscription = this.years$.subscribe(years => this.defaultYears = years);
         this.initYears();
     }
 
@@ -57,10 +58,12 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     }
 
     initYears() {
-        this.form.controls['years'] = this._fb.array([]);
-        for (let year of this.defaultYears) {
-            const control = <FormArray>this.form.controls['years'];
-            control.push(this.newYear(year));
+        if(this.defaultYears !== undefined){
+            this.form.controls['years'] = this._fb.array([]);
+            for (let year of this.defaultYears) {
+                const control = <FormArray>this.form.controls['years'];
+                control.push(this.newYear(year));
+            }
         }
     }
 

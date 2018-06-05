@@ -39,10 +39,11 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionsSubscription = this.platforms$.subscribe(platforms => this.defaultPlatforms=[...platforms]);
+        
     }
 
-    ngOnInit() {        
+    ngOnInit() {  
+        this.actionsSubscription = this.platforms$.subscribe(platforms => this.defaultPlatforms=platforms);      
         this.initPlatforms();
     }
 
@@ -57,10 +58,12 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
     }
 
     initPlatforms() {
-        this.form.controls['platforms'] = this._fb.array([]);
-        for (let platform of this.defaultPlatforms) {
-            const control = <FormArray>this.form.controls['platforms'];
-            control.push(this.newPlatform(platform));
+        if(this.defaultPlatforms !== null){
+            this.form.controls['platforms'] = this._fb.array([]);
+            for (let platform of this.defaultPlatforms) {
+                const control = <FormArray>this.form.controls['platforms'];
+                control.push(this.newPlatform(platform));
+            }
         }
     }
 

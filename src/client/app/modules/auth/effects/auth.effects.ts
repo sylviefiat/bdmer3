@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { defer, Observable, pipe, of } from 'rxjs';
+import { defer, Observable, pipe, of, from } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, withLatestFrom, startWith, tap, exhaustMap } from 'rxjs/operators';
@@ -24,62 +24,67 @@ export class AuthEffects {
   public static readonly tokenItem = 'token';
   public static readonly expirationTime = 60*60*1000;  // setup 10min before login expiration
 
-  @Effect() login$ = this.actions$.pipe(
-    ofType<AuthAction.Login>(AuthAction.ActionTypes.LOGIN),
-    map((action: AuthAction.Login) => action.payload),
-    exhaustMap(auth => this.authService.login(auth)),
-    map((result: AccessToken) => {
-          const authInfoUpdated: AuthInfo = {
-            access_token: result,
-            expires_in: AuthEffects.expirationTime,
-            expires: Math.floor((Date.now()+AuthEffects.expirationTime) / 1000)
-          }
-          localStorage.setItem(AuthEffects.tokenItem, JSON.stringify(authInfoUpdated));
-          return new AuthAction.LoginSuccess(authInfoUpdated);
-        }),
-    catchError(error => of(new AuthAction.LoginFailure(error.message)))
+  @Effect() login$ = this.actions$
+    .ofType<AuthAction.Login>(AuthAction.ActionTypes.LOGIN)
+    .pipe(
+      map((action: AuthAction.Login) => action.payload),
+      exhaustMap(auth => this.authService.login(auth)),
+      map((result: AccessToken) => {
+            const authInfoUpdated: AuthInfo = {
+              access_token: result,
+              expires_in: AuthEffects.expirationTime,
+              expires: Math.floor((Date.now()+AuthEffects.expirationTime) / 1000)
+            }
+            localStorage.setItem(AuthEffects.tokenItem, JSON.stringify(authInfoUpdated));
+            return new AuthAction.LoginSuccess(authInfoUpdated);
+          }),
+      catchError(error => of(new AuthAction.LoginFailure(error.message)))
+    );
+
+  @Effect() logout$ = this.actions$
+    .ofType<AuthAction.Logout>(AuthAction.ActionTypes.LOGOUT)
+    .pipe(
+      map((action: AuthAction.Logout) => action.payload),
+      exhaustMap(stringisnull => this.authService.logout().pipe(
+        tap(authed => {
+            localStorage.removeItem(AuthEffects.tokenItem);
+            return from(this.router.navigate(['/']));
+        })
+      ))    
+    );
+
+  @Effect({ dispatch: false }) loginSuccess$ = this.actions$
+    .ofType<AuthAction.LoginSuccess>(AuthAction.ActionTypes.LOGIN_SUCCESS)
+    .pipe(
+      map((action: AuthAction.LoginSuccess) => action.payload),
+      withLatestFrom(this.store.select(getLatestURL)),
+      map(([authInfo, url]) => [authInfo, url]),
+      mergeMap((value: [any, String]) => this.router.navigate([value[1]]))
+    );
+
+  @Effect({ dispatch: false }) loginRedirect$ = this.actions$
+    .ofType<AuthAction.LoginRedirect>(AuthAction.ActionTypes.LOGIN_REDIRECT)
+    .pipe(tap(authed => this.router.navigate(['/login']))
   );
 
-  @Effect() logout$ = this.actions$.pipe(
-    ofType<AuthAction.Logout>(AuthAction.ActionTypes.LOGOUT),
-    map((action: AuthAction.Logout) => action.payload),
-    exhaustMap(stringisnull => this.authService.logout()),
-    tap(authed => {
-          localStorage.removeItem(AuthEffects.tokenItem);
-          return this.router.navigate(['/']);
-    })
+  @Effect() lostpassword$ = this.actions$
+    .ofType<AuthAction.LostPassword>(AuthAction.ActionTypes.LOST_PASSWORD)
+    .pipe(
+      map((action: AuthAction.LostPassword) => action.payload),
+      exhaustMap(usermail => this.countriesService.verifyMail(usermail)),
+      map((user: User) => this.mailService.sendPasswordMail(user)),
+      map(success => new AuthAction.LostPasswordSuccess(success)),
+      catchError(error => of(new AuthAction.LostPasswordFailure(error)))  
+    );
+
+  @Effect({ dispatch: false }) lostpasswordSuccess$ = this.actions$
+    .ofType<AuthAction.LostPasswordSuccess>(AuthAction.ActionTypes.LOST_PASSWORD_SUCCESS)
+    .pipe(tap(() => this.router.navigate(['/login']))
   );
 
-  @Effect({ dispatch: false }) loginSuccess$ = this.actions$.pipe(
-    ofType<AuthAction.LoginSuccess>(AuthAction.ActionTypes.LOGIN_SUCCESS),
-    map((action: AuthAction.LoginSuccess) => action.payload),
-    withLatestFrom(this.store.select(getLatestURL)),
-    map(([authInfo, url]) => [authInfo, url]),
-    mergeMap((value: [any, String]) => this.router.navigate([value[1]]))
-  );
-
-  @Effect({ dispatch: false }) loginRedirect$ = this.actions$.pipe(
-    ofType<AuthAction.LoginRedirect>(AuthAction.ActionTypes.LOGIN_REDIRECT),
-    tap(authed => this.router.navigate(['/login']))
-  );
-
-  @Effect() lostpassword$ = this.actions$.pipe(
-    ofType<AuthAction.LostPassword>(AuthAction.ActionTypes.LOST_PASSWORD),
-    map((action: AuthAction.LostPassword) => action.payload),
-    exhaustMap(usermail => this.countriesService.verifyMail(usermail)),
-    map((user: User) => this.mailService.sendPasswordMail(user)),
-    map(success => new AuthAction.LostPasswordSuccess(success)),
-    catchError(error => of(new AuthAction.LostPasswordFailure(error)))  
-  );
-
-  @Effect({ dispatch: false }) lostpasswordSuccess$ = this.actions$.pipe(
-    ofType<AuthAction.LostPasswordSuccess>(AuthAction.ActionTypes.LOST_PASSWORD_SUCCESS),
-    tap(() => this.router.navigate(['/login']))
-  );
-
-  @Effect({ dispatch: false }) lostpasswordRedirect$ = this.actions$.pipe(
-    ofType<AuthAction.LostPasswordRedirect>(AuthAction.ActionTypes.LOST_PASSWORD_REDIRECT),
-    tap(authed => this.router.navigate(['/login']))
+  @Effect({ dispatch: false }) lostpasswordRedirect$ = this.actions$
+    .ofType<AuthAction.LostPasswordRedirect>(AuthAction.ActionTypes.LOST_PASSWORD_REDIRECT)
+    .pipe(tap(authed => this.router.navigate(['/login']))
   );
 
   constructor(

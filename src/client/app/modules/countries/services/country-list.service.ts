@@ -1,6 +1,6 @@
 // angular
 import { Injectable } from '@angular/core';
-import { Http, ResponseContentType, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 // libs
@@ -16,13 +16,13 @@ import { Country } from '../../countries/models/country';
 export class CountryListService {
 
   constructor(
-    private http: Http, private sanitizer: DomSanitizer) {
+    private http: HttpClient, private sanitizer: DomSanitizer) {
   }
 
   getCountryList(): Observable<Country[]> {
     return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countries.json`)
       .pipe(
-        map(res => res.json()),
+        map(res => res),
         map(row => {
           let keys = [];
           for (let key in row) {
@@ -44,16 +44,15 @@ export class CountryListService {
 
   getCountrySVG(code: string): SafeUrl {
     let url ='assets/svg/'+code.toLowerCase()+'.svg';
-    let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
-    let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
+    let headers = new HttpHeaders({ 'Content-Type': 'image/svg+xml' });
+    let options = { headers: headers, responseType: "blob" };
 
     return this.http
         .get(url, {
             headers: headers,
-            responseType: ResponseContentType.Blob
+            responseType: "blob"
         })
         .pipe(
-          map(res => res.blob()),
           map(blob => {
             let urlCreator = window.URL;
             let objectUrl = urlCreator.createObjectURL(blob);
@@ -67,15 +66,15 @@ export class CountryListService {
 
   getCountrySVGBlob(code: string): Observable<Blob> {
     let url ='../node_modules/svg-country-flags/svg/'+code.toLowerCase()+'.svg';
-    let headers = new Headers({ 'Content-Type': 'image/svg+xml' });
-    let options = new RequestOptions({ headers: headers, responseType: ResponseContentType.Blob });
+    let headers = new HttpHeaders({ 'Content-Type': 'image/svg+xml' });
+    let options = { headers: headers, responseType: "blob" };
 
     return this.http.get(url, {
         headers: headers,
-        responseType: ResponseContentType.Blob
+        responseType: "blob"
       })
       .pipe(
-          map(res => res.blob()),
+          map(res => res),
           catchError((error:any) => throwError(error))
       );
       }

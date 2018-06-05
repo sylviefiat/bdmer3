@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
@@ -255,7 +256,7 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     echangeCountry(codes: string[]){
-        this.alreadySetCountries$ = this.alreadySetCountries$.map(countries => [...countries.filter(code => code!==codes[0] && code!==codes[1]),codes[1]]);
+        this.alreadySetCountries$ = this.alreadySetCountries$.pipe(map(countries => [...countries.filter(code => code!==codes[0] && code!==codes[1]),codes[1]]));
     }
 
     submit() {

@@ -39,10 +39,11 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     actionSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        this.actionSubscription = this.zones$.subscribe(zones => this.defaultZones = [...zones]);
+        
     }
 
     ngOnInit() {
+        this.actionSubscription = this.zones$.subscribe(zones => this.defaultZones = zones);
         this.initZones();
     }
 
@@ -57,10 +58,12 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     }
 
     initZones() {
-        this.form.controls['zones'] = this._fb.array([]);
-        for (let zone of this.defaultZones) {
-            const control = <FormArray>this.form.controls['zones'];
-            control.push(this.newZone(zone));
+        if(this.defaultZones !== null){
+            this.form.controls['zones'] = this._fb.array([]);
+            for (let zone of this.defaultZones) {
+                const control = <FormArray>this.form.controls['zones'];
+                control.push(this.newZone(zone));
+            }
         }
     }
 

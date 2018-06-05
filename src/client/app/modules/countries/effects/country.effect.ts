@@ -21,59 +21,53 @@ import { PlatformAction } from '../../datas/actions/index';
 
 @Injectable()
 export class CountryEffects {
-  /**
-   * This effect does not yield any actions back to the store. Set
-   * `dispatch` to false to hint to @ngrx/effects that it should
-   * ignore any elements of this effect stream.
-   *
-   * The `defer` observable accepts an observable factory function
-   * that is called when the observable is subscribed to.
-   * Wrapping the database open call in `defer` makes
-   * effect easier to test.
-   */
 
   @Effect()
-  addUserToCountry$: Observable<Action> = this.actions$.pipe(
-    ofType<CountryAction.AddUserAction>(CountryAction.ActionTypes.ADD_USER),
-    map((action: CountryAction.AddUserAction) => action.payload),
-    mergeMap(user => this.authService.signup(user)),
-    mergeMap(user => this.countriesService.addUser(user)),
-    map((country) => new CountryAction.AddUserSuccessAction(country)),
-    catchError((country) => of(new CountryAction.AddUserFailAction(country)))
-  );
+  addUserToCountry$: Observable<Action> = this.actions$
+    .ofType<CountryAction.AddUserAction>(CountryAction.ActionTypes.ADD_USER)
+    .pipe(
+      map((action: CountryAction.AddUserAction) => action.payload),
+      mergeMap(user => this.authService.signup(user)),
+      mergeMap(user => this.countriesService.addUser(user)),
+      map((country) => new CountryAction.AddUserSuccessAction(country)),
+      catchError((country) => of(new CountryAction.AddUserFailAction(country)))
+    );
 
   @Effect()
-  removeUserFromCountry$: Observable<Action> = this.actions$.pipe(
-    ofType<CountryAction.RemoveUserAction>(CountryAction.ActionTypes.REMOVE_USER),
-    map((action: CountryAction.RemoveUserAction) => action.payload),
-    mergeMap(user => this.authService.remove(user)),
-    mergeMap(user => this.countriesService.removeUser(user)),
-    map((country) => new CountryAction.RemoveUserSuccessAction(country)),
-    catchError((country) => of(new CountryAction.RemoveUserFailAction(country)))
+  removeUserFromCountry$: Observable<Action> = this.actions$
+    .ofType<CountryAction.RemoveUserAction>(CountryAction.ActionTypes.REMOVE_USER)
+    .pipe(
+      map((action: CountryAction.RemoveUserAction) => action.payload),
+      mergeMap(user => this.authService.remove(user)),
+      mergeMap(user => this.countriesService.removeUser(user)),
+      map((country) => new CountryAction.RemoveUserSuccessAction(country)),
+      catchError((country) => of(new CountryAction.RemoveUserFailAction(country)))
+    );
+
+  @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
+    .ofType<CountryAction.AddUserSuccessAction>(CountryAction.ActionTypes.ADD_USER_SUCCESS)
+    .pipe(
+      map((action: CountryAction.AddUserSuccessAction) => action.payload),
+      mergeMap((country: Country) => this.router.navigate(['/countries/' + country.code])),
+      delay(3000),
+      map(() => this.store.dispatch(new CountryAction.RemoveMsgAction()))
+    );
+
+  @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$
+    .ofType<CountryAction.RemoveUserSuccessAction>(CountryAction.ActionTypes.REMOVE_USER_SUCCESS)
+    .pipe(
+      delay(3000),
+      map(() => this.store.dispatch(new CountryAction.RemoveMsgAction()))
+    );
+
+  @Effect({ dispatch: false }) select$ = this.actions$
+    .ofType<CountryAction.SelectAction>(CountryAction.ActionTypes.SELECT)
+    .pipe(map(() => this.store.dispatch(new CountryAction.LoadAction()))
   );
 
-  @Effect({ dispatch: false }) addUserSuccess$ = this.actions$.pipe(
-    ofType<CountryAction.AddUserSuccessAction>(CountryAction.ActionTypes.ADD_USER_SUCCESS),
-    map((action: CountryAction.AddUserSuccessAction) => action.payload),
-    mergeMap((country: Country) => this.router.navigate(['/countries/' + country.code])),
-    delay(3000),
-    map(() => this.store.dispatch(new CountryAction.RemoveMsgAction()))
-  );
-
-  @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$.pipe(
-    ofType<CountryAction.RemoveUserSuccessAction>(CountryAction.ActionTypes.REMOVE_USER_SUCCESS),
-    delay(3000),
-    map(() => this.store.dispatch(new CountryAction.RemoveMsgAction()))
-  );
-
-  @Effect({ dispatch: false }) select$ = this.actions$.pipe(
-    ofType<CountryAction.SelectAction>(CountryAction.ActionTypes.SELECT),
-    map(() => this.store.dispatch(new CountryAction.LoadAction()))
-  );
-
-  @Effect({ dispatch: false }) selectUser$ = this.actions$.pipe(
-    ofType<CountryAction.SelectUserAction>(CountryAction.ActionTypes.SELECT_USER),
-    map(() => this.store.dispatch(new CountryAction.LoadUserAction()))
+  @Effect({ dispatch: false }) selectUser$ = this.actions$
+    .ofType<CountryAction.SelectUserAction>(CountryAction.ActionTypes.SELECT_USER)
+    .pipe(map(() => this.store.dispatch(new CountryAction.LoadUserAction()))
   );
 
   constructor(

@@ -1,5 +1,5 @@
 // libs
-import { Component, ElementRef, ViewChild, OnInit, Input, AfterViewInit} from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, Input, AfterViewInit, ChangeDetectionStrategy} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { CountryListService} from '../../modules/countries/services/country-list
 @Component({
   moduleId: module.id,
   selector: 'sd-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css']
 })
@@ -34,16 +35,16 @@ export class HomeComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
 
   ngOnInit() {
+    this.store.dispatch(new PlatformAction.LoadAction());    
+    this.store.dispatch(new CountriesAction.LoadAction());
+
     this.loggedIn$ = this.store.select(getisLoggedIn);
     this.isAdmin$ = this.store.select(getisAdmin);
     
     this.platforms$ = this.store.select(getPlatformListCurrentCountry);
-    this.store.dispatch(new PlatformAction.LoadAction());
 
     this.userCountry$ = this.store.select(getAuthCountry);
 
     this.countries$ = this.store.select(getAllCountriesInApp);
-    this.store.dispatch(new CountriesAction.LoadAction()); 
-    
   }
 }
