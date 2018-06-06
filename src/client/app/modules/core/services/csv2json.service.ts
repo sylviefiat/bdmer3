@@ -18,7 +18,7 @@ export class Csv2JsonService {
     static SEMICOLON = ';';
     csvErrorMsg: string;
 
-    constructor(private translate: TranslateService, private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+    constructor(private store: Store<IAppState>, private translate: TranslateService, private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
         this.csvErrorMsg = this.translate.instant('CSV_FIELD_ERROR');
     }
 
