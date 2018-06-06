@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Species } from '../../modules/datas/models/species';
@@ -27,11 +28,16 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     private csvFile: string;
     private docs_repo: string;
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
             this.csvFile = "importSpecies-"+l+".csv";
-        });
+      });
+    }
+
+    ngOnInit() {
+        this.error$ = this.store.let(getSpeciesPageError);
+        this.msg$ = this.store.let(getSpeciesPageMsg);            
     }
 
     ngOnInit() {
@@ -44,11 +50,12 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
+        let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
             this.store.dispatch(new SpeciesAction.ImportSpeciesAction(csvFile.target.files[0]));
         } else {
-            this.store.dispatch(new SpeciesAction.AddSpeciesFailAction('No csv file found'));
+            this.store.dispatch(new SpeciesAction.AddSpeciesFailAction(notFoundMsg));
         }
     }
 

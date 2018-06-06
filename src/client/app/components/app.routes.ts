@@ -8,6 +8,7 @@ import { SpeciesRoutes } from './species/species.routes';
 import { SurveyRoutes } from './survey/survey.routes';
 import { StationRoutes } from './station/station.routes';
 import { PreferenceAreaRoutes } from './preference-area/preference-area.routes';
+import { GlobalImportRoutes } from './globalImport/global-import.route';
 import { ZoneRoutes } from './zone/zone.routes';
 import { CountRoutes } from './count/count.routes';
 import { AnalyseRoutes } from './analyse/analyse.routes';
@@ -26,5 +27,6 @@ export const routes: Array<any> = [
   ...ZoneRoutes,
   ...CountRoutes,
   ...AnalyseRoutes,
+  ...GlobalImportRoutes,
   { path: '**', component: NotFoundPageComponent }
 ];

@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, E
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -23,6 +25,7 @@ export class StationImportComponent implements OnDestroy {
     @Input() platform: Platform;
     @Input() error: string | null;
     @Input() msg: string | null;
+    @Input() importError: string[];
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
@@ -31,12 +34,21 @@ export class StationImportComponent implements OnDestroy {
     needHelp: boolean = false;
     private csvFile: string;
     private docs_repo: string;
+    private importCsvFile = null;
+  
+    stationForm: FormGroup = new FormGroup({
+        stationInputFile: new FormControl(),
+    });
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
             this.csvFile = "importStation-"+l+".csv";
         });
+    }
+
+    ngOnInit() {
+            
     }
 
     ngOnDestroy() {
@@ -44,13 +56,28 @@ export class StationImportComponent implements OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
+        let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
         console.log(csvFile);
         let reader = new FileReader();
+
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.upload.emit(csvFile.target.files[0]);
+            this.importCsvFile = csvFile.target.files[0];
+            this.check(this.importCsvFile);
         } else {
-            this.err.emit('No csv file found');
+            this.err.emit(notFoundMsg);
         }
+    }
+
+    check(csvFile){
+        this.store.dispatch(new PlatformAction.CheckStationCsvFile(csvFile));
+    }
+
+    send(){
+        this.upload.emit(this.importCsvFile);
+    }
+
+    clearInput(){
+        this.stationForm.get('stationInputFile').reset();
     }
 
     changeNeedHelp() {

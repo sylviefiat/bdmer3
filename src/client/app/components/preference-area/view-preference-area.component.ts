@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter
 import { Store } from '@ngrx/store';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -27,7 +28,7 @@ export class ViewPreferenceAreaComponent implements OnInit {
     @Output() action = new EventEmitter<any>();
 
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -35,7 +36,9 @@ export class ViewPreferenceAreaComponent implements OnInit {
 
 
     deleteZonePref() {
-        if (this.windowService.confirm("Are you sure you want to delete this zone preference from database ?")){
+        let deleteMsg = this.translate.instant('CONFIRM_DELETE_ZONEPREF');
+
+        if (this.windowService.confirm(deleteMsg)){
             this.remove.emit(this.zonePref);
         }
     }
@@ -74,6 +77,6 @@ export class ViewPreferenceAreaComponent implements OnInit {
   }
 
   get thumbnailSpecies(): string | boolean {
-    return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+    return this.zonePref.picture; 
   }
 }

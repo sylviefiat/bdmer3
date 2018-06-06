@@ -61,7 +61,6 @@ export class PreferenceAreaImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
         this.store.dispatch(new PlatformAction.ImportZonePrefAction(csvFile));
     }
 
@@ -70,6 +69,7 @@ export class PreferenceAreaImportPageComponent implements OnInit, OnDestroy {
     }
 
     return(code: string) {
+        this.store.dispatch(new PlatformAction.RemoveMsgAction());
         this.routerext.navigate(['/platform/'+code], {
             transition: {
                 duration: 1000,

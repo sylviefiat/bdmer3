@@ -29,6 +29,7 @@ import { PA_COMPONENTS } from './preference-area/index';
 import { COUNT_COMPONENTS } from './count/index';
 import { SP_COMPONENTS } from './species/index';
 import { ANALYSE_COMPONENTS } from './analyse/index';
+import { GLOBAL_IMPORT_COMPONENTS } from './globalImport/index'
 
 export const APP_COMPONENTS: any[] = [
   ...PLATFORM_COMPONENTS,
@@ -39,6 +40,7 @@ export const APP_COMPONENTS: any[] = [
   ...PA_COMPONENTS,
   ...COUNT_COMPONENTS,
   ...ANALYSE_COMPONENTS,
+  ...GLOBAL_IMPORT_COMPONENTS,
   AppComponent,
   NavbarComponent,
   ToolbarComponent,
@@ -95,3 +97,4 @@ export * from './station/index';
 export * from './preference-area/index';
 export * from './count/index';
 export * from './species/index';
+export * from './globalImport/index';

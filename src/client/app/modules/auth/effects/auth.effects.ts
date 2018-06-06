@@ -1,8 +1,3 @@
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/exhaustMap';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/take';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { defer, Observable, pipe, of, from } from 'rxjs';
@@ -16,7 +11,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
 import { Authenticate, AuthInfo, AccessToken } from '../models/user';
 import { User, Country } from '../../countries/models/country';
-import { CountryAction } from '../../countries/actions/index';
+import { CountryAction, CountriesAction } from '../../countries/actions/index';
+
 
 @Injectable()
 export class AuthEffects {
@@ -57,7 +53,11 @@ export class AuthEffects {
       map((action: AuthAction.LoginSuccess) => action.payload),
       withLatestFrom(this.store.select(getLatestURL)),
       map(([authInfo, url]) => [authInfo, url]),
-      mergeMap((value: [any, String]) => this.router.navigate([value[1]]))
+      mergeMap((value: [any, String]) => {
+        if(value[0].access_token.country.code!=='AA'){
+          this.store.dispatch(new CountryAction.SelectAction(value[0].access_token.country.code));
+        }
+        return this.router.navigate([value[1]])})
     );
 
   @Effect({ dispatch: false }) loginRedirect$ = this.actions$

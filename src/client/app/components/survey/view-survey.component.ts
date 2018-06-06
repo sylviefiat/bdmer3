@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -34,7 +35,7 @@ export class ViewSurveyComponent implements OnInit {
     @Output() action = new EventEmitter<string>();
 
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private windowService: WindowService) { }
 
 
     ngOnInit() {
@@ -43,7 +44,9 @@ export class ViewSurveyComponent implements OnInit {
 
 
     deleteSurvey() {
-        if (this.windowService.confirm("Are you sure you want to delete this survey from database ?")){
+        let deleteMsg = this.translate.instant('CONFIRM_DELETE_SURVEY');
+
+        if (this.windowService.confirm(deleteMsg)){
             this.remove.emit(this.survey);
         }
     }

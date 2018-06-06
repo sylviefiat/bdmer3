@@ -15,6 +15,7 @@ export interface IPlatformState {
     entities: Platform[];
     ids: string[];
     error: string | null;
+    importErrors: string[];
     msg: string | null;
 }
 
@@ -30,6 +31,7 @@ export const platformInitialState: IPlatformState = {
     entities: [],
     ids: [],
     error: null,
+    importErrors:[],
     msg: null
 };
 
@@ -54,6 +56,8 @@ export const getSurveysOfCurrentCountry = createSelector(getPlatformsOfCurrentCo
 export const getPlatformIds = (state: IPlatformState) => state.ids;
 
 export const getPlatformError = (state: IPlatformState) => state.error;
+
+export const getPlatformImportErrors = (state: IPlatformState) => state.importErrors;
 
 export const getPlatformMsg = (state: IPlatformState) => state.msg;
 

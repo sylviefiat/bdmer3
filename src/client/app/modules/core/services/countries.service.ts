@@ -1,6 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Observable, from, of, pipe, throwError } from 'rxjs';
 import { map, mergeMap, filter, catchError } from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 
 import * as PouchDB from "pouchdb";
 import { User, Country } from '../../countries/models/country';
@@ -16,7 +17,7 @@ export class CountriesService {
 
   private db: any;
 
-  constructor() {
+  constructor(private translate: TranslateService) {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
@@ -123,7 +124,6 @@ export class CountriesService {
       }),
       filter((response: ResponsePDB) => { return response.ok; }),
       mergeMap((response) => {
-        console.log("here");
         return this.currentCountry;
       }));
   }
@@ -141,10 +141,11 @@ export class CountriesService {
   }
 
   verifyMail(email: string): Observable<any> {
+    let msg = this.translate.instant('EMAIL_ERROR');
     return this.getMailUser(email).pipe(
       filter(answer => answer && answer._id && answer._id.length > 0),
       map((user) => user),
-      catchError(e => throwError('This email is not registered in BDMer, please contact administrator'))
+      catchError(e => throwError(msg.EMAIL_ERROR))
     )
   }
 

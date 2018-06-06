@@ -61,7 +61,6 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
         this.store.dispatch(new PlatformAction.ImportCountAction(csvFile));
     }
 

@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter
 import { Store } from '@ngrx/store';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
@@ -27,7 +28,7 @@ export class ViewSpeciesComponent implements OnInit {
     @Output() action = new EventEmitter<string>();
 
 
-    constructor(private store: Store<IAppState>, private windowService: WindowService, public routerext: RouterExtensions) { }
+    constructor(private translate: TranslateService, private store: Store<IAppState>, private windowService: WindowService, public routerext: RouterExtensions) { }
 
 
     ngOnInit() {
@@ -61,7 +62,9 @@ export class ViewSpeciesComponent implements OnInit {
     }
 
     deleteSpecies() {
-        if (this.windowService.confirm("Are you sure you want to delete this species from database ?"))
+        let deleteMsg = this.translate.instant('CONFIRM_DELETE_SPECIES');
+
+        if (this.windowService.confirm(deleteMsg))
             return this.remove.emit(this.species);
     }
 
