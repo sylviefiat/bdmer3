@@ -46,8 +46,8 @@ export class AuthEffects {
     .pipe(
       map((action: AuthAction.Logout) => action.payload),
       exhaustMap(stringisnull => this.authService.logout().pipe(
-        map(authed => localStorage.removeItem(AuthEffects.tokenItem)),
-        map(() => this.router.navigate(['/']))
+        tap(authed => localStorage.removeItem(AuthEffects.tokenItem)),
+        tap(() => this.router.navigate(['/']))
       ))  
     );
 

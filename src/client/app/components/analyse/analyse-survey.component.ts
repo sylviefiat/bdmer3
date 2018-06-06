@@ -13,7 +13,7 @@ import { Survey } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="surveys">
-        <div *ngFor="let survey of defaultSurveys; let i=index;"> 
+        <div *ngFor="let survey of (surveys$ | async); let i=index;"> 
           <bc-survey  [group]="form.controls.surveys.controls[i]" [survey]="survey" [locale]="locale" (surveyEmitter)="changeValue($event)"></bc-survey>
         </div>
       </div>
@@ -47,9 +47,12 @@ export class AnalyseSurveyComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.actionsSubscription = this.surveys$.subscribe(surveys => this.defaultSurveys = surveys);
-        this.initSurveys();
+        this.actionsSubscription = this.surveys$.subscribe(surveys => {
+            this.defaultSurveys = surveys;
+            this.initSurveys();
+        });
     }
+        
 
     ngOnDestroy() {
         this.actionsSubscription.unsubscribe();

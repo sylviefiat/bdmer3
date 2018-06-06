@@ -74,6 +74,7 @@ export class AnalyseComponent {
     }    
 
     setCountry(country: Country) {
+        console.log(country);
         this.countryEmitter.emit(country);  
     }
 
@@ -121,6 +122,7 @@ export class AnalyseComponent {
     }
 
     startAnalyse(){
+        console.log("start");
         this.analyse.emit("ok");
     }
 

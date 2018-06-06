@@ -56,8 +56,11 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.actionsSubscription = this.species$.subscribe(species => this.defaultSpecies = species);
-        this.initSpecies();
+        this.actionsSubscription = this.species$.subscribe(species => {
+            this.defaultSpecies = species;
+            this.initSpecies();
+        });
+        
     }
 
     ngOnDestroy() {
@@ -92,7 +95,6 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     }
 
     changeValue(spCheck: any) {
-        console.log(spCheck);
         this.checkedSpecies = [...this.checkedSpecies.filter(s => s.code !== spCheck.species.code)];
         this.checkedSpeciesDims = [...this.checkedSpeciesDims.filter(s => s.codeSp !== spCheck.species.code)];
 

@@ -33,7 +33,7 @@ export class SurveyImportComponent implements OnDestroy{
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.actionSubscription = this.store.let(getLangues).subscribe((l: any) => {
+        this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importSurvey-"+l+".csv";
         });

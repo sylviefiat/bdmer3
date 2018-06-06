@@ -15,6 +15,7 @@ export class AnalyseService {
     }
 
     analyse(analyseData: Data): Results {
+        console.log(analyseData);
         let result: Results = { name: "", resultPerSurvey: [] };
         let today = new Date();
         result.name = "ANALYSE BDMER " + today;

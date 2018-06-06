@@ -193,16 +193,16 @@ export const getPlatformListCurrentCountry: any = compose(getPlatformOfCurrentCo
 export const getSelectedCountryPlatforms: any = compose(getPlatformsOfCurrentCountry, getAppState);
 
 // Analyse
-export const getAnalyseCountry: any = compose(getUsedCountry, getAnalyseState);
-export const getAnalyseSurveys: any = compose(getUsedSurveys, getAnalyseState);
-export const getAnalyseZones: any = compose(getUsedZones, getAnalyseState);
-export const getStationZones: any = compose(getUsedStations, getAnalyseState);
-export const getAnalyseSpecies: any = compose(getUsedSpecies, getAnalyseState);
-export const getAnalyseDims: any = compose(getUsedDims, getAnalyseState);
-export const getAnalyseMethod: any = compose(getUsedMethod, getAnalyseState);
+export const getAnalyseCountry: any = compose(getUsedCountry, getAppState);
+export const getAnalyseSurveys: any = compose(getUsedSurveys, getAppState);
+export const getAnalyseZones: any = compose(getUsedZones, getAppState);
+export const getStationZones: any = compose(getUsedStations, getAppState);
+export const getAnalyseSpecies: any = compose(getUsedSpecies, getAppState);
+export const getAnalyseDims: any = compose(getUsedDims, getAppState);
+export const getAnalyseMethod: any = compose(getUsedMethod, getAppState);
 export const isAnalysing: any = compose(getAnalysing, getAnalyseState);
 export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
-export const getAnalyseData: any = compose(getData, getAnalyseState);
+export const getAnalyseData: any = compose(getData, getAppState);
 export const getAnalyseResult: any = compose(getResult, getAnalyseState);
 export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
 export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getAppState);

@@ -13,7 +13,7 @@ import { Platform } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="platforms">
-        <div *ngFor="let platform of defaultPlatforms; let i=index">
+        <div *ngFor="let platform of (platforms$ | async); let i=index">
           <bc-platform [group]="form.controls.platforms.controls[i]" [platform]="platform" (platformEmitter)="changeValue($event)"></bc-platform>
         </div>
       </div>
@@ -43,8 +43,11 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {  
-        this.actionsSubscription = this.platforms$.subscribe(platforms => this.defaultPlatforms=platforms);      
-        this.initPlatforms();
+        this.actionsSubscription = this.platforms$.subscribe(platforms => {
+            this.defaultPlatforms=platforms;
+            this.initPlatforms();
+        });      
+        
     }
 
     ngOnDestroy(){

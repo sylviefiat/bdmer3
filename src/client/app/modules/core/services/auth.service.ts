@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, throwError } from 'rxjs';
-import { map, mergeMap, filter } from 'rxjs/operators';
+import { map, mergeMap, filter, catchError } from 'rxjs/operators';
 import { Authenticate } from '../../auth/models/user';
 import { CountriesService } from './countries.service';
 import { User, Country } from '../../countries/models/country';
@@ -24,7 +24,7 @@ export class AuthService {
     let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
     this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
-    //this.sync(dbname);
+    console.log(this.db);
   }
 
   login({ username, password }: Authenticate): Observable<any> {
@@ -85,13 +85,19 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    let auth: Authenticate = { username: user.username, password: user.password, roles: [user.countryCode] };
-    return of(user).pipe(
-      mergeMap(user =>
-        from(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode, user.role]}}))),
-      filter((response: ResponsePDB) => { return response.ok; }),
-      mergeMap(response => of(user))
-    )
+    return from(this.db.login(user.username, user.password)).pipe(
+      mergeMap((result: ResponsePDB) => {
+        console.log(result);
+        if (result.ok && result.roles.length > 0){
+          return throwError("User already existing");
+        }
+        else {
+          return from(this.db.signup(user.username, user.password, {roles: [user.countryCode, user.role]})).pipe(
+            filter((response: ResponsePDB) => { console.log(response);return response.ok; }),
+            mergeMap(response => of(user))
+          )
+        }
+      })); 
   }
 
   remove(user): Observable<any> {

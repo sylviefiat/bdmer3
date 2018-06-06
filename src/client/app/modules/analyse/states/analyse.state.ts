@@ -44,7 +44,7 @@ export const initMethods: Method[] = [
 ]
 export const getUsedCountry = (state: IAppState) => state.analyse.usedCountry;
 
-export const getUsedPlatforms = (state: IAppState) => {console.log(state); return state.analyse.usedPlatforms};
+export const getUsedPlatforms = (state: IAppState) => state.analyse.usedPlatforms;
 
 export const getUsedYears = (state: IAppState) => state.analyse.usedYears;
 
@@ -60,13 +60,13 @@ export const getUsedDims = (state: IAppState) => state.analyse.usedDims;
 
 export const getUsedMethod = (state: IAppState) => state.analyse.usedMethod;
 
-export const getAnalysing = (state: IAppState) => state.analyse.analysing;
+export const getAnalysing = (state: IAnalyseState) => state.analysing;
 
-export const getAnalysed = (state: IAppState) => state.analyse.analysed;
+export const getAnalysed = (state: IAnalyseState) => state.analysed;
 
 const getSpeciesInApp = (state: IAppState) => state.species.entities;
 
-export const getSelectedData = (state: IAppState) => createSelector(getUsedCountry,getUsedPlatforms,getUsedYears,
+export const getSelectedData = createSelector(getUsedCountry,getUsedPlatforms,getUsedYears,
     getUsedSurveys,getUsedZones,getUsedStations,getUsedSpecies,(country,platform,years,surveys,zones,stations,species) => {
             return {
                 usedCountry: country,
@@ -81,13 +81,13 @@ export const getSelectedData = (state: IAppState) => createSelector(getUsedCount
 export const getData = createSelector(getSelectedData,getUsedDims,getUsedMethod,
         (selectData,dims,method) => {
             return {
-                usedCountry: selectData[1].usedCountry,
-                usedPlatforms: selectData[1].usedPlatforms,
-                usedYears: selectData[1].usedYears,
-                usedSurveys: selectData[1].usedSurveys,
-                usedZones: selectData[1].usedZones,
-                usedStations: selectData[1].usedStations,
-                usedSpecies: selectData[1].usedSpecies,
+                usedCountry: selectData.usedCountry,
+                usedPlatforms: selectData.usedPlatforms,
+                usedYears: selectData.usedYears,
+                usedSurveys: selectData.usedSurveys,
+                usedZones: selectData.usedZones,
+                usedStations: selectData.usedStations,
+                usedSpecies: selectData.usedSpecies,
                 usedDims: dims,
                 usedMethod: method
             }
@@ -137,20 +137,20 @@ export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZone
     if(!platforms || !zones) return stations;
     for(let p of platforms){
         for(let z of zones){
-            stations = [...stations,p.stations.filter(s => Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates)))];
+            stations = [...stations,...p.stations.filter(s => Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates)))];
         }
     }
     return stations;
 });
 
-export const getSpeciesAvailables = createSelector(getSpeciesInApp,getUsedSurveys,(speciesEntities:Species[],surveys:Survey[]) => {
+export const getSpeciesAvailables = createSelector(getSpeciesInApp,getSurveysAvailables,(speciesEntities:Species[],surveys:Survey[]) => {
     let species = [];
     if(!surveys || !speciesEntities) return species;
     for(let s of surveys){
         for(let c of s.counts){            
             for(let m of c.mesures){
-                let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies);
-                species = [...species, ...cs.filter(sp => species.indexOf(sp.code)<0)];
+                let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies).filter(sp => species.filter(s => s.code===sp.code).length===0);
+                species = [...species, ...cs];
             }
         }
     }

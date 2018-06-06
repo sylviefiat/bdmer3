@@ -13,7 +13,7 @@ import { Zone } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="zones">
-        <div *ngFor="let zone of defaultZones; let i=index">
+        <div *ngFor="let zone of (zones$ | async); let i=index">
           <bc-zone [group]="form.controls.zones.controls[i]" [zone]="zone" (zoneEmitter)="changeValue($event)"></bc-zone>
         </div>
       </div>
@@ -43,8 +43,11 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.actionSubscription = this.zones$.subscribe(zones => this.defaultZones = zones);
-        this.initZones();
+        this.actionSubscription = this.zones$.subscribe(zones => {
+            this.defaultZones = zones;
+            this.initZones();
+        });
+        
     }
 
     ngOnDestroy() {

@@ -13,7 +13,7 @@ import { Platform } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="years">
-        <div *ngFor="let year of defaultYears; let i=index">
+        <div *ngFor="let year of (years$ | async); let i=index">
           <bc-year [group]="form.controls.years.controls[i]" [year]="year" (yearEmitter)="changeValue($event)"></bc-year>
         </div>
       </div>
@@ -43,8 +43,11 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.actionsSubscription = this.years$.subscribe(years => this.defaultYears = years);
-        this.initYears();
+        this.actionsSubscription = this.years$.subscribe(years => {
+            this.defaultYears = years;
+            this.initYears();
+        });
+        
     }
 
     ngOnDestroy() {

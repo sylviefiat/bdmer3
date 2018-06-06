@@ -13,7 +13,7 @@ import { Station } from '../../modules/datas/models/index';
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
       <div  class="stations">
-        <div *ngFor="let station of defaultStation; let i=index">
+        <div *ngFor="let station of (stations$ | async); let i=index">
           <bc-station [group]="form.controls.stations.controls[i]" [station]="station" (stationEmitter)="changeValue($event)"></bc-station>
         </div>
       </div>
@@ -43,8 +43,11 @@ export class AnalyseStationComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.actionsSubscription = this.stations$.subscribe(stations => this.defaultStations = stations);
-        this.initStations();
+        this.actionsSubscription = this.stations$.subscribe(stations => {
+            this.defaultStations = stations;
+            this.initStations();
+        });
+        
     }
 
     ngOnDestroy() {

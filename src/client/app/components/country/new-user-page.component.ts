@@ -55,6 +55,7 @@ export class NewUserPageComponent implements OnInit {
   }
 
   onSubmit(user: User) {
+    console.log(user);
     this.store.dispatch(new CountryAction.AddUserAction(user));
   }
 
