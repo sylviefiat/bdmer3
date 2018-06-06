@@ -19,7 +19,6 @@ export function platformReducer(
             const platforms = action.payload;
             const newPlatforms = platforms.filter(platform => state.ids.includes(platform._id) ? false : platform);
             const newPlatformIds = newPlatforms.map(platform => platform._id);
-            console.log("platforms loaded");
             return {
                 ...state,
                 loading: false,
@@ -63,7 +62,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS: {
             const addedsurvey = action.payload;
-            console.log(addedsurvey);
             const platforms = state.entities.filter(platform => addedsurvey.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedsurvey.codePlatform === platform._id)[0];
             modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => addedsurvey.code !== survey.code),addedsurvey];
@@ -80,7 +78,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.ADD_STATION_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS: {
             const addedstation = action.payload;
-            console.log(addedstation);
             const platforms = state.entities.filter(platform => addedstation.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedstation.codePlatform === platform.code)[0];
 
@@ -98,7 +95,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.ADD_ZONE_PREF_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS: {
             const addedzonepref = action.payload;
-            console.log(addedzonepref);
             const platforms = state.entities.filter(platform => addedzonepref.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedzonepref.codePlatform === platform._id)[0];
             const modifiedZone = modifiedPlatform.zones.filter(zone => addedzonepref.codeZone === zone.properties.code)[0];
@@ -117,7 +113,6 @@ export function platformReducer(
         case PlatformAction.ActionTypes.ADD_COUNT_SUCCESS:
         case PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS: {
             const addedcount = action.payload;
-            console.log(addedcount);
             const platforms = state.entities.filter(platform => addedcount.codePlatform !== platform._id);
             const modifiedPlatform = state.entities.filter(platform => addedcount.codePlatform === platform._id)[0];
             const modifiedSurvey = modifiedPlatform.surveys.filter(survey => addedcount.codeSurvey === survey.code)[0];
@@ -175,7 +170,6 @@ export function platformReducer(
 
         case PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS:
             {
-                console.log(action.payload);
                 const removedSurvey = action.payload;
                 const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
                 modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);

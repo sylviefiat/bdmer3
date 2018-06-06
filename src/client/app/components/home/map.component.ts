@@ -73,7 +73,6 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log(this.platforms);
     this.initMarkers();
   }
 

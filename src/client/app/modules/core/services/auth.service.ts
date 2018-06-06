@@ -24,7 +24,6 @@ export class AuthService {
     let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
     this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
-    console.log(this.db);
   }
 
   login({ username, password }: Authenticate): Observable<any> {
