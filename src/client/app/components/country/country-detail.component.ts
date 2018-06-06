@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
+import {TranslateService} from '@ngx-translate/core';
 
 import { Country, User } from './../../modules/countries/models/country';
 import { WindowService } from './../../modules/core/services/index';
@@ -125,11 +126,13 @@ export class CountryDetailComponent implements OnInit{
    stringDelete: string;
    platforms: Platform[];
 
-   constructor(private store: Store<IAppState>, private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute, private windowService: WindowService){
+   constructor(private translate: TranslateService, private store: Store<IAppState>, private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute, private windowService: WindowService){
      
    }
 
    ngOnInit(){
+     let confirmationMsg = this.translate.instant(['CONFIRM_DELETE_COUNTRY', 'ALSO_DELETE']);
+
      this.platforms$ = this.store.let(getPlatformInApp);
      this.store.dispatch(new PlatformAction.LoadAction());
 
@@ -140,13 +143,13 @@ export class CountryDetailComponent implements OnInit{
        (res) => {
          if(!this.platforms)
            this.platforms = res;
-         this.stringDelete = "Are you sure you want to delete this country from database ? ";
+         this.stringDelete = confirmationMsg.CONFIRM_DELETE_COUNTRY;
          for(let i = 0; i < res.length; i++){
            if(i == 0){
              if(i == res.length - 1){
-               this.stringDelete += "It will also delete platform(s): " + res[i].code + ".";
+               this.stringDelete += confirmationMsg.ALSO_DELETE + res[i].code + ".";
              }else{
-               this.stringDelete += "It will also delete platform(s): " + res[i].code + ",";
+               this.stringDelete += confirmationMsg.ALSO_DELETE + res[i].code + ",";
              }
            }else if(i == res.length - 1 && i != 0){
              this.stringDelete += " " + res[i].code + ".";

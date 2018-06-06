@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import {TranslateService} from '@ngx-translate/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -39,7 +40,7 @@ export class SurveyImportComponent implements OnInit{
         surveyInputFile: new FormControl(),
     });
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -51,12 +52,13 @@ export class SurveyImportComponent implements OnInit{
     }
 
     handleUpload(csvFile: any): void {
+        let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
             this.importCsvFile = csvFile.target.files[0]; 
             this.check(this.importCsvFile);
         } else {
-            this.err.emit('No csv file found');
+            this.err.emit(notFoundMsg);
         }
     }
 
