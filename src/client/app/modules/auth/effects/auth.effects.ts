@@ -15,7 +15,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { AuthAction } from '../actions/index';
 import { Authenticate, AuthInfo, AccessToken } from '../models/user';
 import { User, Country } from '../../countries/models/country';
-import { CountryAction } from '../../countries/actions/index';
+import { CountryAction, CountriesAction } from '../../countries/actions/index';
+
 
 @Injectable()
 export class AuthEffects {
@@ -26,7 +27,7 @@ export class AuthEffects {
   @Effect() login$ = this.actions$
     .ofType(AuthAction.ActionTypes.LOGIN)
     .map((action: AuthAction.Login) => action.payload)
-    .exhaustMap(auth => {
+    .exhaustMap((auth: Authenticate) => {
       return this.authService
         .login(auth)
         .map((result: AccessToken) => {
@@ -55,7 +56,10 @@ export class AuthEffects {
     .ofType(AuthAction.ActionTypes.LOGIN_SUCCESS)
     .withLatestFrom(this.store.let(getLatestURL))
     .map(([action, url]) => [action.payload, url])
-    .mergeMap((value: [any, String]) => {      
+    .mergeMap((value: [any, String]) => {   
+      if(value[0].access_token.country.code!=='AA'){
+        this.store.dispatch(new CountryAction.SelectAction(value[0].access_token.country.code));
+      }
       return this.router.navigate([value[1]])
     });
 

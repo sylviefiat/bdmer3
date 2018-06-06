@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getSelectedZone } from '../../modules/ngrx/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getPlatformImpErrors, getSelectedZone } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
@@ -20,7 +20,8 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       (back)="return($event)"
       [error]="error$ | async"
       [msg]="msg$ | async"
-      [platform]="platform$ | async">
+      [platform]="platform$ | async"
+      [importError]="importError$ | async">
     </bc-station-import>
   `,
     styles: [``]
@@ -29,6 +30,7 @@ export class StationImportPageComponent implements OnInit, OnDestroy {
     platform$: Observable<Platform>;
     error$: Observable<string | null>;
     msg$: Observable<string | null>;
+    importError$: Observable<string | null>;
 
 
     platformSubscription: Subscription;
@@ -43,6 +45,7 @@ export class StationImportPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.importError$ = this.store.let(getPlatformImpErrors);
         this.error$ = this.store.let(getPlatformPageError);
         this.msg$ = this.store.let(getPlatformPageMsg);
         this.platform$ = this.store.let(getSelectedPlatform);
@@ -53,7 +56,6 @@ export class StationImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
         this.store.dispatch(new PlatformAction.ImportStationAction(csvFile));
     }
 
