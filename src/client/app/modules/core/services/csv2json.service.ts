@@ -193,7 +193,7 @@ export class Csv2JsonService {
                         case "codeZone":
                         case "code":
                         case "participants":
-                        case "surfaceTransect":
+                        case "surfaceStation":
                         case "description":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
