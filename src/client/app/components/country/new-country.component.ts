@@ -61,6 +61,7 @@ export class NewCountryComponent implements OnInit {
       this.svgToB64().then( (data) => {
         this.http.get('http://maps.googleapis.com/maps/api/geocode/json?address='+ this.form.controls.pays.value["name"] +'&sensor=false&apiKey=AIzaSyBSEMJ07KVIWdyD0uTKaO75UYsIMMCi69w')
           .subscribe(coord => {
+            console.log(coord);
             this.form.controls.coordinates.get("lat").setValue(coord["results"]["0"].geometry.location.lat);
             this.form.controls.coordinates.get("lng").setValue(coord["results"]["0"].geometry.location.lng);
             this.form.controls.flag.setValue(data);

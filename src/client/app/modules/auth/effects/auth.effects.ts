@@ -46,11 +46,9 @@ export class AuthEffects {
     .pipe(
       map((action: AuthAction.Logout) => action.payload),
       exhaustMap(stringisnull => this.authService.logout().pipe(
-        tap(authed => {
-            localStorage.removeItem(AuthEffects.tokenItem);
-            return from(this.router.navigate(['/']));
-        })
-      ))    
+        map(authed => localStorage.removeItem(AuthEffects.tokenItem)),
+        map(() => this.router.navigate(['/']))
+      ))  
     );
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$
