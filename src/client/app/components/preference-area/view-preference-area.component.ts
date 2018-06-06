@@ -79,6 +79,6 @@ export class ViewPreferenceAreaComponent implements OnInit {
   }
 
   get thumbnailSpecies(): string | boolean {
-    return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+    return this.zonePref.picture; 
   }
 }

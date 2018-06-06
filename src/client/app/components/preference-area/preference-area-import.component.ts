@@ -4,12 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getLangues } from '../../modules/ngrx/index';
-import { PlatformAction } from '../../modules/datas/actions/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getPlatformImpErrors, getLangues } from '../../modules/ngrx/index';
+import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
@@ -30,14 +31,22 @@ export class PreferenceAreaImportComponent implements OnInit{
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
 
-    needHelp: boolean = false;
+    importError$: Observable<string[]>;
+    needHelp: boolean = false;    
     private csvFile: string;
     private docs_repo: string;
+    importCsvFile: any = null;
+
+    zonePrefForm: FormGroup = new FormGroup({
+        zonePrefInputFile: new FormControl(),
+    });
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
     }
 
     ngOnInit() {
+        this.importError$ = this.store.let(getPlatformImpErrors);
+        this.store.dispatch(new SpeciesAction.LoadAction())
         this.store.let(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importZonePref-"+l+".csv";
@@ -48,15 +57,29 @@ export class PreferenceAreaImportComponent implements OnInit{
         let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
         console.log(csvFile);
         let reader = new FileReader();
+      
         if (csvFile.target.files && csvFile.target.files.length > 0) {
-            this.upload.emit(csvFile.target.files[0]);
+            this.importCsvFile = csvFile.target.files[0]
+            this.check(this.importCsvFile)
         } else {
             this.err.emit(notFoundMsg);
         }
     }
 
+    check(csvFile){
+        this.store.dispatch(new PlatformAction.CheckZonePrefCsvFile(csvFile));
+    }
+
+    send(){
+        this.upload.emit(this.importCsvFile);
+    }
+
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
+    }
+
+    clearInput(){
+        this.zonePrefForm.get('zonePrefInputFile').reset();
     }
 
     getCsvZonesPref() {

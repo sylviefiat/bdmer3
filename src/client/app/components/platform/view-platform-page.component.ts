@@ -45,8 +45,8 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.platform$ = this.store.let(getSelectedPlatform);
-    this.zones$ = this.store.let(getSelectedPlatformZones);
     this.stations$ = this.store.let(getSelectedPlatformStations);
+    this.zones$ = this.store.let(getSelectedPlatformZones);
     this.surveys$ = this.store.let(getSelectedPlatformSurveys);
     this.msg$ = this.store.let(getPlatformPageMsg);
   }

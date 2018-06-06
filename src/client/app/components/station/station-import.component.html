@@ -2,13 +2,18 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_STATIONS' | translate}}</mat-card-title>
       <mat-card-content>
+        <button *ngIf="importCsvFile === null || importError.length > 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
+        <ng-template #activedbutton>
+          <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
+        </ng-template>
         <button (click)="back.emit()" class="back">{{ 'CANCEL' | translate }}</button>        
       </mat-card-content>   
-      <mat-card-content class="error" *ngIf="error" align="center">{{ error }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>     
+      <mat-card-content class="error" *ngIf="error !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
+      <mat-card-content class="error" *ngIf="importError.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="importError.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>    
     </mat-card>
 </div>
-<div class="insideform">
+<div class="insideform" [formGroup]="stationForm">
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
@@ -24,10 +29,21 @@
       </a>
     </mat-card-footer>
     <mat-card-actions align="start">
-      <button (click)="fileInput.click()">
+      <button (click)="fileInput.click(); clearInput()">
         <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+        <input #fileInput type="file" formControlName="stationInputFile" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
+    </mat-card-actions>
+
+    <mat-card-actions align="start" *ngIf="importError.length > 0">
+      <h2 class="errorStation">{{'LIST_ERROR_STATION' | translate}}</h2>
+      <mat-list>
+        <div *ngFor="let station of importError">
+          <mat-list-item class="errorStation"> 
+              {{station}}
+          </mat-list-item>
+        </div>
+      </mat-list>
     </mat-card-actions>
   </mat-card>
 </div>

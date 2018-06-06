@@ -10,6 +10,7 @@ import { MultilingualModule } from '../i18n/multilingual.module';
 
 //import { AUTH_PROVIDERS } from './services/index';
 import { AuthGuard } from './guards/auth-guard.service';
+import { DeactivateGuardService } from './guards/can-deactivate-guard.service'
 import { AuthEffects } from './effects/auth.effects';
 
 
@@ -24,7 +25,7 @@ import { AuthEffects } from './effects/auth.effects';
     EffectsModule.run(AuthEffects),
   ],
   declarations: [],
-  providers: [AuthGuard],
+  providers: [AuthGuard, DeactivateGuardService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA

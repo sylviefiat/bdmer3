@@ -3,11 +3,14 @@ import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import {TranslateService} from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
 
 import { MomentService } from './moment.service';
 import { MapStaticService} from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
+import { PlatformAction } from '../../datas/actions/index';
+import { IAppState, getSpeciesInApp } from '../../ngrx/index';
 
 @Injectable()
 export class Csv2JsonService {
@@ -104,6 +107,7 @@ export class Csv2JsonService {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Platform[] = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -118,12 +122,30 @@ export class Csv2JsonService {
                             st[headers[j]] = data[j];
                             break;
                         default:
-                            throw new Error('Wrong CSV File Unknown field detected');
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
                     }
                 }
                 lines.push(st);
             }
         }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            return [];
+        }
+
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
@@ -161,6 +183,7 @@ export class Csv2JsonService {
         let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
         let lines: Survey[] = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -168,17 +191,18 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_country":
-                        case "code_platform":
+                        case "codeCountry":
+                        case "codePlatform":
+                        case "codeZone":
                         case "code":
                         case "participants":
-                        case "surface_station":
+                        case "surfaceStation":
                         case "description":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
-                        case "date_start":
-                        case "date_end":
+                        case "dateStart":
+                        case "dateEnd":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
@@ -192,12 +216,30 @@ export class Csv2JsonService {
                             st[headers[j]] = d;
                             break;
                         default:                            
-                            throw new Error('Wrong CSV File Unknown field detected');
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
                     }
                 }
                 lines.push(st);
             }
         }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            return [];
+        }
+
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
@@ -207,6 +249,7 @@ export class Csv2JsonService {
         let headers = allTextLines[0];
         let lines = [];
         let geojsons = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -223,12 +266,29 @@ export class Csv2JsonService {
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
-                        default:                            
-                            throw new Error('Wrong CSV File Unknown field detected');
+                        default:
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
                     }
                 }
                 lines.push(st);
             }
+        }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            return [];
         }
 
         for(let i = 0; i < lines.length; i++){
@@ -244,7 +304,6 @@ export class Csv2JsonService {
                     description: lines[i]["description"]
                 },
                 staticMapStation: "",
-                codeZone: lines[i]["codeZone"],
                 codePlatform: lines[i]["codePlatform"]
             }
 
@@ -259,9 +318,11 @@ export class Csv2JsonService {
     }
 
     private extractZonePrefData(arrayData): ZonePreference[] { 
+        let species$: Observable<Species[]> = this.store.let(getSpeciesInApp);
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: ZonePreference[] = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -269,22 +330,48 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_platform":
-                        case "code_zone":
+                        case "codePlatform":
+                        case "codeZone":
                         case "code":
-                        case "code_species":
+                        case "codeSpecies":
                         case "presence":
-                        case "info_source":
+                        case "infoSource":
+                        case "picture":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             st[headers[j]] = data[j];
                             break;
-                        default:                            
-                            throw new Error('Wrong CSV File Unknown field detected');
+                        default:
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }       
+                            break;                     
                     }
                 }
+                species$.subscribe((species) =>{
+                    for(let i = 0; i < species.length; i++){
+                        if(st.codeSpecies === species[i].code){
+                            st.picture = species[i].picture;
+                        }
+                    }
+                })
                 lines.push(st);
             }
         }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            return [];
+        }
+
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
@@ -294,6 +381,7 @@ export class Csv2JsonService {
         let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
         let lines: Count[] = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {            
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -301,10 +389,10 @@ export class Csv2JsonService {
                 let header;
                 for (let j = 0; j < headers.length; j++) {
                     switch (headers[j]) {
-                        case "code_platform":
-                        case "code_survey":
+                        case "codePlatform":
+                        case "codeSurvey":
                         case "code":
-                        case "code_station":
+                        case "codeStation":
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             ct[headers[j]] = data[j];
                             break;
@@ -331,23 +419,39 @@ export class Csv2JsonService {
                                 ct.mesures.push({codeSpecies: sp, long: longlarg[0], larg: (longlarg.length>0)?longlarg[1]:'0'});
                             }
                             break;
-                        case "code_species":
+                        case "codeSpecies":
                             ct['monospecies'] = true;
                             break;
                         default:                            
-                            throw new Error('Wrong CSV File Unknown field detected');
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }       
+                            break; 
                     }
                 }
                 lines.push(ct);
             }
         }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            return [];
+        }
+
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }
 
     csv2(type: string, csvFile: any): Observable<any> {
-        console.log(type);
-        console.log(csvFile);
         return Observable.create(
             observable => {
                 this.papa.parse(csvFile, {
@@ -365,7 +469,6 @@ export class Csv2JsonService {
                 });
             })
             .mergeMap(data => {
-                console.log(data);
                 let res;
                 switch (type) {
                     case "species":
@@ -378,26 +481,21 @@ export class Csv2JsonService {
                         res = this.extractZoneData(data);
                         break;
                     case "survey":
-                        console.log(data);
                         res = this.extractSurveyData(data);
                         break;
                     case "zonePref":
-                        console.log(data);
                         res = this.extractZonePrefData(data);
                         break;
                     case "station":
-                        console.log(data);
                         res = this.extractStationData(data);
                         break;
                     case "count":
-                        console.log(data);
                         res = this.extractCountData(data);
                         break;
                     default:
                         // code...
                         break;
                 }
-                console.log(res);
                 return res;
             });
 

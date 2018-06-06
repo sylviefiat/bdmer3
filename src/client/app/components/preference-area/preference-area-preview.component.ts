@@ -71,7 +71,6 @@ export class PreferenceAreaPreviewComponent implements OnInit {
   nCounts: number = 0;
 
   ngOnInit(){
-
   }
 
   get id() {
@@ -103,6 +102,6 @@ export class PreferenceAreaPreviewComponent implements OnInit {
   }
 
   get thumbnail(): string | boolean {
-    return "/assets/img/"+this.zonePref.codeSpecies+".jpg"; 
+     return this.zonePref.picture;
   }
 }
