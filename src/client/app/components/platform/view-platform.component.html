@@ -9,7 +9,7 @@
       <mat-card-actions>
         <form>
         <mat-form-field>
-          <mat-select  placeholder="{{'DISPLAY' | translate}}" (change)="display($event.value)" [formControl]="panelDisplay">
+          <mat-select  placeholder="{{'DISPLAY' | translate}}" (selectionChange)="display($event.value)" [formControl]="panelDisplay">
               <mat-option [value]="'zones'">{{ 'ZONES' | translate}} ({{ (zones$ | async)?.length }})</mat-option>
               <mat-option [value]="'stations'">{{ 'STATIONS' | translate}} ({{ (stations$ | async)?.length }})</mat-option>
               <mat-option [value]="'surveys'">{{ 'SURVEYS' | translate}} ({{ (surveys$ | async)?.length }})</mat-option>
@@ -19,7 +19,7 @@
           <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
         </mat-form-field>
         <mat-form-field class="right">
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
             <mat-optgroup [label]="'ACTION_PLATFORM' | translate">
               <mat-option [value]="'platformForm'">{{ 'EDIT_PLATFORM' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deletePlatform'">{{ 'DELETE_PLATFORM' | translate}}</mat-option>

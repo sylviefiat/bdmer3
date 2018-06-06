@@ -15,7 +15,7 @@ import { Species } from '../../modules/datas/models/species';
     <mat-card>
       <mat-card-title>{{ 'SPECIES_LIST' | translate}}</mat-card-title>
       <mat-form-field>
-      <mat-select  placeholder="{{'ADD_SPECIES' | translate}}" (change)="addSpecies($event.value)">
+      <mat-select  placeholder="{{'ADD_SPECIES' | translate}}" (selectionChange)="addSpecies($event.value)">
           <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
           <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
       </mat-select>

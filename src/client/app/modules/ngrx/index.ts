@@ -67,7 +67,7 @@ export interface IAppState {
  * wrapping that in storeLogger. Remember that compose applies
  * the result from right to left.
  */
-export const AppReducer: ActionReducerMap<IAppState> = {
+export const AppReducer: ActionReducerMap<IAppState, any> = {
   i18n: multilingualReducer,
   main: reducer,
   auth: authReducer,

@@ -8,7 +8,7 @@ import { Country } from '../../modules/countries/models/country';
   template: `
     <h2>{{ 'SELECT_COUNTRY' | translate }}</h2>
     <mat-form-field [formGroup]="form">    
-      <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" [formControlName]="inputName" (change)="countryEmitter.emit($event.value)" required>
+      <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" [formControlName]="inputName" (selectionChange)="countryEmitter.emit($event.value)" required>
         <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
       </mat-select>
     </mat-form-field> 

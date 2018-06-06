@@ -27,7 +27,7 @@ import { PlatformAction } from '../../modules/datas/actions/index';
   </mat-card-title-group>
   <mat-card-actions>
   <mat-form-field>
-  <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+  <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
   <mat-option [value]="'addUser'">{{ 'ADD_USER' | translate}}</mat-option>
   <mat-option *ngIf="isNotAdminCountry() && isAdmin" class="warn" [value]="'deleteCountry'">{{ 'DELETE_COUNTRY' | translate}}</mat-option>
   </mat-select>

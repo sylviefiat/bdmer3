@@ -9,7 +9,7 @@
       </mat-card-title-group>
       <mat-card-actions>
         <mat-form-field>
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
               <mat-option [value]="'speciesForm'">{{ 'EDIT_SPECIES' | translate}}</mat-option>
               <mat-option *ngIf="isAdmin" class="warn" [value]="'deleteSpecies'">{{ 'DELETE_SPECIES' | translate}}</mat-option>
           </mat-select>

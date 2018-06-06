@@ -21,7 +21,7 @@ import { Platform } from '../../modules/datas/models/platform';
           <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filterPlatforms($event.target.value)">
         </mat-form-field>
         <mat-form-field class="right">
-        <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="addPlatform($event.value)">
+        <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="addPlatform($event.value)">
             <mat-option [value]="'form'">{{ 'ADD_PLATFORM' | translate}}</mat-option>
             <mat-option [value]="'import'">{{ 'IMPORT' | translate}} {{ 'PLATFORMS' | translate}}</mat-option>
         </mat-select>

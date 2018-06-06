@@ -13,7 +13,7 @@ import { Country } from '../../modules/countries/models/country';
     <div [formGroup]="dimForm" class="container">
     <mat-card-content>
       <mat-form-field>
-        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (change)="setCountry($event.value)" required>
+        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (selectionChange)="setCountry($event.value)" required>
           <mat-option *ngFor="let pays of countries" [value]="pays.code" 
             [disabled]="alreadySetCountries$ | async | bcHasIntersection:pays.code:dimForm.controls.codeCountry.value">{{ pays.name }}</mat-option>
         </mat-select>

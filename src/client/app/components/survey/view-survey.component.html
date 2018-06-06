@@ -20,7 +20,7 @@
           <input matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
         </mat-form-field> 
         <mat-form-field class="right">
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
             <mat-optgroup [label]="'ACTION_SURVEY' | translate">
               <mat-option [value]="'surveyForm'">{{ 'EDIT_SURVEY' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deleteSurvey'">{{ 'DELETE_SURVEY' | translate}}</mat-option>
