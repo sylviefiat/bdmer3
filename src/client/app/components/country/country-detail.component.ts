@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit,AfterViewChecked } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable, pipe } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Country, User } from './../../modules/countries/models/country';
 import { WindowService } from './../../modules/core/services/index';
@@ -14,8 +14,8 @@ import { Platform } from '../../modules/datas/models/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 
 @Component({
-  selector: 'bc-country-detail',
-  template: `
+    selector: 'bc-country-detail',
+    template: `
   <mat-card *ngIf="country" class="actions">
   <mat-card-title-group>
   <div>
@@ -42,8 +42,8 @@ import { PlatformAction } from '../../modules/datas/actions/index';
   </div>
 
   `,
-  styles: [
-  `
+    styles: [
+        `
   mat-card {
     display: flex;
     flex-direction: column;
@@ -107,122 +107,112 @@ import { PlatformAction } from '../../modules/datas/actions/index';
     text-decoration: underline;
   }
   `,
-  ],
+    ],
 })
-export class CountryDetailComponent implements OnInit{
-  
-  /**
-   * Presentational components receieve data through @Input() and communicate events
-   * through @Output() but generally maintain no internal state of their
-   * own. All decisions are delegated to 'container', or 'smart'
-   * components before data updates flow back down.
-   *
-   * More on 'smart' and 'presentational' components: https://gist.github.com/btroncone/a6e4347326749f938510#utilizing-container-components
-   */
-   @Input() country: Country;
-   @Input() isAdmin: boolean;
-   @Input() msg: string;
-   @Output() removecountry = new EventEmitter;
-   platforms$: Observable<Platform[]>;
-   stringDelete: string;
-   platforms: Platform[];
+export class CountryDetailComponent implements OnInit {
 
-   constructor(private translate: TranslateService, private store: Store<IAppState>, private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute, private windowService: WindowService){
-     
-   }
+    /**
+     * Presentational components receieve data through @Input() and communicate events
+     * through @Output() but generally maintain no internal state of their
+     * own. All decisions are delegated to 'container', or 'smart'
+     * components before data updates flow back down.
+     *
+     * More on 'smart' and 'presentational' components: https://gist.github.com/btroncone/a6e4347326749f938510#utilizing-container-components
+     */
+    @Input() country: Country;
+    @Input() platforms: Platform[];
+    @Input() isAdmin: boolean;
+    @Input() msg: string;
+    @Output() removecountry = new EventEmitter;
+    stringDelete: string;
 
-   ngOnInit(){
-     let confirmationMsg = this.translate.instant(['CONFIRM_DELETE_COUNTRY', 'ALSO_DELETE']);
-     this.store.dispatch(new PlatformAction.LoadAction());
+    constructor(private translate: TranslateService, private store: Store<IAppState>, private sanitizer: DomSanitizer, public routerext: RouterExtensions, public activatedRoute: ActivatedRoute, private windowService: WindowService) {
 
-     this.platforms$ = this.platforms$.pipe(
-       map(platforms => platforms.filter(platform => platform.codeCountry === this.country.code)));
-     
-     this.platforms$.subscribe(
-       (res) => {
-         if(!this.platforms)
-           this.platforms = res;
-         this.stringDelete = confirmationMsg.CONFIRM_DELETE_COUNTRY;
-         for(let i = 0; i < res.length; i++){
-           if(i == 0){
-             if(i == res.length - 1){
-               this.stringDelete += confirmationMsg.ALSO_DELETE + res[i].code + ".";
-             }else{
-               this.stringDelete += confirmationMsg.ALSO_DELETE + res[i].code + ",";
-             }
-           }else if(i == res.length - 1 && i != 0){
-             this.stringDelete += " " + res[i].code + ".";
-           }else{
-             this.stringDelete += ", " + res[i].code;
-           }
-         }
-       });
-   }
+    }
 
-   get id() {
-     return this.country._id;
-   }
+    ngOnInit() {
+        let confirmationMsg = this.translate.instant(['CONFIRM_DELETE_COUNTRY', 'ALSO_DELETE']);
 
-   get name() {
-     return this.country.name;
-   }
+        this.stringDelete = confirmationMsg.CONFIRM_DELETE_COUNTRY;
+        for (let i = 0; i < this.platforms.length; i++) {
+            if (i == 0) {
+                if (i == this.platforms.length - 1) {
+                    this.stringDelete += confirmationMsg.ALSO_DELETE + this.platforms[i].code + ".";
+                } else {
+                    this.stringDelete += confirmationMsg.ALSO_DELETE + this.platforms[i].code + ",";
+                }
+            } else if (i == this.platforms.length - 1 && i != 0) {
+                this.stringDelete += " " + this.platforms[i].code + ".";
+            } else {
+                this.stringDelete += ", " + this.platforms[i].code;
+            }
+        }
+    }
 
-   get code() {
-     return this.country.code;
-   }
+    get id() {
+        return this.country._id;
+    }
 
-   get users() {
-     return this.country.users;
-   }
+    get name() {
+        return this.country.name;
+    }
 
-   get noUsers() {
-     return !this.country.users || this.country.users.length <= 0;
-   }
+    get code() {
+        return this.country.code;
+    }
 
-   get flag() {
-     if(this.country.flag){
-       const flag = this.country.flag;
-       return this.sanitizer.bypassSecurityTrustResourceUrl(flag);
-     }else{
-       return this.country.flag
-     }
-   }
+    get users() {
+        return this.country.users;
+    }
 
-   actions(action: string) {
-     switch (action) {
-       case "addUser":
-       this.addUser();
-       break;
-       case "deleteCountry":
-       this.deleteCountry();
-       break;
-       default:
-       break;
-     }
-   }
+    get noUsers() {
+        return !this.country.users || this.country.users.length <= 0;
+    }
 
-   toCountries() {
-     this.routerext.navigate(['countries']);
-   }
+    get flag() {
+        if (this.country.flag) {
+            const flag = this.country.flag;
+            return this.sanitizer.bypassSecurityTrustResourceUrl(flag);
+        } else {
+            return this.country.flag
+        }
+    }
 
-   addUser() {
-     this.routerext.navigate(['userForm'], {
-       relativeTo: this.activatedRoute,
-       transition: {
-         duration: 1000,
-         name: 'slideTop',
-       }
-     });
-   }
+    actions(action: string) {
+        switch (action) {
+            case "addUser":
+                this.addUser();
+                break;
+            case "deleteCountry":
+                this.deleteCountry();
+                break;
+            default:
+                break;
+        }
+    }
 
-   isNotAdminCountry(): boolean {
-     return this.country.code!=='AA';
-   }
+    toCountries() {
+        this.routerext.navigate(['countries']);
+    }
 
-   deleteCountry() {
-     if(this.windowService.confirm(this.stringDelete)){
-       return this.removecountry.emit({country:this.country, platforms: this.platforms});
-     }
-   }
+    addUser() {
+        this.routerext.navigate(['userForm'], {
+            relativeTo: this.activatedRoute,
+            transition: {
+                duration: 1000,
+                name: 'slideTop',
+            }
+        });
+    }
 
- }
+    isNotAdminCountry(): boolean {
+        return this.country.code !== 'AA';
+    }
+
+    deleteCountry() {
+        if (this.windowService.confirm(this.stringDelete)) {
+            return this.removecountry.emit({ country: this.country, platforms: this.platforms });
+        }
+    }
+
+}

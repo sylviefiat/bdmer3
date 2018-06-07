@@ -37,14 +37,14 @@ export class AuthEffects {
       catchError(error => of(new AuthAction.LoginFailure(error.message)))
     );
 
-  @Effect() logout$ = this.actions$
+  @Effect({ dispatch: false }) logout$ = this.actions$
     .ofType<AuthAction.Logout>(AuthAction.ActionTypes.LOGOUT)
     .pipe(
       map((action: AuthAction.Logout) => action.payload),
       exhaustMap(stringisnull => this.authService.logout().pipe(
         tap(authed => localStorage.removeItem(AuthEffects.tokenItem)),
         tap(() => this.router.navigate(['/']))
-      ))  
+      ))
     );
 
   @Effect({ dispatch: false }) loginSuccess$ = this.actions$

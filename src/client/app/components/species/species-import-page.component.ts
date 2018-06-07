@@ -36,11 +36,6 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getSpeciesPageError);
-        this.msg$ = this.store.let(getSpeciesPageMsg);            
-    }
-
-    ngOnInit() {
         this.error$ = this.store.select(getSpeciesPageError);
         this.msg$ = this.store.select(getSpeciesPageMsg);        
     }

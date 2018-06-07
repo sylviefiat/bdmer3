@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr } from '../../modules/ngrx/index';
+import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform } from '../../modules/datas/models/index';
@@ -15,6 +15,7 @@ import { PlatformService } from '../../modules/datas/services/platform.service';
   template: `
     <bc-country-detail
       [country]="country$ | async"
+      [platforms]="platforms$ | async"
       [isAdmin]="isAdmin$ | async"
       [msg]="msg$ | async"
       (removecountry)="removeFromCountries($event)">
@@ -23,6 +24,7 @@ import { PlatformService } from '../../modules/datas/services/platform.service';
 })
 export class SelectedCountryPageComponent implements OnInit {
   country$: Observable<Country>;
+  platforms$: Observable<Platform[]>;
   isAdmin$: Observable<boolean>;
   msg$: Observable<string>;
 
@@ -30,20 +32,19 @@ export class SelectedCountryPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.store.dispatch(new PlatformAction.LoadAction());
     this.store.dispatch(new CountriesAction.LoadAction()); 
     this.country$ = this.store.select(getSelectedCountry);
+    this.platforms$ = this.store.select(getSelectedCountryPlatforms);
     this.isAdmin$ = this.store.select(getisAdmin);
     this.msg$ = this.store.select(getUserMessage);
   }
 
   removeFromCountries(data) {
-    for(let i = 0; i < data.platforms.length; i++){
-      let platforms$ = this.platformService.getPlatform(data.platforms[i].code);
-      platforms$.subscribe(
-          (res) => {
-           this.store.dispatch(new PlatformAction.RemovePlatformCountryAction(res));
-          }
-      );
+    if(data.platforms){
+      for(let p of data.platforms){
+        this.store.dispatch(new PlatformAction.RemovePlatformCountryAction(p));
+      }
     }
     this.store.dispatch(new CountriesAction.RemoveCountryAction(data.country));  
   }

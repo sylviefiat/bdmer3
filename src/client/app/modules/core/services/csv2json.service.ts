@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
 import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { mergeMap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import { MomentService } from './moment.service';
 import { MapStaticService } from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 import { PlatformAction } from '../../datas/actions/index';
-import { IAppState, getSpeciesInApp } from '../../ngrx/index';
+import { IAppState } from '../../ngrx/index';
 
 @Injectable()
 export class Csv2JsonService {
@@ -16,7 +18,7 @@ export class Csv2JsonService {
     static SEMICOLON = ';';
     csvErrorMsg: string;
 
-    constructor(private translate: TranslateService, private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
+    constructor(private store:Store<IAppState>,private translate: TranslateService, private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
         this.csvErrorMsg = this.translate.instant('CSV_FIELD_ERROR');
     }
 
@@ -314,8 +316,7 @@ export class Csv2JsonService {
         return geojsons;
     }
 
-    private extractZonePrefData(arrayData): ZonePreference[] { 
-        let species$: Observable<Species[]> = this.store.select(getSpeciesInApp);
+    private extractZonePrefData(arrayData,species): ZonePreference[] { 
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: ZonePreference[] = [];
@@ -344,13 +345,13 @@ export class Csv2JsonService {
                             break;                     
                     }
                 }
-                species$.subscribe((species) =>{
+                if(species!==null || species !== undefined){
                     for(let i = 0; i < species.length; i++){
                         if(st.codeSpecies === species[i].code){
                             st.picture = species[i].picture;
                         }
                     }
-                })
+                }
                 lines.push(st);
             }
         }
@@ -448,7 +449,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    csv2(type: string, csvFile: any): Observable<any> {
+    csv2(type: string, csvFile: any, species?: Species[]): Observable<any> {
         return Observable.create(
             observable => {
                 this.papa.parse(csvFile, {
@@ -484,8 +485,8 @@ export class Csv2JsonService {
                             res = this.extractSurveyData(data);
                             break;
                         case "zonePref":
-                            console.log(data);
-                            res = this.extractZonePrefData(data);
+                            console.log(data);                            
+                            res = this.extractZonePrefData(data, species);
                             break;
                         case "station":
                             console.log(data);

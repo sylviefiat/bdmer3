@@ -1,7 +1,7 @@
 
 import { Injectable, NgZone } from '@angular/core';
 import { defer, Observable, pipe, of } from 'rxjs';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { catchError, filter, map, mergeMap, switchMap, startWith, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { CountriesService } from "../../core/services/index";
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
 import { CountryListService } from '../services/index';
+import { IAppState,  } from '../../ngrx/index';
 
 import { config } from '../../../config';
 
@@ -71,7 +72,7 @@ export class CountriesEffects {
     .ofType<CountriesAction.RemoveCountryAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY)
     .pipe(
       map((action: CountriesAction.RemoveCountryAction) => action.payload),
-      mergeMap(country => this.countriesService.removeCountry(country)),
+      mergeMap(country => this.countriesService.removeCountry(country)),      
       map((country) => new CountriesAction.RemoveCountrySuccessAction(country)),
       catchError((country) => of(new CountriesAction.RemoveCountryFailAction(country)))
     );

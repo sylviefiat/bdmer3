@@ -38,7 +38,7 @@ import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, a
 import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
 import { ICountryState, countryInitialState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesInitialState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
-import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformImportMsg, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
+import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformImportErrors, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
 import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
     getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
 import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
@@ -178,7 +178,7 @@ export const getPlatformIdsInApp: any = compose(getPlatformIds, getPlatformState
 export const getPlatformPageError: any = compose(getPlatformError, getPlatformState);
 export const getPlatformImpErrors: any = compose(getPlatformImportErrors, getPlatformState);
 export const getPlatformPageMsg: any = compose(getPlatformMsg, getPlatformState);
-export const getPlatformImpMsg: any = compose(getPlatformImportMsg, getPlatformState);
+export const getPlatformImpMsg: any = compose(getPlatformMsg, getPlatformState);
 export const getSelectedPlatform: any = compose(getCurrentPlatform, getPlatformState);
 export const getSelectedPlatformZones: any = compose(getCurrentPlatformZones, getPlatformState);
 export const getSelectedPlatformStations: any = compose(getCurrentPlatformStations, getPlatformState);

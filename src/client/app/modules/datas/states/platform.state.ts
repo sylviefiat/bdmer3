@@ -42,7 +42,7 @@ export const getPlatformLoading = (state: IPlatformState) => state.loading;
 export const getPlatformEntities = (state: IPlatformState) => state.entities;
 
 export const getPlatformOfCurrentCountry = (state: IAppState) => state.auth && state.auth.country && state.auth.country.code 
-    && state.platform.entities.filter(platform => (state.auth.country.code==='AA')?state.platform.entities:state.platform.entities.filter(platform => platform.codeCountry === state.auth.country.code));
+    && (state.auth.country.code==='AA')?state.platform.entities:state.platform.entities.filter(platform => platform.codeCountry === state.auth.country.code);
 
 export const getPlatformsOfCurrentCountry = (state: IAppState) => state.country.currentCountryId && state.platform.entities.filter(platform => platform.codeCountry === state.country.currentCountryId);
 

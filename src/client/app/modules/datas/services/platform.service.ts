@@ -143,6 +143,7 @@ export class PlatformService {
         filter((response: ResponsePDB) => response.ok),
         mergeMap((response) => of(survey))
       )
+    }
 
   importSurveyVerification(survey: Survey, platform: Platform): Observable<string>{
     let msg = this.translate.instant(['PLATFORM', 'NO_PLATFORM', 'FOR_COUNTRY', 'AND_COUNTRY', 'NOT_PART_OF_COUNTRY', 'NOT_IN_DATABASE']);

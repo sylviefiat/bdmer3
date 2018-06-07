@@ -30,7 +30,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [stations$]="stations$"
       [species$]="species$"
       [species$]="species$"
-      [isAdmin]="isAdmin$ | async"
+      [isAdmin$]="isAdmin$"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"

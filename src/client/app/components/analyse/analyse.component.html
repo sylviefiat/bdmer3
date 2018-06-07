@@ -11,7 +11,7 @@
         <fa [name]="'check'" [border]=false [size]=1></fa>
       </ng-template>
 
-      <mat-step [stepControl]="countryFormGroup" *ngIf="isAdmin">
+      <mat-step [stepControl]="countryFormGroup" *ngIf="isAdmin$ | async">
         <form [formGroup]="countryFormGroup">
           <ng-template matStepLabel>{{ 'COUNTRY' | translate}}</ng-template>
           <bc-analyse-country [countries]="countries" (countryEmitter)="setCountry($event)" [form]="countryFormGroup" [inputName]="'country'"></bc-analyse-country>

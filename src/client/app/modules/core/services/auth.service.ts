@@ -84,19 +84,15 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    return from(this.db.login(user.username, user.password)).pipe(
-      mergeMap((result: ResponsePDB) => {
-        console.log(result);
-        if (result.ok && result.roles.length > 0){
-          return throwError("User already existing");
-        }
-        else {
-          return from(this.db.signup(user.username, user.password, {roles: [user.countryCode, user.role]})).pipe(
-            filter((response: ResponsePDB) => { console.log(response);return response.ok; }),
-            mergeMap(response => of(user))
-          )
-        }
-      })); 
+    return from(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode, user.role]}})).pipe(
+            //filter((response: ResponsePDB) => { console.log(response);return response.ok; }),
+            mergeMap(response => {
+              console.log(response);
+              
+                return of(user);
+            }),
+            catchError((error) => {console.log(error);return of(null)})
+          );
   }
 
   remove(user): Observable<any> {

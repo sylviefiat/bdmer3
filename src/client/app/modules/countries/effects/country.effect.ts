@@ -27,14 +27,10 @@ export class CountryEffects {
     .ofType<CountryAction.AddUserAction>(CountryAction.ActionTypes.ADD_USER)
     .pipe(
       map((action: CountryAction.AddUserAction) => action.payload),
-      mergeMap(user => this.authService.signup(user)
-        .pipe(catchError((country) => of(new CountryAction.AddUserFailAction(country))))),
-      mergeMap(user => this.countriesService.addUser(user)
-        .pipe(
-          map((country) => new CountryAction.AddUserSuccessAction(country)),
-          catchError((country) => of(new CountryAction.AddUserFailAction(country)))
-        )
-      )
+      mergeMap(user => this.authService.signup(user)),
+      mergeMap((user: User) => this.countriesService.addUser(user)),
+      map((country: Country) => new CountryAction.AddUserSuccessAction(country)),
+      catchError((country) => of(new CountryAction.AddUserFailAction(country)))
     );
 
   @Effect()

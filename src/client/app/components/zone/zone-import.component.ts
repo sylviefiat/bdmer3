@@ -56,7 +56,7 @@ export class ZoneImportComponent implements OnDestroy{
             const self = this;
 
             reader.onload = function(event) {
-              const parser = new DOMParser();
+              const parser = new DOMParser();              
               const x = parser.parseFromString(reader.result, 'application/xml')
               const geojson = togeojson.kml(x).features;
 
