@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -30,15 +29,15 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
     private docs_repo: string;
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importSpecies-"+l+".csv";
+      });
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getSpeciesPageError);
-        this.msg$ = this.store.let(getSpeciesPageMsg);
-        this.store.let(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importSpecies-"+l+".csv";
-        });
+        this.error$ = this.store.select(getSpeciesPageError);
+        this.msg$ = this.store.select(getSpeciesPageMsg);        
     }
 
     ngOnDestroy() {
@@ -47,7 +46,6 @@ export class SpeciesImportPageComponent implements OnInit, OnDestroy {
 
     handleUpload(csvFile: any): void {
         let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
-        console.log(csvFile);
         let reader = new FileReader();
         if (csvFile.target.files && csvFile.target.files.length > 0) {
             this.store.dispatch(new SpeciesAction.ImportSpeciesAction(csvFile.target.files[0]));

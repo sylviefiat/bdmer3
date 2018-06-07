@@ -15,15 +15,15 @@
   <bt-chips (send)="submit()" id="SPECIES_NOMS"></bt-chips>
   <mat-card class="row" id="SPECIES_NOMS">
     <h5 mat-subheader>{{ 'SPECIES_NAMING' | translate }}</h5>
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_CODE' | translate }}" formControlName="code" required>
       <div class="hint">{{ 'SPECIES_CODE_EX' | translate }}</div>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_SCIENTIFIC_NAME' | translate }}" formControlName="scientificName" required>
       <div class="hint">{{ 'SPECIES_SCIENTIFIC_NAME_EX' | translate }}</div>     
-    </mat-input-container>
+    </mat-form-field>
 
   </mat-card>
   <!--names-->
@@ -55,77 +55,77 @@
  <mat-card class="row">
   <h5 mat-subheader>{{ 'SPECIES_COEF_LLW' | translate }}</h5>
   <div formGroupName="LLW">
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
-    </mat-input-container>
+    </mat-form-field>
   </div>
 </mat-card>
 <mat-card class="row">
   <h5 mat-subheader>{{ 'SPECIES_COEF_LW' | translate }}</h5>
   <div formGroupName="LW">
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
-    </mat-input-container>
+    </mat-form-field>
   </div>
 </mat-card>
 <bt-chips (send)="submit()" id="SPECIES_CONVERSIONS"></bt-chips>
 <mat-card class="row">
   <h5 mat-subheader>{{ 'SPECIES_CONVERSIONS' | translate }}</h5>
   <div formGroupName="conversions">
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_SALT' | translate }}" formControlName="salt" required>
       <div class="hint">{{ 'SPECIES_CONVERSIONS_SALT_EX' | translate }}</div>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
       <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>    
-    </mat-input-container>
+    </mat-form-field>
   </div>
 </mat-card>
 <mat-card class="row">
   <h5 mat-subheader>{{ 'SPECIES_DIMS' | translate }}</h5>
   <div formGroupName="biologicDimensions">
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
       <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container>
+    <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
       <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>    
-    </mat-input-container>
+    </mat-form-field>
   </div>
 </mat-card>
 <bt-chips (send)="submit()" id="SPECIES_VIE"></bt-chips>
 <mat-card class="column">
   <h5 mat-subheader>{{ 'SPECIES_DISTRIB' | translate }}</h5>
 
-  <mat-input-container>
+  <mat-form-field>
     <textarea rows="2" matInput formControlName="distribution"  mat-select-on-focus></textarea>
     <div class="hint">{{ 'SPECIES_DISTRIB_EX' | translate }}</div>
-  </mat-input-container>
+  </mat-form-field>
 
 </mat-card>
 <mat-card class="column">
   <h5 mat-subheader>{{ 'SPECIES_HABITATS' | translate }}</h5>
 
-  <mat-input-container>
+  <mat-form-field>
     <textarea mat-maxlength="150" rows="5" matInput formControlName="habitatPreference"  mat-select-on-focus></textarea>
     <div class="hint">{{ 'SPECIES_HABITATS_EX' | translate }}</div>
-  </mat-input-container>
+  </mat-form-field>
 
 </mat-card>
 <bt-chips (send)="submit()" id="SPECIES_FISHING_DIMS"></bt-chips>

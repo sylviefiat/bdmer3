@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of, pipe, Subscription } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
+import { map, catchError, first } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -50,22 +49,22 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);  
-    this.surveySubscription = route.params
-      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
+    this.surveySubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
       .subscribe(store);
-    this.countSubscription = route.params
-      .map(params => new PlatformAction.SelectCountAction(params.idCount))
+    this.countSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectCountAction(params.idCount)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.survey$ = this.store.let(getSelectedSurvey);
-    this.count$ = this.store.let(getSelectedCount);
-    this.species$ = this.store.let(getSpeciesInApp);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.survey$ = this.store.select(getSelectedSurvey);
+    this.count$ = this.store.select(getSelectedCount);
+    this.species$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 

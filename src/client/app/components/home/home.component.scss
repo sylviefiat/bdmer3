@@ -24,6 +24,7 @@
 .title_without_map{
   padding: 150px 0 30px;
   text-align: center;
+  width: 100vw;
 
   h2 {
     font-size: 56px;
@@ -45,17 +46,6 @@ ul {
   padding: 0 0 0 8px;
 }
 
-.smile {
-  background: url("./assets/svg/smile.svg");
-  height: 48px;
-  width: 48px;
-  display: inline-block;
-  transform: scale(0.6);
-  margin-top: -25px;
-  position: relative;
-  top: 16px;
-}
-
 a.link {
   color: #00e;
   cursor: pointer;
@@ -66,7 +56,7 @@ a.link:hover {
   color: #f00;
 }
 
-agm-map {
+bc-home-map {
   height: -webkit-calc(100vh - 96px);
   height:    -moz-calc(100vh - 96px);
   height:         calc(100vh - 96px);
@@ -153,7 +143,7 @@ agm-map {
       flex: 100%;
       max-width: 100%;
       
-      agm-map {
+      bc-home-map {
         height:50vh;
       }
     }

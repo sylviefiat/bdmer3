@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export interface ILoginPageState {
   error: string | null;
@@ -9,11 +9,6 @@ export const loginPageInitialState: ILoginPageState = {
   error: null,
   pending: false,
 };
+export const getError = (state: ILoginPageState) => state.error;
 
-export function getError(state$: Observable<ILoginPageState>){
-  return state$.select(state => state.error);
-}
-
-export function getPending(state$: Observable<ILoginPageState>){
-  return state$.select(state => state.pending);
-}
+export const getPending = (state: ILoginPageState) => state.pending;

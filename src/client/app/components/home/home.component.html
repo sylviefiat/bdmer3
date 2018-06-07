@@ -1,21 +1,11 @@
-<ng-template #notloggedin>
-	<div class="background"></div>
-	<div class="title_without_map">
-				<h2>
-				{{ 'APP_TITLE' | translate }}
-				</h2>
-				<p>
-					{{'APP_SUBTITLE' | translate}}
-				</p>
-			</div>
-</ng-template>
 
-<div class="home" *ngIf="loggedIn;else notloggedin">
-	<div class="wrapper" *ngIf="onlineOffline;else nomap">
-		<div class="wrapp_left">
-			<div class="background_left">
+
+<div class="home">
+	<div [class.wrapper]="isOnline" >
+		<div [class.wrapp_left]="(loggedIn$ | async)">
+			<div [class.background]="!(loggedIn$ | async)" [class.background_left]="(loggedIn$ | async)">
 			</div>
-			<div class="title">
+			<div [class.title_without_map]="!(loggedIn$ | async)" [class.title]="(loggedIn$ | async)">
 				<h2>
 				{{ 'APP_TITLE' | translate }}
 				</h2>
@@ -24,45 +14,10 @@
 				</p>
 			</div>
 		</div>
-		<div class="wrapp_right">
-			<agm-map #AgmMap [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
-				<div *ngFor="let platform of (platforms$ | async)">
-					<div *ngFor="let zone of (platform.zones)">
-						<agm-data-layer [geoJson]="zone" (layerClick)="zoomLayer($event)">
-						</agm-data-layer>
-						<div *ngIf="zoom > 10" >
-							<agm-marker *ngFor="let station of (zone.stations)"
-								[latitude]="station.geometry.coordinates[1]"
-						   		[longitude]="station.geometry.coordinates[0]"
-						   		label="T">
-							</agm-marker>
-						</div>
-					</div>
-				</div>
-
-				<div *ngIf="zoom < 6" >
-					<agm-marker *ngFor="let marker of (markers)"
-						fit="true"
-						[latitude]="marker.lat"
-				   		[longitude]="marker.lng"
-				   		(markerClick)="zoomMarker(marker)">
-					</agm-marker>
-				</div>
-
-
-			</agm-map>
-		</div>
+		<!--div class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline">-->
+			<bc-home-map class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline"
+				[platforms]="platforms$ | async"
+				[countries]="(isAdmin$ | async)?([(userCountry$ | async)]):(countries$ | async)"></bc-home-map>
+		<!--</div-->
 	</div>
-
-	<ng-template #nomap>
-		<div class="background"></div>
-		<div class="title_without_map">
-				<h2>
-				{{ 'APP_TITLE' | translate }}
-				</h2>
-				<p>
-					{{'APP_SUBTITLE' | translate}}
-				</p>
-			</div>
-	</ng-template>
 </div>

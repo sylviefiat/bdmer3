@@ -19,6 +19,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         // this.TYPED_COMPILE_INTERVAL = 5;
 
         // Add `NPM` third-party libraries to be injected/bundled.
+        console.log("here");
         this.NPM_DEPENDENCIES = [
             ...this.NPM_DEPENDENCIES
         ];
@@ -44,19 +45,16 @@ export class ProjectConfig extends SeedAdvancedConfig {
         let additionalPackages: ExtendPackages[] = [{
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
-        },{
+        }, {
             name: '@mapbox/togeojson',
             path: 'node_modules/@mapbox/togeojson/togeojson.js'
-        },{
-            name: 'xmldom',
-            path: 'node_modules/xmldom/dom.js'
-        },{
+        }, {
             name: '@mapbox/geojson-area',
             path: 'node_modules/@mapbox/geojson-area/index.js'
-        },{
+        }, {
             name: 'wgs84',
             path: 'node_modules/wgs84/index.js'
-        },{
+        }, {
             name: 'moment',
             path: 'node_modules/moment/moment.js'
         }, {
@@ -68,24 +66,18 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'jquery-confirm',
             path: 'node_modules/jquery-confirm/dist/jquery-confirm.min.js'
-        },{
-            name: 'tslib',
-            path: 'node_modules/tslib/tslib.js'
-        },
-         {
+        }, ,
+        {
             name: 'traceur',
             path: 'node_modules/traceur/bin/traceur.js'
         },
         {
             name: '@agm/js-marker-clusterer',
             path: 'node_modules/@agm/js-marker-clusterer/index.js'
-        }, 
+        },
         {
             name: '@agm/core',
-            packageMeta: {
-                main: 'core.umd.js',
-                defaultExtension: 'js'
-            }
+            path: 'node_modules/@agm/core/core.umd.js'
         }, {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
@@ -93,39 +85,31 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
         }, {
-             name: 'tslib',
-             path: 'node_modules/tslib/tslib.js'
-        },{
             name: '@angular/common',
             path: 'node_modules/@angular/common/bundles/common.umd.js'
-        },{
+        }, {
             name: '@angular/http',
             path: 'node_modules/@angular/http/bundles/http.umd.js'
-        },{
+        }, {
             name: '@angular/common/http',
             path: 'node_modules/@angular/common/bundles/common-http.umd.js'
         }, {
             name: '@angular/material',
-            packageMeta: {
-                main: 'bundles/material.umd.js',
-                defaultExtension: 'js'
-            }
-        }, {
+            path: 'node_modules/@angular/material/bundles/material.umd.js'
+        }, /*{
             name: '@angular/animations',
             packageMeta: {
-                main: 'bundles/animations.umd.js',
+                main: 'node_modules/@angular/animations/bundles/animations.umd.js',
                 defaultExtension: 'js'
             }
-        }, {
+        },*/ {
             name: '@angular/cdk',
-            packageMeta: {
-                main: 'bundles/cdk.umd.js',
-                defaultExtension: 'js'
-            }
+            path: '/@angular/cdk/index.js'
         },
-        { 
+        {
             name: 'rxjs/operators',
-            path: 'node_modules/rxjs/operators.js'},
+            path: 'node_modules/rxjs/operators/index.js'
+        },
         {
             name: '@angular/cdk/a11y',
             path: 'node_modules/@angular/cdk/bundles/cdk-a11y.umd.js'
@@ -179,32 +163,27 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
         },
         {
+            name: '@angular/cdk/text-field',
+            path: 'node_modules/@angular/cdk/bundles/cdk-text-field.umd.js'
+        },
+        {
+            name: '@angular/cdk/tree',
+            path: 'node_modules/@angular/cdk/bundles/cdk-tree.umd.js'
+        },
+        {
             name: 'angular-ts-math',
             path: 'node_modules/angular-ts-math/dist/angular-ts-math.js'
         },
         {
             name: 'angular-material-icons',
             path: 'node_modules/angular-material-icons/angular-material-icons.js'
-        }, 
-        {
-            name: '@ngrx/db',
-            packageMeta: {
-                main: 'bundles/db.umd.js',
-                defaultExtension: 'js'
-            }
-        }, {
-            name: 'ngx-papaparse',
-            packageMeta: {
-                main: 'bundles/ngx-papaparse.umd.js',
-                defaultExtension: 'js'
-            }
         },
         {
-            name: 'ng2-google-charts',
-            packageMeta: {
-                main: 'bundles/ng2-google-charts.umd.js',
-                defaultExtension: 'js'
-            }
+            name: 'papaparse',
+            path: "node_modules/papaparse"
+        }, {
+            name: 'ngx-papaparse',
+            path: 'node_modules/ngx-papaparse/bundles/ngx-papaparse.umd.min.js'
         },
         {
             name: '@turf/turf',
@@ -212,6 +191,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }];
 
         this.addPackagesBundles(additionalPackages);
+
+        // Fix up path to bootstrap module
+        //this.SYSTEM_CONFIG.package[this.BOOTSTRAP_MODULE].defaultExtension = 'js';
 
         /* Add proxy middleware */
         // this.PROXY_MIDDLEWARE = [

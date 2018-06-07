@@ -2,32 +2,36 @@
 import { Injectable, Inject } from '@angular/core';
 
 // libs
-import { Store, Action } from '@ngrx/store';
-import { Effect, Actions } from '@ngrx/effects';
-import { includes, map } from 'lodash';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { defer, Observable, pipe, of } from 'rxjs';
+import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { Action, Store } from '@ngrx/store';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import * as Lodash from 'lodash';
+//import 'rxjs/add/operator/map';
 
 // module
 import { MultilingualService, Languages } from '../services/multilingual.service';
-import * as multilingual from '../actions/multilingual.action';
+import { MultilingualAction } from '../actions/multilingual.action';
 
 @Injectable()
 export class MultilingualEffects {
 
+
   @Effect() change$: Observable<Action> = this.actions$
-    .ofType(multilingual.ActionTypes.CHANGE)
-    .map(action => {
-      let lang = action.payload;
-      if (includes(map(this.languages, 'code'), lang)) {
-        let langChangedAction = new multilingual.LangChangedAction(lang);
-        // change state
-        return new multilingual.LangChangedAction(lang);
-      } else {
-        // not supported (here for example)
-        return new multilingual.LangUnsupportedAction(lang);
-      }
-    });
+    .ofType<MultilingualAction.ChangeAction>(MultilingualAction.ActionTypes.CHANGE)
+    .pipe(
+      map((action: MultilingualAction.ChangeAction) => action.payload),
+      mergeMap((lang:string) => {
+        if (Lodash.includes(Lodash.map(this.languages, 'code'), lang)) {
+          let langChangedAction = new MultilingualAction.LangChangedAction(lang);
+          // change state
+          return of(new MultilingualAction.LangChangedAction(lang));
+        } else {
+          // not supported (here for example)
+          return of(new MultilingualAction.LangUnsupportedAction(lang));
+        }
+      })
+    );
 
   constructor(
     private store: Store<any>,
@@ -35,4 +39,9 @@ export class MultilingualEffects {
     private multilangService: MultilingualService,
     @Inject(Languages) private languages
   ) { }
+  
+  @Effect({ dispatch: false })
+  configure$: Observable<any> = defer(() => { 
+    return this.multilangService.initLanguage();
+  });
 }

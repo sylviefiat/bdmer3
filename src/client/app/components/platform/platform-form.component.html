@@ -15,27 +15,27 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'PLATFORM_DESC' | translate }}</h5>
       <div class="row">
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'PLATFORM_CODE' | translate }}" formControlName="code" required>
         <div class="hint">{{ 'EX_PLATFORM_CODE' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
-      </mat-input-container>
+      </mat-form-field>
 
       <mat-form-field *ngIf="isAdmin">
-        <mat-select  placeholder="{{'COUNTRY' | translate}}" (change)="setCountry($event.value)" required>
+        <mat-select  placeholder="{{'COUNTRY' | translate}}" (selectionChange)="setCountry($event.value)" required>
           <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-input-container *ngIf="!isAdmin">
+      <mat-form-field *ngIf="!isAdmin">
         <input type="text" matInput placeholder="{{ 'COUNTRY' | translate }}" formControlName="codeCountry">
         <div class="hint">{{ 'EX_PLATFORM_COUNTRY' | translate }}</div> 
-      </mat-input-container>
+      </mat-form-field>
     </div>
     <div class="row">
-      <mat-input-container>
+      <mat-form-field>
         <textarea mat-maxlength="150" rows="3" matInput placeholder="{{ 'PLATFORM_DESC' | translate }}" formControlName="description"  mat-select-on-focus required></textarea>
         <div class="hint">{{ 'EX_PLATFORM_DESC' | translate }}</div>     
-      </mat-input-container>
+      </mat-form-field>
     </div>
     </mat-card>
   </div>

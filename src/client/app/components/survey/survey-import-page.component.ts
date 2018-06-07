@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -37,15 +37,15 @@ export class SurveyImportPageComponent implements OnInit, OnDestroy {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.platformSubscription = route.params
-            .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+        this.platformSubscription = route.params.pipe(
+            map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
             .subscribe(store);
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getPlatformPageError);
-        this.msg$ = this.store.let(getPlatformPageMsg);
-        this.platform$ = this.store.let(getSelectedPlatform);
+        this.error$ = this.store.select(getPlatformPageError);
+        this.msg$ = this.store.select(getPlatformPageMsg);
+        this.platform$ = this.store.select(getSelectedPlatform);
     }
 
     ngOnDestroy() {
@@ -53,7 +53,6 @@ export class SurveyImportPageComponent implements OnInit, OnDestroy {
     }
 
     handleUpload(csvFile: any): void {
-        console.log(csvFile);
         this.store.dispatch(new PlatformAction.ImportSurveyAction(csvFile));
     }
 

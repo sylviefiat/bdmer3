@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -42,17 +41,17 @@ export class ZoneFormPageComponent implements OnInit, OnDestroy {
   zoneSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
+    this.zoneSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZoneAction(params.idZone)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.zone$ = this.store.select(getSelectedZone);
   }
 
   ngOnDestroy() {

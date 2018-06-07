@@ -4,7 +4,7 @@ import './operators';
 // libs
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // app
 import { IAppState, getisLoggedIn} from '../modules/ngrx/index';
@@ -24,7 +24,6 @@ import { Config } from '../modules/core/utils/index';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  public isLoggedIn$: Observable<any>;
   
   constructor(
     public log: LogService,
@@ -34,11 +33,11 @@ export class AppComponent {
     log.debug(`Config env: ${Config.ENVIRONMENT().ENV}`);
 
     let token:AuthInfo = JSON.parse(localStorage.getItem('token'));
+
     if(token && token.expires > Math.floor(Date.now() / 1000))
       this.store.dispatch(new AuthAction.LoginSuccess(token));
-    else {
+    else if(token) {
       this.store.dispatch(new AuthAction.Logout(token));
     }
-    this.isLoggedIn$ = this.store.let(getisLoggedIn);
   }
 }

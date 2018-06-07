@@ -1,7 +1,8 @@
 import 'rxjs/add/operator/let';
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 
@@ -20,7 +21,7 @@ import { Platform } from '../../modules/datas/models/platform';
           <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filterPlatforms($event.target.value)">
         </mat-form-field>
         <mat-form-field class="right">
-        <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="addPlatform($event.value)">
+        <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="addPlatform($event.value)">
             <mat-option [value]="'form'">{{ 'ADD_PLATFORM' | translate}}</mat-option>
             <mat-option [value]="'import'">{{ 'IMPORT' | translate}} {{ 'PLATFORMS' | translate}}</mat-option>
         </mat-select>
@@ -61,9 +62,9 @@ export class PlatformListPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {  
+    this.platforms$ = this.store.select(getPlatformListCurrentCountry);
+    this.msg$ = this.store.select(getPlatformPageMsg);
     this.store.dispatch(new PlatformAction.LoadAction()); 
-    this.platforms$ = this.store.let(getPlatformListCurrentCountry);
-    this.msg$ = this.store.let(getPlatformPageMsg);
     this.filteredPlatforms$ = this.platforms$; 
   }
 
@@ -74,11 +75,11 @@ export class PlatformListPageComponent implements OnInit {
 
   filterPlatforms(filter: string){
     filter=filter.toLowerCase();
-    this.filteredPlatforms$ = this.platforms$.map(platforms => 
+    this.filteredPlatforms$ = this.platforms$.pipe(map(platforms => 
       platforms.filter(platform => platform.code.toLowerCase().indexOf(filter)!==-1 || 
         platform.codeCountry.toLowerCase().indexOf(filter)!==-1 || 
         platform.description.toLowerCase().indexOf(filter)!==-1
       )
-    );
+    ));
   }
 }

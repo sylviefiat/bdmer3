@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Zone } from './../../modules/datas/models/platform';
 

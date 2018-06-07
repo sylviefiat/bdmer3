@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -41,17 +40,17 @@ export class SurveyFormPageComponent implements OnInit, OnDestroy {
   surveySubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute,) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);  
-    this.surveySubscription = route.params
-      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
+    this.surveySubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.survey$ = this.store.let(getSelectedSurvey);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.survey$ = this.store.select(getSelectedSurvey);
   }
 
   ngOnDestroy() {

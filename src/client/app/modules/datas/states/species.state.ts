@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import { Species } from '../models/index';
 import { IAppState } from '../../ngrx/index';
 
@@ -22,34 +21,19 @@ export const speciesInitialState: ISpeciesState = {
   msg: null
 };
 
-export function getSpeciesLoaded(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.loaded);
-}
+export const getSpeciesLoaded = (state:ISpeciesState) => state.loaded;
 
-export function getSpeciesLoading(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.loading);
-}
+export const getSpeciesLoading = (state:ISpeciesState) => state.loading;
 
-export function getSpeciesEntities(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.entities);
-}
+export const getSpeciesEntities = (state:ISpeciesState) => state.entities;
 
-export function getSpeciesIds(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.ids);
-}
+export const getSpeciesIds = (state:ISpeciesState) => state.ids;
 
-export function getSpeciesError(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.error);
-}
+export const getSpeciesError = (state:ISpeciesState) => state.error;
 
-export function getSpeciesMsg(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.msg);
-}
+export const getSpeciesMsg = (state:ISpeciesState) => state.msg;
 
-export function getCurrentSpeciesId(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.currentSpeciesId);
-}
+export const getCurrentSpeciesId = (state:ISpeciesState) => state.currentSpeciesId;
 
-export function getCurrentSpecies(state$: Observable<ISpeciesState>) {
-  return state$.select(state => state.currentSpeciesId && state.entities.filter(species => species._id === state.currentSpeciesId)[0]);
-}
+export const getCurrentSpecies = (state:ISpeciesState) => state.currentSpeciesId && state.entities.filter(species => species._id === state.currentSpeciesId)[0];
+

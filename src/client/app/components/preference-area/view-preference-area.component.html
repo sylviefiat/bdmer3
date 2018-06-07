@@ -9,7 +9,7 @@
   </mat-card-title>
   <mat-card-actions>
     <mat-form-field>
-      <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+      <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
         <mat-option [value]="'zonePrefForm'">{{ 'EDIT_ZONE_PREF' | translate}}</mat-option>
         <mat-option class="warn" [value]="'deleteZonePref'">{{ 'DELETE_ZONE_PREF' | translate}}</mat-option>
       </mat-select>

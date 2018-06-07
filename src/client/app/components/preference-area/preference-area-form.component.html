@@ -15,21 +15,21 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'ZONE_PREF_DESC' | translate }}</h5>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'ZONE_PREF_CODE' | translate }}" formControlName="code" required>
           <div class="hint">{{ 'ZONE_PREF_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
-        </mat-input-container> 
+        </mat-form-field> 
       </div>
       <div class="row">   
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'ZONE_CODE' | translate }}" formControlName="codeZone" required>
           <div class="hint">{{ 'EX_STATION_ZONE' | translate }} </div>
-        </mat-input-container>
+        </mat-form-field>
 
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'PLATFORM' | translate }}" formControlName="codePlatform" required>
           <div class="hint">{{ 'EX_ZONE_PLATFORM' | translate }}</div> 
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div class="row"> 
         <mat-form-field>
@@ -46,10 +46,10 @@
           </mat-select>
         </mat-form-field>              
       
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'INFO_SOURCE' | translate }}" formControlName="infoSource" required>
           <div class="hint">{{ 'INFO_SOURCE_EX' | translate }}</div>    
-        </mat-input-container> 
+        </mat-form-field> 
       </div>
     </mat-card>
   </div>

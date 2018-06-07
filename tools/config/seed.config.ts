@@ -334,13 +334,13 @@ export class SeedConfig {
    * The required NPM version to run the application.
    * @type {string}
    */
-  VERSION_NPM = '3.0.0';
+  VERSION_NPM = '6.1.0';
 
   /**
    * The required NodeJS version to run the application.
    * @type {string}
    */
-  VERSION_NODE = '5.0.0';
+  VERSION_NODE = '8.11.2';
 
   /**
    * Enable SCSS stylesheet compilation.
@@ -372,7 +372,7 @@ export class SeedConfig {
     { src: 'intl/dist/Intl.min.js', inject: 'shims' },
     { src: 'systemjs/dist/system.src.js', inject: 'shims', buildType: BUILD_TYPES.DEVELOPMENT },
     // Temporary fix. See https://github.com/angular/angular/issues/9359
-    { src: '.tmp/Rx.min.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT },
+    //{ src: '.tmp/Rx.min.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT },
   ];
 
   /**
@@ -424,7 +424,12 @@ export class SeedConfig {
    * @type {any}
    */
   SYSTEM_CONFIG_DEV: any = {
-    defaultJSExtensions: true,
+    //defaultJSExtensions: true,
+    /*map: {
+      'main.web': 'main.web.js',
+      'rxjs': 'node_modules/rxjs',
+      '@angular': 'node_modules/@angular',
+    },*/
     paths: {
       [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,
       '@angular/animations': 'node_modules/@angular/animations/bundles/animations.umd.js',
@@ -448,13 +453,18 @@ export class SeedConfig {
       '@angular/platform-browser-dynamic/testing':
       'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
+      'rxjs':'node_modules/rxjs/Rx.js',
+      '@ngrx':'node_modules/@ngrx',
 
       'app/*': '/app/*',
+      
       // For test config
       'dist/dev/*': '/base/dist/dev/*',
       '*': 'node_modules/*'
     },
-    packages: {
+    packages: { 
+      '.': { defaultExtension: 'js' }
+      //'rxjs': { main:'Rx.js', defaultExtension: 'js' },
     }
   };
 
@@ -470,14 +480,14 @@ export class SeedConfig {
    * @type {any}
    */
   SYSTEM_BUILDER_CONFIG: any = {
-    defaultJSExtensions: true,
+    //defaultJSExtensions: true,
     base: this.PROJECT_ROOT,
     packageConfigPaths: [
       join('node_modules', '*', 'package.json'),
-      join('node_modules', '@angular', '*', 'package.json')
+      join('node_modules', '@angular', '*', 'package.json'),
       // for other modules like @ngx-translate the package.json path needs to updated here
       // otherwise npm run build.prod would fail
-      // join('node_modules', '@ngx-translate', '*', 'package.json')
+      join('node_modules', '@ngx-translate', '*', 'package.json')
     ],
     paths: {
       // Note that for multiple apps this configuration need to be updated
@@ -536,11 +546,11 @@ export class SeedConfig {
       '@angular/service-worker': {
         main: 'bundles/service-worker.umd.js',
         defaultExtension: 'js'
-      },
+      }/*,
       'rxjs': {
         main: 'Rx.js',
         defaultExtension: 'js'
-      }
+      }*/
     }
   };
 

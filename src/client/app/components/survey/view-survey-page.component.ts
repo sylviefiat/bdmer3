@@ -4,9 +4,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, of, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedSurvey, getSelectedSurveyCounts, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Count, Species } from '../../modules/datas/models/index';
@@ -39,20 +38,20 @@ export class ViewSurveyPageComponent implements OnInit, OnDestroy {
   species$: Observable<Species[]>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);
-    this.surveySubscription = route.params
-      .map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))
+    this.surveySubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.survey$ = this.store.let(getSelectedSurvey);
-    this.counts$ = this.store.let(getSelectedSurveyCounts);
-    this.locale$ = this.store.let(getLangues);
-    this.species$ = this.store.let(getSpeciesInApp);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.survey$ = this.store.select(getSelectedSurvey);
+    this.counts$ = this.store.select(getSelectedSurveyCounts);
+    this.locale$ = this.store.select(getLangues);
+    this.species$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 

@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
@@ -48,22 +47,22 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   zonePrefSubscription: Subscription;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
-    this.platformSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+    this.platformSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
       .subscribe(store);      
-    this.zoneSubscription = route.params
-      .map(params => new PlatformAction.SelectZoneAction(params.idZone))
+    this.zoneSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZoneAction(params.idZone)))
       .subscribe(store);
-    this.zonePrefSubscription = route.params
-      .map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref))
+    this.zonePrefSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectZonePrefAction(params.idZonePref)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.zone$ = this.store.let(getSelectedZone);
-    this.zonePref$ = this.store.let(getSelectedZonePref);
-    this.speciesList$ = this.store.let(getSpeciesInApp);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.zone$ = this.store.select(getSelectedZone);
+    this.zonePref$ = this.store.select(getSelectedZonePref);
+    this.speciesList$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());  
   }
 
@@ -74,7 +73,6 @@ export class PreferenceAreaFormPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(zonePref: ZonePreference) { 
-    console.log(zonePref);
-      this.store.dispatch(new PlatformAction.AddZonePrefAction(zonePref))
+    this.store.dispatch(new PlatformAction.AddZonePrefAction(zonePref))
   }
 }

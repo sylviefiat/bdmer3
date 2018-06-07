@@ -15,6 +15,7 @@ export function countriesReducer(
     }
 
     case CountriesAction.ActionTypes.INITIALIZED: {
+      console.log(action);
       const list = action.payload;
       return {
         ...state,

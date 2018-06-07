@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { PapaParseService } from 'ngx-papaparse';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import {TranslateService} from '@ngx-translate/core';
+import { Papa } from 'ngx-papaparse';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { mergeMap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import { MomentService } from './moment.service';
-import { MapStaticService} from './map-static.service';
+import { MapStaticService } from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
 import { PlatformAction } from '../../datas/actions/index';
-import { IAppState, getSpeciesInApp } from '../../ngrx/index';
+import { IAppState } from '../../ngrx/index';
 
 @Injectable()
 export class Csv2JsonService {
@@ -18,7 +18,7 @@ export class Csv2JsonService {
     static SEMICOLON = ';';
     csvErrorMsg: string;
 
-    constructor(private store: Store<IAppState>, private translate: TranslateService, private mapStaticService: MapStaticService, private papa: PapaParseService, private ms: MomentService) {
+    constructor(private store:Store<IAppState>,private translate: TranslateService, private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
         this.csvErrorMsg = this.translate.instant('CSV_FIELD_ERROR');
     }
 
@@ -103,7 +103,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractPlatformData(arrayData): Platform[] { 
+    private extractPlatformData(arrayData): Platform[] {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Platform[] = [];
@@ -150,11 +150,11 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractZoneData(arrayData): Zone[] { 
+    private extractZoneData(arrayData): Zone[] {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Zone[] = [];
-        for (let i = 1; i < allTextLines.length; i++) {            
+        for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
                 let st = {} as Zone;
@@ -178,7 +178,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractSurveyData(arrayData): Survey[] { 
+    private extractSurveyData(arrayData): Survey[] {
         let allTextLines = arrayData.data;
         let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
@@ -193,7 +193,6 @@ export class Csv2JsonService {
                     switch (headers[j]) {
                         case "codeCountry":
                         case "codePlatform":
-                        case "codeZone":
                         case "code":
                         case "participants":
                         case "surfaceStation":
@@ -206,13 +205,13 @@ export class Csv2JsonService {
                             header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
-                            if(delimiter === Csv2JsonService.SEMICOLON){
+                            if (delimiter === Csv2JsonService.SEMICOLON) {
                                 //this.ms.moment().locale("fr");
                                 d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
                             } else {
                                 //this.ms.moment().locale("en");
                                 d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
-                            }                         
+                            }
                             st[headers[j]] = d;
                             break;
                         default:                            
@@ -244,7 +243,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractStationData(arrayData): Station[] { 
+    private extractStationData(arrayData): Station[] {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines = [];
@@ -276,7 +275,7 @@ export class Csv2JsonService {
                 lines.push(st);
             }
         }
-
+      
         if(errorTab.length !== 0){
             let string = "";
             for(let i in errorTab){
@@ -296,7 +295,7 @@ export class Csv2JsonService {
                 type: "Feature",
                 geometry: {
                     type: "Point",
-                    coordinates:[Number(lines[i]["longitude"]), Number(lines[i]["latitude"])]
+                    coordinates: [Number(lines[i]["longitude"]), Number(lines[i]["latitude"])]
                 },
                 properties: {
                     name: lines[i]["nom"],
@@ -307,8 +306,8 @@ export class Csv2JsonService {
                 codePlatform: lines[i]["codePlatform"]
             }
 
-            this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data){
-              geojson.staticMapStation = data.toString();
+            this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data) {
+                geojson.staticMapStation = data.toString();
             })
 
             geojsons.push(geojson)
@@ -317,8 +316,7 @@ export class Csv2JsonService {
         return geojsons;
     }
 
-    private extractZonePrefData(arrayData): ZonePreference[] { 
-        let species$: Observable<Species[]> = this.store.let(getSpeciesInApp);
+    private extractZonePrefData(arrayData,species): ZonePreference[] { 
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: ZonePreference[] = [];
@@ -347,13 +345,13 @@ export class Csv2JsonService {
                             break;                     
                     }
                 }
-                species$.subscribe((species) =>{
+                if(species!==null || species !== undefined){
                     for(let i = 0; i < species.length; i++){
                         if(st.codeSpecies === species[i].code){
                             st.picture = species[i].picture;
                         }
                     }
-                })
+                }
                 lines.push(st);
             }
         }
@@ -376,7 +374,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    private extractCountData(arrayData): Count[] { 
+    private extractCountData(arrayData): Count[] {
         let allTextLines = arrayData.data;
         let delimiter = arrayData.meta.delimiter;
         let headers = allTextLines[0];
@@ -399,24 +397,24 @@ export class Csv2JsonService {
                         case "date":
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
-                            if(delimiter === Csv2JsonService.SEMICOLON){
+                            if (delimiter === Csv2JsonService.SEMICOLON) {
                                 //this.ms.moment().locale("fr");
                                 d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
                             } else {
                                 //this.ms.moment().locale("en");
                                 d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
-                            }                         
+                            }
                             ct[headers[j]] = d;
                             break;
                         case "mesures":
                             let sp = data[headers.indexOf('codeSpecies')];
                             // if there is no species name (let size of 2 for undesired spaces) break;
-                            if(sp.length<2) break;
+                            if (sp.length < 2) break;
                             if (ct.mesures == null) ct.mesures = [];
                             let mes = data[j].split(',');
-                            for(let dims of mes){
+                            for (let dims of mes) {
                                 let longlarg = dims.split('/');
-                                ct.mesures.push({codeSpecies: sp, long: longlarg[0], larg: (longlarg.length>0)?longlarg[1]:'0'});
+                                ct.mesures.push({ codeSpecies: sp, long: longlarg[0], larg: (longlarg.length > 0) ? longlarg[1] : '0' });
                             }
                             break;
                         case "codeSpecies":
@@ -451,7 +449,7 @@ export class Csv2JsonService {
         return lines;
     }
 
-    csv2(type: string, csvFile: any): Observable<any> {
+    csv2(type: string, csvFile: any, species?: Species[]): Observable<any> {
         return Observable.create(
             observable => {
                 this.papa.parse(csvFile, {
@@ -461,44 +459,50 @@ export class Csv2JsonService {
                     skipEmptyLines: true,
                     download: true,
                     complete: function(results) {
-                        if(!results.data[0].indexOf('code_species'))
+                        if (!results.data[0].indexOf('code_species'))
                             throw new Error('Wrong CSV File Missing mandatory "code" column');
                         observable.next(results);
                         observable.complete();
                     }
                 });
             })
-            .mergeMap(data => {
-                let res;
-                switch (type) {
-                    case "species":
-                        res = this.extractSpeciesData(data);
-                        break;
-                    case "platform":
-                        res = this.extractPlatformData(data);
-                        break;
-                    case "zone":
-                        res = this.extractZoneData(data);
-                        break;
-                    case "survey":
-                        res = this.extractSurveyData(data);
-                        break;
-                    case "zonePref":
-                        res = this.extractZonePrefData(data);
-                        break;
-                    case "station":
-                        res = this.extractStationData(data);
-                        break;
-                    case "count":
-                        res = this.extractCountData(data);
-                        break;
-                    default:
-                        // code...
-                        break;
-                }
-                return res;
-            });
-
+            .pipe(
+                mergeMap(data => {
+                    console.log(data);
+                    let res;
+                    switch (type) {
+                        case "species":
+                            res = this.extractSpeciesData(data);
+                            break;
+                        case "platform":
+                            res = this.extractPlatformData(data);
+                            break;
+                        case "zone":
+                            res = this.extractZoneData(data);
+                            break;
+                        case "survey":
+                            console.log(data);
+                            res = this.extractSurveyData(data);
+                            break;
+                        case "zonePref":
+                            console.log(data);                            
+                            res = this.extractZonePrefData(data, species);
+                            break;
+                        case "station":
+                            console.log(data);
+                            res = this.extractStationData(data);
+                            break;
+                        case "count":
+                            console.log(data);
+                            res = this.extractCountData(data);
+                            break;
+                        default:
+                            // code...
+                            break;
+                    }
+                    console.log(res);
+                    return res;
+                }));
     }
 
 }

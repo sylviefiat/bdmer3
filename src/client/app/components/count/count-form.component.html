@@ -15,16 +15,16 @@
     <mat-card class="column">
       <h5 mat-subheader>{{ 'COUNT_DESC' | translate }}</h5>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'COUNT_CODE' | translate }}" formControlName="code" required>
           <div class="hint">{{ 'COUNT_CODE_EX' | translate }} &nbsp;&nbsp;&nbsp;<span class="forbidden">{{ 'EX_PLATFORM_CODE_FORBIDDEN' | translate }}</span></div>
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div class="row">
-        <mat-input-container>
+        <mat-form-field>
           <input type="text" matInput placeholder="{{ 'SURVEY_CODE' | translate }}" formControlName="codeSurvey" required>
           <div class="hint">{{ 'EX_COUNT_SURVEY' | translate }}</div>
-        </mat-input-container>
+        </mat-form-field>
 
       </div>
       <div class="row">

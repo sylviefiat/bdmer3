@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
@@ -22,14 +21,14 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './survey-import.component.css',
     ],
 })
-export class SurveyImportComponent implements OnInit{
+export class SurveyImportComponent implements OnDestroy{
     @Input() platform: Platform;
     @Input() error: string | null;
     @Input() msg: string | null;
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
-
+    actionSubscription : Subscription;
     importError$: Observable<string[]>;
     needHelp: boolean = false;
     private csvFile: string;
@@ -41,14 +40,18 @@ export class SurveyImportComponent implements OnInit{
     });
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importSurvey-"+l+".csv";
+        });
     }
 
     ngOnInit() {
-        this.importError$ = this.store.let(getPlatformImpErrors);
-        this.store.let(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importSurvey-"+l+".csv";
-        });
+        this.importError$ = this.store.select(getPlatformImpErrors);           
+    }
+
+    ngOnDestroy() {
+        this.actionSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

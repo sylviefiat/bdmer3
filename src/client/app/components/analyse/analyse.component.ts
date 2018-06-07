@@ -1,18 +1,10 @@
-import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { Subscription } from 'rxjs/Subscription';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 
-import { IAppState, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
+import { IAppState } from '../../modules/ngrx/index';
 
-import { AnalyseAction } from '../../modules/analyse/actions/index';
-import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
@@ -37,7 +29,7 @@ export class AnalyseComponent {
     @Input() stations$: Observable<Station[]>;
     @Input() species$: Observable<Species[]>;
     @Input() dimensions$: Observable<DimensionsAnalyse[]>;
-    @Input() isAdmin: boolean;
+    @Input() isAdmin$: Observable<boolean>;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
     @Output() platformEmitter = new EventEmitter<Platform[]>();
@@ -82,6 +74,7 @@ export class AnalyseComponent {
     }    
 
     setCountry(country: Country) {
+        console.log(country);
         this.countryEmitter.emit(country);  
     }
 
@@ -129,6 +122,7 @@ export class AnalyseComponent {
     }
 
     startAnalyse(){
+        console.log("start");
         this.analyse.emit("ok");
     }
 

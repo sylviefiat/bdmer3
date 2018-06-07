@@ -3,104 +3,70 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
-  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule } from '@angular/material';
-  
-/*import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
-} from '@angular/material';*/
-//import {CdkTableModule} from '@angular/cdk/table';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
-import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
 @NgModule({
   exports: [
-    //CdkTableModule,
     MatAutocompleteModule,
-    //MatButtonModule,
-    //MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
     MatStepperModule,
     MatDatepickerModule,
-    //MatDialogModule,
     MatExpansionModule,
-    //MatGridListModule,
-   // MatIconModule,
     MatInputModule,
     MatListModule,
-    //MatMenuModule,
     MatNativeDateModule,
-    //MatPaginatorModule,
-    //MatProgressBarModule,
-    //MatProgressSpinnerModule,
     MatRadioModule,
-    //MatRippleModule,
     MatSelectModule,
     MatSidenavModule,
-    //MatSliderModule,
-    //MatSlideToggleModule,
-    //MatSnackBarModule,
-    //MatSortModule,
-    //MatTableModule,
     MatTabsModule,
-    //MatToolbarModule,
-    //MatTooltipModule,
-    Ng2GoogleChartsModule,
   ]
 })
 export class SharedMaterialModule {}
+
+@NgModule({
+  imports: [
+    MatFormFieldModule,
+  ],
+  exports: [
+    MatAutocompleteModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatTabsModule,
+  ]
+})
+export class MaterialModule { }
 
 const SHARED_MODULES: any[] = [
   CommonModule,
   RouterModule,
   BrowserModule,
-  HttpModule,
+  HttpClientModule,
   FormsModule,
   ReactiveFormsModule,
   MatNativeDateModule,
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
-  MomentModule,
-  HttpClientModule
+  MomentModule
 ];
 
 /**
@@ -126,7 +92,7 @@ const SHARED_MODULES: any[] = [
   ],
   exports: [
     ...SHARED_MODULES,
-    SharedMaterialModule,
+    MaterialModule,
     ...SHARED_COMPONENTS,
     AgmCoreModule
   ],

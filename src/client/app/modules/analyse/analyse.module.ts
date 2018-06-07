@@ -19,7 +19,7 @@ import { AnalyseService } from './services/analyse.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    EffectsModule.run(AnalyseEffects),
+    EffectsModule.forFeature([AnalyseEffects])
   ],
   declarations: [],
   providers: [AnalyseService],

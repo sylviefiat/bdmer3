@@ -13,7 +13,7 @@
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field>
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (change)="actions($event.value)">
+          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
               <mat-option [value]="'stationForm'">{{ 'EDIT_STATION' | translate}}</mat-option>
               <mat-option class="warn" [value]="'deleteStation'">{{ 'DELETE_STATION' | translate}}</mat-option>
           </mat-select>

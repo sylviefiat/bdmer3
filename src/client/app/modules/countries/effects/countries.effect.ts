@@ -1,23 +1,17 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/toArray';
-import { Injectable, NgZone } from '@angular/core';
-import { Action } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { Effect, Actions } from '@ngrx/effects';
-import { Database } from '@ngrx/db';
-import { Observable } from 'rxjs/Observable';
-import { defer } from 'rxjs/observable/defer';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 
-import { of } from 'rxjs/observable/of';
+import { Injectable, NgZone } from '@angular/core';
+import { defer, Observable, pipe, of } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { catchError, filter, map, mergeMap, switchMap, startWith, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 import { CountriesService } from "../../core/services/index";
 
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
 import { CountryListService } from '../services/index';
+import { IAppState,  } from '../../ngrx/index';
 
 import { config } from '../../../config';
 
@@ -39,56 +33,48 @@ export class CountriesEffects {
   });
 
   @Effect() init$: Observable<Action> = this.actions$
-    .ofType(CountriesAction.ActionTypes.INIT)
-    .startWith(new CountriesAction.InitAction)
-    .switchMap(() => this.countryListService.getCountryList())
-    .map(payload => {
-      //console.log(payload);
-      let countryList = payload;
-      return new CountriesAction.InitializedAction(countryList);
-    })
-    // nothing reacting to failure at moment but you could if you want (here for example)
-    .catch(() => Observable.of(new CountriesAction.InitFailedAction()));
+    .ofType<CountriesAction.InitAction>(CountriesAction.ActionTypes.INIT)
+    .pipe(
+      switchMap(init => this.countryListService.getCountryList()),
+      map(countryList => new CountriesAction.InitializedAction(countryList)),
+      catchError((error) => of(new CountriesAction.InitFailedAction()))
+    );
 
   @Effect()
   loadCountries$: Observable<Action> = this.actions$
-    .ofType(CountriesAction.ActionTypes.LOAD)
-    .switchMap(() =>     
-      this.countriesService
-        .getAll()
-        .map((countries: Country[]) => new CountriesAction.LoadSuccessAction(countries))
-        .catch(error => of(new CountriesAction.LoadFailAction(error)))
-    
-    );
+    .ofType<CountriesAction.LoadAction>(CountriesAction.ActionTypes.LOAD)
+    .pipe(
+      switchMap(load => this.countriesService.getAll()),
+      map((countries: Country[]) => new CountriesAction.LoadSuccessAction(countries)),
+      catchError(error => of(new CountriesAction.LoadFailAction(error)))
+    );  
 
   @Effect()
   addCountryToCountries$: Observable<Action> = this.actions$
-    .ofType(CountriesAction.ActionTypes.ADD_COUNTRY)
-    .map((action: CountriesAction.AddCountryAction) => action.payload)
-    .mergeMap(country => 
-      this.countriesService
-        .addCountry(country)
-        .map((country) => new CountriesAction.AddCountrySuccessAction(country))
-        .catch((country) => {console.log(country);return of(new CountriesAction.AddCountryFailAction(country))})
+    .ofType<CountriesAction.AddCountryAction>(CountriesAction.ActionTypes.ADD_COUNTRY)
+    .pipe(
+      map((action: CountriesAction.AddCountryAction) => action.payload),
+      mergeMap(country => this.countriesService.addCountry(country)),
+      map((country) => new CountriesAction.AddCountrySuccessAction(country)),
+      catchError((country) => of(new CountriesAction.AddCountryFailAction(country)))
     );
 
   @Effect({ dispatch: false }) addCountrySuccess$ = this.actions$
-    .ofType(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS)
-    .do(() =>this.router.navigate(['/countries']));
-
+    .ofType<CountriesAction.AddCountrySuccessAction>(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS)
+    .pipe(tap(() =>this.router.navigate(['/countries']))
+  );
   @Effect({ dispatch: false }) removeCountrySuccess$ = this.actions$
-    .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS)
-    .do(() =>this.router.navigate(['/countries']));
-
+    .ofType<CountriesAction.AddCountryFailAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS)
+    .pipe(tap(() =>this.router.navigate(['/countries']))
+  );
   @Effect()
   removeCountryFromCountries$: Observable<Action> = this.actions$
-    .ofType(CountriesAction.ActionTypes.REMOVE_COUNTRY)
-    .map((action: CountriesAction.RemoveCountryAction) => action.payload)
-    .mergeMap(country =>
-      this.countriesService
-        .removeCountry(country)
-        .map(() => new CountriesAction.RemoveCountrySuccessAction(country))
-        .catch(() => of(new CountriesAction.RemoveCountryFailAction(country)))
+    .ofType<CountriesAction.RemoveCountryAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY)
+    .pipe(
+      map((action: CountriesAction.RemoveCountryAction) => action.payload),
+      mergeMap(country => this.countriesService.removeCountry(country)),      
+      map((country) => new CountriesAction.RemoveCountrySuccessAction(country)),
+      catchError((country) => of(new CountriesAction.RemoveCountryFailAction(country)))
     );
 
   constructor(private actions$: Actions, private router: Router, private countriesService: CountriesService, private countryListService: CountryListService) {

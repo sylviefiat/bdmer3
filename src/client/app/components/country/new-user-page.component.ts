@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 
 import { User, Country } from '../../modules/countries/models/country';
@@ -32,20 +32,20 @@ export class NewUserPageComponent implements OnInit {
   public isAdmin$: Observable<boolean>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, public route: ActivatedRoute) {
-    this.countryActionsSubscription = this.route.params
-      .map(params => new CountryAction.SelectAction(params.idCountry))
+    this.countryActionsSubscription = this.route.params.pipe(
+      map(params => new CountryAction.SelectAction(params.idCountry)))
       .subscribe(store);
-    this.userActionsSubscription = this.route.params
-      .map(params => new CountryAction.SelectUserAction(params.idUser))
+    this.userActionsSubscription = this.route.params.pipe(
+      map(params => new CountryAction.SelectUserAction(params.idUser)))
       .subscribe(store);
   }
 
   ngOnInit() {
     this.store.dispatch(new CountriesAction.LoadAction());
-    this.error$ = this.store.let(getCountryPageError);   
-    this.country$ =this.store.let(getSelectedCountry);   
-    this.user$ =this.store.let(getSelectedUser);
-    this.isAdmin$ =this.store.let(getisAdmin);
+    this.error$ = this.store.select(getCountryPageError);   
+    this.country$ =this.store.select(getSelectedCountry);   
+    this.user$ =this.store.select(getSelectedUser);
+    this.isAdmin$ =this.store.select(getisAdmin);
     
   }
 
@@ -55,6 +55,7 @@ export class NewUserPageComponent implements OnInit {
   }
 
   onSubmit(user: User) {
+    console.log(user);
     this.store.dispatch(new CountryAction.AddUserAction(user));
   }
 

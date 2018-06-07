@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { MapStaticService} from '../../modules/core/services/map-static.service';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
@@ -25,7 +24,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './zone-import.component.css',
     ],
 })
-export class ZoneImportComponent implements OnInit{
+export class ZoneImportComponent implements OnDestroy{
     @Input() platform: Platform;
     @Input() zone: Zone | null;
     @Input() error: string | null;
@@ -33,20 +32,21 @@ export class ZoneImportComponent implements OnInit{
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
+    actionSubscription : Subscription;
 
     needHelp: boolean = false;
     private kmlFile: string;
     private docs_repo: string;
 
     constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-
-    }
-
-    ngOnInit() {
-      this.store.let(getLangues).subscribe((l: any) => {
+        this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.kmlFile = "importZones-"+l+".kml";
         });
+    }
+
+    ngOnDestroy() {
+      this.actionSubscription.unsubscribe();
     }
 
     kmlToGeoJson(kml){
@@ -56,7 +56,7 @@ export class ZoneImportComponent implements OnInit{
             const self = this;
 
             reader.onload = function(event) {
-              const parser = new DOMParser();
+              const parser = new DOMParser();              
               const x = parser.parseFromString(reader.result, 'application/xml')
               const geojson = togeojson.kml(x).features;
 

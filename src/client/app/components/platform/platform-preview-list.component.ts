@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
 import { Platform } from './../../modules/datas/models/platform';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'bc-platform-preview-list',

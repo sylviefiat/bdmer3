@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Survey, Zone, Platform } from './../../modules/datas/models/platform';
 import { IAppState,getLangues } from './../../modules/ngrx/index';
 
@@ -29,6 +29,6 @@ export class SurveyPreviewListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.locale$ = this.store.let(getLangues);
+    this.locale$ = this.store.select(getLangues);
   }
 }

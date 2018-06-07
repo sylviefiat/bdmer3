@@ -18,7 +18,7 @@
     mat-card-subtitle {
         color: #555;
     }
-    mat-input-container {
+    mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
     }
@@ -36,7 +36,7 @@
     .mat-form-field {
       width: auto;
     }
-    .mat-input-container {
+    .mat-form-field {
       width: 100%;
     }
     .hint {

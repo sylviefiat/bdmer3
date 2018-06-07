@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -40,19 +40,19 @@ export class PreferenceAreaImportPageComponent implements OnInit, OnDestroy {
     private docs_repo: string;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.platformSubscription = route.params
-            .map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))
+        this.platformSubscription = route.params.pipe(
+            map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
             .subscribe(store);
-        this.zoneSubscription = route.params
-            .map(params => new PlatformAction.SelectZoneAction(params.idZone))
+        this.zoneSubscription = route.params.pipe(
+            map(params => new PlatformAction.SelectZoneAction(params.idZone)))
             .subscribe(store);
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getPlatformPageError);
-        this.msg$ = this.store.let(getPlatformPageMsg);
-        this.platform$ = this.store.let(getSelectedPlatform);
-        this.zone$ = this.store.let(getSelectedZone);
+        this.error$ = this.store.select(getPlatformPageError);
+        this.msg$ = this.store.select(getPlatformPageMsg);
+        this.platform$ = this.store.select(getSelectedPlatform);
+        this.zone$ = this.store.select(getSelectedZone);
     }
 
     ngOnDestroy() {

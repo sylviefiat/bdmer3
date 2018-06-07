@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Country } from '../../modules/countries/models/country';
 
@@ -13,21 +13,21 @@ import { Country } from '../../modules/countries/models/country';
     <div [formGroup]="dimForm" class="container">
     <mat-card-content>
       <mat-form-field>
-        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (change)="setCountry($event.value)" required>
+        <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="codeCountry" (selectionChange)="setCountry($event.value)" required>
           <mat-option *ngFor="let pays of countries" [value]="pays.code" 
             [disabled]="alreadySetCountries$ | async | bcHasIntersection:pays.code:dimForm.controls.codeCountry.value">{{ pays.name }}</mat-option>
         </mat-select>
       </mat-form-field>         
     </mat-card-content>
     <mat-card-content> 
-      <mat-input-container>
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MIN' | translate }}" formControlName="longMin" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MIN_EX' | translate }}</div>    
-      </mat-input-container>     
-      <mat-input-container>
+      </mat-form-field>     
+      <mat-form-field>
         <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX2' | translate }}</div>    
-      </mat-input-container>
+      </mat-form-field>
     </mat-card-content>
     </div>
   `,
@@ -42,7 +42,7 @@ import { Country } from '../../modules/countries/models/country';
       flex-wrap: wrap;
       justify-content: center;
     }
-    mat-input-container {
+    mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
     }

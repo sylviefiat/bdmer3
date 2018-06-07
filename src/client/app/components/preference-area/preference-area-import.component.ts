@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
@@ -22,7 +21,7 @@ import { CountriesAction } from '../../modules/countries/actions/index';
         './preference-area-import.component.css',
     ],
 })
-export class PreferenceAreaImportComponent implements OnInit{
+export class PreferenceAreaImportComponent implements OnDestroy {
     @Input() platform: Platform;
     @Input() zone: Zone;
     @Input() error: string | null;
@@ -30,6 +29,7 @@ export class PreferenceAreaImportComponent implements OnInit{
     @Output() upload = new EventEmitter<any>();
     @Output() err = new EventEmitter<string>();
     @Output() back = new EventEmitter();
+    actionSubscription: Subscription;
 
     importError$: Observable<string[]>;
     needHelp: boolean = false;    
@@ -42,15 +42,19 @@ export class PreferenceAreaImportComponent implements OnInit{
     });
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importZonePref-"+l+".csv";
+        });
     }
 
     ngOnInit() {
         this.importError$ = this.store.let(getPlatformImpErrors);
-        this.store.dispatch(new SpeciesAction.LoadAction())
-        this.store.let(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importZonePref-"+l+".csv";
-        });
+        this.store.dispatch(new SpeciesAction.LoadAction())           
+    }
+
+    ngOnDestroy() {
+        this.actionSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

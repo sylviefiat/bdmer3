@@ -9,7 +9,6 @@ import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
 import { SpeciesEffects, PlatformEffects } from './effects/index';
-//import { CountryExistsGuard } from './guards/country-exists';
 import { SpeciesService, PlatformService } from './services/index';
 
 
@@ -19,9 +18,7 @@ import { SpeciesService, PlatformService } from './services/index';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
-    //MultilingualModule,
-    EffectsModule.run(SpeciesEffects),
-    EffectsModule.run(PlatformEffects),
+    EffectsModule.forFeature([SpeciesEffects,PlatformEffects])
   ],
   declarations: [],
   providers:[SpeciesService, PlatformService],

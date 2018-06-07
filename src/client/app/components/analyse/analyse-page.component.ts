@@ -1,14 +1,13 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/pluck';
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
   getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseStations, 
-  getSelectedAnalyseSpecies,getAnalyseCountry } from '../../modules/ngrx/index';
+  getSelectedAnalyseSpecies,getAnalyseCountry, getAnalyseData } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
@@ -31,7 +30,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [stations$]="stations$"
       [species$]="species$"
       [species$]="species$"
-      [isAdmin]="isAdmin$ | async"
+      [isAdmin$]="isAdmin$"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
       (countryEmitter)="selectCountry($event)"
@@ -60,30 +59,32 @@ export class AnalysePageComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   locale$: Observable<string>;
   msg$: Observable<string>;
+  data$: Observable<any>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     
   }
 
   ngOnInit() {
-    this.isAdmin$ = this.store.let(getisAdmin);
-    this.locale$ = this.store.let(getLangues);
-    this.countries$ = this.store.let(getCountriesInApp);
-    this.currentCountry$ = this.store.let(getAnalyseCountry);
-    this.platforms$ = this.store.let(getSelectedCountryPlatforms);
-    this.years$ = this.store.let(getSelectedAnalyseYears);
-    this.surveys$ = this.store.let(getSelectedAnalyseSurveys);
-    this.zones$ = this.store.let(getSelectedAnalyseZones);
-    this.stations$ = this.store.let(getSelectedAnalyseStations);
-    this.species$ = this.store.let(getSelectedAnalyseSpecies);
-    this.msg$ = this.store.let(getAnalyseMsg);
+    this.isAdmin$ = this.store.select(getisAdmin);
+    this.locale$ = this.store.select(getLangues);
+    this.countries$ = this.store.select(getCountriesInApp);
+    this.currentCountry$ = this.store.select(getAnalyseCountry);
+    this.platforms$ = this.store.select(getSelectedCountryPlatforms);
+    this.years$ = this.store.select(getSelectedAnalyseYears);
+    this.surveys$ = this.store.select(getSelectedAnalyseSurveys);
+    this.zones$ = this.store.select(getSelectedAnalyseZones);
+    this.stations$ = this.store.select(getSelectedAnalyseStations);
+    this.species$ = this.store.select(getSelectedAnalyseSpecies);
+    this.msg$ = this.store.select(getAnalyseMsg);
+    this.data$ = this.store.select(getAnalyseData);
     this.store.dispatch(new CountriesAction.LoadAction());
     this.store.dispatch(new SpeciesAction.LoadAction());
+    this.store.dispatch(new PlatformAction.LoadAction());
   }
 
   selectCountry(country: Country) {
     this.store.dispatch(new CountryAction.SelectAction(country.code));
-    this.store.dispatch(new PlatformAction.LoadAction());
     this.store.dispatch(new AnalyseAction.SelectCountry(country));
   }
 

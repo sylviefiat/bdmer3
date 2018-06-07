@@ -1,8 +1,7 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from '@agm/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 import { Results, Data } from '../../modules/analyse/models/index';

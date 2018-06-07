@@ -1,11 +1,10 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/pluck';
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IAppState, getSelectedPlatform, getSelectedPlatformZones, getSelectedPlatformStations, getSelectedPlatformSurveys, getPlatformPageMsg } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station } from '../../modules/datas/models/index';
@@ -38,17 +37,17 @@ export class ViewPlatformPageComponent implements OnInit, OnDestroy {
   msg$: Observable<string | null>;
 
   constructor(private platformService: PlatformService, private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.actionsSubscription = route.params
-      .map(params => new PlatformAction.SelectPlatformAction(params.id))
+    this.actionsSubscription = route.params.pipe(
+      map(params => new PlatformAction.SelectPlatformAction(params.id)))
       .subscribe(store);
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.stations$ = this.store.let(getSelectedPlatformStations);
-    this.zones$ = this.store.let(getSelectedPlatformZones);
-    this.surveys$ = this.store.let(getSelectedPlatformSurveys);
-    this.msg$ = this.store.let(getPlatformPageMsg);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.zones$ = this.store.select(getSelectedPlatformZones);
+    this.stations$ = this.store.select(getSelectedPlatformStations);
+    this.surveys$ = this.store.select(getSelectedPlatformSurveys);
+    this.msg$ = this.store.select(getPlatformPageMsg);
   }
 
   ngOnDestroy() {

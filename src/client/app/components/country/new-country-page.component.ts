@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { Country } from '../../modules/countries/models/country';
@@ -22,7 +22,9 @@ export class NewCountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
-    this.error$ = this.store.let(getCountryPageError);    
+    this.store.dispatch(new CountriesAction.InitAction());
+    this.store.dispatch(new CountriesAction.LoadAction()); 
+    this.error$ = this.store.select(getCountryPageError);    
   }
 
   onSubmit(country: Country) {

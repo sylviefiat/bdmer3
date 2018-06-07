@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { Http } from '@angular/http';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
+import { HttpClient } from '@angular/common/http';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 
 // libs
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader } from '@ngx-translate/core';
@@ -59,7 +59,7 @@ let DEV_IMPORTS: any[] = [];
 if (String('<%= BUILD_TYPE %>') === 'dev') {
   DEV_IMPORTS = [
     ...DEV_IMPORTS,
-    StoreDevtoolsModule.instrumentOnlyWithExtension()
+    StoreDevtoolsModule.instrument()
   ];
 }
 
@@ -75,14 +75,13 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     routerModule,
     MultilingualModule.forRoot([{
       provide: TranslateLoader,
-      deps: [Http],
+      deps: [HttpClient],
       useFactory: (translateLoaderFactory)
     }]),
     MainModule,
     // configure app state
-    StoreModule.provideStore(AppReducer),
-    EffectsModule.run(MultilingualEffects),
-    EffectsModule.run(MainEffects),
+    StoreModule.forRoot(AppReducer),
+    EffectsModule.forRoot([MultilingualEffects,MainEffects]),
     // dev environment only imports
     DEV_IMPORTS,
   ],

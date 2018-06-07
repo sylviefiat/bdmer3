@@ -3,8 +3,8 @@ import 'rxjs/add/operator/pluck';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 
 import { IAppState, getAnalyseData, getAnalyseResult, getLangues } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
@@ -48,9 +48,9 @@ export class ResultPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analyseData$ = this.store.let(getAnalyseData);
-    this.results$ = this.store.let(getAnalyseResult);
-    this.locale$ = this.store.let(getLangues);
+    this.analyseData$ = this.store.select(getAnalyseData);
+    this.results$ = this.store.select(getAnalyseResult);
+    this.locale$ = this.store.select(getLangues);
   }
 
 

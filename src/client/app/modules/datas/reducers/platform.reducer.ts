@@ -18,7 +18,6 @@ export function platformReducer(
             const platforms = action.payload;
             const newPlatforms = platforms.filter(platform => state.ids.includes(platform._id) ? false : platform);
             const newPlatformIds = newPlatforms.map(platform => platform._id);
-
             return {
                 ...state,
                 loading: false,
@@ -238,10 +237,10 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS:
-        {
-            const removedSurvey = action.payload;
-            const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
-            modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);
+            {
+                const removedSurvey = action.payload;
+                const modifiedPlatform = state.entities.filter(platform => platform.code === removedSurvey.codePlatform)[0];
+                modifiedPlatform.surveys = modifiedPlatform.surveys.filter(survey => survey.code !== removedSurvey.code);
 
             return {
                 ...state,

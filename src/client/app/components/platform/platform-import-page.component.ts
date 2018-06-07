@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription, pipe } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -27,8 +25,9 @@ import { PlatformService } from '../../modules/datas/services/platform.service'
     './platform-import-page.component.css',
     ],
 })
-export class PlatformImportPageComponent implements OnInit {
+export class PlatformImportPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;
+    isAdmin$: Observable<Country>;
     msg$: Observable<string | null>;
     msg: string;
     importError$: Observable<string[]>;
@@ -48,6 +47,11 @@ export class PlatformImportPageComponent implements OnInit {
     });
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+      this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
+        this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importPlatform-"+l+".csv";
+            this.csvFileAdmin = "importPlatformAdmin-"+l+".csv";
+        });
     }
 
     ngOnInit() {
@@ -55,12 +59,11 @@ export class PlatformImportPageComponent implements OnInit {
         this.error$ = this.store.let(getPlatformPageError);
         this.importError$ = this.store.let(getPlatformImpErrors);
         this.msg$ = this.store.let(getPlatformImpMsg);
-        this.userCountry$ = this.store.let(getAuthCountry);
-        this.store.let(getLangues).subscribe((l: any) => {
-            this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importPlatform-"+l+".csv";
-            this.csvFileAdmin = "importPlatformAdmin-"+l+".csv";
-        });
+        this.userCountry$ = this.store.let(getAuthCountry);            
+    }
+
+    ngOnDestroy(){
+        this.actionsSubscription.unsubscribe();
     }
 
     handleUpload(csvFile: any): void {

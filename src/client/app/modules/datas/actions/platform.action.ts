@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Platform,Zone, Station, ZonePreference,Count,Survey } from '../models/index';
 import { type } from '../../core/utils/index';
-import { Observable } from 'rxjs/Observable';
 
 export namespace PlatformAction {
   // Category to uniquely identify the actions

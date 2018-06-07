@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+
 import {TranslateService} from '@ngx-translate/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
@@ -46,7 +46,7 @@ export class CountImportComponent implements OnInit{
     ngOnInit() {
         this.importError$ = this.store.let(getPlatformImpErrors);
         this.store.dispatch(new SpeciesAction.LoadAction())
-        this.store.let(getLangues).subscribe((l: any) => {
+        this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.csvFile = "importCount-"+l+".csv";
         });

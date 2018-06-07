@@ -1,11 +1,10 @@
 import { Component, OnInit,OnDestroy, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -43,9 +42,9 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
 
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, route: ActivatedRoute,public routerext: RouterExtensions, private windowService: WindowService) { 
-        this.actionsSubscription = route.params
-        .map(params => this.display(params.view))
-        .subscribe();
+        this.actionsSubscription = route.params.pipe(
+            map(params => this.display(params.view)))
+          .subscribe();
     }
 
     ngOnInit() {   
@@ -69,24 +68,24 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
         filter=filter.toLowerCase();
         switch (this.panelDisplay.value) {
             case "zones":
-                this.filteredZones$ = this.zones$.map(zones => 
+                this.filteredZones$ = this.zones$.pipe(map(zones => 
                     zones.filter(zone => zone.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         zone.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         zone.properties.surface.toString().toLowerCase().indexOf(filter)!==-1
                         )
-                    );
+                    ));
                 break;
             case "stations":
-                this.filteredStations$ = this.stations$.map(stations => 
+                this.filteredStations$ = this.stations$.pipe(map(stations => 
                     stations.filter(station => station.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         station.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         station.properties.description.toString().toLowerCase().indexOf(filter)!==-1
                         )
-                    );
+                    ));
                 break;
             
             default:
-                this.filteredSurveys$ = this.surveys$.map(surveys => 
+                this.filteredSurveys$ = this.surveys$.pipe(map(surveys => 
                     surveys.filter(survey => survey.code.toLowerCase().indexOf(filter)!==-1 || 
                         survey.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         survey.dateStart.toString().toLowerCase().indexOf(filter)!==-1 ||
@@ -95,13 +94,14 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
                         survey.surfaceStation.toString().toLowerCase().indexOf(filter)!==-1 ||
                         survey.description.toLowerCase().indexOf(filter)!==-1
                         )
-                    );
+                    ));
                 break;
         }
         
     }
 
     actions(type: string) {
+        console.log(type);
         switch (type) {
             case "platformForm":
             case "zoneForm":

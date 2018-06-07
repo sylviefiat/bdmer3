@@ -1,7 +1,6 @@
-import 'rxjs/add/operator/let';
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { IAppState, getAllCountriesInApp } from '../../modules/ngrx/index';
@@ -39,7 +38,7 @@ export class CountryPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
-    this.countries$ = this.store.let(getAllCountriesInApp);
+    this.countries$ = this.store.select(getAllCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction()); 
   }
 

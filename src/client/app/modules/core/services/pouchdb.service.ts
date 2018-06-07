@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Observable, from } from 'rxjs';
 
 import * as PouchDB from "pouchdb";
 //import * as PouchDBAuth from "pouchdb-authentication";
@@ -20,7 +19,7 @@ export class PouchDBService {
     }
 
     public getAll() : Observable<any> {        
-        return fromPromise(
+        return from(
             this.db.allDocs({ include_docs: true })
                 .then(docs => {
                     return docs.rows.map(row => {
@@ -46,7 +45,7 @@ export class PouchDBService {
     } 
 
     public query(func: any, any: any) : Observable<any> {
-        return fromPromise(
+        return from(
             this.db.query(func, any)
                 .then(docs => {
                     return docs.rows.map(row => {

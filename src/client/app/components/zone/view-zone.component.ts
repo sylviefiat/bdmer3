@@ -1,11 +1,10 @@
 import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of, Subscription, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogRef, MatDialog, MatDialogConfig} from "@angular/material";
 import {TranslateService} from '@ngx-translate/core';
@@ -44,8 +43,8 @@ export class ViewZoneComponent implements OnInit {
     fileNameDialogRef: MatDialogRef<zoneMapModal>;
 
     constructor(private translate: TranslateService, private dialog: MatDialog, private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions, private windowService: WindowService) { 
-        this.actionsSubscription = route.params
-          .map(params => this.display(params.view))
+        this.actionsSubscription = route.params.pipe(
+          map(params => this.display(params.view)))
           .subscribe();
     }
 
@@ -68,16 +67,16 @@ export class ViewZoneComponent implements OnInit {
         filter=filter.toLowerCase();
         switch (this.panelDisplay.value) {
             case "stations":
-                this.filteredStations$ = this.stations$.map(stations => 
+                this.filteredStations$ = this.stations$.pipe(map(stations => 
                     stations.filter(station => station.properties.code.toLowerCase().indexOf(filter)!==-1 || 
                         station.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         station.geometry["coordinates"].toString().toLowerCase().indexOf(filter)!==-1
                         )
-                    );
+                    ));
                 break;
             
             default:
-                this.filteredZonesPrefs$ = this.zonesPref$.map(zonesPref => 
+                this.filteredZonesPrefs$ = this.zonesPref$.pipe(map(zonesPref => 
                     zonesPref.filter(zonePref => zonePref.code.toLowerCase().indexOf(filter)!==-1 || 
                         zonePref.codePlatform.toLowerCase().indexOf(filter)!==-1 || 
                         zonePref.codeZone.toString().toLowerCase().indexOf(filter)!==-1 ||
@@ -85,7 +84,7 @@ export class ViewZoneComponent implements OnInit {
                         zonePref.presence.toLowerCase().indexOf(filter)!==-1 ||
                         zonePref.infoSource.toString().toLowerCase().indexOf(filter)!==-1
                         )
-                    );
+                    ));
                 break;
         }
         

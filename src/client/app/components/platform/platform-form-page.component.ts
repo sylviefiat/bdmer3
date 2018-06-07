@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
@@ -46,17 +45,17 @@ export class PlatformFormPageComponent implements OnInit, OnDestroy {
     actionsSubscription: Subscription;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.actionsSubscription = route.params
-            .map(params => new PlatformAction.SelectPlatformAction(params.id))
+        this.actionsSubscription = route.params.pipe(
+            map(params => new PlatformAction.SelectPlatformAction(params.id)))
             .subscribe(store);
     }
 
     ngOnInit() {
-        this.error$ = this.store.let(getPlatformPageError);
-        this.platform$ = this.store.let(getSelectedPlatform);
-        this.country$ = this.store.let(getAuthCountry);
-        this.countries$ = this.store.let(getCountriesInApp);
-        this.isAdmin$ = this.store.let(getisAdmin);
+        this.error$ = this.store.select(getPlatformPageError);
+        this.platform$ = this.store.select(getSelectedPlatform);
+        this.country$ = this.store.select(getAuthCountry);
+        this.countries$ = this.store.select(getCountriesInApp);
+        this.isAdmin$ = this.store.select(getisAdmin);
         this.store.dispatch(new CountriesAction.LoadAction());
     }
 
@@ -65,7 +64,6 @@ export class PlatformFormPageComponent implements OnInit, OnDestroy {
     }
 
     onSubmit(platform: Platform) {
-        console.log(platform);
         this.store.dispatch(new PlatformAction.AddPlatformAction(platform));
     }
 }

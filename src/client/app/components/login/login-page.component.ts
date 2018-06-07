@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
 import { Authenticate } from '../../modules/auth/models/user';
@@ -24,8 +24,8 @@ export class LoginPageComponent implements OnInit {
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {
-    this.pending$ = this.store.let(getLoginPagePending);
-    this.error$ = this.store.let(getLoginPageError);    
+    this.pending$ = this.store.select(getLoginPagePending);
+    this.error$ = this.store.select(getLoginPageError);    
   }
 
   onSubmit(auth: Authenticate) {
