@@ -9,7 +9,6 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
   MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -79,9 +78,7 @@ const SHARED_MODULES: any[] = [
 @NgModule({
   imports: [
     ...SHARED_MODULES,  
-    AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g'
-    }),
+    
   ],
   declarations: [
     ...SHARED_COMPONENTS
@@ -94,10 +91,8 @@ const SHARED_MODULES: any[] = [
     ...SHARED_MODULES,
     MaterialModule,
     ...SHARED_COMPONENTS,
-    AgmCoreModule
   ],
   providers: [
-    GoogleMapsAPIWrapper
   ]
 })
 export class SharedModule {}
