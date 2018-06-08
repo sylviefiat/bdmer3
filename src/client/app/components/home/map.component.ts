@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild, Input, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { LngLatBounds } from 'mapbox-gl';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform } from '../../modules/datas/models/index';
-import { Country } from '../../modules/countries/models/country';
+import { Country, Coordinates } from '../../modules/countries/models/country';
 import { IAppState } from '../../modules/ngrx/index';
 
 
@@ -14,11 +15,27 @@ import { IAppState } from '../../modules/ngrx/index';
   selector: 'bc-home-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <map></map>
+    <mgl-map
+    [style]="'mapbox://styles/mapbox/streets-v9'"
+    [fitBounds]="bounds"
+    [fitBoundsOptions]="{
+      padding: boundsPadding
+    }">
+      <mgl-marker *ngFor="let marker of markers"
+        [lngLat]="marker"
+      >
+        <div
+          class="marker"
+          style="background-image: url(https://placekitten.com/g/50/50/); width: 50px; height: 50px"
+        >
+        </div>
+      </mgl-marker>
+      
+    </mgl-map>
   `,
   styles: [
     `    
-    map {
+    mgl-map {
       height:         calc(100vh - 96px);
       width: 100%;
     }
@@ -27,12 +44,14 @@ import { IAppState } from '../../modules/ngrx/index';
     }
     `]
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, OnChanges {
   @Input() platforms: Platform[];
   @Input() countries: Country[];
 
-  lat: number;
-  lng: number;
+  lat: number =0;
+  lng: number =0;
+  bounds: LngLatBounds;
+  boundsPadding: number = 5;
 
   zoomMarkerConst: number = 8;
   zoomLayerConst: number = 11;
@@ -47,7 +66,12 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.initMarkers();
+    console.log(this.countries);
+    this.init();
+  }
+
+  ngOnChanges(){
+    this.init();
   }
 
   ngAfterViewInit() {
@@ -57,24 +81,32 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.zoom = event;
   }
 
-  initMarkers() {
-    for (let country of this.countries) {
-      for (let platform of this.platforms) {
-        if (country.code === platform.codeCountry) {
-          this.markers.push(country.coordinates)
-        }
-      }
+  init(){
+    if(this.countries.length>0){
+      this.markers = this.countries.filter(country => country.code!=='AA').map(country => [country.coordinates.lng,country.coordinates.lat]);
+      this.zoomToBounds(this.markers);
+      console.log(this.markers);
+      //if(this.platforms.length>0){
+        //this.initMarkers(this.markers);
+      //}
+    }
+  }
+
+  zoomToBounds(coordinates) {    
+    this.bounds = coordinates.reduce((bounds, coord) => {
+        return bounds.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
+  }
+
+  initMarkers(coordinates) {
+    console.log(coordinates);
+    for (let coord of coordinates) {
+      console.log(coord);
+      //this.markers.push([coord.lng,coord.lat]);
     }
 
-    if (this.markers.length == 1) {
-      this.lat = this.markers["0"].lat;
-      this.lng = this.markers["0"].lng;
-      this.zoom = 9;
-    }
-
-    if (this.platforms.length == 0) {
-      this.zoom = 3;
-    }
+    console.log(this.markers);
+    console.log(this.zoom);
   }
 
   zoomMarker(marker) {

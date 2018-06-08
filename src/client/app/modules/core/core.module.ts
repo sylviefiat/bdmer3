@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PapaParseModule } from 'ngx-papaparse';
 import { MatDialogModule } from '@angular/material';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 // module
 import { SharedModule } from '../shared/index';
 import { CountriesModule } from '../countries/index';
@@ -35,7 +36,10 @@ interface ICoreModuleOptions {
     AuthModule,
     PapaParseModule,
     MatDialogModule,
-    AnalyseModule
+    AnalyseModule,
+    NgxMapboxGLModule.forRoot({
+      accessToken: 'pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw'
+    }),
   ],
   declarations: [
     ...CORE_DIRECTIVES,

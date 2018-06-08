@@ -46,12 +46,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
         }, {
-            name: '@mapbox/togeojson',
-            path: 'node_modules/@mapbox/togeojson/togeojson.js'
-        }, {
-            name: '@mapbox/geojson-area',
-            path: 'node_modules/@mapbox/geojson-area/index.js'
-        }, {
             name: 'wgs84',
             path: 'node_modules/wgs84/index.js'
         }, {
@@ -72,13 +66,42 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/traceur/bin/traceur.js'
         },
         {
-            name: '@agm/js-marker-clusterer',
-            path: 'node_modules/@agm/js-marker-clusterer/index.js'
+            name: 'supercluster',
+            path: 'node_modules/supercluster/dist/supercluster.min.js'
         },
         {
-            name: '@agm/core',
-            path: 'node_modules/@agm/core/core.umd.js'
-        }, {
+            name: '@turf/bbox',
+            path: 'node_modules/ngx-mapbox-gl/node_modules/@turf/bbox/index.js'
+        },
+        {
+            name: 'mapbox-gl',
+            path: 'node_modules/mapbox-gl/dist/mapbox-gl-dev.js'
+        },
+        {
+            name:"ngx-mapbox-gl",
+            packageMeta: {  
+                defaultExtension:"js",
+                main:"bundles/ngx-mapbox-gl.umd.js",
+                format: "cjs"
+            }
+          },
+        /*{
+            name: 'ngx-mapbox-gl',
+            path: 'node_modules/ngx-mapbox-gl/bundles/ngx-mapbox-gl.umd.js'
+        }, */
+        {
+            name: '@mapbox/togeojson',
+            path: 'node_modules/@mapbox/togeojson/togeojson.js'
+        }, 
+        {
+            name: '@mapbox/geojson-area',
+            path: 'node_modules/@mapbox/geojson-area/index.js'
+        }, 
+        {
+            name: '@mapbox/mapbox-gl-geocoder',
+            path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
+        },
+        {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
         }, {
@@ -105,10 +128,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
         },*/ {
             name: '@angular/cdk',
             path: '/@angular/cdk/index.js'
-        },
-        {
-            name: 'rxjs/operators',
-            path: 'node_modules/rxjs/operators/index.js'
         },
         {
             name: '@angular/cdk/a11y',
@@ -187,7 +206,15 @@ export class ProjectConfig extends SeedAdvancedConfig {
         },
         {
             name: '@turf/turf',
-            path: 'node_modules/@turf/turf/turf.min.js'
+            path: 'node_modules/@turf/turf/turf.js'
+        },
+        {
+            name: '@turf/helpers',
+            path: 'node_modules/@turf/helpers/index.js'
+        },
+        {
+            name: '@turf/meta',
+            path: 'node_modules/@turf/meta/index.js'
         }];
 
         this.addPackagesBundles(additionalPackages);

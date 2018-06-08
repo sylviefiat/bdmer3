@@ -110,8 +110,30 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/deep-freeze-strict/index.js'
       },
       {
+        name:"rxjs",
+        packageMeta: {  
+         defaultExtension:"js",
+         main:"bundles/rxjs.umd.js",
+         map:{  
+            "./observable":"./observable/index.js",
+            "./operators":"./operators/index.js",
+         }
+        }
+      },
+      {
+        name:"rxjs-compat",
+        packageMeta: {  
+         defaultExtension:"js",
+         main:"bundles/rxjs.umd.js",
+         map:{  
+            "./observable":"./observable/index.js",
+            "./operators":"./operators/index.js",
+         }
+        }
+      },
+      /*{
         name: 'rxjs',
-        path: 'node_modules/rxjs/index.js'
+        path: 'node_modules/rxjs/'
       },
       {
         name: 'rxjs/Observable',
@@ -122,8 +144,12 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/rxjs/Operator.js'
       },
       {
+        name: 'rxjs/operators',
+        path: 'node_modules/rxjs/operators/'
+      },
+      {
         name: 'rxjs/observable',
-        path: 'node_modules/rxjs/observable'
+        path: 'node_modules/rxjs/observable/'
       },
       {
         name: 'rxjs/add',
@@ -132,6 +158,22 @@ export class SeedAdvancedConfig extends SeedConfig {
       {
         name: 'rxjs-compat',
         path: 'node_modules/rxjs-compat/index.js'
+      },
+      {
+        name: 'rxjs-compat/AsyncSubject',
+        path: 'node_modules/rxjs-compat/AsyncSubject.js'
+      },
+      {
+        name: 'rxjs-compat/Subscription',
+        path: 'node_modules/rxjs-compat/Subscription.js'
+      },
+      {
+        name: 'rxjs-compat/Subject',
+        path: 'node_modules/rxjs-compat/Subject.js'
+      },
+      {
+        name: 'rxjs-compat/ReplaySubject',
+        path: 'node_modules/rxjs-compat/ReplaySubject.js'
       },{
         name: 'rxjs-compat/Observable',
         path: 'node_modules/rxjs-compat/Observable.js'
@@ -141,13 +183,17 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/rxjs-compat/Operator.js'
       },
       {
+        name: 'rxjs-compat/operators',
+        path: 'node_modules/rxjs-compat/operators/'
+      },
+      {
         name: 'rxjs-compat/observable',
-        path: 'node_modules/rxjs-compat/observable'
+        path: 'node_modules/rxjs-compat/observable/'
       },
       {
         name: 'rxjs-compat/operator',
-        path: 'node_modules/rxjs-compat/operator'
-      },
+        path: 'node_modules/rxjs-compat/operator/'
+      },*/
       {
         name: 'tslib',
         path: 'node_modules/tslib/tslib.js'

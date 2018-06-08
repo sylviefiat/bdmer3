@@ -9,6 +9,7 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
   MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -65,7 +66,8 @@ const SHARED_MODULES: any[] = [
   MatNativeDateModule,
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
-  MomentModule
+  MomentModule,
+  NgxMapboxGLModule
 ];
 
 /**
@@ -77,8 +79,7 @@ const SHARED_MODULES: any[] = [
 
 @NgModule({
   imports: [
-    ...SHARED_MODULES,  
-    
+    ...SHARED_MODULES, 
   ],
   declarations: [
     ...SHARED_COMPONENTS

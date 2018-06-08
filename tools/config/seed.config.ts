@@ -425,11 +425,11 @@ export class SeedConfig {
    */
   SYSTEM_CONFIG_DEV: any = {
     //defaultJSExtensions: true,
-    /*map: {
-      'main.web': 'main.web.js',
-      'rxjs': 'node_modules/rxjs',
-      '@angular': 'node_modules/@angular',
-    },*/
+     map: {
+      'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
+      'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js'
+    },
+    transpiler: 'plugin-babel',
     paths: {
       [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,
       '@angular/animations': 'node_modules/@angular/animations/bundles/animations.umd.js',
@@ -453,7 +453,10 @@ export class SeedConfig {
       '@angular/platform-browser-dynamic/testing':
       'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
-      'rxjs':'node_modules/rxjs/Rx.js',
+      'rxjs':'node_modules/rxjs',
+      'rxjs-compat':'node_modules/rxjs-compat',
+      '@turf':'node_modules/@turf',
+      'ngx-mapbox-gl':'node_modules/ngx-mapbox-gl',
       '@ngrx':'node_modules/@ngrx',
 
       'app/*': '/app/*',

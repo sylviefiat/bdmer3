@@ -22,7 +22,8 @@ export class PlatformEffects {
 
   @Effect({ dispatch: false })
   openDB$: Observable<any> = defer(() => {
-    return this.platformService.initDB('platforms', config.urldb);
+    return this.platformService.initDB('platforms', config.urldb).pipe(
+      map(()=> new PlatformAction.LoadAction()));
   });
 
   @Effect()
