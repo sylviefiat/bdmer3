@@ -18,6 +18,7 @@
 			<bc-home-map class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline"
 				[platforms]="platforms$ | async"
 				[countries]="(isAdmin$ | async)?(countries$ | async):([(userCountry$ | async)])"></bc-home-map>
+
 		<!--</div-->
 	</div>
 </div>

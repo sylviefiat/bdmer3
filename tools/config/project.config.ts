@@ -78,25 +78,33 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/mapbox-gl/dist/mapbox-gl-dev.js'
         },
         {
-            name:"ngx-mapbox-gl",
-            packageMeta: {  
-                defaultExtension:"js",
-                main:"bundles/ngx-mapbox-gl.umd.js",
+            name: "ngx-mapbox-gl",
+            packageMeta: {
+                defaultExtension: "js",
+                main: "bundles/ngx-mapbox-gl.umd.js",
                 format: "cjs"
             }
-          },
-        /*{
-            name: 'ngx-mapbox-gl',
-            path: 'node_modules/ngx-mapbox-gl/bundles/ngx-mapbox-gl.umd.js'
-        }, */
+        },
         {
             name: '@mapbox/togeojson',
             path: 'node_modules/@mapbox/togeojson/togeojson.js'
-        }, 
+        },
         {
             name: '@mapbox/geojson-area',
             path: 'node_modules/@mapbox/geojson-area/index.js'
-        }, 
+        },
+        {
+            name: 'through',
+            path: 'node_modules/through/index.js'
+        },
+        {
+            name: 'jsonparse',
+            path: 'node_modules/jsonparse/jsonparse.js'
+        },
+        {
+            name: 'fs',
+            path: 'node_modules/graceful-fs/fs.js'
+        },
         {
             name: '@mapbox/mapbox-gl-geocoder',
             path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
@@ -215,6 +223,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@turf/meta',
             path: 'node_modules/@turf/meta/index.js'
+        },
+        {
+            name: '@turf/combine',
+            path: 'node_modules/@turf/combine/index.js'
         }];
 
         this.addPackagesBundles(additionalPackages);

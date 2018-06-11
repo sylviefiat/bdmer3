@@ -1,8 +1,8 @@
 @import '../scss/variables';
 @import 'font-awesome/font-awesome';
-@import '../../../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import "../../../node_modules/mapbox-gl/dist/mapbox-gl.css";
-@import "../../../node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css";
+@import '../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import '../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+@import '../../../node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 /* Reset */
 html, body, div {

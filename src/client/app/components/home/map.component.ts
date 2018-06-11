@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, pipe } from 'rxjs';
+import { Observable, Subscription, pipe, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { LngLatBounds } from 'mapbox-gl';
+import { LngLatBounds, Layer } from 'mapbox-gl';
+import * as Turf from '@turf/turf';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform } from '../../modules/datas/models/index';
+import { Platform, Zone, Station } from '../../modules/datas/models/index';
 import { Country, Coordinates } from '../../modules/countries/models/country';
 import { IAppState } from '../../modules/ngrx/index';
 
@@ -16,20 +17,52 @@ import { IAppState } from '../../modules/ngrx/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mgl-map
-    [style]="'mapbox://styles/mapbox/streets-v9'"
-    [fitBounds]="bounds"
+    [style]="'mapbox://styles/mapbox/satellite-v9'"
+    [fitBounds]="bounds$ | async"
     [fitBoundsOptions]="{
-      padding: boundsPadding
-    }">
-      <mgl-marker *ngFor="let marker of markers"
-        [lngLat]="marker"
-      >
-        <div
-          class="marker"
-          style="background-image: url(https://placekitten.com/g/50/50/); width: 50px; height: 50px"
-        >
-        </div>
-      </mgl-marker>
+      padding: boundsPadding,
+      maxZoom: zoomMax
+    }" 
+    (zoomChange)="zoomChange($event)">
+      <ng-container *ngIf="isDisplayed('countries')">
+        <mgl-marker *ngFor="let marker of markersCountries"
+          [lngLat]="marker.lngLat">
+          <div (click)="zoomOnCountry(marker.country)"
+            class="marker"><fa [name]="'map-marker'" [border]=false [size]=3></fa>
+          </div>
+        </mgl-marker>
+      </ng-container>
+      <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
+        <mgl-geojson-source 
+          id="layerZones"
+          [data]="layerZones$ | async">
+          <mgl-layer (click)="zoomOnStation($event)"
+            id="zonesid"
+            type="fill"
+            source="layerZones"
+            [paint]="{
+              'fill-color': '#AFEEEE',
+              'fill-opacity': 0.3,
+              'fill-outline-color': '#000'
+              }"
+          ></mgl-layer>        
+        </mgl-geojson-source>
+      </ng-container>
+      <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
+        <mgl-geojson-source 
+          id="layerStations"
+          [data]="layerStations$ | async">
+          <mgl-layer
+            id="stationsid"
+            type="circle"
+            source="layerStations"
+            [paint]="{
+              'circle-color': 'rgba(0,255,0,1)',
+              'circle-radius': 20
+              }"
+          ></mgl-layer>        
+        </mgl-geojson-source>
+      </ng-container>
       
     </mgl-map>
   `,
@@ -48,29 +81,29 @@ export class MapComponent implements OnInit, OnChanges {
   @Input() platforms: Platform[];
   @Input() countries: Country[];
 
-  lat: number =0;
-  lng: number =0;
-  bounds: LngLatBounds;
-  boundsPadding: number = 5;
+  bounds$: Observable<LngLatBounds>;
+  boundsPadding: number = 100;
 
-  zoomMarkerConst: number = 8;
-  zoomLayerConst: number = 11;
-  zoomAdmin: number = 3;
+  zoomMax: number = 11;
   zoom: number = 9;
 
-  geoJsonObject: Object;
-  markers: any[] = [];
+  markersCountries: any[] = [];
+  zones: Zone[] = [];
+  layerZones$: Observable<object>;
+  stations: Station[] = [];
+  layerStations$: Observable<object>;
 
+  show: string;
 
   constructor() {
   }
 
   ngOnInit() {
-    console.log(this.countries);
+    //console.log(this.countries);
     this.init();
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.init();
   }
 
@@ -78,47 +111,86 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   zoomChange(event) {
+    console.log(event);
     this.zoom = event;
+    if(this.zoom<9) this.show='zones';
+    if(this.zoom<6) this.show='countries';
   }
 
-  init(){
-    if(this.countries.length>0){
-      this.markers = this.countries.filter(country => country.code!=='AA').map(country => [country.coordinates.lng,country.coordinates.lat]);
-      this.zoomToBounds(this.markers);
-      console.log(this.markers);
-      //if(this.platforms.length>0){
-        //this.initMarkers(this.markers);
-      //}
+  init() {
+    if (this.countries.length > 0) {
+      this.markersCountries = this.countries.filter(country => country.code !== 'AA').map(country => ({
+        'country': country.code,
+        'lngLat': [country.coordinates.lng, country.coordinates.lat]
+      }));      
+      if (this.platforms.length > 0) {
+        this.setZones(this.platforms);
+        this.setStations(this.platforms);
+      }
+      if(this.countries.length===1 && this.platforms.length > 0){
+         this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+         this.show='zones';
+      } else {
+        this.bounds$=of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
+        this.show='countries';
+      }
+      
     }
   }
 
-  zoomToBounds(coordinates) {    
-    this.bounds = coordinates.reduce((bounds, coord) => {
-        return bounds.extend(<any>coord);
+  isDisplayed(layer: string){
+    return this.show===layer;
+  }
+
+  zoomToCountries(coordinates): LngLatBounds {   
+    return coordinates.reduce((bnd, coord) => {
+      return bnd.extend(<any>coord);
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  initMarkers(coordinates) {
-    console.log(coordinates);
-    for (let coord of coordinates) {
-      console.log(coord);
-      //this.markers.push([coord.lng,coord.lat]);
+  zoomToZonesOrStation(featureCollection): LngLatBounds{
+    var bnd = new LngLatBounds();
+    var fc= featureCollection.features.forEach((feature) => bnd.extend(feature.geometry.coordinates[0]));
+    return bnd;
+  }
+
+  zoomOnCountry(countryCode: string) {
+    let platformsConsidered = this.platforms.filter(platform => platform.codeCountry===countryCode)
+    this.setZones(platformsConsidered);
+    console.log(platformsConsidered);
+    if(platformsConsidered.length>1){
+      this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+    } else {
+      this.bounds$=of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country===countryCode).map(mk => mk.lngLat)));
     }
-
-    console.log(this.markers);
-    console.log(this.zoom);
+    this.show='zones';
   }
 
-  zoomMarker(marker) {
-    this.lat = marker.lat;
-    this.lng = marker.lng;
-    this.zoom = this.zoomMarkerConst;
+  zoomOnStation(event: any) {
+    console.log(event);
+    /*let platformsConsidered = this.platforms.filter(platform => platform.zones.filter(zone => zone.properties.code ===zoneCode).length>0)
+    this.setStations(platformsConsidered);
+    this.bounds$=this.layerStations$.map(layerStations => this.zoomToZonesOrStation(layerStations)); */  
+    this.bounds$= of(new LngLatBounds([event.lngLat.lng, event.lngLat.lat],[event.lngLat.lng, event.lngLat.lat]));
+    this.show='stations';
   }
 
-  zoomLayer(event) {
-    this.lat = event.latLng.lat();
-    this.lng = event.latLng.lng();
-    this.zoom = this.zoomLayerConst;
+
+  setZones(platforms: Platform[]) {
+    this.zones = [];
+    for (let p of platforms) {
+      this.zones = [...this.zones, ...p.zones];
+    }
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates))));
   }
+
+  setStations(platforms: Platform[]) {
+    this.stations = [];
+    for (let p of platforms) {
+      this.stations = [...this.stations, ...p.stations];
+    }
+    this.layerStations$ = of(Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates))));
+  }
+
 
 }
