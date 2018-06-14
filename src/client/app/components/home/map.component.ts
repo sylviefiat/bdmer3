@@ -197,9 +197,9 @@ export class MapComponent implements OnInit, OnChanges {
 
   markersCountries: any[] = [];
   zones: Zone[] = [];
-  layerZones$: Observable<object>;
+  layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
-  layerStations$: Observable<object>;
+  layerStations$: Observable<Turf.FeatureCollection>;
 
   show: string[] = ['countries'];
   tmp: string[] = [];
@@ -280,7 +280,7 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomToZonesOrStation(featureCollection): LngLatBounds{
     var bnd = new LngLatBounds();
-    var fc= featureCollection.features.forEach((feature) => bnd.extend(feature.geometry.coordinates[0]));
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach((feature) => bnd.extend(feature.geometry.coordinates[0]));
     return this.checkBounds(bnd);
   }
 

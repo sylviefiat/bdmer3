@@ -91,6 +91,7 @@ export class AnalyseComponent {
     }
 
     setZones(zones: Zone[]) {
+        console.log(zones);
         this.zoneEmitter.emit(zones); 
     }
 
