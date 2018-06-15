@@ -28,9 +28,8 @@ import { Zone } from '../../modules/datas/models/index';
             [fitBoundsOptions]="{
               padding: boundsPadding,
               maxZoom: zoomMaxMap
-            }"
-            (data)="styleChange($event)"> 
-            <ng-container *ngIf="defaultZones && display">
+            }"> 
+            <ng-container *ngIf="defaultZones && (display$ | async)">
                 <mgl-geojson-source 
                   id="layerZones"
                   [data]="layerZones$ | async">
@@ -44,8 +43,8 @@ import { Zone } from '../../modules/datas/models/index';
                           property: 'checked',
                           type: 'categorical',
                           stops: [
-                              [0, '#AFEEEE'],
-                              [1, '#FF0000']
+                              [false, '#AFEEEE'],
+                              [true, '#FF0000']
                           ]
                       },
                       'fill-opacity': 0.3,
@@ -107,14 +106,15 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Input('group') public form: FormGroup;
     actionSubscription: Subscription;
+    layerSubscription: Subscription;
     bounds$: Observable<LngLatBounds>;
     boundsPadding: number = 50;
     zoomMaxMap=11;
     layerZones$: Observable<Turf.FeatureCollection>;
-    display:boolean=true;
+    display$:Observable<boolean>;
 
     constructor(private _fb: FormBuilder) {
-
+        this.display$=of(true);
     }
 
     ngOnInit() {
@@ -122,7 +122,7 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
             this.defaultZones = zones;
             this.initZones();
             let bounds = new LngLatBounds();
-            this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: 0}))));
+            this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: false}))));
             if(this.defaultZones.length >0){
                 let coord0 = this.defaultZones[0].geometry.coordinates[0][0];
                 let bounds = this.defaultZones.map(z => z.geometry.coordinates[0][0]).reduce((bnd, coord) => {                    
@@ -136,6 +136,7 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.actionSubscription.unsubscribe();
+        this.layerSubscription.unsubscribe();
     }
 
     newZone(s: Zone) {
@@ -155,30 +156,29 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     }
 
     select(evt: MapMouseEvent){
-        console.log((<any>evt).features[0]);
+        this.display$=of(false);
         let selected = (<any>evt).features[0].properties;
         this.changeMapSelection(selected.code);
         this.changeFormSelected(selected.code);
         this.changeCheckedZones(selected.code);
-        this.display=true;
+        //this.display=true;
     }
 
     changeValue(zoneCheck: any) {
+        this.display$=of(false);
         console.log(zoneCheck);        
         this.changeMapSelection(zoneCheck.zone.properties.code);
         this.changeCheckedZones(zoneCheck.zone.properties.code);
-        this.display=true;
+        //this.display=true;
     }
 
     changeCheckedZones(code){
-        console.log(code);
         if (this.checkedZones.map(zone=>zone.properties.code).filter(c=>c===code).length>0) {
             this.checkedZones = [...this.checkedZones.filter(z => z.properties.code !== code)];
         } else {
             console.log(this.defaultZones);
             this.checkedZones.push(this.defaultZones.filter(zone=>zone.properties.code===code)[0]);
         }
-        console.log(this.checkedZones);
         this.zoneEmitter.emit(this.checkedZones);
     }
 
@@ -193,17 +193,14 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
         control.setValue(control.value);
     }
 
-    changeMapSelection(code) {
-        this.layerZones$=this.layerZones$.map(lz => {
-            Turf.flattenEach(lz,(zone,index)=>{
-                if(zone.properties.code===code){
-                    zone.properties.checked=zone.properties.checked?0:1;
-                }
-            });
-            console.log(lz);
-            return lz;
-        }); 
-        this.display=false;       
+    changeMapSelection(code) {  
+        let checked = this.checkedZones.map(zone => zone.properties.code).filter(c => c===code).length>0?false:true;
+        this.layerZones$=of(Turf.featureCollection(this.defaultZones.map(zone => {
+            let checked = this.checkedZones.map(z => z.properties.code).filter(c => c===zone.properties.code).length>0?true:false;
+            checked = (zone.properties.code===code)?!checked:checked;
+            return Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: checked});
+        })));
+        this.display$=of(true);
     }
 
     styleChange(event){
@@ -215,6 +212,7 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
         control.value.forEach(x => x.zone = ev.checked)
         control.setValue(control.value);
         this.checkedZones = (ev.checked) ? this.defaultZones : [];
+        this.layerZones$=of(Turf.featureCollection(this.defaultZones.map(zone =>Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: ev.checked}))));
         this.zoneEmitter.emit(this.checkedZones);
     }
 

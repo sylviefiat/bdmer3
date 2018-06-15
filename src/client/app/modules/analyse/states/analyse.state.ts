@@ -133,6 +133,7 @@ export const getZonesAvailables = createSelector(getUsedPlatforms,getUsedSurveys
 });
 
 export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZones,(platforms:Platform[],zones:Zone[])=>{
+    console.log("stations");
     let stations = [];
     if(!platforms || !zones) return stations;
     for(let p of platforms){

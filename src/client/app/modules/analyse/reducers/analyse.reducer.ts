@@ -41,6 +41,7 @@ export function analyseReducer(
     }
 
     case AnalyseAction.ActionTypes.SELECT_ZONES: {  
+      console.log(action.payload);
       return {
         ...state,
         usedZones: action.payload
