@@ -210,5 +210,5 @@ export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
 export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getAppState);
 export const getSelectedAnalyseSurveys: any = compose(getSurveysAvailables, getAppState);
 export const getSelectedAnalyseZones: any = compose(getZonesAvailables, getAppState);
-export const getSelectedAnalyseStations: any = compose(getStationsAvailables, getAppState);
+export const getSelectedAnalyseStations: any = compose(getStationsAvailables, getAnalyseState);
 export const getSelectedAnalyseSpecies: any = compose(getSpeciesAvailables, getAppState);

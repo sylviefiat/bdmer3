@@ -1,7 +1,7 @@
 import { Observable, Subscription, of } from 'rxjs';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { LngLatBounds,LngLat,MapMouseEvent } from 'mapbox-gl';
+import { LngLatBounds,LngLat, MapMouseEvent } from 'mapbox-gl';
 import * as Turf from '@turf/turf';
 import { Zone } from '../../modules/datas/models/index';
 
@@ -106,7 +106,6 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Input('group') public form: FormGroup;
     actionSubscription: Subscription;
-    layerSubscription: Subscription;
     bounds$: Observable<LngLatBounds>;
     boundsPadding: number = 50;
     zoomMaxMap=11;
@@ -136,7 +135,6 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.actionSubscription.unsubscribe();
-        this.layerSubscription.unsubscribe();
     }
 
     newZone(s: Zone) {
@@ -161,22 +159,18 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
         this.changeMapSelection(selected.code);
         this.changeFormSelected(selected.code);
         this.changeCheckedZones(selected.code);
-        //this.display=true;
     }
 
     changeValue(zoneCheck: any) {
         this.display$=of(false);
-        console.log(zoneCheck);        
         this.changeMapSelection(zoneCheck.zone.properties.code);
         this.changeCheckedZones(zoneCheck.zone.properties.code);
-        //this.display=true;
     }
 
     changeCheckedZones(code){
         if (this.checkedZones.map(zone=>zone.properties.code).filter(c=>c===code).length>0) {
             this.checkedZones = [...this.checkedZones.filter(z => z.properties.code !== code)];
         } else {
-            console.log(this.defaultZones);
             this.checkedZones.push(this.defaultZones.filter(zone=>zone.properties.code===code)[0]);
         }
         this.zoneEmitter.emit(this.checkedZones);
@@ -201,10 +195,6 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
             return Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: checked});
         })));
         this.display$=of(true);
-    }
-
-    styleChange(event){
-        //console.log(event);
     }
 
     checkAll(ev) {

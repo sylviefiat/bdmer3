@@ -26,6 +26,7 @@ export class AnalyseComponent {
     @Input() years$: Observable<string[]>;
     @Input() surveys$: Observable<Survey[]>;
     @Input() zones$: Observable<Zone[]>;
+    @Input() usedZones$: Observable<Zone[]>;
     @Input() stations$: Observable<Station[]>;
     @Input() species$: Observable<Species[]>;
     @Input() dimensions$: Observable<DimensionsAnalyse[]>;
