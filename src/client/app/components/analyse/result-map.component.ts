@@ -1,5 +1,8 @@
-
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { LngLatBounds, LngLatLike } from 'mapbox-gl';
+import { Cluster, Supercluster } from 'supercluster';
+import * as Turf from '@turf/turf';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
@@ -10,20 +13,76 @@ import { Results, Data } from '../../modules/analyse/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <div class="container">
-     <map></map>
+     <mgl-map
+        [style]="'mapbox://styles/mapbox/satellite-v9'"
+        [fitBounds]="bounds$ | async"
+        [fitBoundsOptions]="{
+          padding: boundsPadding,
+          maxZoom: zoomMaxMap
+        }"> 
+        <mgl-marker-cluster
+          *ngIf="markers$ | async"
+          [data]="markers$ | async"
+          [maxZoom]="14"
+          [radius]="50"
+          (load)="supercluster = $event">
+          <ng-template mglPoint let-feature>
+            <div
+              class="marker">
+              {{ feature.properties['biomass'] }}
+            </div>
+          </ng-template>
+          <ng-template mglClusterPoint let-feature>
+            <div
+              class="marker-cluster"
+              (click)="selectCluster($event, feature)">
+              {{ feature.properties?.point_count }}
+            </div>
+          </ng-template>
+        </mgl-marker-cluster>   
+      </mgl-map>
    </div>
   `,
   styles: [
   `
-   map {
+   mgl-map {
       width: 800px;
       height: 500px;
       border: 1px solid black;
-    } 
+    }     
+    .marker{
+      color:white;
+    }
+    .marker.selected{
+      color:red;
+    }
     .container {
       display: flex;
       margin-left: 20px;
       margin-right: 20px;
+    }
+    ::ng-deep .marker-cluster {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #4f615a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      border: 2px solid #56C498;
+      cursor: pointer;
+    }
+
+    .marker {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #7d7d7d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #C9C9C9
     }
   `]
 })
@@ -33,6 +92,16 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
   @Input() typeShow : string;
   @Input() spShow: string;
   @Input() surveyShow: string;
+  markers$: Observable<Turf.FeatureCollection>;
+  bounds$: Observable<LngLatBounds>;
+  boundsPadding: number = 100;
+  zoomMaxMap=11;
+  supercluster: Supercluster;
+  selectedCluster: {
+    lngLat: LngLatLike;
+    count: number;
+    id: number;
+  };
 
   mapLat: any = 0;
   mapLng: any = 0;
@@ -64,6 +133,11 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
     this.mapLng = this.analyseData.usedCountry.coordinates.lng;
     this.mapZoom = 9;    
     this.initMarkers();
+    let featureCollection = Turf.featureCollection(this.markers.map(marker => Turf.point(marker.geometry.coordinates,{code: marker.properties.code,abundancy: marker.properties.abundancy,biomass: marker.properties.biomass})));
+    this.markers$ = of(featureCollection);
+    var bnd = new LngLatBounds();
+    this.markers.forEach((marker) => bnd.extend(marker.geometry.coordinates));
+    this.bounds$=of(bnd);
   }
 
   initMarkers(){
@@ -74,62 +148,36 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
             if(rt.densityPerHA>0 && rt.biomassPerHA >0){
               let t: Station = this.analyseData.usedStations.filter((station:Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
               let marker = {
-                fillColor:this.colors[i],
-                latitude:Number(t.geometry.coordinates[1]),
-                longitude:Number(t.geometry.coordinates[0]),
-                abundancy:rt.densityPerHA,
-                biomass:rt.biomassPerHA,
-                species:rsp.codeSpecies,
-                survey:this.results.resultPerSurvey[i].codeSurvey
+                geometry: {
+                  coordinates:t.geometry.coordinates
+                },
+                properties: {
+                  abundancy:rt.densityPerHA,
+                  biomass:rt.biomassPerHA,
+                  species:rsp.codeSpecies,
+                  survey:this.results.resultPerSurvey[i].codeSurvey
+                }
               };
               this.markers.push(marker);
             }
           }
         }
       }
-    }    
+    }  
   }
 
-  getSizeIconAbundance(j){
-    let i=0;
-    if(j <= 50) i=0;
-    if(j > 50 && j <= 100) i=1;
-    if(j > 100 && j <= 1000) i=2;
-    if(j > 1000) i=3;
-    return i
+  selectCluster(event: MouseEvent, feature: Cluster) {
+    console.log(feature);
+    event.stopPropagation(); // This is needed, otherwise the popup will close immediately
+    this.selectedCluster = {
+      // Change the ref, to trigger mgl-popup onChanges (when the user click on the same cluster)
+      lngLat: [ ...feature.geometry!.coordinates ],
+      count: feature.properties.point_count!,
+      id: feature.properties.cluster_id!
+    };
   }
 
-  getSizeIconBiomass(j){
-    let i=0;
-    if(j <= 1000) i=0;
-    if(j > 1000 && j <= 5000) i=1;
-    if(j > 5000 && j <= 10000) i=2;
-    if(j > 10000) i=3;
-    return i
-  }
 
-  getIcon(marker){
-    let factor = this.typeShow==='A'?marker.abundancy:marker.biomass;    
-    let indice = this.typeShow==='A'?1000:1;    
-    let j=factor*indice;
-    let i = this.typeShow==='A'?this.getSizeIconAbundance(j):this.getSizeIconBiomass(j);
-    let icon =  {
-              url: this.iconSize[i].url,
-              scaledSize: {
-                width: this.iconSize[i].size,
-                height: this.iconSize[i].size
-              }
-            };
-    return icon;
-  }
-
-  display(marker){
-    return marker.species===this.spShow&&marker.survey===this.surveyShow;
-  }
-
-  getLabel(marker){
-    return this.typeShow==='A'?'Abondance par hectare: '+marker.abundancy:'Biomasse par hectare: '+marker.biomass;
-  }
 
 
 }

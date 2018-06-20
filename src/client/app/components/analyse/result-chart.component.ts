@@ -57,7 +57,6 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
             }
         for (let i in this.resultSurvey.resultPerSpecies) {
             let index = Number(i)+1;
-            console.log(index);
             data[index] = [];
             let value = type === 'B' ? this.resultSurvey.resultPerSpecies[i].biomassTotal : this.resultSurvey.resultPerSpecies[i].numberIndividual;
             let sd = type === 'B' ? this.resultSurvey.resultPerSpecies[i].SDBiomassTotal : this.resultSurvey.resultPerSpecies[i].SDAbundancyTotal;            
@@ -67,7 +66,6 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
                 data[index] = [this.resultSurvey.resultPerSpecies[i].codeSpecies, value];
             }
         }
-        console.log(data);
         return data;
     }
 
