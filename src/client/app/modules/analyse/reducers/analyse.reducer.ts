@@ -1,4 +1,4 @@
-import { IAnalyseState, analyseInitialState } from '../states/index';
+import { IAnalyseState, analyseInitialState, getStationsAvailables } from '../states/index';
 import { Platform, Zone, Station, Survey } from '../../datas/models/platform';
 import { AnalyseAction } from '../actions/index';
 
@@ -41,10 +41,11 @@ export function analyseReducer(
     }
 
     case AnalyseAction.ActionTypes.SELECT_ZONES: {  
-      console.log(action.payload);
+      let newState = {...state,usedZones: action.payload};
+      let stations = getStationsAvailables(newState);
       return {
-        ...state,
-        usedZones: action.payload
+        ...newState,
+        usedStations: stations
       };
     }
 

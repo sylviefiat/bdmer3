@@ -144,8 +144,9 @@ export class AnalyseStationComponent implements OnInit {
                 this.defaultStations = stations;
                 this.checkedStations = this.defaultStations;
                 this.initStations();
-                if(stations && stations.length > 0)
+                if(stations && stations.length > 0){
                     this.layerStations$ = of(Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code, checked: true}))));
+                }
             }
         });
         this.zonesSubscription = this.usedZones$.subscribe(zones => {
@@ -159,6 +160,8 @@ export class AnalyseStationComponent implements OnInit {
                 this.bounds$ = of(bounds);
             }
         });
+        
+
     }
 
     ngOnDestroy() {
@@ -228,12 +231,16 @@ export class AnalyseStationComponent implements OnInit {
         this.display$=of(true);
     }
 
-    checkAll(ev) {
+    checkAll(ev){
+        return this.checkItAll(ev.checked);
+    }
+
+    checkItAll(checked: boolean) {
         const control = <FormArray>this.form.controls['stations'];
-        control.value.forEach(x => x.station = ev.checked)
+        control.value.forEach(x => x.station = checked)
         control.setValue(control.value);
-        this.checkedStations = (ev.checked) ? this.defaultStations : [];
-        this.layerStations$ = of(Turf.featureCollection(this.defaultStations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code, checked: ev.checked}))));
+        this.checkedStations = (checked) ? this.defaultStations : [];
+        this.layerStations$ = of(Turf.featureCollection(this.defaultStations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code, checked: checked}))));
         this.stationEmitter.emit(this.checkedStations);
     }
 

@@ -103,8 +103,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   selectZone(zones: Zone[]) {
-    console.log(zones);
-    this.store.dispatch(new AnalyseAction.SelectZones(zones));    
+    this.store.dispatch(new AnalyseAction.SelectZones(zones));
   }
 
   selectStation(stations: Station[]) {
