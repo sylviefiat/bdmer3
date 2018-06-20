@@ -132,16 +132,16 @@ export const getZonesAvailables = createSelector(getUsedPlatforms,getUsedSurveys
     return zones;
 });
 
-export const getStationsAvailables = createSelector(getUsedPlatforms,getUsedZones,(platforms:Platform[],zones:Zone[])=>{
+export const getStationsAvailables = (state: IAnalyseState) => {
     let stations = [];
-    if(!platforms || !zones) return stations;
-    for(let p of platforms){
-        for(let z of zones){
+    if(!state.usedPlatforms || !state.usedZones) return stations;
+    for(let p of state.usedPlatforms){
+        for(let z of state.usedZones){
             stations = [...stations,...p.stations.filter(s => Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates)))];
         }
     }
     return stations;
-});
+};
 
 export const getSpeciesAvailables = createSelector(getSpeciesInApp,getSurveysAvailables,(speciesEntities:Species[],surveys:Survey[]) => {
     let species = [];

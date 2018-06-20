@@ -1,38 +1,21 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from '@agm/core';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 import { Results, Data } from '../../modules/analyse/models/index';
-declare var google: any;
 
 @Component({
   selector: 'bc-result-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <div class="container">
-     <agm-map #AgmMap [latitude]="mapLat" [longitude]="mapLng" [zoom]="mapZoom">           
-
-        <agm-marker 
-            *ngFor="let marker of markers; let i = index"
-            [latitude]="marker.latitude"
-            [longitude]="marker.longitude"
-            [visible]="display(marker)"
-            [iconUrl]="getIcon(marker)">
-            
-          <agm-info-window>
-            <strong>{{getLabel(marker)}}</strong>
-          </agm-info-window>
-          
-        </agm-marker>
-
-     </agm-map>
+     <map></map>
    </div>
   `,
   styles: [
   `
-   agm-map {
+   map {
       width: 800px;
       height: 500px;
       border: 1px solid black;
@@ -51,7 +34,6 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
   @Input() spShow: string;
   @Input() surveyShow: string;
 
-  @ViewChild('AgmMap') agmMap: AgmMap;
   mapLat: any = 0;
   mapLng: any = 0;
   mapZoom: any = 0;
@@ -72,7 +54,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
       url:'http://maps.google.com/mapfiles/ms/micons/green.png'
     }];
 
-  constructor(googleMapsAPIWrapper: GoogleMapsAPIWrapper) {
+  constructor() {
 
   }
 

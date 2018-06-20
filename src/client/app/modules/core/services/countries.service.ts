@@ -78,7 +78,7 @@ export class CountriesService {
   }
 
   getUser(uname: string): Observable<User> {
-    console.log(this.db);
+    //console.log(this.db);
     return from(this.db.query(function(doc, emit){
       doc.users && doc.users.forEach(function(user){
         emit(user.username);

@@ -1,127 +1,330 @@
-import { Component, OnInit, ViewChild, Input, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, pipe } from 'rxjs';
+import { Observable, Subscription, pipe, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral } from '@agm/core';
+import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from 'mapbox-gl';
+import * as Turf from '@turf/turf';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform } from '../../modules/datas/models/index';
-import { Country } from '../../modules/countries/models/country';
+import { Platform, Zone, Station } from '../../modules/datas/models/index';
+import { Country, Coordinates } from '../../modules/countries/models/country';
 import { IAppState } from '../../modules/ngrx/index';
 
-declare var google: any;
 
 @Component({
   selector: 'bc-home-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <agm-map #AgmMap [latitude]="lat" [longitude]="lng" [zoom]="zoom" (zoomChange)="zoomChange($event)">
-        <div *ngFor="let platform of (platforms$ | async)">
-          <div *ngFor="let zone of (platform.zones)">
-            <agm-data-layer [geoJson]="zone" (layerClick)="zoomLayer($event)">
-            </agm-data-layer>
-            <div *ngIf="zoom > 10" >
-              <agm-marker *ngFor="let station of (zone.stations)"
-                [latitude]="station.geometry.coordinates[1]"
-                   [longitude]="station.geometry.coordinates[0]"
-                   label="T">
-              </agm-marker>
-            </div>
+    <nav id="switcher">
+      <a href="#" (click)="changeView('countries')" [class.isOn]="isDisplayed('countries')">{{'COUNTRIES' | translate}}</a>
+      <a href="#" (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+      <a href="#" (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
+      <div class="subswitch">
+        <a href="#" (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
+        <a href="#" (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
+      </div>
+    </nav>
+    <mgl-map
+    [style]="bls[bl]"
+    [fitBounds]="bounds$ | async"
+    [fitBoundsOptions]="{
+      padding: boundsPadding,
+      maxZoom: zoomMaxMap
+    }" 
+    (zoomEnd)="zoomChange($event)"
+    (data)="styleChange($event)">
+      <ng-container *ngIf="isDisplayed('countries')">
+        <mgl-marker *ngFor="let marker of markersCountries"
+          [lngLat]="marker.lngLat">
+          <div
+            (click)="zoomOnCountry(marker.country)"
+            class="marker">
+            <fa [name]="'map-marker'" [border]=false [size]=3></fa><br/>
+            <span>{{marker.name}}</span>
           </div>
-        </div>
-
-        <div *ngIf="zoom < 6" >
-          <agm-marker *ngFor="let marker of (markers)"
-            fit="true"
-            [latitude]="marker.lat"
-               [longitude]="marker.lng"
-               (markerClick)="zoomMarker(marker)">
-          </agm-marker>
-        </div>
-      </agm-map>
+        </mgl-marker>
+      </ng-container>
+      <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
+        <mgl-geojson-source 
+          id="layerZones"
+          [data]="layerZones$ | async">
+          <mgl-layer
+            id="zonesid"
+            type="fill"
+            source="layerZones"
+            [paint]="{
+              'fill-color': '#AFEEEE',
+              'fill-opacity': 0.3,
+              'fill-outline-color': '#000'
+              }"
+            (mouseEnter)="cursorStyle = 'pointer'"
+            (mouseLeave)="cursorStyle = ''">            
+          </mgl-layer>
+          <mgl-layer
+            id="zonestext"
+            type="symbol"
+            source="layerZones"
+            [layout]="{
+              'text-field': '{code}',
+              'text-anchor':'bottom',
+              'text-font': [
+                'DIN Offc Pro Italic',
+                'Arial Unicode MS Regular'
+              ],
+              'symbol-placement': 'point',
+              'symbol-avoid-edges': true,
+              'text-max-angle': 30,
+              'text-size': 12
+            }"  
+            [paint]="{
+              'text-color': 'white'
+            }"
+          >            
+          </mgl-layer>
+        </mgl-geojson-source>
+      </ng-container>
+      <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
+        <mgl-geojson-source 
+          id="layerStations"
+          [data]="layerStations$ | async">
+          <mgl-layer
+            id="stationsid"
+            type="symbol"
+            source="layerStations"
+            [layout]="{
+              'icon-image': 'triangle-stroked-15',
+              'icon-size': 1.5,
+              'icon-rotate': 180
+              }"            
+            (click)="showPopupStation($event)"
+            (mouseEnter)="cursorStyle = 'pointer'"
+            (mouseLeave)="cursorStyle = ''">
+          </mgl-layer>        
+        </mgl-geojson-source>
+      </ng-container>
+      <mgl-popup *ngIf="selectedStation"
+        [lngLat]="selectedStation.geometry?.coordinates">
+        <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span>
+      </mgl-popup>
+      <mgl-popup *ngIf="selectedZone"
+        [lngLat]="selectedZone.geometry?.coordinates[0][0]">
+        <span style="color:black;padding-right:10px;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span>
+      </mgl-popup>
+      
+    </mgl-map>
   `,
   styles: [
     `    
-    agm-map {
-      height:         calc(100vh - 96px);
+    mgl-map {
+      height: calc(100vh - 96px);
       width: 100%;
+    }
+    .mapboxgl-popup-content {
+      color:black;
+    }
+    .marker:hover {
+      cursor = 'pointer';
     }
     @media screen and (max-width: 800px) {
       height:50vh;
     }
+    #switcher {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 106px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #switcher a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    #switcher a:last-child {
+        border: none;
+    }
+
+    #switcher a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+
+    #switcher a.isOn {
+        background-color: #106cc8;
+        color: #ffffff;
+    }
+
+    #switcher a.isOn:hover {
+        background: #3074a4;
+    }
+    #switcher .subswitch {
+      display:flex;
+      flex-direction:row;
+    }
+    #switcher .subswitch a {
+      width:50%
+    }
     `]
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, OnChanges {
   @Input() platforms: Platform[];
   @Input() countries: Country[];
+  @Input() isAdmin: boolean;
 
-  lat: number;
-  lng: number;
+  bounds$: Observable<LngLatBounds>;
+  boundsPadding: number = 100;
 
-  zoomMarkerConst: number = 8;
-  zoomLayerConst: number = 11;
-  zoomAdmin: number = 3;
-  zoom: number = 9;
+  zoomMaxMap: number = 10;
+  zoom = 9;
+  zoomMinCountries: number = 4;
+  zoomMinStations: number = 3;
+  zoomMaxStations: number = 5;
+  selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
+  selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
 
-  geoJsonObject: Object;
-  markers: any[] = [];
+  markersCountries: any[] = [];
+  zones: Zone[] = [];
+  layerZones$: Observable<Turf.FeatureCollection>;
+  stations: Station[] = [];
+  layerStations$: Observable<Turf.FeatureCollection>;
 
-  @ViewChild('AgmMap') agmMap: AgmMap;
+  show: string[] = ['countries'];
+  tmp: string[] = [];
+  bls: string[] = ['mapbox://styles/mapbox/satellite-v9','mapbox://styles/mapbox/streets-v9'];
+  bl: number;
 
-  constructor(googleMapsAPIWrapper: GoogleMapsAPIWrapper) {
+  constructor() {
+    this.bl=0;
   }
 
   ngOnInit() {
-    this.initMarkers();
+    this.init();
+
   }
 
-  ngAfterViewInit() {
-    this.agmMap.mapReady.subscribe(map => {
-      let bounds: LatLngBounds = new google.maps.LatLngBounds();
-      if (this.markers.length > 1) {
-        for (let i = 0; i < this.markers.length; i++) {
-          bounds.extend(new google.maps.LatLng(this.markers[i].lat, this.markers[i].lng));
-        }
-        map.fitBounds(bounds);
-      }
-    });
+  ngOnChanges() {
+    this.init();
   }
 
   zoomChange(event) {
-    this.zoom = event;
+    this.zoom = event.target.getZoom();
+    
+    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'),'countries']; 
+    if(this.zoom<=this.zoomMaxStations && this.zoom>this.zoomMinCountries) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'),'countries','zones'];   
+    if(this.zoom>this.zoomMaxStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='stations'),'zones','stations'];
   }
 
-  initMarkers() {
-    for (let country of this.countries) {
-      for (let platform of this.platforms) {
-        if (country.code === platform.codeCountry) {
-          this.markers.push(country.coordinates)
-        }
+  changeView(view: string) {
+    this.show=this.show.indexOf(view)>=0?[...this.show.filter(s => s!==view)]:[...this.show,view];
+  }
+
+  isDisplayed(layer: string){
+    return this.show.indexOf(layer)>=0;
+  }
+
+  changeBL() {
+    this.bl=this.bl?0:1;
+    // Remove all the layers to reload them on new style when baselayer is loaded
+    this.tmp = this.show;    
+    this.show = [];
+  }
+
+  styleChange(event){
+    // when style is loaded put back the layers
+    if(event.dataType==="style"){
+      if(this.tmp.length>0){ 
+        this.show=this.tmp;
+        this.tmp=[];
       }
     }
+  }
 
-    if (this.markers.length == 1) {
-      this.lat = this.markers["0"].lat;
-      this.lng = this.markers["0"].lng;
-      this.zoom = 9;
+  init() {
+    if (this.countries.length > 0) {
+      this.markersCountries = this.countries.filter(country => country.code !== 'AA').map(country => ({
+        'country': country.code,
+        'name':country.name,
+        'lngLat': [country.coordinates.lng, country.coordinates.lat]
+      }));      
+      if (this.platforms.length > 0) {
+        this.setZones(this.platforms);
+        this.setStations(this.platforms);
+      }
+      if(this.countries.length===1 && this.platforms.length > 0){
+         this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      } else {
+        this.bounds$=of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
+      }
+      
     }
+  }
 
-    if (this.platforms.length == 0) {
-      this.zoom = 3;
+  zoomToCountries(coordinates): LngLatBounds {   
+    return coordinates.reduce((bnd, coord) => {
+      return bnd.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
+  }
+
+  zoomToZonesOrStation(featureCollection): LngLatBounds{
+    var bnd = new LngLatBounds();
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach((feature) => bnd.extend(feature.geometry.coordinates[0]));
+    return this.checkBounds(bnd);
+  }
+
+  zoomOnCountry(countryCode: string) {
+    let platformsConsidered = this.platforms.filter(platform => platform.codeCountry===countryCode);
+    this.setZones(platformsConsidered);
+    if(platformsConsidered.length>1){
+      this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+    } else {
+      this.bounds$=of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country===countryCode).map(mk => mk.lngLat)));
     }
   }
 
-  zoomMarker(marker) {
-    this.lat = marker.lat;
-    this.lng = marker.lng;
-    this.zoom = this.zoomMarkerConst;
+  setZones(platforms: Platform[]) {
+    this.zones = [];
+    for (let p of platforms) {
+      this.zones = [...this.zones, ...p.zones];
+    }
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code}))));
   }
 
-  zoomLayer(event) {
-    this.lat = event.latLng.lat();
-    this.lng = event.latLng.lng();
-    this.zoom = this.zoomLayerConst;
+  setStations(platforms: Platform[]) {
+    this.stations = [];
+    for (let p of platforms) {
+      this.stations = [...this.stations, ...p.stations];
+    }
+    this.layerStations$ = of(Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code}))));
   }
 
+  checkBounds(bounds: LngLatBounds){
+    if(bounds.getNorthEast().lng<bounds.getSouthWest().lng){
+      let tmp = bounds.getSouthWest().lng;
+      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng,bounds.getSouthWest().lat));
+      bounds.setNorthEast(new LngLat(tmp,bounds.getNorthEast().lat));
+    }
+    if(bounds.getNorthEast().lat<bounds.getSouthWest().lat){
+      let tmp = bounds.getSouthWest().lat;
+      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng,bounds.getNorthEast().lat));
+      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng,tmp));
+    }
+    return bounds;
+  }
+
+  showPopupStation(evt: MapMouseEvent) {
+    this.selectedStation = (<any>evt).features[0];
+  }
 }

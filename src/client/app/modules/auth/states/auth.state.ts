@@ -23,7 +23,7 @@ export const getURL = (state: IAuthState) => state.latestURL;
 
 export const getRole = (state: IAuthState) => state.role;
 
-export const getRoleIsAdmin = (state: IAuthState) => state => state.country.code === 'AA';
+export const getRoleIsAdmin = (state: IAuthState) => state.country.code === 'AA';
 
 export const getUser = (state: IAuthState) => state.user;
 

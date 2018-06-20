@@ -71,7 +71,7 @@
       <mat-step [stepControl]="stationsFormGroup" [optional]="true">
         <form [formGroup]="stationsFormGroup">
           <ng-template matStepLabel>{{ 'STATIONS' | translate}}</ng-template>
-         <bc-analyse-station [stations$]="stations$" (stationEmitter)="setStations($event)" [group]="stationsFormGroup"></bc-analyse-station>
+         <bc-analyse-station [usedZones$]="usedZones$" [stations$]="stations$" (stationEmitter)="setStations($event)" [group]="stationsFormGroup"></bc-analyse-station>
          <div *ngIf="(species$ | async)?.length==0" class="norecord">{{ 'NO_SPECIES' | translate}}</div> 
           <div>
             <button mat-button matStepperPrevious>{{ 'BACK' | translate}}</button>

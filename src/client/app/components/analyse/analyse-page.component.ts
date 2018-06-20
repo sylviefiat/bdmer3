@@ -27,8 +27,8 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [years$]="years$"
       [surveys$]="surveys$"
       [zones$]="zones$"
+      [usedZones$]="usedZones$"
       [stations$]="stations$"
-      [species$]="species$"
       [species$]="species$"
       [isAdmin$]="isAdmin$"
       [locale]="locale$ | async"
@@ -53,6 +53,7 @@ export class AnalysePageComponent implements OnInit {
   years$: Observable<string[]>;
   surveys$: Observable<Survey[]>;
   zones$: Observable<Zone[]>;
+  usedZones$: Observable<Zone[]>;
   stations$: Observable<Station[]>;
   species$: Observable<Species[]>;
   dimensions$: Observable<DimensionsAnalyse[]>;
@@ -78,6 +79,7 @@ export class AnalysePageComponent implements OnInit {
     this.species$ = this.store.select(getSelectedAnalyseSpecies);
     this.msg$ = this.store.select(getAnalyseMsg);
     this.data$ = this.store.select(getAnalyseData);
+    this.usedZones$ = this.data$.map(data => data.usedZones);
     this.store.dispatch(new CountriesAction.LoadAction());
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.store.dispatch(new PlatformAction.LoadAction());
@@ -101,6 +103,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   selectZone(zones: Zone[]) {
+    console.log(zones);
     this.store.dispatch(new AnalyseAction.SelectZones(zones));    
   }
 

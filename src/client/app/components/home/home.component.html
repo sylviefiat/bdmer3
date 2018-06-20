@@ -15,9 +15,11 @@
 			</div>
 		</div>
 		<!--div class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline">-->
-			<bc-home-map class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline"
+			<bc-home-map class="wrapp_right" *ngIf="(loggedIn$ | async) && isOnline" [isAdmin]="isAdmin$ | async"
 				[platforms]="platforms$ | async"
-				[countries]="(isAdmin$ | async)?([(userCountry$ | async)]):(countries$ | async)"></bc-home-map>
+				[countries]="(isAdmin$ | async)?(countries$ | async):([(userCountry$ | async)])"></bc-home-map>
+
+
 		<!--</div-->
 	</div>
 </div>
