@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
-  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule, MatPaginatorModule } from '@angular/material';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
@@ -29,6 +29,7 @@ import { SHARED_COMPONENTS } from './components/index';
     MatSelectModule,
     MatSidenavModule,
     MatTabsModule,
+    MatPaginatorModule
   ]
 })
 export class SharedMaterialModule {}
@@ -52,6 +53,7 @@ export class SharedMaterialModule {}
     MatSelectModule,
     MatSidenavModule,
     MatTabsModule,
+    MatPaginatorModule
   ]
 })
 export class MaterialModule { }

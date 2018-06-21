@@ -28,18 +28,30 @@ import { Results, Data } from '../../modules/analyse/models/index';
           (load)="supercluster = $event">
           <ng-template mglPoint let-feature>
             <div
-              class="marker">
-              {{ feature.properties['biomass'] }}
+              class="marker marker-small">
+              {{'BIOMASS' | translate}}: {{ feature.properties['biomass'] }}
             </div>
           </ng-template>
           <ng-template mglClusterPoint let-feature>
-            <div
-              class="marker-cluster"
+            <div 
+              class="marker"
+              [class.marker-small]="getBiomassCluster(feature)<=100"
+              [class.marker-medium]="getBiomassCluster(feature)<=10000 && getBiomassCluster(feature)>100"
+              [class.marker-big]="getBiomassCluster(feature)>10000"
               (click)="selectCluster($event, feature)">
-              {{ feature.properties?.point_count }}
+              {{ getBiomassCluster(feature) }}
             </div>
           </ng-template>
-        </mgl-marker-cluster>   
+        </mgl-marker-cluster>  
+        <mgl-popup
+          *ngIf="selectedCluster"
+          [lngLat]="selectedCluster.lngLat">
+          <result-map-cluster-popup
+            [supercluster]="supercluster"
+            [clusterId]="selectedCluster.id"
+            [count]="selectedCluster.count">
+          </result-map-cluster-popup>
+        </mgl-popup> 
       </mgl-map>
    </div>
   `,
@@ -61,28 +73,29 @@ import { Results, Data } from '../../modules/analyse/models/index';
       margin-left: 20px;
       margin-right: 20px;
     }
-    ::ng-deep .marker-cluster {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: #4f615a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      border: 2px solid #56C498;
-      cursor: pointer;
-    }
 
-    .marker {
-      width: 30px;
-      height: 30px;
+    ::ng-deep .marker, .marker {    
       border-radius: 50%;
       background-color: #7d7d7d;
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 2px solid #C9C9C9
+    }
+
+    ::ng-deep .marker-small,.marker-small {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #FF0000;
+    }
+    ::ng-deep .marker-medium {
+      width: 35px;
+      height: 35px;
+      border: 2px solid #00FF00;
+    }
+    ::ng-deep .marker-big {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #0000FF;
     }
   `]
 })
@@ -92,6 +105,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
   @Input() typeShow : string;
   @Input() spShow: string;
   @Input() surveyShow: string;
+  markers: any[] = [];
   markers$: Observable<Turf.FeatureCollection>;
   bounds$: Observable<LngLatBounds>;
   boundsPadding: number = 100;
@@ -103,39 +117,16 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
     id: number;
   };
 
-  mapLat: any = 0;
-  mapLng: any = 0;
-  mapZoom: any = 0;
-  markers: any[] = [];
-  colors: string[] = ['blue','green','red','yellow','purple','orange','pink','cyan'];
-  iconSize = [
-    {
-      size:24,
-      url:'http://maps.google.com/mapfiles/ms/micons/red.png'
-    },{
-      size:32,
-      url:'http://maps.google.com/mapfiles/ms/micons/orange.png'
-    },{
-      size:48,
-      url:'http://maps.google.com/mapfiles/ms/micons/yellow.png'
-    },{
-      size:64,
-      url:'http://maps.google.com/mapfiles/ms/micons/green.png'
-    }];
-
   constructor() {
 
   }
 
-  ngOnInit(){
-    console.log("init map");
-    this.mapLat = this.analyseData.usedCountry.coordinates.lat;
-    this.mapLng = this.analyseData.usedCountry.coordinates.lng;
-    this.mapZoom = 9;    
+  ngOnInit(){  
     this.initMarkers();
     let featureCollection = Turf.featureCollection(this.markers.map(marker => Turf.point(marker.geometry.coordinates,{code: marker.properties.code,abundancy: marker.properties.abundancy,biomass: marker.properties.biomass})));
     this.markers$ = of(featureCollection);
     var bnd = new LngLatBounds();
+    console.log(bnd);
     this.markers.forEach((marker) => bnd.extend(marker.geometry.coordinates));
     this.bounds$=of(bnd);
   }
@@ -152,6 +143,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
                   coordinates:t.geometry.coordinates
                 },
                 properties: {
+                  code: t.properties.code,
                   abundancy:rt.densityPerHA,
                   biomass:rt.biomassPerHA,
                   species:rsp.codeSpecies,
@@ -168,6 +160,7 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
 
   selectCluster(event: MouseEvent, feature: Cluster) {
     console.log(feature);
+    //console.log((<any>this.supercluster.getLeaves)(feature.properties.cluster_id!, 230, 0));
     event.stopPropagation(); // This is needed, otherwise the popup will close immediately
     this.selectedCluster = {
       // Change the ref, to trigger mgl-popup onChanges (when the user click on the same cluster)
@@ -177,7 +170,27 @@ export class ResultMapComponent implements OnInit/*, AfterViewInit*/ {
     };
   }
 
+  getAbundancyCluster(feature: Cluster){
+    let abund = 0;
+    let id= feature.properties.cluster_id!;
+    let leaves = (<any>this.supercluster.getLeaves)(id, 5, 0);
+    for(let i in leaves){
+      //console.log(leaves[i]);
+      abund+=leaves[i].properties.abundancy;
+    }
+    return Math.round(abund);
+  }
 
+  getBiomassCluster(feature: Cluster){
+    let biom = 0;
+    let id= feature.properties.cluster_id!;
+    let leaves = (<any>this.supercluster.getLeaves)(id, Infinity, 0);
+    for(let i in leaves){
+        //console.log(leaves[i]);
+      biom+=leaves[i].properties.biomass;
+    }
+    return Math.round(biom);
+  }
 
 
 }
