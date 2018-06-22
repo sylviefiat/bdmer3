@@ -10,7 +10,7 @@ import { Cluster, Supercluster } from 'supercluster';
       <mat-list>
         <mat-list-item
           *ngFor="let leaf of leaves">
-          {{'BIOMASS' | translate}}: {{ leaf.properties['biomass'] }}
+          {{ leaf.properties['code'] }}: {{ getValue(leaf) }}
         </mat-list-item>
       </mat-list>
       <mat-paginator
@@ -24,6 +24,7 @@ export class ClusterPopupComponent implements OnChanges {
   @Input() clusterId: GeoJSON.Feature<GeoJSON.Point>;
   @Input() supercluster: Supercluster;
   @Input() count: number;
+  @Input() typeShow: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -43,6 +44,16 @@ export class ClusterPopupComponent implements OnChanges {
     }
     // Typing issue in supercluster    
     this.leaves = (<any>this.supercluster.getLeaves)(this.clusterId, 5, offset);
-    console.log(this.leaves);
+  }
+
+  getValue(feature) {
+    switch (this.typeShow) {
+      case "B":
+        return Math.round(feature.properties.biomass);
+      case "A":
+        return Math.round(feature.properties.abundancy);
+      default:
+        return 0;
+    }
   }
 }
