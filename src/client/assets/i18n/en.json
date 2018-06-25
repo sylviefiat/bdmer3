@@ -393,5 +393,6 @@
   "CANNOT_BE_INSERTED_CODEZONE": " cannot be inserted because codeZone ",
   "NO_STATION_IN_DB":"There is no stations in the the database for platform ",
   "NO_SPECIES_IN_DB":"There is no species in the the database",
-  "NO_SURVEY_IN_DB":"There is no surveys in the the database for platform "
+  "NO_SURVEY_IN_DB":"There is no surveys in the the database for platform ",
+  "LAYERS":"Show "
 }

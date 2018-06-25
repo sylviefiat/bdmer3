@@ -10,7 +10,7 @@ import { Cluster, Supercluster } from 'supercluster';
       <mat-list>
         <mat-list-item
           *ngFor="let leaf of leaves">
-          {{ leaf.properties['code'] }}: {{ getValue(leaf) }}
+          {{ leaf.properties['code'] }}: {{ getValue(leaf) }} {{ getUnit() }}
         </mat-list-item>
       </mat-list>
       <mat-paginator
@@ -52,6 +52,17 @@ export class ClusterPopupComponent implements OnChanges {
         return Math.round(feature.properties.biomass);
       case "A":
         return Math.round(feature.properties.abundancy);
+      default:
+        return 0;
+    }
+  }
+
+  getUnit(){
+    switch (this.typeShow) {
+      case "B":
+        return "Kg/ha";
+      case "A":
+        return "Holot./ha";
       default:
         return 0;
     }

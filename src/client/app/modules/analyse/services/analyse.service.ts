@@ -40,11 +40,15 @@ export class AnalyseService {
                     // ajout des résultats du station dans le résultat de l'espère
                     resultSp.resultPerStation.push(resultStation);
                     // si la zone a déjà commencé a etre traitée on récupère l'objet de résultat
-                    if(resultSp.resultPerZone.filter(resultZone => resultZone.codeZone) && resultSp.resultPerZone.filter(resultZone => resultZone.codeZone)[0]){
-                        resultZone = resultSp.resultPerZone.filter(resultZone => resultZone.codeZone)[0];
+                    console.log(resultSp.resultPerZone);
+                    console.log(resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code));
+                    if(resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code) && resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code)[0]){ 
+                        resultZone = resultSp.resultPerZone.filter(rz => rz.codeZone === zone.properties.code)[0];
                     } 
+                    console.log(resultZone);
                     // mise à jour des résultats de la zone avec ce station
                     resultZone = this.updateResultPerZone(resultZone, zone, resultStation);
+                    console.log(resultZone);
                     // on met a jour le résultat de la zone dans le résultat de l'espèce
                     resultSp.resultPerZone=[...resultSp.resultPerZone.filter(rz => rz.codeZone !== resultZone.codeZone),resultZone];
                     // on mets à jour les abondances et biomasses de l'espèce avec ce station
