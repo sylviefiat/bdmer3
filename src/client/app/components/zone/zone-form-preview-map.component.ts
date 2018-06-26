@@ -43,6 +43,45 @@ import { IAppState } from "../../modules/ngrx/index";
         </div>
       </mgl-marker>
     </ng-container>
+    <ng-container *ngIf="newZonePreview && isDisplayed('zones')">
+    <mgl-geojson-source
+      id="layerPreviewsZone"
+      [data]="newZonePreview">
+      <mgl-layer
+        id="previewzoneid"
+        type="fill"
+        source="layerPreviewsZone"
+        [paint]="{
+          'fill-color': 'green',
+          'fill-opacity': 0.3,
+          'fill-outline-color': '#000'
+          }"
+        (mouseEnter)="cursorStyle = 'pointer'"
+        (mouseLeave)="cursorStyle = ''">
+      </mgl-layer>
+      <mgl-layer
+        id="previewzonetext"
+        type="symbol"
+        source="layerPreviewsZone"
+        [layout]="{
+          'text-field': '{code}',
+          'text-anchor':'bottom',
+          'text-font': [
+            'DIN Offc Pro Italic',
+            'Arial Unicode MS Regular'
+          ],
+          'symbol-placement': 'point',
+          'symbol-avoid-edges': true,
+          'text-max-angle': 30,
+          'text-size': 12
+        }"
+        [paint]="{
+          'text-color': 'white'
+        }"
+      >
+      </mgl-layer>
+    </mgl-geojson-source>
+    </ng-container>
     <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
       <mgl-geojson-source
         id="layerZones"
@@ -121,6 +160,10 @@ import { IAppState } from "../../modules/ngrx/index";
     .mapboxgl-popup-content {
       color:black;
     }
+    .marker{
+        color: white;
+    }
+
     .marker:hover {
       cursor = 'pointer';
     }
@@ -181,6 +224,7 @@ import { IAppState } from "../../modules/ngrx/index";
 export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
+  @Input() newZone: any[];
 
   bounds$: Observable<LngLatBounds>;
   boundsPadding: number = 100;
@@ -195,6 +239,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
 
   markerCountry: any;
   zones: Zone[] = [];
+  newZonePreview: Zone;
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
@@ -213,7 +258,33 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    if (this.newZone) {
+      this.createZone(this.newZone);
+    }
     this.init();
+  }
+
+  createZone(coordinates) {
+    this.newZonePreview = {
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: coordinates
+      },
+      properties: {
+        name: "",
+        code: "",
+        surface: 0
+      },
+      staticmap: "",
+      codePlatform: this.platform.code,
+      zonePreferences: []
+    };
+
+    console.log(coordinates[0]);
+    //this.bounds$ = of([coordinates[0][0][0], coordinates[0][0][1]]);
+    var bnd = new LngLatBounds();
+    this.bounds$ = of(this.checkBounds(bnd.extend(coordinates[0])));
   }
 
   zoomChange(event) {
@@ -262,25 +333,20 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
       if (this.platform.zones.length > 0) this.setZones(this.platform);
       if (this.platform.stations.length > 0) this.setStations(this.platform);
 
-      console.log(this.markerCountry);
-      this.bounds$ = of(this.zoomToCountry(this.markerCountry.lngLat));
+      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     }
   }
 
-  zoomToCountry(coordinates): LngLatBounds {
-    console.log(coordinates);
-    return new LngLatBounds(coordinates[0], coordinates[1]);
+  zoomOnCountry() {
+    this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
   }
 
   zoomToZonesOrStation(featureCollection): LngLatBounds {
     var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates[0]));
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
+      bnd.extend(feature.geometry.coordinates[0]);
+    });
     return this.checkBounds(bnd);
-  }
-
-  zoomOnCountry() {
-    this.setZones(this.platform);
-    this.bounds$ = of(this.zoomToCountry(this.markerCountry.lngLat));
   }
 
   setZones(platform: Platform) {

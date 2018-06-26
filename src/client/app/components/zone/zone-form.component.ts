@@ -123,7 +123,6 @@ export class ZoneFormComponent implements OnInit {
     this.errorCoord = false;
     var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
     if (ar !== "error") {
-      this.url = this.mapStaticService.googleMapUrl(ar);
       this.coordsRefactor = ar;
     } else {
       this.errorCoord = true;

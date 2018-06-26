@@ -29,7 +29,7 @@
       <p *ngIf="errorCoord" class="error">{{ 'POLYGON_ERROR' | translate }}</p>
       <img mat-card-sm-image *ngIf="url" [src]="url" />
 
-      <bc-zone-form-map [platform]="platform" [countries]="countries" class="wrapp_right"></bc-zone-form-map>
+      <bc-zone-form-map [platform]="platform" [countries]="countries" [newZone]="coordsRefactor" class="wrapp_right"></bc-zone-form-map>
     </mat-card>
   </div>
 
