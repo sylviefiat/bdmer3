@@ -51,11 +51,7 @@ import { IAppState } from "../../modules/ngrx/index";
         id="previewzoneid"
         type="fill"
         source="layerPreviewsZone"
-        [paint]="{
-          'fill-color': 'green',
-          'fill-opacity': 0.3,
-          'fill-outline-color': '#000'
-          }"
+        [paint]="colorPreview"
         (mouseEnter)="cursorStyle = 'pointer'"
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
@@ -236,7 +232,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   zoomMaxStations: number = 5;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
-
+  colorPreview: Object;
   markerCountry: any;
   zones: Zone[] = [];
   newZonePreview: Zone;
@@ -259,9 +255,32 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.newZone) {
-      this.createZone(this.newZone);
+      if (this.newZone[0].length > 0) {
+        this.createZone(this.newZone);
+        this.checkZoneValid(this.newZone);
+      } else {
+        this.newZonePreview = null;
+      }
     }
     this.init();
+  }
+
+  checkZoneValid(zoneCheck) {
+    this.colorPreview = {
+      "fill-color": "green",
+      "fill-opacity": 0.5,
+      "fill-outline-color": "#000"
+    };
+
+    this.platform.zones.map(zone => {
+      if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zoneCheck))) {
+        this.colorPreview = {
+          "fill-color": "red",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#000"
+        };
+      }
+    });
   }
 
   createZone(coordinates) {
@@ -281,8 +300,6 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
       zonePreferences: []
     };
 
-    console.log(coordinates[0]);
-    //this.bounds$ = of([coordinates[0][0][0], coordinates[0][0][1]]);
     var bnd = new LngLatBounds();
     this.bounds$ = of(this.checkBounds(bnd.extend(coordinates[0])));
   }
