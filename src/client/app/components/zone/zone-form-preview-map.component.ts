@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, Subscription, pipe, of } from "rxjs";
 import { map } from "rxjs/operators";
@@ -18,10 +18,8 @@ import { IAppState } from "../../modules/ngrx/index";
   <nav id="switcher">
     <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
     <a  (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
-    <div class="subswitch">
-      <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
-      <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
-    </div>
+    <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
+    <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
   </nav>
   <mgl-map
   [style]="bls[bl]"
@@ -163,22 +161,16 @@ import { IAppState } from "../../modules/ngrx/index";
     .marker:hover {
       cursor = 'pointer';
     }
-    @media screen and (max-width: 800px) {
-      height:50vh;
-    }
     #switcher {
         background: #fff;
-        position: absolute;
+        display:flex;
+        justify-content: flex-end;
         z-index: 1;
-        top: 265px;
-        right: 24px;
-        border-radius: 3px;
-        width: 120px;
-        border: 1px solid rgba(0,0,0,0.4);
         font-family: 'Open Sans', sans-serif;
     }
 
     #switcher a {
+        margin-left: 2px;
         font-size: 13px;
         color: #404040;
         display: block;
@@ -186,12 +178,8 @@ import { IAppState } from "../../modules/ngrx/index";
         padding: 0;
         padding: 10px;
         text-decoration: none;
-        border-bottom: 1px solid rgba(0,0,0,0.25);
+        border: 1px solid rgba(0,0,0,0.25);
         text-align: center;
-    }
-
-    #switcher a:last-child {
-        border: none;
     }
 
     #switcher a:hover {
@@ -221,6 +209,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
   @Input() newZone: any[];
+  @Output() zoneIntersect: EventEmitter<any> = new EventEmitter<any>();
 
   bounds$: Observable<LngLatBounds>;
   boundsPadding: number = 100;
@@ -274,6 +263,8 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
 
     this.platform.zones.map(zone => {
       if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zoneCheck))) {
+        this.zoneIntersect.emit(true);
+
         this.colorPreview = {
           "fill-color": "red",
           "fill-opacity": 0.5,

@@ -79,24 +79,40 @@ export class MapStaticService {
     return url;
   }
 
-  staticMapToB64(url) {
-    return new Promise((resolve, reject) => {
-      var img = new Image();
-      img.src = url;
+  setAllStaticMapToB64(platform, zone) {
+    console.log(platform);
+    console.log(zone);
+    let base = "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/";
+    let token = "/1280x1280?access_token=pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw";
+    for (let z of platform.zones) {
+      if (zone.properties.code === z.properties.code) {
+        z = zone;
+        break;
+      }
 
-      var xhr = new XMLHttpRequest();
-      var self = this;
-      xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-          resolve(reader.result);
-        };
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.open("GET", url);
-      xhr.responseType = "blob";
-      xhr.send();
-    });
+      if (z === platform.zones[platform.zones.length - 1]) {
+        platform.zones.push(zone);
+      }
+    }
+
+    console.log(platform);
+    // return new Promise((resolve, reject) => {
+    //   var img = new Image();
+    //   img.src = url;
+    //
+    //   var xhr = new XMLHttpRequest();
+    //   var self = this;
+    //   xhr.onload = function() {
+    //     var reader = new FileReader();
+    //     reader.onloadend = function() {
+    //       resolve(reader.result);
+    //     };
+    //     reader.readAsDataURL(xhr.response);
+    //   };
+    //   xhr.open("GET", url);
+    //   xhr.responseType = "blob";
+    //   xhr.send();
+    // });
   }
 
   setSurface(geometry) {

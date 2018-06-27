@@ -4,7 +4,7 @@
       <mat-card-title>{{ 'ADD_ZONE_TO' | translate}} {{ platform.code }}</mat-card-title>
 
       <mat-card-content>
-        <button type="submit" class="btn btn-primary" [disabled]="!zoneForm.valid">{{ 'SUBMIT' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!zoneForm.valid && errorIntersect && errorCoord">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
       </mat-card-content>
     </mat-card>
@@ -23,14 +23,12 @@
         <mat-form-field>
           <input type="text" matInput placeholder="{{ 'ZONE_COORD' | translate }}" (change)="coordChange($event)" formControlName="coordinates" [errorStateMatcher]="matcher" required>
           <div class="hint">{{'ZONE_COORD_EX' | translate}}</div>
-
         </mat-form-field>
       </div>
       <p *ngIf="errorMessage" class="error">{{ 'POLYGON_ERROR' | translate }}</p>
       <p *ngIf="errorCoord" class="error">{{ 'POLYGON_ERROR' | translate }}</p>
-      <img mat-card-sm-image *ngIf="url" [src]="url" />
-
-      <bc-zone-form-map [platform]="platform" [countries]="countries" [newZone]="coordsRefactor" class="wrapp_right"></bc-zone-form-map>
+      <p *ngIf="errorIntersect" class="error">{{ 'INTERSECT_ERROR' | translate }}</p>
+      <bc-zone-form-map (zoneIntersect)="zoneIntersect($event)" [platform]="platform" [countries]="countries" [newZone]="coordsRefactor" class="wrapp_right"></bc-zone-form-map>
     </mat-card>
   </div>
 

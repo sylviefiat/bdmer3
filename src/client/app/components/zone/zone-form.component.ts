@@ -24,12 +24,12 @@ export class ZoneFormComponent implements OnInit {
   @Input() countries: Country[];
   @Output() submitted = new EventEmitter<Zone>();
 
-  url: string;
   code: string;
   coords: string;
   coordsRefactor: any;
   coordStringRefactor: string = "";
-  errorCoord: boolean;
+  errorCoord: boolean = false;
+  errorIntersect: boolean = false;
 
   zoneForm: FormGroup = new FormGroup({
     type: new FormControl("Feature"),
@@ -85,27 +85,23 @@ export class ZoneFormComponent implements OnInit {
       );
       this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
 
-      this.mapStaticService.staticMapToB64(this.url).then(data => {
-        this.zoneForm.controls.staticmap.setValue(data);
+      if (this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value) {
+        this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone.geometry["coordinates"]);
+        this.zoneForm.controls.properties.get("surface").setValue(this.zone.properties["surface"]);
+      } else {
+        this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordsRefactor);
+        this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
+      }
 
-        if (this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value) {
-          this.zoneForm.controls.geometry.get("coordinates").setValue(this.zone.geometry["coordinates"]);
-          this.zoneForm.controls.properties.get("surface").setValue(this.zone.properties["surface"]);
+      if (this.zoneForm.valid) {
+        if (this.zoneForm.controls.properties.get("surface").value === 0) {
+          this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
+          this.errorMessage = true;
         } else {
-          this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordsRefactor);
-          this.zoneForm.controls.properties.get("surface").setValue(this.mapStaticService.setSurface(this.zoneForm.controls.geometry.value));
+          this.zoneForm.controls.properties.get("name").enable();
+          this.submitted.emit(this.zoneForm.value);
         }
-
-        if (this.zoneForm.valid) {
-          if (this.zoneForm.controls.properties.get("surface").value === 0) {
-            this.zoneForm.controls.geometry.get("coordinates").setValue(this.coords);
-            this.errorMessage = true;
-          } else {
-            this.zoneForm.controls.properties.get("name").enable();
-            this.submitted.emit(this.zoneForm.value);
-          }
-        }
-      });
+      }
     }
   }
 
@@ -119,13 +115,18 @@ export class ZoneFormComponent implements OnInit {
     });
   }
 
+  zoneIntersect(error) {
+    this.errorIntersect = error;
+  }
   coordChange(coords) {
     this.errorCoord = false;
-    var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
-    if (ar !== "error") {
-      this.coordsRefactor = ar;
-    } else {
-      this.errorCoord = true;
+    if (coords.target.value !== "") {
+      var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
+      if (ar !== "error") {
+        this.coordsRefactor = ar;
+      } else {
+        this.errorCoord = true;
+      }
     }
   }
 }
