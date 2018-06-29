@@ -2,6 +2,7 @@ import { Injector, Component } from '@angular/core';
 import { Config } from '../../modules/core/index';
 import { Store } from '@ngrx/store';
 import { IAppState, getLangues } from '../../modules/ngrx/index';
+import { Chart } from 'angular-highcharts';
 
 @Component({
     moduleId: module.id,
@@ -22,6 +23,7 @@ export class AboutComponent {
     private pdfFile: string;
     private docs_repo: string;
     private imgs_repo: string;
+    thischart: Chart;
 
     constructor(private injector: Injector, private store: Store<IAppState>) {
         this.docs_repo = '../../../assets/files/';
@@ -38,6 +40,29 @@ export class AboutComponent {
                     this.pdfFile = 'BDMer2.0_Guide_de_l_utilisateur_Juin_2014.pdf';
             }
         });
+        this.thischart = new Chart(
+            {
+                chart: {
+                  type: 'line'
+                },
+                title: {
+                  text: 'Linechart'
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [
+                    {
+                        name: 'Line 1',
+                        data: [1, 2, 3]
+                    }
+                ]
+        });
+    }
+
+
+    add() {
+        this.thischart.addPoint(Math.floor(Math.random() * 10));
     }
 
     get logo_pn() {

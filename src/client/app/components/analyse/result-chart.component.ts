@@ -1,5 +1,6 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
+import { Chart } from 'angular-highcharts';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
@@ -11,7 +12,8 @@ declare var google: any;
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
   <div class="container">   
-     
+     <button (click)="add()">Add Point!</button>
+    <div [chart]="chart"></div>
    </div>
   `,
     styles: [
@@ -25,25 +27,42 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
     @Input() chartType: string;
     chartData: any;
     title: string;
+    chart = new Chart({
+        title: {
+            text: 'Linechart'
+        },
+        credits: {
+            enabled: false
+        },
+        series: [
+            {
+                name: 'Line 1',
+                data: [1, 2, 3]
+            }
+        ]
+    });
 
     constructor() {
 
     }
 
-    ngOnInit() {
-      this.chartData = this.getChartData(this.type);
-      console.log(this.type);
+    add() {
+        this.chart.addPoint(Math.floor(Math.random() * 10));
     }
 
-    getChartData(type: string){
-      return {
-                chartType: this.chartType,
-                dataTable: [
-                    //this.header,
-                    ...this.fillData(type)
-                ],
-                options: { 'legend': 'true', 'title': this.title },
-            };
+    ngOnInit() {
+        this.chartData = this.getChartData(this.type);
+    }
+
+    getChartData(type: string) {
+        return {
+            chartType: this.chartType,
+            dataTable: [
+                //this.header,
+                ...this.fillData(type)
+            ],
+            options: { 'legend': 'true', 'title': this.title },
+        };
     }
 
     fillData(type: string): any[] {
@@ -51,15 +70,15 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
         data[0] = [];
         this.title = type === 'B' ? 'Biomass' : 'Abundance';
         if (this.chartType === 'CandlestickChart') {
-                data[0] = [this.resultSurvey.codeSurvey, this.title, '', '', ''];
-            } else if (this.chartType === 'PieChart') {
-                data[0] = [this.resultSurvey.codeSurvey, this.title];
-            }
+            data[0] = [this.resultSurvey.codeSurvey, this.title, '', '', ''];
+        } else if (this.chartType === 'PieChart') {
+            data[0] = [this.resultSurvey.codeSurvey, this.title];
+        }
         for (let i in this.resultSurvey.resultPerSpecies) {
-            let index = Number(i)+1;
+            let index = Number(i) + 1;
             data[index] = [];
             let value = type === 'B' ? this.resultSurvey.resultPerSpecies[i].biomassTotal : this.resultSurvey.resultPerSpecies[i].numberIndividual;
-            let sd = type === 'B' ? this.resultSurvey.resultPerSpecies[i].SDBiomassTotal : this.resultSurvey.resultPerSpecies[i].SDAbundancyTotal;            
+            let sd = type === 'B' ? this.resultSurvey.resultPerSpecies[i].SDBiomassTotal : this.resultSurvey.resultPerSpecies[i].SDAbundancyTotal;
             if (this.chartType === 'CandlestickChart') {
                 data[index] = [this.resultSurvey.resultPerSpecies[i].codeSpecies, value - sd, value, value, value + sd];
             } else if (this.chartType === 'PieChart') {

@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA, FactoryProvider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,29 +10,11 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
+//import * as more from 'highcharts/highcharts-more.src';
+//import * as exporting from 'highcharts/modules/exporting.src';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
-
-@NgModule({
-  exports: [
-    MatAutocompleteModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatListModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatTabsModule,
-    MatPaginatorModule
-  ]
-})
-export class SharedMaterialModule {}
 
 @NgModule({
   imports: [
@@ -69,7 +51,8 @@ const SHARED_MODULES: any[] = [
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
   MomentModule,
-  NgxMapboxGLModule
+  NgxMapboxGLModule,
+  ChartModule
 ];
 
 /**
@@ -81,7 +64,7 @@ const SHARED_MODULES: any[] = [
 
 @NgModule({
   imports: [
-    ...SHARED_MODULES, 
+    ...SHARED_MODULES,     
   ],
   declarations: [
     ...SHARED_COMPONENTS
@@ -96,6 +79,7 @@ const SHARED_MODULES: any[] = [
     ...SHARED_COMPONENTS,
   ],
   providers: [
+    //{provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ]}
   ]
 })
 export class SharedModule {}

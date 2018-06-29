@@ -108,10 +108,24 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@mapbox/mapbox-gl-geocoder',
             path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
-        },
-        {
+        }, {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
+        }, {
+            name: 'highcharts/highcharts-more.src',
+            path: 'node_modules/highcharts/highcharts-more.src.js'
+        }, {
+            name: 'highcharts/modules/solid-gauge.src',
+            path: 'node_modules/highcharts/modules/solid-gauge.src.js'
+        }, {
+            name: 'highcharts/modules/exporting.src',
+            path: 'node_modules/highcharts/modules/exporting.src.js'
+        }, {
+            name: 'highcharts',
+            path: 'node_modules/highcharts/highcharts.js'
+        }, {
+            name: 'angular-highcharts',
+            path: 'node_modules/angular-highcharts/angular-highcharts.js'
         }, {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
@@ -127,13 +141,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: '@angular/material',
             path: 'node_modules/@angular/material/bundles/material.umd.js'
-        }, /*{
-            name: '@angular/animations',
-            packageMeta: {
-                main: 'node_modules/@angular/animations/bundles/animations.umd.js',
-                defaultExtension: 'js'
-            }
-        },*/ {
+        }, {
             name: '@angular/cdk',
             path: '/@angular/cdk/index.js'
         },
