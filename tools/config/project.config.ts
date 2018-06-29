@@ -13,10 +13,8 @@ export class ProjectConfig extends SeedAdvancedConfig {
     super();
     this.APP_TITLE = "BDMER³";
     // this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
-
     /* Enable typeless compiler runs (faster) between typed compiler runs. */
     // this.TYPED_COMPILE_INTERVAL = 5;
-
     // Add `NPM` third-party libraries to be injected/bundled.
     console.log("here");
     this.NPM_DEPENDENCIES = [...this.NPM_DEPENDENCIES];
@@ -249,12 +247,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
     // Fix up path to bootstrap module
     //this.SYSTEM_CONFIG.package[this.BOOTSTRAP_MODULE].defaultExtension = 'js';
-
     /* Add proxy middleware */
     // this.PROXY_MIDDLEWARE = [
     //   require('http-proxy-middleware')('/api', { ws: false, target: 'http://localhost:3003' })
     // ];
-
     /* Add to or override NPM module configurations: */
     // this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
   }
