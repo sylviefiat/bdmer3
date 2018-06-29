@@ -201,11 +201,6 @@
     "electron": "^2.0.3",
     "es-module-loader": "^2.2.8",
     "file-system": "^2.2.2",
-<<<<<<< Updated upstream
-=======
-    "highcharts": "^6.1.1",
-    "highcharts-angular": "^1.0.2",
->>>>>>> Stashed changes
     "intl": "^1.2.5",
     "jquery-confirm": "^3.3.2",
     "js-marker-clusterer": "^1.0.0",
