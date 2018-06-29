@@ -1,6 +1,5 @@
 
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
-import { Chart } from 'angular-highcharts';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
@@ -12,8 +11,6 @@ declare var google: any;
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
   <div class="container">   
-     <button (click)="add()">Add Point!</button>
-    <div [chart]="chart"></div>
    </div>
   `,
     styles: [
@@ -27,27 +24,9 @@ export class ResultChartComponent implements OnInit/*, AfterViewInit*/ {
     @Input() chartType: string;
     chartData: any;
     title: string;
-    chart = new Chart({
-        title: {
-            text: 'Linechart'
-        },
-        credits: {
-            enabled: false
-        },
-        series: [
-            {
-                name: 'Line 1',
-                data: [1, 2, 3]
-            }
-        ]
-    });
 
     constructor() {
 
-    }
-
-    add() {
-        this.chart.addPoint(Math.floor(Math.random() * 10));
     }
 
     ngOnInit() {

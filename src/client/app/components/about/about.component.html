@@ -3,8 +3,12 @@
   <mat-card-title>{{'ABOUT_TITLE' | translate}}</mat-card-title>
 </mat-card>
 
-<button (click)="add()">Add Point!</button>
-<div [chart]="thischart"></div>
+<highcharts-chart 
+  [Highcharts]="Highcharts"
+  [options]="chartOptions"
+
+  style="width: 100%; height: 400px; display: block;"
+></highcharts-chart>
 
 <div class="cards">
   <div class="flexcards">

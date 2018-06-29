@@ -26,6 +26,10 @@
       "jasmine"
     ]
   },
+  "include": [
+      "src/**/*",
+      "node_modules/highcharts-angular/src/app/*"
+  ],
   "files": [
     "gulpfile.ts",
     "tools/manual_typings/seed/autoprefixer.d.ts",

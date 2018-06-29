@@ -10,9 +10,7 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
-import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
-//import * as more from 'highcharts/highcharts-more.src';
-//import * as exporting from 'highcharts/modules/exporting.src';
+import { HighchartsChartComponent } from 'highcharts-angular';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -51,8 +49,7 @@ const SHARED_MODULES: any[] = [
   BrowserAnimationsModule,
   Angular2FontawesomeModule,
   MomentModule,
-  NgxMapboxGLModule,
-  ChartModule
+  NgxMapboxGLModule
 ];
 
 /**
@@ -67,7 +64,8 @@ const SHARED_MODULES: any[] = [
     ...SHARED_MODULES,     
   ],
   declarations: [
-    ...SHARED_COMPONENTS
+    ...SHARED_COMPONENTS,
+    HighchartsChartComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
@@ -79,7 +77,6 @@ const SHARED_MODULES: any[] = [
     ...SHARED_COMPONENTS,
   ],
   providers: [
-    //{provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ]}
   ]
 })
 export class SharedModule {}
