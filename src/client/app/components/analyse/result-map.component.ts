@@ -77,9 +77,9 @@ import { Results, Data } from '../../modules/analyse/models/index';
                   property: 'abundancy',
                     type: 'interval',
                     stops: [
-                      [0, '#FF0000'],
-                      [0.5, '#00FF00'],
-                      [1, '#0000FF']
+                      [0, '#DF01D7'],
+                      [0.5, '#0B610B'],
+                      [1, '#FF8000']
                     ]
                 },
                 'fill-opacity': 0.3,
@@ -218,7 +218,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     this.filterFeaturesCollection();
   }
 
-  ngOnChanges() {
+  ngOnChanges(event) {
     this.filterFeaturesCollection();
   }
 
@@ -227,7 +227,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rt of rsp.resultPerStation) {
-            if (rt.densityPerHA > 0 && rt.biomassPerHA > 0) {
+            if (rt.densityPerHA >= 0 && rt.biomassPerHA >= 0) {
               let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
               let marker = {
                 geometry: {
@@ -254,8 +254,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rz of rsp.resultPerZone) {
-            if (rz.densityPerHA > 0 && rz.biomassPerHA > 0) {
-              console.log(rz);
+            if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
               let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
               let polygon = {
                 geometry: {
@@ -275,7 +274,6 @@ export class ResultMapComponent implements OnInit, OnChanges {
         }
       }
     }
-    console.log(this.zones);
   }
 
   filterFeaturesCollection() {
@@ -291,7 +289,6 @@ export class ResultMapComponent implements OnInit, OnChanges {
         .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
         .map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
     );
-    console.log(fc2);
     this.layerZones$ = of(fc2);
     // bounds
     var bnd = new LngLatBounds();

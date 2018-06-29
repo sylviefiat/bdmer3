@@ -66,8 +66,6 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   }
 
   ngOnInit(){  
-    console.log(this.showStations);
-    console.log(this.showZones);
   }
 
   changeDisplay(showAbundancy: any){
