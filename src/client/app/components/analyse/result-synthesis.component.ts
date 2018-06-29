@@ -1,6 +1,7 @@
 
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { MatCheckboxChange } from '@angular/material';
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
 import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index';
@@ -17,7 +18,9 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [analyseData]="analyseData"
           [typeShow]="typeShow$ | async" 
           [spShow]="spShow$ | async" 
-          [surveyShow]="surveyShow$ | async">
+          [surveyShow]="surveyShow$ | async"
+          [showStations]="showStations$ | async"
+          [showZones]="showZones$ | async">
         </bc-result-map>
 
         <bc-result-filter 
@@ -26,9 +29,13 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [typeShow]="typeShow$ | async" 
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
+          [showStations]="showStations$ | async"
+          [showZones]="showZones$ | async"
           (typeShowEmitter)="selectTypeShow($event)"
           (spShowEmitter)="selectSpShow($event)"
-          (surveyShowEmitter)="selectSurveyShow($event)">
+          (surveyShowEmitter)="selectSurveyShow($event)"
+          (showStationsEmitter)="stationsLayerShow($event)"
+          (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
 
         <div class="groupCharts">
@@ -68,9 +75,11 @@ export class ResultSynthesisComponent implements OnInit {
     @Input() results: Results;
     @Input() analyseData: Data;
     @Input() locale: string;
-    @Input() typeShow$ : Observable<string>;
-    @Input() spShow$: Observable<string>;
-    @Input() surveyShow$: Observable<string>;
+    typeShow$ : Observable<string>;
+    spShow$: Observable<string>;
+    surveyShow$: Observable<string>;
+    showStations$: Observable<boolean>;
+    showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
 
     constructor() {
@@ -82,6 +91,8 @@ export class ResultSynthesisComponent implements OnInit {
       this.spShow$=of(this.results.resultPerSurvey[0].resultPerSpecies[0].codeSpecies);
       this.surveyShow$=of(this.results.resultPerSurvey[0].codeSurvey);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
+      this.showStations$=of(true);
+      this.showZones$=of(false);
     }
 
     get localDate() {
@@ -109,5 +120,14 @@ export class ResultSynthesisComponent implements OnInit {
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
     }
 
+    stationsLayerShow(show: MatCheckboxChange){
+      console.log(show);
+      this.showStations$ = of(show.checked);      
+    }
+
+    zonesLayerShow(show: MatCheckboxChange){
+      console.log(show);
+      this.showZones$ = of(show.checked);      
+    }
 
 }

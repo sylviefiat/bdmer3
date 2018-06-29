@@ -218,6 +218,7 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
+    "supercluster": "^4.0.1",
     "svg-country-flags": "^1.2.1",
     "systemjs": "0.21.3",
     "systemjs-plugin-babel": "0.0.25",

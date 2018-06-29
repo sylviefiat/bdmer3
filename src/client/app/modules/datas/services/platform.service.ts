@@ -63,8 +63,9 @@ export class PlatformService {
     return this.getPlatform(platform.code)
       .pipe(
         mergeMap(st => {  
-          if (!platform.zones) platform.zones = []; 
+          if(!platform.zones) platform.zones = []; 
           if(!platform.surveys) platform.surveys = [];
+          if(!platform.stations) platform.stations = [];
           if(country !== undefined){
             platform.codeCountry = country.code;
           }

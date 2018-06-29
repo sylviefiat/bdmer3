@@ -297,7 +297,9 @@ export class MapComponent implements OnInit, OnChanges {
   setZones(platforms: Platform[]) {
     this.zones = [];
     for (let p of platforms) {
-      this.zones = [...this.zones, ...p.zones];
+      if(p.zones && p.zones.length>0){
+        this.zones = [...this.zones, ...p.zones];
+      }
     }
     this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code}))));
   }
@@ -305,7 +307,9 @@ export class MapComponent implements OnInit, OnChanges {
   setStations(platforms: Platform[]) {
     this.stations = [];
     for (let p of platforms) {
-      this.stations = [...this.stations, ...p.stations];
+      if(p.stations && p.stations.length>0){
+        this.stations = [...this.stations, ...p.stations];
+      }
     }
     this.layerStations$ = of(Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code}))));
   }

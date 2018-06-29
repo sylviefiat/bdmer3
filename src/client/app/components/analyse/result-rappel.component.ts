@@ -108,7 +108,7 @@ export class ResultRappelComponent implements OnInit {
             spCodesInSurveys[i].push(m.codeSpecies);
         }
       }
-      this.spInSurveys[i] = this.analyseData.usedSpecies.filter(sp => spCodesInSurveys[i].indexOf(sp.code));
+      this.spInSurveys[i] = this.analyseData.usedSpecies.filter(sp => spCodesInSurveys[i].indexOf(sp.code)>=0);
     }
   }
 

@@ -332,6 +332,8 @@
   "SHOW_RECAP":"Show summary",
   "DISPLAY_BIOMASS":"Display biomasses",
   "DISPLAY_ABUNDANCE":"Display abundance",
+  "BIOMASS":"Biomass",
+  "ABUNDANCY":"Abondancy",
   "TYPE":"Analyse type",
   "FILTER":"Filter displayed results",
   "SPECIES_MIN_DIMS":"Choose minimum animal size to consider in analysis",
@@ -391,5 +393,6 @@
   "CANNOT_BE_INSERTED_CODEZONE": " cannot be inserted because codeZone ",
   "NO_STATION_IN_DB":"There is no stations in the the database for platform ",
   "NO_SPECIES_IN_DB":"There is no species in the the database",
-  "NO_SURVEY_IN_DB":"There is no surveys in the the database for platform "
+  "NO_SURVEY_IN_DB":"There is no surveys in the the database for platform ",
+  "LAYERS":"Show "
 }
