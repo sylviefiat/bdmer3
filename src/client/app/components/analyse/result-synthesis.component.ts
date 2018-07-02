@@ -39,18 +39,15 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         </bc-result-filter>
 
         <div class="groupCharts">
-          <h3>{{surveyShow$ | async}}</h3>
+          <h3>{{typeShow$ | async}}</h3>
           <div class="chart">
-            <bc-result-chart 
-              [resultSurvey]="currentresultSurvey$ | async"
-              [chartType]="'CandlestickChart'" 
+            <bc-result-boxplot 
+              [resultSurveys]="results.resultPerSurvey"
+              [usedSurveys]="analyseData.usedSurveys"
+              [years]="analyseData.usedYears"
+              [species]="analyseData.usedSpecies"
               [type]="typeShow$ | async">
-            </bc-result-chart>
-            <bc-result-chart 
-              [resultSurvey]="currentresultSurvey$ | async" 
-              [chartType]="'PieChart'" 
-              [type]="typeShow$ | async">
-            </bc-result-chart>
+            </bc-result-boxplot>
           </div>
         </div>
       </div>

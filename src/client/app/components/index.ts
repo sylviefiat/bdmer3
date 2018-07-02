@@ -21,6 +21,7 @@ import { NewCountryPageComponent } from './country/new-country-page.component';
 import { NewCountryComponent } from './country/new-country.component';
 import { NewUserPageComponent } from './country/new-user-page.component';
 import { NewUserComponent } from './country/new-user.component';
+import { HighchartsChartComponent } from './highcharts/highcharts-chart.component';
 import { PLATFORM_COMPONENTS } from './platform/index';
 import { ZONE_COMPONENTS } from './zone/index';
 import { TR_COMPONENTS } from './station/index';
@@ -29,7 +30,7 @@ import { PA_COMPONENTS } from './preference-area/index';
 import { COUNT_COMPONENTS } from './count/index';
 import { SP_COMPONENTS } from './species/index';
 import { ANALYSE_COMPONENTS } from './analyse/index';
-import { GLOBAL_IMPORT_COMPONENTS } from './globalImport/index'
+import { GLOBAL_IMPORT_COMPONENTS } from './globalImport/index';
 
 export const APP_COMPONENTS: any[] = [
   ...PLATFORM_COMPONENTS,
@@ -64,7 +65,7 @@ export const APP_COMPONENTS: any[] = [
   SelectedUserPageComponent,
   NewUserPageComponent,
   NewUserComponent,
-
+  HighchartsChartComponent
 ];
 
 export * from './app.component';
@@ -98,3 +99,4 @@ export * from './preference-area/index';
 export * from './count/index';
 export * from './species/index';
 export * from './globalImport/index';
+export * from './highcharts/highcharts-chart.component';

@@ -1,7 +1,6 @@
 import { Injector, Component } from '@angular/core';
 import { Config } from '../../modules/core/index';
 import { Store } from '@ngrx/store';
-import * as Highcharts from 'highcharts';
 import { IAppState, getLangues } from '../../modules/ngrx/index';
 
 @Component({
@@ -23,14 +22,6 @@ export class AboutComponent {
     private pdfFile: string;
     private docs_repo: string;
     private imgs_repo: string;
-
-    Highcharts = Highcharts; // required
-    chartConstructor = 'chart'; // optional string, defaults to 'chart'
-    chartOptions = {
-        series: [{
-            data: [1, 2, 3]
-        }]
-    }; // required
 
     constructor(private injector: Injector, private store: Store<IAppState>) {
         this.docs_repo = '../../../assets/files/';

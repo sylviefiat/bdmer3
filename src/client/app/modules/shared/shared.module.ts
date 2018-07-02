@@ -10,7 +10,6 @@ import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, Ma
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
-import { HighchartsChartComponent } from 'highcharts-angular';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
 
@@ -61,11 +60,11 @@ const SHARED_MODULES: any[] = [
 
 @NgModule({
   imports: [
-    ...SHARED_MODULES,     
+    ...SHARED_MODULES,
+
   ],
   declarations: [
     ...SHARED_COMPONENTS,
-    HighchartsChartComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
