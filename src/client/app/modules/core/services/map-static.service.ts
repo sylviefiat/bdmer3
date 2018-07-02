@@ -1,7 +1,14 @@
+import { Injectable } from "@angular/core";
+import { NameRefactorService } from "./nameRefactor.service";
+
 import * as area from "@mapbox/geojson-area";
 import * as Turf from "@turf/turf";
+import * as togeojson from "@mapbox/togeojson";
 
+@Injectable()
 export class MapStaticService {
+  constructor(private nameRefactorService: NameRefactorService) {}
+
   refactorCoordinates(coordinates) {
     var string = coordinates.split(" ");
 
@@ -12,7 +19,12 @@ export class MapStaticService {
     var a = string.length;
 
     for (var i = 0; i < a; i++) {
-      if (parseFloat(string[i].split(",")["0"]) < -90 || parseFloat(string[i].split(",")["0"]) > 90 || parseFloat(string[i].split(",")["1"]) < -180 || parseFloat(string[i].split(",")["1"]) > 180) {
+      if (
+        parseFloat(string[i].split(",")["0"]) < -90 ||
+        parseFloat(string[i].split(",")["0"]) > 90 ||
+        parseFloat(string[i].split(",")["1"]) < -180 ||
+        parseFloat(string[i].split(",")["1"]) > 180
+      ) {
         return "error";
       }
     }

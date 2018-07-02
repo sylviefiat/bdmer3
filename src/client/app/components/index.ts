@@ -5,6 +5,7 @@ import { AboutComponent } from "./about/about.component";
 import { HomeComponent } from "./home/home.component";
 import { MapComponent } from "./home/map.component";
 import { PreviewMapZoneFormComponent } from "./zone/zone-form-preview-map.component";
+import { PreviewMapZoneImportComponent } from "./zone/zone-import-preview-map.component";
 import { LoginComponent } from "./login/login.component";
 import { LoginPageComponent } from "./login/login-page.component";
 import { LostPasswordComponent } from "./login/lost-password.component";
@@ -49,6 +50,7 @@ export const APP_COMPONENTS: any[] = [
   HomeComponent,
   MapComponent,
   PreviewMapZoneFormComponent,
+  PreviewMapZoneImportComponent,
   LoginComponent,
   LoginPageComponent,
   LostPasswordComponent,
@@ -75,6 +77,7 @@ export * from "./about/about.component";
 export * from "./home/home.component";
 export * from "./home/map.component";
 export * from "./zone/zone-form-preview-map.component";
+export * from "./zone/zone-import-preview-map.component";
 export * from "./login/login.component";
 export * from "./login/login-page.component";
 export * from "./login/logout.component";

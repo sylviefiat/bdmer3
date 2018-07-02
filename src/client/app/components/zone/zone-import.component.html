@@ -2,24 +2,24 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES' | translate}}</mat-card-title>
       <mat-card-content>
-        <button *ngIf="importKmlFile === null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
+        <button *ngIf="importKmlFile === null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
-        <button (click)="cancel()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>        
-      </mat-card-content>   
+        <button (click)="cancel()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>
+      </mat-card-content>
       <mat-card-content class="error" *ngIf="error" align="center">{{ error }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>     
+      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>
     </mat-card>
 </div>
 <div class="insideform">
   <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_KML' | translate }}</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+      <mat-card-title>{{'IMPORT_KML' | translate }}</mat-card-title>
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
     </mat-card-title-group>
     <mat-card-content>
-      {{'IMPORT_DESC_KML' | translate }}    
+      {{'IMPORT_DESC_KML' | translate }}
     </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_KML_ZONES' | translate }}</h5>
@@ -33,5 +33,6 @@
         <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".kml"/>
       </button>
     </mat-card-actions>
+    <bc-zone-import-map (zoneIntersect)="zoneIntersect($event)" [platform]="platform" [countries]="countries" [geojsons$]="geojsons$" class="wrapp_right"></bc-zone-import-map>
   </mat-card>
 </div>
