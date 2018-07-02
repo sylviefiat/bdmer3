@@ -2,7 +2,7 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES' | translate}}</mat-card-title>
       <mat-card-content>
-        <button *ngIf="importKmlFile === null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
+        <button *ngIf="importKmlFile === null || intersectError; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
@@ -12,10 +12,10 @@
       <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>
     </mat-card>
 </div>
-<div class="insideform">
+<div class="insideform" [formGroup]="zoneForm">
   <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_KML' | translate }}</mat-card-title>
+      <mat-card-title>{{'IMPORT_KML' | translate }} {{intersectError}}</mat-card-title>
       <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
     </mat-card-title-group>
     <mat-card-content>
@@ -28,9 +28,9 @@
       </a>
     </mat-card-footer>
     <mat-card-actions align="start">
-      <button (click)="fileInput.click()">
+      <button (click)="fileInput.click(); clearInput()">
         <span>{{ 'IMPORT_KML' | translate }}</span>
-        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".kml"/>
+        <input #fileInput type="file" formControlName="zoneInput" (change)="handleUpload($event)" style="display:none;"  accept=".kml"/>
       </button>
     </mat-card-actions>
     <bc-zone-import-map (zoneIntersect)="zoneIntersect($event)" [platform]="platform" [countries]="countries" [geojsons$]="geojsons$" class="wrapp_right"></bc-zone-import-map>

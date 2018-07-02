@@ -43,12 +43,12 @@ import { IAppState } from "../../modules/ngrx/index";
     </ng-container>
     <ng-container *ngIf="newZonesPreviewValid && isDisplayed('zones')">
     <mgl-geojson-source
-      id="layerPreviewsZone"
+      id="layerPreviewsZoneValid"
       [data]="newZonesPreviewValid">
       <mgl-layer
-        id="previewzoneid"
+        id="previewzoneidvalid"
         type="fill"
-        source="layerPreviewsZone"
+        source="layerPreviewsZoneValid"
         [paint]="{
           'fill-color': 'green',
           'fill-opacity': 0.5,
@@ -58,9 +58,9 @@ import { IAppState } from "../../modules/ngrx/index";
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
       <mgl-layer
-        id="previewzonetext"
+        id="previewzonetextvalid"
         type="symbol"
-        source="layerPreviewsZone"
+        source="layerPreviewsZoneValid"
         [layout]="{
           'text-field': '{code}',
           'text-anchor':'bottom',
@@ -82,12 +82,12 @@ import { IAppState } from "../../modules/ngrx/index";
     </ng-container>
     <ng-container *ngIf="newZonesPreviewError && isDisplayed('zones')">
     <mgl-geojson-source
-      id="layerPreviewsZone"
+      id="layerPreviewsZoneError"
       [data]="newZonesPreviewError">
       <mgl-layer
-        id="previewzoneid"
+        id="previewzoneiderror"
         type="fill"
-        source="layerPreviewsZone"
+        source="layerPreviewsZoneError"
         [paint]="{
           'fill-color': 'red',
           'fill-opacity': 0.5,
@@ -97,9 +97,9 @@ import { IAppState } from "../../modules/ngrx/index";
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
       <mgl-layer
-        id="previewzonetext"
+        id="previewzonetexterror"
         type="symbol"
-        source="layerPreviewsZone"
+        source="layerPreviewsZoneError"
         [layout]="{
           'text-field': '{code}',
           'text-anchor':'bottom',
@@ -266,8 +266,8 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
   colorPreview: Object;
   markerCountry: any;
-  newZonesPreviewValidValid: Zone[];
-  newZonesPreviewValidError: Zone[];
+  newZonesPreviewValid: any = { features: [], type: "FeatureCollection" };
+  newZonesPreviewError: any = { features: [], type: "FeatureCollection" };
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
@@ -288,38 +288,34 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.geojsons$) {
       this.geojsons$.subscribe(res => {
+        this.reset();
+        this.checkZoneValid(res);
         this.addZone(res);
       });
     }
     this.init();
   }
 
-  checkZoneValid(zoneCheck) {
-    this.colorPreview = {
-      "fill-color": "green",
-      "fill-opacity": 0.5,
-      "fill-outline-color": "#000"
-    };
+  reset() {
+    this.newZonesPreviewValid = { features: [], type: "FeatureCollection" };
+    this.newZonesPreviewError = { features: [], type: "FeatureCollection" };
+  }
 
-    this.platform.zones.map(zone => {
-      if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zoneCheck))) {
-        this.zoneIntersect.emit(true);
+  checkZoneValid(zonesCheck) {
+    for (let zc of zonesCheck) {
+      this.platform.zones.map(zone => {
+        if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zc.geometry.coordinates))) {
+          this.zoneIntersect.emit(true);
+          this.newZonesPreviewError.features.push(zc);
+          zonesCheck.splice(zc, 1);
+        }
+      });
+    }
 
-        this.colorPreview = {
-          "fill-color": "red",
-          "fill-opacity": 0.5,
-          "fill-outline-color": "#000"
-        };
-      }
-    });
+    this.newZonesPreviewValid.features = zonesCheck;
   }
 
   addZone(geojsons) {
-    console.log(geojsons);
-    this.layerZones$.subscribe(res => {
-      console.log(res);
-    });
-    this.newZonesPreviewValid = { features: geojsons, type: "FeatureCollection" };
     for (let geojson of geojsons) {
       var bnd = new LngLatBounds();
       this.bounds$ = of(this.checkBounds(bnd.extend(geojson.geometry.coordinates[0])));

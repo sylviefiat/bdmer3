@@ -32,6 +32,11 @@ export class ZoneImportComponent implements OnDestroy {
   @Output() back = new EventEmitter();
   actionSubscription: Subscription;
   geojsons$: Observable<any>;
+  intersectError: boolean = false;
+  importKmlFile: any = null;
+  zoneForm: FormGroup = new FormGroup({
+    zoneInput: new FormControl()
+  });
 
   needHelp: boolean = false;
   private kmlFile: string;
@@ -50,17 +55,26 @@ export class ZoneImportComponent implements OnDestroy {
 
   handleUpload(kmlFile: any): void {
     if (kmlFile.target.files && kmlFile.target.files.length > 0) {
+      this.importKmlFile = kmlFile;
+      this.intersectError = false;
       this.geojsons$ = fromPromise(this.geojsonService.kmlToGeoJson(kmlFile.target.files["0"], this.platform));
-      console.log(this.geojsons$);
     }
   }
 
+  clearInput() {
+    this.zoneForm.get("zoneInput").reset();
+  }
+
   zoneIntersect(error) {
-    console.log(error);
+    this.intersectError = error;
   }
 
   changeNeedHelp() {
     this.needHelp = !this.needHelp;
+  }
+
+  send() {
+    this.upload.emit(this.importKmlFile);
   }
 
   getKmlZones() {

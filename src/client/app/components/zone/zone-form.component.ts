@@ -120,6 +120,7 @@ export class ZoneFormComponent implements OnInit {
   }
   coordChange(coords) {
     this.errorCoord = false;
+    this.errorIntersect = false;
     if (coords.target.value !== "") {
       var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
       if (ar !== "error") {
