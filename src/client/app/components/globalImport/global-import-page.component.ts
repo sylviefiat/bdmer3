@@ -46,12 +46,12 @@ export class GlobalImportPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.platform$ = this.store.let(getSelectedPlatform);
-    this.importError$ = this.store.let(getPlatformImpErrors);
-    this.error$ = this.store.let(getPlatformPageError);
-    this.isAdmin$ = this.store.let(getisAdmin);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.importError$ = this.store.select(getPlatformImpErrors);
+    this.error$ = this.store.select(getPlatformPageError);
+    this.isAdmin$ = this.store.select(getisAdmin);
     this.store.dispatch(new SpeciesAction.LoadAction());
-    this.locale$ = this.store.let(getLangues);
+    this.locale$ = this.store.select(getLangues);
     this.docs_repo = "../../../assets/files/";
   }
 
