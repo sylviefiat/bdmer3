@@ -16,7 +16,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
     /* Enable typeless compiler runs (faster) between typed compiler runs. */
     // this.TYPED_COMPILE_INTERVAL = 5;
     // Add `NPM` third-party libraries to be injected/bundled.
-    console.log("here");
     this.NPM_DEPENDENCIES = [...this.NPM_DEPENDENCIES];
 
     // Add `local` third-party libraries to be injected/bundled.
@@ -90,6 +89,13 @@ export class ProjectConfig extends SeedAdvancedConfig {
       {
         name: "@mapbox/togeojson",
         path: "node_modules/@mapbox/togeojson/togeojson.js"
+      },
+      {
+        name: "@mapbox/mapbox-sdk",
+        packageMeta: {
+          defaultExtension: "js",
+          main: "umd/mapbox-sdk.js"
+        }
       },
       {
         name: "@mapbox/geojson-area",

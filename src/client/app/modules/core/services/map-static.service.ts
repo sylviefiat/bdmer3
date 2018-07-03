@@ -4,6 +4,7 @@ import { NameRefactorService } from "./nameRefactor.service";
 import * as area from "@mapbox/geojson-area";
 import * as Turf from "@turf/turf";
 import * as togeojson from "@mapbox/togeojson";
+import * as mbxClient from "@mapbox/mapbox-sdk";
 
 @Injectable()
 export class MapStaticService {
@@ -92,36 +93,92 @@ export class MapStaticService {
   }
 
   setAllStaticMapToB64(platform, zone) {
-    console.log(platform);
+    let token = "pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw";
     console.log(zone);
-    let base = "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/";
-    let token = "/1280x1280?access_token=pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw";
-    for (let z of platform.zones) {
-      if (zone.properties.code === z.properties.code) {
-        z = zone;
-        break;
-      }
+    const baseClient = mbxClient({ accessToken: token });
 
-      if (z === platform.zones[platform.zones.length - 1]) {
-        platform.zones.push(zone);
-      }
-    }
+    baseClient.static
+      .getStaticImage({
+        ownerId: "mapbox",
+        styleId: "streets-v10",
+        width: 1000,
+        height: 1000,
+        coordinates: [55.3, -4.5],
+        zoom: 8
+      })
+      .send()
+      .then(response => {
+        const image = response.body;
+        var blob = new Blob([image], { type: "image/png" });
+        console.log(blob);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+          let base64data = reader.result;
+          console.log(base64data);
+        };
+        //console.log("data:image/png;base64," + window.btoa(image));
+      });
 
-    console.log(platform);
+    const request = baseClient.static.getStaticImage({
+      ownerId: "mapbox",
+      styleId: "streets-v10",
+      width: 1000,
+      height: 1000,
+      coordinates: [55.3, -4.5],
+      overlays: [
+        {
+          geojson: zone
+        }
+      ],
+      zoom: 8
+    });
+    const staticImageUrl = request.url();
+
+    var img = new Image();
+    img.src = staticImageUrl + "?access_token=" + token;
+    var xhr = new XMLHttpRequest();
+    var self = this;
+    xhr.onload = function() {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        console.log(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open("GET", staticImageUrl + "?access_token=" + token);
+    xhr.responseType = "blob";
+    xhr.send();
+
+    // let base = "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/";
+    // let token = "/1280x1280?access_token=pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw";
+    // for (let z of platform.zones) {
+    //   if (zone.properties.code === z.properties.code) {
+    //     z = zone;
+    //     break;
+    //   }
+    //
+    //   if (z === platform.zones[platform.zones.length - 1]) {
+    //     platform.zones.push(zone);
+    //   }
+    // }
+    //
+    // console.log(platform);
     // return new Promise((resolve, reject) => {
     //   var img = new Image();
-    //   img.src = url;
+    //   img.src = staticImageUrl;
     //
     //   var xhr = new XMLHttpRequest();
     //   var self = this;
     //   xhr.onload = function() {
     //     var reader = new FileReader();
     //     reader.onloadend = function() {
+    //       console.log(reader.result);
     //       resolve(reader.result);
     //     };
     //     reader.readAsDataURL(xhr.response);
     //   };
-    //   xhr.open("GET", url);
+    //   xhr.open("GET", staticImageUrl);
     //   xhr.responseType = "blob";
     //   xhr.send();
     // });
