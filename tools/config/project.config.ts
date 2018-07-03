@@ -109,7 +109,42 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: '@mapbox/mapbox-gl-geocoder',
             path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
         },
+        /*{
+            name: 'angular-highcharts',
+            path: 'node_modules/angular-highcharts/angular-highcharts.js'
+        },
         {
+            name: 'highcharts-angular',
+            path: 'node_modules/highcharts-angular/index.js'
+        },*/
+        {
+            name: 'highcharts/modules/indicators',
+            path: 'node_modules/highcharts/modules/indicators.js'
+        }, 
+        {
+            name: 'highcharts/modules/exporting',
+            path: 'node_modules/highcharts/modules/exporting.js'
+        }, 
+        {
+            name: 'highcharts/modules/export-data',
+            path: 'node_modules/highcharts/modules/export-data.js'
+        }, 
+        {
+            name: 'highcharts/highcharts-more',
+            path: 'node_modules/highcharts/highcharts-more.js'
+        }, 
+        {
+            name: 'highcharts/highstock',
+            path: 'node_modules/highcharts/highstock.js'
+        }, 
+        {
+            name: 'highcharts/highmaps',
+            path: 'node_modules/highcharts/highmaps.js'
+        }, 
+        {
+            name: 'highcharts',
+            path: 'node_modules/highcharts/highcharts.js'
+        }, {
             name: 'pouchdb',
             path: 'node_modules/pouchdb/dist/pouchdb.js'
         }, {
@@ -127,13 +162,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: '@angular/material',
             path: 'node_modules/@angular/material/bundles/material.umd.js'
-        }, /*{
-            name: '@angular/animations',
-            packageMeta: {
-                main: 'node_modules/@angular/animations/bundles/animations.umd.js',
-                defaultExtension: 'js'
-            }
-        },*/ {
+        }, {
             name: '@angular/cdk',
             path: '/@angular/cdk/index.js'
         },

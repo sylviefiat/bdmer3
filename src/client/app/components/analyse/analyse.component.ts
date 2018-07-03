@@ -75,7 +75,6 @@ export class AnalyseComponent {
     }    
 
     setCountry(country: Country) {
-        console.log(country);
         this.countryEmitter.emit(country);  
     }
 
@@ -92,7 +91,6 @@ export class AnalyseComponent {
     }
 
     setZones(zones: Zone[]) {
-        console.log(zones);
         this.zoneEmitter.emit(zones); 
     }
 

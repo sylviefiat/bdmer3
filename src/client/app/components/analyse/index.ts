@@ -19,7 +19,7 @@ import { ResultRappelComponent } from './result-rappel.component';
 import { ResultSynthesisComponent } from './result-synthesis.component';
 import { ResultMapComponent } from './result-map.component';
 import { ClusterPopupComponent } from './result-map-cluster-popup.component';
-import { ResultChartComponent } from './result-chart.component';
+import { ResultBoxplotComponent } from './result-boxplot.component';
 import { ResultFilterComponent } from './result-filter.component';
 
 
@@ -44,7 +44,7 @@ export const ANALYSE_COMPONENTS: any[] = [
   ResultRappelComponent,
   ResultSynthesisComponent,
   ResultMapComponent,
-  ResultChartComponent,
+  ResultBoxplotComponent,
   ResultFilterComponent,
   ClusterPopupComponent,
   ];
@@ -70,5 +70,5 @@ export * from './result-rappel.component';
 export * from './result-synthesis.component';
 export * from './result-map.component';
 export * from './result-map-cluster-popup.component';
-export * from './result-chart.component';
+export * from './result-boxplot.component';
 export * from './result-filter.component';

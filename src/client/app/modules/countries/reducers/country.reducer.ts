@@ -1,7 +1,6 @@
 import { CountryAction } from '../actions/index';
 import { ICountryState, countryInitialState } from '../states/index';
 
-
 export function countryReducer(
   state: ICountryState = countryInitialState,
   action: CountryAction.Actions
@@ -36,7 +35,6 @@ export function countryReducer(
     }
 
     case CountryAction.ActionTypes.SELECT: {
-      console.log("select country:" + action.payload);
       return {
         ...state,
         currentCountryId: action.payload,
@@ -44,7 +42,6 @@ export function countryReducer(
     }
 
     case CountryAction.ActionTypes.SELECT_USER: {
-      console.log("select user:" + action.payload);
       return {
         ...state,
         currentUserId: action.payload,
@@ -53,7 +50,6 @@ export function countryReducer(
 
 
     case CountryAction.ActionTypes.REMOVE_MSG: {
-      console.log("remove msg");
       return {
         ...state,
         error: null,
