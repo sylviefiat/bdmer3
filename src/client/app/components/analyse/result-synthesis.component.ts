@@ -1,6 +1,7 @@
 
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import * as Turf from '@turf/turf';
 import { MatCheckboxChange } from '@angular/material';
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
@@ -37,34 +38,56 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showStationsEmitter)="stationsLayerShow($event)"
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
+      </div>
 
-        <div class="groupCharts">
-          <h3>{{typeShow$ | async}}</h3>
-          <div class="chart">
-            <bc-result-boxplot 
-              [resultSurveys]="results.resultPerSurvey"
-              [usedSurveys]="analyseData.usedSurveys"
-              [years]="analyseData.usedYears"
-              [species]="analyseData.usedSpecies"
-              [type]="typeShow$ | async">
-            </bc-result-boxplot>
+        <div *ngFor="let zone of analyseData.usedZones" class="results"> 
+          <div class="resultZone">
+            <h2>{{zone.properties.code}}</h2>       
+            <div class="groupCharts">
+              <bc-result-boxplot class="chart" *ngFor="let station of getStationsZone(zone)"
+                [station]="station"
+                [resultSurveys]="results.resultPerSurvey"
+                [usedSurveys]="analyseData.usedSurveys"
+                [years]="analyseData.usedYears"
+                [species]="analyseData.usedSpecies"
+                [type]="typeShow$ | async">
+              </bc-result-boxplot>
+            </div>
           </div>
         </div>
-      </div>
+      
   `,
     styles: [
         `
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+      }
       h2 {
         margin-left: 25px;
       } 
-      .results, .chart {
+      .results {
         display:flex;
         flex-direction:row;
+        max-width: 100vw;
+      }
+      .resultZone {
+        background-color: rgba(55,55,55,0.1);
       }
       .groupCharts {
         display:flex;
+        flex-direction:row;
+        padding-top:0.5em;
+        padding-left:0.5em;
+        padding-right:0.5em;
+      }
+      .chart {
+        display:flex;
         flex-direction:column;
-        flex:1;
+        flex-wrap: wrap;
+        padding-right:0.3em;
       }
   `]
 })
@@ -102,6 +125,16 @@ export class ResultSynthesisComponent implements OnInit {
         }
     }
 
+    getStationsZone(zone){
+      let stations = [];
+      for (let s of this.analyseData.usedStations) {
+        if (Turf.booleanPointInPolygon(s.geometry.coordinates, Turf.polygon(zone.geometry.coordinates))) {
+            stations.push(s);
+        }
+      }
+      return stations;
+    }
+
     selectTypeShow(ts: string){
       this.typeShow$ = of(ts);
     }
@@ -112,18 +145,14 @@ export class ResultSynthesisComponent implements OnInit {
 
     selectSurveyShow(sus: string){
       this.surveyShow$ = of(sus);
-      console.log(sus);
-      console.log(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
     }
 
     stationsLayerShow(show: MatCheckboxChange){
-      console.log(show);
       this.showStations$ = of(show.checked);      
     }
 
     zonesLayerShow(show: MatCheckboxChange){
-      console.log(show);
       this.showZones$ = of(show.checked);      
     }
 

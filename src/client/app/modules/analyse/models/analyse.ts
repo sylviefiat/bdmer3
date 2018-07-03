@@ -53,6 +53,8 @@ export interface ResultStation {
     biomassTotal: number;            // somme des biomasses
     biomassPerHA: number;            // biomasse par hectare
     densityPerHA: number;            // density = nb individus par hectare
+    SDBiomassTotal: number;          // ecart type / standard deviation biomasse
+    SDDensityTotal: number;          // ecart type / standard deviation densité
 }
 
 export interface ResultZone {

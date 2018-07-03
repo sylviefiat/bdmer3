@@ -40,15 +40,11 @@ export class AnalyseService {
                     // ajout des résultats du station dans le résultat de l'espère
                     resultSp.resultPerStation.push(resultStation);
                     // si la zone a déjà commencé a etre traitée on récupère l'objet de résultat
-                    console.log(resultSp.resultPerZone);
-                    console.log(resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code));
                     if(resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code) && resultSp.resultPerZone.filter(rz => rz.codeZone===zone.properties.code)[0]){ 
                         resultZone = resultSp.resultPerZone.filter(rz => rz.codeZone === zone.properties.code)[0];
                     } 
-                    console.log(resultZone);
                     // mise à jour des résultats de la zone avec ce station
                     resultZone = this.updateResultPerZone(resultZone, zone, resultStation);
-                    console.log(resultZone);
                     // on met a jour le résultat de la zone dans le résultat de l'espèce
                     resultSp.resultPerZone=[...resultSp.resultPerZone.filter(rz => rz.codeZone !== resultZone.codeZone),resultZone];
                     // on mets à jour les abondances et biomasses de l'espèce avec ce station
@@ -61,13 +57,12 @@ export class AnalyseService {
             // on ajoute le résultat du relevé au résultat global
             result.resultPerSurvey.push(resultSurvey);
         }
-        console.log(result);
         return result;
     }
 
     getResultPerStation(survey: Survey, species: Species, spDim: DimensionsAnalyse, station: Station, method: Method): ResultStation {
         let x = 0, biom;
-        let resultStation: ResultStation = { codeStation: station.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0 };
+        let resultStation: ResultStation = { codeStation: station.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal:0, SDDensityTotal:0 };
         let mesures = [];
         for (let c of survey.counts.filter(c => c.codeStation === station.properties.code)) {
             mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
@@ -98,6 +93,10 @@ export class AnalyseService {
             resultStation.biomassPerHA = resultStation.biomassTotal * (10000 / Number(survey.surfaceStation));
             resultStation.densityPerHA = resultStation.numberIndividual * (10000 / Number(survey.surfaceStation));
         }
+        let inds= [];
+        for(let i in mesures) {inds.push(1);}
+        resultStation.SDBiomassTotal= this.standardDeviation(resultStation.biomasses);
+        resultStation.SDDensityTotal= this.standardDeviation(inds);
         return resultStation;
     }
 
