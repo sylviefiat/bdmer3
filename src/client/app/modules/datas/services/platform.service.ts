@@ -309,7 +309,6 @@ export class PlatformService {
 
   importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string>{
     let msg = this.translate.instant(['PLATFORM', 'CANNOT_BE_INSERTED_NOT_EXIST', 'NO_STATION_IN_DB', 'NO_SPECIES_IN_DB', 'NO_SURVEY_IN_DB']);
-
     if(count.codePlatform === platform.code){
       if(platform.stations.length > 0){
         for(let i in platform.stations){
@@ -319,7 +318,7 @@ export class PlatformService {
                 if(count.codeSurvey === platform.surveys[x].code){
                   if(species.length > 0){
                     for(let y in species){
-                      if(count.mesures[0].codeSpecies === species[y].code){
+                      if((!count.mesures || count.mesures.length<=0) || count.mesures[0].codeSpecies === species[y].code){
                         return of('')
                       }
                       if(count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1){

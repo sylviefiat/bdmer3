@@ -26,8 +26,6 @@ export function countryReducer(
 
     case CountryAction.ActionTypes.REMOVE_USER_FAIL:
     case CountryAction.ActionTypes.ADD_USER_FAIL: {
-      const user = action.payload;
-
       return {
         ...state,
         error: action.payload

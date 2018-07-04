@@ -29,7 +29,7 @@ export class AuthService {
   login({ username, password }: Authenticate): Observable<any> {
     return from(this.db.login(username, password)).pipe(
       mergeMap((result: ResponsePDB) => {
-        if (result.ok && result.roles.length > 0){
+        if (result.ok /*&& result.roles.length > 0*/){
           return this.setUser(username);
         }
         else {
@@ -84,15 +84,18 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    return from(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode, user.role]}})).pipe(
-            //filter((response: ResponsePDB) => { console.log(response);return response.ok; }),
-            mergeMap(response => {
-              console.log(response);
-              
-                return of(user);
-            }),
-            catchError((error) => {console.log(error);return of(null)})
-          );
+    return from(
+      this.db.signup(user.username, user.password, {
+        metadata: {
+          rights: user.role,
+          country: user.countryCode
+        }
+      },(err,response)=>{
+        if(err){
+          throwError(err)
+        }
+        return of(user);
+      }))
   }
 
   remove(user): Observable<any> {

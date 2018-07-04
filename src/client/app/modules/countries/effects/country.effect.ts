@@ -30,7 +30,7 @@ export class CountryEffects {
       mergeMap(user => this.authService.signup(user)),
       mergeMap((user: User) => this.countriesService.addUser(user)),
       map((country: Country) => new CountryAction.AddUserSuccessAction(country)),
-      catchError((country) => of(new CountryAction.AddUserFailAction(country)))
+      catchError((error) => {console.log(error);return of(new CountryAction.AddUserFailAction(error))})
     );
 
   @Effect()

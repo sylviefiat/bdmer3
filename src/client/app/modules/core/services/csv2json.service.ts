@@ -397,7 +397,7 @@ export class Csv2JsonService {
                         case "date":
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
-                            if (delimiter === Csv2JsonService.SEMICOLON) {
+                            if (delimiter === Csv2JsonService.SEMICOLON) {  
                                 //this.ms.moment().locale("fr");
                                 d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
                             } else {
@@ -420,7 +420,7 @@ export class Csv2JsonService {
                         case "codeSpecies":
                             ct['monospecies'] = true;
                             break;
-                        default:                            
+                        default:     
                             if(!errorTab.includes(headers[j])){
                                 errorTab.push(headers[j]);
                             }       
@@ -468,7 +468,7 @@ export class Csv2JsonService {
             })
             .pipe(
                 mergeMap(data => {
-                    console.log(data);
+                    //console.log(data);
                     let res;
                     switch (type) {
                         case "species":
@@ -481,26 +481,22 @@ export class Csv2JsonService {
                             res = this.extractZoneData(data);
                             break;
                         case "survey":
-                            console.log(data);
                             res = this.extractSurveyData(data);
                             break;
                         case "zonePref":
-                            console.log(data);                            
                             res = this.extractZonePrefData(data, species);
                             break;
                         case "station":
-                            console.log(data);
                             res = this.extractStationData(data);
                             break;
                         case "count":
-                            console.log(data);
                             res = this.extractCountData(data);
                             break;
                         default:
                             // code...
                             break;
                     }
-                    console.log(res);
+                    //console.log(res);
                     return res;
                 }));
     }

@@ -5,10 +5,13 @@
       
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ 'SUBMIT' | translate }}</button>
-        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
-        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>  
       </mat-card-content>
-
+      <mat-card-content>        
+        <p *ngIf="errorMessage" class="error">
+            {{ errorMessage.message }}
+          </p>  
+      </mat-card-content>
 
     </mat-card>
   </div>

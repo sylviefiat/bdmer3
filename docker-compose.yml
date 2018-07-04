@@ -9,8 +9,8 @@ services:
     hostname: dbmerdb
     image: couchdb:latest
     volumes:
-      - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
-      - ./.docker/couchdb_data/config/local.d:/usr/local/etc/couchdb/local.d
+      - ./.docker/couchdb_data/data:/opt/couchdb/data
+      - ./.docker/couchdb_data/config/:/opt/couchdb/etc
     ports:
       - "5984:5984"
     networks:

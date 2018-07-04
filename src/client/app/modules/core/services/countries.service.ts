@@ -90,6 +90,7 @@ export class CountriesService {
   }
 
   getCountryUser(username: string): Observable<Country> {
+    console.log(username);
     return from(this.db.query(function(doc, emit) {
       doc.users && doc.users.forEach(function(user) {
         emit(user.username);
@@ -115,9 +116,11 @@ export class CountriesService {
     return this.getCountry(user.countryCode).pipe(
       mergeMap(country => {
         this.currentCountry = of(country);
+        console.log(country);
         if (country.users === null) {
           country.users = [];
         }
+        console.log(country);
         country.users[country.users.length] = user;
         console.log(country);
         return from(this.db.put(country));
