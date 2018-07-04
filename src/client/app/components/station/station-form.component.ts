@@ -4,10 +4,10 @@ import { Store } from "@ngrx/store";
 import { RouterExtensions, Config } from "../../modules/core/index";
 import { MapStaticService } from "../../modules/core/services/map-static.service";
 import { NameRefactorService } from "../../modules/core/services/nameRefactor.service";
-
 import { IAppState, getSpeciesInApp } from "../../modules/ngrx/index";
 
 import { Platform, Station, Count } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
 @Component({
   moduleId: module.id,
@@ -19,6 +19,7 @@ import { Platform, Station, Count } from "../../modules/datas/models/index";
 export class StationFormComponent implements OnInit {
   @Input() platform: Platform | null;
   @Input() station: Station | null;
+  @Input() countries: Country[];
   @Input() errorMessage: boolean;
 
   @Output() submitted = new EventEmitter<Station>();
@@ -29,8 +30,8 @@ export class StationFormComponent implements OnInit {
   latitude: any;
   errorLat: boolean;
   errorLng: boolean;
-  canSubmit: boolean;
-
+  newStation: number[];
+  stationValid: boolean = false;
   stationForm: FormGroup = new FormGroup({
     type: new FormControl("Feature"),
     geometry: new FormGroup({
@@ -101,6 +102,10 @@ export class StationFormComponent implements OnInit {
     });
   }
 
+  isStationValid(valid) {
+    this.stationValid = valid;
+  }
+
   coordChange() {
     this.errorLat = false;
     this.errorLng = false;
@@ -114,11 +119,7 @@ export class StationFormComponent implements OnInit {
     }
 
     if (!this.errorLat && !this.errorLng && this.latitude && this.longitude) {
-      this.url = this.mapStaticService.googleMapUrlPoint([this.longitude, this.latitude]);
-      this.canSubmit = true;
-    } else {
-      this.url = "";
-      this.canSubmit = false;
+      this.newStation = [this.longitude, this.latitude];
     }
   }
 }
