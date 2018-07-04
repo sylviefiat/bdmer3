@@ -30,7 +30,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
   Config.DEBUG.LEVEL_4 = true;
 }
 
-let routerModule = RouterModule.forRoot(routes);
+let routerModule = RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'});
 
 if (String('<%= TARGET_DESKTOP %>') === 'true') {
   Config.PLATFORM_TARGET = Config.PLATFORMS.DESKTOP;

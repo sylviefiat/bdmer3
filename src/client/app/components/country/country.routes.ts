@@ -9,25 +9,30 @@ export const CountryRoutes: Array<any> = [
   {
     path: 'countries',
     component: CountryPageComponent,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'countries/:id',
     component: ViewCountryPageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'newcountry',
     component: NewCountryPageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'countries/:idCountry/userForm',
     component: NewUserPageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'countries/:idCountry/userForm/:idUser',
     component: NewUserPageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ];

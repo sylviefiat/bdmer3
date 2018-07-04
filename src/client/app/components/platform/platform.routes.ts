@@ -8,29 +8,35 @@ export const PlatformRoutes: Array<any> = [
   {
     path: 'platform',
     component: PlatformListPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'platform/:id',
     component: ViewPlatformPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }, {
     path: 'platform/:id/:view',
     component: ViewPlatformPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }, {
     path: 'platformForm',
     component: PlatformFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'platformForm/:id',
     component: PlatformFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'platformImport',
     component: PlatformImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ]

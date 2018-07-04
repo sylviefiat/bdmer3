@@ -5,14 +5,17 @@ import { LostPasswordComponent } from './lost-password.component';
 export const LoginRoutes: Array<any> = [
   {
     path: 'login',
-    component: LoginPageComponent
+    component: LoginPageComponent,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'logout',
-    component: LogoutComponent
+    component: LogoutComponent,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'lostpassword',
-    component: LostPasswordComponent
+    component: LostPasswordComponent,
+    runGuardsAndResolvers: 'always'
   }
 ];

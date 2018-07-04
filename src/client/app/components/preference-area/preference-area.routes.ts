@@ -7,25 +7,30 @@ export const PreferenceAreaRoutes: Array<any> = [
   {
     path: 'zonePrefForm/:idPlatform/:idZone',
     component: PreferenceAreaFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },{
     path: 'zonePrefForm/:idPlatform/:idZone/:idZonePref',
     component: PreferenceAreaFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zonePrefImport/:idPlatform',
     component: PreferenceAreaImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zonePrefImport/:idPlatform/:idZone',
     component: PreferenceAreaImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zonePref/:idPlatform/:idZone/:idZonePref',
     component: ViewPreferenceAreaPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ]
