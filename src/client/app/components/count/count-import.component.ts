@@ -44,7 +44,7 @@ export class CountImportComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.importError$ = this.store.let(getPlatformImpErrors);
+        this.importError$ = this.store.select(getPlatformImpErrors);
         this.store.dispatch(new SpeciesAction.LoadAction())
         this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";

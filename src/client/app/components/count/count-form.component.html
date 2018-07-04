@@ -31,7 +31,7 @@
 
         <mat-form-field>
           <mat-select  placeholder="{{'STATION_SELECT' | translate}}" formControlName="codeStation" required>
-            <mat-option *ngFor="let tr of (stations$ | async)" [value]="tr.code">{{ tr.properties.code }}</mat-option>
+            <mat-option *ngFor="let s of (stations$ | async)" [value]="s.properties.code">{{ s.properties.code }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
