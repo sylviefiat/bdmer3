@@ -8,6 +8,7 @@ import { User, Country } from '../../countries/models/country';
 import { ResponsePDB } from '../models/pouchdb';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBAuth from "pouchdb-authentication";
+import {TranslateService} from '@ngx-translate/core';
 
 import { config } from '../../../config';
 
@@ -20,10 +21,10 @@ export class AuthService {
   @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
   @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
-  constructor(private countriesService: CountriesService) {
+  constructor(private translate: TranslateService, private countriesService: CountriesService) {
     let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
-    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
+    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true,revs_limit: 1});   
   }
 
   login({ username, password }: Authenticate): Observable<any> {
@@ -91,11 +92,18 @@ export class AuthService {
           country: user.countryCode
         }
       },(err,response)=>{
-        if(err){
-          throwError(err)
+          if(err){
+            if (err.name === 'conflict') {
+              throwError(this.translate.instant(''))
+            } else if (err.name === 'forbidden') {
+              throwError(err)
+            } else {
+            throwError(err);
+          }
         }
-        return of(user);
-      }))
+      })).pipe(
+        map(r=> user)
+      )
   }
 
   remove(user): Observable<any> {

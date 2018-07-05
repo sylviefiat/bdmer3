@@ -20,7 +20,7 @@ export class PlatformService {
 
   initDB(dbname: string, remote: string): Observable<any> {
     //console.log(dbname);
-    this.db = new PouchDB(dbname);
+    this.db = new PouchDB(dbname,{revs_limit: 1});
     return from(this.sync(remote + dbname));
   }
 
@@ -90,12 +90,12 @@ export class PlatformService {
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
-    var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"])
+    //var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"])
 
-    this.mapStaticService.staticMapToB64(url).then(function(data){
+    /*this.mapStaticService.staticMapToB64(url).then(function(data){
       zone.staticmap = data.toString();
-    })
-
+    })*/
+    console.log(zone);
     return this.getPlatform(platform.code)
       .pipe(
         filter(platform => platform!==null),
@@ -104,8 +104,10 @@ export class PlatformService {
           if(!pt.zones) pt.zones = [];
           if(!pt.stations) pt.stations = [];
           if(!zone.zonePreferences) zone.zonePreferences = [];
+          console.log(pt);
           pt.zones = [ ...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
           this.currentPlatform = of(pt);
+          console.log(pt);
           return from(this.db.put(pt));
         }),
         filter((response: ResponsePDB) => response.ok),
