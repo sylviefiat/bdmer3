@@ -14,6 +14,7 @@ import { Csv2JsonService } from './csv2json.service';
 import { MapStaticService} from './map-static.service';
 import { NameRefactorService } from './nameRefactor.service';
 import { GeojsonService } from './geojson.service';
+import { MapService } from './map.service';
 
 export const CORE_PROVIDERS: any[] = [
   WindowService,
@@ -30,7 +31,8 @@ export const CORE_PROVIDERS: any[] = [
   Csv2JsonService,
   MapStaticService,
   NameRefactorService,
-  GeojsonService
+  GeojsonService,
+  MapService
 ];
 
 export * from './console.service';
@@ -48,3 +50,4 @@ export * from './csv2json.service';
 export * from './map-static.service';
 export * from './nameRefactor.service';
 export * from './geojson.service';
+export * from './map.service';
