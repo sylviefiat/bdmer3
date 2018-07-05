@@ -12,7 +12,7 @@ import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
 
 @Component({
-  selector: "bc-zone-form-map",
+  selector: "bc-view-platform-map",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <nav id="switcher">
@@ -149,7 +149,7 @@ import { IAppState } from "../../modules/ngrx/index";
   styles: [
     `
     mgl-map {
-      height: 50vh;
+      height: 100%;
       width: 100%;
     }
     .mapboxgl-popup-content {
@@ -206,11 +206,9 @@ import { IAppState } from "../../modules/ngrx/index";
     `
   ]
 })
-export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
+export class ViewPlatformMapComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
-  @Input() newZone: any[];
-  @Output() zoneIntersect: EventEmitter<any> = new EventEmitter<any>();
 
   bounds$: Observable<LngLatBounds>;
   boundsPadding: number = 100;
@@ -244,56 +242,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.newZone) {
-      if (this.newZone[0].length > 0) {
-        this.createZone(this.newZone);
-        this.checkZoneValid(this.newZone);
-      } else {
-        this.newZonePreview = null;
-      }
-    }
     this.init();
-  }
-
-  checkZoneValid(zoneCheck) {
-    this.colorPreview = {
-      "fill-color": "green",
-      "fill-opacity": 0.5,
-      "fill-outline-color": "#000"
-    };
-
-    this.platform.zones.map(zone => {
-      if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zoneCheck))) {
-        this.zoneIntersect.emit(true);
-
-        this.colorPreview = {
-          "fill-color": "red",
-          "fill-opacity": 0.5,
-          "fill-outline-color": "#000"
-        };
-      }
-    });
-  }
-
-  createZone(coordinates) {
-    this.newZonePreview = {
-      type: "Feature",
-      geometry: {
-        type: "Polygon",
-        coordinates: coordinates
-      },
-      properties: {
-        name: "",
-        code: "",
-        surface: 0
-      },
-      staticmap: "",
-      codePlatform: this.platform.code,
-      zonePreferences: []
-    };
-
-    var bnd = new LngLatBounds();
-    this.bounds$ = of(this.checkBounds(bnd.extend(coordinates[0])));
   }
 
   zoomChange(event) {
@@ -343,7 +292,8 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
       if (this.platform.zones.length > 0) this.setZones(this.platform);
       if (this.platform.stations.length > 0) this.setStations(this.platform);
 
-      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.zoomOnCountry();
+      // this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     }
   }
 

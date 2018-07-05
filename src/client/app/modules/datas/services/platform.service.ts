@@ -93,11 +93,9 @@ export class PlatformService {
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
-    var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"]);
-
-    this.mapStaticService.setAllStaticMapToB64(platform, zone).then(function(data) {
-      console.log(data);
-    });
+    // this.mapStaticService.setAllStaticMapToB64(platform, zone).then(function(data) {
+    //   console.log(data);
+    // });
 
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
@@ -235,7 +233,14 @@ export class PlatformService {
   }
 
   importZonePrefVerification(zonePref: ZonePreference, platform: Platform, species: Species[]): Observable<string> {
-    let msg = this.translate.instant(["CODE_SPECIES", "CANNOT_BE_INSERTED_NOT_EXIST", "CANNOT_BE_INSERTED_CODEZONE", "CANNOT_BE_INSERTED_CODEPLATFORM", "NOT_IN_DATABASE", "ZONE_PREF"]);
+    let msg = this.translate.instant([
+      "CODE_SPECIES",
+      "CANNOT_BE_INSERTED_NOT_EXIST",
+      "CANNOT_BE_INSERTED_CODEZONE",
+      "CANNOT_BE_INSERTED_CODEPLATFORM",
+      "NOT_IN_DATABASE",
+      "ZONE_PREF"
+    ]);
 
     if (zonePref.codePlatform === platform.code) {
       for (let i = 0; i < platform.zones.length; i++) {

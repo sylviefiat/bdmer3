@@ -1,41 +1,71 @@
-mat-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.actions {
+mat-card-title {
+  font-style: italic;
   text-align: center;
 }
 
-mat-card-title {
-    font-style: italic;
+mat-card-actions,
+mat-card-content {
+  display: flex;
+  justify-content: space-around;
 }
-mat-card-content, mat-card-actions {
-    display: flex;
-    justify-content:space-around;
+
+mat-card-content.one {
+  display: flex;
+  justify-content: start;
 }
-mat-card-content.one{
-    display: flex;
-    justify-content:start;
-}
+
 mat-card-actions {
   justify-content: center;
+  padding: 12px;
 }
+
 mat-form-field {
 }
+
 .warn:hover {
-   background-color: #d9534f;
-} 
+  background-color: #d9534f;
+}
+
 .msg {
   text-align: center;
-  padding: 16px;     
+  padding: 16px;
   color: white;
-  background-color: #4BB543;
+  background-color: #4bb543;
 }
+
 .link {
   cursor: pointer;
   text-decoration: underline;
 }
- .right {
-      margin-left:15px;
+
+.right {
+  margin-left: 15px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wrapp_left {
+  flex: 50%;
+  max-width: 50%;
+}
+
+bc-zone-form-map {
+  flex: 50%;
+  max-width: 50%;
+}
+@media screen and (max-width: 800px) {
+  .wrapper {
+    .wrapp_left {
+      flex: 100%;
+      max-width: 100%;
     }
+
+    bc-zone-form-map {
+      flex: 100%;
+      max-width: 100%;
+    }
+  }
+}
