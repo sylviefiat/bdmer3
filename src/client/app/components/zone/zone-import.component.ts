@@ -3,7 +3,6 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { MapStaticService} from '../../modules/core/services/map-static.service';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
 
@@ -38,7 +37,7 @@ export class ZoneImportComponent implements OnDestroy{
     private kmlFile: string;
     private docs_repo: string;
 
-    constructor(private mapStaticService: MapStaticService, private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
         this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.kmlFile = "importZones-"+l+".kml";
@@ -64,13 +63,11 @@ export class ZoneImportComponent implements OnDestroy{
                 delete geojson[i].properties['styleHash'];
                 delete geojson[i].properties['styleMapHash'];
                 delete geojson[i].properties['styleUrl'];
-
                 geojson[i].properties.code = self.platform.code+"_"+self.nameRefactorService.convertAccent(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
-                
                 const surface = area.geometry(geojson[i].geometry);
 
                 geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
-
+                console.log(geojson[i]);
                 self.upload.emit(geojson[i]);
               }
             }
