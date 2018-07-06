@@ -252,7 +252,7 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
   setMap(event) {
     this.map = event;
-    this.map.fitBounds(this.bounds, { padding: 150 });
+    this.map.fitBounds(this.bounds, { padding: 50 });
   }
 
   zoomChange(event) {
@@ -314,9 +314,10 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
   zoomOnZone(zone) {
     var bnd = new LngLatBounds();
-    bnd.extend(zone.geometry.coordinates[0]);
-    bnd = this.checkBounds(bnd);
-    this.bounds = bnd;
+    zone.geometry.coordinates[0].forEach(coord => {
+      bnd.extend(coord);
+    });
+    this.bounds = this.checkBounds(bnd);
   }
 
   zoomToZonesOrStation(featureCollection) {
@@ -345,8 +346,6 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
     if (index > -1) {
       this.stations.splice(index, 1);
     }
-
-    console.log(this.station);
 
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))

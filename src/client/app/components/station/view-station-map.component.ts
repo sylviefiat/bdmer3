@@ -12,7 +12,7 @@ import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
 
 @Component({
-  selector: "bc-view-platform-map",
+  selector: "bc-view-station-map",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <nav id="switcher">
@@ -42,41 +42,6 @@ import { IAppState } from "../../modules/ngrx/index";
           <span>{{markerCountry.name}}</span>
         </div>
       </mgl-marker>
-    </ng-container>
-    <ng-container *ngIf="newZonePreview && isDisplayed('zones')">
-    <mgl-geojson-source
-      id="layerPreviewsZone"
-      [data]="newZonePreview">
-      <mgl-layer
-        id="previewzoneid"
-        type="fill"
-        source="layerPreviewsZone"
-        [paint]="colorPreview"
-        (mouseEnter)="cursorStyle = 'pointer'"
-        (mouseLeave)="cursorStyle = ''">
-      </mgl-layer>
-      <mgl-layer
-        id="previewzonetext"
-        type="symbol"
-        source="layerPreviewsZone"
-        [layout]="{
-          'text-field': '{code}',
-          'text-anchor':'bottom',
-          'text-font': [
-            'DIN Offc Pro Italic',
-            'Arial Unicode MS Regular'
-          ],
-          'symbol-placement': 'point',
-          'symbol-avoid-edges': true,
-          'text-max-angle': 30,
-          'text-size': 12
-        }"
-        [paint]="{
-          'text-color': 'white'
-        }"
-      >
-      </mgl-layer>
-    </mgl-geojson-source>
     </ng-container>
     <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
       <mgl-geojson-source
@@ -117,6 +82,45 @@ import { IAppState } from "../../modules/ngrx/index";
         </mgl-layer>
       </mgl-geojson-source>
     </ng-container>
+    <ng-container *ngIf="zoneStation && isDisplayed('zones')">
+      <mgl-geojson-source
+        id="layerZone"
+        [data]="zoneStation">
+        <mgl-layer
+          id="zoneid"
+          type="fill"
+          source="layerZone"
+          [paint]="{
+            'fill-color': 'green',
+            'fill-opacity': 0.5,
+            'fill-outline-color': '#000'
+            }"
+          (mouseEnter)="cursorStyle = 'pointer'"
+          (mouseLeave)="cursorStyle = ''">
+        </mgl-layer>
+        <mgl-layer
+          id="zonetext"
+          type="symbol"
+          source="layerZone"
+          [layout]="{
+            'text-field': '{code}',
+            'text-anchor':'bottom',
+            'text-font': [
+              'DIN Offc Pro Italic',
+              'Arial Unicode MS Regular'
+            ],
+            'symbol-placement': 'point',
+            'symbol-avoid-edges': true,
+            'text-max-angle': 30,
+            'text-size': 12
+          }"
+          [paint]="{
+            'text-color': 'white'
+          }"
+        >
+        </mgl-layer>
+      </mgl-geojson-source>
+    </ng-container>
     <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
       <mgl-geojson-source
         id="layerStations"
@@ -128,6 +132,25 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'icon-image': 'triangle-stroked-15',
             'icon-size': 1.5,
+            'icon-rotate': 180
+            }"
+          (click)="showPopupStation($event)"
+          (mouseEnter)="cursorStyle = 'pointer'"
+          (mouseLeave)="cursorStyle = ''">
+        </mgl-layer>
+      </mgl-geojson-source>
+    </ng-container>
+    <ng-container *ngIf="station && isDisplayed('stations')">
+      <mgl-geojson-source
+        id="layerStation"
+        [data]="station">
+        <mgl-layer
+          id="stationid"
+          type="symbol"
+          source="layerStation"
+          [layout]="{
+            'icon-image': 'triangle-15',
+            'icon-size': 2,
             'icon-rotate': 180
             }"
           (click)="showPopupStation($event)"
@@ -207,9 +230,11 @@ import { IAppState } from "../../modules/ngrx/index";
     `
   ]
 })
-export class ViewPlatformMapComponent implements OnInit, OnChanges {
+export class ViewStationMapComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
+  @Input() station: Station;
+  zoneStation: any;
   bounds: LngLatBounds;
   boundsPadding: number = 100;
   map: any;
@@ -247,7 +272,7 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
 
   setMap(event) {
     this.map = event;
-    this.map.fitBounds(this.bounds);
+    this.map.fitBounds(this.bounds, { padding: 50 });
   }
 
   zoomChange(event) {
@@ -297,25 +322,47 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
       if (this.platform.stations.length > 0) this.setStations(this.platform);
       if (this.platform.zones.length > 0) this.setZones(this.platform);
 
-      this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.zoneStation = null;
+
+      this.platform.zones.map(zone => {
+        if (Turf.inside(Turf.point(this.station.geometry.coordinates), Turf.polygon(zone.geometry.coordinates))) {
+          this.zoneStation = zone;
+        }
+      });
+
+      if (this.zoneStation !== null) {
+        this.zoomOnZone(this.zoneStation);
+      } else {
+        this.zoomOnStation(this.station);
+      }
     }
   }
 
   zoomToCountries(coordinates): LngLatBounds {
-    console.log(coordinates);
     return coordinates.reduce((bnd, coord) => {
       return bnd.extend(<any>coord);
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection) {
+  zoomOnZone(zone) {
     var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      feature.geometry.coordinates[0].forEach(coord => {
-        bnd.extend(coord);
-      });
+    zone.geometry.coordinates[0].forEach(coord => {
+      bnd.extend(coord);
     });
     this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomOnStation(station) {
+    var bnd = new LngLatBounds();
+    bnd.extend(station.geometry.coordinates);
+    this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomToZonesOrStation(featureCollection) {
+    var bnd = new LngLatBounds();
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(this.zoomToCountries(feature.geometry.coordinates)));
+    bnd = this.checkBounds(bnd);
+    this.bounds = bnd;
   }
 
   zoomOnCountry(countryCode: string) {
@@ -326,9 +373,9 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
     this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-    this.zoomToZonesOrStation(
-      Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
-    );
+    // this.zoomToZonesOrStation(
+    //   Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
+    // );
   }
 
   setStations(platforms: Platform) {
