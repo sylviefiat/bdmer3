@@ -73,7 +73,7 @@ export class Csv2JsonService {
                             sp.biologicDimensions[header] = data[j];
                             break;
                         case "L_min_NC":
-                        case "L_min_VT":
+                        case "L_min_VU":
                         case "L_min_PG":
                         case "L_min_SB":
                         case "L_min_FJ":
@@ -85,7 +85,7 @@ export class Csv2JsonService {
                             sp.legalDimensions.push(legaldim);
                             break;
                         case "L_max_NC":
-                        case "L_max_VT":
+                        case "L_max_VU":
                         case "L_max_PG":
                         case "L_max_SB":
                         case "L_max_FJ":
