@@ -24,11 +24,12 @@ import { IAppState } from "../../modules/ngrx/index";
   <mgl-map
   [preserveDrawingBuffer]="true"
   [style]="bls[bl]"
-  [fitBounds]="bounds$ | async"
+  [fitBounds]="bounds"
   [fitBoundsOptions]="{
     padding: boundsPadding,
     maxZoom: zoomMaxMap
   }"
+  (load) = "setMap($event)"
   (zoomEnd)="zoomChange($event)"
   (data)="styleChange($event)">
     <ng-container>
@@ -149,7 +150,7 @@ import { IAppState } from "../../modules/ngrx/index";
   styles: [
     `
     mgl-map {
-      height: 100%;
+      height: 50vh;
       width: 100%;
     }
     .mapboxgl-popup-content {
@@ -209,9 +210,9 @@ import { IAppState } from "../../modules/ngrx/index";
 export class ViewPlatformMapComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
-
-  bounds$: Observable<LngLatBounds>;
+  bounds: LngLatBounds;
   boundsPadding: number = 100;
+  map: any;
 
   zoomMaxMap: number = 10;
   zoom = 9;
@@ -220,10 +221,9 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
   zoomMaxStations: number = 5;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
-  colorPreview: Object;
+
   markerCountry: any;
   zones: Zone[] = [];
-  newZonePreview: Zone;
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
@@ -241,8 +241,13 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
     this.init();
   }
 
-  ngOnChanges() {
+  ngOnChanges(event) {
     this.init();
+  }
+
+  setMap(event) {
+    this.map = event;
+    this.map.fitBounds(this.bounds, { padding: 50 });
   }
 
   zoomChange(event) {
@@ -289,35 +294,43 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
         lngLat: [country.coordinates.lng, country.coordinates.lat]
       };
 
-      if (this.platform.zones.length > 0) this.setZones(this.platform);
       if (this.platform.stations.length > 0) this.setStations(this.platform);
+      if (this.platform.zones.length > 0) this.setZones(this.platform);
 
-      this.zoomOnCountry();
-      // this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     }
   }
 
-  zoomOnCountry() {
-    this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+  zoomToCountries(coordinates): LngLatBounds {
+    return coordinates.reduce((bnd, coord) => {
+      return bnd.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds {
+  zoomToZonesOrStation(featureCollection) {
     var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      bnd.extend(feature.geometry.coordinates[0]);
-    });
-    return this.checkBounds(bnd);
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates[0]));
+    bnd = this.checkBounds(bnd);
+    this.bounds = bnd;
+  }
+
+  zoomOnCountry(countryCode: string) {
+    this.setZones(this.platform);
+    this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
   }
 
   setZones(platform: Platform) {
-    this.layerZones$ = of(
-      Turf.featureCollection(this.platform.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
+    this.zones = this.platform.zones;
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+    this.zoomToZonesOrStation(
+      Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
     );
   }
 
-  setStations(platform: Platform) {
+  setStations(platforms: Platform) {
+    this.stations = this.platform.stations;
     this.layerStations$ = of(
-      Turf.featureCollection(this.platform.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
   }
 

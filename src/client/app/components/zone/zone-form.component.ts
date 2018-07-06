@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ElementRef, AfterContentInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, AfterContentInit } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { RouterExtensions, Config } from "../../modules/core/index";
@@ -53,8 +53,7 @@ export class ZoneFormComponent implements OnInit {
     private nameRefactorService: NameRefactorService,
     private store: Store<IAppState>,
     public routerext: RouterExtensions,
-    private _fb: FormBuilder,
-    private elRef: ElementRef
+    private _fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -68,10 +67,6 @@ export class ZoneFormComponent implements OnInit {
       this.zoneForm.controls.geometry.get("coordinates").setValue(this.coordStringRefactor);
       this.zoneForm.controls.properties.get("name").disable();
     }
-  }
-
-  ngAfterContentInit() {
-    console.log(this.elRef.nativeElement.querySelector(".mapboxgl-canvas"));
   }
 
   submit() {
