@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { Cluster, Supercluster } from 'supercluster';
 import * as Turf from '@turf/turf';
+import { MapService } from '../../modules/core/services/index';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
@@ -287,7 +288,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     let fc2 = Turf.featureCollection(
       this.zones
         .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
-        .map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
     );
     this.layerZones$ = of(fc2);
     // bounds

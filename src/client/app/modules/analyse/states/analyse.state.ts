@@ -1,9 +1,11 @@
 import { createSelector } from '@ngrx/store';
 import * as Turf from '@turf/turf';
+import * as TurfBPIP from '@turf/boolean-point-in-polygon';
 
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Station, Survey, Species } from '../../datas/models/index';
 import { Method, Results, Data, DimensionsAnalyse } from '../models/analyse';
+import { MapService } from '../../core/services/index';
 import { IAppState } from '../../ngrx/index';
 
 export interface IAnalyseState {
@@ -137,7 +139,8 @@ export const getStationsAvailables = (state: IAnalyseState) => {
     if(!state.usedPlatforms || !state.usedZones) return stations;
     for(let p of state.usedPlatforms){
         for(let z of state.usedZones){
-            stations = [...stations,...p.stations.filter(s => Turf.booleanPointInPolygon(s.geometry.coordinates,Turf.polygon(z.geometry.coordinates)))];
+            stations = [...stations,...p.stations.filter(s => 
+                TurfBPIP.default(s.geometry.coordinates,(<any>MapService.getPolygon(z,{name: z.properties.name}))))];
         }
     }
     return stations;

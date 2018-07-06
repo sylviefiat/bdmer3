@@ -90,31 +90,36 @@ export class SpeciesComponent implements OnInit {
       if(i<this.MAX_LENGTH) this.optionsL.push(i+"");
       if(i<this.MAX_WIDTH) this.optionsW.push(i+"");
     }
+    console.log(this.MIN);
 
     this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
     this.formDims.controls['largMin'].valueChanges.subscribe(option => this.changeWMins(option));
     this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
+    console.log(this.MAX_LENGTH);
   }
 
   changeCheck(value: any){
+    console.log(value);
     this.isChecked = value;
     this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:this.formDims.value.largMin};
     return this.send();
   }
 
   changeLMins(value: any){
+    console.log(value);
     this.dimensions={codeSp: this.species.code,longMin:value,largMin:this.formDims.value.largMin};
-    if(this.isChecked)
-      return this.send();
+    return this.send();
   }
 
   changeWMins(value: any){
+    console.log(value);
     this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:value};
-    if(this.isChecked)
-      return this.send();
+    return this.send();
   }
 
   send(){
+    console.log("send");
+    console.log({species:this.species,dims:this.dimensions,checked:this.isChecked});
     return this.speciesEmitter.emit({species:this.species,dims:this.dimensions,checked:this.isChecked});
   }
 
