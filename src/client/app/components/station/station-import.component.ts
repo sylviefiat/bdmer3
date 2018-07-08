@@ -57,7 +57,6 @@ export class StationImportComponent implements OnDestroy {
 
     handleUpload(csvFile: any): void {
         let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
-        console.log(csvFile);
         let reader = new FileReader();
 
         if (csvFile.target.files && csvFile.target.files.length > 0) {

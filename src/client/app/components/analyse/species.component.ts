@@ -9,7 +9,7 @@ import { Country } from '../../modules/countries/models/country';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="formSp"> 
-        <mat-checkbox [formControlName]="'species'">
+        <mat-checkbox [formControlName]="'species'" (change)="changeCheck($event)">
           <mat-card>
             <mat-card-title-group>
               <img mat-card-sm-image [src]="species.picture"/>
@@ -25,16 +25,16 @@ import { Country } from '../../modules/countries/models/country';
             <mat-card-content [formGroup]="formDims">
               <h5 mat-subheader>{{ 'SPECIES_MIN_DIMS' | translate }}</h5>
               <mat-form-field>
-                <input type="text" placeholder="{{'LONG_MIN' | translate}}" matInput formControlName="longMin" [matAutocomplete]="auto1">
-                <mat-autocomplete #auto1="matAutocomplete">
+                <input type="text" placeholder="{{'LONG_MIN' | translate}}" (change)="changeLMins($event)" matInput formControlName="longMin" [matAutocomplete]="auto1">
+                <mat-autocomplete (optionSelected)="changeLMins($event.option.value)" #auto1="matAutocomplete">
                   <mat-option *ngFor="let option of optionsL" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field> 
               <mat-form-field>
-                <input type="text" placeholder="{{'LARG_MIN' | translate}}" matInput formControlName="largMin" [matAutocomplete]="auto2">
-                <mat-autocomplete #auto2="matAutocomplete">
+                <input type="text" placeholder="{{'LARG_MIN' | translate}}" (change)="changeWMins($event)" matInput formControlName="largMin" [matAutocomplete]="auto2">
+                <mat-autocomplete (optionSelected)="changeWMins($event.option.value)" #auto2="matAutocomplete">
                   <mat-option *ngFor="let option of optionsW" [value]="option">
                     {{ option }}
                   </mat-option>
@@ -77,7 +77,6 @@ export class SpeciesComponent implements OnInit {
   }
 
   filter(option: string, options: string[]){
-    console.log(option);
     return options.filter(opt => opt.startsWith(option));
   }
 
@@ -90,36 +89,29 @@ export class SpeciesComponent implements OnInit {
       if(i<this.MAX_LENGTH) this.optionsL.push(i+"");
       if(i<this.MAX_WIDTH) this.optionsW.push(i+"");
     }
-    console.log(this.MIN);
 
     this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
     this.formDims.controls['largMin'].valueChanges.subscribe(option => this.changeWMins(option));
     this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
-    console.log(this.MAX_LENGTH);
   }
 
   changeCheck(value: any){
-    console.log(value);
     this.isChecked = value;
     this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:this.formDims.value.largMin};
     return this.send();
   }
 
   changeLMins(value: any){
-    console.log(value);
     this.dimensions={codeSp: this.species.code,longMin:value,largMin:this.formDims.value.largMin};
     return this.send();
   }
 
   changeWMins(value: any){
-    console.log(value);
     this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:value};
     return this.send();
   }
 
   send(){
-    console.log("send");
-    console.log({species:this.species,dims:this.dimensions,checked:this.isChecked});
     return this.speciesEmitter.emit({species:this.species,dims:this.dimensions,checked:this.isChecked});
   }
 

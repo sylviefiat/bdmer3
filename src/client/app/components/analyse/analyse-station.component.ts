@@ -85,7 +85,9 @@ import { Station, Zone } from '../../modules/datas/models/index';
                           ]
                       },
                       'icon-size': 1.5,
-                      'icon-rotate': 180
+                      'icon-rotate': 180,
+                      'icon-allow-overlap': true,
+                      'icon-ignore-placement': true
                       }"            
                     (click)="selectStation($event)"
                     (mouseEnter)="cursorStyle = 'pointer'"

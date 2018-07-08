@@ -99,7 +99,6 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     }
 
     changeValue(spCheck: any) {
-        console.log(spCheck);
         this.checkedSpecies = [...this.checkedSpecies.filter(s => s.code !== spCheck.species.code)];
         this.allSpeciesDims = [...this.allSpeciesDims.filter(s => s.codeSp !== spCheck.species.code)];
 
@@ -107,10 +106,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
             this.checkedSpecies.push(spCheck.species);
             this.allSpeciesDims.push(spCheck.dims);
         }
-        console.log(this.checkedSpecies);
         this.speciesEmitter.emit(this.checkedSpecies);
-        console.log(this.allSpeciesDims);
-        console.log(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
         this.dimensionsEmitter.emit(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
 
     }
@@ -121,7 +117,6 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
         control.setValue(control.value);
         this.checkedSpecies = (ev.checked) ? this.defaultSpecies : [];
         this.speciesEmitter.emit(this.checkedSpecies);
-        console.log(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
         this.dimensionsEmitter.emit(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
     }
 

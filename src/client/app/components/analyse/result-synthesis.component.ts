@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import * as Turf from '@turf/turf';
 import { MatCheckboxChange } from '@angular/material';
 import { IAppState } from '../../modules/ngrx/index';
+import { MapService } from '../../modules/core/services/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
 import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index';
 
@@ -39,10 +40,13 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
       </div>
-
-        <div *ngFor="let zone of analyseData.usedZones" class="results"> 
-          <div class="resultZone">
-            <h2>{{zone.properties.code}}</h2>       
+      <div>
+        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
+        <mat-accordion *ngFor="let zone of analyseData.usedZones; let i=index" class="results"> 
+          <mat-expansion-panel [expanded]="i === 0" class="resultZone">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{'ZONE'|translate}} {{zone.properties.code}}</mat-panel-title>
+            </mat-expansion-panel-header>
             <div class="groupCharts">
               <bc-result-boxplot class="chart" *ngFor="let station of getStationsZone(zone)"
                 [station]="station"
@@ -53,9 +57,9 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
                 [type]="typeShow$ | async">
               </bc-result-boxplot>
             </div>
-          </div>
-        </div>
-      
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
   `,
     styles: [
         `
@@ -71,17 +75,19 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       .results {
         display:flex;
         flex-direction:row;
-        max-width: 100vw;
+        width: 90vw;
       }
       .resultZone {
-        background-color: rgba(55,55,55,0.1);
+        max-width: 100vw;
       }
       .groupCharts {
         display:flex;
         flex-direction:row;
+        flex-wrap: wrap;
         padding-top:0.5em;
         padding-left:0.5em;
         padding-right:0.5em;
+        width: 90vw;
       }
       .chart {
         display:flex;
@@ -128,7 +134,7 @@ export class ResultSynthesisComponent implements OnInit {
     getStationsZone(zone){
       let stations = [];
       for (let s of this.analyseData.usedStations) {
-        if (Turf.booleanPointInPolygon(s.geometry.coordinates, Turf.polygon(zone.geometry.coordinates))) {
+        if (Turf.booleanPointInPolygon(s.geometry.coordinates, MapService.getPolygon(zone,{name:zone.properties.name}))) {
             stations.push(s);
         }
       }

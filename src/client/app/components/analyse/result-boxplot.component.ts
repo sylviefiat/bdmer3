@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnChanges, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectionStrategy, Input, Output, ViewChild } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 import * as Highcharts from 'highcharts';

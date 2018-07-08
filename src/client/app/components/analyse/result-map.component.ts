@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, OnChanges } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { Cluster, Supercluster } from 'supercluster';
@@ -44,7 +44,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 [class.marker-medium]="getClusterValue(feature)<=10000 && getClusterValue(feature)>100"
                 [class.marker-big]="getClusterValue(feature)>10000"
                 (click)="selectCluster($event, feature)">
-                {{ getClusterValue(feature) }}
+                
               </div>
             </ng-template>
           </mgl-marker-cluster>  
@@ -258,9 +258,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
             if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
               let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
               let polygon = {
-                geometry: {
-                    coordinates: z.geometry.coordinates
-                  },
+                geometry: z.geometry,
                   properties: {
                     code: z.properties.code,
                     abundancy: rz.densityPerHA,
@@ -289,6 +287,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
       this.zones
         .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
         .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .filter(polygon => polygon !== null)
     );
     this.layerZones$ = of(fc2);
     // bounds

@@ -58,9 +58,7 @@ import { IAppState } from '../../modules/ngrx/index';
               'fill-color': '#AFEEEE',
               'fill-opacity': 0.3,
               'fill-outline-color': '#000'
-              }"
-            (mouseEnter)="cursorStyle = 'pointer'"
-            (mouseLeave)="cursorStyle = ''">            
+              }">            
           </mgl-layer>
           <mgl-layer
             id="zonestext"

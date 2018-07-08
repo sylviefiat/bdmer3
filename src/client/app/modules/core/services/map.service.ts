@@ -21,15 +21,16 @@ export class MapService {
         }
     }
 
-    static getPolygon(feature,properties) {
+    static getPolygon(feature, properties) {
         switch (feature.geometry.type) {
             case "GeometryCollection":
                 return Turf.multiPolygon(feature.geometry.geometries.map(geom => geom.coordinates), properties);
             case "MultiPolygon":
-                 return Turf.multiPolygon(feature.geometries.coordinates, properties);
-            default:
+                return Turf.multiPolygon(feature.geometries.coordinates, properties);
             case "Polygon":
                 return Turf.polygon(feature.geometry.coordinates, properties);
+            default:
+                return null;
         }
     }
 

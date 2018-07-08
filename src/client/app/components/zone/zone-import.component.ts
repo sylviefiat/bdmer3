@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import * as togeojson from '@mapbox/togeojson';
 import * as area from '@mapbox/geojson-area';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone } from '../../modules/datas/models/index';
@@ -37,7 +38,8 @@ export class ZoneImportComponent implements OnDestroy{
     private kmlFile: string;
     private docs_repo: string;
 
-    constructor(private nameRefactorService: NameRefactorService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    constructor(private nameRefactorService: NameRefactorService, private store: Store<IAppState>, 
+        public routerext: RouterExtensions, route: ActivatedRoute, private translate: TranslateService) {
         this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
             this.docs_repo = "../../../assets/files/";
             this.kmlFile = "importZones-"+l+".kml";
@@ -60,15 +62,19 @@ export class ZoneImportComponent implements OnDestroy{
               const geojson = togeojson.kml(x).features;
 
               for(let i  in geojson){
-                delete geojson[i].properties['styleHash'];
-                delete geojson[i].properties['styleMapHash'];
-                delete geojson[i].properties['styleUrl'];
-                geojson[i].properties.code = self.platform.code+"_"+self.nameRefactorService.convertAccent(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
-                const surface = area.geometry(geojson[i].geometry);
+                if(geojson[i].properties.name){
+                    delete geojson[i].properties['styleHash'];
+                    delete geojson[i].properties['styleMapHash'];
+                    delete geojson[i].properties['styleUrl'];
+                    geojson[i].properties.code = self.platform.code+"_"+self.nameRefactorService.convertAccent(geojson[i].properties.name).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,'');
+                    const surface = area.geometry(geojson[i].geometry);
 
-                geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
-                console.log(geojson[i]);
-                self.upload.emit(geojson[i]);
+                    geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
+                    console.log(geojson[i]);
+                    self.upload.emit(geojson[i]);
+                } else {
+                    self.err.emit(self.translate.instant('ERROR_GEOJSON_ZONE_NAME'));
+                }
               }
             }
     }
