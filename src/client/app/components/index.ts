@@ -6,6 +6,7 @@ import { HomeComponent } from "./home/home.component";
 import { MapComponent } from "./home/map.component";
 import { PreviewMapZoneFormComponent } from "./zone/zone-form-preview-map.component";
 import { PreviewMapZoneImportComponent } from "./zone/zone-import-preview-map.component";
+import { PreviewMapStationImportComponent } from "./station/station-import-preview-map.component";
 import { PreviewMapStationFormComponent } from "./station/station-form-preview-map.component";
 import { ViewPlatformMapComponent } from "./platform/view-platform-map.component";
 import { ViewZoneMapComponent } from "./zone/view-zone-map.component";
@@ -56,6 +57,7 @@ export const APP_COMPONENTS: any[] = [
   PreviewMapZoneFormComponent,
   PreviewMapZoneImportComponent,
   PreviewMapStationFormComponent,
+  PreviewMapStationImportComponent,
   ViewPlatformMapComponent,
   ViewZoneMapComponent,
   ViewStationMapComponent,
@@ -86,6 +88,7 @@ export * from "./home/home.component";
 export * from "./home/map.component";
 export * from "./zone/zone-form-preview-map.component";
 export * from "./zone/zone-import-preview-map.component";
+export * from "./station/station-import-preview-map.component";
 export * from "./station/station-form-preview-map.component";
 export * from "./platform/view-platform-map.component";
 export * from "./zone/view-zone-map.component";

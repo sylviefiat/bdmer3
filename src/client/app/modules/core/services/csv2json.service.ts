@@ -18,11 +18,17 @@ export class Csv2JsonService {
   static SEMICOLON = ";";
   csvErrorMsg: string;
 
-  constructor(private store: Store<IAppState>, private translate: TranslateService, private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
+  constructor(
+    private store: Store<IAppState>,
+    private translate: TranslateService,
+    private mapStaticService: MapStaticService,
+    private papa: Papa,
+    private ms: MomentService
+  ) {
     this.csvErrorMsg = this.translate.instant("CSV_FIELD_ERROR");
   }
 
-  private extractSpeciesData(arrayData): Species[] {
+  extractSpeciesData(arrayData): Species[] {
     // Input csv data to the function
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
@@ -112,7 +118,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  private extractPlatformData(arrayData): Platform[] {
+  extractPlatformData(arrayData): Platform[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: Platform[] = [];
@@ -152,16 +158,14 @@ export class Csv2JsonService {
           string += errorTab[i] + ", ";
         }
       }
-
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
-      return [];
+      throw new Error(string);
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
   }
 
-  private extractZoneData(arrayData): Zone[] {
+  extractZoneData(arrayData): Zone[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: Zone[] = [];
@@ -191,7 +195,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  private extractSurveyData(arrayData): Survey[] {
+  extractSurveyData(arrayData): Survey[] {
     let allTextLines = arrayData.data;
     let delimiter = arrayData.meta.delimiter;
     let headers = allTextLines[0];
@@ -252,15 +256,14 @@ export class Csv2JsonService {
         }
       }
 
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
-      return [];
+      throw new Error(string);
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
   }
 
-  private extractStationData(arrayData): Station[] {
+  extractStationData(arrayData): Station[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines = [];
@@ -305,8 +308,7 @@ export class Csv2JsonService {
         }
       }
 
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
-      return [];
+      throw new Error(string);
     }
 
     for (let i = 0; i < lines.length; i++) {
@@ -335,7 +337,88 @@ export class Csv2JsonService {
     return geojsons;
   }
 
-  private extractZonePrefData(arrayData, species): ZonePreference[] {
+  extractStationPreviewData(csvFile) {
+    return Observable.create(observable => {
+      this.papa.parse(csvFile, {
+        skipEmptyLines: true,
+        download: true,
+        complete: function(results) {
+          observable.next(results);
+          observable.complete();
+        }
+      });
+    }).map(arrayData => {
+      let allTextLines = arrayData.data;
+      let headers = allTextLines[0];
+      let lines = [];
+      let geojsons = [];
+      let errorTab = [];
+      for (let i = 1; i < allTextLines.length; i++) {
+        let data = allTextLines[i];
+        if (data.length == headers.length) {
+          let st = {} as Station;
+          let header;
+          for (let j = 0; j < headers.length; j++) {
+            switch (headers[j]) {
+              case "codePlatform":
+              case "code":
+              case "nom":
+              case "latitude":
+              case "longitude":
+              case "description":
+                header = headers[j].replace(/_([a-z])/g, function(g) {
+                  return g[1].toUpperCase();
+                });
+                st[headers[j]] = data[j];
+                break;
+              default:
+                if (!errorTab.includes(headers[j])) {
+                  errorTab.push(headers[j]);
+                }
+                break;
+            }
+          }
+          lines.push(st);
+        }
+      }
+
+      if (errorTab.length !== 0) {
+        let string = "";
+        for (let i in errorTab) {
+          if (parseInt(i) === errorTab.length - 1) {
+            string += errorTab[i] + ".";
+          } else {
+            string += errorTab[i] + ", ";
+          }
+        }
+
+        throw new Error(string);
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        let geojson = {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [Number(lines[i]["longitude"]), Number(lines[i]["latitude"])]
+          },
+          properties: {
+            name: lines[i]["nom"],
+            code: lines[i]["code"],
+            description: lines[i]["description"]
+          },
+          staticMapStation: "",
+          codePlatform: lines[i]["codePlatform"]
+        };
+
+        geojsons.push(geojson);
+      }
+
+      return geojsons;
+    });
+  }
+
+  extractZonePrefData(arrayData, species): ZonePreference[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: ZonePreference[] = [];
@@ -387,15 +470,14 @@ export class Csv2JsonService {
         }
       }
 
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
-      return [];
+      throw new Error(string);
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
   }
 
-  private extractCountData(arrayData): Count[] {
+  extractCountData(arrayData): Count[] {
     let allTextLines = arrayData.data;
     let delimiter = arrayData.meta.delimiter;
     let headers = allTextLines[0];
@@ -464,8 +546,7 @@ export class Csv2JsonService {
         }
       }
 
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
-      return [];
+      throw new Error(string);
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
