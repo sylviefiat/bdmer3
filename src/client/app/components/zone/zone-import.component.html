@@ -15,7 +15,7 @@
 <div class="insideform" [formGroup]="zoneForm">
   <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_KML' | translate }} {{intersectError}}</mat-card-title>
+      <mat-card-title>{{'IMPORT_KML' | translate }}</mat-card-title>
       <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
     </mat-card-title-group>
     <mat-card-content>
@@ -33,6 +33,6 @@
         <input #fileInput type="file" formControlName="zoneInput" (change)="handleUpload($event)" style="display:none;"  accept=".kml"/>
       </button>
     </mat-card-actions>
-    <bc-zone-import-map (zoneIntersect)="zoneIntersect($event)" [platform]="platform" [countries]="countries" [geojsons$]="geojsons$" class="wrapp_right"></bc-zone-import-map>
+    <bc-zone-import-map (zoneIntersect)="zoneIntersect($event)" [platform]="platform" [countries]="countries" [geojsons]="geojsons$ | async" class="wrapp_right"></bc-zone-import-map>
   </mat-card>
 </div>

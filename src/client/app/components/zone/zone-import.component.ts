@@ -74,7 +74,11 @@ export class ZoneImportComponent implements OnDestroy {
   }
 
   send() {
-    this.upload.emit(this.importKmlFile);
+    this.geojsons$.subscribe(geojsons => {
+      geojsons.forEach(geojson => {
+        this.upload.emit(geojson);
+      });
+    });
   }
 
   getKmlZones() {

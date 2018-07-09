@@ -24,11 +24,12 @@ import { IAppState } from "../../modules/ngrx/index";
   <mgl-map
   [preserveDrawingBuffer]="true"
   [style]="bls[bl]"
-  [fitBounds]="bounds$ | async"
+  [fitBounds]="bounds"
   [fitBoundsOptions]="{
     padding: boundsPadding,
     maxZoom: zoomMaxMap
   }"
+  (load) = "setMap($event)"
   (zoomEnd)="zoomChange($event)"
   (data)="styleChange($event)">
     <ng-container>
@@ -209,11 +210,12 @@ import { IAppState } from "../../modules/ngrx/index";
 export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
-  @Input() newZone: any[];
+  @Input() newZone: any;
   @Output() zoneIntersect: EventEmitter<any> = new EventEmitter<any>();
 
-  bounds$: Observable<LngLatBounds>;
+  bounds: LngLatBounds;
   boundsPadding: number = 100;
+  map: any;
 
   zoomMaxMap: number = 10;
   zoom = 9;
@@ -243,17 +245,24 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
     this.init();
   }
 
-  ngOnChanges(event) {
-    if (this.newZone) {
-      if (this.newZone[0].length > 0) {
-        this.createZone(this.newZone);
-        this.checkZoneValid(this.newZone);
-      } else {
-        this.newZonePreview = null;
-      }
+  ngOnChanges() {
+    console.log(this.newZone);
+
+    if (this.newZone !== null && this.newZone) {
+      this.createZone(this.newZone);
+      this.checkZoneValid(this.newZone);
+    } else {
+      this.newZonePreview = null;
     }
-    console.log(event);
+
     this.init();
+  }
+
+  setMap(event) {
+    this.map = event;
+    if (this.bounds) {
+      this.map.fitBounds(this.bounds, { padding: 10 });
+    }
   }
 
   checkZoneValid(zoneCheck) {
@@ -294,7 +303,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
     };
 
     var bnd = new LngLatBounds();
-    this.bounds$ = of(this.checkBounds(bnd.extend(coordinates[0])));
+    this.bounds = this.checkBounds(bnd.extend(coordinates[0]));
   }
 
   zoomChange(event) {
@@ -341,34 +350,50 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
         lngLat: [country.coordinates.lng, country.coordinates.lat]
       };
 
-      if (this.platform.zones.length > 0) this.setZones(this.platform);
       if (this.platform.stations.length > 0) this.setStations(this.platform);
-
-      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      if (this.platform.zones.length > 0) this.setZones(this.platform);
     }
   }
 
-  zoomOnCountry() {
-    this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+  zoomToCountries(coordinates): LngLatBounds {
+    return coordinates.reduce((bnd, coord) => {
+      return bnd.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds {
+  zoomToZones(featureCollection) {
     var bnd = new LngLatBounds();
     var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      bnd.extend(feature.geometry.coordinates[0]);
+      feature.geometry.coordinates[0].forEach(coord => {
+        bnd.extend(coord);
+      });
     });
-    return this.checkBounds(bnd);
+    this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomToStations(featureCollection) {
+    var bnd = new LngLatBounds();
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates));
+    this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomOnCountry(countryCode: string) {
+    this.bounds = this.zoomToCountries([this.markerCountry.lngLat]);
   }
 
   setZones(platform: Platform) {
-    this.layerZones$ = of(
-      Turf.featureCollection(this.platform.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
-    );
+    this.zones = this.platform.zones;
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+    this.zoomToZones(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
   }
 
   setStations(platform: Platform) {
+    this.stations = this.platform.stations;
     this.layerStations$ = of(
-      Turf.featureCollection(this.platform.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+    );
+    this.zoomToStations(
+      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
   }
 

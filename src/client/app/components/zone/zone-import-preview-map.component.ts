@@ -22,12 +22,14 @@ import { IAppState } from "../../modules/ngrx/index";
     <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
   </nav>
   <mgl-map
+  [preserveDrawingBuffer]="true"
   [style]="bls[bl]"
-  [fitBounds]="bounds$ | async"
+  [fitBounds]="bounds"
   [fitBoundsOptions]="{
     padding: boundsPadding,
     maxZoom: zoomMaxMap
   }"
+  (load) = "setMap($event)"
   (zoomEnd)="zoomChange($event)"
   (data)="styleChange($event)">
     <ng-container>
@@ -251,11 +253,12 @@ import { IAppState } from "../../modules/ngrx/index";
 export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
-  @Input() geojsons$: Observable<any>;
+  @Input() geojsons: any;
   @Output() zoneIntersect: EventEmitter<any> = new EventEmitter<any>();
 
-  bounds$: Observable<LngLatBounds>;
+  bounds: LngLatBounds;
   boundsPadding: number = 100;
+  map: any;
 
   zoomMaxMap: number = 10;
   zoom = 9;
@@ -270,6 +273,7 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   newZonesPreviewError: any = { features: [], type: "FeatureCollection" };
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
+  zones: Zone[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
 
   show: string[] = ["countries"];
@@ -286,14 +290,13 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.geojsons$) {
-      this.geojsons$.subscribe(res => {
-        this.reset();
-        this.checkZoneValid(res);
-        this.addZone(res);
-      });
-    }
     this.init();
+
+    if (this.geojsons) {
+      this.reset();
+      this.checkZoneValid(this.geojsons);
+      this.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
+    }
   }
 
   reset() {
@@ -316,9 +319,18 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   addZone(geojsons) {
+    this.zoomToZones(geojsons);
+    console.log(geojsons);
     for (let geojson of geojsons) {
       var bnd = new LngLatBounds();
-      this.bounds$ = of(this.checkBounds(bnd.extend(geojson.geometry.coordinates[0])));
+      this.bounds = this.checkBounds(bnd.extend(geojson.geometry.coordinates[0]));
+    }
+  }
+
+  setMap(event) {
+    this.map = event;
+    if (this.bounds) {
+      this.map.fitBounds(this.bounds, { padding: 10 });
     }
   }
 
@@ -366,34 +378,50 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
         lngLat: [country.coordinates.lng, country.coordinates.lat]
       };
 
-      if (this.platform.zones.length > 0) this.setZones(this.platform);
       if (this.platform.stations.length > 0) this.setStations(this.platform);
-
-      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      if (this.platform.zones.length > 0) this.setZones(this.platform);
     }
   }
 
-  zoomOnCountry() {
-    this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+  zoomToCountries(coordinates): LngLatBounds {
+    return coordinates.reduce((bnd, coord) => {
+      return bnd.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds {
+  zoomToZones(featureCollection) {
     var bnd = new LngLatBounds();
     var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      bnd.extend(feature.geometry.coordinates[0]);
+      feature.geometry.coordinates[0].forEach(coord => {
+        bnd.extend(coord);
+      });
     });
-    return this.checkBounds(bnd);
+    this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomToStations(featureCollection) {
+    var bnd = new LngLatBounds();
+    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates));
+    this.bounds = this.checkBounds(bnd);
+  }
+
+  zoomOnCountry(countryCode: string) {
+    this.bounds = this.zoomToCountries([this.markerCountry.lngLat]);
   }
 
   setZones(platform: Platform) {
-    this.layerZones$ = of(
-      Turf.featureCollection(this.platform.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
-    );
+    this.zones = platform.zones;
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+    this.zoomToZones(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
   }
 
   setStations(platform: Platform) {
+    this.stations = platform.stations;
     this.layerStations$ = of(
-      Turf.featureCollection(this.platform.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+    );
+    this.zoomToStations(
+      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
   }
 

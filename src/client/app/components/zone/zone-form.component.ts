@@ -118,6 +118,7 @@ export class ZoneFormComponent implements OnInit {
   zoneIntersect(error) {
     this.errorIntersect = error;
   }
+
   coordChange(coords) {
     this.errorCoord = false;
     this.errorIntersect = false;
@@ -126,8 +127,11 @@ export class ZoneFormComponent implements OnInit {
       if (ar !== "error") {
         this.coordsRefactor = ar;
       } else {
+        this.coordsRefactor = null;
         this.errorCoord = true;
       }
+    } else {
+      this.coordsRefactor = null;
     }
   }
 }
