@@ -158,7 +158,8 @@
   "CSV_IMPORT": "Import CSV",
   "IMPORT_CSV": "Importer CSV",
   "IMPORT_KML": "Importer KML",
-  "IMPORT_DESC_KML": "Un fichier KML est un fichier de valeurs sous formes de balise. Télécharger l'example ci dessous pour connaître le format exact attendu pour cet import.",
+  "IMPORT_DESC_KML":
+    "Un fichier KML est un fichier de valeurs sous formes de balise. Télécharger l'example ci dessous pour connaître le format exact attendu pour cet import.",
   "IMPORT_DESC":
     "Un fichier CSV est un fichier de valeurs séparées par des points virgules. Les valeurs d'un même objet sont sur une même ligne, séparés par des points virgules et les objets sont séparés par des retours à la ligne: 1 objet par ligne et 1 valeur par point virgule. Une ligne d'entête peut être inclue en haut du fichier. Télécharger l'example ci dessous pour connaître le format exact attendu pour cet import.",
   "IMPORT_DESC_ADMIN":
@@ -296,7 +297,8 @@
   "IMPORT_PICTURE": "Choisir",
   "ZONE_NAME": "Nom de la zone",
   "MODAL_CLOSE": "Fermer",
-  "ZONE_COORD_EX": "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
+  "ZONE_COORD_EX":
+    "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordonnées de la zone",
   "POLYGON_ERROR": "Le polygone n'est pas valide",
   "STATION_NAME": "Nom de la station",
@@ -397,5 +399,6 @@
   "NO_STATION_IN_DB": "Il n'y a pas de station dans la base de donnée pour la platforme ",
   "NO_SPECIES_IN_DB": "Il n'y a pas d'espèce dans la base de donnée",
   "NO_SURVEY_IN_DB": "Il n'y a pas de relevé dans la base de donnée pour la platforme ",
-  "INTERSECT_ERROR": "Zone invalide, elle chevauche une autre zone"
+  "INTERSECT_ERROR": "Zone invalide, elle chevauche une autre zone",
+  "STATION_NOT_IN_ZONE": "La station n'est dans aucune zone existante"
 }

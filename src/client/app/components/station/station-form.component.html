@@ -4,7 +4,7 @@
       <mat-card-title>{{ 'ADD_STATION_TO' | translate}} {{ platform.code }}</mat-card-title>
 
       <mat-card-content>
-        <button type="submit" class="btn btn-primary" [disabled]="!stationForm.valid || !stationValid">{{ 'SUBMIT' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!stationForm.valid">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
         <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
       </mat-card-content>
@@ -32,6 +32,7 @@
       </div>
       <p *ngIf="errorLng" class="error">{{ 'STATION_ERROR_LNG' | translate }}</p>
       <p *ngIf="errorLat" class="error">{{ 'STATION_ERROR_LAT' | translate }}</p>
+      <p *ngIf="stationValid === false && latitude && longitude" class="warning">{{ 'STATION_NOT_IN_ZONE' | translate }}</p>
       <bc-station-form-map (stationValid)="isStationValid($event)" [platform]="platform" [countries]="countries" [newStation]="newStation" class="wrapp_right"></bc-station-form-map>
     </mat-card>
   </div>

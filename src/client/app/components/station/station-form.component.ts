@@ -31,7 +31,7 @@ export class StationFormComponent implements OnInit {
   errorLat: boolean;
   errorLng: boolean;
   newStation: number[];
-  stationValid: boolean = false;
+  stationValid: boolean;
   stationForm: FormGroup = new FormGroup({
     type: new FormControl("Feature"),
     geometry: new FormGroup({
@@ -80,6 +80,11 @@ export class StationFormComponent implements OnInit {
             .replace(/[^a-zA-Z0-9]/g, "")
       );
       this.stationForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude]);
+
+      if (this.stationForm.valid) {
+        this.stationForm.controls.properties.get("name").enable();
+        this.submitted.emit(this.stationForm.value);
+      }
 
       // this.mapStaticService.staticMapToB64(this.url).then((data) => {
       //     this.stationForm.controls.staticMapStation.setValue(data);
