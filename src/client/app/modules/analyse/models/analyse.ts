@@ -20,10 +20,13 @@ export interface Data {
 export interface Results {
     name: string;
     resultPerSurvey:ResultSurvey[];
+    chartsData: ChartsData;
 }
 
 export interface ResultSurvey{
     codeSurvey: string;
+    yearSurvey: number;
+    codePlatform: string;
     resultPerSpecies:ResultSpecies[];
 }
 
@@ -90,4 +93,22 @@ export interface Stock {
     quotaFresh: number;
     quotaSalt: number;
     quotaDry: number;
+}
+
+export interface ChartsData {
+    chartsZonesBiomass: ChartsZone[];
+    chartsZonesAbundancy: ChartsZone[];
+}
+
+export interface ChartsZone {
+    code: string;    
+    chartsStations: ChartsStation[];
+}
+
+export interface ChartsStation {
+    code: string;
+    species: Species[];
+    dataSpline: number[][];
+    dataError: number[][][];
+    dataPie: number[];
 }

@@ -42,23 +42,18 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       </div>
       <div>
         <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
-        <mat-accordion *ngFor="let zone of analyseData.usedZones; let i=index" class="results"> 
-          <mat-expansion-panel [expanded]="i === 0" class="resultZone">
-            <mat-expansion-panel-header>
-              <mat-panel-title>{{'ZONE'|translate}} {{zone.properties.code}}</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="groupCharts">
-              <bc-result-boxplot class="chart" *ngFor="let station of getStationsZone(zone)"
-                [station]="station"
-                [resultSurveys]="results.resultPerSurvey"
-                [usedSurveys]="analyseData.usedSurveys"
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" #tabGroup> 
+          <mat-tab *ngFor="let chartsZone of ((typeShow$ | async)==='B'?results.chartsData.chartsZonesBiomass:results.chartsData.chartsZonesAbundancy); let i=index"  label="{{(chartsZone)?.code}}">          
+            <div class="groupCharts" *ngIf="tabGroup.selectedIndex === i">
+              <div *ngIf="chartsZone.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+              <bc-result-boxplot class="chart" *ngFor="let chartsStation of chartsZone.chartsStations"
+                [chartsData]="chartsStation"
                 [years]="analyseData.usedYears"
-                [species]="analyseData.usedSpecies"
                 [type]="typeShow$ | async">
               </bc-result-boxplot>
             </div>
-          </mat-expansion-panel>
-        </mat-accordion>
+          </mat-tab>
+        </mat-tab-group>
       </div>
   `,
     styles: [
@@ -66,8 +61,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       :host {
         display: flex;
         flex-wrap: wrap;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+       justify-content:center;
       }
       h2 {
         margin-left: 25px;
@@ -76,6 +71,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         display:flex;
         flex-direction:row;
         width: 90vw;
+        justify-content:center;
       }
       .resultZone {
         max-width: 100vw;
@@ -95,6 +91,12 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         flex-wrap: wrap;
         padding-right:0.3em;
       }
+    .show {
+      display: block;
+    }
+    .hide {
+      display: none;
+    }
   `]
 })
 export class ResultSynthesisComponent implements OnInit {
@@ -119,6 +121,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
       this.showStations$=of(true);
       this.showZones$=of(false);
+      console.log(this.results);
     }
 
     get localDate() {

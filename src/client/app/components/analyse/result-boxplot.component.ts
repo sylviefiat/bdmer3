@@ -8,14 +8,15 @@ require('highcharts/highcharts-more')(Highcharts);
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
-import { ResultSurvey, ResultSpecies } from '../../modules/analyse/models/index';
+import { ChartsStation } from '../../modules/analyse/models/index';
 
 @Component({
     selector: 'bc-result-boxplot',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
   <div class="container"> 
-      <highcharts-chart 
+      <div *ngIf="loading">Plot is loading</div>
+      <highcharts-chart  *ngIf="!loading"
           [Highcharts]="Highcharts"
           [options]="chartOptions"
           style="width: 100%; height: 400px; display: block;">
@@ -28,26 +29,30 @@ import { ResultSurvey, ResultSpecies } from '../../modules/analyse/models/index'
   `]
 })
 export class ResultBoxplotComponent implements OnInit, OnChanges {
-    @Input() station: Station;
-    @Input() resultSurveys: ResultSurvey[];
-    @Input() usedSurveys: Survey[];
     @Input() type: string;
     @Input() years: string[];
-    @Input() species: Species[];
+    @Input() chartsData: ChartsStation;
     Highcharts = Highcharts;
     chartOptions: any;
     title: string;
+    loading: boolean = false;
 
     constructor(private translate: TranslateService) {
 
     }
 
     ngOnInit() {
+        this.loading=true;
         this.getChartOptions();
+        this.loading=false;
     }
 
     ngOnChanges(event) {
-        this.getChartOptions();
+        
+        if(event.type !== null && event.type.previousValue !== undefined){
+            console.log(event);
+            this.getChartOptions();
+        }
     }
 
     getChartOptions() {
@@ -57,7 +62,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
             },
 
             title: {
-                text: this.translate.instant('STATION')+" " + this.station.properties.code + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY')+")</i>"
+                text: this.translate.instant('STATION')+" " + this.chartsData.code + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY')+")</i>"
             },
             legend: {
                 enabled: true
@@ -78,23 +83,24 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         };
     }
 
-    fillData(codeSp: string): any {
+    /*fillData(codeSp: string): any {
         let dataSpline: any[] = [];
         let dataError: any[] = [];
         let dataPie: number;
-        for (let i in this.resultSurveys) {
-            let rs = this.resultSurveys[i];
-            let currentYear = new Date(this.usedSurveys.filter(s => rs.codeSurvey === s.code)[0].dateStart).getFullYear();
+        for (let rs of this.resultSurveys.filter(rs => rs.codePlatform === this.station.codePlatform)) {
+            let currentYear = rs.yearSurvey;
             let currentIndex = this.years.indexOf(currentYear.toString());
             let rspa = rs.resultPerSpecies.filter(rps => rps.codeSpecies === codeSp);
             if ((rspa !== null || rspa.length > 0) &&
-                (rspa[0].resultPerStation.filter(r => r.codeStation === this.station.properties.code) !== null && rspa[0].resultPerStation.filter(r => r.codeStation === this.station.properties.code).length > 0)) {
-                let rst = rspa[0].resultPerStation.filter(r => r.codeStation === this.station.properties.code)[0];
-                let value = this.type === 'B' ? rst.biomassTotal : rst.numberIndividual;
-                let sd = this.type === 'B' ? rst.SDBiomassTotal : rst.SDDensityTotal;
-                dataSpline[currentIndex] = value;
-                dataError[currentIndex] = [value - sd, value + sd];
-                dataPie = rst.numberIndividual;
+                (rspa[0].resultPerStation
+                    .filter(r => r.codeStation === this.station.properties.code) !== null && rspa[0].resultPerStation
+                    .filter(r => r.codeStation === this.station.properties.code).length > 0)) {
+                        let rst = rspa[0].resultPerStation.filter(r => r.codeStation === this.station.properties.code)[0];
+                        let value = this.type === 'B' ? rst.biomassTotal : rst.numberIndividual;
+                        let sd = this.type === 'B' ? rst.SDBiomassTotal : rst.SDDensityTotal;
+                        dataSpline[currentIndex] = value;
+                        dataError[currentIndex] = [value - sd, value + sd];
+                        dataPie = rst.numberIndividual;
             } else {
                 dataSpline[currentIndex] = 0;
                 dataError[currentIndex] = [0, 0];
@@ -102,7 +108,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
             }
         }
         return { dataSpline, dataError, dataPie };
-    }
+    }*/
 
     getSeries() {
         let series: any[] = [];
@@ -110,35 +116,33 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         let index = 0;
         let unit = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
 
-        for (let i in this.species) {
-            let data = this.fillData(this.species[i].code);
+        for (let i in this.chartsData.species) {
             series[index++] = {
-                name: this.species[i].scientificName,
+                name: this.chartsData.species[i].scientificName,
                 type: 'spline',
                 yAxis: 0,
-                data: data.dataSpline,
+                data: this.chartsData.dataSpline[i],
                 tooltip: {
                     headerFormat: '<em>' + unit + '</em><br/>',
                     pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} '+unit+'</b>'
                 }
             }
             series[index++] = {
-                name: this.species[i].scientificName,
+                name: this.chartsData.species[i].scientificName,
                 type: 'errorbar',
                 yAxis: 0,
-                data: data.dataError,
+                data: this.chartsData.dataError[i],
                 tooltip: {
                     headerFormat: '<em>' + (this.type === 'B' ? "Kg/ha" : "ind./ha") + '</em><br/>',
                     pointFormat: '(standard deviation: {point.low}-{point.high} '+unit+'</b>'
                 }
             }
             piedata[i] = {
-                name: this.species[i].scientificName,
-                y: data.dataPie,
+                name: this.chartsData.species[i].scientificName,
+                y: this.chartsData.dataPie[i],
                 color: Highcharts.getOptions().colors[i]
             }
         }
-
         pie = {
             type: 'pie',
             name:  this.translate.instant('PIE_LEGEND'),

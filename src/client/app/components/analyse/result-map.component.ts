@@ -14,7 +14,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <div class="container">
-     <mgl-map
+    <div *ngIf="loading">Map is loading</div>
+    <mgl-map *ngIf="!loading"
         [style]="'mapbox://styles/mapbox/satellite-v9'"
         [fitBounds]="bounds$ | async"
         [fitBoundsOptions]="{
@@ -48,7 +49,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               </div>
             </ng-template>
           </mgl-marker-cluster>  
-          <mgl-popup
+          <mgl-popup  class="popup"
             *ngIf="selectedCluster"
             [lngLat]="selectedCluster.lngLat">
             <result-map-cluster-popup
@@ -58,7 +59,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               [typeShow]="typeShow">
             </result-map-cluster-popup>
           </mgl-popup> 
-          <mgl-popup
+          <mgl-popup class="popup"
             *ngIf="selectedPoint"
             [lngLat]="selectedPoint.lngLat">
             <span>{{ selectedPoint.properties.code }}: {{ getValue(selectedPoint) }} {{ getUnit() }}</span>
@@ -150,6 +151,9 @@ import { Results, Data } from '../../modules/analyse/models/index';
       margin-left: 20px;
       margin-right: 20px;
     }
+    .popup {
+      color: black;
+    }
 
     ::ng-deep .marker, .marker {    
       border-radius: 50%;
@@ -204,6 +208,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   currentTypeCluster: string = "biomass";
   currentZoomCluster: number = 0;
   currentIdCluster: number = 0;
+  loading: boolean = true;
 
   constructor() {
 
@@ -214,9 +219,11 @@ export class ResultMapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.loading=true;
     this.initMarkers();
     this.initZones();
     this.filterFeaturesCollection();
+    this.loading=false;
   }
 
   ngOnChanges(event) {
