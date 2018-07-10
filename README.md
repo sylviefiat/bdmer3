@@ -20,13 +20,6 @@ This is an **advanced** seed project for Angular apps based on [Minko Gechev's](
 - [NativeScript](https://www.nativescript.org/) cross platform mobile (w/ native UI) apps. [Setup instructions here](#mobile-app).
 - [Electron](http://electron.atom.io/) cross platform desktop apps (Mac, Windows and Linux). [Setup instructions here](#desktop-app).
 
-| ![Multiple Platforms](https://cdn.filestackcontent.com/zZlQKKKjQUaBr9pLkEVK) |
-| :---: |
-| *The zen of multiple platforms.* Chrome, Android and iPhone all running the same code. |
-
-| ![Desktop](https://d2wp4shknjcfjl.cloudfront.net/api/file/1O4FRGsSHS8g0Lz3EKNy) |
-| :---: |
-| *Programming Nirvana.* Mac and Windows desktop both running the same code. |
 
 #### Ajouts pour Entropie:
 - [PouchDB](https://pouchdb.com/) database designed to run well within the browser, thats syncs with online [CouchDB](http://couchdb.apache.org/)
