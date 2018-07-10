@@ -342,10 +342,6 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
   setStations(platforms: Platform) {
     this.stations = this.platform.stations;
-    var index = this.stations.indexOf(this.zone);
-    if (index > -1) {
-      this.stations.splice(index, 1);
-    }
 
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
