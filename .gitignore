@@ -71,4 +71,4 @@ ChromeDebugger-UserData
 .DS_Store
 
 # docker
-.docker/couchdb_data/
+.docker/couchdb_data/data
