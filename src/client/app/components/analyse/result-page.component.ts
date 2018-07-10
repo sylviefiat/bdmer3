@@ -44,14 +44,14 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
   locale$: Observable<string>;
   analysing$: Observable<boolean>;
   analysed$: Observable<boolean>;
-  loading: boolean = true;
+  loading: boolean;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
 
   }
 
   ngOnInit() {
-    console.log("load");
+    this.loading=true;
     this.analysing$ = this.store.select(isAnalysing);
     this.analysed$ = this.store.select(isAnalysed);
     this.analyseData$ = this.store.select(getAnalyseData);
@@ -60,7 +60,6 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    console.log("loaded");
     this.loading=false;
   }
 

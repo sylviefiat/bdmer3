@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, ViewChild, OnChanges, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { Cluster, Supercluster } from 'supercluster';
@@ -86,7 +86,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 },
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
-                }">            
+                }"
+              (click)="selectZone($event)">            
             </mgl-layer>   
             <mgl-layer
               *ngIf="typeShow==='B'"
@@ -105,7 +106,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 },
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
-                }">            
+                }"
+              (click)="selectZone($event)">            
             </mgl-layer>
             <mgl-layer
               id="zonestext"
@@ -188,6 +190,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   @Input() surveyShow: string;
   @Input() showStations: boolean;
   @Input() showZones: boolean;
+  @Output() zoneEmitter = new EventEmitter<string>();
   markers: any[] = [];
   zones: any[] = [];
   markers$: Observable<Turf.FeatureCollection>;
@@ -379,9 +382,14 @@ export class ResultMapComponent implements OnInit, OnChanges {
       this.currentIdCluster = id;
       return this.currentBiomValueCluster;
     } catch (e) {
-      console.log(e);
+      //console.log(e);
       return 0;
     }
+  }
+
+  selectZone(evt: MapMouseEvent){
+    let selected = (<any>evt).features[0];
+    this.zoneEmitter.emit(selected.properties.code);
   }
 
 

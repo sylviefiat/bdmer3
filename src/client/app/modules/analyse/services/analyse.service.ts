@@ -16,7 +16,6 @@ export class AnalyseService {
     }
 
     analyse(analyseData: Data): Results {
-        console.log(analyseData);
         try {
             let result: Results = { name: "", resultPerSurvey: [], chartsData: null };
             let today = new Date();
@@ -77,11 +76,9 @@ export class AnalyseService {
                 result.resultPerSurvey.push(resultSurvey);
             }
             result.chartsData = this.getDataCharts(analyseData, result);
-            console.log(result);
             return result;
 
         } catch (e) {
-            console.log(e);
             throw e;
         }
 

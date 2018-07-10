@@ -22,7 +22,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
-          [showZones]="showZones$ | async">
+          [showZones]="showZones$ | async"
+          (zoneEmitter)="dislayGraphZone($event)">
         </bc-result-map>
 
         <bc-result-filter 
@@ -42,16 +43,32 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       </div>
       <div>
         <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
-        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" #tabGroup> 
-          <mat-tab *ngFor="let chartsZone of ((typeShow$ | async)==='B'?results.chartsData.chartsZonesBiomass:results.chartsData.chartsZonesAbundancy); let i=index"  label="{{(chartsZone)?.code}}">          
-            <div class="groupCharts" *ngIf="tabGroup.selectedIndex === i">
-              <div *ngIf="chartsZone.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
-              <bc-result-boxplot class="chart" *ngFor="let chartsStation of chartsZone.chartsStations"
-                [chartsData]="chartsStation"
-                [years]="analyseData.usedYears"
-                [type]="typeShow$ | async">
-              </bc-result-boxplot>
-            </div>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneB of results.chartsData.chartsZonesBiomass; let iB=index"  label="{{(chartsZoneB)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneB.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationB of chartsZoneB.chartsStations"
+                  [chartsData]="chartsStationB"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='A'" [class.hide]="(typeShow$ | async)!=='A'" class="results"  [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneA of results.chartsData.chartsZonesAbundancy; let iA=index"  label="{{(chartsZoneA)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneA.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationA of chartsZoneA.chartsStations"
+                  [chartsData]="chartsStationA"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
           </mat-tab>
         </mat-tab-group>
       </div>
@@ -62,7 +79,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
-       justify-content:center;
+        justify-content:center;
       }
       h2 {
         margin-left: 25px;
@@ -87,6 +104,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       }
       .chart {
         display:flex;
+        flex: 50%;
         flex-direction:column;
         flex-wrap: wrap;
         padding-right:0.3em;
@@ -96,6 +114,10 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     }
     .hide {
       display: none;
+    }
+    .noData {
+      min-height:300px;
+      background-color: white;
     }
   `]
 })
@@ -109,6 +131,7 @@ export class ResultSynthesisComponent implements OnInit {
     showStations$: Observable<boolean>;
     showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
+    selectedZone: number;
 
     constructor() {
 
@@ -121,7 +144,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
       this.showStations$=of(true);
       this.showZones$=of(false);
-      console.log(this.results);
+      this.selectedZone = 0;
     }
 
     get localDate() {
@@ -163,6 +186,13 @@ export class ResultSynthesisComponent implements OnInit {
 
     zonesLayerShow(show: MatCheckboxChange){
       this.showZones$ = of(show.checked);      
+    }
+
+    dislayGraphZone(codeZone: string){
+      let selected = this.results.chartsData.chartsZonesBiomass.map(czb => czb.code).indexOf(codeZone);
+      if(selected){
+        this.selectedZone = selected;
+      }
     }
 
 }
