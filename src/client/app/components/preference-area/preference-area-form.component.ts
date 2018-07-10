@@ -37,7 +37,6 @@ export class PreferenceAreaFormComponent implements OnInit {
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     ngOnInit() {
-        console.log(this.zonePref);
         this.zonePrefForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.zonePrefForm.controls.codeZone.setValue(this.zone ? this.zone.properties.code : null);
         (this.platform !== undefined) ? this.zonePrefForm.controls.codePlatform.disable() : this.zonePrefForm.controls.codePlatform.enable();

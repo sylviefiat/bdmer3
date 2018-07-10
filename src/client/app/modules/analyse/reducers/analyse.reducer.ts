@@ -78,7 +78,6 @@ export function analyseReducer(
     }
 
     case AnalyseAction.ActionTypes.ANALYSE: { 
-    console.log("analysing"); 
       return {
         ...state,
         analysing: true,
@@ -87,7 +86,6 @@ export function analyseReducer(
     }
 
     case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {  
-      console.log("analysed");
       return {
         ...state,
         result: action.payload,

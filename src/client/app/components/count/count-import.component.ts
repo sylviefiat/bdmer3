@@ -55,7 +55,6 @@ export class CountImportComponent implements OnInit{
     handleUpload(csvFile: any): void {
         let csvErrorMsg = this.translate.instant('NO_CSV_FOUND');
 
-        console.log(csvFile);
         let reader = new FileReader();
 
         if (csvFile.target.files && csvFile.target.files.length > 0) {

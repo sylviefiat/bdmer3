@@ -44,7 +44,6 @@ export class ViewPreferenceAreaComponent implements OnInit {
     }
 
     actions(type: string) {
-        console.log(type);
         switch (type) {
             case "zonePrefForm":
                 this.action.emit(type + '/' + this.platform._id + "/" + this.zone.properties.code + '/' + this.zonePref.code);

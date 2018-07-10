@@ -95,7 +95,6 @@ export class PlatformService {
     /*this.mapStaticService.staticMapToB64(url).then(function(data){
       zone.staticmap = data.toString();
     })*/
-    console.log(zone);
     return this.getPlatform(platform.code)
       .pipe(
         filter(platform => platform!==null),
@@ -104,10 +103,8 @@ export class PlatformService {
           if(!pt.zones) pt.zones = [];
           if(!pt.stations) pt.stations = [];
           if(!zone.zonePreferences) zone.zonePreferences = [];
-          console.log(pt);
           pt.zones = [ ...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
           this.currentPlatform = of(pt);
-          console.log(pt);
           return from(this.db.put(pt));
         }),
         filter((response: ResponsePDB) => response.ok),

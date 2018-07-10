@@ -50,7 +50,6 @@ export class StationFormComponent implements OnInit {
     constructor(private nameRefactorService: NameRefactorService, private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
     
     ngOnInit() {
-        console.log(this.station)
         this.stationForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
 
         if(this.station){

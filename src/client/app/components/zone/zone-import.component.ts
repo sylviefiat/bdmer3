@@ -70,7 +70,6 @@ export class ZoneImportComponent implements OnDestroy{
                     const surface = area.geometry(geojson[i].geometry);
 
                     geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
-                    console.log(geojson[i]);
                     self.upload.emit(geojson[i]);
                 } else {
                     self.err.emit(self.translate.instant('ERROR_GEOJSON_ZONE_NAME'));

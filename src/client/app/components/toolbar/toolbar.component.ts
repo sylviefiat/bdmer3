@@ -14,6 +14,6 @@ export class ToolbarComponent {
   constructor() {}
 
   public openLanguages(e: any): void {
-    console.log('openLanguages');
+    //console.log('openLanguages');
   }
 }

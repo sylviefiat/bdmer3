@@ -51,7 +51,6 @@ export class SurveyFormComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.surveyForm);
         if (this.surveyForm.valid) {
             this.surveyForm.value.codePlatform=this.surveyForm.controls.codePlatform.value;
             this.submitted.emit(this.surveyForm.value);

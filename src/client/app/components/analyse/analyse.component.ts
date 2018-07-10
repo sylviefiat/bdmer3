@@ -122,7 +122,7 @@ export class AnalyseComponent {
     }
 
     startAnalyse(){
-        console.log("start");
+        //console.log("start");
         this.analyse.emit("ok");
     }
 

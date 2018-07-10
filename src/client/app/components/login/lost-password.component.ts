@@ -82,7 +82,6 @@ export class LostPasswordComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      console.log(this.submitted);
       this.submitted.emit(this.form.value);
     }
   }
