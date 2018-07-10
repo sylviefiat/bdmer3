@@ -16,4 +16,4 @@ RUN chown -R app:app $HOME/*
 USER app
 WORKDIR $HOME/$APP_NAME
 
-RUN npm install
+RUN npm install --unsafe-perm=true
