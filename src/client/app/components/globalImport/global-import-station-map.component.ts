@@ -12,7 +12,7 @@ import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
 
 @Component({
-  selector: "bc-station-import-map",
+  selector: "bc-station-global-import-map",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <nav id="switcher">
@@ -212,7 +212,7 @@ import { IAppState } from "../../modules/ngrx/index";
     `
   ]
 })
-export class PreviewMapStationImportComponent implements OnInit, OnChanges {
+export class PreviewMapStationGlobalImportComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
   @Input() newStations: Station[];

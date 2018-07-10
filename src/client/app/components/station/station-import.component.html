@@ -46,6 +46,6 @@
       </mat-list>
     </mat-card-actions>
     <p *ngIf="newStationInvalid === true" class="warning">{{ 'STATIONS_NOT_IN_ZONE' | translate }}</p>
-    <bc-station-import-map (newStationInvalid)="isStationsInvalid($event)" [importError]="importError" [platform]="platform" [countries]="countries" [newStations]="newStations$ | async"></bc-station-import-map>
+    <bc-station-import-map (newStationInvalid)="isStationsInvalid($event)" [error]="error" [importError]="importError" [platform]="platform" [countries]="countries" [newStations]="newStations$ | async"></bc-station-import-map>
   </mat-card>
 </div>
