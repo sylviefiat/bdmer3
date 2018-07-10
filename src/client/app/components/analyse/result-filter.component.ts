@@ -13,7 +13,8 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
         <h3>{{'FILTER' | translate}}</h3>
         <h4>{{'LAYERS' | translate}}</h4>
         <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
-        <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}</mat-checkbox>
+        <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
+        <p class="note">* {{'CLICK_ZONE' | translate}}</p>
         <h4>{{'TYPE' | translate}}</h4>
         <mat-radio-group (change)="changeDisplay($event)">
           <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
@@ -44,6 +45,11 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
     mat-radio-group{
       display: flex;
       flex-direction: column;
+    }
+    .note {
+      color: grey;
+      font-style: italic; 
+      font-size: smaller;
     }
   `]
 })

@@ -403,5 +403,6 @@
   "NO_SURVEY_IN_DB":"There is no surveys in the the database for platform ",
   "LAYERS":"Show ",
   "ERROR_GEOJSON_ZONE_NAME":"Geojson file missing or wrong 'name' field - mandatory",
-  "GRAPH_PER_ZONES":"Species evolution per year and zone"
+  "GRAPH_PER_ZONES":"Species evolution per year and zone",
+  "CLICK_ZONE":"Click on zone to display its graphs"
 }

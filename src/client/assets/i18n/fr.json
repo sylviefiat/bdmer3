@@ -403,5 +403,6 @@
   "NO_SURVEY_IN_DB":"Il n'y a pas de relevé dans la base de donnée pour la platforme ",
   "LAYERS":"Afficher ",
   "ERROR_GEOJSON_ZONE_NAME":"Le champ 'name' est manquant ou erroné dans le fichier Geojson",
-  "GRAPH_PER_ZONES":"Evolution des espèces par année et par zone"
+  "GRAPH_PER_ZONES":"Evolution des espèces par année et par zone",
+  "CLICK_ZONE":"Cliquer sur une zone pour afficher ses graphiques"
 }
