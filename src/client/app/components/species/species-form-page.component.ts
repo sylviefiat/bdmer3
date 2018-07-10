@@ -50,7 +50,7 @@ export class SpeciesFormPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.select(getSpeciesPageError);
         this.species$ = this.store.select(getSelectedSpecies);
         this.countries$ = this.store.select(getCountriesInApp).pipe(
-          map((countries:Country[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))));
+            map((countries: Country[]) => countries = countries.sort((c1, c2) => (c1.name < c2.name) ? -1 : ((c1.name > c2.name) ? 1 : 0))));
         this.store.dispatch(new CountriesAction.LoadAction());
     }
 

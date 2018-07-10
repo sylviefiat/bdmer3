@@ -73,7 +73,6 @@ export class ChipsComponent implements OnInit, AfterViewChecked {
   }
 
   submit(){
-    console.log("submit");
     this.send.emit();
   }
 }

@@ -32,7 +32,7 @@ export const getCurrentUser = (state: IAppState) => state.country.currentCountry
 
 export const getCurrentCountry = (state: IAppState) => state.countries.entities.filter(country => country.code === state.country.currentCountryId)[0];
 
-export const getUserError = (state: ICountryState) => state.error;
+export const getUserError = (state: ICountryState) =>state.error;
 
 export const getUserMsg = (state: ICountryState) => state.msg;
 

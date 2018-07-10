@@ -14,7 +14,7 @@ export class PouchDBService {
     }
 
     initDB(dbname: string, remote : string) : Promise<any> {
-        this.db = new PouchDB(dbname);
+        this.db = new PouchDB(dbname,{revs_limit: 1});
         return this.sync(remote+dbname);
     }
 

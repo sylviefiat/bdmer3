@@ -2,6 +2,7 @@ import { Observable, Subscription, of } from 'rxjs';
 import { Component, OnInit, OnChanges, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import * as Turf from '@turf/turf';
+import { MapService } from '../../modules/core/services/index';
 import { LngLatBounds, LngLat, MapMouseEvent } from 'mapbox-gl';
 import { Station, Zone } from '../../modules/datas/models/index';
 
@@ -84,7 +85,9 @@ import { Station, Zone } from '../../modules/datas/models/index';
                           ]
                       },
                       'icon-size': 1.5,
-                      'icon-rotate': 180
+                      'icon-rotate': 180,
+                      'icon-allow-overlap': true,
+                      'icon-ignore-placement': true
                       }"            
                     (click)="selectStation($event)"
                     (mouseEnter)="cursorStyle = 'pointer'"
@@ -152,9 +155,9 @@ export class AnalyseStationComponent implements OnInit {
         this.zonesSubscription = this.usedZones$.subscribe(zones => {
             let bounds = new LngLatBounds();            
             if (zones && zones.length > 0) {
-                this.layerZones$ = of(Turf.featureCollection(zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-                let coord0 = zones[0].geometry.coordinates[0][0];
-                let bounds = zones.map(z => z.geometry.coordinates[0][0]).reduce((bnd, coord) => {
+                this.layerZones$ = of(Turf.featureCollection(zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code }))));
+                let coord0 = this.getFirstCoord(zones[0]);
+                let bounds = zones.map(z => this.getFirstCoord(z)).reduce((bnd, coord) => {
                     return bnd.extend(<any>coord);
                 }, new LngLatBounds(coord0, coord0));
                 this.bounds$ = of(bounds);
@@ -162,6 +165,16 @@ export class AnalyseStationComponent implements OnInit {
         });
         
 
+    }
+
+    getFirstCoord(feature){
+      switch (feature.geometry.type) {
+        case "GeometryCollection":
+          return feature.geometry.geometries[0].coordinates[0][0];
+        case "Polygon":
+        default:
+          return feature.geometry.coordinates[0][0];
+      }
     }
 
     ngOnDestroy() {

@@ -55,11 +55,11 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.countries$ = this.store.let(getAllCountriesInApp);
-        this.error$ = this.store.let(getPlatformPageError);
-        this.importError$ = this.store.let(getPlatformImpErrors);
-        this.msg$ = this.store.let(getPlatformImpMsg);
-        this.userCountry$ = this.store.let(getAuthCountry);            
+        this.countries$ = this.store.select(getAllCountriesInApp);
+        this.error$ = this.store.select(getPlatformPageError);
+        this.importError$ = this.store.select(getPlatformImpErrors);
+        this.msg$ = this.store.select(getPlatformImpMsg);
+        this.userCountry$ = this.store.select(getAuthCountry);            
     }
 
     ngOnDestroy(){

@@ -21,7 +21,7 @@ import { Platform,Zone,Station } from './../../modules/datas/models/platform';
     `
     mat-card {
       width: 400px;
-      height: 300px;
+      height: auto;
       margin: 15px;
     }
     @media only screen and (max-width: 768px) {
@@ -62,7 +62,6 @@ export class StationPreviewComponent implements OnInit {
   
 
   ngOnInit(){
-    console.log(this.station);
 
   }
 

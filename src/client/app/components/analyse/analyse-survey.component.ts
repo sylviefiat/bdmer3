@@ -75,7 +75,6 @@ export class AnalyseSurveyComponent implements OnInit, OnDestroy {
     }
 
     changeValue(survCheck: any) {
-        console.log(survCheck);
         this.checkedSurveys = [...this.checkedSurveys.filter(p => p.code !== survCheck.survey.code)];
         if (survCheck.checked) {
             this.checkedSurveys.push(survCheck.survey);

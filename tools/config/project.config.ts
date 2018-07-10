@@ -256,6 +256,14 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@turf/combine',
             path: 'node_modules/@turf/combine/index.js'
+        },
+        {
+            name: '@turf/boolean-point-in-polygon',
+            path: 'node_modules/@turf/boolean-point-in-polygon/index.js'
+        },
+        {
+            name: '@turf/invariant',
+            path: 'node_modules/@turf/invariant/index.js'
         }];
 
         this.addPackagesBundles(additionalPackages);

@@ -29,7 +29,7 @@ import { Platform } from './../../modules/datas/models/platform';
     `
     mat-card {
       width: 400px;
-      height: 300px;
+      height: auto;
       margin: 15px;
     }
     @media only screen and (max-width: 768px) {
@@ -56,7 +56,7 @@ import { Platform } from './../../modules/datas/models/platform';
     }
     mat-card-content {
       margin-top: 15px;
-      margin: 15px 0 0;
+      margin: 5px 0 0;
     }
     mat-list-item {
       max-height:20px !important;

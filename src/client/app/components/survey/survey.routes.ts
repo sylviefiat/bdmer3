@@ -8,20 +8,24 @@ export const SurveyRoutes: Array<any> = [
   {
     path: 'surveyForm/:idPlatform',
     component: SurveyFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },{
     path: 'surveyForm/:idPlatform/:idSurvey',
     component: SurveyFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'surveyImport/:idPlatform',
     component: SurveyImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'survey/:idPlatform/:idSurvey',
     component: ViewSurveyPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ]

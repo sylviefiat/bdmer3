@@ -1,4 +1,4 @@
-import { Component, AfterViewChecked, ChangeDetectorRef, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, AfterViewChecked, ChangeDetectorRef, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -53,7 +53,6 @@ export class NewUserComponent implements OnInit, AfterViewChecked {
   constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {}
 
   ngOnInit(){
-    console.log(this.user);
     if(this.user){
       this.form.controls.name.setValue(this.user.name);
       this.form.controls.surname.setValue(this.user.surname);

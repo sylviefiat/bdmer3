@@ -6,10 +6,9 @@ import { mergeMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import { MomentService } from './moment.service';
-import { MapStaticService } from './map-static.service';
 import { Species, NameI18N, CoefsAB, Conversion, Dimensions, LegalDimensions } from '../../datas/models/species';
 import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from '../../datas/models/platform';
-import { PlatformAction } from '../../datas/actions/index';
+import { PlatformAction, SpeciesAction } from '../../datas/actions/index';
 import { IAppState } from '../../ngrx/index';
 
 @Injectable()
@@ -18,7 +17,7 @@ export class Csv2JsonService {
     static SEMICOLON = ';';
     csvErrorMsg: string;
 
-    constructor(private store:Store<IAppState>,private translate: TranslateService, private mapStaticService: MapStaticService, private papa: Papa, private ms: MomentService) {
+    constructor(private store:Store<IAppState>,private translate: TranslateService, private papa: Papa, private ms: MomentService) {
         this.csvErrorMsg = this.translate.instant('CSV_FIELD_ERROR');
     }
 
@@ -26,6 +25,7 @@ export class Csv2JsonService {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Species[] = [];
+        let errorTab = [];
         // don't iclude header start from 1
         for (let i = 1; i < allTextLines.length; i++) {
             // split content based on comma
@@ -73,7 +73,7 @@ export class Csv2JsonService {
                             sp.biologicDimensions[header] = data[j];
                             break;
                         case "L_min_NC":
-                        case "L_min_VT":
+                        case "L_min_VU":
                         case "L_min_PG":
                         case "L_min_SB":
                         case "L_min_FJ":
@@ -85,7 +85,7 @@ export class Csv2JsonService {
                             sp.legalDimensions.push(legaldim);
                             break;
                         case "L_max_NC":
-                        case "L_max_VT":
+                        case "L_max_VU":
                         case "L_max_PG":
                         case "L_max_SB":
                         case "L_max_FJ":
@@ -93,11 +93,27 @@ export class Csv2JsonService {
                         case "L_max_SO":
                             break;
                         default:
-                            throw new Error(this.csvErrorMsg);
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
                     }
                 }
                 lines.push(sp);
             }
+        }
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new SpeciesAction.AddSpeciesFailAction(string));
+            return [];
         }
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
@@ -142,7 +158,7 @@ export class Csv2JsonService {
                 }
             }
 
-            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string))
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
             return [];
         }
 
@@ -154,6 +170,7 @@ export class Csv2JsonService {
         let allTextLines = arrayData.data;
         let headers = allTextLines[0];
         let lines: Zone[] = [];
+        let errorTab = [];
         for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -168,11 +185,28 @@ export class Csv2JsonService {
                             st[headers[j]] = data[j];
                             break;
                         default:                            
-                            throw new Error(this.csvErrorMsg);
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
                     }
                 }
                 lines.push(st);
             }
+        }
+
+        if(errorTab.length !== 0){
+            let string = "";
+            for(let i in errorTab){
+                if(parseInt(i) === errorTab.length - 1){
+                    string+=errorTab[i]+"."    
+                }else{
+                    string+=errorTab[i]+", ";
+                }
+            }
+
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(string));
+            return [];
         }
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
@@ -306,10 +340,6 @@ export class Csv2JsonService {
                 codePlatform: lines[i]["codePlatform"]
             }
 
-            this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data) {
-                geojson.staticMapStation = data.toString();
-            })
-
             geojsons.push(geojson)
         }
 
@@ -397,7 +427,7 @@ export class Csv2JsonService {
                         case "date":
                             let d;
                             // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
-                            if (delimiter === Csv2JsonService.SEMICOLON) {
+                            if (delimiter === Csv2JsonService.SEMICOLON) {  
                                 //this.ms.moment().locale("fr");
                                 d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
                             } else {
@@ -420,7 +450,7 @@ export class Csv2JsonService {
                         case "codeSpecies":
                             ct['monospecies'] = true;
                             break;
-                        default:                            
+                        default:     
                             if(!errorTab.includes(headers[j])){
                                 errorTab.push(headers[j]);
                             }       
@@ -468,7 +498,7 @@ export class Csv2JsonService {
             })
             .pipe(
                 mergeMap(data => {
-                    console.log(data);
+                    //console.log(data);
                     let res;
                     switch (type) {
                         case "species":
@@ -481,26 +511,22 @@ export class Csv2JsonService {
                             res = this.extractZoneData(data);
                             break;
                         case "survey":
-                            console.log(data);
                             res = this.extractSurveyData(data);
                             break;
                         case "zonePref":
-                            console.log(data);                            
                             res = this.extractZonePrefData(data, species);
                             break;
                         case "station":
-                            console.log(data);
                             res = this.extractStationData(data);
                             break;
                         case "count":
-                            console.log(data);
                             res = this.extractCountData(data);
                             break;
                         default:
                             // code...
                             break;
                     }
-                    console.log(res);
+                    //console.log(res);
                     return res;
                 }));
     }

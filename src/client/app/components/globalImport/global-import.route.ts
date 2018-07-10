@@ -6,6 +6,7 @@ export const GlobalImportRoutes: Array<any> = [
     path: 'globalImport/:idPlatform',
     component: GlobalImportPageComponent,
     canActivate : [AuthGuard],
-    canDeactivate: [DeactivateGuardService]
+    canDeactivate: [DeactivateGuardService],
+    runGuardsAndResolvers: 'always'
   }
 ]

@@ -8,6 +8,7 @@ import { User, Country } from '../../countries/models/country';
 import { ResponsePDB } from '../models/pouchdb';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBAuth from "pouchdb-authentication";
+import {TranslateService} from '@ngx-translate/core';
 
 import { config } from '../../../config';
 
@@ -20,16 +21,16 @@ export class AuthService {
   @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
   @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
-  constructor(private countriesService: CountriesService) {
+  constructor(private translate: TranslateService, private countriesService: CountriesService) {
     let dbname = "/_users";
     PouchDB.plugin(PouchDBAuth);
-    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true});   
+    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true,revs_limit: 5});   
   }
 
   login({ username, password }: Authenticate): Observable<any> {
     return from(this.db.login(username, password)).pipe(
       mergeMap((result: ResponsePDB) => {
-        if (result.ok && result.roles.length > 0){
+        if (result.ok /*&& result.roles.length > 0*/){
           return this.setUser(username);
         }
         else {
@@ -84,15 +85,25 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    return from(this.db.signup(user.username, user.password, {metadata: {roles: [user.countryCode, user.role]}})).pipe(
-            //filter((response: ResponsePDB) => { console.log(response);return response.ok; }),
-            mergeMap(response => {
-              console.log(response);
-              
-                return of(user);
-            }),
-            catchError((error) => {console.log(error);return of(null)})
-          );
+    return from(
+      this.db.signup(user.username, user.password, {
+        metadata: {
+          rights: user.role,
+          country: user.countryCode
+        }
+      },(err,response)=>{
+          if(err){
+            if (err.name === 'conflict') {
+              throwError(this.translate.instant(''))
+            } else if (err.name === 'forbidden') {
+              throwError(err)
+            } else {
+            throwError(err);
+          }
+        }
+      })).pipe(
+        map(r=> user)
+      )
   }
 
   remove(user): Observable<any> {

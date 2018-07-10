@@ -183,7 +183,7 @@ export class PlatformEffects {
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingSurveyAction) => action.payload),
       mergeMap((survey: Survey) =>this.csv2jsonService.csv2('survey', survey)),
-      catchError((survey) => of(new PlatformAction.AddPendingSurveySuccessAction(survey))),
+      map((survey) => new PlatformAction.AddPendingSurveySuccessAction(survey)),
     );
 
   @Effect()
@@ -228,7 +228,7 @@ export class PlatformEffects {
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingStationAction) => action.payload),
       mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station)),
-      catchError((station: Station) => of(new PlatformAction.AddPendingStationSuccessAction(station)))
+      map((station: Station) => new PlatformAction.AddPendingStationSuccessAction(station))
     );
 
   @Effect()
@@ -275,7 +275,7 @@ export class PlatformEffects {
       map((action: PlatformAction.CheckCountCsvFile) => action.payload),
       mergeMap((count: any) =>this.csv2jsonService.csv2('count', count)),
       withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-      mergeMap((value: any, store:any) => this.platformService.importCountVerification(value, store[0], store[1])),
+      mergeMap((value: any) => this.platformService.importCountVerification(value[0], value[1], value[2])),
       map((error:string) => new PlatformAction.CheckCountAddErrorAction(error))
     );
 

@@ -101,7 +101,6 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
     }
 
     actions(type: string) {
-        console.log(type);
         switch (type) {
             case "platformForm":
             case "zoneForm":

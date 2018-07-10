@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, ViewChild, OnChanges, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { Cluster, Supercluster } from 'supercluster';
 import * as Turf from '@turf/turf';
+import { MapService } from '../../modules/core/services/index';
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
@@ -13,7 +14,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <div class="container">
-     <mgl-map
+    <div *ngIf="loading">Map is loading</div>
+    <mgl-map *ngIf="!loading"
         [style]="'mapbox://styles/mapbox/satellite-v9'"
         [fitBounds]="bounds$ | async"
         [fitBoundsOptions]="{
@@ -43,11 +45,11 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 [class.marker-medium]="getClusterValue(feature)<=10000 && getClusterValue(feature)>100"
                 [class.marker-big]="getClusterValue(feature)>10000"
                 (click)="selectCluster($event, feature)">
-                {{ getClusterValue(feature) }}
+                
               </div>
             </ng-template>
           </mgl-marker-cluster>  
-          <mgl-popup
+          <mgl-popup  class="popup"
             *ngIf="selectedCluster"
             [lngLat]="selectedCluster.lngLat">
             <result-map-cluster-popup
@@ -57,7 +59,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               [typeShow]="typeShow">
             </result-map-cluster-popup>
           </mgl-popup> 
-          <mgl-popup
+          <mgl-popup class="popup"
             *ngIf="selectedPoint"
             [lngLat]="selectedPoint.lngLat">
             <span>{{ selectedPoint.properties.code }}: {{ getValue(selectedPoint) }} {{ getUnit() }}</span>
@@ -84,7 +86,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 },
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
-                }">            
+                }"
+              (click)="selectZone($event)">            
             </mgl-layer>   
             <mgl-layer
               *ngIf="typeShow==='B'"
@@ -103,7 +106,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 },
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
-                }">            
+                }"
+              (click)="selectZone($event)">            
             </mgl-layer>
             <mgl-layer
               id="zonestext"
@@ -149,6 +153,9 @@ import { Results, Data } from '../../modules/analyse/models/index';
       margin-left: 20px;
       margin-right: 20px;
     }
+    .popup {
+      color: black;
+    }
 
     ::ng-deep .marker, .marker {    
       border-radius: 50%;
@@ -183,6 +190,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   @Input() surveyShow: string;
   @Input() showStations: boolean;
   @Input() showZones: boolean;
+  @Output() zoneEmitter = new EventEmitter<string>();
   markers: any[] = [];
   zones: any[] = [];
   markers$: Observable<Turf.FeatureCollection>;
@@ -203,6 +211,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   currentTypeCluster: string = "biomass";
   currentZoomCluster: number = 0;
   currentIdCluster: number = 0;
+  loading: boolean = true;
 
   constructor() {
 
@@ -213,9 +222,11 @@ export class ResultMapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.loading=true;
     this.initMarkers();
     this.initZones();
     this.filterFeaturesCollection();
+    this.loading=false;
   }
 
   ngOnChanges(event) {
@@ -257,9 +268,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
             if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
               let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
               let polygon = {
-                geometry: {
-                    coordinates: z.geometry.coordinates
-                  },
+                geometry: z.geometry,
                   properties: {
                     code: z.properties.code,
                     abundancy: rz.densityPerHA,
@@ -287,7 +296,8 @@ export class ResultMapComponent implements OnInit, OnChanges {
     let fc2 = Turf.featureCollection(
       this.zones
         .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
-        .map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .filter(polygon => polygon !== null)
     );
     this.layerZones$ = of(fc2);
     // bounds
@@ -372,9 +382,14 @@ export class ResultMapComponent implements OnInit, OnChanges {
       this.currentIdCluster = id;
       return this.currentBiomValueCluster;
     } catch (e) {
-      console.log(e);
+      //console.log(e);
       return 0;
     }
+  }
+
+  selectZone(evt: MapMouseEvent){
+    let selected = (<any>evt).features[0];
+    this.zoneEmitter.emit(selected.properties.code);
   }
 
 

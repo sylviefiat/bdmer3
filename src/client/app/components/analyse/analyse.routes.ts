@@ -6,11 +6,13 @@ export const AnalyseRoutes: Array<any> = [
   {
     path: 'analyse',
     component: AnalysePageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'result',
     component: ResultPageComponent, 
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ];

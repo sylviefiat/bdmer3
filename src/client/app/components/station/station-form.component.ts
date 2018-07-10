@@ -31,7 +31,7 @@ export class StationFormComponent implements OnInit {
     latitude: any;
     errorLat: boolean;
     errorLng: boolean;
-    canSubmit: boolean;
+    canSubmit: boolean = true;
 
     stationForm: FormGroup = new FormGroup({
         type: new FormControl("Feature"),
@@ -50,7 +50,6 @@ export class StationFormComponent implements OnInit {
     constructor(private nameRefactorService: NameRefactorService, private mapStaticService: MapStaticService, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
     
     ngOnInit() {
-        console.log(this.station)
         this.stationForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
 
         if(this.station){
@@ -69,14 +68,14 @@ export class StationFormComponent implements OnInit {
             this.stationForm.controls.properties.get("code").setValue(this.platform.code+"_"+this.nameRefactorService.convertAccent(this.stationForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
             this.stationForm.controls.geometry.get("coordinates").setValue([this.longitude, this.latitude])
 
-            this.mapStaticService.staticMapToB64(this.url).then((data) => {
+            /*this.mapStaticService.staticMapToB64(this.url).then((data) => {
                 this.stationForm.controls.staticMapStation.setValue(data);
-
+*/
                 if (this.stationForm.valid) {
                     this.stationForm.controls.properties.get("name").enable();
                     this.submitted.emit(this.stationForm.value);
                 }
-            });
+            //});
         }
     }
 
@@ -103,7 +102,7 @@ export class StationFormComponent implements OnInit {
         }
 
         if(!this.errorLat && !this.errorLng && this.latitude && this.longitude){
-            this.url = this.mapStaticService.googleMapUrlPoint([this.longitude, this.latitude]);
+            //this.url = this.mapStaticService.googleMapUrlPoint([this.longitude, this.latitude]);
             this.canSubmit = true;
         }else{
             this.url = ""

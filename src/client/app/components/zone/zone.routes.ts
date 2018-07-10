@@ -12,26 +12,31 @@ export const ZoneRoutes: Array<any> = [
   {
     path: 'zoneForm/:idPlatform/:idZone',
     component: ZoneFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zoneForm/:idPlatform',
     component: ZoneFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zoneImport/:idPlatform',
     component: ZoneImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zone/:idPlatform/:idZone',
     component: ViewZonePageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'zone/:idPlatform/:idZone/:view',
     component: ViewZonePageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ]

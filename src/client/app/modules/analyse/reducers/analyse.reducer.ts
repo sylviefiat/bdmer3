@@ -77,7 +77,7 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.ANALYSE: {  
+    case AnalyseAction.ActionTypes.ANALYSE: { 
       return {
         ...state,
         analysing: true,

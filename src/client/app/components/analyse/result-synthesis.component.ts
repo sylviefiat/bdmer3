@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import * as Turf from '@turf/turf';
 import { MatCheckboxChange } from '@angular/material';
 import { IAppState } from '../../modules/ngrx/index';
+import { MapService } from '../../modules/core/services/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
 import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index';
 
@@ -21,7 +22,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
-          [showZones]="showZones$ | async">
+          [showZones]="showZones$ | async"
+          (zoneEmitter)="dislayGraphZone($event)">
         </bc-result-map>
 
         <bc-result-filter 
@@ -39,31 +41,45 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
       </div>
-
-        <div *ngFor="let zone of analyseData.usedZones" class="results"> 
-          <div class="resultZone">
-            <h2>{{zone.properties.code}}</h2>       
-            <div class="groupCharts">
-              <bc-result-boxplot class="chart" *ngFor="let station of getStationsZone(zone)"
-                [station]="station"
-                [resultSurveys]="results.resultPerSurvey"
-                [usedSurveys]="analyseData.usedSurveys"
-                [years]="analyseData.usedYears"
-                [species]="analyseData.usedSpecies"
-                [type]="typeShow$ | async">
-              </bc-result-boxplot>
-            </div>
-          </div>
-        </div>
-      
+      <div>
+        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneB of results.chartsData.chartsZonesBiomass; let iB=index"  label="{{(chartsZoneB)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneB.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationB of chartsZoneB.chartsStations"
+                  [chartsData]="chartsStationB"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='A'" [class.hide]="(typeShow$ | async)!=='A'" class="results"  [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneA of results.chartsData.chartsZonesAbundancy; let iA=index"  label="{{(chartsZoneA)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneA.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationA of chartsZoneA.chartsStations"
+                  [chartsData]="chartsStationA"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
   `,
     styles: [
         `
       :host {
         display: flex;
         flex-wrap: wrap;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        justify-content:center;
       }
       h2 {
         margin-left: 25px;
@@ -71,24 +87,38 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       .results {
         display:flex;
         flex-direction:row;
-        max-width: 100vw;
+        width: 90vw;
+        justify-content:center;
       }
       .resultZone {
-        background-color: rgba(55,55,55,0.1);
+        max-width: 100vw;
       }
       .groupCharts {
         display:flex;
         flex-direction:row;
+        flex-wrap: wrap;
         padding-top:0.5em;
         padding-left:0.5em;
         padding-right:0.5em;
+        width: 90vw;
       }
       .chart {
         display:flex;
+        flex: 50%;
         flex-direction:column;
         flex-wrap: wrap;
         padding-right:0.3em;
       }
+    .show {
+      display: block;
+    }
+    .hide {
+      display: none;
+    }
+    .noData {
+      min-height:300px;
+      background-color: white;
+    }
   `]
 })
 export class ResultSynthesisComponent implements OnInit {
@@ -101,6 +131,7 @@ export class ResultSynthesisComponent implements OnInit {
     showStations$: Observable<boolean>;
     showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
+    selectedZone: number;
 
     constructor() {
 
@@ -113,6 +144,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
       this.showStations$=of(true);
       this.showZones$=of(false);
+      this.selectedZone = 0;
     }
 
     get localDate() {
@@ -128,7 +160,7 @@ export class ResultSynthesisComponent implements OnInit {
     getStationsZone(zone){
       let stations = [];
       for (let s of this.analyseData.usedStations) {
-        if (Turf.booleanPointInPolygon(s.geometry.coordinates, Turf.polygon(zone.geometry.coordinates))) {
+        if (Turf.booleanPointInPolygon(s.geometry.coordinates, MapService.getPolygon(zone,{name:zone.properties.name}))) {
             stations.push(s);
         }
       }
@@ -154,6 +186,13 @@ export class ResultSynthesisComponent implements OnInit {
 
     zonesLayerShow(show: MatCheckboxChange){
       this.showZones$ = of(show.checked);      
+    }
+
+    dislayGraphZone(codeZone: string){
+      let selected = this.results.chartsData.chartsZonesBiomass.map(czb => czb.code).indexOf(codeZone);
+      if(selected){
+        this.selectedZone = selected;
+      }
     }
 
 }

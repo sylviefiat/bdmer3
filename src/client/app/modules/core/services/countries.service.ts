@@ -21,7 +21,7 @@ export class CountriesService {
   }
 
   initDB(dbname: string, remote: string): Observable<any> {
-    this.db = new PouchDB(dbname, {skip_setup: true});
+    this.db = new PouchDB(dbname, {skip_setup: true,revs_limit: 2});
     this.sync(remote + dbname);
     return this.getCountry(this.adminCountry.code).pipe(
       filter(country => !country),
@@ -109,7 +109,6 @@ export class CountriesService {
   }
 
   addUser(user: User): Observable<Country> {
-    console.log(user);
     delete user.password;
     delete user.repassword;
     return this.getCountry(user.countryCode).pipe(
@@ -119,7 +118,6 @@ export class CountriesService {
           country.users = [];
         }
         country.users[country.users.length] = user;
-        console.log(country);
         return from(this.db.put(country));
       }),
       filter((response: ResponsePDB) => { return response.ok; }),

@@ -53,8 +53,7 @@ export class ViewCountComponent implements OnInit {
 
     deleteCount() {
         let confirmationMsg = this.translate.instant('CONFIRM_DELETE_COUNT');
-
-        if (this.windowService.confirm(confirmationMsg.CONFIRM_DELETE_COUNT)) {
+        if (this.windowService.confirm(confirmationMsg)) {
             this.remove.emit(this.count);
         }
     }

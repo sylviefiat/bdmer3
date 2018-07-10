@@ -6,7 +6,7 @@ import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 
 import { User, Country } from '../../modules/countries/models/country';
-import { IAppState, getCountryPageError, getSelectedCountry, getSelectedUser, getisAdmin } from '../../modules/ngrx/index';
+import { IAppState, getUserErr, getSelectedCountry, getSelectedUser, getisAdmin } from '../../modules/ngrx/index';
 import { CountryAction, CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
@@ -42,7 +42,7 @@ export class NewUserPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new CountriesAction.LoadAction());
-    this.error$ = this.store.select(getCountryPageError);   
+    this.error$ = this.store.select(getUserErr);   
     this.country$ =this.store.select(getSelectedCountry);   
     this.user$ =this.store.select(getSelectedUser);
     this.isAdmin$ =this.store.select(getisAdmin);
@@ -55,7 +55,6 @@ export class NewUserPageComponent implements OnInit {
   }
 
   onSubmit(user: User) {
-    console.log(user);
     this.store.dispatch(new CountryAction.AddUserAction(user));
   }
 

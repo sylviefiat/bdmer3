@@ -345,7 +345,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_PLATFORM: {
-            console.log("select platform: "+action.payload);
+            //console.log("select platform: "+action.payload);
             return {
                 ...state,
                 currentPlatformId: action.payload,
@@ -353,7 +353,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_ZONE: {
-            console.log("select zone: "+action.payload);
+            //console.log("select zone: "+action.payload);
             return {
                 ...state,
                 currentZoneId: action.payload,
@@ -361,7 +361,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_SURVEY: {
-            console.log("select survey: "+action.payload);
+            //console.log("select survey: "+action.payload);
             return {
                 ...state,
                 currentSurveyId: action.payload,
@@ -369,7 +369,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_STATION: {
-            console.log("select station: "+action.payload);
+            //console.log("select station: "+action.payload);
             return {
                 ...state,
                 currentStationId: action.payload,
@@ -377,7 +377,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_ZONE_PREF: {
-            console.log("select zone pref: "+action.payload);
+            //console.log("select zone pref: "+action.payload);
             return {
                 ...state,
                 currentSpPrefId: action.payload,
@@ -385,7 +385,7 @@ export function platformReducer(
         }
 
         case PlatformAction.ActionTypes.SELECT_COUNT: {
-            console.log("select count: "+action.payload);
+            //console.log("select count: "+action.payload);
             return {
                 ...state,
                 currentCountId: action.payload,

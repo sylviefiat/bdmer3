@@ -1,5 +1,2 @@
-"code","codePlatform","dateStart","dateEnd","participants","surfaceTransect","description","codeCountry"
-"EFIIET_2008-09","EFIIET","08/27/2008","09/03/2008","tein-ve simone,poadata marie,moutham gerard,leopold marc,kedo simone,kedo robert,dabome marguerite,dabome emrick,cornuet nathaniel",200,,"FJ"
-"EFIIET_2012-03","EFIIET","03/14/2012","03/23/2012","Leopold,zach",200,,"FJ"
-"EFIIET_2016-03","EFIIET","03/01/2011","03/01/2011","cornuet nathaniel",200,"campagne assurée par moyen technique PN","FJ"
-"EFIIET_2011-10","EFIIET","10/10/2011","10/13/2011","bull rene,moenteapo zacharie",200,,"FJ"
+code,codePlatform,dateStart,dateEnd,participants,surfaceStation,description,codeCountry
+GATOPE_2012-01,GATOPE,01/17/2012,01/24/2012,CORNUET Nathaniel,200,,NC

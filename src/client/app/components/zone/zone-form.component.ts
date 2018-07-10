@@ -74,8 +74,8 @@ export class ZoneFormComponent implements OnInit {
             this.zoneForm.controls.properties.get("code").setValue(this.platform.code + "_" +this.nameRefactorService.convertAccent(this.zoneForm.controls.properties.get("name").value).split(' ').join('-').replace(/[^a-zA-Z0-9]/g,''));
             this.coords = this.zoneForm.controls.geometry.get("coordinates").value;
 
-            this.mapStaticService.staticMapToB64(this.url).then((data) => {
-              this.zoneForm.controls.staticmap.setValue(data);
+            //this.mapStaticService.staticMapToB64(this.url).then((data) => {
+              //this.zoneForm.controls.staticmap.setValue(data);
 
 
               if(this.coordStringRefactor === this.zoneForm.controls.geometry.get("coordinates").value){
@@ -95,7 +95,7 @@ export class ZoneFormComponent implements OnInit {
                     this.submitted.emit(this.zoneForm.value);
                 }
               }
-            });
+            //});
         }
     }
 
@@ -113,7 +113,7 @@ export class ZoneFormComponent implements OnInit {
         this.errorCoord = false;
         var ar = this.mapStaticService.refactorCoordinates(coords.target.value);
         if(ar !== "error"){
-            this.url = this.mapStaticService.googleMapUrl(ar);
+            //this.url = this.mapStaticService.googleMapUrl(ar);
             this.coordsRefactor = ar;
         }else{
             this.errorCoord = true;
