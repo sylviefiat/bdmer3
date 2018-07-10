@@ -24,14 +24,15 @@ import { CountriesAction } from "../../modules/countries/actions/index";
 export class StationImportComponent implements OnDestroy {
   @Input() platform: Platform;
   @Input() countries: Country[];
-  @Input() error: string | null;
   @Input() msg: string | null;
+  @Input() error: string | null;
   @Input() importError: string[];
   @Output() upload = new EventEmitter<any>();
   @Output() err = new EventEmitter<string>();
   @Output() back = new EventEmitter();
   actionSubscription: Subscription;
 
+  newStationInvalid: boolean = null;
   newStations$: Observable<Station[]>;
   needHelp: boolean = false;
   private csvFile: string;
@@ -74,12 +75,14 @@ export class StationImportComponent implements OnDestroy {
   }
 
   check(csvFile) {
+    this.newStationInvalid = false;
+    this.store.dispatch(new PlatformAction.CheckStationCsvFile(csvFile));
+
     this.newStations$ = this.csv2JsonService.extractStationPreviewData(csvFile);
-    // this.store.dispatch(new PlatformAction.CheckStationCsvFile(csvFile));
   }
 
-  isStationsValid(event) {
-    console.log(event);
+  isStationsInvalid(event) {
+    this.newStationInvalid = event;
   }
 
   send() {

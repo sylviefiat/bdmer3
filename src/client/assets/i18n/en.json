@@ -401,5 +401,6 @@
   "NO_SPECIES_IN_DB": "There is no species in the the database",
   "NO_SURVEY_IN_DB": "There is no surveys in the the database for platform ",
   "INTERSECT_ERROR": "Zone invalid, it intersect with another zone",
-  "STATION_NOT_IN_ZONE": "The station isn't in an existing zone"
+  "STATION_NOT_IN_ZONE": "The station isn't in an existing zone",
+  "STATIONS_NOT_IN_ZONE": "One or more station aren't in an existing zone"
 }

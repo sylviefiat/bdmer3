@@ -400,5 +400,6 @@
   "NO_SPECIES_IN_DB": "Il n'y a pas d'espèce dans la base de donnée",
   "NO_SURVEY_IN_DB": "Il n'y a pas de relevé dans la base de donnée pour la platforme ",
   "INTERSECT_ERROR": "Zone invalide, elle chevauche une autre zone",
-  "STATION_NOT_IN_ZONE": "La station n'est dans aucune zone existante"
+  "STATION_NOT_IN_ZONE": "La station n'est dans aucune zone existante",
+  "STATION_NOT_IN_ZONE": "Une ou plusieurs stations sont dans aucune zone existante"
 }

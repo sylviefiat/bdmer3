@@ -263,7 +263,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  extractStationData(arrayData): Station[] {
+  extractStationData(arrayData): Station[] | any[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines = [];
@@ -307,8 +307,7 @@ export class Csv2JsonService {
           string += errorTab[i] + ", ";
         }
       }
-
-      throw new Error(string);
+      return [{ error: string }];
     }
 
     for (let i = 0; i < lines.length; i++) {
@@ -392,7 +391,7 @@ export class Csv2JsonService {
           }
         }
 
-        throw new Error(string);
+        return string;
       }
 
       for (let i = 0; i < lines.length; i++) {
@@ -569,7 +568,6 @@ export class Csv2JsonService {
       });
     }).pipe(
       mergeMap(data => {
-        console.log(data);
         let res;
         switch (type) {
           case "species":
@@ -590,7 +588,6 @@ export class Csv2JsonService {
             res = this.extractZonePrefData(data, species);
             break;
           case "station":
-            console.log(data);
             res = this.extractStationData(data);
             break;
           case "count":
@@ -601,7 +598,6 @@ export class Csv2JsonService {
             // code...
             break;
         }
-        console.log(res);
         return res;
       })
     );

@@ -216,7 +216,8 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
   @Input() newStations: Station[];
-  @Output() stationsValid: EventEmitter<any> = new EventEmitter<any>();
+  @Input() importError: string[];
+  @Output() newStationInvalid: EventEmitter<any> = new EventEmitter<any>();
 
   bounds: LngLatBounds;
   boundsPadding: number = 100;
@@ -237,7 +238,6 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
-  newStationValid: boolean;
   show: string[] = ["countries"];
   tmp: string[] = [];
   bls: string[] = ["mapbox://styles/mapbox/satellite-v9", "mapbox://styles/mapbox/streets-v9"];
@@ -252,16 +252,20 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.newStations);
-    this.init();
-    if (this.newStations) {
-      if (this.newStations.length > 0) {
-        this.reset();
-        this.checkStationsValid(this.newStations);
-        this.zoomToStations({ features: this.newStations });
-      } else {
-        this.newStationsPreviewInvalid = [];
-        this.newStationsPreviewValid = [];
+    if (this.importError.length > 0) {
+      this.reset();
+    } else {
+      if (this.newStations) {
+        if (typeof this.newStations !== "string") {
+          this.init();
+          if (this.newStations) {
+            this.reset();
+            if (this.newStations.length > 0) {
+              this.checkStationsValid(this.newStations);
+              this.zoomToStations({ features: this.newStations });
+            }
+          }
+        }
       }
     }
   }
@@ -294,17 +298,15 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
         if (Turf.inside(Turf.point(station.geometry.coordinates), Turf.polygon(zone.geometry.coordinates))) {
           inside = true;
           this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
-          this.newStationValid = true;
         }
       });
 
       if (!inside) {
         this.newStationsPreviewInvalid.push(Turf.point(station.geometry.coordinates));
-        this.newStationValid = false;
       }
     });
 
-    this.stationsValid.emit(inside);
+    this.newStationInvalid.emit(this.newStationsPreviewInvalid.length > 0 ? true : false);
   }
 
   zoomChange(event) {
