@@ -249,7 +249,7 @@ export class PlatformEffects {
     map((action: PlatformAction.CheckCountCsvFile) => action.payload),
     mergeMap((count: any) => this.csv2jsonService.csv2("count", count)),
     withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-    mergeMap((value: any, store: any) => this.platformService.importCountVerification(value, store[0], store[1])),
+    mergeMap((value: [any, Platform, Species[]]) => this.platformService.importCountVerification(value[0], value[1], value[2])),
     map((error: string) => new PlatformAction.CheckCountAddErrorAction(error))
   );
 

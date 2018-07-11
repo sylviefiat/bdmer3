@@ -306,46 +306,50 @@ export class PlatformService {
     );
   }
 
-  importCountVerification(count: Count, platform: Platform, species: Species[]): Observable<string> {
-    let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
+  importCountVerification(count, platform, species): Observable<string> {
+    if (!count.error) {
+      let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
 
-    if (count.codePlatform === platform.code) {
-      if (platform.stations.length > 0) {
-        for (let i in platform.stations) {
-          if (count.codeStation === platform.stations[i].properties.code) {
-            if (platform.surveys.length > 0) {
-              for (let x in platform.surveys) {
-                if (count.codeSurvey === platform.surveys[x].code) {
-                  if (species.length > 0) {
-                    for (let y in species) {
-                      if (count.mesures[0].codeSpecies === species[y].code) {
-                        return of("");
+      if (count.codePlatform === platform.code) {
+        if (platform.stations.length > 0) {
+          for (let i in platform.stations) {
+            if (count.codeStation === platform.stations[i].properties.code) {
+              if (platform.surveys.length > 0) {
+                for (let x in platform.surveys) {
+                  if (count.codeSurvey === platform.surveys[x].code) {
+                    if (species.length > 0) {
+                      for (let y in species) {
+                        if (count.mesures[0].codeSpecies === species[y].code) {
+                          return of("");
+                        }
+                        if (count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1) {
+                          return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+                        }
                       }
-                      if (count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1) {
-                        return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-                      }
+                    } else {
+                      return of(msg.NO_SPECIES_IN_DB);
                     }
-                  } else {
-                    return of(msg.NO_SPECIES_IN_DB);
+                  }
+                  if (count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1) {
+                    return of("CodeSurvey " + count.codeSurvey + msg.CANNOT_BE_INSERTED_NOT_EXIST);
                   }
                 }
-                if (count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1) {
-                  return of("CodeSurvey " + count.codeSurvey + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-                }
+              } else {
+                return of(msg.NO_SURVEY_IN_DB + count.codePlatform);
               }
-            } else {
-              return of(msg.NO_SURVEY_IN_DB + count.codePlatform);
+            }
+            if (count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1) {
+              return of("CodeStation " + count.codeStation + msg.CANNOT_BE_INSERTED_NOT_EXIST);
             }
           }
-          if (count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1) {
-            return of("CodeStation " + count.codeStation + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-          }
+        } else {
+          return of(msg.NO_STATION_IN_DB + count.codePlatform);
         }
       } else {
-        return of(msg.NO_STATION_IN_DB + count.codePlatform);
+        return of(msg.PLATFORM + count.codePlatform + msg.CANNOT_BE_INSERTED_NOT_EXIST);
       }
     } else {
-      return of(msg.PLATFORM + count.codePlatform + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+      return of(count);
     }
     return of("");
   }

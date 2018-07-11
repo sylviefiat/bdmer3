@@ -476,7 +476,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  extractCountData(arrayData): Count[] {
+  extractCountData(arrayData) {
     let allTextLines = arrayData.data;
     let delimiter = arrayData.meta.delimiter;
     let headers = allTextLines[0];
@@ -545,11 +545,98 @@ export class Csv2JsonService {
         }
       }
 
-      throw new Error(string);
+      return [{ error: string }];
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
+  }
+
+  extractCountPreviewData(csvFile) {
+    return Observable.create(observable => {
+      this.papa.parse(csvFile, {
+        skipEmptyLines: true,
+        download: true,
+        complete: function(results) {
+          observable.next(results);
+          observable.complete();
+        }
+      });
+    }).map(arrayData => {
+      let allTextLines = arrayData.data;
+      let delimiter = arrayData.meta.delimiter;
+      let headers = allTextLines[0];
+      let lines: Count[] = [];
+      let errorTab = [];
+      for (let i = 1; i < allTextLines.length; i++) {
+        let data = allTextLines[i];
+        if (data.length == headers.length) {
+          let ct = {} as Count;
+          let header;
+          for (let j = 0; j < headers.length; j++) {
+            switch (headers[j]) {
+              case "codePlatform":
+              case "codeSurvey":
+              case "code":
+              case "codeStation":
+                header = headers[j].replace(/_([a-z])/g, function(g) {
+                  return g[1].toUpperCase();
+                });
+                ct[headers[j]] = data[j];
+                break;
+              case "date":
+                let d;
+                // if it is french format reverse date and month in import date (from dd/MM/yyyy to MM/dd/yyyy)
+                if (delimiter === Csv2JsonService.SEMICOLON) {
+                  //this.ms.moment().locale("fr");
+                  d = this.ms.moment(data[j], "DD/MM/YYYY").toISOString();
+                } else {
+                  //this.ms.moment().locale("en");
+                  d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
+                }
+                ct[headers[j]] = d;
+                break;
+              case "mesures":
+                let sp = data[headers.indexOf("codeSpecies")];
+                // if there is no species name (let size of 2 for undesired spaces) break;
+                if (sp.length < 2) break;
+                if (ct.mesures == null) ct.mesures = [];
+                let mes = data[j].split(",");
+                for (let dims of mes) {
+                  let longlarg = dims.split("/");
+                  ct.mesures.push({ codeSpecies: sp, long: longlarg[0], larg: longlarg.length > 0 ? longlarg[1] : "0" });
+                }
+                break;
+              case "codeSpecies":
+                ct["monospecies"] = true;
+                break;
+              default:
+                if (!errorTab.includes(headers[j])) {
+                  errorTab.push(headers[j]);
+                }
+                break;
+            }
+          }
+          lines.push(ct);
+        }
+      }
+
+      if (errorTab.length !== 0) {
+        let string = "";
+        for (let i in errorTab) {
+          if (parseInt(i) === errorTab.length - 1) {
+            string += errorTab[i] + ".";
+          } else {
+            string += errorTab[i] + ", ";
+          }
+        }
+
+        return string;
+      }
+
+      //console.log(lines); //The data in the form of 2 dimensional array.
+      return lines;
+    });
   }
 
   csv2(type: string, csvFile: any, species?: Species[]): Observable<any> {
@@ -591,7 +678,6 @@ export class Csv2JsonService {
             res = this.extractStationData(data);
             break;
           case "count":
-            console.log(data);
             res = this.extractCountData(data);
             break;
           default:

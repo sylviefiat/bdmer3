@@ -11,6 +11,7 @@ import { PreviewMapStationGlobalImportComponent } from "./globalImport/global-im
 import { PreviewMapStationFormComponent } from "./station/station-form-preview-map.component";
 import { ViewPlatformMapComponent } from "./platform/view-platform-map.component";
 import { ViewCountMapComponent } from "./count/view-count-map.component";
+import { PreviewMapCountImportComponent } from "./count/count-import-preview-map.component";
 import { ViewSurveyMapComponent } from "./survey/view-survey-map.component";
 import { ViewZoneMapComponent } from "./zone/view-zone-map.component";
 import { ViewStationMapComponent } from "./station/view-station-map.component";
@@ -62,6 +63,7 @@ export const APP_COMPONENTS: any[] = [
   PreviewMapStationFormComponent,
   PreviewMapStationImportComponent,
   PreviewMapStationGlobalImportComponent,
+  PreviewMapCountImportComponent,
   ViewPlatformMapComponent,
   ViewCountMapComponent,
   ViewSurveyMapComponent,
@@ -99,6 +101,7 @@ export * from "./station/station-form-preview-map.component";
 export * from "./globalImport/global-import-station-map.component";
 export * from "./platform/view-platform-map.component";
 export * from "./count/view-count-map.component";
+export * from "./count/count-import-preview-map.component";
 export * from "./zone/view-zone-map.component";
 export * from "./station/view-station-map.component";
 export * from "./survey/view-survey-map.component";

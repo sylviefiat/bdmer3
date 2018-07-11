@@ -219,10 +219,18 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
     }
 
     case PlatformAction.ActionTypes.CHECK_COUNT_ADD_ERROR: {
-      return {
-        ...state,
-        importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
-      };
+      if (action.payload.error) {
+        return {
+          ...state,
+          error: action.payload.error,
+          msg: null
+        };
+      } else {
+        return {
+          ...state,
+          importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
+        };
+      }
     }
 
     case PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS: {
