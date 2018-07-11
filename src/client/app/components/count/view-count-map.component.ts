@@ -7,12 +7,12 @@ import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
 import * as Turf from "@turf/turf";
 
 import { RouterExtensions, Config } from "../../modules/core/index";
-import { Platform, Zone, Survey, Station } from "../../modules/datas/models/index";
+import { Platform, Zone, Count, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
 
 @Component({
-  selector: "bc-view-survey-map",
+  selector: "bc-view-count-map",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <nav id="switcher">
@@ -103,14 +103,14 @@ import { IAppState } from "../../modules/ngrx/index";
       </mgl-geojson-source>
     </ng-container>
 
-    <ng-container *ngIf=" (layerStationsCount$ | async) && isDisplayed('stations')">
+    <ng-container *ngIf="stationCount && isDisplayed('stations')">
       <mgl-geojson-source
-        id="layerStationsCount"
-        [data]="(layerStationsCount$ | async)">
+        id="layerStation"
+        [data]="stationCount">
         <mgl-layer
-          id="stationscountid"
+          id="stationid"
           type="symbol"
-          source="layerStationsCount"
+          source="layerStation"
           [layout]="{
             'icon-image': 'triangle-15',
             'icon-size': 2,
@@ -194,10 +194,10 @@ import { IAppState } from "../../modules/ngrx/index";
     `
   ]
 })
-export class ViewSurveyMapComponent implements OnInit, OnChanges {
+export class ViewCountMapComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
-  @Input() survey: Survey;
+  @Input() count: Count;
   bounds: LngLatBounds;
   boundsPadding: number = 100;
   map: any;
@@ -214,8 +214,7 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
   zones: Zone[] = [];
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
-  stationsCount: Station[] = [];
-  layerStationsCount$: Observable<Turf.FeatureCollection>;
+  stationCount: Station;
   layerStations$: Observable<Turf.FeatureCollection>;
 
   show: string[] = ["countries"];
@@ -238,7 +237,7 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
   setMap(event) {
     this.map = event;
     if (this.bounds) {
-      this.map.fitBounds(this.bounds, { padding: 50 });
+      this.map.fitBounds(this.bounds, { padding: 10 });
     }
   }
 
@@ -278,16 +277,6 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
 
   init() {
     if (this.countries.length > 0) {
-      this.platform.stations.forEach(station => {
-        this.survey.counts.forEach(count => {
-          if (count.codeStation === station.properties.code) {
-            if (!this.stationsCount.includes(station)) {
-              this.stationsCount.push(station);
-            }
-          }
-        });
-      });
-
       let country = this.countries.filter(country => country.code === this.platform.codeCountry)[0];
 
       this.markerCountry = {
@@ -298,7 +287,21 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
 
       if (this.platform.stations.length > 0) this.setStations(this.platform);
       if (this.platform.zones.length > 0) this.setZones(this.platform);
-      if (this.stationsCount.length > 0) this.setStationsCount(this.stationsCount);
+
+      if (this.stations.length > 0) {
+        let zoneInside = null;
+        this.stationCount = this.platform.stations.filter(station => station.properties.code === this.count.codeStation)[0];
+        this.platform.zones.map(zone => {
+          if (Turf.inside(Turf.point(this.stationCount.geometry.coordinates), Turf.polygon(zone.geometry.coordinates))) {
+            zoneInside = zone;
+          }
+        });
+        if (zoneInside !== null) {
+          this.zoomToZones({ features: [zoneInside] });
+        } else {
+          this.zoomToStations({ features: [this.stationCount] });
+        }
+      }
     }
   }
 
@@ -342,13 +345,6 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
     this.zoomToStations(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
-  }
-
-  setStationsCount(stations: Station[]) {
-    this.layerStationsCount$ = of(
-      Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
-    );
-    this.zoomToStations(Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code }))));
   }
 
   checkBounds(bounds: LngLatBounds) {

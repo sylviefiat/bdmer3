@@ -1,47 +1,51 @@
-
-    <mat-card class="actions">      
+<mat-card>
+  <div class="wrapper">
+    <div class="wrapp_left">
       <mat-card-title>
-        <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / 
-        <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> /  
-        <a class="link" (click)="toSurvey()">{{ 'SURVEY' | translate}} {{ survey.code }}</a> /
-        {{ 'COUNT' | translate}} {{ count.code }}
+        <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> /
+        <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> /
+        <a class="link" (click)="toSurvey()">{{ 'SURVEY' | translate}} {{ survey.code }}</a> / {{ 'COUNT' | translate}} {{ count.code }}
       </mat-card-title>
       <mat-card-content>
-        <div>{{ 'COUNT_DATE' | translate }} : {{ count.date | date:localDate }}</div> 
+        <div>{{ 'COUNT_DATE' | translate }} : {{ count.date | date:localDate }}</div>
       </mat-card-content>
       <mat-card-content>
-        <div>{{ 'COUNT_STATION' | translate }} : {{ count.codeStation }}</div> 
+        <div>{{ 'COUNT_STATION' | translate }} : {{ count.codeStation }}</div>
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field>
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
-              <mat-option [value]="'countForm'">{{ 'EDIT_COUNT' | translate}}</mat-option>
-              <mat-option class="warn" [value]="'deleteCount'">{{ 'DELETE_COUNT' | translate}}</mat-option>
+          <mat-select placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
+            <mat-option [value]="'countForm'">{{ 'EDIT_COUNT' | translate}}</mat-option>
+            <mat-option class="warn" [value]="'deleteCount'">{{ 'DELETE_COUNT' | translate}}</mat-option>
           </mat-select>
-        </mat-form-field>        
-      </mat-card-actions> 
-    </mat-card>
-    <div class="inside">
-      <mat-card>
-        <mat-card-content *ngIf="count.mesures && count.mesures.length>0">
-          <div>{{ 'COUNT_DETAIL' | translate }}
-            <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :          
-          </div>
-          <div class="mesures" *ngFor="let mesure of count.mesures; let i = index;">            
-            <div *ngIf="writeSp(i)">
-              <hr/>
-              <span class="speciesName">
-              {{ getSpeciesName(mesure.codeSpecies) }}
-              </span>
-              ({{'TOTAL' | translate}}: {{getNMesuresSpecies(mesure.codeSpecies)}}):
-            </div>
-            <li>
-              <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm, <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
-            </li>
-          </div>
-        </mat-card-content>
-        <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
-          <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
-        </mat-card-content>
-      </mat-card>
+        </mat-form-field>
+      </mat-card-actions>
+    </div>
+    <bc-view-count-map [platform]="platform" [countries]="countries" [count]="count"></bc-view-count-map>
   </div>
+</mat-card>
+
+<div class="inside">
+  <mat-card>
+    <mat-card-content *ngIf="count.mesures && count.mesures.length>0">
+      <div>{{ 'COUNT_DETAIL' | translate }}
+        <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :
+      </div>
+      <div class="mesures" *ngFor="let mesure of count.mesures; let i = index;">
+        <div *ngIf="writeSp(i)">
+          <hr/>
+          <span class="speciesName">
+              {{ getSpeciesName(mesure.codeSpecies) }}
+              </span> ({{'TOTAL' | translate}}: {{getNMesuresSpecies(mesure.codeSpecies)}}):
+        </div>
+        <li>
+          <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm,
+          <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
+        </li>
+      </div>
+    </mat-card-content>
+    <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
+      <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
+    </mat-card-content>
+  </mat-card>
+</div>
