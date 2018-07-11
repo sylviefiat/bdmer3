@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Observable, Subscription, pipe } from "rxjs";
+import { Observable, Subscription, pipe, of } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
@@ -37,7 +37,6 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   isAdmin$: Observable<Country>;
   msg$: Observable<string | null>;
-  msg: string;
   importError$: Observable<string[]>;
   userCountry$: Observable<Country>;
   locale$: Observable<boolean>;
@@ -92,7 +91,7 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
       if (userCountry.code === "AA") {
         this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
       } else {
-        this.msg = "Import can be performed";
+        this.msg$ = of("Import can be performed");
       }
     });
   }
