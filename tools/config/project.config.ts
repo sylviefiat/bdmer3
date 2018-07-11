@@ -150,7 +150,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
-        }, {
+        }, /*{
             name: '@angular/common',
             path: 'node_modules/@angular/common/bundles/common.umd.js'
         }, {
@@ -159,7 +159,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: '@angular/common/http',
             path: 'node_modules/@angular/common/bundles/common-http.umd.js'
-        }, {
+        }, */{
             name: '@angular/material',
             path: 'node_modules/@angular/material/bundles/material.umd.js'
         }, {
