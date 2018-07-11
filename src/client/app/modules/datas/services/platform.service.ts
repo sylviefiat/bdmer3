@@ -55,9 +55,12 @@ export class PlatformService {
 
   importPlatformVerification(platform, countries: Country[]): Observable<string> {
     let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_COUNTRY", "NOT_IN_DATABASE"]);
-
-    if (countries.filter(country => country.code === platform.codeCountry).length === 0)
-      return of(msg.PLATFORM + platform.code + msg.CANNOT_BE_INSERTED_COUNTRY + platform.codeCountry + msg.NOT_IN_DATABASE);
+    if (!platform.error) {
+      if (countries.filter(country => country.code === platform.codeCountry).length === 0)
+        return of(msg.PLATFORM + platform.code + msg.CANNOT_BE_INSERTED_COUNTRY + platform.codeCountry + msg.NOT_IN_DATABASE);
+    } else {
+      return of(platform);
+    }
     return of("");
   }
 
@@ -68,6 +71,7 @@ export class PlatformService {
       mergeMap(st => {
         if (!platform.zones) platform.zones = [];
         if (!platform.surveys) platform.surveys = [];
+        if (!platform.stations) platform.stations = [];
         if (country !== undefined) {
           platform.codeCountry = country.code;
         }
@@ -143,21 +147,23 @@ export class PlatformService {
     );
   }
 
-  importSurveyVerification(survey: Survey, platform: Platform): Observable<string> {
+  importSurveyVerification(survey, platform: Platform): Observable<string> {
     let msg = this.translate.instant(["PLATFORM", "NO_PLATFORM", "FOR_COUNTRY", "AND_COUNTRY", "NOT_PART_OF_COUNTRY", "NOT_IN_DATABASE"]);
+    if (!survey.error) {
+      if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
+        return of(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
+      }
 
-    if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
-      return of(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
+      if (survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry) {
+        return of(msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
+      }
+
+      if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
+        return of(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
+      }
+    } else {
+      return of(survey);
     }
-
-    if (survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry) {
-      return of(msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
-    }
-
-    if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
-      return of(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
-    }
-
     return of("");
   }
 
@@ -236,7 +242,7 @@ export class PlatformService {
     );
   }
 
-  importZonePrefVerification(zonePref: ZonePreference, platform: Platform, species: Species[]): Observable<string> {
+  importZonePrefVerification(zonePref, platform: Platform, species: Species[]): Observable<string> {
     let msg = this.translate.instant([
       "CODE_SPECIES",
       "CANNOT_BE_INSERTED_NOT_EXIST",
@@ -245,25 +251,28 @@ export class PlatformService {
       "NOT_IN_DATABASE",
       "ZONE_PREF"
     ]);
-
-    if (zonePref.codePlatform === platform.code) {
-      for (let i = 0; i < platform.zones.length; i++) {
-        if (zonePref.codeZone === platform.zones[i].properties.code) {
-          for (let y = 0; y < species.length; y++) {
-            if (zonePref.codeSpecies === species[y].code) {
-              return of("");
-            }
-            if (zonePref.codeSpecies !== species[y].code && y === species.length - 1) {
-              return of(msg.CODE_SPECIES + zonePref.codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+    if (!zonePref.error) {
+      if (zonePref.codePlatform === platform.code) {
+        for (let i = 0; i < platform.zones.length; i++) {
+          if (zonePref.codeZone === platform.zones[i].properties.code) {
+            for (let y = 0; y < species.length; y++) {
+              if (zonePref.codeSpecies === species[y].code) {
+                return of("");
+              }
+              if (zonePref.codeSpecies !== species[y].code && y === species.length - 1) {
+                return of(msg.CODE_SPECIES + zonePref.codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+              }
             }
           }
+          if (zonePref.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1) {
+            return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEZONE + zonePref.codeZone + msg.NOT_IN_DATABASE);
+          }
         }
-        if (zonePref.codeZone !== platform.zones[i].properties.code && i === platform.zones.length - 1) {
-          return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEZONE + zonePref.codeZone + msg.NOT_IN_DATABASE);
-        }
+      } else {
+        return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEPLATFORM + zonePref.codePlatform + msg.NOT_IN_DATABASE);
       }
     } else {
-      return of(msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEPLATFORM + zonePref.codePlatform + msg.NOT_IN_DATABASE);
+      return of(zonePref);
     }
 
     return of("");

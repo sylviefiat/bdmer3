@@ -90,7 +90,7 @@ export class PlatformEffects {
       map((action: PlatformAction.CheckZonePrefCsvFile) => action.payload),
       mergeMap((zonePref: any) => this.csv2jsonService.csv2("zonePref", zonePref)),
       withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-      mergeMap((value: any, store: any) => this.platformService.importZonePrefVerification(value, store[1], store[2])),
+      mergeMap((value: [any, any, any]) => this.platformService.importZonePrefVerification(value[0], value[1], value[2])),
       map((error: string) => new PlatformAction.CheckZonePrefAddErrorAction(error))
     );
 

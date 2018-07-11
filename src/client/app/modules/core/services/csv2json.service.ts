@@ -118,7 +118,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  extractPlatformData(arrayData): Platform[] {
+  extractPlatformData(arrayData): Platform[] | any[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: Platform[] = [];
@@ -158,14 +158,14 @@ export class Csv2JsonService {
           string += errorTab[i] + ", ";
         }
       }
-      throw new Error(string);
+      return [{ error: string }];
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
   }
 
-  extractZoneData(arrayData): Zone[] {
+  extractZoneData(arrayData): Zone[] | any[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: Zone[] = [];
@@ -195,7 +195,7 @@ export class Csv2JsonService {
     return lines;
   }
 
-  extractSurveyData(arrayData): Survey[] {
+  extractSurveyData(arrayData): Survey[] | any[] {
     let allTextLines = arrayData.data;
     let delimiter = arrayData.meta.delimiter;
     let headers = allTextLines[0];
@@ -256,7 +256,7 @@ export class Csv2JsonService {
         }
       }
 
-      throw new Error(string);
+      return [{ error: string }];
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
@@ -417,7 +417,7 @@ export class Csv2JsonService {
     });
   }
 
-  extractZonePrefData(arrayData, species): ZonePreference[] {
+  extractZonePrefData(arrayData, species): ZonePreference[] | any[] {
     let allTextLines = arrayData.data;
     let headers = allTextLines[0];
     let lines: ZonePreference[] = [];
@@ -448,13 +448,7 @@ export class Csv2JsonService {
               break;
           }
         }
-        if (species !== null || species !== undefined) {
-          for (let i = 0; i < species.length; i++) {
-            if (st.codeSpecies === species[i].code) {
-              st.picture = species[i].picture;
-            }
-          }
-        }
+
         lines.push(st);
       }
     }
@@ -469,7 +463,7 @@ export class Csv2JsonService {
         }
       }
 
-      throw new Error(string);
+      return [{ error: string }];
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.

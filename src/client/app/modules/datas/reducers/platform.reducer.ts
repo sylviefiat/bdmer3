@@ -45,10 +45,18 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
     }
 
     case PlatformAction.ActionTypes.CHECK_PLATFORM_ADD_ERROR: {
-      return {
-        ...state,
-        importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
-      };
+      if (action.payload.error) {
+        return {
+          ...state,
+          error: action.payload.error,
+          msg: null
+        };
+      } else {
+        return {
+          ...state,
+          importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
+        };
+      }
     }
 
     case PlatformAction.ActionTypes.CHECK_PLATFORM_SUCCESS: {
@@ -105,10 +113,18 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
     }
 
     case PlatformAction.ActionTypes.CHECK_SURVEY_ADD_ERROR: {
-      return {
-        ...state,
-        importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
-      };
+      if (action.payload.error) {
+        return {
+          ...state,
+          error: action.payload.error,
+          msg: null
+        };
+      } else {
+        return {
+          ...state,
+          importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
+        };
+      }
     }
 
     case PlatformAction.ActionTypes.ADD_STATION_SUCCESS:
@@ -183,10 +199,18 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
     }
 
     case PlatformAction.ActionTypes.CHECK_ZONE_PREF_ADD_ERROR: {
-      return {
-        ...state,
-        importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
-      };
+      if (action.payload.error) {
+        return {
+          ...state,
+          error: action.payload.error,
+          msg: null
+        };
+      } else {
+        return {
+          ...state,
+          importErrors: action.payload !== "" && action.payload.length > 0 ? [...state.importErrors, action.payload] : [...state.importErrors]
+        };
+      }
     }
 
     case PlatformAction.ActionTypes.ADD_COUNT_SUCCESS:
