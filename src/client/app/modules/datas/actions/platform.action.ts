@@ -29,6 +29,9 @@ export namespace PlatformAction {
     REMOVE_ZONE: string;
     REMOVE_ZONE_SUCCESS: string;
     REMOVE_ZONE_FAIL: string;
+    REMOVE_ALL_ZONE: string;
+    REMOVE_ALL_ZONE_SUCCESS: string;
+    REMOVE_ALL_ZONE_FAIL: string;
     ADD_SURVEY: string;
     ADD_SURVEY_SUCCESS: string;
     ADD_PENDING_SURVEY: string;
@@ -117,6 +120,9 @@ export namespace PlatformAction {
     REMOVE_ZONE: type(`${PLATFORM} Remove Zone`),
     REMOVE_ZONE_SUCCESS: type(`${PLATFORM} Remove Zone Success`),
     REMOVE_ZONE_FAIL: type(`${PLATFORM} Remove Zone Fail`),
+    REMOVE_ALL_ZONE: type(`${PLATFORM} Remove All Zone`),
+    REMOVE_ALL_ZONE_SUCCESS: type(`${PLATFORM} Remove All Zone Success`),
+    REMOVE_ALL_ZONE_FAIL: type(`${PLATFORM} Remove All Zone Fail`),
     ADD_STATION: type(`${PLATFORM} Add Station`),
     ADD_STATION_SUCCESS: type(`${PLATFORM} Add Station Success`),
     ADD_PENDING_STATION: type(`${PLATFORM} Add Pending Station`),
@@ -325,6 +331,24 @@ export namespace PlatformAction {
     readonly type = ActionTypes.REMOVE_ZONE_FAIL;
 
     constructor(public payload: Platform) {}
+  }
+
+  export class RemoveAllZoneAction implements Action {
+    readonly type = ActionTypes.REMOVE_ALL_ZONE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class RemoveAllZoneSuccessAction implements Action {
+    readonly type = ActionTypes.REMOVE_ALL_ZONE_SUCCESS;
+
+    constructor(public payload: any) {}
+  }
+
+  export class RemoveAllZoneFailAction implements Action {
+    readonly type = ActionTypes.REMOVE_ALL_ZONE_FAIL;
+
+    constructor(public payload: any) {}
   }
 
   /**
@@ -744,6 +768,9 @@ export namespace PlatformAction {
     | RemoveZoneAction
     | RemoveZoneSuccessAction
     | RemoveZoneFailAction
+    | RemoveAllZoneAction
+    | RemoveAllZoneSuccessAction
+    | RemoveAllZoneFailAction
     | AddStationAction
     | AddStationSuccessAction
     | AddPendingStationAction

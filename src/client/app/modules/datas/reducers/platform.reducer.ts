@@ -269,6 +269,20 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
       };
     }
 
+    case PlatformAction.ActionTypes.REMOVE_ALL_ZONE_SUCCESS: {
+      const modifiedPlatform = state.entities.filter(platform => platform.code === action.payload.code)[0];
+      modifiedPlatform.zones = [];
+
+      return {
+        ...state,
+        entities: [...state.entities.filter(platform => modifiedPlatform._id !== platform._id), modifiedPlatform],
+        ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
+        currentZoneId: null,
+        error: null,
+        msg: null
+      };
+    }
+
     case PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS: {
       const removedZone = action.payload;
       const modifiedPlatform = state.entities.filter(platform => platform.code === removedZone.codePlatform)[0];

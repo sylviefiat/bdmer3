@@ -17,6 +17,7 @@ import { CountriesAction } from "../../modules/countries/actions/index";
   template: `
     <bc-zone-import
       (upload)="handleUpload($event)"
+      (removeAllZone)="removeAllZone($event)"
       (err)="handleErrorUpload($event)"
       (back)="return($event)"
       [error]="error$ | async"
@@ -55,6 +56,10 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
 
   handleUpload(kmlFile: any): void {
     this.store.dispatch(new PlatformAction.ImportZoneAction(kmlFile));
+  }
+
+  removeAllZone(platform: Platform) {
+    this.store.dispatch(new PlatformAction.RemoveAllZoneAction(platform));
   }
 
   handleErrorUpload(msg: string) {
