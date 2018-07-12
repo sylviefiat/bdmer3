@@ -59,6 +59,16 @@ export class NewCountryComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       this.svgToB64().then(data => {
+        if (this.form.get("province").value === "NORTH") {
+          this.form.get("pays").value["code"] = "NCPN";
+          this.form.get("pays").value["name"] = this.form.get("pays").value["name"] + " North Province";
+        }
+
+        if (this.form.get("province").value === "SOUTH") {
+          this.form.get("pays").value["code"] = "NCPS";
+          this.form.get("pays").value["name"] = this.form.get("pays").value["name"] + " South Province";
+        }
+
         this.http
           .get(
             "http://maps.googleapis.com/maps/api/geocode/json?address=" +
@@ -68,20 +78,6 @@ export class NewCountryComponent implements OnInit {
           .subscribe(coord => {
             this.form.controls.coordinates.get("lat").setValue(coord["results"]["0"].geometry.location.lat);
             this.form.controls.coordinates.get("lng").setValue(coord["results"]["0"].geometry.location.lng);
-
-            if (this.form.get("province").value === "NORTH") {
-              this.form.get("pays").value["code"] = "NCPN";
-              this.form.get("pays").value["name"] = this.form.get("pays").value["name"] + " North Province";
-              this.form.get("coordinates").value["lat"] = -21.816167;
-              this.form.get("coordinates").value["lng"] = 166.188218;
-            }
-
-            if (this.form.get("province").value === "SOUTH") {
-              this.form.get("pays").value["code"] = "NCPS";
-              this.form.get("pays").value["name"] = this.form.get("pays").value["name"] + " South Province";
-              this.form.get("coordinates").value["lat"] = -20.913428;
-              this.form.get("coordinates").value["lng"] = 164.961742;
-            }
 
             this.form.controls.flag.setValue(data);
 
