@@ -1,37 +1,44 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, Subscription, pipe } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Observable, Subscription, pipe, of } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
 
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform } from '../../modules/datas/models/index';
-import { Country } from '../../modules/countries/models/country';
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { Platform } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getAuthCountry, getPlatformPageMsg, getAllCountriesInApp, getLangues, getPlatformImpErrors, getPlatformImpMsg } from '../../modules/ngrx/index';
-import { PlatformAction } from '../../modules/datas/actions/index';
-import { CountriesAction } from '../../modules/countries/actions/index';
-import { Csv2JsonService } from '../../modules/core/services/csv2json.service';
-import { CountryListService} from '../../modules/countries/services/country-list.service';
-import { PlatformService } from '../../modules/datas/services/platform.service'
+import {
+    IAppState,
+    getPlatformPageError,
+    getSelectedPlatform,
+    getAuthCountry,
+    getPlatformPageMsg,
+    getAllCountriesInApp,
+    getLangues,
+    getPlatformImpErrors,
+    getPlatformImpMsg
+} from "../../modules/ngrx/index";
+import { PlatformAction } from "../../modules/datas/actions/index";
+import { CountriesAction } from "../../modules/countries/actions/index";
+import { Csv2JsonService } from "../../modules/core/services/csv2json.service";
+import { CountryListService } from "../../modules/countries/services/country-list.service";
+import { PlatformService } from "../../modules/datas/services/platform.service";
 
 @Component({
     moduleId: module.id,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'bc-platform-import-page',
-    templateUrl: './platform-import-page.component.html',
-    styleUrls: [
-    './platform-import-page.component.css',
-    ],
+    selector: "bc-platform-import-page",
+    templateUrl: "./platform-import-page.component.html",
+    styleUrls: ["./platform-import-page.component.css"]
 })
 export class PlatformImportPageComponent implements OnInit, OnDestroy {
     error$: Observable<string | null>;
     isAdmin$: Observable<Country>;
     msg$: Observable<string | null>;
-    msg: string;
     importError$: Observable<string[]>;
-    userCountry$: Observable<Country>
+    userCountry$: Observable<Country>;
     locale$: Observable<boolean>;
     actionsSubscription: Subscription;
     needHelp: boolean = false;
@@ -43,14 +50,14 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
     csvFile: any;
     importCsvFile: any = null;
     platformForm: FormGroup = new FormGroup({
-        platformInputFile: new FormControl(),
+        platformInputFile: new FormControl()
     });
 
     constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-      this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
-        this.docs_repo = "../../../assets/files/";
-            this.csvFile = "importPlatform-"+l+".csv";
-            this.csvFileAdmin = "importPlatformAdmin-"+l+".csv";
+        this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importPlatform-" + l + ".csv";
+            this.csvFileAdmin = "importPlatformAdmin-" + l + ".csv";
         });
     }
 
@@ -59,10 +66,10 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
         this.error$ = this.store.select(getPlatformPageError);
         this.importError$ = this.store.select(getPlatformImpErrors);
         this.msg$ = this.store.select(getPlatformImpMsg);
-        this.userCountry$ = this.store.select(getAuthCountry);            
+        this.userCountry$ = this.store.select(getAuthCountry);
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.actionsSubscription.unsubscribe();
     }
 
@@ -79,27 +86,26 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
         }
     }
 
-    check(csvFile){
-        this.userCountry$
-            .subscribe(userCountry =>{
-              if(userCountry.code === 'AA'){
-                  this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
-              }else{
-                  this.msg = "Import can be performed"
-              }
-            });
+    check(csvFile) {
+        this.userCountry$.subscribe(userCountry => {
+            if (userCountry.code === "AA") {
+                this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
+            } else {
+                this.msg$ = of("Import can be performed");
+            }
+        });
     }
 
     changeNeedHelp() {
         this.needHelp = !this.needHelp;
     }
 
-    send(){
+    send() {
         this.store.dispatch(new PlatformAction.ImportPlatformAction(this.importCsvFile));
     }
 
-    clearInput(){
-        this.platformForm.get('platformInputFile').reset();
+    clearInput() {
+        this.platformForm.get("platformInputFile").reset();
     }
 
     getCsvPlatform() {
@@ -110,15 +116,15 @@ export class PlatformImportPageComponent implements OnInit, OnDestroy {
         return this.docs_repo + this.csvFile;
     }
 
-    getCsvPlatformsUrlAdmin(){
+    getCsvPlatformsUrlAdmin() {
         return this.docs_repo + this.csvFileAdmin;
     }
 
     return() {
-        this.routerext.navigate(['/platform/'], {
+        this.routerext.navigate(["/platform/"], {
             transition: {
                 duration: 1000,
-                name: 'slideTop',
+                name: "slideTop"
             }
         });
     }

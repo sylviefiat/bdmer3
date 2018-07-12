@@ -47,7 +47,6 @@ export function win() {
   return window;
 }
 export function storage() {
-  console.log("storage");
   return localStorage;
 }
 export function cons() {
@@ -57,16 +56,14 @@ export function consoleLogTarget(consoleService: ConsoleService) {
   return new ConsoleTarget(consoleService, { minLogLevel: LogLevel.Debug });
 }
 export function app(store: Store<IAppState>) {
-  console.log("appConfig");
   return () => new Promise(resolve => {
     store.dispatch(new AppInitAction.StartAppInitAction());
     store.dispatch(new AppInitAction.LoadServicesUrlAction());
     store.select(getServiceUrl)
       .pipe(
-        filter(url => {console.log(url);return url !== null}),
+        filter(url => url !== null),
         take(1)
-      ).subscribe((url) => {    
-        console.log(url);    
+      ).subscribe((url) => {      
         store.dispatch(new AppInitAction.FinishAppInitAction());
         resolve(true);
       });

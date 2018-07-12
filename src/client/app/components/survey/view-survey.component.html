@@ -1,9 +1,10 @@
-
-    <mat-card class="actions">
-      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+<mat-card>
+  <div class="wrapper">
+    <div class="wrapp_left">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail" />
       <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'SURVEY' | translate}} {{ survey.code }}</mat-card-title>
       <mat-card-content>
-        {{ 'SURVEY_DATES' | translate }} : {{ survey.dateStart | date:localDate  }}, {{ survey.dateEnd | date:localDate  }}
+        {{ 'SURVEY_DATES' | translate }} : {{ survey.dateStart | date:localDate }}, {{ survey.dateEnd | date:localDate }}
       </mat-card-content>
       <mat-card-content>
         {{ 'PARTICIPANTS' | translate }} : {{ survey.participants }}
@@ -16,26 +17,28 @@
       </mat-card-content>
       <mat-card-actions>
         <form>
-        <mat-form-field>
-          <input matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
-        </mat-form-field> 
-        <mat-form-field class="right">
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
-            <mat-optgroup [label]="'ACTION_SURVEY' | translate">
-              <mat-option [value]="'surveyForm'">{{ 'EDIT_SURVEY' | translate}}</mat-option>
-              <mat-option class="warn" [value]="'deleteSurvey'">{{ 'DELETE_SURVEY' | translate}}</mat-option>
-            </mat-optgroup>
-            <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('SURVEY' | translate)">
-              <mat-option [value]="'countForm'">{{ 'ADD_COUNT' | translate}}</mat-option>             
-            </mat-optgroup>
-            <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('SURVEY' | translate)">
-              <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>   
-        </form>     
-      </mat-card-actions>       
-    </mat-card>
+          <mat-form-field class="right">
+            <input matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
+          </mat-form-field>
+          <mat-form-field class="right">
+            <mat-select placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
+              <mat-optgroup [label]="'ACTION_SURVEY' | translate">
+                <mat-option [value]="'surveyForm'">{{ 'EDIT_SURVEY' | translate}}</mat-option>
+                <mat-option class="warn" [value]="'deleteSurvey'">{{ 'DELETE_SURVEY' | translate}}</mat-option>
+              </mat-optgroup>
+              <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('SURVEY' | translate)">
+                <mat-option [value]="'countForm'">{{ 'ADD_COUNT' | translate}}</mat-option>
+              </mat-optgroup>
+              <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('SURVEY' | translate)">
+                <mat-option [value]="'countImport'">{{ 'IMPORT' | translate}} {{ 'COUNTS' | translate}}</mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </mat-card-actions>
+    </div>
+    <bc-view-survey-map [platform]="platform" [survey]="survey" [countries]="countries"></bc-view-survey-map>
+  </div>
+</mat-card>
 
-    <bc-count-preview-list [counts]="filteredCounts$ | async" [survey]="survey" [platform]="platform"></bc-count-preview-list>  
- 
+<bc-count-preview-list [counts]="filteredCounts$ | async" [survey]="survey" [platform]="platform"></bc-count-preview-list>

@@ -1,42 +1,45 @@
-    <mat-card class="actions">
+<mat-card>
+  <div class="wrapper">
+    <div class="wrapp_left">
       <mat-card-title><a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'ZONE' | translate}} {{ zone.properties.code }}</mat-card-title>
       <mat-card-content>
-        <div>{{ 'SURFACE' | translate }} : {{ zone.properties.surface }} m²</div> 
+        <div>{{ 'SURFACE' | translate }} : {{ zone.properties.surface }} m²</div>
       </mat-card-content>
       <mat-card-content>
-        <img mat-card-sm-image *ngIf="zone.staticmap" (click)="openDialog()" [src]="zone.staticmap"/>
+        <img mat-card-sm-image *ngIf="zone.staticmap" (click)="openDialog()" [src]="zone.staticmap" />
       </mat-card-content>
       <mat-card-actions>
-        <mat-form-field>
-          <mat-select  placeholder="{{'DISPLAY' | translate}}" (selectionChange)="display($event.value)" [formControl]="panelDisplay">
+        <form>
+          <mat-form-field class="right">
+            <mat-select placeholder="{{'DISPLAY' | translate}}" (selectionChange)="display($event.value)" [formControl]="panelDisplay">
               <mat-option [value]="'zonesPref'">{{ 'ZONES_PREF' | translate}} ({{ (zonesPref$ | async)?.length }})</mat-option>
               <mat-option [value]="'stations'">{{ 'STATIONS' | translate}} ({{ (stations$ | async)?.length }})</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="right">
-          <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
-        </mat-form-field> 
-        <mat-form-field class="right">
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
-            <mat-optgroup [label]="'ACTION_ZONE' | translate">
-              <mat-option [value]="'zoneForm'">{{ 'EDIT_ZONE' | translate}}</mat-option>
-              <mat-option class="warn" [value]="'deleteZone'">{{ 'DELETE_ZONE' | translate}}</mat-option>
-            </mat-optgroup>
-            <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('ZONE' | translate)">
-              <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
-            </mat-optgroup>
-            <mat-optgroup [label]="('IMPORT_TOE' | translate)+' '+('ZONE' | translate)">
-              <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
-            </mat-optgroup>          
-          </mat-select>
-        </mat-form-field>         
-      </mat-card-actions>           
-    </mat-card>
-    
-        <bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [platform]="platform"></bc-zone-preference-preview-list>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="right">
+            <input type="text" matInput placeholder="{{ 'FILTER' | translate }}" [formControl]="filterFormControl" (keyup)="filter($event.target.value)">
+          </mat-form-field>
+          <mat-form-field class="right">
+            <mat-select placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
+              <mat-optgroup [label]="'ACTION_ZONE' | translate">
+                <mat-option [value]="'zoneForm'">{{ 'EDIT_ZONE' | translate}}</mat-option>
+                <mat-option class="warn" [value]="'deleteZone'">{{ 'DELETE_ZONE' | translate}}</mat-option>
+              </mat-optgroup>
+              <mat-optgroup [label]="('ADD_TOE' | translate)+' '+('ZONE' | translate)">
+                <mat-option [value]="'zonePrefForm'">{{ 'ADD_ZONE_PREF' | translate}}</mat-option>
+              </mat-optgroup>
+              <mat-optgroup [label]="('IMPORT_TOE' | translate)+' '+('ZONE' | translate)">
+                <mat-option [value]="'zonePrefImport'">{{ 'IMPORT' | translate}} {{ 'ZONES_PREF' | translate}}</mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </mat-card-actions>
+    </div>
+    <bc-view-zone-map [platform]="platform" [countries]="countries" [zone]="zone"></bc-view-zone-map>
+  </div>
+</mat-card>
 
-        <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [platform]="platform"></bc-station-preview-list>          
-     
-    
-   
-    
+<bc-zone-preference-preview-list *ngIf="(view$ | async)==='zonesPref'" [zonesPref$]="filteredZonesPrefs$" [zone]="zone" [platform]="platform"></bc-zone-preference-preview-list>
+
+<bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [platform]="platform"></bc-station-preview-list>

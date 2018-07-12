@@ -1,19 +1,29 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, Subscription, pipe } from 'rxjs';
-import { map, catchError, first } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Observable, Subscription, pipe } from "rxjs";
+import { map, catchError, first } from "rxjs/operators";
+import { ActivatedRoute } from "@angular/router";
 
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform, Zone, Survey } from '../../modules/datas/models/index';
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { Platform, Zone, Survey } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getSelectedZone, getSelectedSurvey } from '../../modules/ngrx/index';
-import { PlatformAction } from '../../modules/datas/actions/index';
-import { CountriesAction } from '../../modules/countries/actions/index';
+import {
+  IAppState,
+  getPlatformPageError,
+  getAllCountriesInApp,
+  getSelectedPlatform,
+  getPlatformPageMsg,
+  getSelectedZone,
+  getSelectedSurvey,
+  getPlatformImpErrors
+} from "../../modules/ngrx/index";
+import { PlatformAction } from "../../modules/datas/actions/index";
+import { CountriesAction } from "../../modules/countries/actions/index";
 
 @Component({
-    selector: 'bc-count-import-page',
-    template: `
+  selector: "bc-count-import-page",
+  template: `
     <bc-count-import
       (upload)="handleUpload($event)"
       (err)="handleErrorUpload($event)"
@@ -21,59 +31,60 @@ import { CountriesAction } from '../../modules/countries/actions/index';
       [error]="error$ | async"
       [msg]="msg$ | async"
       [platform]="platform$ | async"
-      [survey]="survey$ | async">
+      [survey]="survey$ | async"
+      [countries]="countries$ | async"
+      [importError]="importError$ | async">
     </bc-count-import>
   `,
-    styles: [``]
+  styles: [``]
 })
 export class CountImportPageComponent implements OnInit, OnDestroy {
-    platform$: Observable<Platform>;
-    survey$: Observable<Survey>;
-    error$: Observable<string | null>;
-    msg$: Observable<string | null>;
+  platform$: Observable<Platform>;
+  survey$: Observable<Survey>;
+  error$: Observable<string | null>;
+  msg$: Observable<string | null>;
+  importError$: Observable<string | null>;
+  countries$: Observable<Country[]>;
 
+  platformSubscription: Subscription;
+  surveySubscription: Subscription;
+  needHelp: boolean = false;
+  private csvFile: string;
+  private docs_repo: string;
 
-    platformSubscription: Subscription;
-    surveySubscription: Subscription;
-    needHelp: boolean = false;
-    private csvFile: string;
-    private docs_repo: string;
+  constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+    this.platformSubscription = route.params.pipe(map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))).subscribe(store);
+    this.surveySubscription = route.params.pipe(map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))).subscribe(store);
+  }
 
-    constructor(private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-        this.platformSubscription = route.params.pipe(
-            map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
-            .subscribe(store);
-        this.surveySubscription = route.params.pipe(
-            map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
-            .subscribe(store);
-    }
+  ngOnInit() {
+    this.error$ = this.store.select(getPlatformPageError);
+    this.msg$ = this.store.select(getPlatformPageMsg);
+    this.platform$ = this.store.select(getSelectedPlatform);
+    this.survey$ = this.store.select(getSelectedSurvey);
+    this.importError$ = this.store.select(getPlatformImpErrors);
+    this.countries$ = this.store.select(getAllCountriesInApp);
+  }
 
-    ngOnInit() {
-        this.error$ = this.store.select(getPlatformPageError);
-        this.msg$ = this.store.select(getPlatformPageMsg);
-        this.platform$ = this.store.select(getSelectedPlatform);
-        this.survey$ = this.store.select(getSelectedSurvey);
-    }
+  ngOnDestroy() {
+    this.platformSubscription.unsubscribe();
+    this.surveySubscription.unsubscribe();
+  }
 
-    ngOnDestroy() {
-        this.platformSubscription.unsubscribe();
-        this.surveySubscription.unsubscribe();
-    }
+  handleUpload(csvFile: any): void {
+    this.store.dispatch(new PlatformAction.ImportCountAction(csvFile));
+  }
 
-    handleUpload(csvFile: any): void {
-        this.store.dispatch(new PlatformAction.ImportCountAction(csvFile));
-    }
+  handleErrorUpload(msg: string) {
+    this.store.dispatch(new PlatformAction.AddPlatformFailAction(msg));
+  }
 
-    handleErrorUpload(msg: string) {
-        this.store.dispatch(new PlatformAction.AddPlatformFailAction(msg));
-    }
-
-    return(event) {
-        this.routerext.navigate(['/platform/'], {
-            transition: {
-                duration: 1000,
-                name: 'slideTop',
-            }
-        });
-    }
+  return(event) {
+    this.routerext.navigate(["/platform/"], {
+      transition: {
+        duration: 1000,
+        name: "slideTop"
+      }
+    });
+  }
 }

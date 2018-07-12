@@ -6,6 +6,7 @@ import { PlatformFormComponent } from './platform-form.component';
 import { PlatformImportPageComponent } from './platform-import-page.component';
 import { ViewPlatformPageComponent } from './view-platform-page.component';
 import { ViewPlatformComponent } from './view-platform.component';
+import { ViewPlatformMapComponent } from "./view-platform-map.component";
 
 export const PLATFORM_COMPONENTS: any[] = [
   PlatformListPageComponent,
@@ -16,6 +17,7 @@ export const PLATFORM_COMPONENTS: any[] = [
   PlatformImportPageComponent,
   ViewPlatformPageComponent,
   ViewPlatformComponent,
+  ViewPlatformMapComponent
 ];
 
 export * from './platform-list-page.component';
@@ -26,3 +28,4 @@ export * from './platform-form.component';
 export * from './platform-import-page.component';
 export * from './view-platform-page.component';
 export * from './view-platform.component';
+export * from "./view-platform-map.component";

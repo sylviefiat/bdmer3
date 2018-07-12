@@ -8,26 +8,55 @@ mat-card {
 }
 
 mat-card-title {
-    font-style: italic;
+  font-style: italic;
 }
-mat-card-content, mat-card-actions {
-    display: flex;
-    justify-content:space-around;
+mat-card-content,
+mat-card-actions {
+  display: flex;
+  justify-content: space-around;
 }
-mat-card-content.one{
-    display: flex;
-    justify-content:start;
+mat-card-content.one {
+  display: flex;
+  justify-content: start;
 }
 mat-card-actions {
   justify-content: center;
 }
 .warn:hover {
-   background-color: #d9534f;
+  background-color: #d9534f;
 }
 .link {
   cursor: pointer;
   text-decoration: underline;
 }
- .right {
-      margin-left:15px;
+.right {
+  margin-left: 15px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wrapp_left {
+  flex: 50%;
+  max-width: 50%;
+}
+
+bc-view-survey-map {
+  flex: 50%;
+  max-width: 50%;
+}
+@media screen and (max-width: 800px) {
+  .wrapper {
+    .wrapp_left {
+      flex: 100%;
+      max-width: 100%;
     }
+
+    bc-view-survey-map {
+      flex: 100%;
+      max-width: 100%;
+    }
+  }
+}

@@ -1,21 +1,30 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, ViewChild } from "@angular/core";
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
+import { MatStepper } from "@angular/material";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs/Observable";
+import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
 
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform } from '../../modules/datas/models/index';
-import { Country } from '../../modules/countries/models/country';
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { Platform } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getisAdmin, getLangues, getPlatformImpErrors } from '../../modules/ngrx/index';
-import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
-import { CountriesAction } from '../../modules/countries/actions/index';
+import {
+  IAppState,
+  getPlatformPageError,
+  getSelectedPlatform,
+  getPlatformPageMsg,
+  getAllCountriesInApp,
+  getisAdmin,
+  getLangues,
+  getPlatformImpErrors
+} from "../../modules/ngrx/index";
+import { PlatformAction, SpeciesAction } from "../../modules/datas/actions/index";
+import { CountriesAction } from "../../modules/countries/actions/index";
 
 @Component({
-  selector: 'bc-global-import-page',
+  selector: "bc-global-import-page",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <bc-global-import 
@@ -26,12 +35,13 @@ import { CountriesAction } from '../../modules/countries/actions/index';
   (removeMsg)="removeMsg($event)"
   [platform]="platform$ | async"
   [error$]="error$"
+  [countries]="countries$ | async"
   [importError$]="importError$"
   [isAdmin]="isAdmin$ | async"
   [locale]="locale$ | async"
   [docs_repo]="docs_repo">
   </bc-global-import>
-  `,
+  `
 })
 export class GlobalImportPageComponent implements OnInit {
   platform$: Observable<Platform>;
@@ -41,9 +51,9 @@ export class GlobalImportPageComponent implements OnInit {
   locale$: Observable<boolean>;
   docs_repo: string;
   submit: boolean = false;
+  countries$: Observable<Country[]>;
 
-  constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {
-  }
+  constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {}
 
   ngOnInit() {
     this.platform$ = this.store.select(getSelectedPlatform);
@@ -53,30 +63,31 @@ export class GlobalImportPageComponent implements OnInit {
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.locale$ = this.store.select(getLangues);
     this.docs_repo = "../../../assets/files/";
+    this.countries$ = this.store.select(getAllCountriesInApp);
   }
 
   handleCheck(setFile) {
     switch (setFile.type) {
-      case "station":{
+      case "station": {
         this.store.dispatch(new PlatformAction.CheckStationCsvFile(setFile.file));
         break;
       }
-      case "survey":{
+      case "survey": {
         this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(setFile.file));
         break;
       }
-      case "count":{
+      case "count": {
         this.store.dispatch(new PlatformAction.CheckCountCsvFile(setFile.file));
         break;
       }
       default:
-      return;
+        return;
     }
   }
 
   handlePending(setFile) {
     switch (setFile.type) {
-      case "station":{
+      case "station": {
         this.store.dispatch(new PlatformAction.AddPendingStationAction(setFile.file));
         break;
       }
@@ -85,7 +96,7 @@ export class GlobalImportPageComponent implements OnInit {
         break;
       }
       default:
-      return;
+        return;
     }
   }
 
@@ -110,44 +121,44 @@ export class GlobalImportPageComponent implements OnInit {
 
   handleRemove(setFile: any): void {
     switch (setFile.type) {
-      case "station":{
+      case "station": {
         this.store.dispatch(new PlatformAction.RemovePendingStationAction(setFile.file));
         break;
       }
-      case "survey":{
+      case "survey": {
         this.store.dispatch(new PlatformAction.RemovePendingSurveyAction(setFile.file));
         break;
       }
       default:
-      return;
+        return;
     }
   }
 
-  removeMsg(){
+  removeMsg() {
     this.store.dispatch(new PlatformAction.RemoveMsgAction());
   }
 
   return() {
-    this.routerext.navigate(['/platform/'], {
+    this.routerext.navigate(["/platform/"], {
       transition: {
         duration: 1000,
-        name: 'slideTop',
+        name: "slideTop"
       }
     });
   }
 
   canDeactivate() {
-    if(!this.submit){
-      let msg = this.translate.instant('DISCARD_CHANGE');
+    if (!this.submit) {
+      let msg = this.translate.instant("DISCARD_CHANGE");
 
       let confirmR = confirm(msg);
-      if(confirmR){
+      if (confirmR) {
         this.store.dispatch(new PlatformAction.ResetAllPendingAction());
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return true;
     }
   }

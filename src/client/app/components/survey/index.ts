@@ -6,6 +6,7 @@ import { SurveyImportPageComponent } from './survey-import-page.component';
 import { SurveyImportComponent } from './survey-import.component';
 import { ViewSurveyPageComponent } from './view-survey-page.component';
 import { ViewSurveyComponent } from './view-survey.component';
+import { ViewSurveyMapComponent } from "./view-survey-map.component";
 
 export const SU_COMPONENTS: any[] = [
   SurveyPreviewListComponent,
@@ -16,6 +17,7 @@ export const SU_COMPONENTS: any[] = [
   SurveyImportComponent,
   ViewSurveyPageComponent,
   ViewSurveyComponent,
+  ViewSurveyMapComponent,
 ];
 
 export * from './survey-preview-list.component';
@@ -26,3 +28,4 @@ export * from './survey-import-page.component';
 export * from './survey-import.component';
 export * from './view-survey-page.component';
 export * from './view-survey.component';
+export * from "./view-survey-map.component";

@@ -1,5 +1,5 @@
-import { Country } from '../models/country';
-import { IAppState } from '../../ngrx/index';
+import { Country } from "../models/country";
+import { IAppState } from "../../ngrx/index";
 
 export interface ICountriesState {
   loaded: boolean;
@@ -22,7 +22,7 @@ export const getCountriesLoaded = (state: ICountriesState) => state.loaded;
 
 export const getCountriesLoading = (state: ICountriesState) => state.loading;
 
-export const getCountriesEntities = (state: ICountriesState) => state.entities.filter((country: Country) => country.code !== 'AA');
+export const getCountriesEntities = (state: ICountriesState) => state.entities.filter((country: Country) => country.code !== "AA");
 
 export const getAllCountriesEntities = (state: ICountriesState) => state.entities;
 

@@ -1,20 +1,19 @@
-import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, Subscription, pipe, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from 'mapbox-gl';
-import * as Turf from '@turf/turf';
+import { Component, OnInit, ViewChild, Input, OnChanges, ChangeDetectionStrategy } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Observable, Subscription, pipe, of } from "rxjs";
+import { map } from "rxjs/operators";
+import { ActivatedRoute } from "@angular/router";
+import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
+import * as Turf from "@turf/turf";
 
-import { MapService } from '../../modules/core/services/index';
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { Platform, Zone, Station } from '../../modules/datas/models/index';
-import { Country, Coordinates } from '../../modules/countries/models/country';
-import { IAppState } from '../../modules/ngrx/index';
-
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { Platform, Zone, Station } from "../../modules/datas/models/index";
+import { Country, Coordinates } from "../../modules/countries/models/country";
+import { IAppState } from "../../modules/ngrx/index";
+import { MapService } from "../../modules/core/services/index";
 
 @Component({
-  selector: 'bc-home-map',
+  selector: "bc-home-map",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav id="switcher">
@@ -32,7 +31,7 @@ import { IAppState } from '../../modules/ngrx/index';
     [fitBoundsOptions]="{
       padding: boundsPadding,
       maxZoom: zoomMaxMap
-    }" 
+    }"
     (zoomEnd)="zoomChange($event)"
     (data)="styleChange($event)">
       <ng-container *ngIf="isDisplayed('countries')">
@@ -47,7 +46,7 @@ import { IAppState } from '../../modules/ngrx/index';
         </mgl-marker>
       </ng-container>
       <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
-        <mgl-geojson-source 
+        <mgl-geojson-source
           id="layerZones"
           [data]="layerZones$ | async">
           <mgl-layer
@@ -76,16 +75,16 @@ import { IAppState } from '../../modules/ngrx/index';
               'symbol-avoid-edges': true,
               'text-max-angle': 30,
               'text-size': 12
-            }"  
+            }"
             [paint]="{
               'text-color': 'white'
             }"
-          >            
+          >
           </mgl-layer>
         </mgl-geojson-source>
       </ng-container>
       <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
-        <mgl-geojson-source 
+        <mgl-geojson-source
           id="layerStations"
           [data]="layerStations$ | async">
           <mgl-layer
@@ -102,7 +101,7 @@ import { IAppState } from '../../modules/ngrx/index';
             (click)="showPopupStation($event)"
             (mouseEnter)="cursorStyle = 'pointer'"
             (mouseLeave)="cursorStyle = ''">
-          </mgl-layer>        
+          </mgl-layer>
         </mgl-geojson-source>
       </ng-container>
       <mgl-popup *ngIf="selectedStation"
@@ -113,11 +112,11 @@ import { IAppState } from '../../modules/ngrx/index';
         [lngLat]="selectedZone.geometry?.coordinates[0][0]">
         <span style="color:black;padding-right:10px;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span>
       </mgl-popup>
-      
+
     </mgl-map>
   `,
   styles: [
-    `    
+    `
     mgl-map {
       height: calc(100vh - 96px);
       width: 100%;
@@ -179,7 +178,8 @@ import { IAppState } from '../../modules/ngrx/index';
     #switcher .subswitch a {
       width:50%
     }
-    `]
+    `
+  ]
 })
 export class MapComponent implements OnInit, OnChanges {
   @Input() platforms: Platform[];
@@ -205,18 +205,17 @@ export class MapComponent implements OnInit, OnChanges {
   stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
 
-  show: string[] = ['countries'];
+  show: string[] = ["countries"];
   tmp: string[] = [];
-  bls: string[] = ['mapbox://styles/mapbox/satellite-v9','mapbox://styles/mapbox/streets-v9'];
+  bls: string[] = ["mapbox://styles/mapbox/satellite-v9", "mapbox://styles/mapbox/streets-v9"];
   bl: number;
 
-  constructor(private mapService: MapService) {
-    this.bl=0;
+  constructor() {
+    this.bl = 0;
   }
 
   ngOnInit() {
     this.init();
-
   }
 
   ngOnChanges() {
@@ -231,57 +230,56 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   changeView(view: string) {
-    this.show=this.show.indexOf(view)>=0?[...this.show.filter(s => s!==view)]:[...this.show,view];
+    this.show = this.show.indexOf(view) >= 0 ? [...this.show.filter(s => s !== view)] : [...this.show, view];
   }
 
-  isDisplayed(layer: string){
-    return this.show.indexOf(layer)>=0;
+  isDisplayed(layer: string) {
+    return this.show.indexOf(layer) >= 0;
   }
 
   changeBL() {
-    this.bl=this.bl?0:1;
+    this.bl = this.bl ? 0 : 1;
     // Remove all the layers to reload them on new style when baselayer is loaded
-    this.tmp = this.show;    
+    this.tmp = this.show;
     this.show = [];
   }
 
-  styleChange(event){
+  styleChange(event) {
     // when style is loaded put back the layers
-    if(event.dataType==="style"){
-      if(this.tmp.length>0){ 
-        this.show=this.tmp;
-        this.tmp=[];
+    if (event.dataType === "style") {
+      if (this.tmp.length > 0) {
+        this.show = this.tmp;
+        this.tmp = [];
       }
     }
   }
 
   init() {
     if (this.countries.length > 0) {
-      this.markersCountries = this.countries.filter(country => country.code !== 'AA').map(country => ({
-        'country': country.code,
-        'name':country.name,
-        'lngLat': [country.coordinates.lng, country.coordinates.lat]
-      }));      
+      this.markersCountries = this.countries.filter(country => country.code !== "AA").map(country => ({
+        country: country.code,
+        name: country.name,
+        lngLat: [country.coordinates.lng, country.coordinates.lat]
+      }));
       if (this.platforms.length > 0) {
         this.setZones(this.platforms);
         this.setStations(this.platforms);
       }
-      if(this.countries.length===1 && this.platforms.length > 0){
-         this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      if (this.countries.length === 1 && this.platforms.length > 0) {
+        this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
       } else {
-        this.bounds$=of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
+        this.bounds$ = of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
       }
-      
     }
   }
 
-  zoomToCountries(coordinates): LngLatBounds {   
+  zoomToCountries(coordinates): LngLatBounds {
     return coordinates.reduce((bnd, coord) => {
       return bnd.extend(<any>coord);
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds{
+  zoomToZonesOrStation(featureCollection): LngLatBounds {
     var bnd = new LngLatBounds();
     var fc: Turf.FeatureCollection = featureCollection.features
       .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
@@ -290,12 +288,12 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   zoomOnCountry(countryCode: string) {
-    let platformsConsidered = this.platforms.filter(platform => platform.codeCountry===countryCode);
+    let platformsConsidered = this.platforms.filter(platform => platform.codeCountry === countryCode);
     this.setZones(platformsConsidered);
-    if(platformsConsidered.length>1){
-      this.bounds$=this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+    if (platformsConsidered.length > 1) {
+      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     } else {
-      this.bounds$=of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country===countryCode).map(mk => mk.lngLat)));
+      this.bounds$ = of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country === countryCode).map(mk => mk.lngLat)));
     }
   }
 

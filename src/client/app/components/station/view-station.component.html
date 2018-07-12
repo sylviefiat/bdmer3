@@ -1,24 +1,25 @@
-
-    <mat-card class="actions">
-      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail"/>
+<mat-card>
+  <div class="wrapper">
+    <div class="wrapp_left">
+      <img mat-card-sm-image *ngIf="thumbnail" [src]="thumbnail" />
       <mat-card-title>
-        <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> / 
-        <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / 
-        {{ 'STATION' | translate}} {{ station.properties.code }}</mat-card-title>
+        <a class="link" (click)="toPlatforms()">{{ 'PLATFORM_LIST' | translate}}</a> /
+        <a class="link" (click)="toPlatform()">{{ 'PLATFORM' | translate}} {{ platform.code }}</a> / {{ 'STATION' | translate}} {{ station.properties.code }}</mat-card-title>
       <mat-card-content>
-        <div>{{ 'COORDINATES' | translate }} : {{ station.geometry.coordinates }}</div> 
+        <div>{{ 'COORDINATES' | translate }} : {{ station.geometry.coordinates }}</div>
       </mat-card-content>
       <mat-card-content>
-        <img mat-card-sm-image *ngIf="station.staticMapStation" (click)="openDialog()" [src]="station.staticMapStation"/>
+        <img mat-card-sm-image *ngIf="station.staticMapStation" (click)="openDialog()" [src]="station.staticMapStation" />
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field>
-          <mat-select  placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
-              <mat-option [value]="'stationForm'">{{ 'EDIT_STATION' | translate}}</mat-option>
-              <mat-option class="warn" [value]="'deleteStation'">{{ 'DELETE_STATION' | translate}}</mat-option>
+          <mat-select placeholder="{{'ACTIONS' | translate}}" (selectionChange)="actions($event.value)">
+            <mat-option [value]="'stationForm'">{{ 'EDIT_STATION' | translate}}</mat-option>
+            <mat-option class="warn" [value]="'deleteStation'">{{ 'DELETE_STATION' | translate}}</mat-option>
           </mat-select>
-        </mat-form-field>        
-      </mat-card-actions>       
-    </mat-card>
-
-    
+        </mat-form-field>
+      </mat-card-actions>
+    </div>
+    <bc-view-station-map [platform]="platform" [countries]="countries" [station]="station"></bc-view-station-map>
+  </div>
+</mat-card>
