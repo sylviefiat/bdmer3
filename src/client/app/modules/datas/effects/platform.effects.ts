@@ -6,25 +6,29 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp,getSpeciesInApp } from '../../ngrx/index';
+import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp,getSpeciesInApp, getServiceUrl } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from '../actions/index';
 import { Platform, Zone, Station, Count, Survey, ZonePreference } from '../models/platform';
 import { Country } from '../../countries/models/country';
 import { Species } from '../../datas/models/species';
+import { AppInitAction } from "../../core/actions/index";
 
-import { config } from '../../../config';
+//import { config } from '../../../config';
 
 @Injectable()
 export class PlatformEffects {
 
 
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => {
-    return this.platformService.initDB('platforms', config.urldb).pipe(
-      map(()=> new PlatformAction.LoadAction()));
-  });
+  openDB$: Observable<any> = this.actions$
+    .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
+    .pipe(
+      map((action: AppInitAction.FinishAppInitAction) => action.payload),
+      withLatestFrom(this.store.select(getServiceUrl)),
+      map((value) => this.platformService.initDB('platforms',value[1]))
+    );
 
   @Effect()
   loadPlatforms$: Observable<Action> = this.actions$

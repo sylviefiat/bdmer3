@@ -1,4 +1,4 @@
 
-export const config = {
-  urldb: "http://bdmer3.ird.nc/db"
+export const environment = {
+  "servicesBaseUrl": "https://bdmer3db.ird.nc"
 };
