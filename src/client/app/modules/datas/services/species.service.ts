@@ -6,24 +6,16 @@ import * as PouchDB from "pouchdb";
 import { ResponsePDB } from '../../core/models/pouchdb';
 import { Species } from '../models/species';
 
-//import { AppService } from '../../core/services/app.service';
-
 @Injectable()
 export class SpeciesService {
   private currentSpecies: Observable<Species>;
   private db: any;
-  //private basePath: string;
-  //private dbname;
 
-  constructor(/*private environment: AppService*/) {
+  constructor() {
     //this.dbname = "species";
   }
 
   initDB(dbname,remote): Observable<any> {
-    //this.basePath = this.environment.config.servicesBasePath;
-    console.log("sp : "+remote+"/"+dbname);
-    console.log(remote);
-    console.log(dbname);
     this.db = new PouchDB(dbname,{revs_limit: 3});
     return from(this.sync(remote + "/"  + dbname));
   }

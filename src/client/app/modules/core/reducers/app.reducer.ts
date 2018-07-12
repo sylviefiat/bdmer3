@@ -6,7 +6,7 @@ export function appInitReducer(
     state: IAppInitState = appInitialState,
     action: AppInitAction.Actions
 ): IAppInitState {
-    console.log(action);
+
     switch (action.type) {
 
         case AppInitAction.ActionTypes.LOAD_SERVICES_URL: {

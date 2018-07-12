@@ -10,6 +10,7 @@ import { RouterExtensions, Config } from "../../modules/core/index";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
+import { MapService } from "../../modules/core/services/index";
 
 @Component({
   selector: "bc-home-map",

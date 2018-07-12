@@ -10,14 +10,10 @@ import { Platform, Zone, Property, Survey, Station, ZonePreference, Count } from
 import { Country } from "../../countries/models/country";
 import { Species } from "../../datas/models/species";
 
-//import { AppService } from '../../core/services/app.service';
-
 @Injectable()
 export class PlatformService {
   private currentPlatform: Observable<Platform>;
   private db: any;
-  //private basePath: string;
-  //private dbname;
 
 
   constructor(private translate: TranslateService) {
@@ -26,9 +22,7 @@ export class PlatformService {
 
 
   initDB(dbname,remote): Observable<any> {
-    //this.basePath = this.environment.config.servicesBasePath;
     //console.log(dbname);
-    console.log("platform : "+remote+"/"+dbname);
     this.db = new PouchDB(dbname, { revs_limit: 3 });
     return from(this.sync(remote + "/" + dbname));
   }
