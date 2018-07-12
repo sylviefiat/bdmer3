@@ -497,9 +497,9 @@ export class SeedConfig {
       // `src/client`.
       [join(this.TMP_DIR, '*')]: `${this.TMP_DIR}/*`,
       //[join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
-      //'@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
-      //'@angular/animations/browser': 'node_modules/@angular/animations/bundles/animations-browser.umd.js',
-      //'@angular/common/http': 'node_modules/@angular/common/bundles/common-http.umd.js',
+      '@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
+      '@angular/animations/browser': 'node_modules/@angular/animations/bundles/animations-browser.umd.js',
+      '@angular/common/http': 'node_modules/@angular/common/bundles/common-http.umd.js',
       'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
       'node_modules/*': 'node_modules/*',
       '*': 'node_modules/*',
@@ -516,14 +516,14 @@ export class SeedConfig {
         main: 'bundles/animations.umd.js',
         defaultExtension: 'js'
       },
-      '@angular/platform-browser/animations': {
+      /*'@angular/platform-browser/animations': {
         main: '../bundles/platform-browser-animations.umd.js',
         defaultExtension: 'js'
-      },
-      '@angular/common/http': {
+      },*/
+      /*'@angular/common/http': {
         main: '../bundles/common-http.umd.js',
         defaultExtension: 'js'
-      },
+      },*/
       '@angular/common': {
         main: 'bundles/common.umd.js',
         defaultExtension: 'js'
@@ -563,11 +563,11 @@ export class SeedConfig {
       "@angular/service-worker": {
         main: "bundles/service-worker.umd.js",
         defaultExtension: "js"
-      } /*,
-      '@angular/animations/browser': {
+      } ,
+      /*'@angular/animations/browser': {
         main: '../bundles/animations-browser.umd.js',
         defaultExtension: 'js'
-      },
+      },*//*
       '@angular/service-worker': {
         main: 'bundles/service-worker.umd.js',
         defaultExtension: 'js'
