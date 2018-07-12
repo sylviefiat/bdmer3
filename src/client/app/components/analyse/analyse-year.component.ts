@@ -71,7 +71,6 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     }
 
     changeValue(yearCheck: any) {
-        console.log(yearCheck);
         this.checkedYears = [...this.checkedYears.filter(y => y !== yearCheck.year)];
         if (yearCheck.checked) {
             this.checkedYears.push(yearCheck.year);

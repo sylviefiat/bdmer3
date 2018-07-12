@@ -8,25 +8,30 @@ export const SpeciesRoutes: Array<any> = [
   {
     path: 'species',
     component: SpeciesListPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }, {
     path: 'speciesForm',
     component: SpeciesFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'speciesForm/:id',
     component: SpeciesFormPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'speciesImport',
     component: SpeciesImportPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'species/:id',
     component: ViewSpeciesPageComponent,
-    canActivate : [AuthGuard]
+    canActivate : [AuthGuard],
+    runGuardsAndResolvers: 'always'
   }
 ]

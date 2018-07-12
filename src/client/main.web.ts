@@ -9,7 +9,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 // import { TranslationProviders } from './i18n.providers';
 
 // platfrom module
-import { WebModule } from './web.module';
+import { WebModule } from './web.module.js';
 
 // example of how to use build variables to determine environment
 if (String('<%= BUILD_TYPE %>') === 'prod' || String('<%= TARGET_DESKTOP_BUILD %>') === 'true') {

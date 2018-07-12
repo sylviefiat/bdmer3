@@ -10,6 +10,7 @@ export namespace AuthAction {
   export interface IAuthActions {
     LOGIN: string;
     LOGOUT: string;
+    ANONYMOUS_USE: string;
     LOST_PASSWORD: string;
     LOGIN_SUCCESS: string;
     LOGIN_FAILURE: string;
@@ -23,6 +24,7 @@ export namespace AuthAction {
   export const ActionTypes: IAuthActions = {
     LOGIN : type('[Auth] Login'),
     LOGOUT : type('[Auth] Logout'),
+    ANONYMOUS_USE: type('[Auth] Anonymous use'),
     LOST_PASSWORD : type('[Auth] Lost password'),
     LOGIN_SUCCESS : type('[Auth] Login Success'),
     LOGIN_FAILURE : type('[Auth] Login Failure'),
@@ -59,6 +61,11 @@ export class Logout implements Action {
   readonly type = ActionTypes.LOGOUT;
   
   constructor(public payload: any) {}
+}
+
+export class AnonymousUse implements Action {
+  readonly type = ActionTypes.ANONYMOUS_USE;
+  payload: string = null;
 }
 
 export class Session implements Action {
@@ -100,5 +107,6 @@ export type Actions =
   | LostPasswordSuccess
   | LostPasswordFailure
   | LostPasswordRedirect
-  | Logout;
+  | Logout
+  | AnonymousUse;
 }

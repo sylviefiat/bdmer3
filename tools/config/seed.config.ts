@@ -495,31 +495,46 @@ export class SeedConfig {
       // Note that for multiple apps this configuration need to be updated
       // You will have to include entries for each individual application in
       // `src/client`.
-      [join(this.TMP_DIR, "*")]: `${this.TMP_DIR}/*`,
-      // [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
-      "@angular/platform-browser/animations": "node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js",
-      "@angular/animations/browser": "node_modules/@angular/animations/bundles/animations-browser.umd.js",
-      "@angular/common/http": "node_modules/@angular/common/bundles/common-http.umd.js",
-      "dist/tmp/node_modules/*": "dist/tmp/node_modules/*",
-      "node_modules/*": "node_modules/*",
-      "*": "node_modules/*"
+      [join(this.TMP_DIR, '*')]: `${this.TMP_DIR}/*`,
+      //[join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
+      //'@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
+      //'@angular/animations/browser': 'node_modules/@angular/animations/bundles/animations-browser.umd.js',
+      //'@angular/common/http': 'node_modules/@angular/common/bundles/common-http.umd.js',
+      'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
+      'node_modules/*': 'node_modules/*',
+      '*': 'node_modules/*',
+      'rxjs':'node_modules/rxjs',
+      'rxjs-compat':'node_modules/rxjs-compat',
+      '@turf':'node_modules/@turf',
+      'ngx-mapbox-gl':'node_modules/ngx-mapbox-gl',
+      '@ngrx':'node_modules/@ngrx',
+      'app/*': '/app/*',
     },
     packages: {
-      "@angular/animations": {
-        main: "bundles/animations.umd.js",
-        defaultExtension: "js"
+      '.': { defaultExtension: 'js' },
+      '@angular/animations': {
+        main: 'bundles/animations.umd.js',
+        defaultExtension: 'js'
       },
-      "@angular/common": {
-        main: "bundles/common.umd.js",
-        defaultExtension: "js"
+      '@angular/platform-browser/animations': {
+        main: '../bundles/platform-browser-animations.umd.js',
+        defaultExtension: 'js'
+      },
+      '@angular/common/http': {
+        main: '../bundles/common-http.umd.js',
+        defaultExtension: 'js'
+      },
+      '@angular/common': {
+        main: 'bundles/common.umd.js',
+        defaultExtension: 'js'
       },
       "@angular/compiler": {
         main: "bundles/compiler.umd.js",
         defaultExtension: "js"
       },
-      "@angular/core/testing": {
-        main: "bundles/core-testing.umd.js",
-        defaultExtension: "js"
+      '@angular/core/testing': {
+        main: '../bundles/core-testing.umd.js',
+        defaultExtension: 'js'
       },
       "@angular/core": {
         main: "bundles/core.umd.js",
@@ -549,6 +564,14 @@ export class SeedConfig {
         main: "bundles/service-worker.umd.js",
         defaultExtension: "js"
       } /*,
+      '@angular/animations/browser': {
+        main: '../bundles/animations-browser.umd.js',
+        defaultExtension: 'js'
+      },
+      '@angular/service-worker': {
+        main: 'bundles/service-worker.umd.js',
+        defaultExtension: 'js'
+      },
       'rxjs': {
         main: 'Rx.js',
         defaultExtension: 'js'

@@ -16,11 +16,13 @@ import { Survey } from '../../modules/datas/models/index';
             <mat-card-content>
               {{ survey.dateStart | date:localDate }}, {{ survey.dateEnd | date:localDate }}
             </mat-card-content>
-            <mat-card-content>
+         <!--
+           <mat-card-content>
               <p>{{'PARTICIPANTS' | translate}}: {{ survey.participants }}</p>
               <p>{{'SURFACE_STATION' | translate}}: {{ survey.surfaceStation }}</p>
-              <p>{{'DESCRIPTION' | translate}}: {{ survey.description }}</p>
+              <p *ngIf="description">{{'DESCRIPTION' | translate}}: {{ description }}</p>
            </mat-card-content>
+         -->
           </mat-card>
         </mat-checkbox>
     </div>

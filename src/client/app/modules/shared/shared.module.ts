@@ -1,37 +1,17 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA, FactoryProvider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule, MatCardModule, MatInputModule, MatListModule, MatSelectModule, MatOptionModule, MatRadioModule, MatChipsModule, MatDatepickerModule, 
-  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule } from '@angular/material';
+  MatNativeDateModule, MatCheckboxModule, MatExpansionModule,MatStepperModule,MatTabsModule, MatSidenavModule, MatFormFieldModule, MatPaginatorModule, MatTableModule } from '@angular/material';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 import { MomentModule } from 'angular2-moment';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 // modules
 import { SHARED_COMPONENTS } from './components/index';
-
-@NgModule({
-  exports: [
-    MatAutocompleteModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatListModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatTabsModule,
-  ]
-})
-export class SharedMaterialModule {}
 
 @NgModule({
   imports: [
@@ -52,6 +32,8 @@ export class SharedMaterialModule {}
     MatSelectModule,
     MatSidenavModule,
     MatTabsModule,
+    MatPaginatorModule,
+    MatTableModule
   ]
 })
 export class MaterialModule { }
@@ -79,10 +61,11 @@ const SHARED_MODULES: any[] = [
 
 @NgModule({
   imports: [
-    ...SHARED_MODULES, 
+    ...SHARED_MODULES,
+
   ],
   declarations: [
-    ...SHARED_COMPONENTS
+    ...SHARED_COMPONENTS,
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

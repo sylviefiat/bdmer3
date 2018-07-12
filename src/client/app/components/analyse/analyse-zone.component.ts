@@ -1,7 +1,8 @@
 import { Observable, Subscription, of } from 'rxjs';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { LngLatBounds,LngLat, MapMouseEvent } from 'mapbox-gl';
+import { LngLatBounds, LngLat, MapMouseEvent } from 'mapbox-gl';
+import { MapService } from '../../modules/core/services/index';
 import * as Turf from '@turf/turf';
 import { Zone } from '../../modules/datas/models/index';
 
@@ -108,12 +109,12 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     actionSubscription: Subscription;
     bounds$: Observable<LngLatBounds>;
     boundsPadding: number = 50;
-    zoomMaxMap=11;
+    zoomMaxMap = 11;
     layerZones$: Observable<Turf.FeatureCollection>;
-    display$:Observable<boolean>;
+    display$: Observable<boolean>;
 
-    constructor(private _fb: FormBuilder) {
-        this.display$=of(true);
+    constructor(private _fb: FormBuilder, private mapService: MapService) {
+        this.display$ = of(true);
     }
 
     ngOnInit() {
@@ -121,13 +122,15 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
             this.defaultZones = zones;
             this.initZones();
             let bounds = new LngLatBounds();
-            this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: false}))));
-            if(this.defaultZones.length >0){
+            this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => this.getFeature(zone,false))));
+            if (this.defaultZones.length > 0) {
                 let coord0 = this.defaultZones[0].geometry.coordinates[0][0];
-                let bounds = this.defaultZones.map(z => z.geometry.coordinates[0][0]).reduce((bnd, coord) => {                    
-                        return bnd.extend(<any>coord);    
-                }, new LngLatBounds(coord0, coord0));
-                this.bounds$=of(bounds);
+                let bounds = this.defaultZones
+                  .filter(z => z && z.geometry && z.geometry.coordinates)
+                  .map(z => z.geometry.coordinates[0][0]).reduce((bnd, coord) => {
+                    return bnd.extend(<any>coord);
+                  }, new LngLatBounds(coord0, coord0));
+                this.bounds$ = of(bounds);
             }
         });
 
@@ -153,8 +156,8 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
         }
     }
 
-    select(evt: MapMouseEvent){
-        this.display$=of(false);
+    select(evt: MapMouseEvent) {
+        this.display$ = of(false);
         let selected = (<any>evt).features[0].properties;
         this.changeMapSelection(selected.code);
         this.changeFormSelected(selected.code);
@@ -162,39 +165,39 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
     }
 
     changeValue(zoneCheck: any) {
-        this.display$=of(false);
+        this.display$ = of(false);
         this.changeMapSelection(zoneCheck.zone.properties.code);
         this.changeCheckedZones(zoneCheck.zone.properties.code);
     }
 
-    changeCheckedZones(code){
-        if (this.checkedZones.map(zone=>zone.properties.code).filter(c=>c===code).length>0) {
+    changeCheckedZones(code) {
+        if (this.checkedZones.map(zone => zone.properties.code).filter(c => c === code).length > 0) {
             this.checkedZones = [...this.checkedZones.filter(z => z.properties.code !== code)];
         } else {
-            this.checkedZones.push(this.defaultZones.filter(zone=>zone.properties.code===code)[0]);
+            this.checkedZones.push(this.defaultZones.filter(zone => zone.properties.code === code)[0]);
         }
         this.zoneEmitter.emit(this.checkedZones);
     }
 
-    changeFormSelected(code){
+    changeFormSelected(code) {
         const control = <FormArray>this.form.controls['zones'];
-        control.value.forEach((x,i) => {
-            if(i===this.defaultZones.map(zone=>zone.properties.code).indexOf(code)){
-                x.zone = x.zone ? 0:1;
+        control.value.forEach((x, i) => {
+            if (i === this.defaultZones.map(zone => zone.properties.code).indexOf(code)) {
+                x.zone = x.zone ? 0 : 1;
             }
             return x.zone;
         });
         control.setValue(control.value);
     }
 
-    changeMapSelection(code) {  
-        let checked = this.checkedZones.map(zone => zone.properties.code).filter(c => c===code).length>0?false:true;
-        this.layerZones$=of(Turf.featureCollection(this.defaultZones.map(zone => {
-            let checked = this.checkedZones.map(z => z.properties.code).filter(c => c===zone.properties.code).length>0?true:false;
-            checked = (zone.properties.code===code)?!checked:checked;
-            return Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: checked});
+    changeMapSelection(code) {
+        let checked = this.checkedZones.map(zone => zone.properties.code).filter(c => c === code).length > 0 ? false : true;
+        this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => {
+            let checked = this.checkedZones.map(z => z.properties.code).filter(c => c === zone.properties.code).length > 0 ? true : false;
+            checked = (zone.properties.code === code) ? !checked : checked;
+            return this.getFeature(zone,checked);
         })));
-        this.display$=of(true);
+        this.display$ = of(true);
     }
 
     checkAll(ev) {
@@ -202,8 +205,24 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
         control.value.forEach(x => x.zone = ev.checked)
         control.setValue(control.value);
         this.checkedZones = (ev.checked) ? this.defaultZones : [];
-        this.layerZones$=of(Turf.featureCollection(this.defaultZones.map(zone =>Turf.polygon(zone.geometry.coordinates,{code: zone.properties.code,checked: ev.checked}))));
+        this.layerZones$ = of(Turf.featureCollection(this.defaultZones.map(zone => this.getFeature(zone,ev.checked))));
         this.zoneEmitter.emit(this.checkedZones);
+    }
+
+    getFeature(feature,checked) {
+      return MapService.getFeature(feature,{ code: feature.properties.code, checked: checked });
+        /*switch (feature.geometry.type) {
+            case "GeometryCollection":
+                return Turf.multiPolygon(feature.geometry.geometries.map(geom => geom.coordinates), { code: feature.properties.code, checked: checked });
+            case "MultiPolygon":
+                return Turf.multiPolygon(feature.geometries.coordinates, { code: feature.properties.code, checked: checked });
+            case "Polygon":
+                return Turf.polygon(feature.geometry.coordinates, { code: feature.properties.code, checked: checked });
+            case "Point":
+                return Turf.point(feature.geometry.coordinates, { code: feature.properties.code, checked: checked })
+            default:
+                return null;
+        }*/
     }
 
 }

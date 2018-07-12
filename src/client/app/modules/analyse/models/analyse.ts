@@ -20,10 +20,13 @@ export interface Data {
 export interface Results {
     name: string;
     resultPerSurvey:ResultSurvey[];
+    chartsData: ChartsData;
 }
 
 export interface ResultSurvey{
     codeSurvey: string;
+    yearSurvey: number;
+    codePlatform: string;
     resultPerSpecies:ResultSpecies[];
 }
 
@@ -53,6 +56,8 @@ export interface ResultStation {
     biomassTotal: number;            // somme des biomasses
     biomassPerHA: number;            // biomasse par hectare
     densityPerHA: number;            // density = nb individus par hectare
+    SDBiomassTotal: number;          // ecart type / standard deviation biomasse
+    SDDensityTotal: number;          // ecart type / standard deviation densité
 }
 
 export interface ResultZone {
@@ -88,4 +93,22 @@ export interface Stock {
     quotaFresh: number;
     quotaSalt: number;
     quotaDry: number;
+}
+
+export interface ChartsData {
+    chartsZonesBiomass: ChartsZone[];
+    chartsZonesAbundancy: ChartsZone[];
+}
+
+export interface ChartsZone {
+    code: string;    
+    chartsStations: ChartsStation[];
+}
+
+export interface ChartsStation {
+    code: string;
+    species: Species[];
+    dataSpline: number[][];
+    dataError: number[][][];
+    dataPie: number[];
 }

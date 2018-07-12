@@ -1,34 +1,32 @@
-import { Injectable } from "@angular/core";
-import { defer, Observable, pipe, of } from "rxjs";
-import { Action, Store } from "@ngrx/store";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from "rxjs/operators";
-import { Router } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { defer, Observable, pipe, of } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
-import {
-  IAppState,
-  getSelectedCountry,
-  getSelectedPlatform,
-  getSelectedZone,
-  getAuthCountry,
-  getAllCountriesInApp,
-  getSpeciesInApp
-} from "../../ngrx/index";
+import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp,getSpeciesInApp, getServiceUrl } from '../../ngrx/index';
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
-import { PlatformAction } from "../actions/index";
-import { Platform, Zone, Station, Count, Survey, ZonePreference } from "../models/platform";
-import { Country } from "../../countries/models/country";
-import { Species } from "../../datas/models/species";
+import { PlatformAction } from '../actions/index';
+import { Platform, Zone, Station, Count, Survey, ZonePreference } from '../models/platform';
+import { Country } from '../../countries/models/country';
+import { Species } from '../../datas/models/species';
+import { AppInitAction } from "../../core/actions/index";
 
-import { config } from "../../../config";
+//import { config } from '../../../config';
+
 
 @Injectable()
 export class PlatformEffects {
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => {
-    return this.platformService.initDB("platforms", config.urldb).pipe(map(() => new PlatformAction.LoadAction()));
-  });
+  openDB$: Observable<any> = this.actions$
+    .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
+    .pipe(
+      map((action: AppInitAction.FinishAppInitAction) => action.payload),
+      withLatestFrom(this.store.select(getServiceUrl)),
+      map((value) => this.platformService.initDB('platforms',value[1]))
+    );
 
   @Effect()
   loadPlatforms$: Observable<Action> = this.actions$.ofType<PlatformAction.LoadAction>(PlatformAction.ActionTypes.LOAD).pipe(
@@ -165,8 +163,8 @@ export class PlatformEffects {
     .pipe(
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingSurveyAction) => action.payload),
-      mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
-      catchError(survey => of(new PlatformAction.AddPendingSurveySuccessAction(survey)))
+      mergeMap((survey: Survey) =>this.csv2jsonService.csv2('survey', survey)),
+      map((survey) => new PlatformAction.AddPendingSurveySuccessAction(survey)),
     );
 
   @Effect()
@@ -208,8 +206,8 @@ export class PlatformEffects {
     .pipe(
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingStationAction) => action.payload),
-      mergeMap((station: Station) => this.csv2jsonService.csv2("station", station)),
-      catchError((station: Station) => of(new PlatformAction.AddPendingStationSuccessAction(station)))
+      mergeMap((station: Station) =>this.csv2jsonService.csv2('station', station)),
+      map((station: Station) => new PlatformAction.AddPendingStationSuccessAction(station))
     );
 
   @Effect()
@@ -244,14 +242,16 @@ export class PlatformEffects {
   );
 
   @Effect()
-  checkCountCsv$: Observable<Action> = this.actions$.ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE).pipe(
-    tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
-    map((action: PlatformAction.CheckCountCsvFile) => action.payload),
-    mergeMap((count: any) => this.csv2jsonService.csv2("count", count)),
-    withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-    mergeMap((value: [any, Platform, Species[]]) => this.platformService.importCountVerification(value[0], value[1], value[2])),
-    map((error: string) => new PlatformAction.CheckCountAddErrorAction(error))
-  );
+  checkCountCsv$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE)
+    .pipe(
+      tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
+      map((action: PlatformAction.CheckCountCsvFile) => action.payload),
+      mergeMap((count: any) =>this.csv2jsonService.csv2("count", count)),
+      withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
+      mergeMap((value: any) => this.platformService.importCountVerification(value[0], value[1], value[2])),
+      map((error:string) => new PlatformAction.CheckCountAddErrorAction(error))
+    );
 
   @Effect()
   removePlatform$: Observable<Action> = this.actions$.ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM).pipe(

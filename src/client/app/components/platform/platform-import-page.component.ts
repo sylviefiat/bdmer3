@@ -10,15 +10,15 @@ import { Platform } from "../../modules/datas/models/index";
 import { Country } from "../../modules/countries/models/country";
 
 import {
-  IAppState,
-  getPlatformPageError,
-  getSelectedPlatform,
-  getAuthCountry,
-  getPlatformPageMsg,
-  getAllCountriesInApp,
-  getLangues,
-  getPlatformImpErrors,
-  getPlatformImpMsg
+    IAppState,
+    getPlatformPageError,
+    getSelectedPlatform,
+    getAuthCountry,
+    getPlatformPageMsg,
+    getAllCountriesInApp,
+    getLangues,
+    getPlatformImpErrors,
+    getPlatformImpMsg
 } from "../../modules/ngrx/index";
 import { PlatformAction } from "../../modules/datas/actions/index";
 import { CountriesAction } from "../../modules/countries/actions/index";
@@ -27,105 +27,105 @@ import { CountryListService } from "../../modules/countries/services/country-lis
 import { PlatformService } from "../../modules/datas/services/platform.service";
 
 @Component({
-  moduleId: module.id,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "bc-platform-import-page",
-  templateUrl: "./platform-import-page.component.html",
-  styleUrls: ["./platform-import-page.component.css"]
+    moduleId: module.id,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "bc-platform-import-page",
+    templateUrl: "./platform-import-page.component.html",
+    styleUrls: ["./platform-import-page.component.css"]
 })
 export class PlatformImportPageComponent implements OnInit, OnDestroy {
-  error$: Observable<string | null>;
-  isAdmin$: Observable<Country>;
-  msg$: Observable<string | null>;
-  importError$: Observable<string[]>;
-  userCountry$: Observable<Country>;
-  locale$: Observable<boolean>;
-  actionsSubscription: Subscription;
-  needHelp: boolean = false;
-  private csvFileAdmin: string;
-  private docs_repo: string;
-  countries$: Observable<Country[]>;
-  platformsErr = [];
-  error = true;
-  csvFile: any;
-  importCsvFile: any = null;
-  platformForm: FormGroup = new FormGroup({
-    platformInputFile: new FormControl()
-  });
-
-  constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
-    this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
-      this.docs_repo = "../../../assets/files/";
-      this.csvFile = "importPlatform-" + l + ".csv";
-      this.csvFileAdmin = "importPlatformAdmin-" + l + ".csv";
+    error$: Observable<string | null>;
+    isAdmin$: Observable<Country>;
+    msg$: Observable<string | null>;
+    importError$: Observable<string[]>;
+    userCountry$: Observable<Country>;
+    locale$: Observable<boolean>;
+    actionsSubscription: Subscription;
+    needHelp: boolean = false;
+    private csvFileAdmin: string;
+    private docs_repo: string;
+    countries$: Observable<Country[]>;
+    platformsErr = [];
+    error = true;
+    csvFile: any;
+    importCsvFile: any = null;
+    platformForm: FormGroup = new FormGroup({
+        platformInputFile: new FormControl()
     });
-  }
 
-  ngOnInit() {
-    this.countries$ = this.store.select(getAllCountriesInApp);
-    this.error$ = this.store.select(getPlatformPageError);
-    this.importError$ = this.store.select(getPlatformImpErrors);
-    this.msg$ = this.store.select(getPlatformImpMsg);
-    this.userCountry$ = this.store.select(getAuthCountry);
-  }
-
-  ngOnDestroy() {
-    this.actionsSubscription.unsubscribe();
-  }
-
-  handleUpload(csvFile: any): void {
-    let notFoundMsg = this.translate.instant("NO_CSV_FOUND");
-
-    let reader = new FileReader();
-
-    if (csvFile.target.files && csvFile.target.files.length > 0) {
-      this.importCsvFile = csvFile.target.files["0"];
-      this.check(this.importCsvFile);
-    } else {
-      this.store.dispatch(new PlatformAction.AddPlatformFailAction(notFoundMsg));
+    constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, route: ActivatedRoute) {
+        this.actionsSubscription = this.store.select(getLangues).subscribe((l: any) => {
+            this.docs_repo = "../../../assets/files/";
+            this.csvFile = "importPlatform-" + l + ".csv";
+            this.csvFileAdmin = "importPlatformAdmin-" + l + ".csv";
+        });
     }
-  }
 
-  check(csvFile) {
-    this.userCountry$.subscribe(userCountry => {
-      if (userCountry.code === "AA") {
-        this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
-      } else {
-        this.msg$ = of("Import can be performed");
-      }
-    });
-  }
+    ngOnInit() {
+        this.countries$ = this.store.select(getAllCountriesInApp);
+        this.error$ = this.store.select(getPlatformPageError);
+        this.importError$ = this.store.select(getPlatformImpErrors);
+        this.msg$ = this.store.select(getPlatformImpMsg);
+        this.userCountry$ = this.store.select(getAuthCountry);
+    }
 
-  changeNeedHelp() {
-    this.needHelp = !this.needHelp;
-  }
+    ngOnDestroy() {
+        this.actionsSubscription.unsubscribe();
+    }
 
-  send() {
-    this.store.dispatch(new PlatformAction.ImportPlatformAction(this.importCsvFile));
-  }
+    handleUpload(csvFile: any): void {
+        let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
 
-  clearInput() {
-    this.platformForm.get("platformInputFile").reset();
-  }
+        let reader = new FileReader();
 
-  getCsvPlatform() {
-    return this.csvFile;
-  }
+        if (csvFile.target.files && csvFile.target.files.length > 0) {
+            this.importCsvFile = csvFile.target.files["0"];
+            this.check(this.importCsvFile);
+        } else {
+            this.store.dispatch(new PlatformAction.AddPlatformFailAction(notFoundMsg));
+        }
+    }
 
-  getCsvPlatformsUrl() {
-    return this.docs_repo + this.csvFile;
-  }
+    check(csvFile) {
+        this.userCountry$.subscribe(userCountry => {
+            if (userCountry.code === "AA") {
+                this.store.dispatch(new PlatformAction.CheckPlatformCsvFile(csvFile));
+            } else {
+                this.msg$ = of("Import can be performed");
+            }
+        });
+    }
 
-  getCsvPlatformsUrlAdmin() {
-    return this.docs_repo + this.csvFileAdmin;
-  }
+    changeNeedHelp() {
+        this.needHelp = !this.needHelp;
+    }
 
-  return() {
-    this.routerext.navigate(["/platform/"], {
-      transition: {
-        duration: 1000,
-        name: "slideTop"
-      }
-    });
-  }
+    send() {
+        this.store.dispatch(new PlatformAction.ImportPlatformAction(this.importCsvFile));
+    }
+
+    clearInput() {
+        this.platformForm.get("platformInputFile").reset();
+    }
+
+    getCsvPlatform() {
+        return this.csvFile;
+    }
+
+    getCsvPlatformsUrl() {
+        return this.docs_repo + this.csvFile;
+    }
+
+    getCsvPlatformsUrlAdmin() {
+        return this.docs_repo + this.csvFileAdmin;
+    }
+
+    return() {
+        this.routerext.navigate(["/platform/"], {
+            transition: {
+                duration: 1000,
+                name: "slideTop"
+            }
+        });
+    }
 }

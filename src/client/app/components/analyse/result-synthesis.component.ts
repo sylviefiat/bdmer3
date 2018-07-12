@@ -1,7 +1,10 @@
 
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import * as Turf from '@turf/turf';
+import { MatCheckboxChange } from '@angular/material';
 import { IAppState } from '../../modules/ngrx/index';
+import { MapService } from '../../modules/core/services/index';
 import { Zone, Survey, Species } from '../../modules/datas/models/index';
 import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index';
 
@@ -17,7 +20,10 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [analyseData]="analyseData"
           [typeShow]="typeShow$ | async" 
           [spShow]="spShow$ | async" 
-          [surveyShow]="surveyShow$ | async">
+          [surveyShow]="surveyShow$ | async"
+          [showStations]="showStations$ | async"
+          [showZones]="showZones$ | async"
+          (zoneEmitter)="dislayGraphZone($event)">
         </bc-result-map>
 
         <bc-result-filter 
@@ -26,52 +32,106 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [typeShow]="typeShow$ | async" 
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
+          [showStations]="showStations$ | async"
+          [showZones]="showZones$ | async"
           (typeShowEmitter)="selectTypeShow($event)"
           (spShowEmitter)="selectSpShow($event)"
-          (surveyShowEmitter)="selectSurveyShow($event)">
+          (surveyShowEmitter)="selectSurveyShow($event)"
+          (showStationsEmitter)="stationsLayerShow($event)"
+          (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
-
-        <div class="groupCharts">
-          <h3>{{surveyShow$ | async}}</h3>
-          <div class="chart">
-            <bc-result-chart 
-              [resultSurvey]="currentresultSurvey$ | async"
-              [chartType]="'CandlestickChart'" 
-              [type]="typeShow$ | async">
-            </bc-result-chart>
-            <bc-result-chart 
-              [resultSurvey]="currentresultSurvey$ | async" 
-              [chartType]="'PieChart'" 
-              [type]="typeShow$ | async">
-            </bc-result-chart>
-          </div>
-        </div>
+      </div>
+      <div>
+        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneB of results.chartsData.chartsZonesBiomass; let iB=index"  label="{{(chartsZoneB)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneB.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationB of chartsZoneB.chartsStations"
+                  [chartsData]="chartsStationB"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='A'" [class.hide]="(typeShow$ | async)!=='A'" class="results"  [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let chartsZoneA of results.chartsData.chartsZonesAbundancy; let iA=index"  label="{{(chartsZoneA)?.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <div class="noData" *ngIf="chartsZoneA.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
+                <bc-result-boxplot class="chart" *ngFor="let chartsStationA of chartsZoneA.chartsStations"
+                  [chartsData]="chartsStationA"
+                  [years]="analyseData.usedYears"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
       </div>
   `,
     styles: [
         `
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content:center;
+      }
       h2 {
         margin-left: 25px;
       } 
-      .results, .chart {
+      .results {
         display:flex;
         flex-direction:row;
+        width: 90vw;
+        justify-content:center;
+      }
+      .resultZone {
+        max-width: 100vw;
       }
       .groupCharts {
         display:flex;
-        flex-direction:column;
-        flex:1;
+        flex-direction:row;
+        flex-wrap: wrap;
+        padding-top:0.5em;
+        padding-left:0.5em;
+        padding-right:0.5em;
+        width: 90vw;
       }
+      .chart {
+        display:flex;
+        flex: 50%;
+        flex-direction:column;
+        flex-wrap: wrap;
+        padding-right:0.3em;
+      }
+    .show {
+      display: block;
+    }
+    .hide {
+      display: none;
+    }
+    .noData {
+      min-height:300px;
+      background-color: white;
+    }
   `]
 })
 export class ResultSynthesisComponent implements OnInit {
     @Input() results: Results;
     @Input() analyseData: Data;
     @Input() locale: string;
-    @Input() typeShow$ : Observable<string>;
-    @Input() spShow$: Observable<string>;
-    @Input() surveyShow$: Observable<string>;
+    typeShow$ : Observable<string>;
+    spShow$: Observable<string>;
+    surveyShow$: Observable<string>;
+    showStations$: Observable<boolean>;
+    showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
+    selectedZone: number;
 
     constructor() {
 
@@ -82,6 +142,9 @@ export class ResultSynthesisComponent implements OnInit {
       this.spShow$=of(this.results.resultPerSurvey[0].resultPerSpecies[0].codeSpecies);
       this.surveyShow$=of(this.results.resultPerSurvey[0].codeSurvey);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
+      this.showStations$=of(true);
+      this.showZones$=of(false);
+      this.selectedZone = 0;
     }
 
     get localDate() {
@@ -94,6 +157,16 @@ export class ResultSynthesisComponent implements OnInit {
         }
     }
 
+    getStationsZone(zone){
+      let stations = [];
+      for (let s of this.analyseData.usedStations) {
+        if (Turf.booleanPointInPolygon(s.geometry.coordinates, MapService.getPolygon(zone,{name:zone.properties.name}))) {
+            stations.push(s);
+        }
+      }
+      return stations;
+    }
+
     selectTypeShow(ts: string){
       this.typeShow$ = of(ts);
     }
@@ -104,10 +177,22 @@ export class ResultSynthesisComponent implements OnInit {
 
     selectSurveyShow(sus: string){
       this.surveyShow$ = of(sus);
-      console.log(sus);
-      console.log(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
     }
 
+    stationsLayerShow(show: MatCheckboxChange){
+      this.showStations$ = of(show.checked);      
+    }
+
+    zonesLayerShow(show: MatCheckboxChange){
+      this.showZones$ = of(show.checked);      
+    }
+
+    dislayGraphZone(codeZone: string){
+      let selected = this.results.chartsData.chartsZonesBiomass.map(czb => czb.code).indexOf(codeZone);
+      if(selected){
+        this.selectedZone = selected;
+      }
+    }
 
 }

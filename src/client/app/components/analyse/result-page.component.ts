@@ -1,12 +1,11 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/pluck';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { IAppState, getAnalyseData, getAnalyseResult, getLangues } from '../../modules/ngrx/index';
+import { IAppState, getAnalyseData, getAnalyseResult, getLangues, isAnalysing, isAnalysed } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, Results, Data } from '../../modules/analyse/models/index';
 import { IAnalyseState } from '../../modules/analyse/states/index';
@@ -23,8 +22,9 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
     <mat-card>
       <mat-card-title>{{'RESULT_TITLE' | translate}}</mat-card-title>
     </mat-card>
-    <bc-result-rappel [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
-    <bc-result-synthesis [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
+    <div *ngIf="(analysing$ | async)||loading">Analyse en cours...</div>
+    <bc-result-rappel *ngIf="analysed$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+    <bc-result-synthesis *ngIf="analysed$ | async" [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
   `,
   styles: [
     `
@@ -38,19 +38,35 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   }
     `]
 })
-export class ResultPageComponent implements OnInit {
+export class ResultPageComponent implements OnInit, AfterViewInit {
   analyseData$: Observable<Data>;
   results$: Observable<Results>;
   locale$: Observable<string>;
+  analysing$: Observable<boolean>;
+  analysed$: Observable<boolean>;
+  loading: boolean;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
 
   }
 
   ngOnInit() {
+    this.loading=true;
+    this.analysing$ = this.store.select(isAnalysing);
+    this.analysed$ = this.store.select(isAnalysed);
     this.analyseData$ = this.store.select(getAnalyseData);
     this.results$ = this.store.select(getAnalyseResult);
     this.locale$ = this.store.select(getLangues);
+  }
+
+  ngAfterViewInit(){
+    this.loading=false;
+    this.results$.map(r => {
+      console.log(r);
+      if(!r){ 
+        this.routerext.navigate(['analyse']);
+      }
+    });
   }
 
 

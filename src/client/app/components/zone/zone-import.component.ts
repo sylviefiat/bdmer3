@@ -14,6 +14,7 @@ import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMs
 import { PlatformAction } from "../../modules/datas/actions/index";
 import { CountriesAction } from "../../modules/countries/actions/index";
 
+
 @Component({
   moduleId: module.id,
   changeDetection: ChangeDetectionStrategy.OnPush,

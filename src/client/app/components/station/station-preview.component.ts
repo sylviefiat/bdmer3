@@ -59,8 +59,9 @@ import { Platform, Zone, Station } from "./../../modules/datas/models/platform";
 export class StationPreviewComponent implements OnInit {
   @Input() station: Station;
   @Input() platform: Platform;
+  
 
-  ngOnInit() {}
+  ngOnInit(){}
 
   get id() {
     return this.station.properties.code;

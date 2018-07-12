@@ -56,9 +56,7 @@ import { IAppState } from "../../modules/ngrx/index";
               'fill-color': '#AFEEEE',
               'fill-opacity': 0.3,
               'fill-outline-color': '#000'
-              }"
-            (mouseEnter)="cursorStyle = 'pointer'"
-            (mouseLeave)="cursorStyle = ''">
+              }">            
           </mgl-layer>
           <mgl-layer
             id="zonestext"
@@ -71,6 +69,7 @@ import { IAppState } from "../../modules/ngrx/index";
                 'DIN Offc Pro Italic',
                 'Arial Unicode MS Regular'
               ],
+              'text-allow-overlap': true,
               'symbol-placement': 'point',
               'symbol-avoid-edges': true,
               'text-max-angle': 30,
@@ -94,8 +93,10 @@ import { IAppState } from "../../modules/ngrx/index";
             [layout]="{
               'icon-image': 'triangle-stroked-15',
               'icon-size': 1.5,
-              'icon-rotate': 180
-              }"
+              'icon-rotate': 180,
+              'icon-allow-overlap': true,
+              'icon-ignore-placement': true
+              }"            
             (click)="showPopupStation($event)"
             (mouseEnter)="cursorStyle = 'pointer'"
             (mouseLeave)="cursorStyle = ''">
@@ -185,13 +186,15 @@ export class MapComponent implements OnInit, OnChanges {
   @Input() isAdmin: boolean;
 
   bounds$: Observable<LngLatBounds>;
-  boundsPadding: number = 100;
+  boundsPadding: number = 20;
 
   zoomMaxMap: number = 10;
   zoom = 9;
   zoomMinCountries: number = 4;
-  zoomMinStations: number = 3;
+  zoomMinStations: number = 11;
   zoomMaxStations: number = 5;
+  zoomMinZones: number = 4;
+  zoomMaxZones: number = 5;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
 
@@ -220,11 +223,9 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-
-    if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
-    if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries']; 
+    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];   
+    if(this.zoom>this.zoomMinStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='stations'),'zones','stations'];
   }
 
   changeView(view: string) {
@@ -279,7 +280,9 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomToZonesOrStation(featureCollection): LngLatBounds {
     var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates[0]));
+    var fc: Turf.FeatureCollection = featureCollection.features
+      .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
+      .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
     return this.checkBounds(bnd);
   }
 
@@ -296,33 +299,60 @@ export class MapComponent implements OnInit, OnChanges {
   setZones(platforms: Platform[]) {
     this.zones = [];
     for (let p of platforms) {
-      this.zones = [...this.zones, ...p.zones];
+      if(p.zones && p.zones.length>0){
+        this.zones = [...this.zones, ...p.zones];
+      }
     }
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+    this.layerZones$ = of(
+      Turf.featureCollection(
+        this.zones
+          .filter(zone=> zone!==null)
+          .map(zone => this.getFeature(zone))));
   }
 
   setStations(platforms: Platform[]) {
     this.stations = [];
     for (let p of platforms) {
-      this.stations = [...this.stations, ...p.stations];
+      if(p.stations && p.stations.length>0){
+        this.stations = [...this.stations, ...p.stations];
+      }
     }
     this.layerStations$ = of(
-      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
-    );
+      Turf.featureCollection(
+        this.stations
+          .map(station => this.getFeature(station))));
   }
 
-  checkBounds(bounds: LngLatBounds) {
-    if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
-      let tmp = bounds.getSouthWest().lng;
-      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
-      bounds.setNorthEast(new LngLat(tmp, bounds.getNorthEast().lat));
-    }
-    if (bounds.getNorthEast().lat < bounds.getSouthWest().lat) {
-      let tmp = bounds.getSouthWest().lat;
-      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng, bounds.getNorthEast().lat));
-      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng, tmp));
+  checkBounds(bounds: LngLatBounds){
+    if(bounds && bounds.getNorthEast() && bounds.getSouthWest()){
+      if(bounds.getNorthEast().lng<bounds.getSouthWest().lng){
+        let tmp = bounds.getSouthWest().lng;
+        bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng,bounds.getSouthWest().lat));
+        bounds.setNorthEast(new LngLat(tmp,bounds.getNorthEast().lat));
+      }
+      if(bounds.getNorthEast().lat<bounds.getSouthWest().lat){
+        let tmp = bounds.getSouthWest().lat;
+        bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng,bounds.getNorthEast().lat));
+        bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng,tmp));
+      }
     }
     return bounds;
+  }
+
+  getFeature(feature){
+    return MapService.getFeature(feature,{ code: feature.properties.code});
+    /*switch (feature.geometry.type) {
+              case "GeometryCollection":
+                return Turf.multiPolygon(feature.geometry.geometries.map(geom=>geom.coordinates),{code: feature.properties.code});
+              case "MultiPolygon":
+                return Turf.multiPolygon(feature.geometries.coordinates,{code: feature.properties.code});
+              case "Polygon":
+                return Turf.polygon(feature.geometry.coordinates,{code: feature.properties.code});
+              case "Point":
+                return Turf.point(feature.geometry.coordinates,{code: feature.properties.code})
+              default:
+                return null;
+            }*/
   }
 
   showPopupStation(evt: MapMouseEvent) {

@@ -18,7 +18,7 @@ export class GeojsonService {
 
       reader.onload = function(event) {
         const parser = new DOMParser();
-        const x = parser.parseFromString(reader.result.toString(), "application/xml");
+        const x = parser.parseFromString((<string>reader.result), "application/xml");
         const geojson = togeojson.kml(x).features;
         for (let i in geojson) {
           delete geojson[i].properties["styleHash"];
@@ -44,3 +44,4 @@ export class GeojsonService {
     });
   }
 }
+

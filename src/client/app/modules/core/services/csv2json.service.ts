@@ -12,6 +12,7 @@ import { Platform, Zone, Station, Survey, ZonePreference, Count, Mesure } from "
 import { PlatformAction } from "../../datas/actions/index";
 import { IAppState } from "../../ngrx/index";
 
+
 @Injectable()
 export class Csv2JsonService {
   static COMMA = ",";
@@ -28,94 +29,100 @@ export class Csv2JsonService {
     this.csvErrorMsg = this.translate.instant("CSV_FIELD_ERROR");
   }
 
-  extractSpeciesData(arrayData): Species[] {
-    // Input csv data to the function
-    let allTextLines = arrayData.data;
-    let headers = allTextLines[0];
-    let lines: Species[] = [];
-    // don't iclude header start from 1
-    for (let i = 1; i < allTextLines.length; i++) {
-      // split content based on comma
-      let data = allTextLines[i];
-      if (data.length == headers.length) {
-        let sp = {} as Species;
-        let header,
-          name = {} as NameI18N,
-          value,
-          parts,
-          legaldim = {} as LegalDimensions;
-        for (let j = 0; j < headers.length; j++) {
-          switch (headers[j]) {
-            case "code":
-            case "distribution":
-            case "scientific_name":
-            case "habitat_preference":
-              header = headers[j].replace(/_([a-z])/g, function(g) {
-                return g[1].toUpperCase();
-              });
-              sp[header] = data[j];
-              break;
-            case "sp_name":
-            case "sp_nom":
-              name = { lang: headers[j].indexOf("name") != -1 ? "EN" : "FR", name: data[j] };
-              if (sp.names == null) sp.names = [];
-              sp.names.push(name);
-              break;
-            case "LLW_coef_a":
-            case "LLW_coef_b":
-            case "LW_coef_a":
-            case "LW_coef_b":
-              parts = headers[j].split("_");
-              header = parts[0];
-              value = parts[1] + parts[2].charAt(0).toUpperCase() + parts[2].slice(1);
-              if (sp[header] == null) sp[header] = {} as CoefsAB;
-              sp[header][value] = data[j];
-              break;
-            case "conversion_salt":
-            case "conversion_BDM":
-              parts = headers[j].split("_");
-              header = parts[0] + "s";
-              value = parts[1];
-              if (sp[header] == null) sp[header] = {} as Conversion;
-              sp[header][value] = data[j];
-              break;
-            case "long_max":
-            case "larg_max":
-              header = headers[j].replace(/_([a-z])/g, function(g) {
-                return g[1].toUpperCase();
-              });
-              if (sp.biologicDimensions == null) sp.biologicDimensions = {} as Dimensions;
-              sp.biologicDimensions[header] = data[j];
-              break;
-            case "L_min_NC":
-            case "L_min_VT":
-            case "L_min_PG":
-            case "L_min_SB":
-            case "L_min_FJ":
-            case "L_min_TO":
-            case "L_min_SO":
-              header = headers[j].substring(headers[j].lastIndexOf("_") + 1);
-              legaldim = { codeCountry: header, longMin: data[j], longMax: data[headers.indexOf("L_max_" + header)] };
-              if (sp.legalDimensions == null) sp.legalDimensions = [];
-              sp.legalDimensions.push(legaldim);
-              break;
-            case "L_max_NC":
-            case "L_max_VT":
-            case "L_max_PG":
-            case "L_max_SB":
-            case "L_max_FJ":
-            case "L_max_TO":
-            case "L_max_SO":
-              break;
-            default:
-              throw new Error(this.csvErrorMsg);
-          }
+  private extractSpeciesData(arrayData): Species[] | any[] { // Input csv data to the function
+        let allTextLines = arrayData.data;
+        let headers = allTextLines[0];
+        let lines: Species[] = [];
+        let errorTab = [];
+        // don't iclude header start from 1
+        for (let i = 1; i < allTextLines.length; i++) {
+            // split content based on comma
+            let data = allTextLines[i];
+            if (data.length == headers.length) {
+                let sp = {} as Species;
+                let header, name = {} as NameI18N, value, parts, legaldim = {} as LegalDimensions;
+                for (let j = 0; j < headers.length; j++) {
+                    switch (headers[j]) {
+                        case "code":
+                        case "distribution":
+                        case "scientific_name":
+                        case "habitat_preference":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
+                            sp[header] = data[j];
+                            break;
+                        case "sp_name":
+                        case "sp_nom":
+                            name = { lang: (headers[j].indexOf('name') != -1) ? "EN" : "FR", name: data[j] };
+                            if (sp.names == null) sp.names = [];
+                            sp.names.push(name);
+                            break;
+                        case "LLW_coef_a":
+                        case "LLW_coef_b":
+                        case "LW_coef_a":
+                        case "LW_coef_b":
+                            parts = headers[j].split('_');
+                            header = parts[0];
+                            value = parts[1] + parts[2].charAt(0).toUpperCase() + parts[2].slice(1);
+                            if (sp[header] == null) sp[header] = {} as CoefsAB;
+                            sp[header][value] = data[j];
+                            break;
+                        case "conversion_salt":
+                        case "conversion_BDM":
+                            parts = headers[j].split('_');
+                            header = parts[0] + 's';
+                            value = parts[1];
+                            if (sp[header] == null) sp[header] = {} as Conversion;
+                            sp[header][value] = data[j];
+                            break;
+                        case "long_max":
+                        case "larg_max":
+                            header = headers[j].replace(/_([a-z])/g, function(g) { return g[1].toUpperCase(); });
+                            if (sp.biologicDimensions == null) sp.biologicDimensions = {} as Dimensions;
+                            sp.biologicDimensions[header] = data[j];
+                            break;
+                        case "L_min_NC":
+                        case "L_min_VU":
+                        case "L_min_PG":
+                        case "L_min_SB":
+                        case "L_min_FJ":
+                        case "L_min_TO":
+                        case "L_min_SO":
+                            header = headers[j].substring(headers[j].lastIndexOf('_') + 1);
+                            legaldim = { codeCountry: header, longMin: data[j], longMax: data[headers.indexOf('L_max_' + header)] };
+                            if (sp.legalDimensions == null) sp.legalDimensions = [];
+                            sp.legalDimensions.push(legaldim);
+                            break;
+                        case "L_max_NC":
+                        case "L_max_VU":
+                        case "L_max_PG":
+                        case "L_max_SB":
+                        case "L_max_FJ":
+                        case "L_max_TO":
+                        case "L_max_SO":
+                            break;
+                        default:
+                            if(!errorTab.includes(headers[j])){
+                                errorTab.push(headers[j]);
+                            }  
+                            break;
+                    }
+                }
+                lines.push(sp);
+            }
         }
-        lines.push(sp);
+        if (errorTab.length !== 0) {
+      let string = "";
+      for (let i in errorTab) {
+        if (parseInt(i) === errorTab.length - 1) {
+          string += errorTab[i] + ".";
+        } else {
+          string += errorTab[i] + ", ";
+        }
       }
+      return [{ error: string }];
     }
-    //console.log(lines); //The data in the form of 2 dimensional array.
-    return lines;
+        //console.log(lines); //The data in the form of 2 dimensional array.
+        return lines;
   }
 
   extractPlatformData(arrayData): Platform[] | any[] {
@@ -639,47 +646,48 @@ export class Csv2JsonService {
         /*delimiter: function(csvFile){
                         return ",";
                     },*/
-        skipEmptyLines: true,
-        download: true,
-        complete: function(results) {
-          if (!results.data[0].indexOf("code_species")) throw new Error('Wrong CSV File Missing mandatory "code" column');
-          observable.next(results);
-          observable.complete();
-        }
-      });
-    }).pipe(
-      mergeMap(data => {
-        let res;
-        switch (type) {
-          case "species":
-            res = this.extractSpeciesData(data);
-            break;
-          case "platform":
-            res = this.extractPlatformData(data);
-            break;
-          case "zone":
-            res = this.extractZoneData(data);
-            break;
-          case "survey":
-            console.log(data);
-            res = this.extractSurveyData(data);
-            break;
-          case "zonePref":
-            console.log(data);
-            res = this.extractZonePrefData(data, species);
-            break;
-          case "station":
-            res = this.extractStationData(data);
-            break;
-          case "count":
-            res = this.extractCountData(data);
-            break;
-          default:
-            // code...
-            break;
-        }
-        return res;
-      })
-    );
-  }
-}
+                    skipEmptyLines: true,
+                    download: true,
+                    complete: function(results) {
+                        if (!results.data[0].indexOf('code_species'))
+                            throw new Error('Wrong CSV File Missing mandatory "code" column');
+                        observable.next(results);
+                        observable.complete();
+                    }
+                });
+            })
+            .pipe(
+                mergeMap(data => {
+                    //console.log(data);
+                    let res;
+                    switch (type) {
+                        case "species":
+                            res = this.extractSpeciesData(data);
+                            break;
+                        case "platform":
+                            res = this.extractPlatformData(data);
+                            break;
+                        case "zone":
+                            res = this.extractZoneData(data);
+                            break;
+                        case "survey":
+                            res = this.extractSurveyData(data);
+                            break;
+                        case "zonePref":
+                            res = this.extractZonePrefData(data, species);
+                            break;
+                        case "station":
+                            res = this.extractStationData(data);
+                            break;
+                        case "count":
+                            res = this.extractCountData(data);
+                            break;
+                        default:
+                            // code...
+                            break;
+                    }
+                    //console.log(res);
+                    return res;
+                }));
+    }
+

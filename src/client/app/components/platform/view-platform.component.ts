@@ -140,7 +140,6 @@ export class ViewPlatformComponent implements OnInit, OnDestroy {
       case "globalImport":
       case "surveyImport":
       case "stationImport":
-      case "stationImport":
       case "zonePrefImport":
       case "countImport":
         this.action.emit(type + "/" + this.platform._id);

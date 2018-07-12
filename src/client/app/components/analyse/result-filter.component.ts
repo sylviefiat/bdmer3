@@ -11,6 +11,10 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
   <div class="container">
     <div class="legend">
         <h3>{{'FILTER' | translate}}</h3>
+        <h4>{{'LAYERS' | translate}}</h4>
+        <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
+        <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
+        <p class="note">* {{'CLICK_ZONE' | translate}}</p>
         <h4>{{'TYPE' | translate}}</h4>
         <mat-radio-group (change)="changeDisplay($event)">
           <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
@@ -42,6 +46,11 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
       display: flex;
       flex-direction: column;
     }
+    .note {
+      color: grey;
+      font-style: italic; 
+      font-size: smaller;
+    }
   `]
 })
 export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
@@ -50,9 +59,13 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Input() typeShow : string;
   @Input() spShow: string;
   @Input() surveyShow: string;
+  @Input() showStations: boolean;
+  @Input() showZones: boolean;
   @Output() typeShowEmitter= new EventEmitter<string>();
   @Output() spShowEmitter = new EventEmitter<string>();
   @Output() surveyShowEmitter = new EventEmitter<string>();
+  @Output() showStationsEmitter = new EventEmitter<string>();
+  @Output() showZonesEmitter = new EventEmitter<string>();
 
   constructor() {
 

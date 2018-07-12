@@ -45,7 +45,8 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     @Input() locale: string;
     defaultSpecies: Species[] = [];
     checkedSpecies: Species[] = [];
-    checkedSpeciesDims: DimensionsAnalyse[] = [];
+    allSpeciesDims: DimensionsAnalyse[] = [];
+    defaultDimension: DimensionsAnalyse = { codeSp:null,longMin:"0",largMin:"0" };
     @Output() speciesEmitter = new EventEmitter<Species[]>();
     @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
     @Input('group') public form: FormGroup;
@@ -58,6 +59,9 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.actionsSubscription = this.species$.subscribe(species => {
             this.defaultSpecies = species;
+            for(let s of species){
+                this.allSpeciesDims.push( { codeSp:s.code,longMin:"0",largMin:"0" });
+            }
             this.initSpecies();
         });
         
@@ -74,7 +78,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     }
 
     newDimensions(s: Species) {
-        let dims = this.checkedSpeciesDims.filter(dims => dims.codeSp === s.code).length > 0 && this.checkedSpeciesDims.filter(dims => dims.codeSp === s.code)[0];
+        let dims = this.allSpeciesDims.filter(dims => dims.codeSp === s.code).length > 0 && this.allSpeciesDims.filter(dims => dims.codeSp === s.code)[0];
         return this._fb.group({
             longMin: new FormControl(dims ? dims.longMin : "0"),
             largMin: new FormControl(dims ? dims.largMin : "0")
@@ -96,15 +100,14 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
 
     changeValue(spCheck: any) {
         this.checkedSpecies = [...this.checkedSpecies.filter(s => s.code !== spCheck.species.code)];
-        this.checkedSpeciesDims = [...this.checkedSpeciesDims.filter(s => s.codeSp !== spCheck.species.code)];
+        this.allSpeciesDims = [...this.allSpeciesDims.filter(s => s.codeSp !== spCheck.species.code)];
 
         if (spCheck.checked) {
             this.checkedSpecies.push(spCheck.species);
-            this.checkedSpeciesDims.push(spCheck.dims);
+            this.allSpeciesDims.push(spCheck.dims);
         }
-
         this.speciesEmitter.emit(this.checkedSpecies);
-        this.dimensionsEmitter.emit(this.checkedSpeciesDims);
+        this.dimensionsEmitter.emit(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
 
     }
 
@@ -114,6 +117,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
         control.setValue(control.value);
         this.checkedSpecies = (ev.checked) ? this.defaultSpecies : [];
         this.speciesEmitter.emit(this.checkedSpecies);
+        this.dimensionsEmitter.emit(this.allSpeciesDims.filter(dims => this.checkedSpecies.map(sp=>sp.code).indexOf(dims.codeSp)>-1));
     }
 
 }

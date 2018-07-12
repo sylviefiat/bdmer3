@@ -6,7 +6,7 @@ services:
   #curl -X PUT http://admin:admin@127.0.0.1:5984/_replicator
   #curl -X PUT http://admin:admin@127.0.0.1:5984/_global_changes
   bdmerdb:
-    hostname: dbmerdb
+    hostname: dbmerdb2
     image: couchdb:latest
     volumes:
       - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
