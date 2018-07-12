@@ -1,23 +1,9 @@
 version: '2'
 
 services:
-  # When you run 2.0 as a single node, it doesn’t create system databases on startup. You have to do this manually:
-  #curl -X PUT http://admin:admin@127.0.0.1:5984/_users
-  #curl -X PUT http://admin:admin@127.0.0.1:5984/_replicator
-  #curl -X PUT http://admin:admin@127.0.0.1:5984/_global_changes
-  bdmer3db:
-    hostname: bdmer3db 
-    image: couchdb:latest
-    volumes:
-      - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
-      - ./.docker/couchdb_data/config/local.d:/usr/local/etc/couchdb/local.d
-    ports:
-      - "5984:5984"
-    networks:
-      - bdmer3-network
 
-  bdmer3build:
-    hostname: dbmer3build
+  bdmer3-prod:
+    hostname: dbmer-prod
     build:
       context: .
       dockerfile: ./.docker/angular-seed.production.dockerfile
@@ -29,9 +15,9 @@ services:
     volumes:
       - ./dist:/home/app/BDMER3/dist
 
-  bdmer3-nginx:
+  bdmer-nginx:
     command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/angular-seed.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-    container_name: bdmer3-nginx
+    container_name: bdmer-nginx-prod
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
