@@ -30,7 +30,7 @@ export class AnalyseEffects {
     .pipe(
       withLatestFrom(this.store.select(getSelectedCountry)),
       filter(value => value[1]),
-      map(value => new CountryAction.SelectAction(value[1].code))
+      map(value => new AnalyseAction.SelectCountry(value[1]))
     );
 
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
