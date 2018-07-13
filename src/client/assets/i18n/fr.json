@@ -433,5 +433,9 @@
   "ZONE_PREF_REMOVED_SUCCESS": "Zone de préférence supprimée avec succès",
   "COUNT_REMOVED_SUCCESS": "Comptage supprimé avec succès",
   "ANALYSE_SUCCESS": "Analyse réussit",
-  "ANALYSE_FAILED": "Analyse échoué"
+  "ANALYSE_FAILED": "Analyse échoué",
+  "USER_SAVED_SUCCESS": "Utilisateur sauvegardé avec succès",
+  "USER_REMOVED_SUCCESS": "Utilisateur supprimé avec succès",
+  "SPECIES_REGISTERED_SUCCESS": "Espèce enregistré avec succès",
+  "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès"
 }
