@@ -302,6 +302,7 @@ $ docker-compose -f docker-compose.production.yml build bdmer3build
 $ docker-compose -f docker-compose.production.yml up bdmer3build   # Wait until this container has finished building, as the nginx container is dependent on the production build artifacts
 # either start nginx in detached mode or build image to use in bdmer_deploy
 $ docker-compose -f docker-compose.production.yml up -d bdmer3-nginx  # Start the nginx container in detached mode
+# before executing this command rename .dockerignore to whatever not .dockerignore otherwise copy path won't be found
 $ docker-compose -f docker-compose.production.yml build bdmer3-prod # Build bdmer3 image and upload to docker hub to use in bdmer_deploy
 ```
 
