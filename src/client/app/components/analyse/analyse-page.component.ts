@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
   getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseStations, 
-  getSelectedAnalyseSpecies,getAnalyseCountry, getAnalyseData } from '../../modules/ngrx/index';
+  getSelectedAnalyseSpecies,getAnalyseCountry, getAnalyseData, getSelectedCountry } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { Country } from '../../modules/countries/models/country';
@@ -70,7 +70,7 @@ export class AnalysePageComponent implements OnInit {
     this.isAdmin$ = this.store.select(getisAdmin);
     this.locale$ = this.store.select(getLangues);
     this.countries$ = this.store.select(getCountriesInApp);
-    this.currentCountry$ = this.store.select(getAnalyseCountry);
+    this.currentCountry$ = this.store.select(getSelectedCountry);
     this.platforms$ = this.store.select(getSelectedCountryPlatforms);
     this.years$ = this.store.select(getSelectedAnalyseYears);
     this.surveys$ = this.store.select(getSelectedAnalyseSurveys);
@@ -83,6 +83,7 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new CountriesAction.LoadAction());
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.store.dispatch(new PlatformAction.LoadAction());
+    this.store.dispatch(new AnalyseAction.SetDefaultCountry());
   }
 
   selectCountry(country: Country) {

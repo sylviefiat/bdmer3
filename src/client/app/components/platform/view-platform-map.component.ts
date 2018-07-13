@@ -33,7 +33,7 @@ import { IAppState } from "../../modules/ngrx/index";
   (zoomEnd)="zoomChange($event)"
   (data)="styleChange($event)">
     <ng-container>
-      <mgl-marker
+      <mgl-marker *ngIf="markerCountry"
         [lngLat]="markerCountry.lngLat">
         <div
           (click)="zoomOnCountry(markerCountry.country)"
@@ -254,12 +254,13 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
   init() {
     if (this.countries.length > 0) {
       let country = this.countries.filter(country => country.code === this.platform.codeCountry)[0];
-
-      this.markerCountry = {
-        country: country.code,
-        name: country.name,
-        lngLat: [country.coordinates.lng, country.coordinates.lat]
-      };
+      if(country){
+        this.markerCountry = {
+          country: country.code,
+          name: country.name,
+          lngLat: [country.coordinates.lng, country.coordinates.lat]
+        };
+      }
 
       if (this.platform.stations.length > 0) this.setStations(this.platform);
       if (this.platform.zones.length > 0) this.setZones(this.platform);

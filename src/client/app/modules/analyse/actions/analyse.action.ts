@@ -19,6 +19,7 @@ export namespace AnalyseAction {
     SELECT_SPECIES: string;
     SELECT_DIMS: string;
     SELECT_METHOD: string;
+    SET_DEFAULT_COUNTRY: string;
     ANALYSE: string;
     ANALYSE_SUCCESS: string;
     ANALYSE_FAILURE: string;
@@ -34,6 +35,7 @@ export namespace AnalyseAction {
     SELECT_SPECIES : type('[Analyse] Select Species'),
     SELECT_DIMS : type('[Analyse] Select Species dimensions'),
     SELECT_METHOD : type('[Analyse] Select method'),
+    SET_DEFAULT_COUNTRY : type('[Analyse] Set default country'),
     ANALYSE: type('[Analyse] Start analyse'),
     ANALYSE_SUCCESS : type('[Analyse] Analyse Success'),
     ANALYSE_FAILURE : type('[Analyse] Analyse Failure')
@@ -91,6 +93,12 @@ export class SelectMethod implements Action {
   constructor(public payload: Method) {}
 }
 
+export class SetDefaultCountry implements Action {
+  readonly type = ActionTypes.SET_DEFAULT_COUNTRY;
+
+  payload: string = null;
+}
+
 export class Analyse implements Action {
   readonly type = ActionTypes.ANALYSE;
 
@@ -119,6 +127,7 @@ export type Actions =
   | SelectSpecies
   | SelectDims
   | SelectMethod
+  | SetDefaultCountry
   | Analyse
   | AnalyseSuccess
   | AnalyseFailure;
