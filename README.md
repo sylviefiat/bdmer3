@@ -304,6 +304,10 @@ $ docker-compose -f docker-compose.production.yml up bdmer3build   # Wait until 
 $ docker-compose -f docker-compose.production.yml up -d bdmer3-nginx  # Start the nginx container in detached mode
 # before executing this command rename .dockerignore to whatever not .dockerignore otherwise copy path won't be found
 $ docker-compose -f docker-compose.production.yml build bdmer3-prod # Build bdmer3 image and upload to docker hub to use in bdmer_deploy
+# tag image
+$ docker tag bdmer3-prod sylviefiat/bdmer3-prod # for latest tag
+# push image to dockerhub (after a docker login !)
+$ docker push sylviefiat/bdmer3-prod
 ```
 
 Now open your browser at http://localhost:5555
