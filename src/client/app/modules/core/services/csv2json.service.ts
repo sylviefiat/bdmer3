@@ -559,7 +559,7 @@ export class Csv2JsonService {
       return [{ error: string }];
     }
 
-    if (allTextLines.length > 200) {
+    if (allTextLines.length > 201) {
       return [{ error: "TOO_MUCH_ENTITY_COUNT" }];
     }
 
