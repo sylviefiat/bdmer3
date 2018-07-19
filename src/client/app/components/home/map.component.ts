@@ -265,9 +265,10 @@ export class MapComponent implements OnInit, OnChanges {
         this.setZones(this.platforms);
         this.setStations(this.platforms);
       }
-      if (this.countries.length === 1 && this.platforms.length > 0) {
+
+      if (this.markersCountries.length === 1 && this.platforms.length > 0) {
         this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
-      } else {
+      } else  if(this.markersCountries.length >= 1){
         this.bounds$ = of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
       }
     }
