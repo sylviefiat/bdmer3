@@ -25,7 +25,7 @@ export class NewCountryComponent implements OnInit {
   public image: any;
   results: any[];
   @Input() errorMessage: string | null;
-  
+
 
   @Output() submitted = new EventEmitter<Country>();
 
@@ -66,7 +66,7 @@ export class NewCountryComponent implements OnInit {
             this.form.controls.flag.setValue(data);
 
             this.submitted.emit(this.form.value);
-        });
+          });
         });
     }
   }
