@@ -44,6 +44,20 @@ export function speciesReducer(state: ISpeciesState = speciesInitialState, actio
       };
     }
 
+    case SpeciesAction.ActionTypes.CHECK_SPECIES_ADD_ERROR: {
+      if (action.payload.error) {
+        return {
+          ...state,
+          error: action.payload.error,
+          msg: null
+        };
+      } else {
+        return {
+          ...state
+        };
+      }
+    }
+
     case SpeciesAction.ActionTypes.REMOVE_SPECIES_SUCCESS: {
       const removedSpecies = action.payload;
       return {
