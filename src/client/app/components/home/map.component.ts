@@ -112,7 +112,6 @@ import { MapService } from "../../modules/core/services/index";
         [lngLat]="selectedZone.geometry?.coordinates[0][0]">
         <span style="color:black;padding-right:10px;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span>
       </mgl-popup>
-
     </mgl-map>
   `,
   styles: [
@@ -141,7 +140,6 @@ import { MapService } from "../../modules/core/services/index";
         border: 1px solid rgba(0,0,0,0.4);
         font-family: 'Open Sans', sans-serif;
     }
-
     #switcher a {
         font-size: 13px;
         color: #404040;
@@ -153,21 +151,17 @@ import { MapService } from "../../modules/core/services/index";
         border-bottom: 1px solid rgba(0,0,0,0.25);
         text-align: center;
     }
-
     #switcher a:last-child {
         border: none;
     }
-
     #switcher a:hover {
         background-color: #f8f8f8;
         color: #404040;
     }
-
     #switcher a.isOn {
         background-color: #106cc8;
         color: #ffffff;
     }
-
     #switcher a.isOn:hover {
         background: #3074a4;
     }
@@ -266,8 +260,9 @@ export class MapComponent implements OnInit, OnChanges {
         this.setStations(this.platforms);
       }
 
+
       if (this.markersCountries.length === 1 && this.platforms.length > 0) {
-        this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+        this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
       } else  if(this.markersCountries.length >= 1){
         this.bounds$ = of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
       }
@@ -280,19 +275,21 @@ export class MapComponent implements OnInit, OnChanges {
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features
+  zoomToZonesOrStation(featureCollection) {
+    if(featureCollection.features.length>0){
+      var bnd = new LngLatBounds();
+      var fc: Turf.FeatureCollection = featureCollection.features
       .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
       .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
-    return this.checkBounds(bnd);
+      this.bounds$ = of(this.checkBounds(bnd));
+    }
   }
 
   zoomOnCountry(countryCode: string) {
     let platformsConsidered = this.platforms.filter(platform => platform.codeCountry === countryCode);
     this.setZones(platformsConsidered);
     if (platformsConsidered.length > 1) {
-      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     } else {
       this.bounds$ = of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country === countryCode).map(mk => mk.lngLat)));
     }
