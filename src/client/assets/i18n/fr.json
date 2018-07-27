@@ -413,6 +413,5 @@
   "ERROR_GEOJSON_ZONE_NAME": "Le champ 'name' est manquant ou erroné dans le fichier Geojson",
   "GRAPH_PER_ZONES": "Evolution des espèces par année et par zone",
   "CLICK_ZONE": "Cliquer sur une zone pour afficher ses graphiques",
-  "NORTH_PROVINCE": "Province Nord ",
-  "SOUTH_PROVINCE": "Province Sud "
+  "SELECT_PROVINCE": "Choisir une province"
 }

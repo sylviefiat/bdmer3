@@ -1,0 +1,12 @@
+[{
+  "codeCountry": "NC",
+  "alternative": [{
+      "codeCountry": "NCNP",
+      "name": "New Caledonia North Province"
+    },
+    {
+      "codeCountry": "NCSP",
+      "name": "New Caledonia South Province"
+    }
+  ]
+}]

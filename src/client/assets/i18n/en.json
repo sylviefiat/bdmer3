@@ -413,6 +413,5 @@
   "ERROR_GEOJSON_ZONE_NAME": "Geojson file missing or wrong 'name' field - mandatory",
   "GRAPH_PER_ZONES": "Species evolution per year and zone",
   "CLICK_ZONE": "Click on zone to display its graphs",
-  "NORTH_PROVINCE": "North Province ",
-  "SOUTH_PROVINCE": "South Province "
+  "SELECT_PROVINCE": "Select Province"
 }

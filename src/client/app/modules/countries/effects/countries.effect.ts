@@ -3,7 +3,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { defer, Observable, pipe, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { catchError, filter, map, mergeMap, switchMap, startWith, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { CountriesService } from "../../core/services/index";
@@ -28,7 +28,7 @@ export class CountriesEffects {
    * effect easier to test.
    */
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => { 
+  openDB$: Observable<any> = defer(() => {
     return this.countriesService.initDB('countries',config.urldb);
   });
 
@@ -36,7 +36,8 @@ export class CountriesEffects {
     .ofType<CountriesAction.InitAction>(CountriesAction.ActionTypes.INIT)
     .pipe(
       switchMap(init => this.countryListService.getCountryList()),
-      map(countryList => new CountriesAction.InitializedAction(countryList)),
+      withLatestFrom(this.countryListService.getCountryListDetails()),
+      map(([countryList, countryListDetails]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails })),
       catchError((error) => of(new CountriesAction.InitFailedAction()))
     );
 
@@ -47,7 +48,7 @@ export class CountriesEffects {
       switchMap(load => this.countriesService.getAll()),
       map((countries: Country[]) => new CountriesAction.LoadSuccessAction(countries)),
       catchError(error => of(new CountriesAction.LoadFailAction(error)))
-    );  
+    );
 
   @Effect()
   addCountryToCountries$: Observable<Action> = this.actions$
@@ -72,13 +73,13 @@ export class CountriesEffects {
     .ofType<CountriesAction.RemoveCountryAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY)
     .pipe(
       map((action: CountriesAction.RemoveCountryAction) => action.payload),
-      mergeMap(country => this.countriesService.removeCountry(country)),      
+      mergeMap(country => this.countriesService.removeCountry(country)),
       map((country) => new CountriesAction.RemoveCountrySuccessAction(country)),
       catchError((country) => of(new CountriesAction.RemoveCountryFailAction(country)))
     );
 
   constructor(private actions$: Actions, private router: Router, private countriesService: CountriesService, private countryListService: CountryListService) {
-    
-    
+
+
   }
 }
