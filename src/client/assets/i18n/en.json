@@ -387,7 +387,7 @@
   "ERROR_CSV_FIELD": "Error while checking CSV, following field(s) are unknown: ",
   "ERROR_IMPORT": "Error while checking CSV's data, see details just below.",
   "VALID_IMPORT": "CSV valid and ready to be send.",
-  "VALID_IMPORT": "CSV and data are valid.",
+  "VALID_DATA": "CSV and data are valid.",
   "DISCARD_CHANGE": "Discard changes ?",
   "DELETE_STATION_CONFIRM": "It will delete file : Station. Are you sure to continue?",
   "DELETE_SURVEY_CONFIRM": "It will delete file : Survey. Are you sure to continue?",
