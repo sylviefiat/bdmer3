@@ -1,13 +1,13 @@
 
-<form [formGroup]="form" (ngSubmit)="submit()">  
+<form [formGroup]="form" (ngSubmit)="submit()">
   <div>
   <mat-card class="actions">
     <mat-card-title>{{ 'ADD_SPECIES' | translate}}</mat-card-title>
-    
+
     <mat-card-content>
       <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ 'SUBMIT' | translate }}</button>
       <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
-      <p *ngIf="errorMessage" class="speciesError">{{ errorMessage }}</p>  
+      <p *ngIf="errorMessage" class="speciesError">{{ errorMessage }}</p>
     </mat-card-content>
   </mat-card>
 </div>
@@ -22,16 +22,16 @@
 
     <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_SCIENTIFIC_NAME' | translate }}" formControlName="scientificName" required>
-      <div class="hint">{{ 'SPECIES_SCIENTIFIC_NAME_EX' | translate }}</div>     
+      <div class="hint">{{ 'SPECIES_SCIENTIFIC_NAME_EX' | translate }}</div>
     </mat-form-field>
 
   </mat-card>
   <!--names-->
   <mat-card class="row" formArrayName="names" id="SPECIES_VERNACULAR_NAME">
     <h5 mat-subheader>{{ 'SPECIES_VERNACULAR_NAME' | translate }}</h5>
-    <div *ngFor="let name of form.controls.names.controls; let i=index;" [formGroupName]="i">          
+    <div *ngFor="let name of form.controls.names.controls; let i=index;" [formGroupName]="i">
       <fa class="warn clickable" [name]="'times'" [size]=1 [pull]=right *ngIf="form.controls.names.controls.length > 1" (click)="removeName(i)"></fa>
-      <bt-name [group]="form.controls.names.controls[i]"></bt-name>     
+      <bt-name [group]="form.controls.names.controls[i]"></bt-name>
     </div>
     <mat-card-actions>
      <button mat-raised-button color="warn" (click)="addName()">
@@ -62,7 +62,7 @@
 
     <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
-      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>
     </mat-form-field>
   </div>
 </mat-card>
@@ -76,7 +76,7 @@
 
     <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
-      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>    
+      <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>
     </mat-form-field>
   </div>
 </mat-card>
@@ -91,7 +91,7 @@
 
     <mat-form-field>
       <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
-      <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>    
+      <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>
     </mat-form-field>
   </div>
 </mat-card>
@@ -99,13 +99,13 @@
   <h5 mat-subheader>{{ 'SPECIES_DIMS' | translate }}</h5>
   <div formGroupName="biologicDimensions">
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
+      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax">
       <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
-      <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>    
+      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax">
+      <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>
     </mat-form-field>
   </div>
 </mat-card>
@@ -132,7 +132,7 @@
 <!--legal dims-->
 <mat-card class="row" formArrayName="legalDimensions">
   <h5 mat-subheader>{{ 'SPECIES_FISHING_DIMS' | translate }} </h5>
-  <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" [formGroupName]="j">          
+  <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" [formGroupName]="j">
     <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j)"></fa>
     <bt-dim [group]="form.controls.legalDimensions.controls[j]" [countries]="countries" [alreadySetCountries$]="alreadySetCountries$"
             (changeCountry)="echangeCountry($event)"></bt-dim>
