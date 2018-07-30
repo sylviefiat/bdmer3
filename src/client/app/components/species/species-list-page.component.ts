@@ -74,7 +74,7 @@ export class SpeciesListPageComponent implements OnInit {
     filter=filter.toLowerCase();
     this.filteredSpecies$ = this.species$.pipe(map(species =>
       species.filter(sp =>{
-        if(sp.code !== null && sp.scientificName !== null && sp.habitatPreference){
+        if(sp.code !== null || sp.scientificName !== null || sp.habitatPreference !== null){
           if(sp.names.length > 0){
             return sp.code.toLowerCase().indexOf(filter)!==-1 ||
             sp.scientificName.toLowerCase().indexOf(filter)!==-1 ||
