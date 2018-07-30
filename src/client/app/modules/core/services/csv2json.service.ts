@@ -692,4 +692,3 @@ export class Csv2JsonService {
                 }));
     }
   }
-
