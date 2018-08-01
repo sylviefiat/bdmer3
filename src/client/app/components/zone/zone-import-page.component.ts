@@ -62,10 +62,6 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(new PlatformAction.RemoveAllZoneAction(platform));
   }
 
-  handleErrorUpload(msg: string) {
-    this.store.dispatch(new PlatformAction.AddPlatformFailAction(msg));
-  }
-
   return(code: string) {
     this.routerext.navigate(["/platform" + code], {
       transition: {
