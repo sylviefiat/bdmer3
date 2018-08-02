@@ -107,7 +107,7 @@ export class SpeciesComponent implements OnInit {
   }
 
   changeLMax(value: any){
-    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,value};
+    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,longMax: value};
     return this.send();
   }
 
