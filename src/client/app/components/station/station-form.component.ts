@@ -7,6 +7,7 @@ import { NameRefactorService } from "../../modules/core/services/nameRefactor.se
 import { IAppState, getSpeciesInApp } from "../../modules/ngrx/index";
 
 import { Platform, Station, Count } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
 @Component({
     moduleId: module.id,
@@ -18,6 +19,7 @@ import { Platform, Station, Count } from "../../modules/datas/models/index";
 export class StationFormComponent implements OnInit {
     @Input() platform: Platform | null;
     @Input() station: Station | null;
+    @Input() countries: Country[] | null;
     @Input() errorMessage: boolean;
 
     @Output() submitted = new EventEmitter<Station>();
