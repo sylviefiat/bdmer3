@@ -220,10 +220,14 @@ export class PlatformService {
 
   importStationVerification(station, platform: Platform): Observable<string> {
     let msg = this.translate.instant(['STATION', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE']);
-    if (station.codePlatform === platform.code) {
-      return of('');
-    } else {
-      return of(msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+    if(!station.error){
+      if (station.codePlatform === platform.code) {
+        return of('');
+      } else {
+        return of(msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+      }
+    }else{
+      return of(station)
     }
   }
 
