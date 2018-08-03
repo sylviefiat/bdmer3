@@ -62,7 +62,7 @@ export class ZoneImportPageComponent implements OnInit, OnDestroy {
   }
 
   return(code: string) {
-    this.routerext.navigate(["/platform" + code], {
+    this.routerext.navigate(["/platform/" + code], {
       transition: {
         duration: 1000,
         name: "slideTop"
