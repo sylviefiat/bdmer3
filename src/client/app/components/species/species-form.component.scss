@@ -1,78 +1,100 @@
-  .insideform {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 72px 0;
-    }
-    .insideform mat-card {
-      flex-grow: 1;
-      margin:10px 20%;
-    }
+.insideform {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 72px 0;
+}
 
-    mat-card-title,
-    mat-card-content {
-      display: flex;
-      justify-content: center;
-    }
-    mat-card-subtitle {
-        color: #555;
-    }
-    mat-form-field {
-      padding-left: 2em;
-      flex-grow: 1;
-    }
-    mat-card-actions {
-      margin: 5px 0 0 !important;
-    }
-    input {
-      flex-grow: 1;
-      min-width: 300px;
-    }
-    .column {
-      display: flex;
-      flex-direction: column;
-    }
-    .mat-form-field {
-      width: auto;
-    }
-    .mat-form-field {
-      width: 100%;
-    }
-    .hint {
-        /* Position the hint */
-        position: absolute;
-        left: 2px;
-        right: auto;
-        bottom: 7px;
-        /* Copy styles from ng-messages */
-        font-size: 12px;
-        line-height: 14px;
-        transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
-        /* Set our own color */
-        color: grey; 
-    }
-    .btn[disabled] {
-        cursor: not-allowed;
-        box-shadow: none;
-        opacity: .65;
-    }
-    .warn {
-      color: white;
-      background-color: #d9534f;
-    }
-    .clickable {
-      padding: 0 1px 2px 2px;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-    .actions {
-      text-align: center;
-    }
-    .back {
-      background-color: darkgrey;
-    }
-    img {
-      width: auto !important;
-      margin-top: 10px;
-    }
+.insideform mat-card {
+  flex-grow: 1;
+  margin: 10px 20%;
+}
+
+mat-card-content,
+mat-card-title {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-subtitle {
+  color: #555;
+}
+
+mat-form-field {
+  padding-left: 2em;
+  flex-grow: 1;
+}
+
+mat-card-actions {
+  margin: 5px 0 0 !important;
+}
+
+input {
+  flex-grow: 1;
+  min-width: 300px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-form-field {
+  width: auto;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.hint {
+  /* Position the hint */
+  position: absolute;
+  left: 2px;
+  right: auto;
+  bottom: 7px;
+  /* Copy styles from ng-messages */
+  font-size: 12px;
+  line-height: 14px;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  /* Set our own color */
+  color: grey;
+}
+
+.btn[disabled] {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.65;
+}
+
+.warn {
+  color: white;
+  background-color: #d9534f;
+}
+
+.clickable {
+  padding: 0 1px 2px 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.actions {
+  text-align: center;
+}
+
+.back {
+  background-color: darkgrey;
+}
+
+img {
+  width: auto !important;
+  margin-top: 10px;
+}
+
+.speciesError {
+  text-align: center;
+  padding: 16px;
+  color: white;
+  background-color: red;
+}
