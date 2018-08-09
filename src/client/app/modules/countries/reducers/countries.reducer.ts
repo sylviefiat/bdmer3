@@ -16,27 +16,31 @@ export function countriesReducer(
     }
 
     case CountriesAction.ActionTypes.INITIALIZED: {
-      let list = action.payload;
-      list = list.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));
+      console.log(action.payload)
+      let countryList = action.payload.countryList;
+      let countryListCount = action.payload.countryListCount;
+      countryList = countryList.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));
+
       return {
         ...state,
-        countryList: list
+        countryList: countryList,
+        countryListCount: countryListCount
       };
     }
 
-    case CountriesAction.ActionTypes.LOAD_SUCCESS: {      
+    case CountriesAction.ActionTypes.LOAD_SUCCESS: {
       const countries = action.payload;
 
       const newCountries = countries.filter(country => state.ids.includes(country._id)?false:country);
 
       const newCountryIds = newCountries.map(country => country._id);
-      
+
       return {
         ...state,
         ids: [...state.ids, ...newCountryIds],
         entities: [...state.entities, ...newCountries]
       };
-      
+
     }
 
     case CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS: {
@@ -61,7 +65,7 @@ export function countriesReducer(
 
     case CountriesAction.ActionTypes.REMOVE_COUNTRY_FAIL:
     case CountriesAction.ActionTypes.ADD_COUNTRY_FAIL:
-    {   
+    {
       return {
         ...state,
         error: action.payload
@@ -81,9 +85,9 @@ export function countriesReducer(
           error: null
         };
       } else {
-        return state;  
+        return state;
       }
-      
+
     }
 
     default: {
@@ -91,4 +95,3 @@ export function countriesReducer(
     }
   }
 }
-

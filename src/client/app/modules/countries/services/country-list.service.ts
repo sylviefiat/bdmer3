@@ -31,7 +31,14 @@ export class CountryListService {
           }
           return keys;
         })
-      );    
+      );
+  }
+
+  getCountryListCount(): Observable<any>{
+    return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countryCountsWithoutMesure.json`)
+      .pipe(
+        map(res => res)
+      );
   }
 
   getCountryName(code: string): any {
@@ -61,7 +68,7 @@ export class CountryListService {
           }),
           catchError((error:any) => throwError(error))
         );
-    
+
   }
 
   getCountrySVGBlob(code: string): Observable<Blob> {
