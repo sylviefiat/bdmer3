@@ -93,6 +93,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerStations"
           [layout]="{
             'icon-image': 'triangle-stroked-15',
+            'icon-allow-overlap': true,
             'icon-size': 1.5,
             'icon-rotate': 180
             }"

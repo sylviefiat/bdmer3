@@ -57,7 +57,7 @@ import { MapService } from "../../modules/core/services/index";
               'fill-color': '#AFEEEE',
               'fill-opacity': 0.3,
               'fill-outline-color': '#000'
-              }">            
+              }">
           </mgl-layer>
           <mgl-layer
             id="zonestext"
@@ -97,7 +97,7 @@ import { MapService } from "../../modules/core/services/index";
               'icon-rotate': 180,
               'icon-allow-overlap': true,
               'icon-ignore-placement': true
-              }"            
+              }"
             (click)="showPopupStation($event)"
             (mouseEnter)="cursorStyle = 'pointer'"
             (mouseLeave)="cursorStyle = ''">
@@ -224,8 +224,8 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries']; 
-    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];   
+    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries'];
+    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];
     if(this.zoom>this.zoomMinStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='stations'),'zones','stations'];
   }
 

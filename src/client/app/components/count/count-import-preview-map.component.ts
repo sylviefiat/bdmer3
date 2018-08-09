@@ -94,6 +94,7 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'icon-image': 'triangle-stroked-15',
             'icon-size': 1.5,
+            'icon-allow-overlap': true,
             'icon-rotate': 180
             }"
           (click)="showPopupStation($event)"
@@ -113,6 +114,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerStationsCount"
           [layout]="{
             'icon-image': 'triangle-15',
+            'icon-allow-overlap': true,
             'icon-size': 2,
             'icon-rotate': 180
             }"

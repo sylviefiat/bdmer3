@@ -93,6 +93,7 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'icon-image': 'triangle-stroked-15',
             'icon-size': 1.5,
+            'icon-allow-overlap': true,
             'icon-rotate': 180
             }"
           (click)="showPopupStation($event)"
