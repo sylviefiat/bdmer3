@@ -22,7 +22,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
           padding: boundsPadding,
           maxZoom: zoomMaxMap
         }"
-        (zoomEnd)="zoomChange($event)"> 
+        (zoomEnd)="zoomChange($event)">
         <ng-container *ngIf="showStations && (markers$ | async)">
           <mgl-marker-cluster
             [data]="markers$ | async"
@@ -39,16 +39,16 @@ import { Results, Data } from '../../modules/analyse/models/index';
               </div>
             </ng-template>
             <ng-template mglClusterPoint let-feature>
-              <div 
+              <div
                 class="marker"
                 [class.marker-small]="getClusterValue(feature)<=100"
                 [class.marker-medium]="getClusterValue(feature)<=10000 && getClusterValue(feature)>100"
                 [class.marker-big]="getClusterValue(feature)>10000"
                 (click)="selectCluster($event, feature)">
-                
+
               </div>
             </ng-template>
-          </mgl-marker-cluster>  
+          </mgl-marker-cluster>
           <mgl-popup  class="popup"
             *ngIf="selectedCluster"
             [lngLat]="selectedCluster.lngLat">
@@ -58,7 +58,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               [count]="selectedCluster.count"
               [typeShow]="typeShow">
             </result-map-cluster-popup>
-          </mgl-popup> 
+          </mgl-popup>
           <mgl-popup class="popup"
             *ngIf="selectedPoint"
             [lngLat]="selectedPoint.lngLat">
@@ -66,7 +66,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
           </mgl-popup>
         </ng-container>
         <ng-container *ngIf="(layerZones$ | async) && showZones">
-          <mgl-geojson-source 
+          <mgl-geojson-source
             id="layerZones"
             [data]="layerZones$ | async">
             <mgl-layer
@@ -87,8 +87,8 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
                 }"
-              (click)="selectZone($event)">            
-            </mgl-layer>   
+              (click)="selectZone($event)">
+            </mgl-layer>
             <mgl-layer
               *ngIf="typeShow==='B'"
               id="zonesid_biom"
@@ -107,7 +107,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
                 }"
-              (click)="selectZone($event)">            
+              (click)="selectZone($event)">
             </mgl-layer>
             <mgl-layer
               id="zonestext"
@@ -115,6 +115,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               source="layerZones"
               [layout]="{
                 'text-field': '{code}',
+                'text-allow-overlap': true,
                 'text-anchor':'bottom',
                 'text-font': [
                   'DIN Offc Pro Italic',
@@ -124,11 +125,11 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 'symbol-avoid-edges': true,
                 'text-max-angle': 30,
                 'text-size': 12
-              }"  
+              }"
               [paint]="{
                 'text-color': 'white'
               }"
-            >            
+            >
             </mgl-layer>
           </mgl-geojson-source>
         </ng-container>
@@ -141,7 +142,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
       width: 800px;
       height: 500px;
       border: 1px solid black;
-    }     
+    }
     .marker{
       color:white;
     }
@@ -157,7 +158,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
       color: black;
     }
 
-    ::ng-deep .marker, .marker {    
+    ::ng-deep .marker, .marker {
       border-radius: 50%;
       background-color: #7d7d7d;
       display: flex;

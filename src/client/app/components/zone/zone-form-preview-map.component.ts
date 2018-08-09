@@ -61,6 +61,7 @@ import { IAppState } from "../../modules/ngrx/index";
         source="layerPreviewsZone"
         [layout]="{
           'text-field': '{code}',
+          'text-allow-overlap': true,
           'text-anchor':'bottom',
           'text-font': [
             'DIN Offc Pro Italic',
@@ -100,6 +101,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerZones"
           [layout]="{
             'text-field': '{code}',
+            'text-allow-overlap': true,
             'text-anchor':'bottom',
             'text-font': [
               'DIN Offc Pro Italic',

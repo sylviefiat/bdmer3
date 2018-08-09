@@ -65,6 +65,7 @@ import { IAppState } from "../../modules/ngrx/index";
         source="layerPreviewsZoneValid"
         [layout]="{
           'text-field': '{code}',
+          'text-allow-overlap': true,
           'text-anchor':'bottom',
           'text-font': [
             'DIN Offc Pro Italic',
@@ -104,6 +105,7 @@ import { IAppState } from "../../modules/ngrx/index";
         source="layerPreviewsZoneError"
         [layout]="{
           'text-field': '{code}',
+          'text-allow-overlap': true,
           'text-anchor':'bottom',
           'text-font': [
             'DIN Offc Pro Italic',
@@ -144,6 +146,7 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'text-field': '{code}',
             'text-anchor':'bottom',
+            'text-allow-overlap': true,
             'text-font': [
               'DIN Offc Pro Italic',
               'Arial Unicode MS Regular'
