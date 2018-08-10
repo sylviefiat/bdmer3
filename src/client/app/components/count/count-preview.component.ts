@@ -14,11 +14,22 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
         </mat-card-content>
+        <mat-card-content *ngIf="count.count !== null">
+          <div>
+            <span class="speciesName">
+              {{'SPECIES' | translate}} : {{ getSpeciesName(count.count.codeSpecies) }}
+            </span>
+            <br>
+            <span>
+            {{'QUANTITY' | translate}}: {{count.count.quantity}}
+            </span>
+          </div>
+        </mat-card-content>
         <mat-card-content *ngIf="count.mesures && count.mesures.length>0">
           <div>{{ 'COUNT_DETAIL' | translate }}
-            <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :            
+            <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :
           </div>
-          <div class="mesures" *ngFor="let mesure of count.mesures; let i = index;">
+          <ng-template class="mesures" *ngFor="let mesure of count.mesures; let i = index;">
             <div *ngIf="writeSp(i)">
               <hr/>
               <span class="speciesName">
@@ -29,7 +40,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
             <li>
               <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm, <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
             </li>
-          </div>
+          </ng-template>
         </mat-card-content>
         <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
           <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
@@ -87,7 +98,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
   `,
   ],
 })
-export class CountPreviewComponent implements OnInit {  
+export class CountPreviewComponent implements OnInit {
   @Input() count: Count;
   @Input() survey: Survey;
   @Input() platform: Platform;
@@ -128,7 +139,7 @@ export class CountPreviewComponent implements OnInit {
 
   get monospecies() {
     return this.count.monospecies;
-  }  
+  }
 
   get mesures() {
     return this.count.mesures;
@@ -146,7 +157,7 @@ export class CountPreviewComponent implements OnInit {
   get thumbnail(): string | boolean {
     // WAIT FOR MAP
     return null;
-    //return "/assets/img/"+this.count.code+".jpg"; 
+    //return "/assets/img/"+this.count.code+".jpg";
   }
 
   get localDate(){

@@ -16,8 +16,7 @@ export function countriesReducer(
     }
 
     case CountriesAction.ActionTypes.INITIALIZED: {
-      console.log(action.payload)
-      let countryList = action.payload.countryList;
+      let countryList = action.payload.countryList.payload;
       let countryListCount = action.payload.countryListCount;
       countryList = countryList.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));
 

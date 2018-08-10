@@ -323,6 +323,7 @@ export class PlatformService {
   }
 
   importCountVerification(count, platform, species): Observable<string> {
+    console.log(count)
     if (!count.error) {
       let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
 
@@ -333,17 +334,21 @@ export class PlatformService {
               if (platform.surveys.length > 0) {
                 for (let x in platform.surveys) {
                   if (count.codeSurvey === platform.surveys[x].code) {
-                    if (species.length > 0) {
-                      for (let y in species) {
-                        if (count.mesures[0].codeSpecies === species[y].code) {
-                          return of("");
+                    if(count.mesures){
+                      if (species.length > 0) {
+                        for (let y in species) {
+                          if (count.mesures[0].codeSpecies === species[y].code) {
+                            return of("");
+                          }
+                          if (count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1) {
+                            return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+                          }
                         }
-                        if (count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1) {
-                          return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-                        }
+                      } else {
+                        return of(msg.NO_SPECIES_IN_DB);
                       }
-                    } else {
-                      return of(msg.NO_SPECIES_IN_DB);
+                    }else{
+                      return of("");
                     }
                   }
                   if (count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1) {

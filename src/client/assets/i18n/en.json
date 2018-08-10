@@ -414,5 +414,7 @@
   "LAYERS":"Show ",
   "ERROR_GEOJSON_ZONE_NAME":"Geojson file missing or wrong 'name' field - mandatory",
   "GRAPH_PER_ZONES":"Species evolution per year and zone",
-  "CLICK_ZONE":"Click on zone to display its graphs"
+  "CLICK_ZONE":"Click on zone to display its graphs",
+  "QUANTITY":"Quanity",
+  "IMPORT_COUNT_NO_MESURE": "Warning, counts for this country must not contain a column 'mesures' but a column 'count' with the number of speciemen recorded"
 }

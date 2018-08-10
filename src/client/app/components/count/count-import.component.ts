@@ -28,6 +28,7 @@ export class CountImportComponent implements OnInit {
   @Input() error: string | null;
   @Input() msg: string | null;
   @Input() countries: Country[];
+  @Input() countriesCount: string[];
   @Input() importError: string[];
   @Output() upload = new EventEmitter<any>();
   @Output() err = new EventEmitter<string>();
@@ -35,12 +36,15 @@ export class CountImportComponent implements OnInit {
 
   newCounts$: Observable<Count>;
   needHelp: boolean = false;
+  noMesures: boolean = false;
+  type: string = "count";
   private csvFile: string;
   private docs_repo: string;
   importCsvFile: any = null;
   countForm: FormGroup = new FormGroup({
     countInputFile: new FormControl()
   });
+
 
   constructor(
     private csv2JsonService: Csv2JsonService,
@@ -52,10 +56,19 @@ export class CountImportComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new SpeciesAction.LoadAction());
+    if(this.countriesCount.includes(this.platform.codeCountry)){
+      this.type = "countNoMesures"
+      this.noMesures = true;
+    }
     this.store.select(getLangues).subscribe((l: any) => {
       this.docs_repo = "../../../assets/files/";
-      this.csvFile = "importCount-" + l + ".csv";
+      if(this.noMesures){
+        this.csvFile = "importCountNoMesures-" + l + ".csv";
+      }else{
+        this.csvFile = "importCount-" + l + ".csv";
+      }
     });
+
   }
 
   handleUpload(csvFile: any): void {
@@ -72,12 +85,17 @@ export class CountImportComponent implements OnInit {
   }
 
   check(csvFile) {
-    this.store.dispatch(new PlatformAction.CheckCountCsvFile(csvFile));
-    this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile);
+    if(this.noMesures){
+      this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
+      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, true);
+    }else{
+      this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
+      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, false);
+    }
   }
 
   send() {
-    this.upload.emit(this.importCsvFile);
+    this.upload.emit({csvFile: this.importCsvFile, type: this.type});
   }
 
   changeNeedHelp() {
