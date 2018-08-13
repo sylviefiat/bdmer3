@@ -77,6 +77,8 @@ export class CountFormComponent implements OnInit {
             this.countForm.controls.codeStation.setValue(this.count.codeStation);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
+            this.countForm.controls.count.get("codeSpecies").setValue(this.count.count.codeSpecies);
+            this.countForm.controls.count.get("quantity").setValue(this.count.count.quantity);
         } else {
             this.countForm.controls.code.setValue(this.survey.code + "_");
             this.countForm.controls.monospecies.setValue(false);
