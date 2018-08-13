@@ -323,10 +323,8 @@ export class PlatformService {
   }
 
   importCountVerification(count, platform, species): Observable<string> {
-    console.log(count)
     if (!count.error) {
       let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
-
       if (count.codePlatform === platform.code) {
         if (platform.stations.length > 0) {
           for (let i in platform.stations) {

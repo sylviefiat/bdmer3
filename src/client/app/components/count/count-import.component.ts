@@ -85,13 +85,8 @@ export class CountImportComponent implements OnInit {
   }
 
   check(csvFile) {
-    if(this.noMesures){
-      this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
-      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, true);
-    }else{
-      this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
-      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, false);
-    }
+    this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
+    this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, this.noMesures);
   }
 
   send() {
