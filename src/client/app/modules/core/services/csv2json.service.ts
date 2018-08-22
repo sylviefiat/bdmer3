@@ -118,7 +118,6 @@ export class Csv2JsonService {
         lines.push(sp);
       }
     }
-
     if (errorTab.length !== 0) {
       let string = "";
       for (let i in errorTab) {
@@ -492,6 +491,7 @@ export class Csv2JsonService {
     let headers = allTextLines[0];
     let lines: Count[] = [];
     let errorTab = [];
+
     for (let i = 1; i < allTextLines.length; i++) {
       let data = allTextLines[i];
       if (data.length == headers.length) {
@@ -556,6 +556,9 @@ export class Csv2JsonService {
       }
 
       return [{ error: string }];
+    }
+    if (allTextLines.length > 201) {
+      return [{ error: "TOO_MUCH_ENTITY_COUNT" }];
     }
 
     //console.log(lines); //The data in the form of 2 dimensional array.
@@ -643,7 +646,9 @@ export class Csv2JsonService {
 
         return string;
       }
-
+      if (allTextLines.length > 201) {
+        return [{ error: "TOO_MUCH_ENTITY_COUNT" }];
+      }
       //console.log(lines); //The data in the form of 2 dimensional array.
       return lines;
     });

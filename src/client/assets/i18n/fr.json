@@ -419,6 +419,7 @@
   "ERROR_GEOJSON_ZONE_NAME": "Le champ 'name' est manquant ou erroné dans le fichier Geojson",
   "GRAPH_PER_ZONES": "Evolution des espèces par année et par zone",
   "CLICK_ZONE": "Cliquer sur une zone pour afficher ses graphiques",
+  "TOO_MUCH_ENTITY_COUNT": "Il y a trop de comptage dans votre fichier csv, choisissez un fichier avec moins de 200 comptages.",
   "PLATFORM_REGISTERED_SUCCESS": "Platforme(s) enregistrée(s) avec succès",
   "CSV_RDY_IMPORT": "Fichier CSV prêt à être importé",
   "ZONES_REGISTERED_SUCCESS": "Zone(s) enregistrée(s) avec succès",
@@ -437,5 +438,7 @@
   "USER_SAVED_SUCCESS": "Utilisateur sauvegardé avec succès",
   "USER_REMOVED_SUCCESS": "Utilisateur supprimé avec succès",
   "SPECIES_REGISTERED_SUCCESS": "Espèce enregistré avec succès",
-  "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès"
+  "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès",
+  "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?",
+  "SELECT_PROVINCE": "Choisir une province"
 }

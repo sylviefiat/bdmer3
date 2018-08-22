@@ -1,40 +1,47 @@
-    :host {
-      display: flex;
-      justify-content: center;
-      margin: 72px 0;
-    }
-    mat-card {
-      margin: 15px;
-      width: 400px;
-      height: 300px;
-    }
-    mat-card-title,
-    mat-card-content {
-      display: flex;
-      justify-content: space-between;
-    }
-    mat-card-content form {
-      width: 100%;
-    }
-    mat-card-content .mat-card-sm-image {
-      margin-left: 10px;
-      width: 3em !important;
-      height: 2em !important;
-    }
-    mat-form-field {
-      padding-left: 1em;
-    }
-    input {
-      width: 300px;
-    }
-    .countryError {
-      padding: 16px;
-      width: 300px;
-      font-color: white;
-      background-color: red;
-    }
-    .countryButtons {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
+:host {
+  display: flex;
+  justify-content: center;
+  margin: 72px 0;
+}
+mat-card {
+  margin: 15px;
+  width: 400px;
+  height: 300px;
+}
+mat-card-title,
+mat-card-content {
+  display: flex;
+  justify-content: space-between;
+}
+mat-card-content form {
+  width: 100%;
+}
+mat-card-content .mat-card-sm-image {
+  margin-left: 10px;
+  width: 3em !important;
+  height: 2em !important;
+}
+mat-form-field {
+  padding-left: 1em;
+}
+input {
+  width: 300px;
+}
+.countryError {
+  padding: 16px;
+  width: 300px;
+  font-color: white;
+  background-color: red;
+}
+.countryButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+mat-radio-button {
+  margin-left: 10px;
+}
