@@ -53,6 +53,17 @@ export class SpeciesEffects {
   );
 
   @Effect()
+  checkSpeciesCsv$: Observable<Action> = this.actions$
+    .ofType<SpeciesAction.CheckSpeciesCsvFile>(SpeciesAction.ActionTypes.CHECK_SPECIES_CSV_FILE)
+    .pipe(
+      tap(() => this.store.dispatch(new SpeciesAction.RemoveMsgAction())),
+      map((action: SpeciesAction.CheckSpeciesCsvFile) => action.payload),
+      mergeMap(speciesCsv => this.csv2jsonService.csv2("species", speciesCsv)),
+      mergeMap(species => this.speciesService.checkSpecies(species)),
+      map(error => new SpeciesAction.CheckSpeciesAddErrorAction(error))
+    );
+
+  @Effect()
   addSpeciesSuccess$ = this.actions$.ofType<SpeciesAction.AddSpeciesSuccessAction>(SpeciesAction.ActionTypes.ADD_SPECIES_SUCCESS).pipe(
     map((action: SpeciesAction.AddSpeciesSuccessAction) => action.payload),
     mergeMap(species => this.router.navigate(["/species/" + species._id])),

@@ -15,6 +15,9 @@ export namespace SpeciesAction {
     REMOVE_SPECIES: string;
     REMOVE_SPECIES_SUCCESS: string;
     REMOVE_SPECIES_FAIL: string;
+    CHECK_SPECIES_CSV_FILE: string;
+    CHECK_SPECIES_ADD_ERROR: string;
+    CHECK_SPECIES_SUCCESS: string;
     LOAD: string;
     LOAD_SUCCESS: string;
     LOAD_FAIL: string;
@@ -31,6 +34,9 @@ export namespace SpeciesAction {
     REMOVE_SPECIES: type(`${SPECIES} Remove Species`),
     REMOVE_SPECIES_SUCCESS: type(`${SPECIES} Remove Species Success`),
     REMOVE_SPECIES_FAIL: type(`${SPECIES} Remove Species Fail`),
+    CHECK_SPECIES_CSV_FILE: type(`${SPECIES} Check Species Csv file`),
+    CHECK_SPECIES_ADD_ERROR: type(`${SPECIES} Check Species Csv file add error`),
+    CHECK_SPECIES_SUCCESS: type(`${SPECIES} Check Species Csv file success`),
     LOAD: type(`${SPECIES} Load`),
     LOAD_SUCCESS: type(`${SPECIES} Load Success`),
     LOAD_FAIL: type(`${SPECIES} Load Fail`),
@@ -113,6 +119,24 @@ export namespace SpeciesAction {
   export class RemoveMsgAction implements Action {
     readonly type = ActionTypes.REMOVE_MSG;
     payload: string = null;
+  }
+
+  export class CheckSpeciesCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckSpeciesAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckSpeciesSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_SUCCESS;
+
+    constructor(public payload: any) {}
   }
 
   export class SelectAction implements Action {

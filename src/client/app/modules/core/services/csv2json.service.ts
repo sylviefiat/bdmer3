@@ -118,18 +118,17 @@ export class Csv2JsonService {
         lines.push(sp);
       }
     }
-    console.log(lines);
-    /* if (errorTab.length !== 0) {
-            let string = "";
-            for (let i in errorTab) {
-                if (parseInt(i) === errorTab.length - 1) {
-                    string += errorTab[i] + ".";
-                } else {
-                    string += errorTab[i] + ", ";
-                }
-            }
-            return [{ error: string }];
-        }*/
+    if (errorTab.length !== 0) {
+      let string = "";
+      for (let i in errorTab) {
+        if (parseInt(i) === errorTab.length - 1) {
+          string += errorTab[i] + ".";
+        } else {
+          string += errorTab[i] + ", ";
+        }
+      }
+      return [{ error: string }];
+    }
     //console.log(lines); //The data in the form of 2 dimensional array.
     return lines;
   }
