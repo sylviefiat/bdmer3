@@ -5,8 +5,7 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { defer, Observable, pipe, of } from "rxjs";
 import { Action, Store } from "@ngrx/store";
 import { mergeMap, tap } from "rxjs/operators";
-
-import { IAppState, getCountryList, getCountriesIdsInApp } from "../../modules/ngrx/index";
+import { IAppState, getCountryList, getCountryListDetails, getCountriesIdsInApp } from "../../modules/ngrx/index";
 import { CountryListService } from "../../modules/countries/services/country-list.service";
 import { CountriesAction } from "../../modules/countries/actions/index";
 import { Country } from "../../modules/countries/models/country";
@@ -17,18 +16,23 @@ import { Country } from "../../modules/countries/models/country";
   templateUrl: "new-country.component.html",
   styleUrls: ["new-country.component.css"]
 })
-export class NewCountryComponent implements OnInit {
-  countryList$: Observable<any[]>;
-  countriesIds$: Observable<any[]>;
+export class NewCountryComponent {
   public image: any;
   results: any[];
   @Input() errorMessage: string | null;
+  @Input() countryList: any[] | null;
+  @Input() countryListDetails: any[] | null;
+  @Input() countriesIds: any[] | null;
 
   @Output() submitted = new EventEmitter<Country>();
+
+  details : any = null;
+  selected : boolean = false;
 
   form: FormGroup = new FormGroup({
     pays: new FormControl(""),
     flag: new FormControl(""),
+    province: new FormControl(""),
     coordinates: new FormGroup({
       lat: new FormControl(),
       lng: new FormControl()
@@ -42,6 +46,12 @@ export class NewCountryComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
+  check(event){
+    this.form.get("province").reset();
+    this.selected = true;
+    this.details = this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0] === undefined ? null : this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0];
+  }
+
   ngOnInit() {
     this.countryList$ = this.store.select(
       getCountryList
@@ -52,7 +62,6 @@ export class NewCountryComponent implements OnInit {
 
   svgToB64() {
     const url = "assets/svg/" + this.form.value.pays.code.toLowerCase() + ".svg";
-
     return new Promise(resolve => {
       var ajax = new XMLHttpRequest();
       ajax.open("GET", url, true);
@@ -64,6 +73,10 @@ export class NewCountryComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       this.svgToB64().then(data => {
+        if (this.form.get("province").value !== null) {
+          this.form.get("pays").value["code"] = this.form.get("province").value["codeCountry"];
+          this.form.get("pays").value["name"] = this.form.get("province").value["name"];
+        }
         this.http
           .get(
             "http://maps.googleapis.com/maps/api/geocode/json?address=" +
@@ -73,6 +86,7 @@ export class NewCountryComponent implements OnInit {
           .subscribe(coord => {
             this.form.controls.coordinates.get("lat").setValue(coord["results"]["0"].geometry.location.lat);
             this.form.controls.coordinates.get("lng").setValue(coord["results"]["0"].geometry.location.lng);
+
             this.form.controls.flag.setValue(data);
 
             this.submitted.emit(this.form.value);
@@ -83,5 +97,13 @@ export class NewCountryComponent implements OnInit {
 
   get flag() {
     return this.form.get("pays") && this.form.get("pays").value && this.form.get("pays").value["flag"];
+  }
+
+  get pays() {
+    return this.form.get("pays").value["code"];
+  }
+
+  get province() {
+    return this.form.get("province").value;
   }
 }
