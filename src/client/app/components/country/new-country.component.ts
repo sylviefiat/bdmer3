@@ -1,13 +1,12 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { defer, Observable, pipe, of } from "rxjs";
 import { Action, Store } from "@ngrx/store";
 import { mergeMap, tap } from "rxjs/operators";
-
 import { IAppState, getCountryList, getCountryListDetails, getCountriesIdsInApp } from "../../modules/ngrx/index";
-
+import { CountryListService } from "../../modules/countries/services/country-list.service";
 import { CountriesAction } from "../../modules/countries/actions/index";
 import { Country } from "../../modules/countries/models/country";
 
@@ -40,7 +39,12 @@ export class NewCountryComponent {
     })
   });
 
-  constructor(private http: HttpClient, private store: Store<IAppState>, private sanitizer: DomSanitizer) {}
+  constructor(
+    private countryListService: CountryListService,
+    private http: HttpClient,
+    private store: Store<IAppState>,
+    private sanitizer: DomSanitizer
+  ) {}
 
   check(event){
     this.form.get("province").reset();
@@ -48,8 +52,16 @@ export class NewCountryComponent {
     this.details = this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0] === undefined ? null : this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0];
   }
 
+  ngOnInit() {
+    this.countryList$ = this.store.select(
+      getCountryList
+    ) /*.pipe(
+      mergeMap((countries:any[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))))*/;
+    this.countriesIds$ = this.store.select(getCountriesIdsInApp);
+  }
+
   svgToB64() {
-    const url = "../node_modules/svg-country-flags/svg/" + this.form.value.pays.code.toLowerCase() + ".svg";
+    const url = "assets/svg/" + this.form.value.pays.code.toLowerCase() + ".svg";
     return new Promise(resolve => {
       var ajax = new XMLHttpRequest();
       ajax.open("GET", url, true);
@@ -65,7 +77,6 @@ export class NewCountryComponent {
           this.form.get("pays").value["code"] = this.form.get("province").value["codeCountry"];
           this.form.get("pays").value["name"] = this.form.get("province").value["name"];
         }
-
         this.http
           .get(
             "http://maps.googleapis.com/maps/api/geocode/json?address=" +
