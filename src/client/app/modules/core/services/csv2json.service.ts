@@ -558,7 +558,6 @@ export class Csv2JsonService {
 
       return [{ error: string }];
     }
-
     if (allTextLines.length > 201) {
       return [{ error: "TOO_MUCH_ENTITY_COUNT" }];
     }
@@ -648,7 +647,9 @@ export class Csv2JsonService {
 
         return string;
       }
-
+      if (allTextLines.length > 201) {
+        return [{ error: "TOO_MUCH_ENTITY_COUNT" }];
+      }
       //console.log(lines); //The data in the form of 2 dimensional array.
       return lines;
     });
