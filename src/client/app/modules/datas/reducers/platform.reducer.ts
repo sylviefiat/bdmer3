@@ -37,10 +37,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, ...addedplatform],
         ids: [...state.ids.filter(id => addedplatform._id !== id), ...addedplatform._id],
         error: null,
-        msg:
-          action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS
-            ? "Platforms registered with success"
-            : "platform registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "PLATFORM_REGISTERED_SUCCESS" : "PLATFORM_REGISTERED_SUCCESS"
       };
     }
 
@@ -62,7 +59,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
     case PlatformAction.ActionTypes.CHECK_PLATFORM_SUCCESS: {
       return {
         ...state,
-        msg: "CSV file is ready to be imported"
+        msg: "CSV_RDY_IMPORT"
       };
     }
 
@@ -78,7 +75,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedzone.codePlatform !== id), ...addedzone.codePlatform],
         error: null,
-        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "Zones registered with success" : "Zone registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "ZONES_REGISTERED_SUCCESS" : "ZONES_REGISTERED_SUCCESS"
       };
     }
 
@@ -94,7 +91,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedsurvey.codePlatform !== id), ...addedsurvey.codePlatform],
         error: null,
-        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "Surveys registered with success" : "Survey registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "SURVEYS_REGISTERED_SUCCESS" : "SURVEYS_REGISTERED_SUCCESS"
       };
     }
 
@@ -141,8 +138,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedstation.codePlatform !== id), ...addedstation.codePlatform],
         error: null,
-        msg:
-          action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "Stations registered with success" : "Station registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "STATIONS_REGISTERED_SUCCESS" : "STATIONS_REGISTERED_SUCCESS"
       };
     }
 
@@ -191,10 +187,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedzonepref.codePlatform !== id), ...addedzonepref.codePlatform],
         error: null,
-        msg:
-          action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS
-            ? "Zones preferences registered with success"
-            : "Zone preference registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "ZONE_PREF_REGISTERED_SUCCESS" : "ZONE_PREF_REGISTERED_SUCCESS"
       };
     }
 
@@ -227,7 +220,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedcount.codePlatform !== id), ...addedcount.codePlatform],
         error: null,
-        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "Counts registered with success" : "Count registered with success"
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "COUNTS_REGISTERED_SUCCESS" : "COUNTS_REGISTERED_SUCCESS"
       };
     }
 
@@ -265,7 +258,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: state.ids.filter(id => id !== removedPlatform._id),
         currentPlatformId: null,
         error: null,
-        msg: "Platform removed with success"
+        msg: "PLATFORM_REMOVED_SUCCESS"
       };
     }
 
@@ -293,7 +286,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
         currentZoneId: null,
         error: null,
-        msg: "Zone removed with success"
+        msg: "ZONE_REMOVED_SUCCESS"
       };
     }
 
@@ -308,7 +301,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
         currentSurveyId: null,
         error: null,
-        msg: "Survey removed with success"
+        msg: "SURVEY_REMOVED_SUCCESS"
       };
     }
 
@@ -336,7 +329,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
         currentStationId: null,
         error: null,
-        msg: "Station removed with success"
+        msg: "STATION_REMOVED_SUCCESS"
       };
     }
 
@@ -367,7 +360,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
         currentSpPrefId: null,
         error: null,
-        msg: "Zone preference removed with success"
+        msg: "ZONE_PREF_REMOVED_SUCCESS"
       };
     }
 
@@ -384,7 +377,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ids: [...state.ids.filter(id => id !== modifiedPlatform._id), modifiedPlatform._id],
         currentCountId: null,
         error: null,
-        msg: "Count removed with success"
+        msg: "COUNT_REMOVED_SUCCESS"
       };
     }
 

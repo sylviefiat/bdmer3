@@ -1,15 +1,16 @@
-import 'rxjs/add/operator/let';
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { RouterExtensions, Config } from '../../modules/core/index';
+import "rxjs/add/operator/let";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { getSpeciesPageMsg } from "../../modules/ngrx/index";
 
-import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
-import { SpeciesAction } from '../../modules/datas/actions/index';
-import { Species } from '../../modules/datas/models/species';
+import { IAppState, getSpeciesInApp } from "../../modules/ngrx/index";
+import { SpeciesAction } from "../../modules/datas/actions/index";
+import { Species } from "../../modules/datas/models/species";
 
 @Component({
-  selector: 'bc-species-page',
+  selector: "bc-species-page",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
@@ -19,11 +20,12 @@ import { Species } from '../../modules/datas/models/species';
           <mat-option [value]="'form'">{{ 'FORM' | translate}}</mat-option>
           <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
       </mat-select>
-      </mat-form-field>      
+      </mat-form-field>
+      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ (msg$ | async) | translate }}</mat-card-content>
     </mat-card>
 
     <bc-species-preview-list [speciesList]="species$ | async"></bc-species-preview-list>
-    
+
   `,
   /**
    * Container components are permitted to have just enough styles
@@ -33,27 +35,35 @@ import { Species } from '../../modules/datas/models/species';
    */
   styles: [
     `
-    mat-card {
-      text-align: center;
-    }
-    mat-card-title {
-      display: flex;
-      justify-content: center;
-    }
-  `,
-  ],
+      mat-card {
+        text-align: center;
+      }
+      mat-card-title {
+        display: flex;
+        justify-content: center;
+      }
+      .msg {
+        text-align: center;
+        padding: 16px;
+        color: white;
+        background-color: #4bb543;
+      }
+    `
+  ]
 })
 export class SpeciesListPageComponent implements OnInit {
   species$: Observable<Species[]>;
+  msg$: Observable<string | null>;
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
-  ngOnInit() {    
+  ngOnInit() {
     this.species$ = this.store.select(getSpeciesInApp);
-    this.store.dispatch(new SpeciesAction.LoadAction());   
+    this.msg$ = this.store.select(getSpeciesPageMsg);
+    this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
-  addSpecies(type: string){
+  addSpecies(type: string) {
     type = type.charAt(0).toUpperCase() + type.slice(1);
-    this.routerext.navigate(['/species'+type]);
+    this.routerext.navigate(["/species" + type]);
   }
 }

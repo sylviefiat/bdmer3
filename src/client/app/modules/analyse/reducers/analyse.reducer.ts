@@ -1,13 +1,10 @@
-import { IAnalyseState, analyseInitialState, getStationsAvailables } from '../states/index';
-import { Platform, Zone, Station, Survey } from '../../datas/models/platform';
-import { AnalyseAction } from '../actions/index';
+import { IAnalyseState, analyseInitialState, getStationsAvailables } from "../states/index";
+import { Platform, Zone, Station, Survey } from "../../datas/models/platform";
+import { AnalyseAction } from "../actions/index";
 
-export function analyseReducer(
-  state : IAnalyseState = analyseInitialState,
-  action: AnalyseAction.Actions
-): IAnalyseState {
+export function analyseReducer(state: IAnalyseState = analyseInitialState, action: AnalyseAction.Actions): IAnalyseState {
   switch (action.type) {
-    case AnalyseAction.ActionTypes.SELECT_COUNTRY: {  
+    case AnalyseAction.ActionTypes.SELECT_COUNTRY: {
       //console.log(action.payload);
       return {
         ...state,
@@ -40,8 +37,8 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_ZONES: {  
-      let newState = {...state,usedZones: action.payload};
+    case AnalyseAction.ActionTypes.SELECT_ZONES: {
+      let newState = { ...state, usedZones: action.payload };
       let stations = getStationsAvailables(newState);
       return {
         ...newState,
@@ -49,35 +46,35 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_STATIONS: {  
+    case AnalyseAction.ActionTypes.SELECT_STATIONS: {
       return {
         ...state,
         usedStations: action.payload
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_SPECIES: {  
+    case AnalyseAction.ActionTypes.SELECT_SPECIES: {
       return {
         ...state,
         usedSpecies: action.payload
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_DIMS: {  
+    case AnalyseAction.ActionTypes.SELECT_DIMS: {
       return {
         ...state,
         usedDims: action.payload
       };
     }
 
-    case AnalyseAction.ActionTypes.SELECT_METHOD: {  
+    case AnalyseAction.ActionTypes.SELECT_METHOD: {
       return {
         ...state,
         usedMethod: action.payload
       };
     }
 
-    case AnalyseAction.ActionTypes.ANALYSE: { 
+    case AnalyseAction.ActionTypes.ANALYSE: {
       return {
         ...state,
         analysing: true,
@@ -85,22 +82,22 @@ export function analyseReducer(
       };
     }
 
-    case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {  
+    case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {
       return {
         ...state,
         result: action.payload,
         analysing: false,
         analysed: true,
-        msg: "Analyse succeded"
+        msg: "ANALYSE_SUCCESS"
       };
     }
 
-    case AnalyseAction.ActionTypes.ANALYSE_FAILURE: {  
+    case AnalyseAction.ActionTypes.ANALYSE_FAILURE: {
       return {
         ...state,
         analysing: false,
         analysed: false,
-        msg: "Analyse failed"
+        msg: "ANALYSE_FAILED"
       };
     }
 
@@ -109,4 +106,3 @@ export function analyseReducer(
     }
   }
 }
-
