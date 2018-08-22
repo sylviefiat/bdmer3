@@ -419,5 +419,6 @@
   "ERROR_GEOJSON_ZONE_NAME": "Le champ 'name' est manquant ou erroné dans le fichier Geojson",
   "GRAPH_PER_ZONES": "Evolution des espèces par année et par zone",
   "CLICK_ZONE": "Cliquer sur une zone pour afficher ses graphiques",
-  "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?"
+  "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?",
+  "SELECT_PROVINCE": "Choisir une province"
 }

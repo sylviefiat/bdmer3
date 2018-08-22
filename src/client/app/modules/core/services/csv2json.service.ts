@@ -110,7 +110,8 @@ export class Csv2JsonService {
                 lines.push(sp);
             }
         }
-        if (errorTab.length !== 0) {
+        console.log(lines);
+       /* if (errorTab.length !== 0) {
             let string = "";
             for (let i in errorTab) {
                 if (parseInt(i) === errorTab.length - 1) {
@@ -120,7 +121,7 @@ export class Csv2JsonService {
                 }
             }
             return [{ error: string }];
-        }
+        }*/
         //console.log(lines); //The data in the form of 2 dimensional array.
         return lines;
     }

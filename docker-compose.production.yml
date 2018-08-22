@@ -44,6 +44,17 @@ services:
       - ./.docker/nginx.conf:/etc/nginx/conf.d/angular-seed.template
       - ./dist/prod:/var/www/dist/prod
 
+  # Just to build prod image - available also in bdmer_deploy project
+  bdmer3-prod:
+    hostname: dbmer3-prod
+    build:
+      context: .
+      dockerfile: ./.docker/dbmer3.production.dockerfile
+    container_name: bdmer3-prod
+    image: bdmer3-prod
+    networks:
+      - bdmer3-network
+
 networks:
   bdmer3-network:
     driver: bridge

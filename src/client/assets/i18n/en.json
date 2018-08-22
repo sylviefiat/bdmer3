@@ -419,5 +419,6 @@
   "ERROR_GEOJSON_ZONE_NAME": "Geojson file missing or wrong 'name' field - mandatory",
   "GRAPH_PER_ZONES": "Species evolution per year and zone",
   "CLICK_ZONE": "Click on zone to display its graphs",
-  "WILL_DELETE_ALL_ZONE": "Warning ! Importing this file will delete all the existing zones. Are you sure to continue?"
+  "WILL_DELETE_ALL_ZONE": "Warning ! Importing this file will delete all the existing zones. Are you sure to continue?",
+  "SELECT_PROVINCE": "Select Province"
 }
