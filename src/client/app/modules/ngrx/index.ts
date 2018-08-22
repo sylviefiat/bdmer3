@@ -32,6 +32,7 @@ import { ActionReducer, combineReducers, ActionReducerMap } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
+import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl } from '../core/index';
 import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
 import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
 import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
@@ -49,6 +50,7 @@ import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCou
  * our top level state interface is just a map of keys to inner state types.
  */
 export interface IAppState {
+  app: IAppInitState;
   i18n: IMultilingualState;
   main: IMainState;
   auth: IAuthState;
@@ -68,6 +70,7 @@ export interface IAppState {
  * the result from right to left.
  */
 export const AppReducer: ActionReducerMap<IAppState, any> = {
+  app: appInitReducer,
   i18n: multilingualReducer,
   main: reducer,
   auth: authReducer,
@@ -80,6 +83,7 @@ export const AppReducer: ActionReducerMap<IAppState, any> = {
 };
 
 export const initialState: IAppState = {
+  app: appInitialState,
   i18n: multilingualInitialState,
   main: mainInitialState,
   auth: authInitialState,
@@ -105,6 +109,7 @@ export const initialState: IAppState = {
     return productionReducer(state, action);
   }
 }*/
+export const getAppInitState = (state:IAppState) => state.app;
 
 export const getMultilingualState = (state:IAppState) => state.i18n;
 
@@ -126,6 +131,8 @@ export const getAnalyseState = (state:IAppState) => state.analyse;
 
 export const getAppState = (state:IAppState) => state;
 
+// init app
+export const getServiceUrl : any = compose(getServicesBaseUrl,getAppInitState);
 // i18n
 export const getLangues: any = compose(getLang, getMultilingualState);
 export const getListNames: any = compose(getNames, getNameListState);

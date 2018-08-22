@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Observable, defer, pipe, of } from 'rxjs';
 import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from 'rxjs/operators';
@@ -10,16 +10,19 @@ import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SpeciesService } from "../services/species.service";
 import { SpeciesAction } from '../actions/index';
 import { Species } from '../models/species';
-
-import { config } from '../../../config';
+import { IAppState, getServiceUrl } from '../../ngrx/index';
+import { AppInitAction } from "../../core/actions/index";
 
 @Injectable()
 export class SpeciesEffects {
   
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = defer(() => { 
-    return this.speciesService.initDB('species',config.urldb);
-  });
+  openDB$: Observable<any> = this.actions$
+    .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
+    .pipe(
+      withLatestFrom(this.store.select(getServiceUrl)),
+      map((value) => this.speciesService.initDB('species',value[1]))
+    );
 
   @Effect()
   loadSpecies$: Observable<Action> = this.actions$
@@ -72,7 +75,12 @@ export class SpeciesEffects {
     .ofType<SpeciesAction.RemoveSpeciesSuccessAction>(SpeciesAction.ActionTypes.REMOVE_SPECIES_SUCCESS)
     .pipe(tap(() =>this.router.navigate(['/species'])));
 
-  constructor(private actions$: Actions, private router: Router, private speciesService: SpeciesService, private csv2jsonService: Csv2JsonService) {
+  constructor(
+    private actions$: Actions, 
+    private router: Router, 
+    private store: Store<IAppState>,
+    private speciesService: SpeciesService, 
+    private csv2jsonService: Csv2JsonService) {
     
     
   }

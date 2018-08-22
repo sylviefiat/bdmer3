@@ -64,12 +64,6 @@
           {{'MENU_ANALYSE' | translate}}
         </a>
       </mat-list-item>
-      <mat-list-item>
-        <a [routerLink]="['/map']" [routerLinkActive]="['router-link-active']" (click)="open = !open"  [routerLinkActiveOptions]="{exact:true}">
-          <fa [name]="'map-marker'" [border]=true></fa>
-          {{'MAP' | translate}}
-        </a>
-      </mat-list-item>
       <mat-list-item *ngIf="(isLogged$ | async)">
         <a [routerLink]="['/platform']" (click)="open = !open"  [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
           <fa [name]="'map-marker'" [border]=true></fa>

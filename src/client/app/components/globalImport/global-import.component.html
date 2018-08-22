@@ -7,7 +7,7 @@
       <ng-template #activedbutton>
         <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
       </ng-template>
-      <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
+      <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
     </mat-card-content>
   </mat-card>
 </div>
@@ -15,7 +15,7 @@
 <div class="insideform">
   <mat-horizontal-stepper #stepper (selectionChange)="changeIndex($event)">
     <mat-step [optional]="true" class="station">
-      <form [formGroup]="stationForm"> 
+      <form [formGroup]="stationForm">
         <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileStation !== null && (error$ | async) === null) ? 'valid' : ''">Stations</div></ng-template>
 
         <bc-global-import-station
@@ -25,6 +25,8 @@
         [locale]="locale"
         [docs_repo]="docs_repo"
         [error$]="error$"
+        [countries]="countries"
+        [platform]="platform"
         [importError$]="importError$"
         [csvFileStation]="csvFileStation"
         [csvFileCount]="csvFileCount"
@@ -40,7 +42,7 @@
   </mat-step>
 
   <mat-step [optional]="true" class="survey">
-    <form [formGroup]="surveyForm"> 
+    <form [formGroup]="surveyForm">
       <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileSurvey !== null && (error$ | async) === null) ? 'valid' : ''">Surveys</div></ng-template>
 
       <bc-global-import-survey
@@ -67,14 +69,16 @@
 </mat-step>
 
 <mat-step [optional]="true" class="count">
-  <form [formGroup]="countForm"> 
+  <form [formGroup]="countForm">
     <ng-template matStepLabel><div [ngClass]="((importError$ | async)?.length === 0 && csvFileCount !== null && (error$ | async) === null) ? 'valid' : ''">Counts</div></ng-template>
-    
+
     <bc-global-import-count
     [viewCount]="viewCount"
     [group]="countForm"
     [locale]="locale"
     [docs_repo]="docs_repo"
+    [countries]="countries"
+    [platform]="platform"
     [error$]="error$"
     [importError$]="importError$"
     [csvFileCount]="csvFileCount"

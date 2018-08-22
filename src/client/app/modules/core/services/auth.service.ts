@@ -10,7 +10,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBAuth from "pouchdb-authentication";
 import {TranslateService} from '@ngx-translate/core';
 
-import { config } from '../../../config';
+import { AppService } from './app.service';
 
 @Injectable()
 export class AuthService {
@@ -21,10 +21,14 @@ export class AuthService {
   @Output() getLoggedInUser: EventEmitter<Observable<User>> = new EventEmitter();
   @Output() getCountry: EventEmitter<Observable<Country>> = new EventEmitter();
 
-  constructor(private translate: TranslateService, private countriesService: CountriesService) {
-    let dbname = "/_users";
+  constructor(private environment: AppService, private translate: TranslateService, private countriesService: CountriesService) {
+
+  }
+
+  initDB(dbname,remote): Observable<any> {
     PouchDB.plugin(PouchDBAuth);
-    this.db = new PouchDB(config.urldb+dbname, {skip_setup: true,revs_limit: 5});   
+    this.db = new PouchDB(remote + "/" + dbname, {skip_setup: true,revs_limit: 5}); 
+    return from(this.sync(remote + "/"  + dbname));
   }
 
   login({ username, password }: Authenticate): Observable<any> {

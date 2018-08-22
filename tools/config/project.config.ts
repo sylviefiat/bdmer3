@@ -1,27 +1,37 @@
-import { join } from 'path';
-import { SeedAdvancedConfig } from './seed-advanced.config';
-import { ExtendPackages } from './seed.config.interfaces';
+import { join } from "path";
+import { SeedAdvancedConfig } from "./seed-advanced.config";
+import { ExtendPackages } from "./seed.config.interfaces";
 
 /**
  * This class extends the basic seed configuration, allowing for project specific overrides. A few examples can be found
  * below.
  */
 export class ProjectConfig extends SeedAdvancedConfig {
-
-    PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
+    PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, "tasks", "project");
 
     constructor() {
         super();
-        this.APP_TITLE = 'BDMER³';
+        this.APP_TITLE = "BDMER³";
         // this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
-
         /* Enable typeless compiler runs (faster) between typed compiler runs. */
         // this.TYPED_COMPILE_INTERVAL = 5;
-
         // Add `NPM` third-party libraries to be injected/bundled.
-        console.log("here");
-        this.NPM_DEPENDENCIES = [
-            ...this.NPM_DEPENDENCIES
+        this.NPM_DEPENDENCIES = [...this.NPM_DEPENDENCIES];
+
+        // Add `local` third-party libraries to be injected/bundled.
+        this.APP_ASSETS = [
+            // {src: `${this.APP_SRC}/your-path-to-lib/libs/jquery-ui.js`, inject: true, vendor: false}
+            // {src: `${this.CSS_SRC}/path-to-lib/test-lib.css`, inject: true, vendor: false},
+        ];
+
+        this.ROLLUP_INCLUDE_DIR = [
+            ...this.ROLLUP_INCLUDE_DIR
+            //'node_modules/moment/**'
+        ];
+
+        this.ROLLUP_NAMED_EXPORTS = [
+            ...this.ROLLUP_NAMED_EXPORTS
+            //{'node_modules/immutable/dist/immutable.js': [ 'Map' ]},
         ];
 
         // Add `local` third-party libraries to be injected/bundled.
@@ -90,6 +100,13 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/@mapbox/togeojson/togeojson.js'
         },
         {
+            name: "@mapbox/mapbox-sdk",
+            packageMeta: {
+                defaultExtension: "js",
+                main: "umd/mapbox-sdk.js"
+            }
+        },
+        {
             name: '@mapbox/geojson-area',
             path: 'node_modules/@mapbox/geojson-area/index.js'
         },
@@ -120,27 +137,27 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: 'highcharts/modules/indicators',
             path: 'node_modules/highcharts/modules/indicators.js'
-        }, 
+        },
         {
             name: 'highcharts/modules/exporting',
             path: 'node_modules/highcharts/modules/exporting.js'
-        }, 
+        },
         {
             name: 'highcharts/modules/export-data',
             path: 'node_modules/highcharts/modules/export-data.js'
-        }, 
+        },
         {
             name: 'highcharts/highcharts-more',
             path: 'node_modules/highcharts/highcharts-more.js'
-        }, 
+        },
         {
             name: 'highcharts/highstock',
             path: 'node_modules/highcharts/highstock.js'
-        }, 
+        },
         {
             name: 'highcharts/highmaps',
             path: 'node_modules/highcharts/highmaps.js'
-        }, 
+        },
         {
             name: 'highcharts',
             path: 'node_modules/highcharts/highcharts.js'
@@ -279,5 +296,4 @@ export class ProjectConfig extends SeedAdvancedConfig {
         /* Add to or override NPM module configurations: */
         // this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
     }
-
 }

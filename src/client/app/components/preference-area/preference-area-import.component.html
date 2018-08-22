@@ -2,25 +2,25 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES_PREF' | translate}}</mat-card-title>
        <mat-card-content>
-        <button *ngIf="importCsvFile === null || (importError$ | async)?.length !== 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button> 
+        <button *ngIf="importCsvFile === null || importError.length !== 0 || error !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
-        <button (click)="cancel()" class="back">{{ 'CANCEL' | translate }}</button>        
-      </mat-card-content>   
+        <button (click)="cancel()" class="back">{{ 'CANCEL' | translate }}</button>
+      </mat-card-content>
       <mat-card-content class="error" *ngIf="error !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
-      <mat-card-content class="error" *ngIf="(importError$ | async)?.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>     
+      <mat-card-content class="error" *ngIf="importError.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="importError.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>
     </mat-card>
 </div>
 <div class="insideform" [formGroup]="zonePrefForm">
   <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title>
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
     </mat-card-title-group>
     <mat-card-content>
-      {{'IMPORT_DESC' | translate }}    
+      {{'IMPORT_DESC' | translate }}
     </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_CSV_ZONES_PREF' | translate }}</h5>
@@ -35,11 +35,11 @@
       </button>
     </mat-card-actions>
 
-    <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
+    <mat-card-actions align="start" *ngIf="importError.length > 0">
       <h2 class="errorZonePref">{{'LIST_ERROR_ZONE_PREF' | translate}}</h2>
       <mat-list>
-        <div *ngFor="let zonePref of (importError$ | async)">
-          <mat-list-item class="errorZonePref"> 
+        <div *ngFor="let zonePref of importError">
+          <mat-list-item class="errorZonePref">
               {{zonePref}}
           </mat-list-item>
         </div>
@@ -47,4 +47,3 @@
     </mat-card-actions>
   </mat-card>
 </div>
-

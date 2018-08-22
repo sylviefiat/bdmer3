@@ -12,11 +12,12 @@ export class SpeciesService {
   private db: any;
 
   constructor() {
+    //this.dbname = "species";
   }
 
-  initDB(dbname: string, remote: string): Observable<any> {
-    this.db = new PouchDB(dbname,{revs_limit: 2});
-    return from(this.sync(remote + dbname));
+  initDB(dbname,remote): Observable<any> {
+    this.db = new PouchDB(dbname,{revs_limit: 3});
+    return from(this.sync(remote + "/"  + dbname));
   }
 
   public getAll(): Observable<any> {
@@ -33,6 +34,7 @@ export class SpeciesService {
 
   addSpecies(species: Species): Observable<Species> {
     species._id=species.code;
+    console.log(species);
     return from(this.db.put(species))
       .pipe(
         filter((response: ResponsePDB) =>response.ok),
@@ -41,12 +43,14 @@ export class SpeciesService {
   }
 
   importSpecies(species: Species[]): Observable<Observable<Species>> {
+    console.log(species);
     return of(species)
       .map((sp, i) => this.addSpecies(sp[i]))
   }
 
   editSpecies(species: Species): Observable<Species> {
     species._id=species.code;
+    console.log(species);
     return this.getSpecies(species.code)
       .pipe(
         mergeMap(sp => {    

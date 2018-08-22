@@ -1,16 +1,27 @@
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { RouterExtensions, Config } from "../../modules/core/index";
+import { ActivatedRoute } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { Observable, of, Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { RouterExtensions, Config } from '../../modules/core/index';
-import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { IAppState, getSelectedPlatform, getAuthUser, getSelectedZone, getSelectedStation, getSelectedSurvey,getSelectedCount, getLangues, getSpeciesInApp } from '../../modules/ngrx/index';
-import { Platform, Zone, Survey, Station, Count, Species } from '../../modules/datas/models/index';
-import { User } from '../../modules/countries/models/country';
-import { PlatformAction } from '../../modules/datas/actions/index';
-import { SpeciesAction } from '../../modules/datas/actions/index';
+import {
+  IAppState,
+  getSelectedPlatform,
+  getAllCountriesInApp,
+  getAuthUser,
+  getSelectedZone,
+  getSelectedStation,
+  getSelectedSurvey,
+  getSelectedCount,
+  getLangues,
+  getSpeciesInApp
+} from "../../modules/ngrx/index";
+import { Platform, Zone, Survey, Station, Count, Species } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
+import { User } from "../../modules/countries/models/country";
+import { PlatformAction } from "../../modules/datas/actions/index";
+import { SpeciesAction } from "../../modules/datas/actions/index";
 
 /**
  * Note: Container components are also reusable. Whether or not
@@ -23,19 +34,20 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
  * SelectedBookPageComponent
  */
 @Component({
-  selector: 'bc-view-count-page',
+  selector: "bc-view-count-page",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bc-count 
+    <bc-count
       [platform]="platform$ | async"
       [survey]="survey$ | async"
       [count]="count$ | async"
-      [locale]="locale$ | async" 
+      [locale]="locale$ | async"
       [species]="speciesList$ | async"
+      [countries]="countries$ | async"
       (remove)="removeCount($event)"
       (action)="actionCount($event)">
     </bc-count>
-  `,
+  `
 })
 export class ViewCountPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
@@ -46,17 +58,12 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
   count$: Observable<Count | null>;
   locale$: Observable<string>;
   speciesList$: Observable<Species[]>;
+  countries$: Observable<Country[]>;
 
   constructor(private store: Store<IAppState>, private route: ActivatedRoute, public routerext: RouterExtensions) {
-    this.platformSubscription = route.params.pipe(
-      map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
-      .subscribe(store);
-    this.surveySubscription = route.params.pipe(
-      map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
-      .subscribe(store);
-    this.countSubscription = route.params.pipe(
-      map(params => new PlatformAction.SelectCountAction(params.idCount)))
-      .subscribe(store);
+    this.platformSubscription = route.params.pipe(map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))).subscribe(store);
+    this.surveySubscription = route.params.pipe(map(params => new PlatformAction.SelectSurveyAction(params.idSurvey))).subscribe(store);
+    this.countSubscription = route.params.pipe(map(params => new PlatformAction.SelectCountAction(params.idCount))).subscribe(store);
   }
 
   ngOnInit() {
@@ -65,6 +72,7 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
     this.count$ = this.store.select(getSelectedCount);
     this.locale$ = this.store.select(getLangues);
     this.speciesList$ = this.store.select(getSpeciesInApp);
+    this.countries$ = this.store.select(getAllCountriesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
@@ -78,7 +86,7 @@ export class ViewCountPageComponent implements OnInit, OnDestroy {
     this.routerext.navigate([redirect]);
   }
 
-  removeCount(count: Count){
+  removeCount(count: Count) {
     this.store.dispatch(new PlatformAction.RemoveCountAction(count));
   }
 }

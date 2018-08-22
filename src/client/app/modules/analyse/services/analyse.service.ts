@@ -19,6 +19,7 @@ export class AnalyseService {
         try {
             let result: Results = { name: "", resultPerSurvey: [], chartsData: null };
             let today = new Date();
+            console.log(analyseData);
             result.name = "ANALYSE BDMER " + today;
             // resultats par relevé
             for (let survey of analyseData.usedSurveys) {
@@ -79,6 +80,7 @@ export class AnalyseService {
             return result;
 
         } catch (e) {
+            console.log(e);
             throw e;
         }
 

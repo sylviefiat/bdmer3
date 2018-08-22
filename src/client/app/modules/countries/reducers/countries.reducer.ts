@@ -6,6 +6,7 @@ export function countriesReducer(
   state: ICountriesState = countriesInitialState,
   action: CountriesAction.Actions | CountryAction.Actions
 ): ICountriesState {
+
   switch (action.type) {
     case CountriesAction.ActionTypes.LOAD: {
       return {
