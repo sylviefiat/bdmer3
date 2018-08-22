@@ -437,5 +437,7 @@
   "USER_SAVED_SUCCESS": "Utilisateur sauvegardé avec succès",
   "USER_REMOVED_SUCCESS": "Utilisateur supprimé avec succès",
   "SPECIES_REGISTERED_SUCCESS": "Espèce enregistré avec succès",
-  "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès"
+  "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès",
+  "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?",
+  "SELECT_PROVINCE": "Choisir une province"
 }

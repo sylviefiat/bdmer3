@@ -132,6 +132,17 @@ export class PlatformService {
     );
   }
 
+  removeAllZone(platform: Platform) {
+    return this.getPlatform(platform.code).pipe(
+      mergeMap(pt => {
+        pt.zones = [];
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(platform))
+    );
+  }
+
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {
     let msg = this.translate.instant("IMPORT_ERROR_SURVEY");
 

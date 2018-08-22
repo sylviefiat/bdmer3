@@ -437,5 +437,7 @@
   "USER_SAVED_SUCCESS": "User saved with success",
   "USER_REMOVED_SUCCESS": "User removed with success",
   "SPECIES_REGISTERED_SUCCESS": "Species registered with success",
-  "SPECIES_REMOVED_SUCCESS": "Species removed with success"
+  "SPECIES_REMOVED_SUCCESS": "Species removed with success",
+  "WILL_DELETE_ALL_ZONE": "Warning ! Importing this file will delete all the existing zones. Are you sure to continue?",
+  "SELECT_PROVINCE": "Select Province"
 }

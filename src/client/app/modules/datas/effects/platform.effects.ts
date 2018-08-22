@@ -284,6 +284,14 @@ export class PlatformEffects {
   );
 
   @Effect()
+  removeAllZone$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveAllZoneAction>(PlatformAction.ActionTypes.REMOVE_ALL_ZONE).pipe(
+    map((action: PlatformAction.RemoveAllZoneAction) => action.payload),
+    mergeMap(platform => this.platformService.removeAllZone(platform)),
+    map((platform: Platform) => new PlatformAction.RemoveAllZoneSuccessAction(platform)),
+    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+  );
+
+  @Effect()
   removeSurvey$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveSurveyAction>(PlatformAction.ActionTypes.REMOVE_SURVEY).pipe(
     map((action: PlatformAction.RemoveSurveyAction) => action.payload),
     mergeMap(survey => this.platformService.removeSurvey(survey)),
