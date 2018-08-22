@@ -1,4 +1,3 @@
-
 import { Injectable, NgZone } from '@angular/core';
 import { defer, Observable, pipe, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -90,6 +89,5 @@ export class CountriesEffects {
         private environment: AppService) {
         //this.basePath = environment.config.servicesBasePath;
         //this.dbname = "countries";
-
     }
 }

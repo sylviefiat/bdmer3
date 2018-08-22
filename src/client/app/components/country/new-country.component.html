@@ -1,26 +1,36 @@
 <mat-card>
-      <mat-card-title>{{ 'TITLE_NEW_COUNTRY' | translate}}</mat-card-title>
-        <mat-card-content>
-          <form [formGroup]="form" (ngSubmit)="submit()" >
-          <p>
-            <fa [name]="'globe'" [border]=false [size]=2></fa>
-            <mat-form-field>
-              <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="pays" >
-                <mat-option *ngFor="let pays of (countryList$ | async)" [value]="pays" [disabled]="countriesIds$ | async | bcHasIntersection:pays">{{ pays.name }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          <img mat-card-sm-image *ngIf="flag" [src]="flag | async" />
-        </p>
-          <p *ngIf="errorMessage" class="countryError">
-            {{ errorMessage }}
-          </p>    
+  <mat-card-title>{{ 'TITLE_NEW_COUNTRY' | translate}}</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <p>
+        <fa [name]="'globe'" [border]=false [size]=2></fa>
+        <mat-form-field>
+          <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" formControlName="pays"  (selectionChange)="check($event)">
+            <mat-option *ngFor="let pays of countryList" [value]="pays" [disabled]="countriesIds | bcHasIntersection:pays">{{ pays.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <img mat-card-sm-image *ngIf="flag" [src]="flag | async" />
+      </p>
+      <p *ngIf="details !== null" >
+        <fa [name]="'map'" [border]=false [size]=2></fa>
+        <mat-form-field>
+          <mat-select placeholder="{{ 'SELECT_PROVINCE' | translate}}" formControlName="province">
+            <mat-option *ngFor="let province of details.alternative" [value]="province">{{ province.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </p>
 
-          
-          <p class="countryButtons">
-            <button type="submit" mat-button>{{ 'ADD' | translate}}</button>
-          </p>
 
-        </form>
-      </mat-card-content>
+      <p *ngIf="errorMessage" class="countryError">
+        {{ errorMessage }}
+      </p>
 
-    </mat-card>
+      <p class="countryButtons">
+        <button *ngIf="(province === null && details !== null) || selected === false;else valid" type="submit" mat-button class="disabled" disabled>{{ 'ADD' | translate}}</button>
+        <ng-template #valid> <button type="submit" mat-button>{{ 'ADD' | translate}}</button></ng-template>
+      </p>
+
+    </form>
+  </mat-card-content>
+
+</mat-card>
