@@ -419,6 +419,7 @@
   "ERROR_GEOJSON_ZONE_NAME": "Geojson file missing or wrong 'name' field - mandatory",
   "GRAPH_PER_ZONES": "Species evolution per year and zone",
   "CLICK_ZONE": "Click on zone to display its graphs",
+  "TOO_MUCH_ENTITY_COUNT": "There is too many count in your csv file, please choose a file with less than 200 counts",
   "PLATFORM_REGISTERED_SUCCESS": "Platforms registered with success",
   "CSV_RDY_IMPORT": "CSV file is ready to be imported",
   "ZONES_REGISTERED_SUCCESS": "Zones registered with success",

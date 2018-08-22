@@ -419,6 +419,7 @@
   "ERROR_GEOJSON_ZONE_NAME": "Le champ 'name' est manquant ou erroné dans le fichier Geojson",
   "GRAPH_PER_ZONES": "Evolution des espèces par année et par zone",
   "CLICK_ZONE": "Cliquer sur une zone pour afficher ses graphiques",
+  "TOO_MUCH_ENTITY_COUNT": "Il y a trop de comptage dans votre fichier csv, choisissez un fichier avec moins de 200 comptages.",
   "PLATFORM_REGISTERED_SUCCESS": "Platforme(s) enregistrée(s) avec succès",
   "CSV_RDY_IMPORT": "Fichier CSV prêt à être importé",
   "ZONES_REGISTERED_SUCCESS": "Zone(s) enregistrée(s) avec succès",
