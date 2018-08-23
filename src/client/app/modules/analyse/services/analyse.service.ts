@@ -42,20 +42,20 @@ export class AnalyseService {
                                 hasCountOnSp = true;
                                 break;
                             }
-                        }                        
+                        }
                         if (hasCountOnSp) {
                             // on récupère longueur et largeur min entrés par l'utilisateur pour cette espèce pour l'analyse
-                            let spdim = analyseData.usedDims.filter(spd => spd.codeSp === sp.code)[0];                                                     
+                            let spdim = analyseData.usedDims.filter(spd => spd.codeSp === sp.code)[0];
                             // calcul des résultats pour ce station
-                            resultStation = this.getResultPerStation(survey, sp, spdim, station, analyseData.usedMethod);                            
+                            resultStation = this.getResultPerStation(survey, sp, spdim, station, analyseData.usedMethod);
                         }
                         if(resultStation !== null){
                             // ajout des résultats du station dans le résultat de l'espère
                             resultSp.resultPerStation.push(resultStation);
-                            // on récupère la zone de la station  
+                            // on récupère la zone de la station
                             let zone = analyseData.usedZones.filter((uz: Zone) => {
                                 return station.geometry && uz.geometry && Turf.booleanPointInPolygon(station.geometry.coordinates, MapService.getPolygon(uz, { name: uz.properties.code }))
-                            })[0];   
+                            })[0];
                             // initialisation de resultZone au cas où cette zone n'ai pas encore été traitée
                             let resultZone: ResultZone = { codeZone: zone.properties.code, numberIndividual: 0, biomasses: [], biomassesPerHA: [], densitiesPerHA: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal: 0, SDBiomassPerHA: 0, SDDensityPerHA: 0 };
                             // si la zone a déjà commencé a etre traitée on récupère l'objet de résultat
@@ -103,7 +103,7 @@ export class AnalyseService {
                     break;
                 case "LONGLARG":
                 default:
-                    if ((Number(spDim.longMin) === 0 && Number(spDim.largMin) === 0) || (Number(m.long) >= Number(spDim.longMin) && Number(m.larg) >= Number(spDim.largMin))) {
+                    if ((Number(spDim.longMin) === 0 && Number(spDim.longMax) === 0) || (Number(m.long) >= Number(spDim.longMin) && Number(m.larg) >= Number(spDim.longMax))) {
                         x = (angularMath.getPi() * Number(m.long) * Number(m.larg)) / 4;
                     }
             }
@@ -166,7 +166,7 @@ export class AnalyseService {
         let biomass = 0
         for(let i in mesures){
             // calcul biomass depending on method
-            let x=(method.method ==="LONGLARG")?((angularMath.getPi()*Number(mesures[i].long)*Number(mesures[i].larg))/4):(Number(mesures[i].long));            
+            let x=(method.method ==="LONGLARG")?((angularMath.getPi()*Number(mesures[i].long)*Number(mesures[i].larg))/4):(Number(mesures[i].long));
             // biomass per individual
             indicators.biomasses[i] = Number(species.LLW.coefA)*angularMath.powerOfNumber(x, Number(species.LLW.coefB));
             biomass += indicators.biomasses[i];
@@ -185,9 +185,9 @@ export class AnalyseService {
                 for (let m of c.mesures) {
                     let dims = spDims.filter(dims => dims.codeSp === m.codeSpecies)[0];
                     if (dims &&
-                        ((Number(dims.longMin) > 0 && Number(dims.largMin) > 0 &&
-                            Number(m.larg) <= Number(dims.largMin) && Number(m.long) <= Number(dims.longMin)) ||
-                            (Number(dims.longMin) === 0 && Number(dims.largMin) === 0)))
+                        ((Number(dims.longMin) > 0 && Number(dims.longMax) > 0 &&
+                            Number(m.larg) <= Number(dims.longMax) && Number(m.long) <= Number(dims.longMin)) ||
+                            (Number(dims.longMin) === 0 && Number(dims.longMax) === 0)))
                         total_mesures = [...total_mesures, m];
                 }
             }
@@ -220,7 +220,7 @@ export class AnalyseService {
                                 chartsStationBiomass.dataError[spIndex] = [];
                                 chartsStationAbundancy.dataError[spIndex] = [];
                             }
-                            chartsStationBiomass.dataSpline[spIndex][currentIndex] = chartsStationBiomass.dataSpline[spIndex][currentIndex]!==undefined ? chartsStationBiomass.dataSpline[spIndex][currentIndex] + (rst ? rst.biomassTotal : 0) : (rst ? rst.biomassTotal : null);                                
+                            chartsStationBiomass.dataSpline[spIndex][currentIndex] = chartsStationBiomass.dataSpline[spIndex][currentIndex]!==undefined ? chartsStationBiomass.dataSpline[spIndex][currentIndex] + (rst ? rst.biomassTotal : 0) : (rst ? rst.biomassTotal : null);
                             chartsStationAbundancy.dataSpline[spIndex][currentIndex] = chartsStationAbundancy.dataSpline[spIndex][currentIndex]!==undefined ? chartsStationAbundancy.dataSpline[spIndex][currentIndex] + (rst ? rst.numberIndividual : 0) : (rst ? rst.numberIndividual : null);
                             chartsStationBiomass.dataError[spIndex][currentIndex] = chartsStationBiomass.dataError[spIndex][currentIndex]!==undefined ?
                                 [chartsStationBiomass.dataError[spIndex][currentIndex][0] + (rst ? (rst.biomassTotal - rst.SDBiomassTotal) : 0),

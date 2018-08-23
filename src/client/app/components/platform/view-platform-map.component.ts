@@ -175,6 +175,8 @@ import { IAppState } from "../../modules/ngrx/index";
 export class ViewPlatformMapComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
+  @Input() zones: Zone[];
+  @Input() stations: Station[];
   bounds: LngLatBounds;
   boundsPadding: number = 100;
   map: any;
@@ -188,9 +190,7 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
 
   markerCountry: any;
-  zones: Zone[] = [];
   layerZones$: Observable<Turf.FeatureCollection>;
-  stations: Station[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
 
   show: string[] = ["countries"];
@@ -262,8 +262,8 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
         };
       }
 
-      if (this.platform.stations.length > 0) this.setStations(this.platform);
-      if (this.platform.zones.length > 0) this.setZones(this.platform);
+      if (this.stations.length > 0) this.setStations();
+      if (this.zones.length > 0) this.setZones();
     }
   }
 
@@ -293,14 +293,12 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
     this.bounds = this.zoomToCountries([this.markerCountry.lngLat]);
   }
 
-  setZones(platform: Platform) {
-    this.zones = this.platform.zones;
+  setZones() {
     this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
     this.zoomToZones(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
   }
 
-  setStations(platform: Platform) {
-    this.stations = this.platform.stations;
+  setStations() {
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );

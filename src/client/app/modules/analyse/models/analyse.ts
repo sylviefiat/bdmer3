@@ -43,10 +43,10 @@ export interface ResultSpecies {
     legalDimensions: LegalDimensions;
 }
 
-export interface DimensionsAnalyse {   
+export interface DimensionsAnalyse {
     codeSp: string;
     longMin: string;
-    largMin: string;
+    longMax: string;
 }
 
 export interface ResultStation {
@@ -101,7 +101,7 @@ export interface ChartsData {
 }
 
 export interface ChartsZone {
-    code: string;    
+    code: string;
     chartsStations: ChartsStation[];
 }
 

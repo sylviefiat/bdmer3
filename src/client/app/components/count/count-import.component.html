@@ -8,7 +8,8 @@
         </ng-template>
         <button (click)="cancel()" class="back">{{ 'CANCEL' | translate }}</button>
       </mat-card-content>
-      <mat-card-content class="error" *ngIf="error !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
+      <mat-card-content class="error" *ngIf="error !== null && error !== 'TOO_MUCH_ENTITY_COUNT'" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error }}</mat-card-content>
+      <mat-card-content class="error" *ngIf="error !== null && error === 'TOO_MUCH_ENTITY_COUNT'" align="center">{{ error | translate }}</mat-card-content>
       <mat-card-content class="error" *ngIf="importError.length > 0" align="center">{{ 'ERROR_IMPORT' | translate }}</mat-card-content>
       <mat-card-content class="msg" *ngIf="importError.length === 0 && importCsvFile !== null && error === null" align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>
     </mat-card>
