@@ -440,5 +440,7 @@
   "SPECIES_REGISTERED_SUCCESS": "Species registered with success",
   "SPECIES_REMOVED_SUCCESS": "Species removed with success",
   "WILL_DELETE_ALL_ZONE": "Warning ! Importing this file will delete all the existing zones. Are you sure to continue?",
-  "SELECT_PROVINCE": "Select Province"
+  "SELECT_PROVINCE": "Select Province",
+  "SURFACE_NOT_NUMBER": ", surface is not a number",
+  "SURFACE_NOT_DEFINED": ", surface is not defined"
 }

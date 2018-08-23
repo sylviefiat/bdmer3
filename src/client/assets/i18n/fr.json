@@ -440,5 +440,7 @@
   "SPECIES_REGISTERED_SUCCESS": "Espèce enregistré avec succès",
   "SPECIES_REMOVED_SUCCESS": "Espèce supprimé avec succès",
   "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?",
-  "SELECT_PROVINCE": "Choisir une province"
+  "SELECT_PROVINCE": "Choisir une province",
+  "SURFACE_NOT_NUMBER": ", la surface n'est pas un nombre",
+  "SURFACE_NOT_DEFINED": ", la surface n'est pas défini"
 }

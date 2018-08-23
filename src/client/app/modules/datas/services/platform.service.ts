@@ -162,7 +162,7 @@ export class PlatformService {
   }
 
   importSurveyVerification(survey, platform: Platform): Observable<string> {
-    let msg = this.translate.instant(["PLATFORM", "NO_PLATFORM", "FOR_COUNTRY", "AND_COUNTRY", "NOT_PART_OF_COUNTRY", "NOT_IN_DATABASE"]);
+    let msg = this.translate.instant(['PLATFORM', 'SURFACE_NOT_NUMBER', 'SURFACE_NOT_DEFINED', 'NO_PLATFORM', 'FOR_COUNTRY', 'AND_COUNTRY', 'NOT_PART_OF_COUNTRY', 'NOT_IN_DATABASE']);
     if (!survey.error) {
       if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
         return of(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
@@ -174,6 +174,14 @@ export class PlatformService {
 
       if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
         return of(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
+      }
+
+      if(survey.surfaceStation){
+        if(!survey.surfaceStation.match(/^\d+(\.\d+)?$/)){
+          return of("Survey " + survey.code + msg.SURFACE_NOT_NUMBER);
+        }
+      }else{
+        return of("Survey " + survey.code + msg.SURFACE_NOT_DEFINED);
       }
     } else {
       return of(survey);
