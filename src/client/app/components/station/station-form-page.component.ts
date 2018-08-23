@@ -7,6 +7,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@ang
 
 import { RouterExtensions, Config } from "../../modules/core/index";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
+import { Country } from "../../modules/countries/models/country";
 
 import {
   IAppState,
@@ -25,6 +26,7 @@ import { PlatformAction } from "../../modules/datas/actions/index";
       (submitted)="onSubmit($event)"
       [errorMessage]="error$ | async"
       [platform]="platform$ | async"
+      [countries]="countries$ | async"
       [station]="station$ | async">
     </bc-station-form>
   `,
@@ -47,6 +49,7 @@ export class StationFormPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
   zoneSubscription: Subscription;
   stationSubscription: Subscription;
+  countries$: Observable<Country[]>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.platformSubscription = route.params.pipe(map(params => new PlatformAction.SelectPlatformAction(params.idPlatform))).subscribe(store);
@@ -56,6 +59,7 @@ export class StationFormPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.platform$ = this.store.select(getSelectedPlatform);
     this.station$ = this.store.select(getSelectedStation);
+    this.countries$ = this.store.select(getAllCountriesInApp);
   }
 
   ngOnDestroy() {

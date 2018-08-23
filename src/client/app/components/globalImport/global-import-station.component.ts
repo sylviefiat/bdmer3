@@ -22,8 +22,9 @@ import { Platform, Station } from "../../modules/datas/models/index";
   {{'IMPORT_DESC' | translate }}
   </mat-card-content>
   <mat-card-footer class="footer">
-  <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
-  <a *ngIf="!isAdmin" href="{{getCsvUrl()}}" download>
+  <h5 mat-subheader>{{ 'DOWNLOAD_CSV_STATIONS' | translate }}</h5>
+
+  <a href="{{getCsvUrl()}}" download>
   <fa [name]="'download'" [border]=true [size]=1></fa>
   </a>
   </mat-card-footer>
