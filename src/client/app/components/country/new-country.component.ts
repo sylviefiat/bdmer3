@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
@@ -50,14 +50,6 @@ export class NewCountryComponent {
     this.form.get("province").reset();
     this.selected = true;
     this.details = this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0] === undefined ? null : this.countryListDetails.filter(country => country.codeCountry === event.value.code)[0];
-  }
-
-  ngOnInit() {
-    this.countryList$ = this.store.select(
-      getCountryList
-    ) /*.pipe(
-      mergeMap((countries:any[]) => countries = countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0))))*/;
-    this.countriesIds$ = this.store.select(getCountriesIdsInApp);
   }
 
   svgToB64() {
