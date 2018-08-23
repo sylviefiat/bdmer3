@@ -57,7 +57,7 @@ import { MapService } from "../../modules/core/services/index";
               'fill-color': '#AFEEEE',
               'fill-opacity': 0.3,
               'fill-outline-color': '#000'
-              }">            
+              }">
           </mgl-layer>
           <mgl-layer
             id="zonestext"
@@ -97,7 +97,7 @@ import { MapService } from "../../modules/core/services/index";
               'icon-rotate': 180,
               'icon-allow-overlap': true,
               'icon-ignore-placement': true
-              }"            
+              }"
             (click)="showPopupStation($event)"
             (mouseEnter)="cursorStyle = 'pointer'"
             (mouseLeave)="cursorStyle = ''">
@@ -112,7 +112,6 @@ import { MapService } from "../../modules/core/services/index";
         [lngLat]="selectedZone.geometry?.coordinates[0][0]">
         <span style="color:black;padding-right:10px;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span>
       </mgl-popup>
-
     </mgl-map>
   `,
   styles: [
@@ -141,7 +140,6 @@ import { MapService } from "../../modules/core/services/index";
         border: 1px solid rgba(0,0,0,0.4);
         font-family: 'Open Sans', sans-serif;
     }
-
     #switcher a {
         font-size: 13px;
         color: #404040;
@@ -153,21 +151,17 @@ import { MapService } from "../../modules/core/services/index";
         border-bottom: 1px solid rgba(0,0,0,0.25);
         text-align: center;
     }
-
     #switcher a:last-child {
         border: none;
     }
-
     #switcher a:hover {
         background-color: #f8f8f8;
         color: #404040;
     }
-
     #switcher a.isOn {
         background-color: #106cc8;
         color: #ffffff;
     }
-
     #switcher a.isOn:hover {
         background: #3074a4;
     }
@@ -224,8 +218,8 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries']; 
-    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];   
+    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries'];
+    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];
     if(this.zoom>this.zoomMinStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='stations'),'zones','stations'];
   }
 
@@ -256,7 +250,7 @@ export class MapComponent implements OnInit, OnChanges {
 
   init() {
     if (this.countries.length > 0) {
-      this.markersCountries = this.countries.filter(country => country.code !== "AA").map(country => ({
+      this.markersCountries = this.countries.filter(country => country.code !== "AA" && country.coordinates && country.coordinates.lng && country.coordinates.lat).map(country => ({
         country: country.code,
         name: country.name,
         lngLat: [country.coordinates.lng, country.coordinates.lat]
@@ -265,9 +259,11 @@ export class MapComponent implements OnInit, OnChanges {
         this.setZones(this.platforms);
         this.setStations(this.platforms);
       }
-      if (this.countries.length === 1 && this.platforms.length > 0) {
-        this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
-      } else {
+
+
+      if (this.markersCountries.length === 1 && this.platforms.length > 0) {
+        this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      } else  if(this.markersCountries.length >= 1){
         this.bounds$ = of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
       }
     }
@@ -279,19 +275,21 @@ export class MapComponent implements OnInit, OnChanges {
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
 
-  zoomToZonesOrStation(featureCollection): LngLatBounds {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features
+  zoomToZonesOrStation(featureCollection) {
+    if(featureCollection.features.length>0){
+      var bnd = new LngLatBounds();
+      var fc: Turf.FeatureCollection = featureCollection.features
       .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
       .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
-    return this.checkBounds(bnd);
+      this.bounds$ = of(this.checkBounds(bnd));
+    }
   }
 
   zoomOnCountry(countryCode: string) {
     let platformsConsidered = this.platforms.filter(platform => platform.codeCountry === countryCode);
     this.setZones(platformsConsidered);
     if (platformsConsidered.length > 1) {
-      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     } else {
       this.bounds$ = of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country === countryCode).map(mk => mk.lngLat)));
     }

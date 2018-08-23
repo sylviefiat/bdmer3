@@ -43,14 +43,14 @@ import { IAppState } from "../../modules/ngrx/index";
         </div>
       </mgl-marker>
     </ng-container>
-    <ng-container *ngIf="newZonesPreviewValid && isDisplayed('zones')">
+    <ng-container *ngIf="newZonesPreview && isDisplayed('zones')">
     <mgl-geojson-source
-      id="layerPreviewsZoneValid"
-      [data]="newZonesPreviewValid">
+      id="layerPreviewsZone"
+      [data]="newZonesPreview">
       <mgl-layer
-        id="previewzoneidvalid"
+        id="previewzoneid"
         type="fill"
-        source="layerPreviewsZoneValid"
+        source="layerPreviewsZone"
         [paint]="{
           'fill-color': 'green',
           'fill-opacity': 0.5,
@@ -60,9 +60,9 @@ import { IAppState } from "../../modules/ngrx/index";
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
       <mgl-layer
-        id="previewzonetextvalid"
+        id="previewzonetext"
         type="symbol"
-        source="layerPreviewsZoneValid"
+        source="layerPreviewsZone"
         [layout]="{
           'text-field': '{code}',
           'text-anchor':'bottom',
@@ -82,46 +82,8 @@ import { IAppState } from "../../modules/ngrx/index";
       </mgl-layer>
     </mgl-geojson-source>
     </ng-container>
-    <ng-container *ngIf="newZonesPreviewError && isDisplayed('zones')">
-    <mgl-geojson-source
-      id="layerPreviewsZoneError"
-      [data]="newZonesPreviewError">
-      <mgl-layer
-        id="previewzoneiderror"
-        type="fill"
-        source="layerPreviewsZoneError"
-        [paint]="{
-          'fill-color': 'red',
-          'fill-opacity': 0.5,
-          'fill-outline-color': '#000'
-          }"
-        (mouseEnter)="cursorStyle = 'pointer'"
-        (mouseLeave)="cursorStyle = ''">
-      </mgl-layer>
-      <mgl-layer
-        id="previewzonetexterror"
-        type="symbol"
-        source="layerPreviewsZoneError"
-        [layout]="{
-          'text-field': '{code}',
-          'text-anchor':'bottom',
-          'text-font': [
-            'DIN Offc Pro Italic',
-            'Arial Unicode MS Regular'
-          ],
-          'symbol-placement': 'point',
-          'symbol-avoid-edges': true,
-          'text-max-angle': 30,
-          'text-size': 12
-        }"
-        [paint]="{
-          'text-color': 'white'
-        }"
-      >
-      </mgl-layer>
-    </mgl-geojson-source>
-    </ng-container>
-    <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
+
+    <ng-container *ngIf="(layerZones$ | async) && newZonesPreview.features.length === 0 && isDisplayed('zones')">
       <mgl-geojson-source
         id="layerZones"
         [data]="layerZones$ | async">
@@ -254,7 +216,6 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
   @Input() countries: Country[];
   @Input() geojsons: any;
-  @Output() zoneIntersect: EventEmitter<any> = new EventEmitter<any>();
 
   bounds: LngLatBounds;
   boundsPadding: number = 100;
@@ -269,8 +230,7 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   selectedZone: GeoJSON.Feature<GeoJSON.Polygon> | null;
   colorPreview: Object;
   markerCountry: any;
-  newZonesPreviewValid: any = { features: [], type: "FeatureCollection" };
-  newZonesPreviewError: any = { features: [], type: "FeatureCollection" };
+  newZonesPreview: any = { features: [], type: "FeatureCollection" };
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   zones: Zone[] = [];
@@ -294,28 +254,13 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
 
     if (this.geojsons) {
       this.reset();
-      this.checkZoneValid(this.geojsons);
+      this.newZonesPreview.features = this.geojsons
       this.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
     }
   }
 
   reset() {
-    this.newZonesPreviewValid = { features: [], type: "FeatureCollection" };
-    this.newZonesPreviewError = { features: [], type: "FeatureCollection" };
-  }
-
-  checkZoneValid(zonesCheck) {
-    for (let zc of zonesCheck) {
-      this.platform.zones.map(zone => {
-        if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zc.geometry.coordinates))) {
-          this.zoneIntersect.emit(true);
-          this.newZonesPreviewError.features.push(zc);
-          zonesCheck.splice(zc, 1);
-        }
-      });
-    }
-
-    this.newZonesPreviewValid.features = zonesCheck;
+    this.newZonesPreview = { features: [], type: "FeatureCollection" };
   }
 
   addZone(geojsons) {
