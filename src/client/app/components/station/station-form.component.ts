@@ -21,7 +21,6 @@ export class StationFormComponent implements OnInit {
     @Input() station: Station | null;
     @Input() countries: Country[] | null;
     @Input() errorMessage: boolean;
-    @Input() countries: Country[];
     
     @Output() submitted = new EventEmitter<Station>();
 
