@@ -19,6 +19,7 @@ import { Country } from "../../modules/countries/models/country";
 export class StationFormComponent implements OnInit {
     @Input() platform: Platform | null;
     @Input() station: Station | null;
+    @Input() countries: Country[] | null;
     @Input() errorMessage: boolean;
     @Input() countries: Country[];
     
