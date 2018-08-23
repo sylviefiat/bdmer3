@@ -1,18 +1,13 @@
-import { CountryAction } from '../actions/index';
-import { ICountryState, countryInitialState } from '../states/index';
+import { CountryAction } from "../actions/index";
+import { ICountryState, countryInitialState } from "../states/index";
 
-export function countryReducer(
-  state: ICountryState = countryInitialState,
-  action: CountryAction.Actions
-): ICountryState {
-
+export function countryReducer(state: ICountryState = countryInitialState, action: CountryAction.Actions): ICountryState {
   switch (action.type) {
-
     case CountryAction.ActionTypes.ADD_USER_SUCCESS: {
       const country = action.payload;
       return {
         ...state,
-        msg: "User saved with success"
+        msg: "USER_SAVED_SUCCESS"
       };
     }
 
@@ -20,7 +15,7 @@ export function countryReducer(
       const country = action.payload;
       return {
         ...state,
-        msg: "User removed with success"
+        msg: "USER_REMOVED_SUCCESS"
       };
     }
 
@@ -35,17 +30,16 @@ export function countryReducer(
     case CountryAction.ActionTypes.SELECT: {
       return {
         ...state,
-        currentCountryId: action.payload,
+        currentCountryId: action.payload
       };
     }
 
     case CountryAction.ActionTypes.SELECT_USER: {
       return {
         ...state,
-        currentUserId: action.payload,
+        currentUserId: action.payload
       };
     }
-
 
     case CountryAction.ActionTypes.REMOVE_MSG: {
       return {
@@ -55,10 +49,8 @@ export function countryReducer(
       };
     }
 
-
     default: {
       return state;
     }
   }
 }
-
