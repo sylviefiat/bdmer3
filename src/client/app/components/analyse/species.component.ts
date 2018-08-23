@@ -82,17 +82,18 @@ export class SpeciesComponent implements OnInit {
     this.legalDims = this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code) &&
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code).length > 0 &&
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code)[0];
-
-    if (this.legalDims.longMax) {
-      this.formDims.controls['longMax'].setValue(this.legalDims.longMax)
+    console.log(this.species.biologicDimensions.longMax);
+    if (this.species.biologicDimensions.longMax) {
+      this.formDims.controls['longMax'].setValue(this.species.biologicDimensions.longMax);
+      console.log(this.formDims.controls['longMax']);
     }
     for (let i = this.MIN; i < this.MAX_LENGTH; i += 5) {
       if (i < this.MAX_LENGTH) this.optionsL.push(i + "");
     }
 
-    this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
-    this.formDims.controls['longMax'].valueChanges.subscribe(option => this.changeLMax(option));
-    this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
+    //this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
+    //this.formDims.controls['longMax'].valueChanges.subscribe(option => this.changeLMax(option));
+    //this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
   }
 
   changeCheck(value: any){
