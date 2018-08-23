@@ -11,14 +11,14 @@ import {TranslateService} from '@ngx-translate/core';
   <div [formGroup]="form">
   <mat-card class="no-box-shadow">
   <mat-card-title-group>
-  <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title> 
-  <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+  <mat-card-title>{{'IMPORT_CSV' | translate }} Surveys</mat-card-title>
+  <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
   </mat-card-title-group>
   <mat-card-content>
-  {{'IMPORT_DESC' | translate }}    
+  {{'IMPORT_DESC' | translate }}
   </mat-card-content>
   <mat-card-content class="warn">
-  {{'IMPORT_DESC_DATE' | translate }}      
+  {{'IMPORT_DESC_DATE' | translate }}
   </mat-card-content>
   <mat-card-footer class="footer">
   <h5 mat-subheader>{{ 'DOWNLOAD_CSV_SURVEYS' | translate }}</h5>
@@ -46,7 +46,7 @@ import {TranslateService} from '@ngx-translate/core';
   <h2 class="errorList">{{'LIST_ERROR_SURVEY' | translate}}</h2>
   <mat-list>
   <div *ngFor="let survey of (importError$ | async)">
-  <mat-list-item class="errorList"> 
+  <mat-list-item class="errorList">
   {{survey}}
   </mat-list-item>
   </div>

@@ -21,10 +21,10 @@ export class MapStaticService {
 
     for (var i = 0; i < a; i++) {
       if (
-        parseFloat(string[i].split(",")["0"]) < -90 ||
-        parseFloat(string[i].split(",")["0"]) > 90 ||
-        parseFloat(string[i].split(",")["1"]) < -180 ||
-        parseFloat(string[i].split(",")["1"]) > 180
+        parseFloat(string[i].split(",")["0"]) < -180 ||
+        parseFloat(string[i].split(",")["0"]) > 180 ||
+        parseFloat(string[i].split(",")["1"]) < -90 ||
+        parseFloat(string[i].split(",")["1"]) > 90
       ) {
         return "error";
       }
@@ -41,12 +41,12 @@ export class MapStaticService {
 
     var res = [];
     res.push(ar);
+
     try {
       Turf.polygon(res);
     } catch (error) {
       return "error";
     }
-    console.log();
 
     return res;
   }

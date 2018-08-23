@@ -93,7 +93,7 @@ export namespace CountriesAction {
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
 
-    constructor(public payload: any[]) { }
+    constructor(public payload: any) { }
   }
 
   export class InitFailedAction implements Action {
@@ -109,7 +109,7 @@ export namespace CountriesAction {
     payload: string = null;
   }
 
-  export class LoadSuccessAction implements Action {    
+  export class LoadSuccessAction implements Action {
     readonly type = ActionTypes.LOAD_SUCCESS;
     constructor(public payload: Country[]) {}
   }
