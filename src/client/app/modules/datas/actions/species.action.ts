@@ -1,41 +1,48 @@
-import { Action } from '@ngrx/store';
-import { Species } from '../models/species';
-import { type } from '../../core/utils/index';
+import { Action } from "@ngrx/store";
+import { Species } from "../models/species";
+import { type } from "../../core/utils/index";
 
 export namespace SpeciesAction {
   // Category to uniquely identify the actions
-  export const SPECIES: string = 'SpeciesAction';
-
+  export const SPECIES: string = "SpeciesAction";
 
   export interface ISpeciesActions {
-      ADD_SPECIES: string;
-      ADD_SPECIES_SUCCESS: string;
-      ADD_SPECIES_FAIL: string;
-      IMPORT_SPECIES: string;
-      IMPORT_SPECIES_SUCCESS: string;
-      REMOVE_SPECIES: string;
-      REMOVE_SPECIES_SUCCESS: string;
-      REMOVE_SPECIES_FAIL: string;
-      LOAD: string;
-      LOAD_SUCCESS: string;
-      LOAD_FAIL: string;
-      SELECT: string;
-    }
+    ADD_SPECIES: string;
+    ADD_SPECIES_SUCCESS: string;
+    ADD_SPECIES_FAIL: string;
+    IMPORT_SPECIES: string;
+    IMPORT_SPECIES_SUCCESS: string;
+    REMOVE_SPECIES: string;
+    REMOVE_SPECIES_SUCCESS: string;
+    REMOVE_SPECIES_FAIL: string;
+    CHECK_SPECIES_CSV_FILE: string;
+    CHECK_SPECIES_ADD_ERROR: string;
+    CHECK_SPECIES_SUCCESS: string;
+    LOAD: string;
+    LOAD_SUCCESS: string;
+    LOAD_FAIL: string;
+    SELECT: string;
+    REMOVE_MSG: string;
+  }
 
-    export const ActionTypes: ISpeciesActions = {
-      ADD_SPECIES: type(`${SPECIES} Add Species`),
-      ADD_SPECIES_SUCCESS: type(`${SPECIES} Add Species Success`),
-      ADD_SPECIES_FAIL: type(`${SPECIES} Add Species Fail`),
-      IMPORT_SPECIES: type(`${SPECIES} Import Species`),
-      IMPORT_SPECIES_SUCCESS:type(`${SPECIES} Import Species Success`),
-      REMOVE_SPECIES: type(`${SPECIES} Remove Species`),
-      REMOVE_SPECIES_SUCCESS: type(`${SPECIES} Remove Species Success`),
-      REMOVE_SPECIES_FAIL: type(`${SPECIES} Remove Species Fail`),
-      LOAD: type(`${SPECIES} Load`),
-      LOAD_SUCCESS: type(`${SPECIES} Load Success`),
-      LOAD_FAIL: type(`${SPECIES} Load Fail`),
-      SELECT: type(`${SPECIES}  select`)
-    };
+  export const ActionTypes: ISpeciesActions = {
+    ADD_SPECIES: type(`${SPECIES} Add Species`),
+    ADD_SPECIES_SUCCESS: type(`${SPECIES} Add Species Success`),
+    ADD_SPECIES_FAIL: type(`${SPECIES} Add Species Fail`),
+    IMPORT_SPECIES: type(`${SPECIES} Import Species`),
+    IMPORT_SPECIES_SUCCESS: type(`${SPECIES} Import Species Success`),
+    REMOVE_SPECIES: type(`${SPECIES} Remove Species`),
+    REMOVE_SPECIES_SUCCESS: type(`${SPECIES} Remove Species Success`),
+    REMOVE_SPECIES_FAIL: type(`${SPECIES} Remove Species Fail`),
+    CHECK_SPECIES_CSV_FILE: type(`${SPECIES} Check Species Csv file`),
+    CHECK_SPECIES_ADD_ERROR: type(`${SPECIES} Check Species Csv file add error`),
+    CHECK_SPECIES_SUCCESS: type(`${SPECIES} Check Species Csv file success`),
+    LOAD: type(`${SPECIES} Load`),
+    LOAD_SUCCESS: type(`${SPECIES} Load Success`),
+    LOAD_FAIL: type(`${SPECIES} Load Fail`),
+    SELECT: type(`${SPECIES}  select`),
+    REMOVE_MSG: type(`${SPECIES} remove message`)
+  };
 
   /**
    * Add species to Species list Actions
@@ -99,13 +106,36 @@ export namespace SpeciesAction {
     payload: string = null;
   }
 
-  export class LoadSuccessAction implements Action {    
+  export class LoadSuccessAction implements Action {
     readonly type = ActionTypes.LOAD_SUCCESS;
     constructor(public payload: Species[]) {}
   }
 
   export class LoadFailAction implements Action {
     readonly type = ActionTypes.LOAD_FAIL;
+    constructor(public payload: any) {}
+  }
+
+  export class RemoveMsgAction implements Action {
+    readonly type = ActionTypes.REMOVE_MSG;
+    payload: string = null;
+  }
+
+  export class CheckSpeciesCsvFile implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_CSV_FILE;
+
+    constructor(public payload: any) {}
+  }
+
+  export class CheckSpeciesAddErrorAction implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_ADD_ERROR;
+
+    constructor(public payload: string) {}
+  }
+
+  export class CheckSpeciesSuccessAction implements Action {
+    readonly type = ActionTypes.CHECK_SPECIES_SUCCESS;
+
     constructor(public payload: any) {}
   }
 
@@ -125,5 +155,6 @@ export namespace SpeciesAction {
     | LoadAction
     | LoadSuccessAction
     | LoadFailAction
-    | SelectAction;
- }
+    | SelectAction
+    | RemoveMsgAction;
+}

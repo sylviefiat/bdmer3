@@ -1,17 +1,15 @@
-import 'rxjs/add/operator/let';
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-
-import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
-import { SpeciesAction } from '../../modules/datas/actions/index';
-import { Species } from '../../modules/datas/models/species';
+import { IAppState, getSpeciesInApp, getSpeciesPageMsg } from "../../modules/ngrx/index";
+import { SpeciesAction } from "../../modules/datas/actions/index";
+import { Species } from "../../modules/datas/models/species";
 
 @Component({
-  selector: 'bc-species-page',
+  selector: "bc-species-page",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
@@ -25,10 +23,10 @@ import { Species } from '../../modules/datas/models/species';
             <mat-option [value]="'import'">{{ 'IMPORT' | translate}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ (msg$ | async) | translate }}</mat-card-content>
     </mat-card>
 
     <bc-species-preview-list [speciesList]="filteredSpecies$ | async"></bc-species-preview-list>
-
   `,
   /**
    * Container components are permitted to have just enough styles
@@ -49,6 +47,12 @@ import { Species } from '../../modules/datas/models/species';
     .right{
       margin: 15px;
     }
+      .msg {
+        text-align: center;
+        padding: 16px;
+        color: white;
+        background-color: #4bb543;
+      }
   `,
   ],
 })
@@ -56,6 +60,7 @@ export class SpeciesListPageComponent implements OnInit {
   species$: Observable<Species[]>;
   filteredSpecies$: Observable<Species[]>;
   filterFormControl = new FormControl('', []);
+  msg$: Observable<string | null>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
@@ -63,11 +68,12 @@ export class SpeciesListPageComponent implements OnInit {
     this.species$ = this.store.select(getSpeciesInApp);
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.filteredSpecies$ = this.species$;
+    this.msg$ = this.store.select(getSpeciesPageMsg);
   }
 
-  addSpecies(type: string){
+  addSpecies(type: string) {
     type = type.charAt(0).toUpperCase() + type.slice(1);
-    this.routerext.navigate(['/species'+type]);
+    this.routerext.navigate(["/species" + type]);
   }
 
   filterSpecies(filter: string){
