@@ -9,7 +9,7 @@
         <button (click)="cancel()" class="btn btn-danger">{{ 'CANCEL' | translate }}</button>
       </mat-card-content>
       <mat-card-content class="error" *ngIf="error" align="center">{{ error }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="msg" align="start">{{ msg | translate }}</mat-card-content>
     </mat-card>
 </div>
 <div class="insideform" [formGroup]="zoneForm">

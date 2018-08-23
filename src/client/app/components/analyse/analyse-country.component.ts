@@ -11,7 +11,7 @@ import { Country } from '../../modules/countries/models/country';
     <h2>{{ 'SELECT_COUNTRY' | translate }}</h2>
     <div class='row'>
       <div class="half">
-        <mat-form-field [formGroup]="form">    
+        <mat-form-field [formGroup]="form">
           <mat-select placeholder="{{ 'SELECT_COUNTRY' | translate}}" [formControlName]="inputName" (selectionChange)="select($event.value)" required>
             <mat-option *ngFor="let pays of countries" [value]="pays">{{ pays.name }}</mat-option>
           </mat-select>
@@ -23,23 +23,23 @@ import { Country } from '../../modules/countries/models/country';
         [fitBoundsOptions]="{
           padding: boundsPadding,
           maxZoom: zoomMaxMap
-        }"> 
+        }">
         <ng-container *ngIf="countries">
-          <mgl-marker *ngFor="let country of countries"
-            [lngLat]="[country.coordinates.lng, country.coordinates.lat]">
+          <mgl-marker *ngFor="let marker of markers"
+            [lngLat]="[marker.coordinates.lng, marker.coordinates.lat]">
             <div
-              (click)="select(country)"
-              class="marker" [class.selected]="selected?selected.code===country.code:false">
+              (click)="select(marker)"
+              class="marker" [class.selected]="selected?selected.code===marker.code:false">
               <fa [name]="'map-marker'" [border]=false [size]=3></fa><br/>
-              <span>{{country.name}}</span>
+              <span>{{marker.name}}</span>
             </div>
           </mgl-marker>
-        </ng-container>    
+        </ng-container>
       </mgl-map>
     </div>
   `,
   styles: [
-    `    
+    `
     .row{
       display:flex;
     }
@@ -67,16 +67,23 @@ export class AnalyseCountryComponent implements OnInit {
   bounds$: Observable<LngLatBounds>;
   boundsPadding: number = 100;
   zoomMaxMap=11;
+  markers: Country[];
 
   constructor() {
   }
 
   ngOnInit(){
-    let coor0 = [this.countries[0].coordinates.lng,this.countries[0].coordinates.lat];
-    let bounds=this.countries.map(country => ([country.coordinates.lng,country.coordinates.lat])).reduce((bnd, coord) => {
-      return bnd.extend(<any>coord);
-    }, new LngLatBounds(coor0, coor0));
-    this.bounds$=of(bounds);
+    if (this.countries.length > 0) {
+      this.markers = this.countries.filter(country => country.code !== "AA" && country.coordinates && country.coordinates.lng && country.coordinates.lat);
+
+      if(this.markers.length > 0){
+        let coor0 = [this.markers[0].coordinates.lng,this.markers[0].coordinates.lat];
+        let bounds=this.markers.map(country => ([country.coordinates.lng,country.coordinates.lat])).reduce((bnd, coord) => {
+          return bnd.extend(<any>coord);
+        }, new LngLatBounds(coor0, coor0));
+        this.bounds$=of(bounds);
+      }
+    }
   }
 
   select(c: any){

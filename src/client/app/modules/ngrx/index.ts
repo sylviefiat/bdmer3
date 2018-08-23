@@ -36,11 +36,11 @@ import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl } fr
 import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
 import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
 import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
-import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList} from '../countries/index';
+import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList, getCountryDetailsList} from '../countries/index';
 import { ICountryState, countryInitialState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesInitialState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformImportErrors, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
-import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations, 
+import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations,
     getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
 import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
     getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
@@ -154,6 +154,7 @@ export const getSignupPageError: any = compose(getError, getLoginPageState);
 
 // Countries
 export const getCountryList: any = compose(getCountryNamesList, getCountriesState);
+export const getCountryListDetails: any = compose(getCountryDetailsList, getCountriesState);
 export const getCountriesisLoaded: any = compose(getCountriesLoaded, getCountriesState);
 export const getCountriesisLoading: any = compose(getCountriesLoading, getCountriesState);
 export const getCountriesInApp: any = compose(getCountriesEntities, getCountriesState);
@@ -162,7 +163,7 @@ export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesSt
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
 
 // Country
-export const getSelectedCountry: any = compose(getCurrentCountry, getAppState); 
+export const getSelectedCountry: any = compose(getCurrentCountry, getAppState);
 export const getUsersCountry: any = compose(getCountryUsers, getCountryState);
 export const getSelectedUser: any = compose(getCurrentUser, getAppState);
 export const getUserMessage: any = compose(getUserMsg, getCountryState);
