@@ -65,6 +65,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerZones"
           [layout]="{
             'text-field': '{code}',
+            'text-allow-overlap': true,
             'text-anchor':'bottom',
             'text-font': [
               'DIN Offc Pro Italic',
@@ -104,6 +105,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerZone"
           [layout]="{
             'text-field': '{code}',
+            'text-allow-overlap': true,
             'text-anchor':'bottom',
             'text-font': [
               'DIN Offc Pro Italic',
@@ -131,6 +133,7 @@ import { IAppState } from "../../modules/ngrx/index";
           source="layerStations"
           [layout]="{
             'icon-image': 'triangle-stroked-15',
+            'icon-allow-overlap': true,
             'icon-size': 1.5,
             'icon-rotate': 180
             }"

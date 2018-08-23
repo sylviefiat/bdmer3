@@ -66,6 +66,7 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'text-field': '{code}',
             'text-anchor':'bottom',
+            'text-allow-overlap': true,
             'text-font': [
               'DIN Offc Pro Italic',
               'Arial Unicode MS Regular'
@@ -93,6 +94,7 @@ import { IAppState } from "../../modules/ngrx/index";
           [layout]="{
             'icon-image': 'triangle-stroked-15',
             'icon-size': 1.5,
+            'icon-allow-overlap': true,
             'icon-rotate': 180
             }"
           (click)="showPopupStation($event)"
