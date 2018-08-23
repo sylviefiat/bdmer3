@@ -442,5 +442,6 @@
   "WILL_DELETE_ALL_ZONE": "Attention ! L'import de ces zones supprimeront toutes les zones existantes. Êtes vous sûr de vouloir continuer ?",
   "SELECT_PROVINCE": "Choisir une province",
   "SURFACE_NOT_NUMBER": ", la surface n'est pas un nombre",
-  "SURFACE_NOT_DEFINED": ", la surface n'est pas définie"
+  "SURFACE_NOT_DEFINED": ", la surface n'est pas définie",
+  "INVALID_FORM": "Le formulaire n'est pas valide"
 }

@@ -7,8 +7,8 @@
     <mat-card-content>
       <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ 'SUBMIT' | translate }}</button>
       <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
-      <p *ngIf="errorMessage" class="speciesError">{{ errorMessage }}</p>
     </mat-card-content>
+    <mat-card-content *ngIf="errorMessage" class="speciesError">{{ errorMessage }}</mat-card-content>
   </mat-card>
 </div>
 <div class="insideform">
@@ -56,12 +56,12 @@
   <h5 mat-subheader>{{ 'SPECIES_COEF_LLW' | translate }}</h5>
   <div formGroupName="LLW">
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>
     </mat-form-field>
   </div>
@@ -70,12 +70,12 @@
   <h5 mat-subheader>{{ 'SPECIES_COEF_LW' | translate }}</h5>
   <div formGroupName="LW">
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_COEF_COEFA' | translate }}" formControlName="coefA" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFA_EX' | translate }}</div>
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_COEF_COEFB' | translate }}" formControlName="coefB" required>
       <div class="hint">{{ 'SPECIES_COEF_LLW_COEFB_EX' | translate }}</div>
     </mat-form-field>
   </div>
@@ -85,12 +85,12 @@
   <h5 mat-subheader>{{ 'SPECIES_CONVERSIONS' | translate }}</h5>
   <div formGroupName="conversions">
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_SALT' | translate }}" formControlName="salt" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_CONVERSIONS_SALT' | translate }}" formControlName="salt" required>
       <div class="hint">{{ 'SPECIES_CONVERSIONS_SALT_EX' | translate }}</div>
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
+      <input type="number" matInput placeholder="{{ 'SPECIES_CONVERSIONS_BDM' | translate }}" formControlName="BDM" required>
       <div class="hint">{{ 'SPECIES_CONVERSIONS_BDM_EX' | translate }}</div>
     </mat-form-field>
   </div>
@@ -99,12 +99,12 @@
   <h5 mat-subheader>{{ 'SPECIES_DIMS' | translate }}</h5>
   <div formGroupName="biologicDimensions">
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax">
+      <input type="number" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
       <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX' | translate }}</div>
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax">
+      <input type="number" matInput placeholder="{{ 'SPECIES_DIMS_LARG_MAX' | translate }}" formControlName="largMax" required>
       <div class="hint">{{ 'SPECIES_DIMS_LARG_MAX_EX' | translate }}</div>
     </mat-form-field>
   </div>
@@ -133,7 +133,7 @@
 <mat-card class="row" formArrayName="legalDimensions">
   <h5 mat-subheader>{{ 'SPECIES_FISHING_DIMS' | translate }} </h5>
   <div *ngFor="let name of form.controls.legalDimensions.controls; let j=index;" [formGroupName]="j">
-    <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j)"></fa>
+    <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right *ngIf="form.controls.legalDimensions.controls.length > 1" (click)="removeLegalDim(j, name.value.codeCountry)"></fa>
     <bt-dim [group]="form.controls.legalDimensions.controls[j]" [countries]="countries" [alreadySetCountries$]="alreadySetCountries$"
             (changeCountry)="echangeCountry($event)"></bt-dim>
   </div>
