@@ -9,6 +9,7 @@ export interface ICountriesState {
   error: string | null;
   countryList: any[];
   countryListCount: any[];
+  countryListDetails: any;
 }
 
 export const countriesInitialState: ICountriesState = {
@@ -19,6 +20,7 @@ export const countriesInitialState: ICountriesState = {
   error: null,
   countryList: [],
   countryListCount: []
+  countryListDetails: []
 };
 export const getCountriesLoaded = (state: ICountriesState) => state.loaded;
 
@@ -35,3 +37,6 @@ export const getCountryError = (state: ICountriesState) => state.error;
 export const getCountryNamesList = (state: ICountriesState) => state.countryList;
 
 export const getCountryListCount = (state: ICountriesState) => state.countryListCount;
+
+export const getCountryDetailsList = (state: ICountriesState) => state.countryListDetails;
+

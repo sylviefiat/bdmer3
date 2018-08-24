@@ -9,7 +9,7 @@ import { Country } from '../../modules/countries/models/country';
     selector: 'bc-analyse-species',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-    <div [formGroup]="form"> 
+    <div [formGroup]="form">
       <h2>{{ 'SELECT_MANY_SPECIES' | translate }}</h2>
       <mat-checkbox (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
@@ -46,25 +46,25 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     defaultSpecies: Species[] = [];
     checkedSpecies: Species[] = [];
     allSpeciesDims: DimensionsAnalyse[] = [];
-    defaultDimension: DimensionsAnalyse = { codeSp:null,longMin:"0",largMin:"0" };
+    defaultDimension: DimensionsAnalyse = { codeSp:null,longMin:"0",longMax:"0" };
     @Output() speciesEmitter = new EventEmitter<Species[]>();
     @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
     @Input('group') public form: FormGroup;
     actionsSubscription: Subscription;
 
     constructor(private _fb: FormBuilder) {
-        
+
     }
 
     ngOnInit() {
         this.actionsSubscription = this.species$.subscribe(species => {
             this.defaultSpecies = species;
             for(let s of species){
-                this.allSpeciesDims.push( { codeSp:s.code,longMin:"0",largMin:"0" });
+                this.allSpeciesDims.push( { codeSp:s.code,longMin:"0",longMax:"0" });
             }
             this.initSpecies();
         });
-        
+
     }
 
     ngOnDestroy() {
@@ -81,7 +81,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
         let dims = this.allSpeciesDims.filter(dims => dims.codeSp === s.code).length > 0 && this.allSpeciesDims.filter(dims => dims.codeSp === s.code)[0];
         return this._fb.group({
             longMin: new FormControl(dims ? dims.longMin : "0"),
-            largMin: new FormControl(dims ? dims.largMin : "0")
+            longMax: new FormControl(dims ? dims.longMax : "0")
         });
     }
 

@@ -110,6 +110,7 @@ export class Csv2JsonService {
                 lines.push(sp);
             }
         }
+        console.log(lines);
        /* if (errorTab.length !== 0) {
             let string = "";
             for (let i in errorTab) {

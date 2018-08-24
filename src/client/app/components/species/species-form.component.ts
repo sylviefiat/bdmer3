@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouterExtensions, Config } from '../../modules/core/index';
+import { TranslateService } from "@ngx-translate/core";
 
 import { IAppState, getSpeciesInApp } from '../../modules/ngrx/index';
 
@@ -25,7 +26,7 @@ export class SpeciesFormComponent implements OnInit {
     @Input() errorMessage: string | null;
     @Input() species: Species | null;
     @Input() countries: Country[];
-    @Input() alreadySetCountries$: Observable<string[]>;
+    @Input() alreadySetCountries$: Observable<string[]> = null;
     url = '';
 
     @Output() submitted = new EventEmitter<Species>();
@@ -56,7 +57,7 @@ export class SpeciesFormComponent implements OnInit {
         legalDimensions: this._fb.array([]),
     });
 
-    constructor(private cdr: ChangeDetectorRef, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
+    constructor(private translate: TranslateService, private cdr: ChangeDetectorRef, private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
 
     initName() {
         if (this.species && this.species.names && this.species.names.length > 0) {
@@ -85,7 +86,6 @@ export class SpeciesFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        
         if (this.species) {
             this.form.controls.code.setValue(this.species.code);
             this.form.controls.picture.setValue(this.species.picture);
@@ -223,12 +223,12 @@ export class SpeciesFormComponent implements OnInit {
         if (event.target.files && event.target.files[0]){
             this.showPic(event)
             const file = event.srcElement.files["0"];
-            
+
             this.imgToB64(file).then((data) => {
                 this.form.controls.picture.setValue(data);
             })
         }
-    }    
+    }
 
     removeName(i: number) {
         const control = <FormArray>this.form.controls['names'];
@@ -250,20 +250,29 @@ export class SpeciesFormComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    removeLegalDim(i: number) {
+    removeLegalDim(i: number, codeCountry: String) {
+      if(codeCountry !== ""){
+        this.alreadySetCountries$ = this.alreadySetCountries$.pipe(map(countries => [...countries.filter(code => code!==codeCountry)]));
+        this.alreadySetCountries$.subscribe(res=>console.log(res))
+      }
         const control = <FormArray>this.form.controls['legalDimensions'];
         control.removeAt(i);
     }
 
     echangeCountry(codes: string[]){
+      if(this.alreadySetCountries$ !== null){
         this.alreadySetCountries$ = this.alreadySetCountries$.pipe(map(countries => [...countries.filter(code => code!==codes[0] && code!==codes[1]),codes[1]]));
+      }else{
+        this.alreadySetCountries$ = of(codes);
+      }
     }
 
     submit() {
         if (this.form.valid) {
-            this.submitted.emit(this.form.value);
+          this.submitted.emit(this.form.value);
         } else {
-            this.errorMessage="Form is INVALID";
+          let msg = this.translate.instant('INVALID_FORM');
+          this.errorMessage=msg;
         }
     }
 

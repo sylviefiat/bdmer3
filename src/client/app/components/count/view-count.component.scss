@@ -58,3 +58,30 @@ mat-form-field {
     hr {
       border-color: #fff;
     }
+    .wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .wrapp_left {
+      flex: 50%;
+      max-width: 50%;
+    }
+
+    bc-view-count-map {
+      flex: 50%;
+      max-width: 50%;
+    }
+    @media screen and (max-width: 800px) {
+      .wrapper {
+        .wrapp_left {
+          flex: 100%;
+          max-width: 100%;
+        }
+
+        bc-view-count-map {
+          flex: 100%;
+          max-width: 100%;
+        }
+      }
+    }

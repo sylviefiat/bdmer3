@@ -8,18 +8,18 @@ import { Country } from '../../modules/countries/models/country';
   selector: 'bc-species',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div [formGroup]="formSp"> 
+    <div [formGroup]="formSp">
         <mat-checkbox [formControlName]="'species'" (change)="changeCheck($event)">
           <mat-card>
             <mat-card-title-group>
               <img mat-card-sm-image [src]="species.picture"/>
               <mat-card-title>{{ species.scientificName }}</mat-card-title>
               <mat-card-subtitle *ngFor="let name of species.names">{{ name.lang }}: {{ name.name }}</mat-card-subtitle>
-            </mat-card-title-group>  
+            </mat-card-title-group>
             <mat-card-content *ngIf="legalDims">
               <h5 mat-subheader>{{ 'LEGAL_DIMS' | translate }}</h5>
               <p>
-                {{ legalDims.longMin}}mm / {{legalDims.longMax}}mm 
+                min {{ legalDims.longMin}}mm, max {{legalDims.longMax}}mm
               </p>
             </mat-card-content>
             <mat-card-content [formGroup]="formDims">
@@ -31,15 +31,15 @@ import { Country } from '../../modules/countries/models/country';
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
-              </mat-form-field> 
+              </mat-form-field>
               <mat-form-field>
-                <input type="text" placeholder="{{'LARG_MIN' | translate}}" (change)="changeWMins($event)" matInput formControlName="largMin" [matAutocomplete]="auto2">
-                <mat-autocomplete (optionSelected)="changeWMins($event.option.value)" #auto2="matAutocomplete">
-                  <mat-option *ngFor="let option of optionsW" [value]="option">
+                <input type="text" placeholder="{{'LONG_MAX' | translate}}" (change)="changeLMax($event)" matInput formControlName="longMax" [matAutocomplete]="auto2">
+                <mat-autocomplete (optionSelected)="changeLMax($event.option.value)" #auto2="matAutocomplete">
+                  <mat-option *ngFor="let option of optionsL" [value]="option">
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
-              </mat-form-field> 
+              </mat-form-field>
             </mat-card-content>
           </mat-card>
         </mat-checkbox>
@@ -52,13 +52,12 @@ import { Country } from '../../modules/countries/models/country';
       height: auto;
     }
     h5 {
-      white-space:normal;      
+      white-space:normal;
     }
   `]
 })
 export class SpeciesComponent implements OnInit {
   MAX_LENGTH = 1000;
-  MAX_WIDTH = 500;
   MIN = 5;
   @Input() species: Species;
   @Input() locale: string;
@@ -66,14 +65,13 @@ export class SpeciesComponent implements OnInit {
   @Input('group') public formSp: FormGroup;
   @Input('dims') public formDims: FormGroup;
   @Output() speciesEmitter = new EventEmitter<{species:Species,dims:DimensionsAnalyse,checked:boolean}>();
-  dimensions: DimensionsAnalyse = { codeSp:null,longMin:"0",largMin:"0" };
+  dimensions: DimensionsAnalyse = { codeSp:null,longMin:"0",longMax:"0" };
   legalDims: LegalDimensions;
   isChecked: boolean = false;
   optionsL : string[] = [];
-  optionsW : string[] = [];
 
-  constructor(private _fb: FormBuilder) {    
-      
+  constructor(private _fb: FormBuilder) {
+
   }
 
   filter(option: string, options: string[]){
@@ -81,33 +79,36 @@ export class SpeciesComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.legalDims = this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code) && 
-      this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code).length>0 && 
+    this.legalDims = this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code) &&
+      this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code).length > 0 &&
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code)[0];
-    
-    for(let i=this.MIN; i<Math.max(this.MAX_LENGTH,this.MAX_WIDTH); i+=5){
-      if(i<this.MAX_LENGTH) this.optionsL.push(i+"");
-      if(i<this.MAX_WIDTH) this.optionsW.push(i+"");
+    console.log(this.species.biologicDimensions.longMax);
+    if (this.species.biologicDimensions.longMax) {
+      this.formDims.controls['longMax'].setValue(this.species.biologicDimensions.longMax);
+      console.log(this.formDims.controls['longMax']);
+    }
+    for (let i = this.MIN; i < this.MAX_LENGTH; i += 5) {
+      if (i < this.MAX_LENGTH) this.optionsL.push(i + "");
     }
 
-    this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
-    this.formDims.controls['largMin'].valueChanges.subscribe(option => this.changeWMins(option));
-    this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
+    //this.formDims.controls['longMin'].valueChanges.subscribe(option => this.changeLMins(option));
+    //this.formDims.controls['longMax'].valueChanges.subscribe(option => this.changeLMax(option));
+    //this.formSp.controls['species'].valueChanges.subscribe(option => this.changeCheck(option));
   }
 
   changeCheck(value: any){
     this.isChecked = value;
-    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:this.formDims.value.largMin};
+    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,longMax:this.formDims.value.longMax};
     return this.send();
   }
 
   changeLMins(value: any){
-    this.dimensions={codeSp: this.species.code,longMin:value,largMin:this.formDims.value.largMin};
+    this.dimensions={codeSp: this.species.code,longMin:value,longMax:this.formDims.value.longMax};
     return this.send();
   }
 
-  changeWMins(value: any){
-    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,largMin:value};
+  changeLMax(value: any){
+    this.dimensions={codeSp: this.species.code,longMin:this.formDims.value.longMin,longMax: value};
     return this.send();
   }
 
@@ -127,6 +128,6 @@ export class SpeciesComponent implements OnInit {
   }
 
   get picture(): string | boolean {
-    return this.species.picture; 
+    return this.species.picture;
   }
 }

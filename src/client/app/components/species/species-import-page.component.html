@@ -2,17 +2,21 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_SPECIES' | translate}}</mat-card-title>
       <mat-card-content>
-        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>        
-      </mat-card-content>   
-      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ error$ | async }}</mat-card-content>
-      <mat-card-content class="msg" *ngIf="msg$ | async" align="start">{{ msg$ | async }}</mat-card-content>     
+        <button *ngIf="importCsvFile === null  || (error$ | async) !== null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
+        <ng-template #activedbutton>
+          <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
+        </ng-template>
+        <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
+      </mat-card-content>
+      <mat-card-content class="error" *ngIf="error$ | async" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error$ | async }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="(error$ | async) === null && importCsvFile !== null " align="start">{{ 'VALID_IMPORT' | translate }}</mat-card-content>
     </mat-card>
 </div>
-<div class="insideform">
+<div class="insideform" [formGroup]="speciesForm">
   <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title> 
-      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa> 
+      <mat-card-title>{{'IMPORT_CSV' | translate }}</mat-card-title>
+      <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
     </mat-card-title-group>
     <mat-card-content>
       {{'IMPORT_DESC' | translate }}
@@ -24,9 +28,9 @@
       </a>
     </mat-card-footer>
     <mat-card-actions align="start">
-      <button (click)="fileInput.click()">
+      <button (click)="fileInput.click(); clearInput()">
         <span>{{ 'IMPORT_CSV' | translate }}</span>
-        <input #fileInput type="file" (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
+        <input #fileInput type="file" formControlName="speciesInputFile"  (change)="handleUpload($event)" style="display:none;"  accept=".csv"/>
       </button>
     </mat-card-actions>
   </mat-card>

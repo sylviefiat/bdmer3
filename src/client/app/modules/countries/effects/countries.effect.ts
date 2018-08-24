@@ -1,4 +1,3 @@
-
 import { Injectable, NgZone } from '@angular/core';
 import { defer, Observable, pipe, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -39,11 +38,11 @@ export class CountriesEffects {
     @Effect() init$: Observable<Action> = this.actions$
         .ofType<CountriesAction.InitAction>(CountriesAction.ActionTypes.INIT)
         .pipe(
-          switchMap(init => this.countryListService.getCountryList()),
-          map(countryList => new CountriesAction.InitializedAction(countryList)),
-          withLatestFrom(this.countryListService.getCountryListCount()),
-          map(([countryList, countryListCount]) => new CountriesAction.InitializedAction({countryList: countryList, countryListCount: countryListCount })),
-          catchError((error) => of(new CountriesAction.InitFailedAction()))
+            switchMap(init => this.countryListService.getCountryList()),
+            withLatestFrom(this.countryListService.getCountryListDetails()),
+            withLatestFrom(this.countryListService.getCountryListCount()),
+            map(([countryList, countryListDetails, countryListCount]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails, countryListCount: countryListCount })),      
+            catchError((error) => of(new CountriesAction.InitFailedAction()))
         );
 
     @Effect()
@@ -92,6 +91,5 @@ export class CountriesEffects {
         private environment: AppService) {
         //this.basePath = environment.config.servicesBasePath;
         //this.dbname = "countries";
-
     }
 }
