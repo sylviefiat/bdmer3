@@ -79,7 +79,13 @@ export interface Count {
     codeStation: string;
     date: Date;
     monospecies?: boolean;
-    mesures: Mesure[];    
+    count?: Ct;
+    mesures?: Mesure[];
+}
+
+export interface Ct {
+  codeSpecies: string;
+  quantity: number;
 }
 
 export interface Mesure {

@@ -240,7 +240,7 @@ export class PlatformEffects {
   @Effect()
   importCount$: Observable<Action> = this.actions$.ofType<PlatformAction.ImportCountAction>(PlatformAction.ActionTypes.IMPORT_COUNT).pipe(
     map((action: PlatformAction.ImportCountAction) => action.payload),
-    mergeMap((count: Count) => this.csv2jsonService.csv2("count", count)),
+    mergeMap((count: any) => this.csv2jsonService.csv2(count.type, count.csvFile)),
     withLatestFrom(this.store.select(getSelectedPlatform)),
     mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
     map((count: Count) => new PlatformAction.ImportCountSuccessAction(count)),
@@ -248,14 +248,16 @@ export class PlatformEffects {
   );
 
   @Effect()
-  checkCountCsv$: Observable<Action> = this.actions$.ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE).pipe(
-    tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
-    map((action: PlatformAction.CheckCountCsvFile) => action.payload),
-    mergeMap((count: any) => this.csv2jsonService.csv2("count", count)),
-    withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-    mergeMap((value: any) => this.platformService.importCountVerification(value[0], value[1], value[2])),
-    map((error: string) => new PlatformAction.CheckCountAddErrorAction(error))
-  );
+  checkCountCsv$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE)
+    .pipe(
+      tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
+      map((action: PlatformAction.CheckCountCsvFile) => action.payload),
+      mergeMap((count: any) =>this.csv2jsonService.csv2(count.type, count.csvFile)),
+      withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
+      mergeMap((value: any) => this.platformService.importCountVerification(value[0], value[1], value[2])),
+      map((error:string) => new PlatformAction.CheckCountAddErrorAction(error))
+    );
 
   @Effect()
   removePlatform$: Observable<Action> = this.actions$.ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM).pipe(

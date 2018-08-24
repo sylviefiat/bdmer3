@@ -40,7 +40,8 @@ export class CountriesEffects {
         .pipe(
             switchMap(init => this.countryListService.getCountryList()),
             withLatestFrom(this.countryListService.getCountryListDetails()),
-            map(([countryList, countryListDetails]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails })),      
+            withLatestFrom(this.countryListService.getCountryListCount()),
+            map(([[countryList, countryListDetails], countryListCount]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails, countryListCount: countryListCount })),      
             catchError((error) => of(new CountriesAction.InitFailedAction()))
         );
 

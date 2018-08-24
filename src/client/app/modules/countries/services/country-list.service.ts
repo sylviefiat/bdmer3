@@ -34,6 +34,14 @@ export class CountryListService {
       );
   }
 
+
+  getCountryListCount(): Observable<any>{
+    return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countryCountsWithoutMesure.json`)
+      .pipe(
+        map(res => res)
+      );
+  }
+
   getCountryListDetails(): Observable<any>{
     return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/countriesDetails.json`)
       .pipe(

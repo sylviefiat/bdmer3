@@ -23,6 +23,9 @@ import { Country } from "../../modules/countries/models/country";
   <mat-card-content class="warn">
   {{'IMPORT_DESC_DATE' | translate }}
   </mat-card-content>
+  <mat-card-content *ngIf="noMesures" class="warn">
+    {{'IMPORT_COUNT_NO_MESURE' | translate }}
+  </mat-card-content>
   <mat-card-footer class="footer">
   <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
   <a *ngIf="!isAdmin" href="{{getCsvUrl()}}" download>
@@ -70,6 +73,7 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
   @Input() locale: string;
   @Input() csvFileCount: object = null;
   @Input() viewCount: boolean;
+  @Input() noMesures: boolean;
   @Output() countFileEmitter = new EventEmitter<{ file: any; action: string }>();
   @Output() stayHereEmitter = new EventEmitter<string>();
 
@@ -108,12 +112,16 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
       this.csvFileCount = csvFile.target.files[0];
       this.countFileEmitter.emit({ file: this.csvFileCount, action: "check" });
-      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(this.csvFileCount);
+      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(this.csvFileCount, this.noMesures);
     }
   }
 
   getCsvUrl() {
-    return this.docs_repo + "importCount-" + this.locale + ".csv";
+    if(this.noMesures){
+      return this.docs_repo = "importCountNoMesures-" + this.locale + ".csv";
+    }else{
+      return this.docs_repo = "importCount-" + this.locale + ".csv";
+    }
   }
 
   ngOnDestroy() {

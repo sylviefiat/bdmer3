@@ -18,12 +18,14 @@ export function countriesReducer(
     case CountriesAction.ActionTypes.INITIALIZED: {
       let countryList = action.payload.countryList;
       let countryListDetails = action.payload.countryListDetails;
+      let countryListCount = action.payload.countryListCount;
       countryList = countryList.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));
       
       return {
         ...state,
         countryList: countryList,
-        countryListDetails: countryListDetails
+        countryListDetails: countryListDetails,
+        countryListCount: countryListCount
       };
     }
 

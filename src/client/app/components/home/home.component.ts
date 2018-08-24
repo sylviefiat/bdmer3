@@ -35,12 +35,13 @@ export class HomeComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new PlatformAction.LoadAction());    
+    this.store.dispatch(new PlatformAction.LoadAction());
     this.store.dispatch(new CountriesAction.LoadAction());
+    this.store.dispatch(new CountriesAction.InitAction());
 
     this.loggedIn$ = this.store.select(getisLoggedIn);
     this.isAdmin$ = this.store.select(getisAdmin);
-    
+
     this.platforms$ = this.store.select(getPlatformListCurrentCountry);
 
     this.userCountry$ = this.store.select(getAuthCountry);

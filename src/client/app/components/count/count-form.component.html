@@ -1,12 +1,12 @@
-<form [formGroup]="countForm" (ngSubmit)="submit()">  
+<form [formGroup]="countForm" (ngSubmit)="submit()">
   <div>
     <mat-card class="actions">
       <mat-card-title>{{ 'ADD_COUNT_TO' | translate}} {{ survey.code }}</mat-card-title>
-      
+
       <mat-card-content>
         <button type="submit" class="btn btn-primary" [disabled]="!countForm.valid">{{ 'SUBMIT' | translate }}</button>
         <button (click)="return()" class="back">{{ 'CANCEL' | translate }}</button>
-        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>  
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
       </mat-card-content>
     </mat-card>
   </div>
@@ -40,13 +40,30 @@
           <input matInput [matDatepicker]="Datepicker" placeholder="{{ 'DATE' | translate }}" formControlName="date" required>
           <mat-datepicker-toggle matSuffix [for]="Datepicker"></mat-datepicker-toggle>
           <mat-datepicker #Datepicker></mat-datepicker>
-        </mat-form-field>         
+        </mat-form-field>
       </div>
-      <div class="column">
+      <div *ngIf="noMesures" class="column">
+        <h5 mat-subheader>{{ 'COUNTS' | translate }} </h5>
+        <div formGroupName="count">
+          <mat-card-content>
+            <mat-form-field>
+              <mat-select placeholder="{{'SPECIES_SELECT' | translate}}" formControlName="codeSpecies">
+                <mat-option *ngFor="let espece of species" [value]="espece.code">{{ espece.scientificName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-content>
+            <mat-form-field>
+              <input type="number" matInput placeholder="{{ 'QUANTITY' | translate }}" formControlName="quantity">
+            </mat-form-field>
+          </mat-card-content>
+        </div>
+      </div>
+      <div *ngIf="!noMesures" class="column">
           <h5 mat-subheader>{{ 'MESURES' | translate }} </h5>
           <mat-checkbox *ngIf="countForm.controls.mesures.controls[0]" formControlName="monospecies">{{ 'MONOSPECIES' | translate }}</mat-checkbox>
           <div formArrayName="mesures">
-            <div *ngFor="let name of countForm.controls.mesures.controls; let j=index; let first=first;" [formGroupName]="j">          
+            <div *ngFor="let name of countForm.controls.mesures.controls; let j=index; let first=first;" [formGroupName]="j">
               <fa class="warn clickable" [name]="'times'" [border]=false [size]=1 [pull]=right (click)="removeMesure(j)"></fa>
               <bt-mesure [group]="countForm.controls.mesures.controls[j]" [species]="species"></bt-mesure>
             </div>

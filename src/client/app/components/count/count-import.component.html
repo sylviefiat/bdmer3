@@ -26,6 +26,9 @@
     <mat-card-content class="warn">
       {{'IMPORT_DESC_DATE' | translate }}
     </mat-card-content>
+    <mat-card-content *ngIf="noMesures" class="warn">
+      {{'IMPORT_COUNT_NO_MESURE' | translate }}
+    </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
       <a *ngIf="!isAdmin" href="{{getCsvCountsUrl()}}" download>

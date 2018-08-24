@@ -31,11 +31,11 @@
     }*/
     .column {
       display: flex;
-      flex-direction: column;    
+      flex-direction: column;
     }
     .row {
       display: flex;
-      flex-grow: 1;    
+      flex-grow: 1;
     }
     .mat-form-field {
       /*width: auto;
@@ -55,7 +55,7 @@
         line-height: 14px;
         transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
         /* Set our own color */
-        color: grey; 
+        color: grey;
     }
     .btn[disabled], .mat-input-element[disabled] {
         cursor: not-allowed;

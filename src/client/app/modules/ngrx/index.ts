@@ -36,7 +36,7 @@ import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl } fr
 import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
 import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
 import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
-import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList, getCountryDetailsList} from '../countries/index';
+import { ICountriesState, countriesInitialState, countriesReducer, getCountriesLoaded, getCountriesLoading, getCountriesEntities, getAllCountriesEntities, getCountriesIds, getCountryNamesList, getCountryDetailsList, getCountryListCount} from '../countries/index';
 import { ICountryState, countryInitialState, countryReducer, getCountryUsers, getCountryUsersId, getCurrentUserId, getCurrentUser, getCountryError, getCurrentCountry, getUserMsg, getUserError} from '../countries/index';
 import { ISpeciesState, speciesInitialState, speciesReducer, getSpeciesLoaded, getSpeciesLoading, getSpeciesEntities, getSpeciesIds, getSpeciesError, getSpeciesMsg, getCurrentSpecies } from '../datas/index';
 import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformImportErrors, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
@@ -161,6 +161,7 @@ export const getCountriesInApp: any = compose(getCountriesEntities, getCountries
 export const getAllCountriesInApp: any = compose(getAllCountriesEntities, getCountriesState);
 export const getCountriesIdsInApp: any = compose(getCountriesIds, getCountriesState);
 export const getCountryPageError: any = compose(getCountryError, getCountriesState);
+export const getCountryCountList: any = compose(getCountryListCount, getCountriesState);
 
 // Country
 export const getSelectedCountry: any = compose(getCurrentCountry, getAppState);

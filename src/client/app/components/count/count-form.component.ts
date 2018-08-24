@@ -23,11 +23,15 @@ export class CountFormComponent implements OnInit {
     @Input() survey: Survey | null;
     @Input() count: Count | null;
     @Input() errorMessage: string;
+    @Input() countriesCount: string[];
     @Input() species: Species[];
     @Input() zones: Zone[];
     @Input() stations$: Observable<Station[]>;
 
     @Output() submitted = new EventEmitter<Survey>();
+
+    noMesures: boolean = false;
+    type: string = "count";
 
     countForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
@@ -36,7 +40,11 @@ export class CountFormComponent implements OnInit {
         codeStation: new FormControl(),
         date: new FormControl(""),
         monospecies: new FormControl(),
-        mesures: this._fb.array([])
+        mesures: this._fb.array([]),
+        count: new FormGroup({
+          codeSpecies: new FormControl(),
+          quantity: new FormControl()
+        })
     });
     monospecies: boolean = false;
 
@@ -50,11 +58,16 @@ export class CountFormComponent implements OnInit {
                 addrCtrl = this.newMesure(mes.codeSpecies, mes.long, mes.larg);
                 control.push(addrCtrl);
             }
-        } 
+        }
     }
 
-    ngOnInit() {  
-        this.stations$ = of(this.platform.stations); 
+    ngOnInit() {
+        if(this.countriesCount.includes(this.platform.codeCountry)){
+          this.type = "countNoMesures"
+          this.noMesures = true;
+        }
+
+        this.stations$ = of(this.platform.stations);
         this.countForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
         this.countForm.controls.codeSurvey.setValue(this.survey ? this.survey.code : null);
         (this.platform !== undefined) ? this.countForm.controls.codePlatform.disable() : this.countForm.controls.codePlatform.enable();
@@ -64,6 +77,8 @@ export class CountFormComponent implements OnInit {
             this.countForm.controls.codeStation.setValue(this.count.codeStation);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
+            this.countForm.controls.count.get("codeSpecies").setValue(this.count.count.codeSpecies);
+            this.countForm.controls.count.get("quantity").setValue(this.count.count.quantity);
         } else {
             this.countForm.controls.code.setValue(this.survey.code + "_");
             this.countForm.controls.monospecies.setValue(false);
@@ -82,7 +97,7 @@ export class CountFormComponent implements OnInit {
     addMesure() {
         const control = <FormArray>this.countForm.controls['mesures'];
         const sp1 = <FormArray>control.controls[0];
-       
+
         let sp = control && control.controls[0] && sp1.controls['codeSpecies'].value;
         const addrCtrl = this.newMesure(this.countForm.controls.monospecies?sp:'', '', '');
         control.push(addrCtrl);

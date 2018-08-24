@@ -37,6 +37,7 @@ export class GlobalImportComponent implements OnInit {
   @Input() error$: Observable<string | null>;
   @Input() importError$: Observable<string[]>;
   @Input() countries: Country[];
+  @Input() countriesCount: string[];
   @Input() isAdmin: boolean;
   @Input() locale: boolean;
   @Input() docs_repo: string;
@@ -54,6 +55,8 @@ export class GlobalImportComponent implements OnInit {
   viewCount: boolean;
   pendingStation: boolean = false;
   pendingSurvey: boolean = false;
+  noMesures: boolean = false;
+  type: string = "count";
 
   stationForm: FormGroup = new FormGroup({
     stationInputFile: new FormControl()
@@ -73,6 +76,10 @@ export class GlobalImportComponent implements OnInit {
     this.csvFileStation = null;
     this.csvFileSurvey = null;
     this.csvFileCount = null;
+    if(this.countriesCount.includes(this.platform.codeCountry)){
+      this.type = "countNoMesures"
+      this.noMesures = true;
+    }
   }
 
   setStationFile(setFile) {
@@ -139,7 +146,7 @@ export class GlobalImportComponent implements OnInit {
     switch (setFile.action) {
       case "check": {
         this.csvFileCount = setFile.file;
-        this.check.emit({ file: setFile.file, type: "count" });
+        this.check.emit({ file: setFile.file, type: this.type });
         break;
       }
       case "delete": {
@@ -213,7 +220,7 @@ export class GlobalImportComponent implements OnInit {
       this.upload.emit({ file: this.csvFileSurvey, type: "survey" });
     }
     if (this.csvFileCount !== null) {
-      this.upload.emit({ file: this.csvFileCount, type: "count" });
+      this.upload.emit({ file: this.csvFileCount, type: this.type });
     }
   }
 

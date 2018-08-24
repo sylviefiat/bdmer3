@@ -16,7 +16,8 @@ import {
   getPlatformPageMsg,
   getSelectedZone,
   getSelectedSurvey,
-  getPlatformImpErrors
+  getPlatformImpErrors,
+  getCountryCountList
 } from "../../modules/ngrx/index";
 import { PlatformAction } from "../../modules/datas/actions/index";
 import { CountriesAction } from "../../modules/countries/actions/index";
@@ -33,6 +34,7 @@ import { CountriesAction } from "../../modules/countries/actions/index";
       [platform]="platform$ | async"
       [survey]="survey$ | async"
       [countries]="countries$ | async"
+      [countriesCount]="countriesCount$ | async"
       [importError]="importError$ | async">
     </bc-count-import>
   `,
@@ -45,6 +47,7 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
   msg$: Observable<string | null>;
   importError$: Observable<string | null>;
   countries$: Observable<Country[]>;
+  countriesCount$: Observable<String[]>;
 
   platformSubscription: Subscription;
   surveySubscription: Subscription;
@@ -64,6 +67,7 @@ export class CountImportPageComponent implements OnInit, OnDestroy {
     this.survey$ = this.store.select(getSelectedSurvey);
     this.importError$ = this.store.select(getPlatformImpErrors);
     this.countries$ = this.store.select(getAllCountriesInApp);
+    this.countriesCount$ = this.store.select(getCountryCountList);
   }
 
   ngOnDestroy() {

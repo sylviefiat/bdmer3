@@ -18,7 +18,8 @@ import {
   getAllCountriesInApp,
   getisAdmin,
   getLangues,
-  getPlatformImpErrors
+  getPlatformImpErrors,
+  getCountryCountList
 } from "../../modules/ngrx/index";
 import { PlatformAction, SpeciesAction } from "../../modules/datas/actions/index";
 import { CountriesAction } from "../../modules/countries/actions/index";
@@ -27,7 +28,7 @@ import { CountriesAction } from "../../modules/countries/actions/index";
   selector: "bc-global-import-page",
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-  <bc-global-import 
+  <bc-global-import
   (check)="handleCheck($event)"
   (upload)="handleUpload($event)"
   (pending)="handlePending($event)"
@@ -36,6 +37,7 @@ import { CountriesAction } from "../../modules/countries/actions/index";
   [platform]="platform$ | async"
   [error$]="error$"
   [countries]="countries$ | async"
+  [countriesCount]="countriesCount$ | async"
   [importError$]="importError$"
   [isAdmin]="isAdmin$ | async"
   [locale]="locale$ | async"
@@ -52,6 +54,7 @@ export class GlobalImportPageComponent implements OnInit {
   docs_repo: string;
   submit: boolean = false;
   countries$: Observable<Country[]>;
+  countriesCount$: Observable<String[]>;
 
   constructor(private translate: TranslateService, private store: Store<IAppState>, public routerext: RouterExtensions, private router: Router) {}
 
@@ -64,6 +67,7 @@ export class GlobalImportPageComponent implements OnInit {
     this.locale$ = this.store.select(getLangues);
     this.docs_repo = "../../../assets/files/";
     this.countries$ = this.store.select(getAllCountriesInApp);
+    this.countriesCount$ = this.store.select(getCountryCountList);
   }
 
   handleCheck(setFile) {
@@ -76,8 +80,9 @@ export class GlobalImportPageComponent implements OnInit {
         this.store.dispatch(new PlatformAction.CheckSurveyCsvFile(setFile.file));
         break;
       }
+      case "countNoMesures":
       case "count": {
-        this.store.dispatch(new PlatformAction.CheckCountCsvFile(setFile.file));
+        this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: setFile.file, type: setFile.type}));
         break;
       }
       default:
@@ -112,8 +117,9 @@ export class GlobalImportPageComponent implements OnInit {
         this.store.dispatch(new PlatformAction.ImportSurveyAction(setFile.file));
         break;
       }
+      case "countNoMesures":
       case "count": {
-        this.store.dispatch(new PlatformAction.ImportCountAction(setFile.file));
+        this.store.dispatch(new PlatformAction.ImportCountAction({csvFile: setFile.file, type: setFile.type}));
         break;
       }
     }

@@ -8,7 +8,7 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { Platform, Zone, Survey, Count, Species, Station } from '../../modules/datas/models/index';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getSelectedSurvey, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
+import { IAppState, getPlatformPageError, getSelectedPlatform, getSelectedZone, getCountryCountList, getSelectedSurvey, getSelectedCount, getSpeciesInApp } from '../../modules/ngrx/index';
 import { PlatformAction } from '../../modules/datas/actions/index';
 import { SpeciesAction } from '../../modules/datas/actions/index';
 
@@ -21,6 +21,7 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
       [platform]="platform$ | async"
       [survey]="survey$ | async"
       [count]="count$ | async"
+      [countriesCount]="countriesCount$ | async"
       [species]="species$ | async">
     </bc-count-form>
   `,
@@ -46,12 +47,12 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
   surveySubscription: Subscription;
   countSubscription: Subscription;
-
+  countriesCount$: Observable<String[]>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.platformSubscription = route.params.pipe(
       map(params => new PlatformAction.SelectPlatformAction(params.idPlatform)))
-      .subscribe(store);  
+      .subscribe(store);
     this.surveySubscription = route.params.pipe(
       map(params => new PlatformAction.SelectSurveyAction(params.idSurvey)))
       .subscribe(store);
@@ -65,6 +66,7 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
     this.survey$ = this.store.select(getSelectedSurvey);
     this.count$ = this.store.select(getSelectedCount);
     this.species$ = this.store.select(getSpeciesInApp);
+    this.countriesCount$ = this.store.select(getCountryCountList);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 
@@ -74,7 +76,7 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
     this.countSubscription.unsubscribe();
   }
 
-  onSubmit(count: Count) { 
+  onSubmit(count: Count) {
     this.store.dispatch(new PlatformAction.AddCountAction(count))
   }
 }

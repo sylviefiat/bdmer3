@@ -443,5 +443,7 @@
   "SELECT_PROVINCE": "Choisir une province",
   "SURFACE_NOT_NUMBER": ", la surface n'est pas un nombre",
   "SURFACE_NOT_DEFINED": ", la surface n'est pas définie",
-  "INVALID_FORM": "Le formulaire n'est pas valide"
+  "INVALID_FORM": "Le formulaire n'est pas valide",
+  "QUANTITY":"Quantité",
+  "IMPORT_COUNT_NO_MESURE": "Attention les comptages pour ce pays ne doivent pas contenir de colonne 'mesures' mais une colonne 'count' comportant le nombre d'individus enregistrés"
 }
