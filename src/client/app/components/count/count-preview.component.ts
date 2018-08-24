@@ -14,7 +14,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
         </mat-card-content>
-        <mat-card-content *ngIf="count.count !== null">
+        <mat-card-content *ngIf="count.count.quantity">
           <div>
             <span class="speciesName">
               {{'SPECIES' | translate}} : {{ getSpeciesName(count.count.codeSpecies) }}
@@ -42,7 +42,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
             </li>
           </ng-template>
         </mat-card-content>
-        <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
+        <mat-card-content *ngIf="(!count.mesures || count.mesures.length<=0) && !(count.count.quantity)">
           <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
         </mat-card-content>
       </mat-card>

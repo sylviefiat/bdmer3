@@ -44,7 +44,7 @@
         </li>
       </div>
     </mat-card-content>
-    <mat-card-content *ngIf="count.count !== null">
+    <mat-card-content *ngIf="count.count.quantity">
       <div>
         <span class="speciesName">
           {{'SPECIES' | translate}} : {{ getSpeciesName(count.count.codeSpecies) }}
@@ -55,7 +55,7 @@
         </span>
       </div>
     </mat-card-content>
-    <mat-card-content *ngIf="!count.mesures || count.mesures.length<=0">
+    <mat-card-content *ngIf="(!count.mesures || count.mesures.length<=0) && !(count.count.quantity)">
       <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
     </mat-card-content>
   </mat-card>
