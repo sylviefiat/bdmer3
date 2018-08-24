@@ -19,7 +19,7 @@ export const countriesInitialState: ICountriesState = {
   ids: [],
   error: null,
   countryList: [],
-  countryListCount: []
+  countryListCount: [],
   countryListDetails: []
 };
 export const getCountriesLoaded = (state: ICountriesState) => state.loaded;

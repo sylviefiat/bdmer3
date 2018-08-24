@@ -41,7 +41,7 @@ export class CountriesEffects {
             switchMap(init => this.countryListService.getCountryList()),
             withLatestFrom(this.countryListService.getCountryListDetails()),
             withLatestFrom(this.countryListService.getCountryListCount()),
-            map(([countryList, countryListDetails, countryListCount]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails, countryListCount: countryListCount })),      
+            map(([[countryList, countryListDetails], countryListCount]) => new CountriesAction.InitializedAction({countryList: countryList, countryListDetails: countryListDetails, countryListCount: countryListCount })),      
             catchError((error) => of(new CountriesAction.InitFailedAction()))
         );
 
