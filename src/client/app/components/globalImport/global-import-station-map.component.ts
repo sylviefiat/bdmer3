@@ -7,6 +7,7 @@ import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
 import * as Turf from "@turf/turf";
 
 import { RouterExtensions, Config } from "../../modules/core/index";
+import { MapService } from "../../modules/core/services/map.service";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
@@ -298,7 +299,7 @@ export class PreviewMapStationGlobalImportComponent implements OnInit, OnChanges
     stations.forEach(station => {
       inside = false;
       this.platform.zones.map(zone => {
-        if (Turf.inside(Turf.point(station.geometry.coordinates), Turf.polygon(zone.geometry.coordinates))) {
+        if (MapService.booleanInPolygon(station, MapService.getPolygon(zone,{name:zone.properties.name}))) {
           inside = true;
           this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
         }

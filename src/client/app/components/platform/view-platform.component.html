@@ -46,6 +46,6 @@
   </div>
 </mat-card>
 
-<bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="filteredZones$" [idPlatform]="platform.code"></bc-zone-preview-list>
+<bc-zone-preview-list *ngIf="(view$ | async)==='zones'" [zones$]="filteredZones$" [platform]="platform"></bc-zone-preview-list>
 <bc-station-preview-list *ngIf="(view$ | async)==='stations'" [stations$]="filteredStations$" [platform]="platform"></bc-station-preview-list>
 <bc-survey-preview-list *ngIf="(view$ | async)==='surveys'" [surveys$]="filteredSurveys$" [platform]="platform"></bc-survey-preview-list>

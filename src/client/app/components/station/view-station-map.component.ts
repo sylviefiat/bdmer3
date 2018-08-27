@@ -7,6 +7,7 @@ import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
 import * as Turf from "@turf/turf";
 
 import { RouterExtensions, Config } from "../../modules/core/index";
+import { MapService } from "../../modules/core/services/map.service";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
@@ -329,57 +330,26 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
       this.zoneStation = null;
 
       this.platform.zones.map(zone => {
-        if (Turf.inside(Turf.point(this.station.geometry.coordinates), Turf.polygon(zone.geometry.coordinates))) {
+        if (MapService.booleanInPolygon(this.station, MapService.getPolygon(zone, {name:zone.properties.name}))) {
           this.zoneStation = zone;
         }
       });
 
       if (this.zoneStation !== null) {
-        this.zoomOnZone(this.zoneStation);
+        this.bounds = MapService.zoomOnZone(this.zoneStation);
       } else {
-        this.zoomOnStation(this.station);
+        this.bounds = MapService.zoomOnStation(this.station);
       }
     }
   }
 
-  zoomToCountries(coordinates): LngLatBounds {
-    return coordinates.reduce((bnd, coord) => {
-      return bnd.extend(<any>coord);
-    }, new LngLatBounds(coordinates[0], coordinates[0]));
-  }
-
-  zoomOnZone(zone) {
-    var bnd = new LngLatBounds();
-    zone.geometry.coordinates[0].forEach(coord => {
-      bnd.extend(coord);
-    });
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomOnStation(station) {
-    var bnd = new LngLatBounds();
-    bnd.extend(station.geometry.coordinates);
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomToZonesOrStation(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(this.zoomToCountries(feature.geometry.coordinates)));
-    bnd = this.checkBounds(bnd);
-    this.bounds = bnd;
-  }
-
   zoomOnCountry(countryCode: string) {
-    this.setZones(this.platform);
-    this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+    this.bounds = MapService.zoomToCountries([this.markerCountry.lngLat]);
   }
 
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-    // this.zoomToZonesOrStation(
-    //   Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
-    // );
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(MapService.getCoordinates(zone), { code: zone.properties.code }))));
   }
 
   setStations(platforms: Platform) {
@@ -387,20 +357,6 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
-  }
-
-  checkBounds(bounds: LngLatBounds) {
-    if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
-      let tmp = bounds.getSouthWest().lng;
-      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
-      bounds.setNorthEast(new LngLat(tmp, bounds.getNorthEast().lat));
-    }
-    if (bounds.getNorthEast().lat < bounds.getSouthWest().lat) {
-      let tmp = bounds.getSouthWest().lat;
-      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng, bounds.getNorthEast().lat));
-      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng, tmp));
-    }
-    return bounds;
   }
 
   showPopupStation(evt: MapMouseEvent) {

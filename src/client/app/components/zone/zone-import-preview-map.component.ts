@@ -10,6 +10,7 @@ import { RouterExtensions, Config } from "../../modules/core/index";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
+import { MapService } from "../../modules/core/services/index";
 
 @Component({
   selector: "bc-zone-import-map",
@@ -395,11 +396,9 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
 
   zoomToZones(featureCollection) {
     var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      feature.geometry.coordinates[0].forEach(coord => {
-        bnd.extend(coord);
-      });
-    });
+    var fc: Turf.FeatureCollection = featureCollection.features
+      .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
+      .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
     this.bounds = this.checkBounds(bnd);
   }
 
@@ -414,9 +413,13 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   setZones(platform: Platform) {
-    this.zones = platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-    this.zoomToZones(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+    this.zones = this.platform.zones;
+    let lz =  Turf.featureCollection(
+        this.zones
+          .filter(zone=> zone!==null)
+          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+    this.layerZones$ = of(lz);
+    this.zoomToZones(lz);
   }
 
   setStations(platform: Platform) {

@@ -211,18 +211,6 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
 
     getFeature(feature,checked) {
       return MapService.getFeature(feature,{ code: feature.properties.code, checked: checked });
-        /*switch (feature.geometry.type) {
-            case "GeometryCollection":
-                return Turf.multiPolygon(feature.geometry.geometries.map(geom => geom.coordinates), { code: feature.properties.code, checked: checked });
-            case "MultiPolygon":
-                return Turf.multiPolygon(feature.geometries.coordinates, { code: feature.properties.code, checked: checked });
-            case "Polygon":
-                return Turf.polygon(feature.geometry.coordinates, { code: feature.properties.code, checked: checked });
-            case "Point":
-                return Turf.point(feature.geometry.coordinates, { code: feature.properties.code, checked: checked })
-            default:
-                return null;
-        }*/
     }
 
 }

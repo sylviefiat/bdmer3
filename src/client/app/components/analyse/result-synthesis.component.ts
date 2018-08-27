@@ -160,7 +160,7 @@ export class ResultSynthesisComponent implements OnInit {
     getStationsZone(zone){
       let stations = [];
       for (let s of this.analyseData.usedStations) {
-        if (Turf.booleanPointInPolygon(s.geometry.coordinates, MapService.getPolygon(zone,{name:zone.properties.name}))) {
+        if (MapService.booleanInPolygon(s, MapService.getPolygon(zone,{name:zone.properties.name}))) {
             stations.push(s);
         }
       }

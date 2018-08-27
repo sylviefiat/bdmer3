@@ -1,15 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Platform,Zone } from './../../modules/datas/models/platform';
+import { MapService } from './../../modules/core/services/map.service';
 
 @Component({
   selector: 'bc-zone-preview',
   template: `
-    <a [routerLink]="['/zone', idPlatform, idZone]">
+    <a [routerLink]="['/zone', platform.code, idZone]">
       <mat-card>
         <mat-card-title-group>
           <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
-          <mat-card-subtitle *ngIf="idPlatform">{{ idPlatform }}</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="platform">{{ platform.code }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           {{ surface }} m²
@@ -63,13 +64,14 @@ import { Platform,Zone } from './../../modules/datas/models/platform';
 })
 export class ZonePreviewComponent implements OnInit {
   @Input() zone: Zone;
-  @Input() idPlatform: string;
+  @Input() platform: Platform;
   nZonesPrefs: number = 0;
   nStations: number = 0;
 
   ngOnInit(){
     this.nZonesPrefs = this.zone.zonePreferences ? this.zone.zonePreferences.length : 0;
-
+    let stationsInZone = this.platform.stations.filter(station => MapService.booleanInPolygon(station,MapService.getPolygon(this.zone, {name:this.zone.properties.name})))
+    this.nStations = stationsInZone.length;
   }
 
   get idZone() {

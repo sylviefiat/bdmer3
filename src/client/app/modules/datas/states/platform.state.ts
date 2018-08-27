@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { Platform, Survey } from '../models/index';
 import { IAppState } from '../../ngrx/index';
+import { MapService } from '../../../modules/core/services/map.service';
 import * as Turf from '@turf/turf';
 
 export interface IPlatformState {
@@ -41,8 +42,7 @@ export const getPlatformLoading = (state: IPlatformState) => state.loading;
 
 export const getPlatformEntities = (state: IPlatformState) => state.entities;
 
-export const getPlatformOfCurrentCountry = (state: IAppState) => state.auth && state.auth.country && state.auth.country.code 
-    && (state.auth.country.code==='AA')?state.platform.entities:state.platform.entities.filter(platform => platform.codeCountry === state.auth.country.code);
+export const getPlatformOfCurrentCountry = (state: IAppState) => state.auth && state.auth.country && state.auth.country.code && (state.auth.country.code==='AA')?state.platform.entities:state.platform.entities.filter(platform => platform.codeCountry === state.auth.country.code);
 
 export const getPlatformsOfCurrentCountry = (state: IAppState) => state.country.currentCountryId && state.platform.entities.filter(platform => platform.codeCountry === state.country.currentCountryId);
 
@@ -81,7 +81,7 @@ export const getCurrentZone = (state: IPlatformState) => state.currentPlatformId
 export const getCurrentZoneStations = createSelector(getCurrentPlatform, getCurrentZone, (platform, zone) => {
     let stations = [];
     for (let s of platform.stations) {
-        if (Turf.booleanPointInPolygon(s.geometry.coordinates, Turf.polygon(zone.geometry.coordinates))) {
+        if (MapService.booleanInPolygon(s,MapService.getPolygon(zone, {name:zone.properties.name}))) {
             stations.push(s);
         }
     }

@@ -10,6 +10,7 @@ import { RouterExtensions, Config } from "../../modules/core/index";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
+import { MapService } from "../../modules/core/services/index";
 
 @Component({
   selector: "bc-view-platform-map",
@@ -265,46 +266,29 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
       }
 
       if (this.stations.length > 0) this.setStations();
-      if (this.zones.length > 0) this.setZones();
+      if (this.zones.length > 0) this.setZones(this.platform);
     }
   }
 
-  zoomToCountries(coordinates): LngLatBounds {
-    return coordinates.reduce((bnd, coord) => {
-      return bnd.extend(<any>coord);
-    }, new LngLatBounds(coordinates[0], coordinates[0]));
-  }
-
-  zoomToZones(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => {
-      feature.geometry.coordinates[0].forEach(coord => {
-        bnd.extend(coord);
-      });
-    });
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomToStations(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates));
-    this.bounds = this.checkBounds(bnd);
-  }
-
   zoomOnCountry(countryCode: string) {
-    this.bounds = this.zoomToCountries([this.markerCountry.lngLat]);
+    this.bounds = MapService.zoomToCountries([this.markerCountry.lngLat]);
   }
 
-  setZones() {
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-    this.zoomToZones(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
+  setZones(platform: Platform) {
+    this.zones = this.platform.zones;
+    let lz =  Turf.featureCollection(
+        this.zones
+          .filter(zone=> zone!==null)
+          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+    this.layerZones$ = of(lz);
+    this.bounds = MapService.zoomToZones(lz);
   }
 
   setStations() {
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
-    this.zoomToStations(
+    this.bounds = MapService.zoomToStations(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
   }

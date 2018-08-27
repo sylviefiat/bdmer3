@@ -10,6 +10,7 @@ import { RouterExtensions, Config } from "../../modules/core/index";
 import { Platform, Zone, Station } from "../../modules/datas/models/index";
 import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
+import { MapService } from "../../modules/core/services/index";
 
 @Component({
   selector: "bc-view-zone-map",
@@ -305,42 +306,18 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
       if (this.platform.stations.length > 0) this.setStations(this.platform);
       if (this.platform.zones.length > 0) this.setZones(this.platform);
 
-      this.zoomOnZone(this.zone);
+      this.bounds = MapService.zoomOnZone(this.zone);
     }
-  }
-
-  zoomToCountries(coordinates): LngLatBounds {
-    return coordinates.reduce((bnd, coord) => {
-      return bnd.extend(<any>coord);
-    }, new LngLatBounds(coordinates[0], coordinates[0]));
-  }
-
-  zoomOnZone(zone) {
-    var bnd = new LngLatBounds();
-    zone.geometry.coordinates[0].forEach(coord => {
-      bnd.extend(coord);
-    });
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomToZonesOrStation(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates[0]));
-    bnd = this.checkBounds(bnd);
-    this.bounds = bnd;
-  }
-
-  zoomOnCountry(countryCode: string) {
-    this.setZones(this.platform);
-    this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
   }
 
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code }))));
-    this.zoomToZonesOrStation(
-      Turf.featureCollection(this.zones.map(zone => Turf.polygon(zone.geometry.coordinates, { code: zone.properties.code })))
-    );
+    let lz =  Turf.featureCollection(
+        this.zones
+          .filter(zone=> zone!==null)
+          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+    this.layerZones$ = of(lz);
+    this.bounds = MapService.zoomToZones(lz);
   }
 
   setStations(platforms: Platform) {
@@ -349,20 +326,6 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
-  }
-
-  checkBounds(bounds: LngLatBounds) {
-    if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
-      let tmp = bounds.getSouthWest().lng;
-      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
-      bounds.setNorthEast(new LngLat(tmp, bounds.getNorthEast().lat));
-    }
-    if (bounds.getNorthEast().lat < bounds.getSouthWest().lat) {
-      let tmp = bounds.getSouthWest().lat;
-      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng, bounds.getNorthEast().lat));
-      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng, tmp));
-    }
-    return bounds;
   }
 
   showPopupStation(evt: MapMouseEvent) {
