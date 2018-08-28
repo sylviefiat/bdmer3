@@ -5,16 +5,7 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from "rxjs/operators";
 import { Router } from "@angular/router";
 
-import {
-  IAppState,
-  getSelectedCountry,
-  getSelectedPlatform,
-  getSelectedZone,
-  getAuthCountry,
-  getAllCountriesInApp,
-  getSpeciesInApp,
-  getServiceUrl
-} from "../../ngrx/index";
+import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp, getSpeciesInApp, getServiceUrl, getPrefixDatabase } from "../../ngrx/index";
 import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from "../actions/index";
@@ -30,8 +21,8 @@ export class PlatformEffects {
   @Effect({ dispatch: false })
   openDB$: Observable<any> = this.actions$.ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT).pipe(
     map((action: AppInitAction.FinishAppInitAction) => action.payload),
-    withLatestFrom(this.store.select(getServiceUrl)),
-    map(value => this.platformService.initDB("platforms", value[1]))
+    withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
+    map(value => this.platformService.initDB("platforms", value[1], value[2]))
   );
 
   @Effect()

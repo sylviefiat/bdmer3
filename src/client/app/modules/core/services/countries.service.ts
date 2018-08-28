@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Observable, from, of, pipe, throwError } from 'rxjs';
-import { map, mergeMap, filter, catchError } from 'rxjs/operators';
+import { map, mergeMap, filter, catchError, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as PouchDB from "pouchdb";
@@ -21,15 +21,18 @@ export class CountriesService {
 
     }
 
-    initDB(dbname, remote): Observable<any> {
-        this.db = new PouchDB(dbname, { skip_setup: true, revs_limit: 3 });
-        this.sync(remote + "/" + dbname);
-        return this.getCountry(this.adminCountry.code).pipe(
+    initDB(dbname, remote, prefix): Observable<any> {
+        console.log("init countries");
+        this.db = new PouchDB( prefix + dbname, { skip_setup: true, revs_limit: 3 });
+        return this.getCountry(this.adminCountry.code)
+        .pipe(
+            tap(result => console.log(result)),
             filter(country => !country),
-            mergeMap(() =>
-                this.insertCountry(this.adminCountry).pipe(
+            mergeMap(() =>{
+                console.log(this.adminCountry);
+                return this.insertCountry(this.adminCountry).pipe(
                     mergeMap(country => this.addUser(this.adminUser)))
-            )
+            })
         )
     }
 
@@ -42,13 +45,15 @@ export class CountriesService {
 
 
     getCountry(countrycode: string): Observable<Country> {
-        return from(this.db.query(function(doc, emit) {
-            emit(doc.code);
-        }, { key: countrycode, include_docs: true, attachments: true, binary: true }))
-            .pipe(map((result: ResponsePDB) => {
+        console.log(countrycode);
+        return from(this.db.query(function(doc, emit) { emit(doc.code); }, { key: countrycode, include_docs: true, attachments: true, binary: true }))
+        .pipe(
+            tap((result)=>console.log(result)),
+            map((result: ResponsePDB) => {
+                console.log(result);
                 return result.rows && result.rows[0] && result.rows[0].doc;
-
-            }))
+            })
+        );
     }
 
     insertCountry(country: Country): Observable<Country> {

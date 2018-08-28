@@ -18,10 +18,10 @@ export class PlatformService {
     //this.dbname = "platforms";
   }
 
-  initDB(dbname, remote): Observable<any> {
+  initDB(dbname, remote, prefix): Observable<any> {
     //console.log(dbname);
-    this.db = new PouchDB(dbname, { revs_limit: 3 });
-    return from(this.sync(remote + "/" + dbname));
+    this.db = new PouchDB(prefix + dbname, { revs_limit: 3 });
+    return from(this.sync(remote + "/" + prefix + dbname));
   }
 
   public getAll(): Observable<any> {

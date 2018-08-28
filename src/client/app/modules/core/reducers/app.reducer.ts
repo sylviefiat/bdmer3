@@ -13,12 +13,13 @@ export function appInitReducer(
             return state;
         }
         case AppInitAction.ActionTypes.SERVICES_URL_LOADED: {
-            
             let url = action.payload ? action.payload.servicesBaseUrl : null;
+            let prefix = action.payload ? action.payload.prefixDB : null;
 
             return {
                 ...state,
-                servicesBaseUrl: url
+                servicesBaseUrl: url,
+                prefixDB: prefix
             };
         }
         default: {

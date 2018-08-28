@@ -11,28 +11,20 @@ import { AppInitAction } from "../../core/actions/index";
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
 import { CountryListService } from '../services/index';
-import { IAppState, getServiceUrl } from '../../ngrx/index';
+import { IAppState, getServiceUrl, getPrefixDatabase } from '../../ngrx/index';
 
 @Injectable()
 export class CountriesEffects {
     private basePath: string;
     private dbname;
-    /**
-     * This effect does not yield any actions back to the store. Set
-     * `dispatch` to false to hint to @ngrx/effects that it should
-     * ignore any elements of this effect stream.
-     *
-     * The `defer` observable accepts an observable factory function
-     * that is called when the observable is subscribed to.
-     * Wrapping the database open call in `defer` makes
-     * effect easier to test.
-     */
+
+    
     @Effect({ dispatch: false })
     openDB$: Observable<any> = this.actions$
         .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
         .pipe(
-            withLatestFrom(this.store.select(getServiceUrl)),
-            map((value) => this.countriesService.initDB('countries', value[1]))
+            withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
+            map((value) => this.countriesService.initDB('countries', value[1], value[2]))
         );
 
     @Effect() init$: Observable<Action> = this.actions$

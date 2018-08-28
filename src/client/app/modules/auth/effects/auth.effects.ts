@@ -5,7 +5,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, withLatestFrom, startWith, tap, exhaustMap } from 'rxjs/operators';
 
-import { IAppState, getLatestURL, getServiceUrl } from '../../ngrx/index';
+import { IAppState, getLatestURL, getServiceUrl, getPrefixDatabase} from '../../ngrx/index';
 import { CountriesService, MailService } from '../../core/services/index';
 import { AuthService } from '../../core/services/auth.service';
 import { AppInitAction } from '../../core/actions/app.action';
@@ -30,9 +30,10 @@ export class AuthEffects {
       map((value) => this.authService.initDB('_users',value[1])),
       map((db) => {
         let token = JSON.parse(localStorage.getItem('token'));
-        if (token && token.expires > Math.floor(Date.now() / 1000))
+        if (token && token.expires > Math.floor(Date.now() / 1000)){
+          console.log(token);
           return new AuthAction.LoginSuccess(token);
-        else if (token) {
+        } else if (token) {
            return new AuthAction.Logout(token);
         } else {
           return new AuthAction.AnonymousUse();
@@ -46,6 +47,7 @@ export class AuthEffects {
             map((action: AuthAction.Login) => action.payload),
             exhaustMap(auth => this.authService.login(auth)),
             map((result: AccessToken) => {
+                console.log(result);
                 const authInfoUpdated: AuthInfo = {
                     access_token: result,
                     expires_in: AuthEffects.expirationTime,
