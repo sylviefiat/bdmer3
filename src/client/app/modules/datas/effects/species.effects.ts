@@ -9,15 +9,15 @@ import { Csv2JsonService } from "../../core/services/csv2json.service";
 import { SpeciesService } from "../services/species.service";
 import { SpeciesAction } from "../actions/index";
 import { Species } from "../models/species";
-import { IAppState, getServiceUrl } from "../../ngrx/index";
+import { IAppState, getServiceUrl, getPrefixDatabase } from "../../ngrx/index";
 import { AppInitAction } from "../../core/actions/index";
 
 @Injectable()
 export class SpeciesEffects {
   @Effect({ dispatch: false })
   openDB$: Observable<any> = this.actions$.ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT).pipe(
-    withLatestFrom(this.store.select(getServiceUrl)),
-    map(value => this.speciesService.initDB("species", value[1]))
+    withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
+    map(value => this.speciesService.initDB("species", value[1], value[2]))
   );
 
   @Effect()

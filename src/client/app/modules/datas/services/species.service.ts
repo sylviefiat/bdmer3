@@ -15,9 +15,9 @@ export class SpeciesService {
     //this.dbname = "species";
   }
 
-  initDB(dbname, remote): Observable<any> {
-    this.db = new PouchDB(dbname, { revs_limit: 3 });
-    return from(this.sync(remote + "/" + dbname));
+  initDB(dbname, remote, prefix): Observable<any> {
+    this.db = new PouchDB(prefix+dbname, { revs_limit: 3 });
+    return from(this.sync(remote + "/" + prefix+dbname));
   }
 
   public getAll(): Observable<any> {

@@ -11,12 +11,14 @@ import { AppInitAction } from "../../core/actions/index";
 import { CountriesAction } from '../actions/index';
 import { Country } from '../models/country';
 import { CountryListService } from '../services/index';
-import { IAppState, getServiceUrl } from '../../ngrx/index';
+import { IAppState, getServiceUrl, getPrefixDatabase } from '../../ngrx/index';
 
 @Injectable()
 export class CountriesEffects {
     private basePath: string;
     private dbname;
+    /*public adminUser = { _id: 'admin', name: 'admin', surname: 'ad', username: 'admin', email: null, countryCode: 'AA', password: null, role: 'EDITOR' };
+    public adminCountry: Country = { _id: 'AA', code: 'AA', name: 'Administrators', users: null, coordinates: { lat: null, lng: null }, flag: null };*/
     /**
      * This effect does not yield any actions back to the store. Set
      * `dispatch` to false to hint to @ngrx/effects that it should
@@ -31,8 +33,13 @@ export class CountriesEffects {
     openDB$: Observable<any> = this.actions$
         .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
         .pipe(
-            withLatestFrom(this.store.select(getServiceUrl)),
-            map((value) => this.countriesService.initDB('countries', value[1]))
+            withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
+            map((value) => this.countriesService.initDB('countries', value[1], value[2])),
+            /*map(() => {console.log("go");return this.countriesService.getCountry(this.adminCountry.code)}),
+            filter(country => !country),
+            mergeMap((country) => {console.log(country);return this.countriesService.insertCountry(this.adminCountry)}),
+            mergeMap(country => this.countriesService.addUser(this.adminUser)),
+            catchError(error => {console.log(error);return of(error)})*/
         );
 
     @Effect() init$: Observable<Action> = this.actions$

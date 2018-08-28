@@ -32,7 +32,7 @@ import { ActionReducer, combineReducers, ActionReducerMap } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl } from '../core/index';
+import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl, getPrefixDB } from '../core/index';
 import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
 import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
 import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
@@ -133,6 +133,7 @@ export const getAppState = (state:IAppState) => state;
 
 // init app
 export const getServiceUrl : any = compose(getServicesBaseUrl,getAppInitState);
+export const getPrefixDatabase : any = compose(getPrefixDB,getAppInitState);
 // i18n
 export const getLangues: any = compose(getLang, getMultilingualState);
 export const getListNames: any = compose(getNames, getNameListState);

@@ -63,7 +63,8 @@ export function app(store: Store<IAppState>) {
       .pipe(
         filter(url => url !== null),
         take(1)
-      ).subscribe((url) => {      
+      ).subscribe((url) => {     
+        console.log("finish load");
         store.dispatch(new AppInitAction.FinishAppInitAction());
         resolve(true);
       });
