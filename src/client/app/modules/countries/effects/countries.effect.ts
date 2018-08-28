@@ -18,7 +18,6 @@ export class CountriesEffects {
     private basePath: string;
     private dbname;
 
-    
     @Effect({ dispatch: false })
     openDB$: Observable<any> = this.actions$
         .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
