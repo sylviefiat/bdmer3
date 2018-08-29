@@ -29,18 +29,15 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
           <div>{{ 'COUNT_DETAIL' | translate }}
             <span *ngIf="!monospecies">{{ 'MULTISPECIES' | translate }} ({{'TOTAL' | translate}}: {{nMesures}})</span> :
           </div>
-          <ng-template class="mesures" *ngFor="let mesure of count.mesures; let i = index;">
+          <div class="mesures" *ngFor="let mesure of count.mesures; let i = index;">
             <div *ngIf="writeSp(i)">
-              <hr/>
+              
               <span class="speciesName">
               {{ getSpeciesName(mesure.codeSpecies) }}
               </span>
-              ({{'TOTAL' | translate}}: {{getNMesuresSpecies(mesure.codeSpecies)}}):
+              : {{getNMesuresSpecies(mesure.codeSpecies)}}
             </div>
-            <li>
-              <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm, <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
-            </li>
-          </ng-template>
+          </div>
         </mat-card-content>
         <mat-card-content *ngIf="(!count.mesures || count.mesures.length<=0) && !(count.count.quantity)">
           <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
