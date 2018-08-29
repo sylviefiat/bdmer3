@@ -75,7 +75,7 @@
     <mat-card-content>
       <span class="greyed">{{ 'LONG_MIN' | translate }}:</span> <span>{{ dim.longMin }}{{ 'MILLIMETER_ABR' | translate }}</span>
     </mat-card-content>
-    <mat-card-content>
+    <mat-card-content *ngIf="dim.longMax">
       <span class="greyed">{{ 'LONG_MAX' | translate }}:</span> <span>{{ dim.longMax }}{{ 'MILLIMETER_ABR' | translate }}</span>
     </mat-card-content>
   </mat-card>

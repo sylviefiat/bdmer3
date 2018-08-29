@@ -25,7 +25,7 @@ import { Country } from '../../modules/countries/models/country';
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MIN_EX' | translate }}</div>
       </mat-form-field>
       <mat-form-field>
-        <input type="number" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax" required>
+        <input type="number" matInput placeholder="{{ 'SPECIES_DIMS_LONG_MAX' | translate }}" formControlName="longMax">
         <div class="hint">{{ 'SPECIES_DIMS_LONG_MAX_EX2' | translate }}</div>
       </mat-form-field>
     </mat-card-content>
