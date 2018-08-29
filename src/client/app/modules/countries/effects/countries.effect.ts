@@ -23,7 +23,11 @@ export class CountriesEffects {
         .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
         .pipe(
             withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
-            map((value) => this.countriesService.initDB('countries', value[1], value[2]))
+            map((value) => this.countriesService.initDB('countries', value[1], value[2])),
+            mergeMap(() => this.countriesService.getCountry(this.countriesService.adminCountry.code)),
+            filter(country => !country),
+            mergeMap(value => this.countriesService.insertCountry(this.countriesService.adminCountry)),
+            mergeMap(value => this.countriesService.addUser(this.countriesService.adminUser))
         );
 
     @Effect() init$: Observable<Action> = this.actions$

@@ -31,7 +31,6 @@ export class AuthEffects {
       map((db) => {
         let token = JSON.parse(localStorage.getItem('token'));
         if (token && token.expires > Math.floor(Date.now() / 1000)){
-          console.log(token);
           return new AuthAction.LoginSuccess(token);
         } else if (token) {
            return new AuthAction.Logout(token);
@@ -47,7 +46,6 @@ export class AuthEffects {
             map((action: AuthAction.Login) => action.payload),
             exhaustMap(auth => this.authService.login(auth)),
             map((result: AccessToken) => {
-                console.log(result);
                 const authInfoUpdated: AuthInfo = {
                     access_token: result,
                     expires_in: AuthEffects.expirationTime,

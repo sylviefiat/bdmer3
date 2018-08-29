@@ -27,24 +27,15 @@ export class AuthService {
 
   initDB(dbname,remote): Observable<any> {
     PouchDB.plugin(PouchDBAuth);
-    console.log(remote + "/" + dbname);
     this.db = new PouchDB(remote + "/" + dbname, {skip_setup: true,revs_limit: 5}); 
     return from(this.sync(remote + "/"  + dbname));
   }
 
   login({ username, password }: Authenticate): Observable<any> {
-    console.log(username);
-    console.log(password);
     return from(this.db.login(username, password)).pipe(
-      mergeMap((result: ResponsePDB) => {
-        console.log(result);
-        if (result.ok /*&& result.roles.length > 0*/){
-          return this.setUser(username);
-        }
-        else {
-          return throwError(result); 
-        }
-      }));
+      filter((result: ResponsePDB) => result.ok),
+      mergeMap((result: ResponsePDB) => this.setUser(username)
+      ));
   }
 
   session(): Observable<any> {

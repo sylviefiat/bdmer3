@@ -64,7 +64,6 @@ export function app(store: Store<IAppState>) {
         filter(url => url !== null),
         take(1)
       ).subscribe((url) => {     
-        console.log("finish load");
         store.dispatch(new AppInitAction.FinishAppInitAction());
         resolve(true);
       });
