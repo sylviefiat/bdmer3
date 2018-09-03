@@ -19,7 +19,7 @@ import { Country } from '../../modules/countries/models/country';
             <mat-card-content *ngIf="legalDims">
               <h5 mat-subheader>{{ 'LEGAL_DIMS' | translate }}</h5>
               <p>
-                min {{ legalDims.longMin}}mm, max {{legalDims.longMax}}mm
+                min {{ legalDims.longMin}}mm<span *ngIf="legalDims.longMax">, max {{legalDims.longMax}}mm</span>
               </p>
             </mat-card-content>
             <mat-card-content [formGroup]="formDims">
@@ -82,10 +82,8 @@ export class SpeciesComponent implements OnInit {
     this.legalDims = this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code) &&
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code).length > 0 &&
       this.species.legalDimensions.filter(ld => ld.codeCountry === this.currentCountry.code)[0];
-    console.log(this.species.biologicDimensions.longMax);
     if (this.species.biologicDimensions.longMax) {
       this.formDims.controls['longMax'].setValue(this.species.biologicDimensions.longMax);
-      console.log(this.formDims.controls['longMax']);
     }
     for (let i = this.MIN; i < this.MAX_LENGTH; i += 5) {
       if (i < this.MAX_LENGTH) this.optionsL.push(i + "");

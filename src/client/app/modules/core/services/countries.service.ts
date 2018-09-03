@@ -22,7 +22,6 @@ export class CountriesService {
     }
 
     initDB(dbname, remote, prefix): Observable<any> {
-        console.log("init countries");
         this.db = new PouchDB( prefix + dbname, { skip_setup: true, revs_limit: 3 });
         this.sync(remote+'/'+prefix+dbname);
         return this.getCountry(this.adminCountry.code);

@@ -355,7 +355,7 @@
   "PIE_LEGEND": "Nombre de specimen sur la station",
   "TYPE": "Type de résultat",
   "FILTER": "Filtrer les resultats",
-  "SPECIES_MIN_DIMS": "Choix de la taille minimale des animaux à prendre en compte dans l'analyse",
+  "SPECIES_MIN_DIMS": "Choix de la taille des animaux à prendre en compte dans l'analyse",
   "LEGAL_DIMS": "Taille de pêche légale",
   "NO_CSV_FOUND": "Aucun fichier csv",
   "ALSO_DELETE": "Cela va également supprimer les plateformes: ",

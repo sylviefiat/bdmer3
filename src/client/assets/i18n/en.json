@@ -354,7 +354,7 @@
   "PIE_LEGEND": "Number of sp. on station",
   "TYPE": "Analyse type",
   "FILTER": "Filter displayed results",
-  "SPECIES_MIN_DIMS": "Choose minimum animal size to consider in analysis",
+  "SPECIES_MIN_DIMS": "Choose animal size to consider in analysis",
   "LEGAL_DIMS": "Legal fishing size",
   "NO_CSV_FOUND": "No csv file found",
   "ALSO_DELETE": "It will also delete platform(s): ",
