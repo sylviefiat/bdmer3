@@ -12,54 +12,46 @@ import { Country } from "../../modules/countries/models/country";
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
   <div [formGroup]="form">
-  <mat-card class="no-box-shadow">
-  <mat-card-title-group>
-  <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title>
-  <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
-  </mat-card-title-group>
-  <mat-card-content>
-  {{'IMPORT_DESC' | translate }}
-  </mat-card-content>
-  <mat-card-content class="warn">
-  {{'IMPORT_DESC_DATE' | translate }}
-  </mat-card-content>
-  <mat-card-content *ngIf="noMesures" class="warn">
-    {{'IMPORT_COUNT_NO_MESURE' | translate }}
-  </mat-card-content>
-  <mat-card-footer class="footer">
-  <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-  <a *ngIf="!isAdmin" href="{{getCsvUrl()}}" download>
-  <fa [name]="'download'" [border]=true [size]=1></fa>
-  </a>
-  </mat-card-footer>
-  <mat-card-actions align="start">
-  <button (click)="fileInputCount.click(); clearInput()">
-  <span>{{ 'IMPORT_CSV' | translate }}</span>
-  <input #fileInputCount type="file" (change)="handleUploadCsv($event)" formControlName="countInputFile" style="display:none;"  accept=".csv"/>
-  </button>
-  <button class="btn-danger" *ngIf="csvFileCount" (click)="deleteCsv('count')">
-  <span>{{ 'DELETE_CSV' | translate }}</span>
-  </button>
-  <div *ngIf="csvFileCount">
-  {{csvFileCount.name}} {{ 'SELECTED_CSV' | translate }}
-  </div>
-  </mat-card-actions>
+    <mat-card class="no-box-shadow">
+      <mat-card-title-group>
+        <mat-card-title>{{'IMPORT_CSV' | translate }} Counts</mat-card-title>
+        <fa mat-card-sm-image [name]="'upload'" [border]=true [size]=2></fa>
+      </mat-card-title-group>
+      <mat-card-content>{{'IMPORT_DESC' | translate }}</mat-card-content>
+      <mat-card-content class="warn">{{'IMPORT_DESC_DATE' | translate }}</mat-card-content>
+      <mat-card-footer class="footer">
+        <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
+        <a href="{{ getCsvUrlType1() }}" title="{{'CSV_COUNT_TYPE1' | translate}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+        </a>
+        <a href="{{ getCsvUrlType2() }}" title="{{'CSV_COUNT_TYPE2' | translate}}" download>
+          <fa [name]="'download'" [border]=true [size]=1></fa>
+        </a>
+      </mat-card-footer>
+      <mat-card-actions align="start">
+        <button (click)="fileInputCount.click(); clearInput()">
+          <span>{{ 'IMPORT_CSV' | translate }}</span>
+          <input #fileInputCount type="file" (change)="handleUploadCsv($event)" formControlName="countInputFile" style="display:none;"  accept=".csv"/>
+        </button>
+        <button class="btn-danger" *ngIf="csvFileCount" (click)="deleteCsv('count')">
+          <span>{{ 'DELETE_CSV' | translate }}</span>
+        </button>
+        <div *ngIf="csvFileCount">{{csvFileCount.name}} {{ 'SELECTED_CSV' | translate }}</div>
+      </mat-card-actions>
 
-  <mat-card-content class="error" *ngIf="(error$ | async)  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error$ | async }}</mat-card-content>
-  <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && csvFileCount !== null && (error$ | async) === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
+      <mat-card-content class="error" *ngIf="(error$ | async)  !== null" align="center">{{ 'ERROR_CSV_FIELD' | translate }} {{ error$ | async }}</mat-card-content>
+      <mat-card-content class="msg" *ngIf="(importError$ | async)?.length === 0 && csvFileCount !== null && (error$ | async) === null" align="start">{{ 'VALID_DATA' | translate }}</mat-card-content>
 
-  <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
-  <h2 class="errorList">{{'LIST_ERROR_COUNT' | translate}}</h2>
-  <mat-list>
-  <div *ngFor="let count of (importError$ | async)">
-  <mat-list-item class="errorList">
-  {{count}}
-  </mat-list-item>
-  </div>
-  </mat-list>
-  </mat-card-actions>
-    <bc-count-global-import-map [error]="error$ | async" [importError]="importError$ | async" [platform]="platform" [countries]="countries" [newCounts]="newCounts$ | async"></bc-count-global-import-map>
-  </mat-card>
+      <mat-card-actions align="start" *ngIf="(importError$ | async)?.length > 0">
+        <h2 class="errorList">{{'LIST_ERROR_COUNT' | translate}}</h2>
+        <mat-list>
+          <div *ngFor="let count of (importError$ | async)">
+            <mat-list-item class="errorList">{{count}}</mat-list-item>
+          </div>
+        </mat-list>
+      </mat-card-actions>
+      <bc-count-global-import-map [error]="error$ | async" [importError]="importError$ | async" [platform]="platform" [countries]="countries" [newCounts]="newCounts$ | async"></bc-count-global-import-map>
+    </mat-card>
   </div>
   `
 })
@@ -73,7 +65,6 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
   @Input() locale: string;
   @Input() csvFileCount: object = null;
   @Input() viewCount: boolean;
-  @Input() noMesures: boolean;
   @Output() countFileEmitter = new EventEmitter<{ file: any; action: string }>();
   @Output() stayHereEmitter = new EventEmitter<string>();
 
@@ -112,16 +103,16 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
       this.csvFileCount = csvFile.target.files[0];
       this.countFileEmitter.emit({ file: this.csvFileCount, action: "check" });
-      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(this.csvFileCount, this.noMesures);
+      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(this.csvFileCount);
     }
   }
 
-  getCsvUrl() {
-    if(this.noMesures){
+  getCsvUrlType1() {
       return this.docs_repo = "importCountNoMesures-" + this.locale + ".csv";
-    }else{
-      return this.docs_repo = "importCount-" + this.locale + ".csv";
     }
+
+  getCsvUrlType2() {
+      return this.docs_repo = "importCount-" + this.locale + ".csv";
   }
 
   ngOnDestroy() {

@@ -79,11 +79,11 @@ export interface Count {
     codeStation: string;
     date: Date;
     monospecies?: boolean;
-    count?: Ct;
+    quantities?: Quantity[];
     mesures?: Mesure[];
 }
 
-export interface Ct {
+export interface Quantity {
   codeSpecies: string;
   quantity: number;
 }

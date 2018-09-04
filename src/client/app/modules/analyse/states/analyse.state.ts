@@ -41,6 +41,7 @@ export const analyseInitialState: IAnalyseState = {
 };
 
 export const initMethods: Method[] = [
+    { method: 'NONE' },
     { method: 'LONGLARG' },
     { method: 'LONGUEUR' }
 ]

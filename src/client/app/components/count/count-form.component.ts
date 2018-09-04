@@ -23,15 +23,13 @@ export class CountFormComponent implements OnInit {
     @Input() survey: Survey | null;
     @Input() count: Count | null;
     @Input() errorMessage: string;
-    @Input() countriesCount: string[];
     @Input() species: Species[];
     @Input() zones: Zone[];
     @Input() stations$: Observable<Station[]>;
 
     @Output() submitted = new EventEmitter<Survey>();
 
-    noMesures: boolean = false;
-    type: string = "count";
+    countType: string = "none";
 
     countForm: FormGroup = new FormGroup({
         code: new FormControl("", Validators.required),
@@ -41,14 +39,22 @@ export class CountFormComponent implements OnInit {
         date: new FormControl(""),
         monospecies: new FormControl(),
         mesures: this._fb.array([]),
-        count: new FormGroup({
-          codeSpecies: new FormControl(),
-          quantity: new FormControl()
-        })
+        quantities: this._fb.array([]),
     });
     monospecies: boolean = false;
 
     constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private _fb: FormBuilder) { }
+
+    initQuantities() {
+        if (this.count && this.count.quantities && this.count.quantities.length > 0) {
+            const control = <FormArray>this.countForm.controls['quantities'];
+            let addrCtrl;
+            for (let qua of this.count.quantities) {
+                addrCtrl = this.newQuantity(qua.codeSpecies, qua.quantity);
+                control.push(addrCtrl);
+            }
+        }
+    }
 
     initMesures() {
         if (this.count && this.count.mesures && this.count.mesures.length > 0) {
@@ -62,10 +68,6 @@ export class CountFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        if(this.countriesCount.includes(this.platform.codeCountry)){
-          this.type = "countNoMesures"
-          this.noMesures = true;
-        }
 
         this.stations$ = of(this.platform.stations);
         this.countForm.controls.codePlatform.setValue(this.platform ? this.platform.code : null);
@@ -77,13 +79,33 @@ export class CountFormComponent implements OnInit {
             this.countForm.controls.codeStation.setValue(this.count.codeStation);
             this.countForm.controls.date.setValue(this.count.date);
             this.countForm.controls.monospecies.setValue(this.count.monospecies);
-            this.countForm.controls.count.get("codeSpecies").setValue(this.count.count.codeSpecies);
-            this.countForm.controls.count.get("quantity").setValue(this.count.count.quantity);
         } else {
             this.countForm.controls.code.setValue(this.survey.code + "_");
             this.countForm.controls.monospecies.setValue(false);
         }
         this.initMesures();
+        this.initQuantities();
+    }
+
+    newQuantity(code, value) {
+        return this._fb.group({
+            codeSpecies: new FormControl(code),
+            quantity: new FormControl(value)
+        });
+    }
+
+    addQuantity() {
+        const control = <FormArray>this.countForm.controls['quantities'];
+        const sp1 = <FormArray>control.controls[0];
+
+        let sp = control && control.controls[0] && sp1.controls['codeSpecies'].value;
+        const addrCtrl = this.newQuantity(sp, '');
+        control.push(addrCtrl);
+    }
+
+    removeQuantity(i: number) {
+        const control = <FormArray>this.countForm.controls['quantities'];
+        control.removeAt(i);
     }
 
     newMesure(code, long, larg) {

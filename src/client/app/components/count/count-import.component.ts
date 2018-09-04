@@ -36,9 +36,9 @@ export class CountImportComponent implements OnInit {
 
   newCounts$: Observable<Count>;
   needHelp: boolean = false;
-  noMesures: boolean = false;
   type: string = "count";
-  private csvFile: string;
+  private csvFileType1: string;
+  private csvFileType2: string;
   private docs_repo: string;
   importCsvFile: any = null;
   countForm: FormGroup = new FormGroup({
@@ -56,17 +56,10 @@ export class CountImportComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new SpeciesAction.LoadAction());
-    if(this.countriesCount.includes(this.platform.codeCountry)){
-      this.type = "countNoMesures"
-      this.noMesures = true;
-    }
     this.store.select(getLangues).subscribe((l: any) => {
       this.docs_repo = "../../../assets/files/";
-      if(this.noMesures){
-        this.csvFile = "importCountNoMesures-" + l + ".csv";
-      }else{
-        this.csvFile = "importCount-" + l + ".csv";
-      }
+      this.csvFileType1 = "importCountNoMesures-" + l + ".csv";
+      this.csvFileType2 = "importCount-" + l + ".csv";
     });
 
   }
@@ -86,7 +79,7 @@ export class CountImportComponent implements OnInit {
 
   check(csvFile) {
     this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
-    this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile, this.noMesures);
+    this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile);
   }
 
   send() {
@@ -101,12 +94,12 @@ export class CountImportComponent implements OnInit {
     this.countForm.get("countInputFile").reset();
   }
 
-  getCsvCounts() {
-    return this.csvFile;
+  get csvCountsUrlType1() {
+    return this.docs_repo + this.csvFileType1;
   }
 
-  getCsvCountsUrl() {
-    return this.docs_repo + this.csvFile;
+  get csvCountsUrlType2() {
+    return this.docs_repo + this.csvFileType2;
   }
 
   cancel() {

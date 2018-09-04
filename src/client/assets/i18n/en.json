@@ -445,5 +445,13 @@
   "SURFACE_NOT_DEFINED": ", surface is not defined",
   "INVALID_FORM": "Form is invalid",
   "QUANTITY":"Quantity",
-  "IMPORT_COUNT_NO_MESURE": "Warning, counts for this country must not contain a column 'mesures' but a column 'count' with the number of speciemen recorded"
+  "IMPORT_COUNT_NO_MESURE": "Warning, counts for this country must not contain a column 'mesures' but a column 'count' with the number of speciemen recorded",
+  "CSV_COUNT_TYPE1":"CSV example file without height/width relation",
+  "CSV_COUNT_TYPE2":"CSV example file with height/width relation",
+  "COUNT_TYPE_SELECT":"Select count type (simple count or with mesurements): ",
+  "COUNT_TYPE_QUANTITY":"Register species counts",
+  "COUNT_TYPE_MESURE":"Register species mesurements",
+  "QUANTITIES":"Counts",
+  "ADD_QUANTITY":"Add count",
+  "QUANTITY_EX":"Ex: 25"
 }

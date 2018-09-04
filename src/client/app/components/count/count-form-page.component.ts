@@ -21,7 +21,6 @@ import { SpeciesAction } from '../../modules/datas/actions/index';
       [platform]="platform$ | async"
       [survey]="survey$ | async"
       [count]="count$ | async"
-      [countriesCount]="countriesCount$ | async"
       [species]="species$ | async">
     </bc-count-form>
   `,
@@ -47,7 +46,6 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
   platformSubscription: Subscription;
   surveySubscription: Subscription;
   countSubscription: Subscription;
-  countriesCount$: Observable<String[]>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions, private route: ActivatedRoute, private _fb: FormBuilder) {
     this.platformSubscription = route.params.pipe(
@@ -66,7 +64,6 @@ export class CountFormPageComponent implements OnInit, OnDestroy {
     this.survey$ = this.store.select(getSelectedSurvey);
     this.count$ = this.store.select(getSelectedCount);
     this.species$ = this.store.select(getSpeciesInApp);
-    this.countriesCount$ = this.store.select(getCountryCountList);
     this.store.dispatch(new SpeciesAction.LoadAction());
   }
 

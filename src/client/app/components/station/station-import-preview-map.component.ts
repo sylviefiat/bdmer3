@@ -299,7 +299,7 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
     stations.forEach(station => {
       inside = false;
       this.platform.zones.map(zone => {
-        if (MapService.booleanInPolygon(station, MapService.getPolygon(zone.geometry.coordinates,{name:zone.properties.name}))) {
+        if (MapService.booleanInPolygon(station, MapService.getPolygon(zone,{name:zone.properties.name}))) {
           inside = true;
           this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
         }

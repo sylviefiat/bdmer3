@@ -14,14 +14,13 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
         </mat-card-content>
-        <mat-card-content *ngIf="count.count.quantity">
-          <div>
+        <mat-card-content *ngIf="count.quantities && count.quantities.length>0">
+          <div *ngFor="let quantity of count.quantities">
             <span class="speciesName">
-              {{'SPECIES' | translate}} : {{ getSpeciesName(count.count.codeSpecies) }}
+              {{ getSpeciesName(quantity.codeSpecies) }} :
             </span>
-            <br>
             <span>
-            {{'QUANTITY' | translate}}: {{count.count.quantity}}
+            {{quantity.quantity}}
             </span>
           </div>
         </mat-card-content>
@@ -39,7 +38,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
             </div>
           </div>
         </mat-card-content>
-        <mat-card-content *ngIf="(!count.mesures || count.mesures.length<=0) && !(count.count.quantity)">
+        <mat-card-content *ngIf="(!count.mesures || count.mesures.length<=0) && (!count.quantities || count.quantities.length<=0)">
           <div>{{ 'NO_INVERTEBRATES' | translate }}</div>
         </mat-card-content>
       </mat-card>
