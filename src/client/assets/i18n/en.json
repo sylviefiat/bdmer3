@@ -453,5 +453,7 @@
   "COUNT_TYPE_MESURE":"Register species mesurements",
   "QUANTITIES":"Counts",
   "ADD_QUANTITY":"Add count",
-  "QUANTITY_EX":"Ex: 25"
+  "QUANTITY_EX":"Ex: 25",
+  "NONE":"No biomasse estimate",
+  "NONE_ASTERIX":"The data do not provide an estimate of biomass"
 }

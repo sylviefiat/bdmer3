@@ -453,5 +453,7 @@
   "COUNT_TYPE_MESURE":"Saisir des mesures d'espèces",
   "QUANTITIES":"Comptages",
   "ADD_QUANTITY":"Ajouter un comptage",
-  "QUANTITY_EX":"Ex: 25"
+  "QUANTITY_EX":"Ex: 25",
+  "NONE":"Pas d'estimation de biomasse",
+  "NONE_ASTERIX":"Les données ne permettent pas de fournir une estimation de la biomasse"
 }

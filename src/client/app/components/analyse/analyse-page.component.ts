@@ -84,22 +84,17 @@ export class AnalysePageComponent implements OnInit {
     this.data$ = this.store.select(getAnalyseData);
     this.usedZones$ = this.data$.map(data => data.usedZones); 
     this.methodsAvailables$ = this.data$.map(data => {
-      console.log(data);
       let methods = initMethods;
       if(!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities).length>0).length>0)){
         methods = methods.filter((method:Method)=> method.method==="NONE");
-        console.log(methods);
         return methods;
       } else {
-        console.log(methods);
-        console.log(data.usedSpecies);
-        if(data.usedSpecies && data.usedSpecies.filter(sp => {console.log(sp);return !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0}).length>0){
+        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0).length>0){
           methods=methods.filter((method:Method)=> method.method!=="LONGLARG");
         }
         if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LW || sp.LW.coefA===0 || sp.LW.coefB===0).length>0){
           methods=methods.filter((method:Method)=> method.method!=="LONGUEUR");
         }
-        console.log(methods);
         return methods;
       }
     });

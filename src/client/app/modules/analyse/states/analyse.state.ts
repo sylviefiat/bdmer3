@@ -42,8 +42,8 @@ export const analyseInitialState: IAnalyseState = {
 
 export const initMethods: Method[] = [
     { method: 'NONE' },
-    { method: 'LONGLARG' },
-    { method: 'LONGUEUR' }
+    { method: 'LONGUEUR' },
+    { method: 'LONGLARG' }
 ]
 export const getUsedCountry = (state: IAppState) => state.analyse.usedCountry;
 
@@ -130,7 +130,6 @@ export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurvey
     let zones: Zone[] = [];
     if (!platforms || !surveys) return zones;
     for (let s of surveys) {
-        console.log(s.codePlatform);
         let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
         zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
     }
