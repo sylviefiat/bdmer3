@@ -30,6 +30,7 @@ export class AnalyseComponent {
     @Input() stations$: Observable<Station[]>;
     @Input() species$: Observable<Species[]>;
     @Input() dimensions$: Observable<DimensionsAnalyse[]>;
+    @Input() methodsAvailables$: Observable<Method[]>;
     @Input() isAdmin$: Observable<boolean>;
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();

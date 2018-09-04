@@ -322,6 +322,7 @@ export class PlatformService {
       filter(platform => platform !== null),
       mergeMap(st => {
         if (!count.mesures) count.mesures = [];
+        if (!count.mesures) count.quantities = [];
         let cp = st.surveys.filter(c => c.code === count.codeSurvey)[0];
         if (cp) {
           if (cp.counts.filter(c => c.code === count.code).length > -1) {

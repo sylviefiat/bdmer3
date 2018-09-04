@@ -130,6 +130,7 @@ export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurvey
     let zones: Zone[] = [];
     if (!platforms || !surveys) return zones;
     for (let s of surveys) {
+        console.log(s.codePlatform);
         let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
         zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
     }
@@ -153,9 +154,17 @@ export const getSpeciesAvailables = createSelector(getSpeciesInApp, getSurveysAv
     if (!surveys || !speciesEntities) return species;
     for (let s of surveys) {
         for (let c of s.counts) {
-            for (let m of c.mesures) {
-                let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies).filter(sp => species.filter(s => s.code === sp.code).length === 0);
-                species = [...species, ...cs];
+            if(c.mesures){
+                for (let m of c.mesures) {
+                    let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies).filter(sp => species.filter(s => s.code === sp.code).length === 0);
+                    species = [...species, ...cs];
+                }
+            }
+            if(c.quantities){
+                for (let q of c.quantities) {
+                    let cs = speciesEntities.filter(sp => sp.code === q.codeSpecies).filter(sp => species.filter(s => s.code === sp.code).length === 0);
+                    species = [...species, ...cs];
+                }
             }
         }
     }

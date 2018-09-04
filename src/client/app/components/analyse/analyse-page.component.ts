@@ -2,14 +2,15 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterExtensions, Config } from '../../modules/core/index';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
   getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseStations, 
   getSelectedAnalyseSpecies,getAnalyseCountry, getAnalyseData, getSelectedCountry } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
-import { Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
+import { Data, Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
+import { initMethods } from '../../modules/analyse/states/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
@@ -30,6 +31,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
       [usedZones$]="usedZones$"
       [stations$]="stations$"
       [species$]="species$"
+      [methodsAvailables$]="methodsAvailables$"
       [isAdmin$]="isAdmin$"
       [locale]="locale$ | async"
       [msg]="msg$ | async"
@@ -57,10 +59,11 @@ export class AnalysePageComponent implements OnInit {
   stations$: Observable<Station[]>;
   species$: Observable<Species[]>;
   dimensions$: Observable<DimensionsAnalyse[]>;
+  methodsAvailables$: Observable<Method[]>;
   isAdmin$: Observable<boolean>;
   locale$: Observable<string>;
   msg$: Observable<string>;
-  data$: Observable<any>;
+  data$: Observable<Data>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     
@@ -79,7 +82,27 @@ export class AnalysePageComponent implements OnInit {
     this.species$ = this.store.select(getSelectedAnalyseSpecies);
     this.msg$ = this.store.select(getAnalyseMsg);
     this.data$ = this.store.select(getAnalyseData);
-    this.usedZones$ = this.data$.map(data => data.usedZones);
+    this.usedZones$ = this.data$.map(data => data.usedZones); 
+    this.methodsAvailables$ = this.data$.map(data => {
+      console.log(data);
+      let methods = initMethods;
+      if(!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities).length>0).length>0)){
+        methods = methods.filter((method:Method)=> method.method==="NONE");
+        console.log(methods);
+        return methods;
+      } else {
+        console.log(methods);
+        console.log(data.usedSpecies);
+        if(data.usedSpecies && data.usedSpecies.filter(sp => {console.log(sp);return !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0}).length>0){
+          methods=methods.filter((method:Method)=> method.method!=="LONGLARG");
+        }
+        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LW || sp.LW.coefA===0 || sp.LW.coefB===0).length>0){
+          methods=methods.filter((method:Method)=> method.method!=="LONGUEUR");
+        }
+        console.log(methods);
+        return methods;
+      }
+    });
     this.store.dispatch(new CountriesAction.LoadAction());
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.store.dispatch(new PlatformAction.LoadAction());
@@ -112,7 +135,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   selectSpecies(species: Species[]) {
-    this.store.dispatch(new AnalyseAction.SelectSpecies(species));    
+    this.store.dispatch(new AnalyseAction.SelectSpecies(species));   
   }
 
   setDimensions(dims: DimensionsAnalyse[]) {

@@ -15,14 +15,14 @@ export interface Species {
 }
 
 export interface Dimensions {   
-    longMax: string;
-    largMax: string;
+    longMax: number;
+    largMax: number;
 }
 
 export interface LegalDimensions {
     codeCountry: string;
-    longMin: string;
-    longMax: string
+    longMin: number;
+    longMax: number
 }
 
 export interface NameI18N {
@@ -31,11 +31,11 @@ export interface NameI18N {
 }
 
 export interface CoefsAB {
-    coefA: string;
-    coefB: string;
+    coefA: number;
+    coefB: number;
 }
 
 export interface Conversion {
-    salt: string;
-    BDM: string;
+    salt: number;
+    BDM: number;
 }

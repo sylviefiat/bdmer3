@@ -93,7 +93,7 @@
       <mat-step [stepControl]="analyseFormGroup">
         <form [formGroup]="analyseFormGroup">
           <ng-template matStepLabel>{{ 'START_ANALYSE' | translate}}</ng-template>
-          <bc-analyse-method (methodEmitter)="setMethod($event)" [form]="analyseFormGroup" [inputName]="'analyseType'"></bc-analyse-method>
+          <bc-analyse-method (methodEmitter)="setMethod($event)" [form]="analyseFormGroup" [methods]="methodsAvailables$ | async" [inputName]="'analyseType'"></bc-analyse-method>
           
         </form>
         <div>
