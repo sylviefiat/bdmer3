@@ -1,156 +1,232 @@
 import { Injectable } from '@angular/core';
 import { angularMath } from 'angular-ts-math';
 import * as Turf from '@turf/turf';
+import { flatMap } from 'rxjs/operators';
 import { MapService } from '../../core/services/index';
 
 import { IAnalyseState } from '../states/index';
-import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, Indicators, Method, DimensionsAnalyse, ChartsData, ChartsZone, ChartsStation } from '../models/index';
+import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, ResultPlatform, Method, DimensionsAnalyse } from '../models/index';
+import { INIT_RESULT, INIT_PLATFORM, INIT_SURVEY, INIT_ZONE, INIT_SPECIES, INIT_STATION } from '../models/index';
 import { Country } from '../../countries/models/country';
-import { Species, Survey, Mesure, Count, Station, Zone } from '../../datas/models/index';
+import { Species, Platform, Survey, Mesure, Count, Station, Zone, LegalDimensions } from '../../datas/models/index';
 
 @Injectable()
 export class AnalyseService {
-
+    //results: Results;
+    //data: Data;
 
     constructor() {
     }
 
-    analyse(analyseData: Data): Results {
-        try {
-            let result: Results = { name: "", resultPerSurvey: [], chartsData: null };
-            let today = new Date();
-            console.log(analyseData);
-            result.name = "ANALYSE BDMER " + today;
-            // resultats par relevé
-            for (let survey of analyseData.usedSurveys) {
-                let surveyStations = analyseData.usedStations.filter(t => t.codePlatform === survey.codePlatform);
-                let dateY = new Date(survey.dateStart).getFullYear();
-                let resultSurvey: ResultSurvey = { codeSurvey: survey.code, yearSurvey: dateY, codePlatform: survey.codePlatform, resultPerSpecies: [] };
-                // par espèce
-                for (let sp of analyseData.usedSpecies) {
-                    let resultSp: ResultSpecies = { codeSpecies: sp.code, numberIndividual: 0, biomassTotal: 0, biomassesPerStation: [], individualsPerStation: [], SDBiomassTotal: 0, SDAbundancyTotal: 0, resultPerStation: [], resultPerZone: [], legalDimensions: null };
-                    resultSp.legalDimensions = sp.legalDimensions.filter(ld => ld.codeCountry === analyseData.usedCountry.code)[0];
-                    // par station
-                    for (let station of surveyStations) {
-                        let hasCountOnSp = false;
-                        let resultStation: ResultStation = null;
-                        for (let count of survey.counts.filter(c => c.codeStation === station.properties.code)) {
-                            if(count.mesures.length === 0){
-                                resultStation = { codeStation: station.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal: 0, SDDensityTotal: 0 };
-                            }
-                            if (count.mesures.map(m => m.codeSpecies).indexOf(sp.code) > -1) {
-                                hasCountOnSp = true;
-                                break;
-                            }
-                        }
-                        if (hasCountOnSp) {
-                            // on récupère longueur et largeur min entrés par l'utilisateur pour cette espèce pour l'analyse
-                            let spdim = analyseData.usedDims.filter(spd => spd.codeSp === sp.code)[0];
-                            // calcul des résultats pour ce station
-                            resultStation = this.getResultPerStation(survey, sp, spdim, station, analyseData.usedMethod);
-                        }
-                        if(resultStation !== null){
-                            // ajout des résultats du station dans le résultat de l'espère
-                            resultSp.resultPerStation.push(resultStation);
-                            // on récupère la zone de la station
-                            let zone = analyseData.usedZones.filter((uz: Zone) => {
-                                return station.geometry && uz.geometry && Turf.booleanPointInPolygon(station.geometry.coordinates, MapService.getPolygon(uz, { name: uz.properties.code }))
-                            })[0];
-                            // initialisation de resultZone au cas où cette zone n'ai pas encore été traitée
-                            let resultZone: ResultZone = { codeZone: zone.properties.code, numberIndividual: 0, biomasses: [], biomassesPerHA: [], densitiesPerHA: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal: 0, SDBiomassPerHA: 0, SDDensityPerHA: 0 };
-                            // si la zone a déjà commencé a etre traitée on récupère l'objet de résultat
-                            if (resultSp.resultPerZone.filter(rz => rz.codeZone === zone.properties.code) && resultSp.resultPerZone.filter(rz => rz.codeZone === zone.properties.code)[0]) {
-                                resultZone = resultSp.resultPerZone.filter(rz => rz.codeZone === zone.properties.code)[0];
-                            }
-                            // mise à jour des résultats de la zone avec ce station
-                            resultZone = this.updateResultPerZone(resultZone, zone, resultStation);
-                            // on met a jour le résultat de la zone dans le résultat de l'espèce
-                            resultSp.resultPerZone = [...resultSp.resultPerZone.filter(rz => rz.codeZone !== resultZone.codeZone), resultZone];
-                            // on mets à jour les abondances et biomasses de l'espèce avec ce station
-                            resultSp = this.updateResultPerSpecies(resultSp, resultStation);
-                        }
-                    }
-                    // on ajoute le résultat de l'espèce au résultat du relevé
-                    resultSurvey.resultPerSpecies.push(resultSp);
-                }
-                // on ajoute le résultat du relevé au résultat global
-                result.resultPerSurvey.push(resultSurvey);
-            }
-            result.chartsData = this.getDataCharts(analyseData, result);
-            return result;
-
-        } catch (e) {
-            console.log(e);
-            throw e;
+    static analyse(analyseData: Data): Results {
+        let results: Results = { name: null, resultPerSurvey: [] };
+        results.name = "ANALYSE BDMER " + new Date();
+        let resultsSurveys: ResultSurvey[] = [];
+        for (let survey of analyseData.usedSurveys) {
+            resultsSurveys = [...resultsSurveys, this.getResultsSurvey(analyseData, survey)];
         }
+        results.resultPerSurvey = [...resultsSurveys];
+        return results;
 
     }
 
-    getResultPerStation(survey: Survey, species: Species, spDim: DimensionsAnalyse, station: Station, method: Method): ResultStation {
-        let x = 0, biom;
-        let resultStation: ResultStation = { codeStation: station.properties.code, numberIndividual: 0, biomasses: [], biomassTotal: 0, biomassPerHA: 0, densityPerHA: 0, SDBiomassTotal: 0, SDDensityTotal: 0 };
+    static getResultsSurvey(analyseData: Data, survey: Survey): ResultSurvey {
+        let rsurvey = {
+            codeSurvey: null,
+            yearSurvey: 0,
+            codePlatform: null,
+            resultPerSpecies: []
+        };
+        let resultsSpecies: ResultSpecies[] = [];
+        rsurvey.codeSurvey = survey.code;
+        rsurvey.yearSurvey = new Date(survey.dateStart).getFullYear();
+        rsurvey.codePlatform = survey.codePlatform;
+        for (let species of analyseData.usedSpecies) {
+            if (this.hasSpSurvey(survey, species)) {
+                let requiredDims = analyseData.usedDims.filter(dims => dims.codeSp === species.code)[0];
+                let rss = this.getResultsSurveySpecies(analyseData.usedMethod, analyseData.usedStations, analyseData.usedZones, analyseData.usedPlatforms, survey, species, requiredDims);
+                resultsSpecies = [...resultsSpecies, rss];
+            }
+        }
+        rsurvey.resultPerSpecies = [...resultsSpecies];
+        console.log(rsurvey);
+        return rsurvey;
+    }
+
+    static hasSpSurvey(survey: Survey, species: Species): boolean {
+        return survey.counts.filter((c: Count) => (c.quantities && c.quantities.length > 0 && c.quantities[0].codeSpecies === species.code)
+            || (c.mesures && c.mesures.length > 0 && c.mesures.filter(m => m.codeSpecies === species.code).length > 0)).length > 0;
+    }
+
+    static getResultsSurveySpecies(method: Method, usedStations: Station[], usedZones: Zone[], usedPlatforms: Platform[], survey: Survey, species: Species, requiredDims: DimensionsAnalyse): ResultSpecies {
+        let rspecies = {
+            codeSpecies: null,
+            resultPerStation: [],
+            resultPerZone: [],
+            resultPerPlatform: []
+        };
+        let resultsStations: ResultStation[] = [];
+        let resultsZones: ResultZone[] = [];
+        let resultsPlatforms: ResultPlatform[] = [];
+        rspecies.codeSpecies = species.code;
+        for (let station of usedStations) {
+            let rs = this.getResultStation(method, survey, station, species, requiredDims);
+            resultsStations = [...resultsStations, rs];
+        }
+        rspecies.resultPerStation = [...resultsStations];
+        for (let zone of usedZones) {
+            let rstZone = resultsStations.filter(rst => usedStations.filter(st => st.properties.code === rst.codeStation && MapService.booleanInPolygon(st, zone)).length > 0);
+            if (rstZone.length > 0) {
+                let rz = this.getResultZone(method, survey, zone, rstZone);
+                resultsZones = [...resultsZones, rz];
+            }
+        }
+        rspecies.resultPerZone = [...resultsZones];
+        for (let platform of usedPlatforms) {
+            let rznPlatform = resultsZones.filter(rzn => usedZones.filter(zn => zn.properties.code === rzn.codeZone && zn.codePlatform === platform.code).length > 0);
+            if (rznPlatform.length > 0) {
+                let rp = this.getResultPlatform(method, platform, rznPlatform);
+                resultsPlatforms = [...resultsPlatforms, rp];
+            }
+
+        }
+        rspecies.resultPerPlatform = [...resultsPlatforms];
+        return rspecies;
+    }
+
+    static getResultStation(method: Method, survey: Survey, station: Station, species: Species, requiredDims: DimensionsAnalyse): ResultStation {
+        let rstation = {
+            codeStation: null,
+            surface: 0,
+            abundance: 0,
+            biomasses: [],
+            biomass: 0,
+            biomassPerHA: 0,
+            abundancePerHA: 0
+        };
+        rstation.codeStation = station.properties.code;
+        rstation.surface = survey.surfaceStation;
+
+        //console.log(requiredDims);
+        // tableau des mesures considérées
         let mesures = [];
         for (let c of survey.counts.filter(c => c.codeStation === station.properties.code)) {
-            mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code)];
+            // si la mesure est sur la bonne espèce et dans la taille considérée
+            mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code
+                && ((requiredDims.longMin === 0 || m.long >= requiredDims.longMin) && (requiredDims.longMax === 0 || m.long <= requiredDims.longMax)))];
         }
-        for (let m of mesures) {
-            // if specimen is in requested size otherwise don't consider it
-            switch (method.method) {
-                case "LONGUEUR":
-                    if (Number(spDim.longMin) === 0 || Number(m.long) >= Number(spDim.longMin)) {
-                        x = Number(m.long);
-                    }
-                    break;
-                case "LONGLARG":
-                default:
-                    if ((Number(spDim.longMin) === 0 && Number(spDim.longMax) === 0) || (Number(m.long) >= Number(spDim.longMin) && Number(m.larg) >= Number(spDim.longMax))) {
-                        x = (angularMath.getPi() * Number(m.long) * Number(m.larg)) / 4;
-                    }
+        //console.log(mesures);
+        if (mesures.length === 0) {
+            return rstation;
+        }
+        // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
+        rstation.abundance = mesures.length;
+        // ABONDANCE PER HECTARE STATION = ABONDANCE STATION x (10000 / SURFACE STATION)
+        rstation.abundancePerHA = rstation.abundance * (10000 / rstation.surface);
+        // Pas de relation taille/poids = pas de calcul biomasse
+        if (method.method !== 'NONE') {
+            for (let mesure of mesures) {
+                rstation.biomasses.push(this.getBiomass(method, mesure, species));
             }
-            if (x > 0) {
-                let biom = Number(species.LLW.coefA) * angularMath.powerOfNumber(x, Number(species.LLW.coefB));
-                resultStation.biomasses.push(biom);
-                resultStation.biomassTotal += biom;
-            }
+            // BIOMASSE STATION = SOMME DES BIOMMASSES DES INDIVIDUS CONSIDERES
+            rstation.biomass = rstation.biomasses.reduce((a, b) => a + b);
+            // BIOMASSE PER HECTARE STATION = BIOMASSE STATION x (10000 / SURFACE STATION)
+            rstation.biomassPerHA = rstation.biomass * (10000 / rstation.surface);
         }
+        //console.log(rstation);
+        return rstation;
+    }
 
-        resultStation.numberIndividual = mesures.length;
-        if (survey.surfaceStation > 0) {
-            resultStation.biomassPerHA = resultStation.biomassTotal * (10000 / Number(survey.surfaceStation));
-            resultStation.densityPerHA = resultStation.numberIndividual * (10000 / Number(survey.surfaceStation));
+    static getBiomass(method: Method, mesure: Mesure, species: Species): number {
+        let biom = 0;
+        switch (method.method) {
+            // Poids individuel Longueur-Weight: LW = sp.LW.Coef_A x m.long ^ sp.LW.Coef_B
+            case "LONGUEUR":
+                biom = Number(species.LW.coefA) * angularMath.powerOfNumber(Number(mesure.long), Number(species.LW.coefB));
+                break;
+            // Poids individuel Longueur-Largeur-Weight LLW = sp.LLW.Coef_A x (pi x (m.long/10)/2 x (m.larg/10)/2)^sp.LLW.Coef_B
+            case "LONGLARG":
+            default:
+                biom = Number(species.LLW.coefA) * angularMath.powerOfNumber((angularMath.getPi() * (Number(mesure.long) / 10) / 2 * (Number(mesure.larg) / 10) / 2), Number(species.LLW.coefB));
+                break;
         }
-        let inds = [];
-        for (let i in mesures) { inds.push(1); }
-        resultStation.SDBiomassTotal = this.standardDeviation(resultStation.biomasses);
-        resultStation.SDDensityTotal = this.standardDeviation(inds);
-        return resultStation;
+        //console.log(biom);
+        return biom;
     }
 
-    updateResultPerZone(resultZone: ResultZone, zone: Zone, resultStation: ResultStation): ResultZone {
-        resultZone.numberIndividual += resultStation.numberIndividual;
-        resultZone.biomasses = [...resultZone.biomasses, ...resultStation.biomasses];
-        resultZone.biomassesPerHA = [...resultZone.biomassesPerHA, resultStation.biomassPerHA];
-        resultZone.densitiesPerHA = [...resultZone.densitiesPerHA, resultStation.densityPerHA];
-        resultZone.biomassTotal += resultStation.biomassTotal;
-        resultZone.biomassPerHA = resultZone.biomassTotal * (10000 / zone.properties.surface);
-        resultZone.densityPerHA = resultZone.numberIndividual * (10000 / zone.properties.surface);
-        resultZone.SDBiomassTotal = this.standardDeviation(resultZone.biomasses);
-        resultZone.SDBiomassPerHA = this.standardDeviation(resultZone.biomassesPerHA);
-        resultZone.SDDensityPerHA = this.standardDeviation(resultZone.densitiesPerHA);
-        return resultZone;
+    static getResultZone(method: Method, survey: Survey, zone: Zone, rstations: ResultStation[]): ResultZone {
+        let rzone = {
+            codeZone: null,
+            surface: 0,
+            nbStrates: 0,
+            nbStations: 0,
+            averageAbundance: 0,
+            abundance: 0,
+            averageBiomass: 0,
+            biomass: 0,
+            biomassPerHA: 0,
+            abundancePerHA: 0,
+            SDBiomassPerHA: 0,
+            SDabundancePerHA: 0
+        };
+        rzone.codeZone = zone.properties.code;
+        rzone.surface = zone.properties.surface;
+        rzone.nbStations = rstations.length;
+        rzone.nbStrates = rzone.surface / this.getAverage(rstations.map(rs => rs.surface), rzone.nbStations);
+        rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rzone.nbStations);
+        rzone.abundance = rzone.nbStrates * rzone.averageAbundance;
+        rzone.abundancePerHA = rzone.abundance * 1000 / rzone.surface;
+        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.abundance));
+        // si calcul biomasse
+        if (method.method !== 'NONE') {
+            rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass), rzone.nbStations);
+            rzone.biomass = rzone.nbStrates * rzone.averageBiomass * 1000;
+            rzone.biomassPerHA = rzone.biomass * (1000 / rzone.surface);
+            rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomass));
+        }
+        return rzone;
     }
 
-    updateResultPerSpecies(resultSp: ResultSpecies, resultStation: ResultStation): ResultSpecies {
-        resultSp.numberIndividual += resultStation.numberIndividual;
-        resultSp.biomassTotal += resultStation.biomassTotal;
-        resultSp.biomassesPerStation = [...resultSp.biomassesPerStation, resultStation.biomassTotal];
-        resultSp.individualsPerStation = [...resultSp.individualsPerStation, resultStation.numberIndividual];
-        resultSp.SDBiomassTotal = this.standardDeviation(resultSp.biomassesPerStation);
-        resultSp.SDAbundancyTotal = this.standardDeviation(resultSp.individualsPerStation);
-        return resultSp;
+    static getResultPlatform(method: Method, platform: Platform, rzones: ResultZone[]): ResultPlatform {
+        // Valeur approximative de la statistique de student pour un échantillon de plus de 30 stations
+        const T: number = 2.05;
+        let rplatform = {
+            codePlatform: null,
+            nbStrates: 0,
+            nbZones: 0,
+            nbStations: 0,
+            averageAbundance: 0,
+            averageBiomass: 0,
+            varianceAbundance: 0,
+            varianceBiomass: 0,
+            confidenceIntervalAbundance: 0,
+            confidenceIntervalBiomass: 0
+        };
+        rplatform.codePlatform = platform.code;
+        rplatform.nbStrates = rzones.map(rz => rz.nbStrates).reduce((a, b) => a + b);
+        rplatform.nbZones = rzones.length;
+        rplatform.nbStations = rzones.map(rz => rz.nbStations).reduce((a, b) => a + b);
+        rplatform.averageAbundance = rzones.map(rz => rz.nbStrates * rz.averageAbundance).reduce((a, b) => a + b) / rplatform.nbStrates;
+        rplatform.varianceAbundance = rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.abundance, rz.nbStations)).reduce((a, b) => a + b) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
+        rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
+        // si calcul biomasse
+        if (method.method !== 'NONE') {
+            rplatform.averageBiomass = rzones.map(rz => rz.nbStrates * rz.averageBiomass).reduce((a, b) => a + b) / rplatform.nbStrates;
+            rplatform.varianceBiomass = rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.biomass, rz.nbStations)).reduce((a, b) => a + b) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
+            rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
+        }
+        return rplatform;
     }
 
-    standardDeviation(table: number[]) {
+    static getAverage(values: any[], nb: number): number {
+        return values.reduce((a, b) => a + b) / nb;
+    }
+
+    static getPlatformZoneForVariance(nbStrates, average, nbStations): number {
+        return angularMath.powerOfNumber(nbStrates, 2) * angularMath.powerOfNumber(average, 2) * (1 - nbStations / nbStrates);
+    }
+
+    static getStandardDeviation(table: number[]) {
         if (table.length <= 0) return 0;
         let total = table.reduce((p, c) => p + c);
         let length = table.length;
@@ -161,89 +237,8 @@ export class AnalyseService {
         return Math.sqrt(variance / (length - 1));
     }
 
-    /*calculate_indicators(species: Species, mesures: Mesure[], method: Method): Indicators {
-        let indicators: Indicators = {biomasses:[],biomass_total: 0, biomass_salt: 0,biomass_dry: 0,abundancy_calcul: 0, density_total_calcul_individual: 0, density_total_calcul_weight:0};
-        let biomass = 0
-        for(let i in mesures){
-            // calcul biomass depending on method
-            let x=(method.method ==="LONGLARG")?((angularMath.getPi()*Number(mesures[i].long)*Number(mesures[i].larg))/4):(Number(mesures[i].long));
-            // biomass per individual
-            indicators.biomasses[i] = Number(species.LLW.coefA)*angularMath.powerOfNumber(x, Number(species.LLW.coefB));
-            biomass += indicators.biomasses[i];
-        }
-        // species total biomass
-        indicators.biomass_total = biomass/mesures.length;
-        console.log(indicators);
-        return indicators;
-    }*/
 
 
-    getTotalMesures(surveys: Survey[], spDims: DimensionsAnalyse[]): Mesure[] {
-        let total_mesures: Mesure[] = [];
-        for (let s of surveys) {
-            for (let c of s.counts) {
-                for (let m of c.mesures) {
-                    let dims = spDims.filter(dims => dims.codeSp === m.codeSpecies)[0];
-                    if (dims &&
-                        ((Number(dims.longMin) > 0 && Number(dims.longMax) > 0 &&
-                            Number(m.larg) <= Number(dims.longMax) && Number(m.long) <= Number(dims.longMin)) ||
-                            (Number(dims.longMin) === 0 && Number(dims.longMax) === 0)))
-                        total_mesures = [...total_mesures, m];
-                }
-            }
-        }
-        return total_mesures;
-    }
-
-    getDataCharts(data: Data, results: Results): ChartsData {
-        let chartsData: ChartsData = { chartsZonesBiomass: [], chartsZonesAbundancy: [] };
-        for (let zone of data.usedZones) {
-            let chartszoneBiomass: ChartsZone = { code: zone.properties.code, chartsStations: [] };
-            let chartszoneAbundancy: ChartsZone = { code: zone.properties.code, chartsStations: [] };
-            for (let station of data.usedStations) {
-                if (Turf.booleanPointInPolygon(station.geometry.coordinates, MapService.getPolygon(zone, { name: zone.properties.name }))) {
-                    let chartsStationBiomass: ChartsStation = { code: station.properties.code, species: [], dataSpline: [], dataError: [], dataPie: [] };
-                    let chartsStationAbundancy: ChartsStation = { code: station.properties.code, species: [], dataSpline: [], dataError: [], dataPie: [] };
-                    for (let rsurvey of results.resultPerSurvey.filter(rps => rps.codePlatform === station.codePlatform)) {
-                        let currentIndex = data.usedYears.indexOf(rsurvey.yearSurvey.toString());
-                        for (let rsp of rsurvey.resultPerSpecies) {
-                            let currentSpecies = data.usedSpecies.filter(s => s.code === rsp.codeSpecies)[0];
-                            let spIndex = chartsStationAbundancy.species.indexOf(currentSpecies);
-                            let rst = rsp.resultPerStation.filter(r => r.codeStation === station.properties.code)[0];
-
-                            if (chartsStationAbundancy.species.indexOf(currentSpecies) < 0) {
-                                chartsStationBiomass.species.push(currentSpecies);
-                                chartsStationAbundancy.species.push(currentSpecies);
-                                spIndex = chartsStationAbundancy.species.indexOf(currentSpecies);
-                                chartsStationBiomass.dataSpline[spIndex] = [];
-                                chartsStationAbundancy.dataSpline[spIndex] = [];
-                                chartsStationBiomass.dataError[spIndex] = [];
-                                chartsStationAbundancy.dataError[spIndex] = [];
-                            }
-                            chartsStationBiomass.dataSpline[spIndex][currentIndex] = chartsStationBiomass.dataSpline[spIndex][currentIndex]!==undefined ? chartsStationBiomass.dataSpline[spIndex][currentIndex] + (rst ? rst.biomassTotal : 0) : (rst ? rst.biomassTotal : null);
-                            chartsStationAbundancy.dataSpline[spIndex][currentIndex] = chartsStationAbundancy.dataSpline[spIndex][currentIndex]!==undefined ? chartsStationAbundancy.dataSpline[spIndex][currentIndex] + (rst ? rst.numberIndividual : 0) : (rst ? rst.numberIndividual : null);
-                            chartsStationBiomass.dataError[spIndex][currentIndex] = chartsStationBiomass.dataError[spIndex][currentIndex]!==undefined ?
-                                [chartsStationBiomass.dataError[spIndex][currentIndex][0] + (rst ? (rst.biomassTotal - rst.SDBiomassTotal) : 0),
-                                chartsStationBiomass.dataError[spIndex][currentIndex][1] + (rst ? (rst.biomassTotal + rst.SDBiomassTotal) : 0)] :
-                                (rst ? [rst.biomassTotal - rst.SDBiomassTotal, rst.biomassTotal + rst.SDBiomassTotal] : [null, null]);
-                            chartsStationAbundancy.dataError[spIndex][currentIndex] = chartsStationAbundancy.dataError[spIndex][currentIndex]!==undefined ?
-                                [chartsStationAbundancy.dataError[spIndex][currentIndex][0] + (rst ? (rst.numberIndividual - rst.SDDensityTotal) : 0),
-                                chartsStationAbundancy.dataError[spIndex][currentIndex][1] + (rst ? (rst.numberIndividual + rst.SDDensityTotal) : 0)] :
-                                (rst ? [rst.numberIndividual - rst.SDDensityTotal, rst.numberIndividual + rst.SDDensityTotal] : [null, null]);
-                            chartsStationBiomass.dataPie[spIndex] = chartsStationBiomass.dataPie[spIndex]!==undefined ? chartsStationBiomass.dataPie[spIndex] + (rst ? rst.numberIndividual : 0) : (rst ? rst.numberIndividual : null);
-                            chartsStationAbundancy.dataPie[spIndex] = chartsStationAbundancy.dataPie[spIndex]!==undefined ? chartsStationAbundancy.dataPie[spIndex] + (rst ? rst.numberIndividual : 0) : (rst ? rst.numberIndividual : null);
-
-                        }
-                    }
-                    chartszoneBiomass.chartsStations.push(chartsStationBiomass);
-                    chartszoneAbundancy.chartsStations.push(chartsStationAbundancy);
-                }
-            }
-            chartsData.chartsZonesBiomass.push(chartszoneBiomass);
-            chartsData.chartsZonesAbundancy.push(chartszoneAbundancy);
-        }
-        return chartsData;
-    }
 
 
 }

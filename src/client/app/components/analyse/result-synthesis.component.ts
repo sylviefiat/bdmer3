@@ -42,35 +42,11 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         </bc-result-filter>
       </div>
       <div>
-        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
-        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='B'" [class.hide]="(typeShow$ | async)!=='B'" class="results" [selectedIndex]="selectedZone"> 
-          <mat-tab *ngFor="let chartsZoneB of results.chartsData.chartsZonesBiomass; let iB=index"  label="{{(chartsZoneB)?.code}}">          
-            <ng-template matTabContent>
-              <div class="groupCharts">
-                <div class="noData" *ngIf="chartsZoneB.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
-                <bc-result-boxplot class="chart" *ngFor="let chartsStationB of chartsZoneB.chartsStations"
-                  [chartsData]="chartsStationB"
-                  [years]="analyseData.usedYears"
+        <h3>{{ 'GRAPH_PLATFORMS' | translate }}</h3>
+        <bc-result-boxplot class="chart"
+                  [chartsData]="results"
                   [type]="typeShow$ | async">
                 </bc-result-boxplot>
-              </div>
-            </ng-template>
-          </mat-tab>
-        </mat-tab-group>
-        <mat-tab-group class="primer" [class.show]="(typeShow$ | async)==='A'" [class.hide]="(typeShow$ | async)!=='A'" class="results"  [selectedIndex]="selectedZone"> 
-          <mat-tab *ngFor="let chartsZoneA of results.chartsData.chartsZonesAbundancy; let iA=index"  label="{{(chartsZoneA)?.code}}">          
-            <ng-template matTabContent>
-              <div class="groupCharts">
-                <div class="noData" *ngIf="chartsZoneA.chartsStations.length ===0">{{'NO_DATA'|translate}}</div>
-                <bc-result-boxplot class="chart" *ngFor="let chartsStationA of chartsZoneA.chartsStations"
-                  [chartsData]="chartsStationA"
-                  [years]="analyseData.usedYears"
-                  [type]="typeShow$ | async">
-                </bc-result-boxplot>
-              </div>
-            </ng-template>
-          </mat-tab>
-        </mat-tab-group>
       </div>
   `,
     styles: [
@@ -189,10 +165,7 @@ export class ResultSynthesisComponent implements OnInit {
     }
 
     dislayGraphZone(codeZone: string){
-      let selected = this.results.chartsData.chartsZonesBiomass.map(czb => czb.code).indexOf(codeZone);
-      if(selected){
-        this.selectedZone = selected;
-      }
+      
     }
 
 }

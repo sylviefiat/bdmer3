@@ -20,7 +20,11 @@ export interface Data {
 export interface Results {
     name: string;
     resultPerSurvey:ResultSurvey[];
-    chartsData: ChartsData;
+}
+
+export const INIT_RESULT : Results = {
+    name: null,
+    resultPerSurvey: []
 }
 
 export interface ResultSurvey{
@@ -30,85 +34,107 @@ export interface ResultSurvey{
     resultPerSpecies:ResultSpecies[];
 }
 
+export const INIT_SURVEY: ResultSurvey = {
+    codeSurvey: null,
+    yearSurvey: 0,
+    codePlatform: null,
+    resultPerSpecies: []
+}
+
 export interface ResultSpecies {
     codeSpecies: string;
-    numberIndividual: number;
-    biomassTotal: number;
-    biomassesPerStation: number[];
-    individualsPerStation: number[];
-    SDBiomassTotal: number;
-    SDAbundancyTotal: number;
     resultPerStation: ResultStation[];
     resultPerZone: ResultZone[];
-    legalDimensions: LegalDimensions;
+    resultPerPlatform: ResultPlatform[];
+}
+
+export const INIT_SPECIES: ResultSpecies = {
+    codeSpecies: null,
+    resultPerStation: [],
+    resultPerZone: [],
+    resultPerPlatform: []
 }
 
 export interface DimensionsAnalyse {
     codeSp: string;
-    longMin: string;
-    longMax: string;
+    longMin: number;
+    longMax: number;
 }
 
 export interface ResultStation {
     codeStation: string;
-    numberIndividual: number;        // nombre d'invidus
-    biomasses: number[];             // biomasse par individu
-    biomassTotal: number;            // somme des biomasses
-    biomassPerHA: number;            // biomasse par hectare
-    densityPerHA: number;            // density = nb individus par hectare
-    SDBiomassTotal: number;          // ecart type / standard deviation biomasse
-    SDDensityTotal: number;          // ecart type / standard deviation densité
+    surface: number;                 // surface de la station
+    abundance: number;               // abondance = nombre de mesures - mesures non considérées par l'analyse
+    biomasses: number[];             // biomasse par individu = cf calcul biomasse en fonction du type de calcul LW ou LLW
+    biomass: number;                 // somme des biomasses
+    biomassPerHA: number;            // biomasse par hectare = somme biomasses * (10000 / surface station)
+    abundancePerHA: number;          // abondance par hectare = abondance * (10000 / surface station)
+}
+
+export const INIT_STATION: ResultStation = {
+    codeStation: null,
+    surface:0,
+    abundance: 0,
+    biomasses: [],
+    biomass: 0,
+    biomassPerHA: 0,
+    abundancePerHA: 0   
 }
 
 export interface ResultZone {
     codeZone: string;
-    numberIndividual: number;        // nombre d'invidus
-    biomasses: number[];             // biomasse par individu
-    biomassesPerHA: number[];        // biomasse par hectare par station
-    densitiesPerHA: number[];        // densités par hectare par tranect
-    biomassTotal: number;            // somme des biomasses
-    biomassPerHA: number;            // biomasse par hectare
-    densityPerHA: number;            // density = nb individus par hectare
-    SDBiomassTotal: number;          // ecart type / standard deviation biomasse
-    SDBiomassPerHA: number;          // ecart type / standard deviation biomasse par hectare
-    SDDensityPerHA: number;          // ecart type / standard deviation densité par hectare
+    surface: number,
+    nbStrates: number;                 // nombre de strates = surface zone / surface moyenne station
+    nbStations: number;                // nombre de stations considérées
+    averageAbundance: number;          // moyenne(abondance par station)
+    abundance: number;                 // nbStrates x moyenne(abondance par station)
+    averageBiomass: number;            // moyenne biomasse = moyenne(biomasses par station)
+    biomass: number;                   // nbStrates x moyenne(biomasses par stations) * 1000
+    biomassPerHA: number;              // biomasse par hectare = biomass zone * (10000 / surface zone)
+    abundancePerHA: number;            // abondance par hectare = abondance * (10000 / surface zone)
+    SDBiomassPerHA: number;            // ecart type / standard deviation biomasse par hectare
+    SDabundancePerHA: number;          // ecart type / standard deviation abondance par hectare
 }
 
-export interface Indicators {
-    biomasses: number[];
-    biomassTotal: number;
-    biomassSalt: number;
-    biomassDry: number;
-    abundancyCalcul: number;
-    densityTotalCalculIndividual: number;
-    densityTotalCalculWeight: number;
+export const INIT_ZONE : ResultZone = {
+    codeZone: null,
+    surface:0,
+    nbStrates: 0,
+    nbStations: 0,
+    averageAbundance: 0,
+    abundance: 0,
+    averageBiomass: 0,
+    biomass: 0,
+    biomassPerHA: 0,
+    abundancePerHA: 0,
+    SDBiomassPerHA: 0,
+    SDabundancePerHA: 0
 }
 
-export interface Interpretation {
-    legalSizeIndividualPercentage: number;
+
+export interface ResultPlatform {
+    codePlatform: string;
+    nbStrates: number;                     // nombre de strates = somme strates total zones
+    nbZones: number;                       // nombre de zones considérées
+    nbStations: number;                    // nombre de stations considérées
+    averageAbundance: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
+    averageBiomass: number;                // moyenne biomasse par station = somme(nb strates zones x moyenne biomass stations zone) / nb strates total
+    varianceAbundance: number;             // Variance abondance = somme[nb strates zone^2 x écart type abondance zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    varianceBiomass: number;               // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    confidenceIntervalAbundance: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
+    confidenceIntervalBiomass: number;     // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
 }
 
-export interface Stock {
-    totalEstimation: number;
-    quotaFresh: number;
-    quotaSalt: number;
-    quotaDry: number;
+export const INIT_PLATFORM: ResultPlatform = {
+    codePlatform: null,
+    nbStrates: 0,
+    nbZones: 0,
+    nbStations: 0,
+    averageAbundance: 0,
+    averageBiomass: 0,
+    varianceAbundance: 0,
+    varianceBiomass: 0,
+    confidenceIntervalAbundance: 0,
+    confidenceIntervalBiomass: 0
 }
 
-export interface ChartsData {
-    chartsZonesBiomass: ChartsZone[];
-    chartsZonesAbundancy: ChartsZone[];
-}
-
-export interface ChartsZone {
-    code: string;
-    chartsStations: ChartsStation[];
-}
-
-export interface ChartsStation {
-    code: string;
-    species: Species[];
-    dataSpline: number[][];
-    dataError: number[][][];
-    dataPie: number[];
-}

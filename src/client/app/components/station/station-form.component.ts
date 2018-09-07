@@ -24,7 +24,6 @@ export class StationFormComponent implements OnInit {
     
     @Output() submitted = new EventEmitter<Station>();
 
-    url: string;
     code: string;
     longitude: any;
     latitude: any;
@@ -61,7 +60,6 @@ export class StationFormComponent implements OnInit {
         if (this.station) {
             this.stationForm.controls.properties.get("name").setValue(this.station.properties.name);
             this.stationForm.controls.properties.get("code").setValue(this.station.properties.code);
-            this.url = this.station.staticMapStation;
             this.longitude = this.station.geometry["coordinates"]["0"];
             this.latitude = this.station.geometry["coordinates"]["1"];
             this.stationForm.controls.properties.get("name").disable();
@@ -101,25 +99,5 @@ export class StationFormComponent implements OnInit {
 
     isStationValid(valid) {
         this.stationValid = valid;
-    }
-
-    coordChange() {
-        this.errorLat = false;
-        this.errorLng = false;
-
-        if (this.latitude) {
-            this.errorLat = !this.mapStaticService.checkIsValidCoordinate(this.latitude, 'lat');
-        }
-
-        if (this.longitude) {
-            this.errorLng = !this.mapStaticService.checkIsValidCoordinate(this.longitude, 'lng');
-        }
-
-        if (!this.errorLat && !this.errorLng && this.latitude && this.longitude) {
-            this.newStation = [this.longitude, this.latitude];
-        } else {
-            this.url = ""
-        }
-
     }
 }

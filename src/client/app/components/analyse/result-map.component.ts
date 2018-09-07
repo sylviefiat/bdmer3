@@ -223,6 +223,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    console.log(this.results);
     this.loading=true;
     this.initMarkers();
     this.initZones();
@@ -239,7 +240,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rt of rsp.resultPerStation) {
-            if (rt.densityPerHA >= 0 && rt.biomassPerHA >= 0) {
+            //if (rt.densityPerHA >= 0 && rt.biomassPerHA >= 0) {
               let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
               let marker = {
                 geometry: {
@@ -247,14 +248,14 @@ export class ResultMapComponent implements OnInit, OnChanges {
                 },
                 properties: {
                   code: s.properties.code,
-                  abundancy: rt.densityPerHA,
+                  abundancy: rt.abundancePerHA,
                   biomass: rt.biomassPerHA,
                   species: rsp.codeSpecies,
                   survey: this.results.resultPerSurvey[i].codeSurvey
                 }
               };
               this.markers.push(marker);
-            }
+            //}
           }
         }
       }
@@ -266,20 +267,20 @@ export class ResultMapComponent implements OnInit, OnChanges {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rz of rsp.resultPerZone) {
-            if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
+            //if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
               let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
               let polygon = {
                 geometry: z.geometry,
                   properties: {
                     code: z.properties.code,
-                    abundancy: rz.densityPerHA,
+                    abundancy: rz.abundancePerHA,
                     biomass: rz.biomassPerHA,
                     species: rsp.codeSpecies,
                     survey: this.results.resultPerSurvey[i].codeSurvey
                   }
               };
               this.zones.push(polygon);
-            }
+            //}
           }
         }
       }

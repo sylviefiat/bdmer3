@@ -278,7 +278,6 @@ export class PreviewMapStationFormComponent implements OnInit, OnChanges {
         code: "",
         description: ""
       },
-      staticMapStation: "",
       codePlatform: this.platform.code
     };
 

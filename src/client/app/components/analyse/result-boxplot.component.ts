@@ -10,7 +10,7 @@ require('highcharts/modules/exporting')(Highcharts);
 
 import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
-import { ChartsStation } from '../../modules/analyse/models/index';
+import { Results } from '../../modules/analyse/models/index';
 
 @Component({
     selector: 'bc-result-boxplot',
@@ -23,16 +23,7 @@ import { ChartsStation } from '../../modules/analyse/models/index';
           [options]="chartOptions"
           style="height: 400px; display: block;">
       </highcharts-chart>
-      <mat-table #table [dataSource]="displayedColumns" class="mat-elevation-z8">
-
-         <ng-container *ngFor="let disCol of headerRow; let colIndex = index" matColumnDef='{{disCol}}'>
-            <mat-header-cell *matHeaderCellDef>{{disCol}}</mat-header-cell>
-            <mat-cell *matCellDef="let element " (click)="write(element,disCol)"> {{ getElement(element,disCol) }} </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="headerRow"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: headerRow;"></mat-row>
-    </mat-table>
+      
    </div>
   `,
     styles: [
@@ -59,8 +50,7 @@ import { ChartsStation } from '../../modules/analyse/models/index';
 })
 export class ResultBoxplotComponent implements OnInit, OnChanges {
     @Input() type: string;
-    @Input() years: string[];
-    @Input() chartsData: ChartsStation;
+    @Input() chartsData: Results;
     Highcharts = Highcharts;
     chartOptions: any;
     title: string;
@@ -82,7 +72,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.loading = true;
         this.getChartOptions();
-        this.setTable();
+        //this.setTable();
         this.loading = false;
     }
 
@@ -90,7 +80,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
 
         if (event.type !== null && event.type.previousValue !== undefined) {
             this.getChartOptions();
-            this.setTable();
+            //this.setTable();
         }
     }
 
@@ -103,16 +93,16 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
             },
 
             title: {
-                text: this.translate.instant('STATION') + " " + this.chartsData.code + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY') + ")</i>"
+                text: this.translate.instant('RESULTS_PLATFORMS') + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY') + ")</i>"
             },
             legend: {
                 enabled: true
             },
 
             xAxis: {
-                categories: this.years,
+                categories: this.chartsData.resultPerSurvey.map(rps => rps.codeSurvey),
                 title: {
-                    text: this.translate.instant('YEARS')
+                    text: this.translate.instant('SURVEYS')
                 }
             },
             yAxis: {
@@ -129,50 +119,34 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         let pie, piedata: any[] = [];
         let index = 0;
         let unit = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
-
-        for (let i in this.chartsData.species) {
-            series[index++] = {
-                name: this.chartsData.species[i].scientificName,
-                type: 'spline',
-                yAxis: 0,
-                data: this.chartsData.dataSpline[i],
-                tooltip: {
-                    headerFormat: '<em>' + unit + '</em><br/>',
-                    pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+        for(let rps of this.chartsData.resultPerSurvey){
+            for (let i in rps.resultPerSpecies) {
+                series[index++] = {
+                    name: rps.codePlatform+" / "+rps.resultPerSpecies[i].codeSpecies,
+                    type: 'spline',
+                    yAxis: 0,
+                    data: this.type === 'B' ? rps.resultPerSpecies[i].resultPerPlatform.map(rpp=>rpp.averageBiomass) : rps.resultPerSpecies[i].resultPerPlatform.map(rpp=>rpp.averageAbundance),
+                    tooltip: {
+                        headerFormat: '<em>' + unit + '</em><br/>',
+                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+                    }
                 }
-            }
-            series[index++] = {
-                name: this.chartsData.species[i].scientificName,
-                type: 'errorbar',
-                yAxis: 0,
-                data: this.chartsData.dataError[i],
-                tooltip: {
-                    headerFormat: '<em>' + (this.type === 'B' ? "Kg/ha" : "ind./ha") + '</em><br/>',
-                    pointFormat: '(standard deviation: {point.low}-{point.high} ' + unit + '</b>'
-                }
-            }
-            piedata[i] = {
-                name: this.chartsData.species[i].scientificName,
-                y: this.chartsData.dataPie[i],
-                color: Highcharts.getOptions().colors[i]
+                /*series[index++] = {
+                    name: rps.resultPerSpecies[i].codeSpecies,
+                    type: 'errorbar',
+                    yAxis: 0,
+                    data: this.type === 'B' ? rps.resultPerSpecies[i].resultPerPlatform.map(rpp=>rpp.averageBiomass) : rps.resultPerSpecies[i].resultPerPlatform.map(rpp=>rpp.averageAbundance),
+                    tooltip: {
+                        headerFormat: '<em>' + (this.type === 'B' ? "Kg/ha" : "ind./ha") + '</em><br/>',
+                        pointFormat: '(standard deviation: {point.low}-{point.high} ' + unit + '</b>'
+                    }
+                }*/
             }
         }
-        pie = {
-            type: 'pie',
-            name: this.translate.instant('PIE_LEGEND'),
-            data: piedata,
-            center: [60, 60],
-            size: 100,
-            showInLegend: false,
-            dataLabels: {
-                enabled: false
-            }
-        }
-        series.push(pie);
         return series;
     }
 
-    setTable(){
+    /*setTable(){
         let table = [];
         let valueSuffix = this.type === 'B' ? "Kg/ha" : "ind./ha";
         // set categories
@@ -218,7 +192,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
             this.displayedColumns.push(row);
         }
         this.dataSource = new MatTableDataSource(this.displayedColumns);
-    }
+    }*/
 
    
 

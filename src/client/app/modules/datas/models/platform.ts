@@ -40,7 +40,6 @@ export interface Station {
     type: string;
     geometry: Point;
     properties: StationProperties;
-    staticMapStation: string;
     codePlatform: string;
 }
 
@@ -90,6 +89,6 @@ export interface Quantity {
 
 export interface Mesure {
   codeSpecies: string;
-  long: string;
-  larg: string;
+  long: number;
+  larg: number;
 }

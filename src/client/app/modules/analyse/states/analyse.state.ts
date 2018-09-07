@@ -106,9 +106,11 @@ export const getYearsAvailables = createSelector(getUsedPlatforms, (platforms: P
     if (!platforms) return years;
     for (let p of platforms) {
         for (let s of p.surveys) {
-            let y = new Date(s.dateStart).getFullYear().toString();
-            if (years.indexOf(y) < 0) {
-                years.push(y);
+            if(s.counts.length > 0) {
+                let y = new Date(s.dateStart).getFullYear().toString();
+                if (years.indexOf(y) < 0) {
+                    years.push(y);
+                }
             }
         }
     }
@@ -120,8 +122,8 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYear
     if (!platforms || !years) return surveys;
     for (let p of platforms) {
         for (let y of years) {
-            surveys = [...surveys, ...p.surveys.filter(s => y === new Date(s.dateStart).getFullYear().toString())];
-        }
+            surveys = [...surveys, ...p.surveys.filter(s => s.counts.length > 0 && y === new Date(s.dateStart).getFullYear().toString())];
+        }        
     }
     return surveys;
 });
@@ -129,7 +131,7 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYear
 export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurveys, (platforms: Platform[], surveys: Survey[]) => {
     let zones: Zone[] = [];
     if (!platforms || !surveys) return zones;
-    for (let s of surveys) {
+    for (let s of surveys.filter(s => s.counts.length > 0)) {
         let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
         zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
     }

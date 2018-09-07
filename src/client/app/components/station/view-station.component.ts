@@ -67,10 +67,4 @@ export class ViewStationComponent implements OnInit {
   toPlatform() {
     this.routerext.navigate(["platform/" + this.platform.code]);
   }
-
-  openDialog() {
-    this.fileNameDialogRef = this.dialog.open(stationMapModal, {
-      data: this.station.staticMapStation
-    });
-  }
 }

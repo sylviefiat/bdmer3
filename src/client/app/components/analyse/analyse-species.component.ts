@@ -46,7 +46,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
     defaultSpecies: Species[] = [];
     checkedSpecies: Species[] = [];
     allSpeciesDims: DimensionsAnalyse[] = [];
-    defaultDimension: DimensionsAnalyse = { codeSp:null,longMin:"0",longMax:"0" };
+    defaultDimension: DimensionsAnalyse = { codeSp:null,longMin:0,longMax:0 };
     @Output() speciesEmitter = new EventEmitter<Species[]>();
     @Output() dimensionsEmitter = new EventEmitter<DimensionsAnalyse[]>();
     @Input('group') public form: FormGroup;
@@ -60,7 +60,7 @@ export class AnalyseSpeciesComponent implements OnInit, OnDestroy {
         this.actionsSubscription = this.species$.subscribe(species => {
             this.defaultSpecies = species;
             for(let s of species){
-                this.allSpeciesDims.push( { codeSp:s.code,longMin:"0",longMax:"0" });
+                this.allSpeciesDims.push( { codeSp:s.code,longMin:0,longMax:0 });
             }
             this.initSpecies();
         });

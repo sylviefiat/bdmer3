@@ -7,7 +7,6 @@ import { Platform, Zone, Station } from "./../../modules/datas/models/platform";
     <a [routerLink]="['/station', codePlatform, code]">
       <mat-card>
         <mat-card-title-group>
-          <img mat-card-sm-image *ngIf="map" [src]="map"/>
           <mat-card-title>{{ code }}</mat-card-title>
           <mat-card-subtitle><span *ngIf="codePlatform">{{ codePlatform }}</span></mat-card-subtitle>
         </mat-card-title-group>
@@ -77,10 +76,6 @@ export class StationPreviewComponent implements OnInit {
 
   get coord() {
     return this.station.geometry.coordinates;
-  }
-
-  get map() {
-    return this.station.staticMapStation;
   }
 
   // get latitude() {

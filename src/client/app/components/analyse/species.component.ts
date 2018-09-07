@@ -65,7 +65,7 @@ export class SpeciesComponent implements OnInit {
   @Input('group') public formSp: FormGroup;
   @Input('dims') public formDims: FormGroup;
   @Output() speciesEmitter = new EventEmitter<{species:Species,dims:DimensionsAnalyse,checked:boolean}>();
-  dimensions: DimensionsAnalyse = { codeSp:null,longMin:"0",longMax:"0" };
+  dimensions: DimensionsAnalyse = { codeSp:null,longMin:0,longMax:0 };
   legalDims: LegalDimensions;
   isChecked: boolean = false;
   optionsL : string[] = [];

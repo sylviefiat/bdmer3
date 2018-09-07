@@ -20,7 +20,7 @@ export class AnalyseEffects {
     .pipe(
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
-      map((value: [string, Data]) => this.analyseService.analyse(value[1])),
+      map((value: [string, Data]) => AnalyseService.analyse(value[1])),
       map(result => new AnalyseAction.AnalyseSuccess(result)),
       catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
   );
