@@ -6,7 +6,6 @@ import { MapService } from '../../core/services/index';
 
 import { IAnalyseState } from '../states/index';
 import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, ResultPlatform, Method, DimensionsAnalyse } from '../models/index';
-import { INIT_RESULT, INIT_PLATFORM, INIT_SURVEY, INIT_ZONE, INIT_SPECIES, INIT_STATION } from '../models/index';
 import { Country } from '../../countries/models/country';
 import { Species, Platform, Survey, Mesure, Count, Station, Zone, LegalDimensions } from '../../datas/models/index';
 
@@ -25,7 +24,7 @@ export class AnalyseService {
         for (let survey of analyseData.usedSurveys) {
             resultsSurveys = [...resultsSurveys, this.getResultsSurvey(analyseData, survey)];
         }
-        results.resultPerSurvey = [...resultsSurveys];
+        results.resultPerSurvey = [...resultsSurveys.sort((a:ResultSurvey,b:ResultSurvey)=> a.codeSurvey >= b.codeSurvey ? Number(1):Number(-1))];
         return results;
 
     }
@@ -48,8 +47,7 @@ export class AnalyseService {
                 resultsSpecies = [...resultsSpecies, rss];
             }
         }
-        rsurvey.resultPerSpecies = [...resultsSpecies];
-        console.log(rsurvey);
+        rsurvey.resultPerSpecies = [...resultsSpecies.sort((a:ResultSpecies,b:ResultSpecies)=> a.codeSpecies >= b.codeSpecies ? Number(1):Number(-1))];
         return rsurvey;
     }
 
@@ -61,6 +59,7 @@ export class AnalyseService {
     static getResultsSurveySpecies(method: Method, usedStations: Station[], usedZones: Zone[], usedPlatforms: Platform[], survey: Survey, species: Species, requiredDims: DimensionsAnalyse): ResultSpecies {
         let rspecies = {
             codeSpecies: null,
+            nameSpecies: null,
             resultPerStation: [],
             resultPerZone: [],
             resultPerPlatform: []
@@ -69,19 +68,21 @@ export class AnalyseService {
         let resultsZones: ResultZone[] = [];
         let resultsPlatforms: ResultPlatform[] = [];
         rspecies.codeSpecies = species.code;
+        rspecies.nameSpecies = species.scientificName;
         for (let station of usedStations) {
             let rs = this.getResultStation(method, survey, station, species, requiredDims);
             resultsStations = [...resultsStations, rs];
         }
-        rspecies.resultPerStation = [...resultsStations];
+        rspecies.resultPerStation = [...resultsStations.sort((a:ResultStation,b:ResultStation)=> a.codeStation >= b.codeStation ? Number(1):Number(-1))];
         for (let zone of usedZones) {
-            let rstZone = resultsStations.filter(rst => usedStations.filter(st => st.properties.code === rst.codeStation && MapService.booleanInPolygon(st, zone)).length > 0);
+            let rstZone = resultsStations.filter(rst => usedStations.filter(st => st.properties.code === rst.codeStation && 
+                MapService.booleanInPolygon(st, MapService.getPolygon(zone,{name:zone.properties.name}))).length > 0);
             if (rstZone.length > 0) {
                 let rz = this.getResultZone(method, survey, zone, rstZone);
                 resultsZones = [...resultsZones, rz];
             }
         }
-        rspecies.resultPerZone = [...resultsZones];
+        rspecies.resultPerZone = [...resultsZones.sort((a:ResultZone,b:ResultZone)=> a.codeZone >= b.codeZone ? Number(1):Number(-1))];
         for (let platform of usedPlatforms) {
             let rznPlatform = resultsZones.filter(rzn => usedZones.filter(zn => zn.properties.code === rzn.codeZone && zn.codePlatform === platform.code).length > 0);
             if (rznPlatform.length > 0) {
@@ -90,7 +91,7 @@ export class AnalyseService {
             }
 
         }
-        rspecies.resultPerPlatform = [...resultsPlatforms];
+        rspecies.resultPerPlatform = [...resultsPlatforms.sort((a:ResultPlatform,b:ResultPlatform)=> a.codePlatform >= b.codePlatform ? Number(1):Number(-1))];
         return rspecies;
     }
 
@@ -122,14 +123,14 @@ export class AnalyseService {
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
         rstation.abundance = mesures.length;
         // ABONDANCE PER HECTARE STATION = ABONDANCE STATION x (10000 / SURFACE STATION)
-        rstation.abundancePerHA = rstation.abundance * (10000 / rstation.surface);
+        rstation.abundancePerHA = Number(rstation.abundance) * (10000 / Number(rstation.surface));
         // Pas de relation taille/poids = pas de calcul biomasse
         if (method.method !== 'NONE') {
             for (let mesure of mesures) {
                 rstation.biomasses.push(this.getBiomass(method, mesure, species));
             }
             // BIOMASSE STATION = SOMME DES BIOMMASSES DES INDIVIDUS CONSIDERES
-            rstation.biomass = rstation.biomasses.reduce((a, b) => a + b);
+            rstation.biomass = this.getSum(rstation.biomasses);
             // BIOMASSE PER HECTARE STATION = BIOMASSE STATION x (10000 / SURFACE STATION)
             rstation.biomassPerHA = rstation.biomass * (10000 / rstation.surface);
         }
@@ -170,18 +171,18 @@ export class AnalyseService {
             SDabundancePerHA: 0
         };
         rzone.codeZone = zone.properties.code;
-        rzone.surface = zone.properties.surface;
+        rzone.surface = Number(zone.properties.surface);
         rzone.nbStations = rstations.length;
-        rzone.nbStrates = rzone.surface / this.getAverage(rstations.map(rs => rs.surface), rzone.nbStations);
+        rzone.nbStrates = Number(rzone.surface) / this.getAverage(rstations.map(rs => rs.surface), rzone.nbStations);
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rzone.nbStations);
-        rzone.abundance = rzone.nbStrates * rzone.averageAbundance;
-        rzone.abundancePerHA = rzone.abundance * 1000 / rzone.surface;
+        rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
+        rzone.abundancePerHA = Number(rzone.abundance) * 10000 / Number(rzone.surface);
         rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.abundance));
         // si calcul biomasse
         if (method.method !== 'NONE') {
             rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass), rzone.nbStations);
-            rzone.biomass = rzone.nbStrates * rzone.averageBiomass * 1000;
-            rzone.biomassPerHA = rzone.biomass * (1000 / rzone.surface);
+            rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) * 1000;
+            rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
             rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomass));
         }
         return rzone;
@@ -203,32 +204,36 @@ export class AnalyseService {
             confidenceIntervalBiomass: 0
         };
         rplatform.codePlatform = platform.code;
-        rplatform.nbStrates = rzones.map(rz => rz.nbStrates).reduce((a, b) => a + b);
+        rplatform.nbStrates = this.getSum(rzones.map(rz => rz.nbStrates));
         rplatform.nbZones = rzones.length;
-        rplatform.nbStations = rzones.map(rz => rz.nbStations).reduce((a, b) => a + b);
-        rplatform.averageAbundance = rzones.map(rz => rz.nbStrates * rz.averageAbundance).reduce((a, b) => a + b) / rplatform.nbStrates;
-        rplatform.varianceAbundance = rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.abundance, rz.nbStations)).reduce((a, b) => a + b) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
+        rplatform.nbStations = this.getSum(rzones.map(rz => rz.nbStations));
+        rplatform.averageAbundance = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageAbundance),rplatform.nbStrates);
+        rplatform.varianceAbundance = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDabundancePerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
         rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
         // si calcul biomasse
         if (method.method !== 'NONE') {
-            rplatform.averageBiomass = rzones.map(rz => rz.nbStrates * rz.averageBiomass).reduce((a, b) => a + b) / rplatform.nbStrates;
-            rplatform.varianceBiomass = rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.biomass, rz.nbStations)).reduce((a, b) => a + b) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
+            rplatform.averageBiomass = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageBiomass),rplatform.nbStrates);
+            rplatform.varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
             rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
         }
         return rplatform;
     }
 
     static getAverage(values: any[], nb: number): number {
-        return values.reduce((a, b) => a + b) / nb;
+        return values.reduce((a, b) => Number(a) + Number(b)) / Number(nb);
     }
 
-    static getPlatformZoneForVariance(nbStrates, average, nbStations): number {
-        return angularMath.powerOfNumber(nbStrates, 2) * angularMath.powerOfNumber(average, 2) * (1 - nbStations / nbStrates);
+    static getSum(values: any[]): number {
+        return values.reduce((a, b) => Number(a) + Number(b));
+    }
+
+    static getPlatformZoneForVariance(nbStrates, standardDeviation, nbStations): number {
+        return angularMath.powerOfNumber(Number(nbStrates), 2) * angularMath.powerOfNumber(Number(standardDeviation), 2) * (1 - Number(nbStations) / Number(nbStrates));
     }
 
     static getStandardDeviation(table: number[]) {
         if (table.length <= 0) return 0;
-        let total = table.reduce((p, c) => p + c);
+        let total = this.getSum(table);
         let length = table.length;
         let mean = (total / length);
         let variance = table

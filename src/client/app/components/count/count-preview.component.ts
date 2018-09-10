@@ -14,6 +14,9 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
         <mat-card-content>
           {{ 'COUNT_DATE' | translate }} : {{ date | date:localDate }}
         </mat-card-content>
+        <mat-card-content>
+          {{ 'STATION' | translate }} : {{ count.codeStation }}
+        </mat-card-content>
         <mat-card-content *ngIf="count.quantities && count.quantities.length>0">
           <div *ngFor="let quantity of count.quantities">
             <span class="speciesName">

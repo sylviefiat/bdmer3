@@ -101,7 +101,12 @@ export class MapService {
     }
 
     static booleanInPolygon(point,polygon){
-        return Turf.booleanPointInPolygon(point.geometry.coordinates, polygon);
+        try {
+            return Turf.booleanPointInPolygon(point.geometry.coordinates, polygon);
+        } catch(e){
+            throw e;
+            
+        }
     }
 
 }

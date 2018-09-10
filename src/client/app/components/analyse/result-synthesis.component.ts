@@ -45,6 +45,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         <h3>{{ 'GRAPH_PLATFORMS' | translate }}</h3>
         <bc-result-boxplot class="chart"
                   [chartsData]="results"
+                  [species]="analyseData.usedSpecies"
                   [type]="typeShow$ | async">
                 </bc-result-boxplot>
       </div>

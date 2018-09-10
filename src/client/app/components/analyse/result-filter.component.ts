@@ -20,6 +20,12 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
           <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
           <mat-radio-button value="A" [checked]="typeShow==='A'">{{'DISPLAY_ABUNDANCE' | translate}}</mat-radio-button>
         </mat-radio-group>
+        <div>
+          <div *ngFor="let item of legend">
+            <span class="legend-key" [style.backgroundColor]="item.color"></span>
+            <span>{{item.value}}</span>
+          </div>
+        </div>
         <h4>{{'SPECIES' | translate}}</h4>
         <mat-radio-group (change)="setShowSp($event)">
           <mat-radio-button *ngFor="let sp of species" value="{{sp.code}}" [checked]="spShow===sp.code">{{sp.scientificName}}</mat-radio-button>
@@ -51,6 +57,13 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
       font-style: italic; 
       font-size: smaller;
     }
+    .legend-key {
+      display: inline-block;
+      border-radius: 20%;
+      width: 10px;
+      height: 10px;
+      margin-right: 5px;
+    }
   `]
 })
 export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
@@ -66,6 +79,8 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
+  legend = [{value:'0-1',color:'#FFEDA0'}, {value:'1-10',color:'#FD8D3C'}, {value:'10+',color:'#800026'}];
+  colors = ['#FFEDA0', '#FD8D3C', '#800026'];
 
   constructor() {
 

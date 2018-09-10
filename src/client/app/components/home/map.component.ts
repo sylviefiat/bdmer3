@@ -97,10 +97,7 @@ import { MapService } from "../../modules/core/services/index";
               'icon-rotate': 180,
               'icon-allow-overlap': true,
               'icon-ignore-placement': true
-              }"
-            (click)="showPopupStation($event)"
-            (mouseEnter)="cursorStyle = 'pointer'"
-            (mouseLeave)="cursorStyle = ''">
+              }">
           </mgl-layer>
         </mgl-geojson-source>
       </ng-container>
@@ -306,7 +303,7 @@ export class MapComponent implements OnInit, OnChanges {
       Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => this.getFeature(zone))));
+          .map(zone => MapService.getFeature(zone,{code: zone.properties.code}))));
   }
 
   setStations(platforms: Platform[]) {
@@ -319,7 +316,7 @@ export class MapComponent implements OnInit, OnChanges {
     this.layerStations$ = of(
       Turf.featureCollection(
         this.stations
-          .map(station => this.getFeature(station))));
+          .map(station => MapService.getFeature(station,{ code: station.properties.code}))));
   }
 
   checkBounds(bounds: LngLatBounds){
@@ -336,22 +333,6 @@ export class MapComponent implements OnInit, OnChanges {
       }
     }
     return bounds;
-  }
-
-  getFeature(feature){
-    return MapService.getFeature(feature,{ code: feature.properties.code});
-    /*switch (feature.geometry.type) {
-              case "GeometryCollection":
-                return Turf.multiPolygon(feature.geometry.geometries.map(geom=>geom.coordinates),{code: feature.properties.code});
-              case "MultiPolygon":
-                return Turf.multiPolygon(feature.geometries.coordinates,{code: feature.properties.code});
-              case "Polygon":
-                return Turf.polygon(feature.geometry.coordinates,{code: feature.properties.code});
-              case "Point":
-                return Turf.point(feature.geometry.coordinates,{code: feature.properties.code})
-              default:
-                return null;
-            }*/
   }
 
   showPopupStation(evt: MapMouseEvent) {

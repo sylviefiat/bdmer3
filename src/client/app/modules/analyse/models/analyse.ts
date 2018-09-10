@@ -22,11 +22,6 @@ export interface Results {
     resultPerSurvey:ResultSurvey[];
 }
 
-export const INIT_RESULT : Results = {
-    name: null,
-    resultPerSurvey: []
-}
-
 export interface ResultSurvey{
     codeSurvey: string;
     yearSurvey: number;
@@ -34,25 +29,12 @@ export interface ResultSurvey{
     resultPerSpecies:ResultSpecies[];
 }
 
-export const INIT_SURVEY: ResultSurvey = {
-    codeSurvey: null,
-    yearSurvey: 0,
-    codePlatform: null,
-    resultPerSpecies: []
-}
-
 export interface ResultSpecies {
     codeSpecies: string;
+    nameSpecies: string;
     resultPerStation: ResultStation[];
     resultPerZone: ResultZone[];
     resultPerPlatform: ResultPlatform[];
-}
-
-export const INIT_SPECIES: ResultSpecies = {
-    codeSpecies: null,
-    resultPerStation: [],
-    resultPerZone: [],
-    resultPerPlatform: []
 }
 
 export interface DimensionsAnalyse {
@@ -71,16 +53,6 @@ export interface ResultStation {
     abundancePerHA: number;          // abondance par hectare = abondance * (10000 / surface station)
 }
 
-export const INIT_STATION: ResultStation = {
-    codeStation: null,
-    surface:0,
-    abundance: 0,
-    biomasses: [],
-    biomass: 0,
-    biomassPerHA: 0,
-    abundancePerHA: 0   
-}
-
 export interface ResultZone {
     codeZone: string;
     surface: number,
@@ -96,21 +68,6 @@ export interface ResultZone {
     SDabundancePerHA: number;          // ecart type / standard deviation abondance par hectare
 }
 
-export const INIT_ZONE : ResultZone = {
-    codeZone: null,
-    surface:0,
-    nbStrates: 0,
-    nbStations: 0,
-    averageAbundance: 0,
-    abundance: 0,
-    averageBiomass: 0,
-    biomass: 0,
-    biomassPerHA: 0,
-    abundancePerHA: 0,
-    SDBiomassPerHA: 0,
-    SDabundancePerHA: 0
-}
-
 
 export interface ResultPlatform {
     codePlatform: string;
@@ -123,18 +80,5 @@ export interface ResultPlatform {
     varianceBiomass: number;               // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
     confidenceIntervalAbundance: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
     confidenceIntervalBiomass: number;     // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
-}
-
-export const INIT_PLATFORM: ResultPlatform = {
-    codePlatform: null,
-    nbStrates: 0,
-    nbZones: 0,
-    nbStations: 0,
-    averageAbundance: 0,
-    averageBiomass: 0,
-    varianceAbundance: 0,
-    varianceBiomass: 0,
-    confidenceIntervalAbundance: 0,
-    confidenceIntervalBiomass: 0
 }
 
