@@ -52,6 +52,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     @Input() type: string;
     @Input() chartsData: Results;
     @Input() species: Species[];
+    @Input() zone?: Zone;
     Highcharts = Highcharts;
     chartOptions: any;
     title: string;
@@ -71,10 +72,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.loading = true;
         this.getChartOptions();
-        //this.setTable();
-        this.loading = false;
     }
 
     ngOnChanges(event) {
@@ -86,14 +84,21 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     }
 
     getChartOptions() {
-        this.series = this.getSeries();
+        let title="";
+        if(this.zone){
+            this.series = this.getSeriesZone();
+            title = this.translate.instant('RESULTS_ZONE') + " " + this.zone.properties.code;
+        } else {
+            this.series = this.getSeriesPlatforms();
+            title = this.translate.instant('RESULTS_PLATFORMS');
+        }
         this.chartOptions = {
             chart: {
                 type: 'boxplot'
             },
 
             title: {
-                text: this.translate.instant('RESULTS_PLATFORMS') + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY') + ")</i>"
+                text: title + " <i>(" + this.translate.instant((this.type === 'B') ? 'BIOMASS' : 'ABUNDANCY') + ")</i>"
             },
             legend: {
                 enabled: true
@@ -114,7 +119,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         };
     }
 
-    getSeries() {
+    getSeriesPlatforms() {
         let series: any[] = [];
         let data: any[][][] = [];
         let index = 0;
@@ -149,12 +154,40 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         return series;
     }
 
-    getSeriesZone(zone: Zone) {
+    getSeriesZone() {
         let series: any[] = [];
         let data: any[][][] = [];
         let index = 0;
         let unit = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
-
+        for (let rps of this.chartsData.resultPerSurvey) {
+            if (!data[this.zone.properties.code]) {
+                data[this.zone.properties.code] = [];
+            }
+            for (let sp of this.species) {
+                if (!data[this.zone.properties.code][sp.scientificName]) {
+                    data[this.zone.properties.code][sp.scientificName] = [];
+                }
+                let rspp = rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code).length > 0 ? rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code)[0] : null;
+                let rpz = rspp ? rspp.resultPerZone.filter(z=>z.codeZone===this.zone.properties.code):null;
+                let value = rpz ? (this.type === 'B' ? rpz.map(rpp => rpp.averageBiomass) : rpz.map(rpp => rpp.averageAbundance)) : null;
+                data[this.zone.properties.code][sp.scientificName] = [...data[this.zone.properties.code][sp.scientificName], ...value];
+            }
+        }
+        for (let i in data) {
+            for (let j in data[i]) {
+                series[index++] = {
+                    name: i + " / " + j,
+                    type: 'spline',
+                    yAxis: 0,
+                    data: data[i][j],
+                    tooltip: {
+                        headerFormat: '<em>' + unit + '</em><br/>',
+                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+                    }
+                }
+            }
+        }
+        return series;
     }
 
 

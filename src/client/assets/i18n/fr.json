@@ -455,5 +455,8 @@
   "ADD_QUANTITY":"Ajouter un comptage",
   "QUANTITY_EX":"Ex: 25",
   "NONE":"Pas d'estimation de biomasse",
-  "NONE_ASTERIX":"Les données ne permettent pas de fournir une estimation de la biomasse"
+  "NONE_ASTERIX":"Les données ne permettent pas de fournir une estimation de la biomasse",
+  "GRAPH_PLATFORMS":"Résultats pour les plateformes sélectionnées",
+  "RESULTS_PLATFORMS":"Evolution du stock sur les plateformes",
+  "RESULTS_ZONE":"Evolution du stock sur la zone "
 }

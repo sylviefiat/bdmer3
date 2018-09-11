@@ -38,18 +38,28 @@ import { Results, Data } from '../../modules/analyse/models/index';
                       property: 'abundancy',
                       type: 'interval',
                       stops: [
-                        [0, '#FFEDA0'],
-                        [1, '#FD8D3C'],
-                        [10, '#800026']
+                      [0, '#FFEDA0'],
+                      [1, '#FED976'],
+                      [10, '#FEB24C'],
+                      [20, '#FD8D3C'],
+                      [30, '#FC4E2A'],
+                      [40, '#E31A1C'],
+                      [50, '#BD0026'],
+                      [100, '#800026']
                       ]
                   },
                   'circle-radius': {
                       property: 'abundancy',
                       type: 'interval',
                       stops: [
-                          [0, 4],
-                          [1, 8],
-                          [10, 12]
+                        [0, 2],
+                        [1, 3],
+                        [10, 4],
+                        [20, 5],
+                        [30, 6],
+                        [40, 7],
+                        [50, 8],
+                        [100, 9]
                       ]
                   }
             }">
@@ -64,32 +74,41 @@ import { Results, Data } from '../../modules/analyse/models/index';
                       property: 'biomass',
                       type: 'interval',
                       stops: [
-                        [0, '#FFEDA0'],
-                        [1, '#FD8D3C'],
-                        [10, '#800026']
+                      [0, '#FFEDA0'],
+                      [1, '#FED976'],
+                      [10, '#FEB24C'],
+                      [20, '#FD8D3C'],
+                      [30, '#FC4E2A'],
+                      [40, '#E31A1C'],
+                      [50, '#BD0026'],
+                      [100, '#800026']
                       ]
                   },
                   'circle-radius': {
                       property: 'biomass',
                       type: 'interval',
                       stops: [
-                          [0, 4],
-                          [1, 8],
-                          [10, 12]
+                        [0, 2],
+                        [1, 3],
+                        [10, 4],
+                        [20, 5],
+                        [30, 6],
+                        [40, 7],
+                        [50, 8],
+                        [100, 9]
                       ]
                   }
-            }">
+            }"
+            (click)="selectStation($event)"
+                    (mouseEnter)="cursorStyle = 'pointer'"
+                    (mouseLeave)="cursorStyle = ''">            
             </mgl-layer>
-            <mgl-layer
-              id="stationValue"
-              type="symbol"
-              source="layerStations"
-              [layout]="{
-                'text-field': typeShow==='B'?'{biomass}':'{abundancy}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12
-            }">
-            </mgl-layer> 
+             <mgl-popup *ngIf="selectedStation"
+              [lngLat]="selectedStation.geometry?.coordinates">
+              <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span><br/>
+              <span *ngIf="typeShow==='B'" style="color:black;">{{'BIOMASS' | translate}} {{selectedStation.properties?.biomass}}</span>
+              <span *ngIf="typeShow==='A'" style="color:black;">{{'ABUNDANCY' | translate}} {{selectedStation.properties?.abundancy}}</span>
+            </mgl-popup>
           </mgl-geojson-source>
         </ng-container>
         <ng-container *ngIf="(layerZones$ | async) && showZones">
@@ -107,14 +126,21 @@ import { Results, Data } from '../../modules/analyse/models/index';
                     type: 'interval',
                     stops: [
                       [0, '#FFEDA0'],
-                      [1, '#FD8D3C'],
-                      [10, '#800026']
+                      [1, '#FED976'],
+                      [10, '#FEB24C'],
+                      [20, '#FD8D3C'],
+                      [30, '#FC4E2A'],
+                      [40, '#E31A1C'],
+                      [50, '#BD0026'],
+                      [100, '#800026']
                     ]
                 },
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
                 }"
-              (click)="selectZone($event)">
+              (click)="selectZone($event)"
+                    (mouseEnter)="cursorStyle = 'pointer'"
+                    (mouseLeave)="cursorStyle = ''">
             </mgl-layer>
             <mgl-layer
               *ngIf="typeShow==='B'"
@@ -127,8 +153,13 @@ import { Results, Data } from '../../modules/analyse/models/index';
                     type: 'interval',
                     stops: [
                       [0, '#FFEDA0'],
-                      [1, '#FD8D3C'],
-                      [10, '#800026']
+                      [1, '#FED976'],
+                      [10, '#FEB24C'],
+                      [20, '#FD8D3C'],
+                      [30, '#FC4E2A'],
+                      [40, '#E31A1C'],
+                      [50, '#BD0026'],
+                      [100, '#800026']
                     ]
                 },
                 'fill-opacity': 0.3,
@@ -200,10 +231,10 @@ export class ResultMapComponent implements OnInit, OnChanges {
   layerStations$: Observable<Turf.FeatureCollection>;
   layerZones$: Observable<Turf.FeatureCollection>;
   bounds$: Observable<LngLatBounds>;
-  boundsPadding: number = 20;
+  boundsPadding: number = 0;
   zoomMaxMap = 10;
   zoom: number = 9;
-  selectedPoint: any;
+  selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
 
   constructor() {
 
@@ -277,7 +308,6 @@ export class ResultMapComponent implements OnInit, OnChanges {
     let filteredStations = this.stations
         .filter(marker => marker.properties.species === this.spShow && marker.properties.survey === this.surveyShow );
     let featureCollection = Turf.featureCollection(filteredStations);
-    console.log(featureCollection);
     this.layerStations$ = of(featureCollection);
     // zones
     let fc2 = Turf.featureCollection(
@@ -286,12 +316,10 @@ export class ResultMapComponent implements OnInit, OnChanges {
         .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
         .filter(polygon => polygon !== null)
     );
-    console.log(fc2);
     this.layerZones$ = of(fc2);
-    // bounds
-    var bnd = new LngLatBounds();
-    this.stations.forEach((marker) => bnd.extend(marker.geometry.coordinates));
-    this.bounds$ = of(bnd);
+    if(filteredStations.length > 0){
+      this.bounds$ = of(MapService.zoomToStations(featureCollection));
+    }
   }
 
   getValue(feature) {
@@ -314,6 +342,10 @@ export class ResultMapComponent implements OnInit, OnChanges {
       default:
         return 0;
     }
+  }
+
+  selectStation(evt: MapMouseEvent) {
+    this.selectedStation = (<any>evt).features[0];
   }
 
   selectZone(evt: MapMouseEvent){

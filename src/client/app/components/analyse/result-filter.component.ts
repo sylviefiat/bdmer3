@@ -23,7 +23,7 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
         <div>
           <div *ngFor="let item of legend">
             <span class="legend-key" [style.backgroundColor]="item.color"></span>
-            <span>{{item.value}}</span>
+            <span>{{item.value}} </span><span>{{getUnit()}}</span>
           </div>
         </div>
         <h4>{{'SPECIES' | translate}}</h4>
@@ -79,14 +79,18 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
-  legend = [{value:'0-1',color:'#FFEDA0'}, {value:'1-10',color:'#FD8D3C'}, {value:'10+',color:'#800026'}];
-  colors = ['#FFEDA0', '#FD8D3C', '#800026'];
+  legend = [{value:'0-1',color:'#FFEDA0'}, {value:'1-10',color:'#FED976'}, 
+    {value:'10-20',color:'#FEB24C'},{value:'20-30',color:'#FD8D3C'}, 
+    {value:'30-40',color:'#FC4E2A'}, {value:'40-50',color:'#E31A1C'}, 
+    {value:'50-100',color:'#BD0026'}, {value:'100+',color:'#800026'}];
+  units = ['kg/ha', 'ind./ha'];
 
   constructor() {
 
   }
 
   ngOnInit(){  
+    this.surveys = this.surveys.sort((s1,s2)=>s1.code >= s2.code ? Number(1):Number(-1));
   }
 
   changeDisplay(showAbundancy: any){
@@ -102,6 +106,10 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   setShowSurvey(svCode: any){
     this.surveyShow = svCode.value;
     this.surveyShowEmitter.emit(this.surveyShow);
+  }
+
+  getUnit(){
+    return this.units[this.typeShow==='B'?0:1];
   }
 
 

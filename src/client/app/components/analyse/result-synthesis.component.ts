@@ -41,13 +41,30 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
       </div>
-      <div>
+      <div> 
         <h3>{{ 'GRAPH_PLATFORMS' | translate }}</h3>
         <bc-result-boxplot class="chart"
                   [chartsData]="results"
                   [species]="analyseData.usedSpecies"
                   [type]="typeShow$ | async">
                 </bc-result-boxplot>
+      </div>
+      <div>
+        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
+        <mat-tab-group class="primer" class="results" [selectedIndex]="selectedZone"> 
+          <mat-tab *ngFor="let zone of sortedZoneList; let i=index"  label="{{(zone)?.properties.code}}">          
+            <ng-template matTabContent>
+              <div class="groupCharts">
+                <bc-result-boxplot class="chart"
+                  [chartsData]="results"
+                  [species]="analyseData.usedSpecies"
+                  [zone]="zone"
+                  [type]="typeShow$ | async">
+                </bc-result-boxplot>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
       </div>
   `,
     styles: [
@@ -63,7 +80,6 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       } 
       .results {
         display:flex;
-        flex-direction:row;
         width: 90vw;
         justify-content:center;
       }
@@ -109,6 +125,7 @@ export class ResultSynthesisComponent implements OnInit {
     showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
     selectedZone: number;
+    sortedZoneList: Zone[];
 
     constructor() {
 
@@ -122,6 +139,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.showStations$=of(true);
       this.showZones$=of(false);
       this.selectedZone = 0;
+      this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> z1.properties.code >= z2.properties.code? Number(1):Number(-1));
     }
 
     get localDate() {
@@ -166,7 +184,10 @@ export class ResultSynthesisComponent implements OnInit {
     }
 
     dislayGraphZone(codeZone: string){
-      
+      let selected = this.sortedZoneList.map(z=>z.properties.code).indexOf(codeZone);
+      if(selected){
+        this.selectedZone = selected;
+      }
     }
 
 }
