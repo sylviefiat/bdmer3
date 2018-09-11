@@ -74,7 +74,7 @@ export class PlatformService {
         if (!platform.zones) platform.zones = [];
         if (!platform.surveys) platform.surveys = [];
         if (!platform.stations) platform.stations = [];
-        if (country !== undefined) {
+        if (!platform.codeCountry && country !== undefined) {
           platform.codeCountry = country.code;
         }
         if (platform.codeCountry === null) {
