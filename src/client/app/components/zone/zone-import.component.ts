@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { Observable, of, Subscription } from "rxjs";
-import { fromPromise } from "rxjs/observable/fromPromise";
+import { Observable, of, Subscription, from } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { GeojsonService } from "../../modules/core/services/geojson.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -34,7 +33,7 @@ export class ZoneImportComponent implements OnDestroy {
   @Output() back = new EventEmitter();
   actionSubscription: Subscription;
   geojsons$: Observable<any>;
-  intersectError: boolean = false;
+  intersectError$: Observable<string>;
   importKmlFile: any = null;
   zoneForm: FormGroup = new FormGroup({
     zoneInput: new FormControl()
@@ -61,11 +60,11 @@ export class ZoneImportComponent implements OnDestroy {
     this.actionSubscription.unsubscribe();
   }
 
-  handleUpload(kmlFile: any): void {
+  handleUpload(kmlFile: any) {
     if (kmlFile.target.files && kmlFile.target.files.length > 0) {
       this.importKmlFile = kmlFile;
-      this.intersectError = false;
-      this.geojsons$ = fromPromise(this.geojsonService.kmlToGeoJson(kmlFile.target.files["0"], this.platform));
+      this.intersectError$ = of("checking");
+      this.geojsons$ = from(this.geojsonService.kmlToGeoJson(kmlFile.target.files["0"], this.platform));
     }
   }
 
@@ -74,7 +73,7 @@ export class ZoneImportComponent implements OnDestroy {
   }
 
   zoneIntersect(error) {
-    this.intersectError = error;
+    this.intersectError$ = of(error);
   }
 
   changeNeedHelp() {
@@ -86,18 +85,10 @@ export class ZoneImportComponent implements OnDestroy {
     if (this.platform.zones.length > 0) {
       if (confirm(msg)) {
         this.removeAllZone.emit(this.platform);
-        this.geojsons$.subscribe(geojsons => {
-          geojsons.forEach(geojson => {
-            this.upload.emit(geojson);
-          });
-        });
+        this.upload.emit(this.importKmlFile.target.files["0"]);
       }
     } else {
-      this.geojsons$.subscribe(geojsons => {
-        geojsons.forEach(geojson => {
-          this.upload.emit(geojson);
-        });
-      });
+      this.upload.emit(this.importKmlFile.target.files["0"]);
     }
   }
 

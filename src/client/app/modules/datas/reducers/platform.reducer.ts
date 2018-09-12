@@ -63,8 +63,7 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
       };
     }
 
-    case PlatformAction.ActionTypes.ADD_ZONE_SUCCESS:
-    case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
+    case PlatformAction.ActionTypes.ADD_ZONE_SUCCESS:{
       const addedzone = action.payload;
       const platforms = state.entities.filter(platform => addedzone.codePlatform !== platform._id);
       const modifiedPlatform = state.entities.filter(platform => addedzone.codePlatform === platform._id)[0];
@@ -73,14 +72,27 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
       return {
         ...state,
         entities: [...platforms, modifiedPlatform],
-        ids: [...state.ids.filter(id => addedzone.codePlatform !== id), ...addedzone.codePlatform],
+        ids: [...state.ids.filter(id => modifiedPlatform.code !== id), modifiedPlatform.code],
         error: null,
         msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "ZONES_REGISTERED_SUCCESS" : "ZONES_REGISTERED_SUCCESS"
       };
     }
 
-    case PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS:
-    case PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS: {
+    case PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS: {
+      const addedzones = action.payload;
+      const platforms = state.entities.filter(platform => addedzones[0].codePlatform !== platform._id);
+      const modifiedPlatform = state.entities.filter(platform => addedzones[0].codePlatform === platform._id)[0];
+      modifiedPlatform.zones = [...modifiedPlatform.zones.filter(zone => addedzones.map(az => az.properties.code !== zone.properties.code).length>=0), ...addedzones];
+      return {
+        ...state,
+        entities: [...platforms, modifiedPlatform],
+        ids: [...state.ids.filter(id => modifiedPlatform.code !== id), modifiedPlatform.code],
+        error: null,
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "ZONES_REGISTERED_SUCCESS" : "ZONES_REGISTERED_SUCCESS"
+      };
+    }
+
+    case PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS: {
       const addedsurvey = action.payload;
       const platforms = state.entities.filter(platform => addedsurvey.codePlatform !== platform._id);
       const modifiedPlatform = state.entities.filter(platform => addedsurvey.codePlatform === platform._id)[0];
@@ -90,6 +102,20 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
         ...state,
         entities: [...platforms, modifiedPlatform],
         ids: [...state.ids.filter(id => addedsurvey.codePlatform !== id), ...addedsurvey.codePlatform],
+        error: null,
+        msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "SURVEYS_REGISTERED_SUCCESS" : "SURVEYS_REGISTERED_SUCCESS"
+      };
+    }
+    case PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS: {
+      const addedsurveys = action.payload;
+      const platforms = state.entities.filter(platform => addedsurveys[0].codePlatform !== platform._id);
+      const modifiedPlatform = state.entities.filter(platform => addedsurveys[0].codePlatform === platform._id)[0];
+      modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(survey => addedsurveys.map(as => as.code !== survey.code).length>=0), ...addedsurveys];
+
+      return {
+        ...state,
+        entities: [...platforms, modifiedPlatform],
+        ids: [...state.ids.filter(id => modifiedPlatform.code !== id), modifiedPlatform.code],
         error: null,
         msg: action.type === PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS ? "SURVEYS_REGISTERED_SUCCESS" : "SURVEYS_REGISTERED_SUCCESS"
       };

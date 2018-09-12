@@ -309,7 +309,7 @@ export namespace PlatformAction {
   export class ImportZoneSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_SUCCESS;
 
-    constructor(public payload: Zone) {}
+    constructor(public payload: any) {}
   }
 
   /**
@@ -459,7 +459,7 @@ export namespace PlatformAction {
   export class ImportSurveySuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_SURVEY_SUCCESS;
 
-    constructor(public payload: Survey) {}
+    constructor(public payload: Survey[]) {}
   }
 
   export class CheckSurveyCsvFile implements Action {

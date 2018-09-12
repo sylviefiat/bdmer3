@@ -513,11 +513,14 @@ export class Csv2JsonService {
                             }
                             count[headers[j]] = d;
                             break;
-                        case "quantities":
+                        case "count":
                             sp = data[headers.indexOf("codeSpecies")];
                             if (sp.length < 2) break;
                             let qua = data[j].split(",");
                             for (let q of qua) {
+                                if(!count.quantities){
+                                    count.quantities = [];
+                                }
                                 count.quantities.push({ codeSpecies: sp, quantity: data[j] });
                             }
                             break;
@@ -661,7 +664,7 @@ export class Csv2JsonService {
         });
     }
 
-    csv2(type: string, csvFile: any, species?: Species[]): Observable<any> {
+    csv2(type: string, csvFile: any, species?: Species[]): Observable<any[]> {
         return Observable.create(observable => {
             this.papa.parse(csvFile, {
                 /*delimiter: function(csvFile){
@@ -689,7 +692,7 @@ export class Csv2JsonService {
                             res = this.extractPlatformData(data);
                             break;
                         case "zone":
-                            res = this.extractZoneData(data);
+                            res = data;
                             break;
                         case "survey":
                             res = this.extractSurveyData(data);

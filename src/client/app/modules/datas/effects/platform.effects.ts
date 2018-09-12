@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
-import { defer, Observable, pipe, of } from "rxjs";
+import { defer, Observable, pipe, of, forkJoin, from } from "rxjs";
 import { Action, Store } from "@ngrx/store";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { catchError, map, mergeMap, withLatestFrom, switchMap, tap, delay } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 import { IAppState, getSelectedCountry, getSelectedPlatform, getSelectedZone, getAuthCountry, getAllCountriesInApp, getSpeciesInApp, getServiceUrl, getPrefixDatabase } from "../../ngrx/index";
-import { Csv2JsonService } from "../../core/services/csv2json.service";
+import { Csv2JsonService, GeojsonService } from "../../core/services/index";
 import { PlatformService } from "../services/platform.service";
 import { PlatformAction } from "../actions/index";
 import { Platform, Zone, Station, Count, Survey, ZonePreference } from "../models/platform";
 import { Country } from "../../countries/models/country";
 import { Species } from "../../datas/models/species";
-import { AppInitAction } from "../../core/actions/index";
+import { AppInitAction,LoaderAction } from "../../core/actions/index";
 
 //import { config } from '../../../config';
 
@@ -123,23 +123,30 @@ export class PlatformEffects {
     );
 
   @Effect()
-  importZone$: Observable<Action> = this.actions$.ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE).pipe(
-    map((action: PlatformAction.ImportZoneAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
-    map((zone: Zone) => new PlatformAction.ImportZoneSuccessAction(zone)),
-    catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importZone$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE)
+    .pipe(
+      tap(() => {console.log("load !");new LoaderAction.LoadingAction()}),
+      map((action: PlatformAction.ImportZoneAction) => action.payload),      
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [any,Platform]) => from(this.geojsonService.kmlToGeoJson(value[0], value[1]))),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Zone[], Platform]) => this.platformService.importZones(value[0], value[1])), 
+      map((zones: any) => new PlatformAction.ImportZoneSuccessAction(zones)),
+      catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
-  importSurvey$: Observable<Action> = this.actions$.ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY).pipe(
-    map((action: PlatformAction.ImportSurveyAction) => action.payload),
-    mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
-    map((survey: Survey) => new PlatformAction.ImportSurveySuccessAction(survey)),
-    catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  importSurvey$: Observable<Action> = this.actions$
+    .ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY)
+    .pipe(
+      map((action: PlatformAction.ImportSurveyAction) => action.payload),
+      mergeMap((survey: any) => this.csv2jsonService.csv2("survey", survey)),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Survey[], Platform]) => this.platformService.importSurveys(value[1], value[0])),
+      map((surveys: Survey[]) => new PlatformAction.ImportSurveySuccessAction(surveys)),
+      catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
+    );
 
   @Effect()
   checkSurveyCsv$: Observable<Action> = this.actions$
@@ -147,10 +154,9 @@ export class PlatformEffects {
     .pipe(
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckSurveyCsvFile) => action.payload),
-      mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
-      // fait automatiquement une boucle sur les platforms retournées
+      mergeMap((survey: any) => this.csv2jsonService.csv2("survey", survey)),
       withLatestFrom(this.store.select(getSelectedPlatform)),
-      mergeMap((value: [Survey, Platform]) => this.platformService.importSurveyVerification(value[0], value[1])),
+      mergeMap((value: [Survey[], Platform]) => this.platformService.importSurveyVerification(value[0], value[1])),
       map((error: string) => new PlatformAction.CheckPlatformAddErrorAction(error))
     );
 
@@ -170,19 +176,31 @@ export class PlatformEffects {
     .pipe(
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.RemovePendingSurveyAction) => action.payload),
-      mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
       catchError((survey: Survey) => of(new PlatformAction.RemovePendingSurveySuccessAction(survey)))
     );
 
   @Effect()
   importStation$: Observable<Action> = this.actions$.ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION).pipe(
     map((action: PlatformAction.ImportStationAction) => action.payload),
-    mergeMap((station: Station) => this.csv2jsonService.csv2("station", station)),
+    tap(() => new LoaderAction.LoadingAction()),
+    mergeMap((stations: any) => this.csv2jsonService.csv2("station", stations))
+    withLatestFrom(this.store.select(getSelectedPlatform)),
+    mergeMap((value: [Station, Platform]) => this.platformService.importStations(value[1], value[0]))
+    
+    map((station: Station) => new PlatformAction.ImportStationSuccessAction(station)),
+    catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))))
+  );
+
+    /*
+    @Effect()
+    importStation$: Observable<Action> = this.actions$.ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION).pipe(
+    map((action: PlatformAction.ImportStationAction) => action.payload),
+    mergeMap((stations: any) => this.csv2jsonService.csv2("station", stations)),
     withLatestFrom(this.store.select(getSelectedPlatform)),
     mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
     map((station: Station) => new PlatformAction.ImportStationSuccessAction(station)),
     catchError(error => of(new PlatformAction.AddPlatformFailAction(error)))
-  );
+  );*/
 
   @Effect()
   checkStationCsv$: Observable<Action> = this.actions$
@@ -352,10 +370,20 @@ export class PlatformEffects {
   );
 
   @Effect()
-  importOrRemoveZoneSuccess$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS, PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS)
+  importZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS)
     .pipe(
-      map((action: PlatformAction.ImportZoneSuccessAction | PlatformAction.RemoveZoneSuccessAction) => action.payload),
+      map((action: PlatformAction.ImportZoneSuccessAction) => action.payload),
+      mergeMap((zones: Zone[]) => this.router.navigate(["/platform/" + zones[0].codePlatform + "/zones"])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
+
+  @Effect()
+  removeZoneSuccess$: Observable<Action> = this.actions$
+    .ofType(PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS)
+    .pipe(
+      map((action: PlatformAction.RemoveZoneSuccessAction) => action.payload),
       mergeMap((zone: Zone) => this.router.navigate(["/platform/" + zone.codePlatform + "/zones"])),
       delay(3000),
       map(() => new PlatformAction.RemoveMsgAction())
@@ -427,6 +455,7 @@ export class PlatformEffects {
     )
     .pipe(
       map((action: PlatformAction.ImportStationSuccessAction | PlatformAction.RemoveStationSuccessAction) => action.payload),
+      tap(() => new LoaderAction.LoadingAction()),
       mergeMap((station: Station) => this.router.navigate(["/platform/" + station.codePlatform])),
       delay(3000),
       map(() => new PlatformAction.RemoveMsgAction())
@@ -460,6 +489,7 @@ export class PlatformEffects {
     private store: Store<IAppState>,
     private router: Router,
     private platformService: PlatformService,
-    private csv2jsonService: Csv2JsonService
+    private csv2jsonService: Csv2JsonService,
+    private geojsonService: GeojsonService
   ) {}
 }

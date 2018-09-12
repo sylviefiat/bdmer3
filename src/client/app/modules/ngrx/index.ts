@@ -32,7 +32,7 @@ import { ActionReducer, combineReducers, ActionReducerMap } from '@ngrx/store';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-import { IAppInitState, appInitialState, appInitReducer, getServicesBaseUrl, getPrefixDB } from '../core/index';
+import { IAppInitState, appInitialState, appInitReducer, ILoaderState, loaderInitialState, loaderReducer, getServicesBaseUrl, getPrefixDB, getIsLoaderLoading } from '../core/index';
 import { IMultilingualState, multilingualInitialState, multilingualReducer, getLang } from '../i18n/index';
 import { IMainState, mainInitialState, reducer, getNames} from '../main/index';
 import { IAuthState, authInitialState, ILoginPageState, loginPageInitialState, authReducer, loginPageReducer, getLoggedIn, getPending, getError, getRole, getUser, getCountry, getURL, getSessionLoaded, getRoleIsAdmin} from '../auth/index';
@@ -51,6 +51,7 @@ import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCou
  */
 export interface IAppState {
   app: IAppInitState;
+  loader: ILoaderState;
   i18n: IMultilingualState;
   main: IMainState;
   auth: IAuthState;
@@ -71,6 +72,7 @@ export interface IAppState {
  */
 export const AppReducer: ActionReducerMap<IAppState, any> = {
   app: appInitReducer,
+  loader: loaderReducer,
   i18n: multilingualReducer,
   main: reducer,
   auth: authReducer,
@@ -84,6 +86,7 @@ export const AppReducer: ActionReducerMap<IAppState, any> = {
 
 export const initialState: IAppState = {
   app: appInitialState,
+  loader: loaderInitialState,
   i18n: multilingualInitialState,
   main: mainInitialState,
   auth: authInitialState,
@@ -111,6 +114,8 @@ export const initialState: IAppState = {
 }*/
 export const getAppInitState = (state:IAppState) => state.app;
 
+export const getLoaderState = (state:IAppState) => state.loader;
+
 export const getMultilingualState = (state:IAppState) => state.i18n;
 
 export const getNameListState = (state:IAppState) => state.main;
@@ -134,6 +139,8 @@ export const getAppState = (state:IAppState) => state;
 // init app
 export const getServiceUrl : any = compose(getServicesBaseUrl,getAppInitState);
 export const getPrefixDatabase : any = compose(getPrefixDB,getAppInitState);
+// loader
+export const isLoading : any = compose(getIsLoaderLoading,getLoaderState);
 // i18n
 export const getLangues: any = compose(getLang, getMultilingualState);
 export const getListNames: any = compose(getNames, getNameListState);

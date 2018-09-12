@@ -99,11 +99,6 @@ export class PlatformService {
   }
 
   editZone(zone: Zone, platform: Platform): Observable<Zone> {
-    //var url = this.mapStaticService.googleMapUrl(zone.geometry["coordinates"])
-
-    /*this.mapStaticService.staticMapToB64(url).then(function(data){
-      zone.staticmap = data.toString();
-    })*/
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -115,8 +110,27 @@ export class PlatformService {
         this.currentPlatform = of(pt);
         return from(this.db.put(pt));
       }),
-      filter((response: ResponsePDB) => response.ok),
+      filter((response: ResponsePDB) => {console.log(response);return response.ok;}),
       mergeMap(response => of(zone))
+    );
+  }
+
+  importZones(zones: Zone[], platform: Platform): Observable<Zone[]> {
+    return this.getPlatform(platform.code).pipe(
+      filter(platform => platform !== null),
+      mergeMap(pt => {
+        this.currentPlatform = of(pt);
+        for(let zone of zones){
+          if (!zone.codePlatform) zone.codePlatform = platform.code;
+          if (!pt.zones) pt.zones = [];
+          if (!pt.stations) pt.stations = [];
+          if (!zone.zonePreferences) zone.zonePreferences = [];
+          pt.zones = [...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];                  
+        }
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(zones)) 
     );
   }
 
@@ -158,6 +172,26 @@ export class PlatformService {
       }),
       filter((response: ResponsePDB) => response.ok),
       mergeMap(response => of(survey))
+    );
+  }
+
+  importSurveys(platform: Platform, surveys: Survey[]): Observable<Survey[]> {
+    let msg = this.translate.instant("IMPORT_ERROR_SURVEY");
+
+    if (platform.code !== surveys[0].codePlatform) return throwError(msg.IMPORT_ERROR_SURVEY);
+    return this.getPlatform(platform.code).pipe(
+      filter(platform => platform !== null),
+      mergeMap(pt => {
+        this.currentPlatform = of(pt);
+        for(let survey of surveys){
+          if (!survey.counts) survey.counts = [];
+          survey.codeCountry = pt.codeCountry;
+          pt.surveys = [...pt.surveys.filter(c => c.code !== survey.code), survey];
+        }
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(surveys))
     );
   }
 

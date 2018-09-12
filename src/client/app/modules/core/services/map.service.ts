@@ -59,7 +59,13 @@ export class MapService {
         var bnd = new LngLatBounds();
         var fc: Turf.FeatureCollection = featureCollection.features
             .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
-            .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi') > -1 ? feature.geometry.coordinates[0][0] : feature.geometry.coordinates[0]));
+            .forEach((feature) => {
+                try {
+                    return bnd.extend(feature.geometry.type.indexOf('Multi') > -1 ? feature.geometry.coordinates[0][0] : feature.geometry.coordinates[0])
+                } catch(e){
+                    return bnd;
+                }
+            });
         return this.checkBounds(bnd);
     }
 

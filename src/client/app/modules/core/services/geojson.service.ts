@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
 import * as togeojson from "@mapbox/togeojson";
 import * as area from "@mapbox/geojson-area";
+import { mergeMap } from "rxjs/operators";
 
 import { NameRefactorService } from "./nameRefactor.service";
 import { Platform } from "../../datas/models/platform";
+import { Observable, from, of } from "rxjs";
 
 @Injectable()
 export class GeojsonService {
-  constructor(private nameRefactorService: NameRefactorService) {}
+  constructor(private nameRefactorService: NameRefactorService) { }
 
   kmlToGeoJson(kml, platform) {
     const self = this;
@@ -24,12 +26,12 @@ export class GeojsonService {
           delete geojson[i].properties["styleHash"];
           delete geojson[i].properties["styleMapHash"];
           delete geojson[i].properties["styleUrl"];
-
+          let name = geojson[i].properties.name ? geojson[i].properties.name : (geojson[i].properties.Name ? geojson[i].properties.Name : i);
           geojson[i].properties.code =
             platform.code +
             "_" +
             self.nameRefactorService
-              .convertAccent(geojson[i].properties.name)
+              .convertAccent(name)
               .split(" ")
               .join("-")
               .replace(/[^a-zA-Z0-9]/g, "");
@@ -38,10 +40,22 @@ export class GeojsonService {
 
           geojson[i].properties.surface = parseInt(surface.toString().split(".")["0"]);
         }
-
         resolve(geojson);
       };
     });
   }
+
+  /*kml2(kml, platform): Observable<any> {
+    return Observable.create(observable => 
+      this.kmlToGeoJson(kml,platform)
+    )
+      .pipe(
+        mergeMap((data,index) => {
+          console.log(data);
+          return of(data).toArray();
+      })
+    );
+  }*/
+
 }
 

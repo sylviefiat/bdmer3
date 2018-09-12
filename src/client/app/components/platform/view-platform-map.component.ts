@@ -293,20 +293,6 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
     );
   }
 
-  checkBounds(bounds: LngLatBounds) {
-    if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
-      let tmp = bounds.getSouthWest().lng;
-      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
-      bounds.setNorthEast(new LngLat(tmp, bounds.getNorthEast().lat));
-    }
-    if (bounds.getNorthEast().lat < bounds.getSouthWest().lat) {
-      let tmp = bounds.getSouthWest().lat;
-      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng, bounds.getNorthEast().lat));
-      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng, tmp));
-    }
-    return bounds;
-  }
-
   showPopupStation(evt: MapMouseEvent) {
     this.selectedStation = (<any>evt).features[0];
   }

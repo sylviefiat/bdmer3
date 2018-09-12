@@ -1,5 +1,6 @@
 
 import { AppComponent } from './app.component';
+import { LoaderComponent } from './loader.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AboutComponent } from './about/about.component';
@@ -44,6 +45,7 @@ export const APP_COMPONENTS: any[] = [
   ...ANALYSE_COMPONENTS,
   ...GLOBAL_IMPORT_COMPONENTS,
   AppComponent,
+  LoaderComponent,
   NavbarComponent,
   ToolbarComponent,
   AboutComponent,
@@ -70,6 +72,7 @@ export const APP_COMPONENTS: any[] = [
 ];
 
 export * from './app.component';
+export * from './loader.component';
 export * from './navbar/navbar.component';
 export * from './toolbar/toolbar.component';
 export * from './about/about.component';

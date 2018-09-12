@@ -300,7 +300,7 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
     if (this.geojsons) {
       this.reset();
       this.checkZoneValid(this.geojsons);
-      this.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
+      this.bounds = MapService.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
     }
   }
 
@@ -309,26 +309,29 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
     this.newZonesPreviewError = { features: [], type: "FeatureCollection" };
   }
 
+  zoomOnCountry(countryCode: string) {
+    this.bounds = MapService.zoomToCountries([this.markerCountry.lngLat]);
+  }
+
   checkZoneValid(zonesCheck) {
     for (let zc of zonesCheck) {
       this.platform.zones.map(zone => {
-        if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zc.geometry.coordinates))) {
-          this.zoneIntersect.emit(true);
+        if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zc.geometry.coordinates))) {          
           this.newZonesPreviewError.features.push(zc);
           zonesCheck.splice(zc, 1);
+          return this.zoneIntersect.emit('error');
         }
       });
     }
-
     this.newZonesPreviewValid.features = zonesCheck;
+    return this.zoneIntersect.emit('none');
   }
 
   addZone(geojsons) {
-    this.zoomToZones(geojsons);
-    console.log(geojsons);
+    MapService.zoomToZones(geojsons);
     for (let geojson of geojsons) {
       var bnd = new LngLatBounds();
-      this.bounds = this.checkBounds(bnd.extend(geojson.geometry.coordinates[0]));
+      this.bounds = MapService.checkBounds(bnd.extend(geojson.geometry.coordinates[0]));
     }
   }
 
@@ -388,30 +391,6 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
     }
   }
 
-  zoomToCountries(coordinates): LngLatBounds {
-    return coordinates.reduce((bnd, coord) => {
-      return bnd.extend(<any>coord);
-    }, new LngLatBounds(coordinates[0], coordinates[0]));
-  }
-
-  zoomToZones(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features
-      .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
-      .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomToStations(featureCollection) {
-    var bnd = new LngLatBounds();
-    var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates));
-    this.bounds = this.checkBounds(bnd);
-  }
-
-  zoomOnCountry(countryCode: string) {
-    this.bounds = this.zoomToCountries([this.markerCountry.lngLat]);
-  }
-
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
     let lz =  Turf.featureCollection(
@@ -419,32 +398,16 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
           .filter(zone=> zone!==null)
           .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
     this.layerZones$ = of(lz);
-    this.zoomToZones(lz);
+    MapService.zoomToZones(lz);
   }
 
   setStations(platform: Platform) {
     this.stations = platform.stations;
-    this.layerStations$ = of(
-      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
-    );
-    this.zoomToStations(
-      Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
-    );
+    let fc = Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+    this.layerStations$ = of(fc);
+    MapService.zoomToStations(fc);
   }
 
-  checkBounds(bounds: LngLatBounds) {
-    if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
-      let tmp = bounds.getSouthWest().lng;
-      bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
-      bounds.setNorthEast(new LngLat(tmp, bounds.getNorthEast().lat));
-    }
-    if (bounds.getNorthEast().lat < bounds.getSouthWest().lat) {
-      let tmp = bounds.getSouthWest().lat;
-      bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng, bounds.getNorthEast().lat));
-      bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng, tmp));
-    }
-    return bounds;
-  }
 
   showPopupStation(evt: MapMouseEvent) {
     this.selectedStation = (<any>evt).features[0];
