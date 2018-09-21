@@ -74,7 +74,7 @@ export namespace SpeciesAction {
   export class ImportSpeciesSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_SPECIES_SUCCESS;
 
-    constructor(public payload: any) {}
+    constructor(public payload: Species[]) {}
   }
 
   /**

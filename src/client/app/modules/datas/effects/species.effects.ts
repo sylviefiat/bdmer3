@@ -39,8 +39,8 @@ export class SpeciesEffects {
   importSpeciesToList$: Observable<Action> = this.actions$.ofType<SpeciesAction.ImportSpeciesAction>(SpeciesAction.ActionTypes.IMPORT_SPECIES).pipe(
     map((action: SpeciesAction.ImportSpeciesAction) => action.payload),
     mergeMap(speciesCsv => this.csv2jsonService.csv2("species", speciesCsv)),
-    mergeMap(species => this.speciesService.editSpecies(species)),
-    map((species: Species) => new SpeciesAction.ImportSpeciesSuccessAction(species)),
+    mergeMap((species:Species[]) => this.speciesService.importSpecies(species)),
+    map((species: Species[]) => new SpeciesAction.ImportSpeciesSuccessAction(species)),
     catchError(error => of(new SpeciesAction.AddSpeciesFailAction(error)))
   );
 

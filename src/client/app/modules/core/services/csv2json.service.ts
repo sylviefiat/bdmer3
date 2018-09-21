@@ -518,7 +518,7 @@ export class Csv2JsonService {
                             if (sp.length < 2) break;
                             let qua = data[j].split(",");
                             for (let q of qua) {
-                                if(!count.quantities){
+                                if (!count.quantities) {
                                     count.quantities = [];
                                 }
                                 count.quantities.push({ codeSpecies: sp, quantity: data[j] });
@@ -664,54 +664,50 @@ export class Csv2JsonService {
         });
     }
 
-    csv2(type: string, csvFile: any, species?: Species[]): Observable<any[]> {
-        return Observable.create(observable => {
-            this.papa.parse(csvFile, {
-                /*delimiter: function(csvFile){
-                                return ",";
-                            },*/
+    convertData(type: string, data: any, species?: Species[]): any[] {
+        let res: any = [];
+        switch (type) {
+            case "species":
+                res = this.extractSpeciesData(data);
+                break;
+            case "platform":
+                res = this.extractPlatformData(data);
+                break;
+            case "zone":
+                res = data;
+                break;
+            case "survey":
+                res = this.extractSurveyData(data);
+                break;
+            case "zonePref":
+                res = this.extractZonePrefData(data, species);
+                break;
+            case "station":
+                res = this.extractStationData(data);
+                break;
+            case "count":
+                res = this.extractCountData(data);
+                break;
+            default:
+                // code...
+                break;
+        }
+        return res;
+    }
+
+
+    csv2(type: string, csvFile: any, species?: Species[]) {
+        const self = this;
+        return new Promise(function(resolve, reject) {
+            self.papa.parse(csvFile, {
                 skipEmptyLines: true,
                 download: true,
                 complete: function(results) {
-                    if (!results.data[0].indexOf('code_species'))
-                        throw new Error('Wrong CSV File Missing mandatory "code" column');
-                    observable.next(results);
-                    observable.complete();
+                    let res = results ? (species ? self.convertData(type, results, species) : self.convertData(type, results)) : [];
+                    resolve(res);
                 }
-            });
-        })
-            .pipe(
-                mergeMap(data => {
-                    //console.log(data);
-                    let res;
-                    switch (type) {
-                        case "species":
-                            res = this.extractSpeciesData(data);
-                            break;
-                        case "platform":
-                            res = this.extractPlatformData(data);
-                            break;
-                        case "zone":
-                            res = data;
-                            break;
-                        case "survey":
-                            res = this.extractSurveyData(data);
-                            break;
-                        case "zonePref":
-                            res = this.extractZonePrefData(data, species);
-                            break;
-                        case "station":
-                            res = this.extractStationData(data);
-                            break;
-                        case "count":
-                            res = this.extractCountData(data);
-                            break;
-                        default:
-                            // code...
-                            break;
-                    }
-                    //console.log(res);
-                    return res;
-                }));
+            })
+
+        });
     }
 }

@@ -9,6 +9,7 @@ export interface Platform {
   zones: Zone[];
   stations: Station[];
   surveys: Survey[];
+  error?: string;
 }
 
 export interface Point {
@@ -41,6 +42,7 @@ export interface Station {
     geometry: Point;
     properties: StationProperties;
     codePlatform: string;
+    error?:string;
 }
 
 export interface StationProperties {
@@ -69,6 +71,7 @@ export interface Survey {
     description: string;
     codeCountry: string;
     counts: Count[];
+    error?:string;
 }
 
 export interface Count {
@@ -80,6 +83,7 @@ export interface Count {
     monospecies?: boolean;
     quantities?: Quantity[];
     mesures?: Mesure[];
+    error?:string;
 }
 
 export interface Quantity {

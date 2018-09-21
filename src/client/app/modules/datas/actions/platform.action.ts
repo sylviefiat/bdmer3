@@ -34,6 +34,7 @@ export namespace PlatformAction {
     REMOVE_ALL_ZONE_FAIL: string;
     ADD_SURVEY: string;
     ADD_SURVEY_SUCCESS: string;
+    ADD_SURVEY_FAIL: string;
     ADD_PENDING_SURVEY: string;
     ADD_PENDING_SURVEY_SUCCESS: string;
     ADD_PENDING_SURVEY_FAIL: string;
@@ -50,6 +51,7 @@ export namespace PlatformAction {
     REMOVE_SURVEY_FAIL: string;
     ADD_STATION: string;
     ADD_STATION_SUCCESS: string;
+    ADD_STATION_FAIL: string;
     ADD_PENDING_STATION: string;
     ADD_PENDING_STATION_SUCCESS: string;
     ADD_PENDING_STATION_FAIL: string;
@@ -66,6 +68,7 @@ export namespace PlatformAction {
     REMOVE_STATION_FAIL: string;
     ADD_ZONE_PREF: string;
     ADD_ZONE_PREF_SUCCESS: string;
+    ADD_ZONE_PREF_FAIL: string;
     IMPORT_ZONE_PREF: string;
     IMPORT_ZONE_PREF_SUCCESS: string;
     CHECK_ZONE_PREF_CSV_FILE: string;
@@ -76,6 +79,7 @@ export namespace PlatformAction {
     REMOVE_ZONE_PREF_FAIL: string;
     ADD_COUNT: string;
     ADD_COUNT_SUCCESS: string;
+    ADD_COUNT_FAIL: string;
     IMPORT_COUNT: string;
     IMPORT_COUNT_SUCCESS: string;
     CHECK_COUNT_CSV_FILE: string;
@@ -125,6 +129,7 @@ export namespace PlatformAction {
     REMOVE_ALL_ZONE_FAIL: type(`${PLATFORM} Remove All Zone Fail`),
     ADD_STATION: type(`${PLATFORM} Add Station`),
     ADD_STATION_SUCCESS: type(`${PLATFORM} Add Station Success`),
+    ADD_STATION_FAIL: type(`${PLATFORM} Add Station Fail`),
     ADD_PENDING_STATION: type(`${PLATFORM} Add Pending Station`),
     ADD_PENDING_STATION_SUCCESS: type(`${PLATFORM} Add Pending Station Success`),
     ADD_PENDING_STATION_FAIL: type(`${PLATFORM} Add Pending Station Fail`),
@@ -141,6 +146,7 @@ export namespace PlatformAction {
     REMOVE_STATION_FAIL: type(`${PLATFORM} Remove Station Fail`),
     ADD_SURVEY: type(`${PLATFORM} Add Survey`),
     ADD_SURVEY_SUCCESS: type(`${PLATFORM} Add Survey Success`),
+    ADD_SURVEY_FAIL: type(`${PLATFORM} Add Survey Fail`),
     ADD_PENDING_SURVEY: type(`${PLATFORM} Add Pending Survey`),
     ADD_PENDING_SURVEY_SUCCESS: type(`${PLATFORM} Add Pending Survey Success`),
     ADD_PENDING_SURVEY_FAIL: type(`${PLATFORM} Add Pending Survey Fail`),
@@ -157,6 +163,7 @@ export namespace PlatformAction {
     REMOVE_SURVEY_FAIL: type(`${PLATFORM} Remove Survey Fail`),
     ADD_ZONE_PREF: type(`${PLATFORM} Add Zone Preference`),
     ADD_ZONE_PREF_SUCCESS: type(`${PLATFORM} Add Zone Preference Success`),
+    ADD_ZONE_PREF_FAIL: type(`${PLATFORM} Add Zone Preference Fail`),
     IMPORT_ZONE_PREF: type(`${PLATFORM} Import Zone Preference`),
     IMPORT_ZONE_PREF_SUCCESS: type(`${PLATFORM} Import Zone Preference Success`),
     CHECK_ZONE_PREF_CSV_FILE: type(`${PLATFORM} Check Zone Preference Csv file`),
@@ -167,6 +174,7 @@ export namespace PlatformAction {
     REMOVE_ZONE_PREF_FAIL: type(`${PLATFORM} Remove Zone Preference Fail`),
     ADD_COUNT: type(`${PLATFORM} Add Count`),
     ADD_COUNT_SUCCESS: type(`${PLATFORM} Add Count Success`),
+    ADD_COUNT_FAIL: type(`${PLATFORM} Add Count Fail`),
     IMPORT_COUNT: type(`${PLATFORM} Import Count`),
     IMPORT_COUNT_SUCCESS: type(`${PLATFORM} Import Count Success`),
     CHECK_COUNT_CSV_FILE: type(`${PLATFORM} Check Count Csv file`),
@@ -218,7 +226,7 @@ export namespace PlatformAction {
   export class ImportPlatformSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_PLATFORM_SUCCESS;
 
-    constructor(public payload: Platform) {}
+    constructor(public payload: Platform[]) {}
   }
 
   export class CheckPlatformCsvFile implements Action {
@@ -230,7 +238,7 @@ export namespace PlatformAction {
   export class CheckPlatformAddErrorAction implements Action {
     readonly type = ActionTypes.CHECK_PLATFORM_ADD_ERROR;
 
-    constructor(public payload: string) {}
+    constructor(public payload: string[]) {}
   }
 
   export class CheckPlatformSuccessAction implements Action {
@@ -366,6 +374,12 @@ export namespace PlatformAction {
     constructor(public payload: ZonePreference) {}
   }
 
+  export class AddZonePrefFailAction implements Action {
+    readonly type = ActionTypes.ADD_ZONE_PREF_FAIL;
+
+    constructor(public payload: Platform) {}
+  }
+
   export class ImportZonePrefAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_PREF;
 
@@ -375,7 +389,7 @@ export namespace PlatformAction {
   export class ImportZonePrefSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_ZONE_PREF_SUCCESS;
 
-    constructor(public payload: ZonePreference) {}
+    constructor(public payload: ZonePreference[]) {}
   }
 
   export class CheckZonePrefCsvFile implements Action {
@@ -430,6 +444,12 @@ export namespace PlatformAction {
     readonly type = ActionTypes.ADD_SURVEY_SUCCESS;
 
     constructor(public payload: Survey) {}
+  }
+
+  export class AddSurveyFailAction implements Action {
+    readonly type = ActionTypes.ADD_SURVEY_FAIL;
+
+    constructor(public payload: Platform) {}
   }
 
   export class AddPendingSurveyAction implements Action {
@@ -534,6 +554,12 @@ export namespace PlatformAction {
     constructor(public payload: Station) {}
   }
 
+  export class AddStationFailAction implements Action {
+    readonly type = ActionTypes.ADD_STATION_FAIL;
+
+    constructor(public payload: Platform) {}
+  }
+
   export class AddPendingStationAction implements Action {
     readonly type = ActionTypes.ADD_PENDING_STATION;
 
@@ -561,7 +587,7 @@ export namespace PlatformAction {
   export class ImportStationSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_STATION_SUCCESS;
 
-    constructor(public payload: Station) {}
+    constructor(public payload: Station[]) {}
   }
 
   export class CheckStationCsvFile implements Action {
@@ -573,7 +599,7 @@ export namespace PlatformAction {
   export class CheckStationAddErrorAction implements Action {
     readonly type = ActionTypes.CHECK_STATION_ADD_ERROR;
 
-    constructor(public payload: string) {}
+    constructor(public payload: string[]) {}
   }
 
   export class CheckStationSuccessAction implements Action {
@@ -636,6 +662,12 @@ export namespace PlatformAction {
     constructor(public payload: Count) {}
   }
 
+  export class AddCountFailAction implements Action {
+    readonly type = ActionTypes.ADD_COUNT_FAIL;
+
+    constructor(public payload: Platform) {}
+  }
+
   export class ImportCountAction implements Action {
     readonly type = ActionTypes.IMPORT_COUNT;
 
@@ -645,7 +677,7 @@ export namespace PlatformAction {
   export class ImportCountSuccessAction implements Action {
     readonly type = ActionTypes.IMPORT_COUNT_SUCCESS;
 
-    constructor(public payload: Count) {}
+    constructor(public payload: Count[]) {}
   }
 
   export class CheckCountCsvFile implements Action {
@@ -657,7 +689,7 @@ export namespace PlatformAction {
   export class CheckCountAddErrorAction implements Action {
     readonly type = ActionTypes.CHECK_COUNT_ADD_ERROR;
 
-    constructor(public payload: string) {}
+    constructor(public payload: string[]) {}
   }
 
   export class CheckCountSuccessAction implements Action {
@@ -763,6 +795,7 @@ export namespace PlatformAction {
     | RemovePlatformCountryFailAction
     | AddZoneAction
     | AddZoneSuccessAction
+    | AddZoneFailAction
     | ImportZoneAction
     | ImportZoneSuccessAction
     | RemoveZoneAction
@@ -773,6 +806,7 @@ export namespace PlatformAction {
     | RemoveAllZoneFailAction
     | AddStationAction
     | AddStationSuccessAction
+    | AddStationFailAction
     | AddPendingStationAction
     | AddPendingStationSuccessAction
     | AddPendingStationFailAction
@@ -789,6 +823,7 @@ export namespace PlatformAction {
     | RemoveStationFailAction
     | AddSurveyAction
     | AddSurveySuccessAction
+    | AddSurveyFailAction
     | AddPendingSurveyAction
     | AddPendingSurveySuccessAction
     | AddPendingSurveyFailAction
@@ -802,6 +837,7 @@ export namespace PlatformAction {
     | RemoveSurveyFailAction
     | AddZonePrefAction
     | AddZonePrefSuccessAction
+    | AddZonePrefFailAction
     | ImportZonePrefAction
     | ImportZonePrefSuccessAction
     | RemoveZonePrefAction
@@ -809,6 +845,7 @@ export namespace PlatformAction {
     | RemoveZonePrefFailAction
     | AddCountAction
     | AddCountSuccessAction
+    | AddCountFailAction
     | ImportCountAction
     | ImportCountSuccessAction
     | CheckCountCsvFile

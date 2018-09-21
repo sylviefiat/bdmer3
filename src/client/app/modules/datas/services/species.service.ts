@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from "@angular/core";
-import { Observable, from, pipe, of } from "rxjs";
+import { Observable, from, pipe, of, combineLatest } from "rxjs";
 import { map, filter, catchError, mergeMap } from "rxjs/operators";
 
 import * as PouchDB from "pouchdb";
@@ -44,9 +44,9 @@ export class SpeciesService {
     );
   }
 
-  importSpecies(species: Species[]): Observable<Observable<Species>> {
+  importSpecies(species: Species[]): Observable<Species[]> {
     console.log(species);
-    return of(species).map((sp, i) => this.addSpecies(sp[i]));
+    return combineLatest(species.map((sp) => this.editSpecies(sp)));
   }
 
   editSpecies(species: Species): Observable<Species> {

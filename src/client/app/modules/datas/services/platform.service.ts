@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from "@angular/core";
-import { Observable, of, from, pipe, throwError } from "rxjs";
+import { Observable, of, from, pipe, throwError, combineLatest } from "rxjs";
 import { map, filter, mergeMap } from "rxjs/operators";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -50,20 +50,20 @@ export class PlatformService {
     );
   }
 
-  importPlatform(platform: Platform[]): Observable<Observable<Platform>> {
-    return of(platform).pipe(map((sp, i) => this.addPlatform(sp[i])));
+  importPlatforms(platforms: Platform[], country : Country): Observable<Platform[]> {
+    return combineLatest(platforms.map((platform) => this.editPlatform(platform,country)));
   }
 
-  importPlatformVerification(platform, countries: Country[]): Observable<string> {
+  importPlatformVerification(platforms: Platform[], countries: Country[]): Observable<string[]> {    
     let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_COUNTRY", "NOT_IN_DATABASE"]);
-
-    if (!platform.error) {
-      if (countries.filter(country => country.code === platform.codeCountry).length === 0)
-        return of(msg.PLATFORM + platform.code + msg.CANNOT_BE_INSERTED_COUNTRY + platform.codeCountry + msg.NOT_IN_DATABASE);
-    } else {
-      return of(platform);
+    let errors = [];
+    for(let platform of platforms){
+      if (!platform.error) {
+        if (countries.map(country => country.code).indexOf(platform.codeCountry) < 0)
+          errors.push(msg.PLATFORM + platform.code + msg.CANNOT_BE_INSERTED_COUNTRY + platform.codeCountry + msg.NOT_IN_DATABASE);
+      }
     }
-    return of("");
+    return of(errors);
   }
 
   editPlatform(platform: Platform, country: Country): Observable<Platform> {
@@ -110,7 +110,7 @@ export class PlatformService {
         this.currentPlatform = of(pt);
         return from(this.db.put(pt));
       }),
-      filter((response: ResponsePDB) => {console.log(response);return response.ok;}),
+      filter((response: ResponsePDB) => response.ok),
       mergeMap(response => of(zone))
     );
   }
@@ -195,32 +195,29 @@ export class PlatformService {
     );
   }
 
-  importSurveyVerification(survey, platform: Platform): Observable<string> {
+  importSurveyVerification(surveys: Survey[], platform: Platform): Observable<string[]> {
     let msg = this.translate.instant(['PLATFORM', 'SURFACE_NOT_NUMBER', 'SURFACE_NOT_DEFINED', 'NO_PLATFORM', 'FOR_COUNTRY', 'AND_COUNTRY', 'NOT_PART_OF_COUNTRY', 'NOT_IN_DATABASE']);
-    if (!survey.error) {
-      if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
-        return of(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
-      }
-
-      if (survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry) {
-        return of(msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
-      }
-
-      if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
-        return of(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
-      }
-
-      if(survey.surfaceStation){
-        if(!survey.surfaceStation.match(/^\d+(\.\d+)?$/)){
-          return of("Survey " + survey.code + msg.SURFACE_NOT_NUMBER);
+    let errors = [];
+    for(let survey of surveys){
+      if (!survey.error) {
+        if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
+          errors.push(msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
         }
-      }else{
-        return of("Survey " + survey.code + msg.SURFACE_NOT_DEFINED);
+
+        if (survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry) {
+          errors.push(msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
+        }
+
+        if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
+          errors.push(msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
+        }
+
+        if(!survey.surfaceStation){
+          errors.push("Survey " + survey.code + msg.SURFACE_NOT_DEFINED);
+        }
       }
-    } else {
-      return of(survey);
     }
-    return of("");
+    return of(errors);
   }
 
   removeSurvey(survey: Survey): Observable<Survey> {
@@ -263,17 +260,38 @@ export class PlatformService {
     );
   }
 
-  importStationVerification(station, platform: Platform): Observable<string> {
+  importStations(platform: Platform, stations: Station[]): Observable<Station[]> {
+    let msg = this.translate.instant("IMPORT_ERROR_STATION");
+
+    if (platform.code !== stations[0].codePlatform) return throwError(msg.IMPORT_ERROR_STATION);
+    return this.getPlatform(platform.code).pipe(
+      filter(platform => platform !== null),
+      mergeMap(pt => {
+        this.currentPlatform = of(pt);
+        for(let station of stations) {
+          station.codePlatform = pt.code;
+          pt.stations = [...pt.stations.filter(s => s.properties.code !== station.properties.code), station];
+        }
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(stations))
+    );
+  }
+
+  importStationVerification(stations: Station[], platform: Platform): Observable<String[]> {
     let msg = this.translate.instant(['STATION', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE']);
-    if(!station.error){
-      if (station.codePlatform === platform.code) {
-        return of('');
-      } else {
-        return of(msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+    let errors: String[] = [];
+    for(let station of stations){
+      if(!station.error){
+        if (station.codePlatform === platform.code) {
+          break;
+        } else {
+          errors.push(msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+        }
       }
-    }else{
-      return of(station);
     }
+    return of(errors);
   }
 
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
@@ -334,6 +352,27 @@ export class PlatformService {
     return of("");
   }
 
+  importZonePrefs(platform: Platform, zonePrefs: ZonePreference[]): Observable<ZonePreference[]> {
+    let msg = this.translate.instant("IMPORT_ERROR_ZONE_PREFERENCE");
+
+    if (platform.code !== zonePrefs[0].codePlatform) return throwError(msg.IMPORT_ERROR_ZONE_PREFERENCE);
+    return this.getPlatform(platform.code).pipe(
+      filter(platform => platform !== null),
+      mergeMap(pt => {
+        this.currentPlatform = of(pt);        
+        for(let zonePref of zonePrefs) {
+          zonePref.codePlatform = pt.code;
+          let zone = pt.zones.filter(z => z.properties.code === zonePref.codeZone)[0];
+          zone.zonePreferences = [...zone.zonePreferences.filter(zp => zp.code !== zonePref.code),zonePref];
+          pt.zones = [...pt.zones.filter(z => z.properties.code !== zone.properties.code), zone];
+        }
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(zonePrefs))
+    );
+  }
+
   removeZonePref(zonePref: ZonePreference): Observable<ZonePreference> {
     return this.getPlatform(zonePref.codePlatform).pipe(
       filter(platform => platform !== null),
@@ -372,55 +411,60 @@ export class PlatformService {
     );
   }
 
-  importCountVerification(count, platform, species): Observable<string> {
-    if (!count.error) {
-      let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
-      if (count.codePlatform === platform.code) {
-        if (platform.stations.length > 0) {
-          for (let i in platform.stations) {
-            if (count.codeStation === platform.stations[i].properties.code) {
-              if (platform.surveys.length > 0) {
-                for (let x in platform.surveys) {
-                  if (count.codeSurvey === platform.surveys[x].code) {
-                    if(count.mesures){
-                      if (species.length > 0) {
-                        for (let y in species) {
-                          if (count.mesures[0].codeSpecies === species[y].code) {
-                            return of("");
-                          }
-                          if (count.mesures[0].codeSpecies !== species[y].code && parseInt(y) === species.length - 1) {
-                            return of("CodeSpecies " + count.mesures[0].codeSpecies + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-                          }
-                        }
-                      } else {
-                        return of(msg.NO_SPECIES_IN_DB);
-                      }
-                    }else{
-                      return of("");
-                    }
-                  }
-                  if (count.codeSurvey !== platform.surveys[x].code && parseInt(x) === platform.surveys.length - 1) {
-                    return of("CodeSurvey " + count.codeSurvey + msg.CANNOT_BE_INSERTED_NOT_EXIST);
-                  }
-                }
-              } else {
-                return of(msg.NO_SURVEY_IN_DB + count.codePlatform);
-              }
-            }
-            if (count.codeStation !== platform.stations[i].properties.code && parseInt(i) === platform.stations.length - 1) {
-              return of("CodeStation " + count.codeStation + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+  importCountVerification(counts:Count[], platform: Platform, species: Species[]): Observable<string[]> {
+    let errors = [];
+    for(let count of counts){
+      if (!count.error) {
+        let msg = this.translate.instant(["PLATFORM", "CANNOT_BE_INSERTED_NOT_EXIST", "NO_STATION_IN_DB", "NO_SPECIES_IN_DB", "NO_SURVEY_IN_DB"]);
+        if(!species || species.length <= 0){
+          errors.push(msg.NO_SPECIES_IN_DB);
+        }
+        if(!platform){
+          errors.push(msg.PLATFORM + count.codePlatform + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+        } else {
+          if(!platform.stations || platform.stations.length<=0){
+            errors.push(msg.NO_STATION_IN_DB + count.codePlatform);
+          }
+          else if(platform.stations.filter(st => st.properties.code === count.codeStation).length <= 0){
+            errors.push("CodeStation " + count.codeStation + msg.CANNOT_BE_INSERTED_NOT_EXIST)
+          }
+          if(!platform.surveys || platform.surveys.length <= 0){
+            errors.push()
+          }
+          else if(platform.surveys.filter(sv => sv.code === count.codeSurvey).length <= 0){
+            errors.push("CodeSurvey " + count.codeSurvey + msg.CANNOT_BE_INSERTED_NOT_EXIST);
+          }
+          if(count.mesures && count.mesures.length >0){
+            for(let noSp of count.mesures.filter(m => species.map(sp => sp.code).indexOf(m.codeSpecies)<0)){
+              errors.push("CodeSpecies " + noSp + msg.CANNOT_BE_INSERTED_NOT_EXIST);
             }
           }
-        } else {
-          return of(msg.NO_STATION_IN_DB + count.codePlatform);
         }
-      } else {
-        return of(msg.PLATFORM + count.codePlatform + msg.CANNOT_BE_INSERTED_NOT_EXIST);
       }
-    } else {
-      return of(count);
     }
-    return of("");
+    return of(errors);
+  }
+
+  importCounts(platform: Platform, counts: Count[]): Observable<Count[]> {
+    let msg = this.translate.instant("IMPORT_ERROR_COUNT");
+
+    if (platform.code !== counts[0].codePlatform) return throwError(msg.IMPORT_ERROR_COUNT);
+    return this.getPlatform(platform.code).pipe(
+      filter(platform => platform !== null),
+      mergeMap(pt => {
+        this.currentPlatform = of(pt);
+        for(let count of counts) {
+          count.codePlatform = pt.code;
+          if(!count.quantities){count.quantities=[]}
+          if(!count.mesures){count.mesures=[]}
+          let survey = pt.surveys.filter(sv => sv.code === count.codeSurvey)[0];
+          pt.surveys = [...pt.surveys.filter(sv => sv.code !== survey.code), survey];
+        }
+        return from(this.db.put(pt));
+      }),
+      filter((response: ResponsePDB) => response.ok),
+      mergeMap(response => of(counts))
+    );
   }
 
   removeCount(count: Count): Observable<Count> {
