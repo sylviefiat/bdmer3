@@ -23,9 +23,10 @@ export function loginPageReducer(state = loginPageInitialState, action: AuthActi
     }
 
     case AuthAction.ActionTypes.LOGIN_FAILURE: {
+
       return {
         ...state,
-        error: action.payload,
+        error: action.payload ? action.payload : "LOGIN_SYSTEM_ERROR",
         pending: false,
       };
     }

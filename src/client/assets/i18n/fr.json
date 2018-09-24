@@ -458,5 +458,6 @@
   "NONE_ASTERIX":"Les données ne permettent pas de fournir une estimation de la biomasse",
   "GRAPH_PLATFORMS":"Résultats pour les plateformes sélectionnées",
   "RESULTS_PLATFORMS":"Evolution du stock sur les plateformes",
-  "RESULTS_ZONE":"Evolution du stock sur la zone "
+  "RESULTS_ZONE":"Evolution du stock sur la zone ",
+  "LOGIN_SYSTEM_ERROR":"Une erreur inconnue est survenue, contacter l'administrateur du site"
 }
