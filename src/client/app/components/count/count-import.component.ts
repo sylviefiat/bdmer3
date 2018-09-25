@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
+import { Observable, from } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 
 import { TranslateService } from "@ngx-translate/core";
@@ -34,7 +34,7 @@ export class CountImportComponent implements OnInit {
   @Output() err = new EventEmitter<string>();
   @Output() back = new EventEmitter();
 
-  newCounts$: Observable<Count>;
+  newCounts$: Observable<{}>;
   needHelp: boolean = false;
   type: string = "count";
   private csvFileType1: string;
@@ -79,7 +79,8 @@ export class CountImportComponent implements OnInit {
 
   check(csvFile) {
     this.store.dispatch(new PlatformAction.CheckCountCsvFile({csvFile: csvFile, type: this.type}));
-    this.newCounts$ = this.csv2JsonService.extractCountPreviewData(csvFile);
+    this.newCounts$ = from(this.csv2JsonService.csv2('count',csvFile));
+
   }
 
   send() {

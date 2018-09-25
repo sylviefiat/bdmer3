@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy, OnChanges } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
+import { Observable, from, Subscription } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
 import { Count, Platform } from "../../modules/datas/models/index";
 import { Csv2JsonService } from "../../modules/core/services/csv2json.service";
@@ -68,7 +67,7 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
   @Output() countFileEmitter = new EventEmitter<{ file: any; action: string }>();
   @Output() stayHereEmitter = new EventEmitter<string>();
 
-  newCounts$: Observable<Count>;
+  newCounts$: Observable<{}>;
   view: boolean = false;
   hasErr: boolean;
   hasIErr: boolean;
@@ -103,7 +102,7 @@ export class GlobalImportCountComponent implements OnInit, OnChanges, OnDestroy 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
       this.csvFileCount = csvFile.target.files[0];
       this.countFileEmitter.emit({ file: this.csvFileCount, action: "check" });
-      this.newCounts$ = this.csv2JsonService.extractCountPreviewData(this.csvFileCount);
+      this.newCounts$ = from(this.csv2JsonService.csv2('count',this.csvFileCount));
     }
   }
 

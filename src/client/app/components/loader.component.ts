@@ -25,6 +25,7 @@ import { IAppState,isLoading } from '../modules/ngrx/index';
       display: inline-block;
       width: 64px;
       height: 64px;
+      z-index: 100000;
     }
     .lds-dual-ring:after {
       content: " ";
@@ -36,6 +37,7 @@ import { IAppState,isLoading } from '../modules/ngrx/index';
       border: 5px solid #fff;
       border-color: #fff transparent #fff transparent;
       animation: lds-dual-ring 1.2s linear infinite;
+      z-index: 100000;
     }
     @keyframes lds-dual-ring {
       0% {

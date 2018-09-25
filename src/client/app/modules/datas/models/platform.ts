@@ -59,6 +59,7 @@ export interface ZonePreference {
     presence: string;
     infoSource: string;
     picture: string;
+    error?: string;
 }
 
 export interface Survey {

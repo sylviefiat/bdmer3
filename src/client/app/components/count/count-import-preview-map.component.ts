@@ -60,28 +60,6 @@ import { IAppState } from "../../modules/ngrx/index";
           (mouseEnter)="cursorStyle = 'pointer'"
           (mouseLeave)="cursorStyle = ''">
         </mgl-layer>
-        <mgl-layer
-          id="zonestext"
-          type="symbol"
-          source="layerZones"
-          [layout]="{
-            'text-field': '{code}',
-            'text-allow-overlap': true,
-            'text-anchor':'bottom',
-            'text-font': [
-              'DIN Offc Pro Italic',
-              'Arial Unicode MS Regular'
-            ],
-            'symbol-placement': 'point',
-            'symbol-avoid-edges': true,
-            'text-max-angle': 30,
-            'text-size': 12
-          }"
-          [paint]="{
-            'text-color': 'white'
-          }"
-        >
-        </mgl-layer>
       </mgl-geojson-source>
     </ng-container>
 
@@ -106,7 +84,7 @@ import { IAppState } from "../../modules/ngrx/index";
       </mgl-geojson-source>
     </ng-container>
 
-    <ng-container *ngIf=" (layerStationsCount$ | async) && isDisplayed('stations')">
+    <ng-container *ngIf=" (layerStationsCount$ | async)">
       <mgl-geojson-source
         id="layerStationsCount"
         [data]="(layerStationsCount$ | async)">
@@ -256,8 +234,6 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
   colorPreview: Object;
   markerCountry: any;
   zones: Zone[] = [];
-  newStationsPreviewInvalid: any[] = [];
-  newStationsPreviewValid: any[] = [];
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
   stationsCount: Station[] = [];
@@ -277,18 +253,9 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.importError.length > 0 || this.error !== null) {
-      this.reset();
-    } else {
-      if (this.newCounts && typeof this.newCounts !== "string") {
-        this.init();
-      }
+    if (!(this.importError.length > 0 || this.error !== null) && this.newCounts && typeof this.newCounts !== "string") {
+      this.init();
     }
-  }
-
-  reset() {
-    this.newStationsPreviewInvalid = [];
-    this.newStationsPreviewValid = [];
   }
 
   setMap(event) {
@@ -334,12 +301,14 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
 
   init() {
     if (this.countries.length > 0) {
+      this.stations = this.platform.stations;
       if (this.newCounts !== null && this.newCounts.length > 0) {
-        this.platform.stations.forEach(station => {
+        this.stations.forEach(station => {
           this.newCounts.forEach(count => {
             if (count.codeStation === station.properties.code) {
               if (!this.stationsCount.includes(station)) {
                 this.stationsCount.push(station);
+                this.stations = [...this.stations.filter(st => st.properties.code !== station.properties.code)];
               }
             }
           });
@@ -355,7 +324,7 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
       };
 
       if (this.platform.zones.length > 0) this.setZones(this.platform);
-      if (this.platform.stations.length > 0) this.setStations(this.platform);
+      if (this.stations.length > 0) this.setStations(this.stations);
       if (this.stationsCount.length > 0) this.setStationsCount(this.stationsCount);
     }
   }
@@ -367,9 +336,9 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
     this.bounds = MapService.zoomToZones(fc);
   }
 
-  setStations(platform: Platform) {
-    this.stations = this.platform.stations;
-    let fc = Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+  setStations(stations: Station[]) {
+    //this.stations = this.platform.stations;
+    let fc = Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     this.layerStations$ = of(fc);
     this.bounds = MapService.zoomToStations(fc);
   }

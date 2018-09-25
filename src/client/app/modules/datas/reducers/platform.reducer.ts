@@ -450,8 +450,9 @@ export function platformReducer(state: IPlatformState = platformInitialState, ac
       const platforms = state.entities.filter(platform => addedcounts[0].codePlatform !== platform._id);
       const modifiedPlatform = state.entities.filter(platform => addedcounts[0].codePlatform === platform._id)[0];
       for(let survey of modifiedPlatform.surveys){
-        if(addedcounts.filter(ac => ac.codeSurvey===survey.code).length > 0) {
-          survey.counts = [...survey.counts,...survey.counts.filter(c => addedcounts.filter(ac => ac.codeSurvey===survey.code).map(ac => ac.code).indexOf(c.code) >=0)];
+        let currCounts = addedcounts.filter(ac => ac.codeSurvey===survey.code);
+        if(currCounts.length > 0) {
+          survey.counts = [...survey.counts.filter(c => currCounts.map(d => d.code).indexOf(c.code)<0),...currCounts];
           modifiedPlatform.surveys = [...modifiedPlatform.surveys.filter(s => s.code !== survey.code),survey];
         }
       }

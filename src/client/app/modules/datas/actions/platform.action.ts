@@ -401,7 +401,7 @@ export namespace PlatformAction {
   export class CheckZonePrefAddErrorAction implements Action {
     readonly type = ActionTypes.CHECK_ZONE_PREF_ADD_ERROR;
 
-    constructor(public payload: string) {}
+    constructor(public payload: string[]) {}
   }
 
   export class CheckZonePrefSuccessAction implements Action {

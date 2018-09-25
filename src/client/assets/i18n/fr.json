@@ -447,7 +447,7 @@
   "QUANTITY":"Quantité",
   "IMPORT_COUNT_NO_MESURE": "Attention les comptages pour ce pays ne doivent pas contenir de colonne 'mesures' mais une colonne 'count' comportant le nombre d'individus enregistrés",
   "CSV_COUNT_TYPE1":"Exemple de CSV sans relation taille/poids",
-  "CSV_COUNT_TYPE2":"Exemple de CSV sans relation taille/poids",
+  "CSV_COUNT_TYPE2":"Exemple de CSV avec relation taille/poids",
   "COUNT_TYPE_SELECT":"Sélectionner le type de comptage (comptage simple ou avec mesures) : ",
   "COUNT_TYPE_QUANTITY":"Saisir des comptages d'espèces",
   "COUNT_TYPE_MESURE":"Saisir des mesures d'espèces",

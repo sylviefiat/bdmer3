@@ -85,8 +85,8 @@ export class PlatformEffects {
       map((action: PlatformAction.CheckZonePrefCsvFile) => action.payload),
       mergeMap((zonePref: any) => this.csv2jsonService.csv2("zonePref", zonePref)),
       withLatestFrom(this.store.select(getSelectedPlatform), this.store.select(getSpeciesInApp)),
-      mergeMap((value: [any, any, any]) => this.platformService.importZonePrefVerification(value[0], value[1], value[2])),
-      map((error: string) => new PlatformAction.CheckZonePrefAddErrorAction(error))
+      mergeMap((value: [ZonePreference[], any, any]) => this.platformService.importZonePrefVerification(value[0], value[1], value[2])),
+      map((errors: string[]) => new PlatformAction.CheckZonePrefAddErrorAction(errors))
     );
 
   @Effect()
@@ -501,8 +501,9 @@ export class PlatformEffects {
   importCountSuccess$: Observable<Action> = this.actions$
     .ofType<PlatformAction.ImportCountSuccessAction>(PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS)
     .pipe(
+      tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportCountSuccessAction) => action.payload),
-      mergeMap((counts: Count[]) => this.router.navigate([counts[0] ? "/survey/" + counts[0].codePlatform + "/" + counts[0].codeSurvey:""])),
+      mergeMap((counts: Count[]) => this.router.navigate([counts[0] ? "/platform/" + counts[0].codePlatform :""])),
       delay(3000),
       map(() => new PlatformAction.RemoveMsgAction())
     );
@@ -510,7 +511,7 @@ export class PlatformEffects {
   @Effect()
   removeCountSuccess$: Observable<Action> = this.actions$
     .ofType<PlatformAction.RemoveCountSuccessAction>(PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS)
-    .pipe(
+    .pipe(      
       map((action: PlatformAction.RemoveCountSuccessAction) => action.payload),
       mergeMap((count: Count) => this.router.navigate(["/survey/" + count.codePlatform + "/" + count.codeSurvey])),
       delay(3000),
