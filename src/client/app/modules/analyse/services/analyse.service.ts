@@ -18,6 +18,7 @@ export class AnalyseService {
     }
 
     static analyse(analyseData: Data): Results {
+        console.log(analyseData);
         let results: Results = { name: null, resultPerSurvey: [] };
         results.name = "ANALYSE BDMER " + new Date();
         let resultsSurveys: ResultSurvey[] = [];
@@ -48,6 +49,7 @@ export class AnalyseService {
             }
         }
         rsurvey.resultPerSpecies = [...resultsSpecies.sort((a:ResultSpecies,b:ResultSpecies)=> a.codeSpecies >= b.codeSpecies ? Number(1):Number(-1))];
+        console.log(rsurvey);
         return rsurvey;
     }
 
@@ -111,17 +113,19 @@ export class AnalyseService {
         //console.log(requiredDims);
         // tableau des mesures considérées
         let mesures = [];
+        let quantity = 0;
         for (let c of survey.counts.filter(c => c.codeStation === station.properties.code)) {
             // si la mesure est sur la bonne espèce et dans la taille considérée
             mesures = [...mesures, ...c.mesures.filter(m => m.codeSpecies === species.code
                 && ((requiredDims.longMin === 0 || m.long >= requiredDims.longMin) && (requiredDims.longMax === 0 || m.long <= requiredDims.longMax)))];
+            quantity = c.quantities.filter(q => q.codeSpecies === species.code)[0]?c.quantities.filter(q => q.codeSpecies === species.code)[0].quantity:0;
         }
         //console.log(mesures);
-        if (mesures.length === 0) {
+        if (mesures.length === 0 || quantity ===0) {
             return rstation;
         }
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
-        rstation.abundance = mesures.length;
+        rstation.abundance = mesures.length !==0 ? mesures.length : quantity;
         // ABONDANCE PER HECTARE STATION = ABONDANCE STATION x (10000 / SURFACE STATION)
         rstation.abundancePerHA = Number(rstation.abundance) * (10000 / Number(rstation.surface));
         // Pas de relation taille/poids = pas de calcul biomasse
@@ -134,7 +138,7 @@ export class AnalyseService {
             // BIOMASSE PER HECTARE STATION = BIOMASSE STATION x (10000 / SURFACE STATION)
             rstation.biomassPerHA = rstation.biomass * (10000 / rstation.surface);
         }
-        //console.log(rstation);
+        console.log(rstation);
         return rstation;
     }
 
@@ -185,6 +189,7 @@ export class AnalyseService {
             rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
             rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomass));
         }
+        //console.log(rzone);
         return rzone;
     }
 
@@ -216,6 +221,7 @@ export class AnalyseService {
             rplatform.varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
             rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
         }
+        console.log(rplatform);
         return rplatform;
     }
 

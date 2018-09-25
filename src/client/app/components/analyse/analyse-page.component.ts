@@ -15,6 +15,7 @@ import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { AnalyseAction } from '../../modules/analyse/actions/index';
+import { LoaderAction } from "../../modules/core/actions/index";
 
 
 @Component({
@@ -142,7 +143,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   startAnalyse(status: string) {
-    this.store.dispatch(new AnalyseAction.Analyse(status)); 
+    this.store.dispatch(new AnalyseAction.Redirect(status)); 
   }
 
 

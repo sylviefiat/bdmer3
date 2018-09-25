@@ -11,16 +11,24 @@ import { AnalyseAction } from '../actions/index';
 import { Data } from '../models/index';
 import { AnalyseService } from '../services/index';
 import { CountryAction } from '../../countries/actions/index';
+import { LoaderAction } from "../../core/actions/index";
 
 @Injectable()
 export class AnalyseEffects {
 
-  @Effect() analyse$ = this.actions$ 
+  @Effect() redirectToResults$ = this.actions$
+    .ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT)
+    .pipe(
+      tap(() => this.router.navigate(['/result'])),
+      map((action: AnalyseAction.Redirect) => new AnalyseAction.Analyse(action))
+    );
+
+  @Effect() analyse$ = this.actions$
     .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
     .pipe(
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
-      map((value: [string, Data]) => AnalyseService.analyse(value[1])),
+      tap((value: [string, Data]) => {console.log(value);return AnalyseService.analyse(value[1])}),
       map(result => new AnalyseAction.AnalyseSuccess(result)),
       catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
   );
@@ -35,7 +43,9 @@ export class AnalyseEffects {
 
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
     .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
-    .pipe(tap(() => this.router.navigate(['/result']))
+    .pipe(
+      tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
+      tap(() => this.router.navigate(['/result']))
   );
 
 

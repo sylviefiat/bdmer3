@@ -23,6 +23,7 @@ export namespace AnalyseAction {
     ANALYSE: string;
     ANALYSE_SUCCESS: string;
     ANALYSE_FAILURE: string;
+    REDIRECT: string;
   }
 
   export const ActionTypes: IAnalyseActions = {
@@ -38,7 +39,8 @@ export namespace AnalyseAction {
     SET_DEFAULT_COUNTRY : type('[Analyse] Set default country'),
     ANALYSE: type('[Analyse] Start analyse'),
     ANALYSE_SUCCESS : type('[Analyse] Analyse Success'),
-    ANALYSE_FAILURE : type('[Analyse] Analyse Failure')
+    ANALYSE_FAILURE : type('[Analyse] Analyse Failure'),
+    REDIRECT : type('[Analyse] Analyse redirection to results')
   }
 export class SelectCountry implements Action {
   readonly type = ActionTypes.SELECT_COUNTRY;
@@ -117,6 +119,11 @@ export class AnalyseFailure implements Action {
   constructor(public payload: any) {}
 }
 
+export class Redirect implements Action {
+  readonly type = ActionTypes.REDIRECT;
+  constructor(public payload: any) {} 
+}
+
 export type Actions =
   | SelectCountry
   | SelectPlatforms
@@ -130,5 +137,6 @@ export type Actions =
   | SetDefaultCountry
   | Analyse
   | AnalyseSuccess
-  | AnalyseFailure;
+  | AnalyseFailure
+  | Redirect;
 }

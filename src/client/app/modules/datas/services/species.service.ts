@@ -37,7 +37,6 @@ export class SpeciesService {
 
   addSpecies(species: Species): Observable<Species> {
     species._id = species.code;
-    console.log(species);
     return from(this.db.put(species)).pipe(
       filter((response: ResponsePDB) => response.ok),
       mergeMap(response => of(species))
@@ -45,13 +44,11 @@ export class SpeciesService {
   }
 
   importSpecies(species: Species[]): Observable<Species[]> {
-    console.log(species);
     return combineLatest(species.map((sp) => this.editSpecies(sp)));
   }
 
   editSpecies(species: Species): Observable<Species> {
     species._id = species.code;
-    console.log(species);
     return this.getSpecies(species.code).pipe(
       mergeMap(sp => {
         if (sp) {
