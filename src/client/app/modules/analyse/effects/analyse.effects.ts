@@ -1,14 +1,14 @@
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { defer, Observable, pipe, of } from 'rxjs';
+import { defer, Observable, pipe, of, from } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { catchError, map, withLatestFrom, tap, filter } from 'rxjs/operators';
+import { catchError, map, withLatestFrom, tap, filter, mergeMap, exhaustMap } from 'rxjs/operators';
 
 import { IAppState, getAnalyseData, getSelectedCountry } from '../../ngrx/index';
 import { AnalyseAction } from '../actions/index';
-import { Data } from '../models/index';
+import { Data, Results } from '../models/index';
 import { AnalyseService } from '../services/index';
 import { CountryAction } from '../../countries/actions/index';
 import { LoaderAction } from "../../core/actions/index";
@@ -19,17 +19,20 @@ export class AnalyseEffects {
   @Effect() redirectToResults$ = this.actions$
     .ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT)
     .pipe(
-      tap(() => this.router.navigate(['/result'])),
-      map((action: AnalyseAction.Redirect) => new AnalyseAction.Analyse(action))
+      exhaustMap(() => from(this.router.navigate(['/result']))),
+      filter(moved => {console.log(moved);return moved}),
+      map((moved) => {console.log(moved);return new AnalyseAction.Analyse("")})
     );
 
   @Effect() analyse$ = this.actions$
     .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
     .pipe(
+      tap(() => {console.log('/resulting');this.store.dispatch(new LoaderAction.LoadingAction())}),
+      tap(() => this.router.navigate(['/result'])),
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
-      tap((value: [string, Data]) => {console.log(value);return AnalyseService.analyse(value[1])}),
-      map(result => new AnalyseAction.AnalyseSuccess(result)),
+      mergeMap((value: [string, Data]) => {console.log(value);return this.analyseService.analyse(value[1])}),
+      map((result:Results) => {console.log(result);return new AnalyseAction.AnalyseSuccess(result)}),
       catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
   );
 
@@ -45,7 +48,7 @@ export class AnalyseEffects {
     .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
     .pipe(
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
-      tap(() => this.router.navigate(['/result']))
+      //tap(() => this.router.navigate(['/result']))
   );
 
 

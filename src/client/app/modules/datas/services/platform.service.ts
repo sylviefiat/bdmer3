@@ -444,7 +444,6 @@ export class PlatformService {
 
   importCounts(platform: Platform, counts: Count[]): Observable<Count[]> {
     let msg = this.translate.instant("IMPORT_ERROR_COUNT");
-    console.log(counts);
     if (platform.code !== counts[0].codePlatform) return throwError(msg.IMPORT_ERROR_COUNT);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
@@ -458,7 +457,6 @@ export class PlatformService {
           survey.counts = [...survey.counts.filter(c => c.code !== count.code),count];
           pt.surveys = [...pt.surveys.filter(sv => sv.code !== survey.code), survey];
         }
-        console.log(pt);
         return from(this.db.put(pt));
       }),
       filter((response: ResponsePDB) => response.ok),

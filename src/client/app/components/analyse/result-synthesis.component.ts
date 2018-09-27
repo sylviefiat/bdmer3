@@ -18,7 +18,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         <bc-result-map 
           [results]="results" 
           [analyseData]="analyseData"
-          [typeShow]="typeShow$ | async" 
+          [showBiom]="showBiom"
+          [typeShow]="typeShow$ | async"
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
@@ -29,6 +30,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
         <bc-result-filter 
           [species]="analyseData.usedSpecies" 
           [surveys]="analyseData.usedSurveys"
+          [showBiom]="showBiom"
           [typeShow]="typeShow$ | async" 
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
@@ -126,19 +128,21 @@ export class ResultSynthesisComponent implements OnInit {
     currentresultSurvey$: Observable<ResultSurvey>;
     selectedZone: number;
     sortedZoneList: Zone[];
+    showBiom: boolean;
 
     constructor() {
 
     }
 
     ngOnInit() {
-      this.typeShow$=of('B');
-      this.spShow$=of(this.results.resultPerSurvey[0].resultPerSpecies[0].codeSpecies);
-      this.surveyShow$=of(this.results.resultPerSurvey[0].codeSurvey);
-      this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.results.resultPerSurvey[0].codeSurvey)[0]);
+      this.typeShow$=of('A');
+      this.spShow$=of(this.analyseData.usedSpecies[0].code);
+      this.surveyShow$=of(this.analyseData.usedSurveys[0].code);
+      this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.analyseData.usedSurveys[0].code)[0]);
       this.showStations$=of(true);
       this.showZones$=of(false);
       this.selectedZone = 0;
+      this.showBiom = this.analyseData.usedMethod.method !== 'NONE';
       this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> z1.properties.code >= z2.properties.code? Number(1):Number(-1));
     }
 

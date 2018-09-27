@@ -519,7 +519,14 @@ export class Csv2JsonService {
                             if (!count.quantities) {
                                 count.quantities = [];
                             }
-                            count.quantities.push({ codeSpecies: sp, quantity: data[j] });
+                            let q;
+                            // if it is french format replace decimal separator "," to "."
+                            if (delimiter === Csv2JsonService.SEMICOLON) {
+                                q = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
+                            } else {
+                                q = data[j];
+                            }
+                            count.quantities.push({ codeSpecies: sp, quantity: q });
                             break;
                         case "mesures":
                             sp = data[headers.indexOf("codeSpecies")];

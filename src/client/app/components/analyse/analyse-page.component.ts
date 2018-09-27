@@ -143,7 +143,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   startAnalyse(status: string) {
-    this.store.dispatch(new AnalyseAction.Redirect(status)); 
+    this.store.dispatch(new AnalyseAction.Analyse(status)); 
   }
 
 

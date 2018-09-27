@@ -16,7 +16,7 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
         <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
         <p class="note">* {{'CLICK_ZONE' | translate}}</p>
         <h4>{{'TYPE' | translate}}</h4>
-        <mat-radio-group (change)="changeDisplay($event)">
+        <mat-radio-group *ngIf="showBiom" (change)="changeDisplay($event)">
           <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
           <mat-radio-button value="A" [checked]="typeShow==='A'">{{'DISPLAY_ABUNDANCE' | translate}}</mat-radio-button>
         </mat-radio-group>
@@ -69,6 +69,7 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
 export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Input() species: Species[];
   @Input() surveys: Survey[];
+  @Input() showBiom: boolean;
   @Input() typeShow : string;
   @Input() spShow: string;
   @Input() surveyShow: string;
@@ -93,8 +94,8 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
     this.surveys = this.surveys.sort((s1,s2)=>s1.code >= s2.code ? Number(1):Number(-1));
   }
 
-  changeDisplay(showAbundancy: any){
-    this.typeShow = showAbundancy.value;
+  changeDisplay(show: any){
+    this.typeShow = show.value;
     this.typeShowEmitter.emit(this.typeShow);
   }
 

@@ -93,12 +93,12 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     this.loading=false;
-    this.results$.map(r => {
+    /*this.results$.map(r => {
       console.log(r);
       if(!r){ 
         this.routerext.navigate(['analyse']);
       }
-    });
+    });*/
   }
 
 

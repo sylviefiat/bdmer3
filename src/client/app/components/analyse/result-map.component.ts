@@ -29,7 +29,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
             [data]="layerStations$ | async">
             
             <mgl-layer
-                *ngIf="typeShow==='A'"
+                *ngIf="(!showBiom) || (typeShow==='A')"
                 id="stationId_abun"
                 type="circle"
                 source="layerStations"
@@ -65,7 +65,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
             }">
             </mgl-layer>
             <mgl-layer
-                *ngIf="typeShow==='B'"
+                *ngIf="showBiom && typeShow==='B'"
                 id="stationId_biom"
                 type="circle"
                 source="layerStations"
@@ -99,9 +99,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
                       ]
                   }
             }"
-            (click)="selectStation($event)"
-                    (mouseEnter)="cursorStyle = 'pointer'"
-                    (mouseLeave)="cursorStyle = ''">            
+            (click)="selectStation($event)">            
             </mgl-layer>
              <mgl-popup *ngIf="selectedStation"
               [lngLat]="selectedStation.geometry?.coordinates">
@@ -116,7 +114,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
             id="layerZones"
             [data]="layerZones$ | async">
             <mgl-layer
-              *ngIf="typeShow==='A'"
+              *ngIf="(!showBiom) || (typeShow==='A')"
               id="zonesid_abun"
               type="fill"
               source="layerZones"
@@ -138,12 +136,10 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 'fill-opacity': 0.3,
                 'fill-outline-color': '#000'
                 }"
-              (click)="selectZone($event)"
-                    (mouseEnter)="cursorStyle = 'pointer'"
-                    (mouseLeave)="cursorStyle = ''">
+              (click)="selectZone($event)">
             </mgl-layer>
             <mgl-layer
-              *ngIf="typeShow==='B'"
+              *ngIf="showBiom && typeShow==='B'"
               id="zonesid_biom"
               type="fill"
               source="layerZones"
@@ -167,28 +163,10 @@ import { Results, Data } from '../../modules/analyse/models/index';
                 }"
               (click)="selectZone($event)">
             </mgl-layer>
-            <mgl-layer
-              id="zonestext"
-              type="symbol"
-              source="layerZones"
-              [layout]="{
-                'text-field': '{code}',
-                'text-allow-overlap': true,
-                'text-anchor':'bottom',
-                'text-font': [
-                  'DIN Offc Pro Italic',
-                  'Arial Unicode MS Regular'
-                ],
-                'symbol-placement': 'point',
-                'symbol-avoid-edges': true,
-                'text-max-angle': 30,
-                'text-size': 12
-              }"
-              [paint]="{
-                'text-color': 'white'
-              }"
-            >
-            </mgl-layer>
+            <mgl-popup *ngIf="selectedZone"
+              [lngLat]="MapService.getCoordinates(selectedZone)[0]">
+              <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span><br/>
+            </mgl-popup>
           </mgl-geojson-source>
         </ng-container>
       </mgl-map>
@@ -225,6 +203,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   @Input() surveyShow: string;
   @Input() showStations: boolean;
   @Input() showZones: boolean;
+  @Input() showBiom: boolean;
   @Output() zoneEmitter = new EventEmitter<string>();
   stations: any[] = [];
   zones: any[] = [];
@@ -235,6 +214,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   zoomMaxMap = 10;
   zoom: number = 9;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
+  selectedZone: GeoJSON.Feature<GeoJSON.Point> | null;
 
   constructor() {
 
@@ -349,8 +329,8 @@ export class ResultMapComponent implements OnInit, OnChanges {
   }
 
   selectZone(evt: MapMouseEvent){
-    let selected = (<any>evt).features[0];
-    this.zoneEmitter.emit(selected.properties.code);
+    this.selectedZone = (<any>evt).features[0];
+    this.zoneEmitter.emit(this.selectedZone.properties.code);
   }
 
 

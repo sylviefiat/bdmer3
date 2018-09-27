@@ -83,6 +83,7 @@ export function analyseReducer(state: IAnalyseState = analyseInitialState, actio
     }
 
     case AnalyseAction.ActionTypes.ANALYSE_SUCCESS: {
+      console.log(action.payload);
       return {
         ...state,
         result: action.payload,

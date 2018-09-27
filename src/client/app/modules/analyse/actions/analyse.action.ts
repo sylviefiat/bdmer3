@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Survey, Station } from '../../datas/models/platform';
 import { Species } from '../../datas/models/species';
-import { Method, DimensionsAnalyse } from '../models/analyse';
+import { Method, DimensionsAnalyse, Results } from '../models/analyse';
 import { type } from '../../core/utils/index';
   
 export namespace AnalyseAction {
@@ -110,7 +110,7 @@ export class Analyse implements Action {
 export class AnalyseSuccess implements Action {
   readonly type = ActionTypes.ANALYSE_SUCCESS;
 
-  constructor(public payload: any) {}
+  constructor(public payload: Results) {}
 }
 
 export class AnalyseFailure implements Action {
