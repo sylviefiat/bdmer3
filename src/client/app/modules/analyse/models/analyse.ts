@@ -55,6 +55,7 @@ export interface ResultStation {
 
 export interface ResultZone {
     codeZone: string;
+    codePlatform: string;
     surface: number,
     nbStrates: number;                 // nombre de strates = surface zone / surface moyenne station
     nbStations: number;                // nombre de stations considérées

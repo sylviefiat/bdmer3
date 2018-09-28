@@ -110,6 +110,7 @@ export class MapService {
         try {
             return Turf.booleanPointInPolygon(point.geometry.coordinates, polygon);
         } catch(e){
+            console.log(e);
             throw e;
             
         }

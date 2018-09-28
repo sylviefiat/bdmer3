@@ -82,7 +82,7 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.loading=true;
     this.analysing$ = this.store.select(isAnalysing);
     this.analysed$ = this.store.select(isAnalysed);
@@ -93,12 +93,12 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     this.loading=false;
-    /*this.results$.map(r => {
-      console.log(r);
-      if(!r){ 
-        this.routerext.navigate(['analyse']);
+    this.analyseData$.map(d => {
+      console.log(d);
+      if(!d){ 
+        this.routerext.navigate(['/analyse']);
       }
-    });*/
+    });
   }
 
 

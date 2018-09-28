@@ -27,7 +27,7 @@ export class AnalyseEffects {
   @Effect() analyse$ = this.actions$
     .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
     .pipe(
-      tap(() => {console.log('/resulting');this.store.dispatch(new LoaderAction.LoadingAction())}),
+      tap(() => {console.log('/resulting')/*;this.store.dispatch(new LoaderAction.LoadingAction())*/}),
       tap(() => this.router.navigate(['/result'])),
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
@@ -47,7 +47,8 @@ export class AnalyseEffects {
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
     .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
     .pipe(
-      tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
+      tap(() => console.log("analyse ok"))
+      //tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       //tap(() => this.router.navigate(['/result']))
   );
 
