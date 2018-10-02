@@ -86,15 +86,15 @@ export class AnalysePageComponent implements OnInit {
     this.usedZones$ = this.data$.map(data => data.usedZones); 
     this.methodsAvailables$ = this.data$.map(data => {
       let methods = initMethods;
-      if(!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities).length>0).length>0)){
+      if(!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities && c.quantities.length>0).length>0).length>0)){
         methods = methods.filter((method:Method)=> method.method==="NONE");
         return methods;
       } else {
-        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0).length>0){
-          methods=methods.filter((method:Method)=> method.method!=="LONGLARG");
-        }
         if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LW || sp.LW.coefA===0 || sp.LW.coefB===0).length>0){
           methods=methods.filter((method:Method)=> method.method!=="LONGUEUR");
+        }
+        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0).length>0){
+          methods=methods.filter((method:Method)=> method.method!=="LONGLARG");
         }
         return methods;
       }
@@ -143,7 +143,7 @@ export class AnalysePageComponent implements OnInit {
   }
 
   startAnalyse(status: string) {
-    this.store.dispatch(new AnalyseAction.Analyse(status)); 
+    this.store.dispatch(new AnalyseAction.Redirect(status)); 
   }
 
 

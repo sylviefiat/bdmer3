@@ -20,19 +20,17 @@ export class AnalyseEffects {
     .ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT)
     .pipe(
       exhaustMap(() => from(this.router.navigate(['/result']))),
-      filter(moved => {console.log(moved);return moved}),
-      map((moved) => {console.log(moved);return new AnalyseAction.Analyse("")})
+      filter(moved => moved),
+      map((moved) => new AnalyseAction.Analyse(""))
     );
 
   @Effect() analyse$ = this.actions$
     .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
     .pipe(
-      tap(() => {console.log('/resulting')/*;this.store.dispatch(new LoaderAction.LoadingAction())*/}),
-      tap(() => this.router.navigate(['/result'])),
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
-      mergeMap((value: [string, Data]) => {console.log(value);return this.analyseService.analyse(value[1])}),
-      map((result:Results) => {console.log(result);return new AnalyseAction.AnalyseSuccess(result)}),
+      mergeMap((value: [string, Data]) => this.analyseService.analyse(value[1])),
+      map((result:Results) => new AnalyseAction.AnalyseSuccess(result)),
       catchError((error) => of(new AnalyseAction.AnalyseFailure(error)))
   );
 
@@ -48,8 +46,6 @@ export class AnalyseEffects {
     .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
     .pipe(
       tap(() => console.log("analyse ok"))
-      //tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
-      //tap(() => this.router.navigate(['/result']))
   );
 
 

@@ -164,7 +164,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
               (click)="selectZone($event)">
             </mgl-layer>
             <mgl-popup *ngIf="selectedZone"
-              [lngLat]="MapService.getCoordinates(selectedZone)[0]">
+              [lngLat]="selectZoneCoordinates()">
               <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span><br/>
             </mgl-popup>
           </mgl-geojson-source>
@@ -216,7 +216,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Point> | null;
 
-  constructor() {
+  constructor(mapService: MapService) {
 
   }
 
@@ -331,6 +331,12 @@ export class ResultMapComponent implements OnInit, OnChanges {
   selectZone(evt: MapMouseEvent){
     this.selectedZone = (<any>evt).features[0];
     this.zoneEmitter.emit(this.selectedZone.properties.code);
+  }
+
+  selectZoneCoordinates(){
+    console.log(this.selectedZone);
+    console.log(MapService.getCoordinates(this.selectedZone));
+    return MapService.getCoordinates(this.selectedZone)[0][0];
   }
 
 

@@ -22,7 +22,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
     <mat-card>
       <mat-card-title>{{'RESULT_TITLE' | translate}}</mat-card-title>
     </mat-card>    
-    <bc-result-rappel [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+    <bc-result-rappel *ngIf="analyseData$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
     <bc-result-synthesis *ngIf="results$ | async" [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
     <div class="loader" *ngIf="!(results$ | async)">
       <div class="lds-dual-ring"></div>
@@ -89,16 +89,18 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
     this.analyseData$ = this.store.select(getAnalyseData);
     this.results$ = this.store.select(getAnalyseResult);
     this.locale$ = this.store.select(getLangues);
-  }
-
-  ngAfterViewInit(){
-    this.loading=false;
+    console.log("after init");
     this.analyseData$.map(d => {
       console.log(d);
       if(!d){ 
         this.routerext.navigate(['/analyse']);
       }
     });
+  }
+
+  ngAfterViewInit(){
+    this.loading=false;
+
   }
 
 
