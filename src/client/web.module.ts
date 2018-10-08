@@ -14,7 +14,7 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { filter, take } from 'rxjs/operators';
 
 // app
-import { APP_COMPONENTS, AppComponent } from './app/components/index';
+import { APP_COMPONENTS, APP_ENTRY_COMPONENTS, AppComponent } from './app/components/index';
 import { routes } from './app/components/app.routes';
 
 // feature modules
@@ -105,6 +105,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
   declarations: [
     APP_COMPONENTS
   ],
+  entryComponents: [APP_ENTRY_COMPONENTS],
   providers: [
     {
       provide: APP_BASE_HREF,

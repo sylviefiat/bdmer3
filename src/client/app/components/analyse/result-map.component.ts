@@ -17,11 +17,12 @@ import { Results, Data } from '../../modules/analyse/models/index';
     <div *ngIf="loading">Map is loading</div>
     <mgl-map *ngIf="!loading"
         [style]="'mapbox://styles/mapbox/satellite-v9'"
-        [fitBounds]="bounds$ | async"
+        [fitBounds]="bounds"
         [fitBoundsOptions]="{
           padding: boundsPadding,
           maxZoom: zoomMaxMap
         }"
+        (load) = "setMap($event)"
         (zoomEnd)="zoomChange($event)">
         <ng-container *ngIf="showStations && (layerStations$ | async)">
           <mgl-geojson-source
@@ -209,10 +210,11 @@ export class ResultMapComponent implements OnInit, OnChanges {
   zones: any[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
   layerZones$: Observable<Turf.FeatureCollection>;
-  bounds$: Observable<LngLatBounds>;
-  boundsPadding: number = 0;
+  bounds: LngLatBounds;
+  boundsPadding: number = 50;
   zoomMaxMap = 10;
   zoom: number = 9;
+  map: any;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Point> | null;
 
@@ -229,6 +231,13 @@ export class ResultMapComponent implements OnInit, OnChanges {
     this.initStations();
     this.initZones();
     this.filterFeaturesCollection();
+  }
+
+  setMap(event) {
+    this.map = event;
+    if (this.bounds) {
+      this.map.fitBounds(this.bounds, { padding: 10 });
+    }
   }
 
   ngOnChanges(event) {
@@ -277,28 +286,29 @@ export class ResultMapComponent implements OnInit, OnChanges {
         }
       }
     }
-    this.bounds$ = of(MapService.zoomToZones(Turf.featureCollection(
-      this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass }))
-        .filter(polygon => polygon !== null))));
   }
 
   filterFeaturesCollection() {
     // stations
     let filteredStations = this.stations
-      .filter(marker => marker.properties.species === this.spShow && marker.properties.survey === this.surveyShow);
+        .filter(marker => (this.spShow===null || marker.properties.species === this.spShow) && 
+          (this.surveyShow===null || marker.properties.survey === this.surveyShow) );
     let featureCollection = Turf.featureCollection(filteredStations);
     this.layerStations$ = of(featureCollection);
     // zones
-    let fc2 = Turf.featureCollection(
-      this.zones
-        .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
-        .map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass }))
-        .filter(polygon => polygon !== null)
-    );
+    let filteredZones = this.zones
+        .filter(zone => (this.spShow===null || zone.properties.species === this.spShow) && 
+          (this.surveyShow===null || zone.properties.survey === this.surveyShow))
+        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .filter(polygon => polygon !== null);
+    let fc2 = Turf.featureCollection(filteredZones);
     this.layerZones$ = of(fc2);
-    //if (filteredStations.length > 0) {
-    //  this.bounds$ = of(MapService.zoomToZones(fc2));
-    //}
+    if(this.zones.length > 0){      
+      this.bounds = MapService.zoomToZones(fc2);
+      if(this.bounds && this.map){
+        this.map.fitBounds(this.bounds, { padding: 10 });
+      }
+    }
   }
 
   getValue(feature) {

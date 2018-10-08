@@ -16,6 +16,7 @@ import { SpeciesComponent } from './species.component';
 import { AnalyseMethodComponent } from './analyse-method.component';
 import { ResultPageComponent } from './result-page.component';
 import { ResultRappelComponent } from './result-rappel.component';
+import { ResultRappelDialogComponent } from './result-rappel-dialog.component';
 import { ResultSynthesisComponent } from './result-synthesis.component';
 import { ResultMapComponent } from './result-map.component';
 import { ResultBoxplotComponent } from './result-boxplot.component';
@@ -41,6 +42,7 @@ export const ANALYSE_COMPONENTS: any[] = [
   AnalyseMethodComponent,
   ResultPageComponent,
   ResultRappelComponent,
+  ResultRappelDialogComponent,
   ResultSynthesisComponent,
   ResultMapComponent,
   ResultBoxplotComponent,
@@ -65,6 +67,7 @@ export * from './analyse-species.component';
 export * from './species.component';
 export * from './analyse-method.component';
 export * from './result-rappel.component';
+export * from './result-rappel-dialog.component';
 export * from './result-synthesis.component';
 export * from './result-map.component';
 export * from './result-boxplot.component';

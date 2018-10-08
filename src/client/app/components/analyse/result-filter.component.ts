@@ -15,11 +15,11 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
         <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
         <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
         <p class="note">* {{'CLICK_ZONE' | translate}}</p>
-        <h4>{{'TYPE' | translate}}</h4>
-        <mat-radio-group *ngIf="showBiom" (change)="changeDisplay($event)">
-          <mat-radio-button value="B" [checked]="typeShow==='B'">{{'DISPLAY_BIOMASS' | translate}}</mat-radio-button>
-          <mat-radio-button value="A" [checked]="typeShow==='A'">{{'DISPLAY_ABUNDANCE' | translate}}</mat-radio-button>
-        </mat-radio-group>
+        <h4 *ngIf="showBiom"> {{'TYPE' | translate}}</h4>
+        <mat-select *ngIf="showBiom" [(ngModel)]="typeShow" (selectionChange)="this.typeShowEmitter.emit($event.value)">
+          <mat-option value="B">{{'DISPLAY_BIOMASS' | translate}}</mat-option>
+          <mat-option value="A">{{'DISPLAY_ABUNDANCE' | translate}}</mat-option>
+        </mat-select>
         <div>
           <div *ngFor="let item of legend">
             <span class="legend-key" [style.backgroundColor]="item.color"></span>
@@ -27,13 +27,15 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
           </div>
         </div>
         <h4>{{'SPECIES' | translate}}</h4>
-        <mat-radio-group (change)="setShowSp($event)">
-          <mat-radio-button *ngFor="let sp of species" value="{{sp.code}}" [checked]="spShow===sp.code">{{sp.scientificName}}</mat-radio-button>
-        </mat-radio-group>
+        <mat-select [(ngModel)]="spShow" (selectionChange)="this.spShowEmitter.emit($event.value)">
+          <mat-option [value]="null">-</mat-option>
+          <mat-option *ngFor="let sp of species" value="{{sp.code}}">{{sp.scientificName}}</mat-option>
+        </mat-select>
         <h4>{{'SURVEYS' | translate}}</h4>
-        <mat-radio-group (change)="setShowSurvey($event)">
-          <mat-radio-button *ngFor="let sv of surveys" value="{{sv.code}}" [checked]="surveyShow===sv.code">{{sv.code}}</mat-radio-button>
-        </mat-radio-group>
+        <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
+          <mat-option [value]="null">-</mat-option>
+          <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
+        </mat-select>
     </div>
   </div>
   `,
@@ -92,11 +94,6 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
 
   ngOnInit(){  
     this.surveys = this.surveys.sort((s1,s2)=>s1.code >= s2.code ? Number(1):Number(-1));
-  }
-
-  changeDisplay(show: any){
-    this.typeShow = show.value;
-    this.typeShowEmitter.emit(this.typeShow);
   }
 
   setShowSp(spCode: any){

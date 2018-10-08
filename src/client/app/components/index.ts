@@ -31,7 +31,7 @@ import { SU_COMPONENTS } from './survey/index';
 import { PA_COMPONENTS } from './preference-area/index';
 import { COUNT_COMPONENTS } from './count/index';
 import { SP_COMPONENTS } from './species/index';
-import { ANALYSE_COMPONENTS } from './analyse/index';
+import { ANALYSE_COMPONENTS, ResultRappelDialogComponent } from './analyse/index';
 import { GLOBAL_IMPORT_COMPONENTS } from './globalImport/index';
 
 export const APP_COMPONENTS: any[] = [
@@ -69,6 +69,10 @@ export const APP_COMPONENTS: any[] = [
   NewUserPageComponent,
   NewUserComponent,
   HighchartsChartComponent
+];
+
+export const APP_ENTRY_COMPONENTS: any[] = [
+  ResultRappelDialogComponent
 ];
 
 export * from './app.component';

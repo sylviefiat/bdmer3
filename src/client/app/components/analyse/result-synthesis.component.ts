@@ -12,7 +12,6 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     selector: 'bc-result-synthesis',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-      <h2>{{ results.name }}</h2>
       <div class="results">
 
         <bc-result-map 

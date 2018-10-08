@@ -14,15 +14,17 @@ import { CountriesAction, CountryAction } from '../../modules/countries/actions/
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 
-
 @Component({
   selector: 'bc-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+  template: `   
     <mat-card>
-      <mat-card-title>{{'RESULT_TITLE' | translate}}</mat-card-title>
-    </mat-card>    
-    <bc-result-rappel *ngIf="analyseData$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+      <mat-card-title>{{ (results$ | async)?.name }}</mat-card-title>
+      <mat-card-actions>
+        <bc-result-rappel *ngIf="analyseData$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+      </mat-card-actions>
+    </mat-card>
+    
     <bc-result-synthesis *ngIf="results$ | async" [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
     <div class="loader" *ngIf="!(results$ | async)">
       <div class="lds-dual-ring"></div>
@@ -30,7 +32,7 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
   `,
   styles: [
     `
-    mat-card-title, mat-card-content {
+  mat-card-title, mat-card-content {
     display: flex;
     justify-content: center;
   }
@@ -74,8 +76,6 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
   analyseData$: Observable<Data>;
   results$: Observable<Results>;
   locale$: Observable<string>;
-  analysing$: Observable<boolean>;
-  analysed$: Observable<boolean>;
   loading: boolean;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
@@ -84,8 +84,6 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {    
     this.loading=true;
-    this.analysing$ = this.store.select(isAnalysing);
-    this.analysed$ = this.store.select(isAnalysed);
     this.analyseData$ = this.store.select(getAnalyseData);
     this.results$ = this.store.select(getAnalyseResult);
     this.locale$ = this.store.select(getLangues);
@@ -103,5 +101,6 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
 
   }
 
+ 
 
 }
