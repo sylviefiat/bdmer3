@@ -8,51 +8,63 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
   selector: 'bc-result-filter',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-  <div class="container">
-    <div class="legend">
-        <h3>{{'FILTER' | translate}}</h3>
-        <h4>{{'LAYERS' | translate}}</h4>
-        <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
-        <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
-        <p class="note">* {{'CLICK_ZONE' | translate}}</p>
-        <h4 *ngIf="showBiom"> {{'TYPE' | translate}}</h4>
-        <mat-select *ngIf="showBiom" [(ngModel)]="typeShow" (selectionChange)="this.typeShowEmitter.emit($event.value)">
-          <mat-option value="B">{{'DISPLAY_BIOMASS' | translate}}</mat-option>
-          <mat-option value="A">{{'DISPLAY_ABUNDANCE' | translate}}</mat-option>
-        </mat-select>
-        <div>
+  <mat-card class="container">
+    <mat-card-title-group>
+        <mat-card-title>{{'FILTER' | translate}}</mat-card-title>        
+    </mat-card-title-group>
+        <mat-card-content>
+          <mat-card-subtitle>{{'LAYERS' | translate}}</mat-card-subtitle>
+          <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
+          <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
+          <p class="note">* {{'CLICK_ZONE' | translate}}</p>
+        </mat-card-content>
+        <mat-card-content>
+          <mat-card-subtitle *ngIf="showBiom"> {{'TYPE' | translate}}</mat-card-subtitle>
+          <mat-form-field>
+            <mat-select *ngIf="showBiom" [(ngModel)]="typeShow" (selectionChange)="this.typeShowEmitter.emit($event.value)">
+              <mat-option value="B">{{'DISPLAY_BIOMASS' | translate}}</mat-option>
+              <mat-option value="A">{{'DISPLAY_ABUNDANCE' | translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-content>
           <div *ngFor="let item of legend">
             <span class="legend-key" [style.backgroundColor]="item.color"></span>
             <span>{{item.value}} </span><span>{{getUnit()}}</span>
           </div>
-        </div>
-        <h4>{{'SPECIES' | translate}}</h4>
-        <mat-select [(ngModel)]="spShow" (selectionChange)="this.spShowEmitter.emit($event.value)">
-          <mat-option [value]="null">-</mat-option>
-          <mat-option *ngFor="let sp of species" value="{{sp.code}}">{{sp.scientificName}}</mat-option>
-        </mat-select>
-        <h4>{{'SURVEYS' | translate}}</h4>
-        <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
-          <mat-option [value]="null">-</mat-option>
-          <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
-        </mat-select>
-    </div>
-  </div>
+        </mat-card-content>
+        <mat-card-content>
+          <mat-card-subtitle>{{'SPECIES' | translate}}</mat-card-subtitle>
+          <mat-form-field>
+            <mat-select [(ngModel)]="spShow" (selectionChange)="this.spShowEmitter.emit($event.value)">
+              <mat-option [value]="null">-</mat-option>
+              <mat-option *ngFor="let sp of species" value="{{sp.code}}">{{sp.scientificName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-content>
+          <mat-card-subtitle>{{'SURVEYS' | translate}}</mat-card-subtitle>
+          <mat-form-field>
+            <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
+              <mat-option [value]="null">-</mat-option>
+              <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+  </mat-card>
   `,
   styles: [
   `
-    .container {
-      display: flex;
-      margin-left: 20px;
-      margin-right: 20px;
+    mat-card {
+      display:flex;
+      flex-direction:column;
     }
-    .legend {
-      padding-left: 10px;
-      border: 1px solid black;
+    .mat-card-subtitle {
+      display: inline !important;
+      margin-right: 10px;
     }
-    mat-radio-group{
-      display: flex;
-      flex-direction: column;
+    .mat-checkbox {
+      padding-right: 10px;
     }
     .note {
       color: grey;

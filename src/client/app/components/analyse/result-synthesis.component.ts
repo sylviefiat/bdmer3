@@ -23,7 +23,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
           [showZones]="showZones$ | async"
-          (zoneEmitter)="dislayGraphZone($event)">
+          (zoneEmitter)="selectZone($event)">
         </bc-result-map>
 
         <bc-result-filter 
@@ -42,30 +42,37 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
       </div>
-      <div> 
-        <h3>{{ 'GRAPH_PLATFORMS' | translate }}</h3>
-        <bc-result-boxplot class="chart"
-                  [chartsData]="results"
-                  [species]="analyseData.usedSpecies"
-                  [type]="typeShow$ | async">
-                </bc-result-boxplot>
-      </div>
-      <div>
-        <h3>{{ 'GRAPH_PER_ZONES' | translate }}</h3>
-        <mat-tab-group class="primer" class="results" [selectedIndex]="selectedZone"> 
-          <mat-tab *ngFor="let zone of sortedZoneList; let i=index"  label="{{(zone)?.properties.code}}">          
-            <ng-template matTabContent>
-              <div class="groupCharts">
+      <div class="charts"> 
+        <mat-card>
+          <mat-card-title-group>
+            <mat-card-title>{{ 'GRAPH_PLATFORMS' | translate }}</mat-card-title>
+          </mat-card-title-group>
+          <bc-result-boxplot class="chart"
+            [chartsData]="results"
+            [species]="analyseData.usedSpecies"
+            [type]="typeShow$ | async">
+          </bc-result-boxplot>
+        </mat-card>
+        <mat-card>
+          <mat-card-title-group>
+            <mat-card-title>{{ 'GRAPH_PER_ZONES' | translate }}</mat-card-title>
+            <mat-card-subtitle>
+              <mat-form-field>
+                <mat-select placeholder="{{'SELECT_ZONE' | translate}}" (selectionChange)="selectZone($event.value)">
+                  <mat-option *ngFor="let zone of sortedZoneList" value="{{zone.properties.code}}">{{zone.properties.code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-card-subtitle>
+          </mat-card-title-group>
+          <mat-card-content *ngIf="selectedZone$ | async">
                 <bc-result-boxplot class="chart"
                   [chartsData]="results"
                   [species]="analyseData.usedSpecies"
-                  [zone]="zone"
+                  [codeZone]="selectedZone$ | async"
                   [type]="typeShow$ | async">
                 </bc-result-boxplot>
-              </div>
-            </ng-template>
-          </mat-tab>
-        </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
       </div>
   `,
     styles: [
@@ -81,34 +88,12 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       } 
       .results {
         display:flex;
-        width: 90vw;
         justify-content:center;
+        margin-bottom:10px;
       }
-      .resultZone {
-        max-width: 100vw;
-      }
-      .groupCharts {
+      .charts {
         display:flex;
-        flex-direction:row;
-        flex-wrap: wrap;
-        padding-top:0.5em;
-        padding-left:0.5em;
-        padding-right:0.5em;
-        width: 90vw;
       }
-      .chart {
-        display:flex;
-        flex: 50%;
-        flex-direction:column;
-        flex-wrap: wrap;
-        padding-right:0.3em;
-      }
-    .show {
-      display: block;
-    }
-    .hide {
-      display: none;
-    }
     .noData {
       min-height:300px;
       background-color: white;
@@ -125,7 +110,7 @@ export class ResultSynthesisComponent implements OnInit {
     showStations$: Observable<boolean>;
     showZones$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
-    selectedZone: number;
+    selectedZone$: Observable<string>;
     sortedZoneList: Zone[];
     showBiom: boolean;
 
@@ -140,9 +125,12 @@ export class ResultSynthesisComponent implements OnInit {
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.analyseData.usedSurveys[0].code)[0]);
       this.showStations$=of(true);
       this.showZones$=of(false);
-      this.selectedZone = 0;
       this.showBiom = this.analyseData.usedMethod.method !== 'NONE';
-      this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> z1.properties.code >= z2.properties.code? Number(1):Number(-1));
+      this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> this.customSort(z1.properties.code,z2.properties.code));
+    }
+
+    customSort(a:string, b:string) {
+      return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
     }
 
     get localDate() {
@@ -186,11 +174,8 @@ export class ResultSynthesisComponent implements OnInit {
       this.showZones$ = of(show.checked);      
     }
 
-    dislayGraphZone(codeZone: string){
-      let selected = this.sortedZoneList.map(z=>z.properties.code).indexOf(codeZone);
-      if(selected){
-        this.selectedZone = selected;
-      }
+    selectZone(codeZone: string){
+      this.selectedZone$ = of(codeZone);
     }
 
 }

@@ -18,10 +18,6 @@ import { Results, Data } from '../../modules/analyse/models/index';
     <mgl-map *ngIf="!loading"
         [style]="'mapbox://styles/mapbox/satellite-v9'"
         [fitBounds]="bounds"
-        [fitBoundsOptions]="{
-          padding: boundsPadding,
-          maxZoom: zoomMaxMap
-        }"
         (load) = "setMap($event)"
         (zoomEnd)="zoomChange($event)">
         <ng-container *ngIf="showStations && (layerStations$ | async)">
@@ -303,12 +299,14 @@ export class ResultMapComponent implements OnInit, OnChanges {
         .filter(polygon => polygon !== null);
     let fc2 = Turf.featureCollection(filteredZones);
     this.layerZones$ = of(fc2);
-    if(this.zones.length > 0){      
+    if(filteredZones.length > 0){      
       this.bounds = MapService.zoomToZones(fc2);
-      if(this.bounds && this.map){
+    } /*else if(this.showStations && filteredStations.length > 0){
+      this.bounds = MapService.zoomToStations(featureCollection);
+    }*/
+      /*if(this.bounds && this.map){
         this.map.fitBounds(this.bounds, { padding: 10 });
-      }
-    }
+      }*/
   }
 
   getValue(feature) {

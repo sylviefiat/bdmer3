@@ -24,15 +24,16 @@ import { AnalyseAction } from '../../modules/analyse/actions/index';
         <bc-result-rappel *ngIf="analyseData$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
       </mat-card-actions>
     </mat-card>
-    
-    <bc-result-synthesis *ngIf="results$ | async" [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
-    <div class="loader" *ngIf="!(results$ | async)">
-      <div class="lds-dual-ring"></div>
+    <div class="main">
+      <bc-result-synthesis *ngIf="results$ | async" [results]="results$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-synthesis>
+      <div class="loader" *ngIf="!(results$ | async)">
+        <div class="lds-dual-ring"></div>
+      </div>
     </div>
   `,
   styles: [
     `
-  mat-card-title, mat-card-content {
+  mat-card-title, mat-card-content, mat-card-actions {
     display: flex;
     justify-content: center;
   }
@@ -90,7 +91,7 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
     console.log("after init");
     this.analyseData$.subscribe(d => {
       console.log(d);
-      if(!d){ 
+      if(!d || !d.usedCountry){ 
         this.routerext.navigate(['/analyse']);
       }
     });

@@ -17,8 +17,7 @@ import { Results } from '../../modules/analyse/models/index';
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
   <div class="container"> 
-      <div *ngIf="loading">Plot is loading</div>
-      <highcharts-chart  *ngIf="!loading"
+      <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
           style="height: 400px; display: block;">
@@ -52,7 +51,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     @Input() type: string;
     @Input() chartsData: Results;
     @Input() species: Species[];
-    @Input() zone?: Zone;
+    @Input() codeZone?: string;
     Highcharts = Highcharts;
     chartOptions: any;
     title: string;
@@ -78,18 +77,16 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(event) {
-
-        if (event.type !== null && event.type.previousValue !== undefined) {
+        if ((event.type && event.type.previousValue !== undefined) || (event.codeZone && event.codeZone.previousValue !== undefined)) {
             this.getChartOptions();
-            //this.setTable();
         }
     }
 
     getChartOptions() {
-        let title = "";
-        if (this.zone) {
+        let title = "";        
+        if (this.codeZone) {
             this.series = this.getSeriesZone();
-            title = this.translate.instant('RESULTS_ZONE') + " " + this.zone.properties.code;
+            title = this.translate.instant('RESULTS_ZONE') + " " + this.codeZone;
         } else {
             this.series = this.getSeriesPlatforms();
             title = this.translate.instant('RESULTS_PLATFORMS');
@@ -145,7 +142,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 let rspp = rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code).length > 0 ? rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code)[0] : null;
                 let value = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.averageBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.averageAbundance))) : null;
                 let valuConf = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalAbundance))) : (value ? 0 : null);
-                dataScatter[rps.codePlatform][sp.scientificName] = [...dataScatter[rps.codePlatform][sp.scientificName], value];
+                dataScatter[rps.codePlatform][sp.scientificName] = [...dataScatter[rps.codePlatform][sp.scientificName], Number(value)];
                 dataConfidence[rps.codePlatform][sp.scientificName] = [...dataConfidence[rps.codePlatform][sp.scientificName], [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]];
                 this.colors[colori++] = Highcharts.Color(hcolors[i]).brighten(0.2).get();
                 this.colors[colori++] = hcolors[i++];
@@ -159,11 +156,10 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                     name: i + " / " + j,
                     type: 'columnrange',
                     yAxis: 0,
-                    showInLegend:false,
-                    data: dataConfidence[i][j],
+                    showInLegend:true,
+                    data: dataConfidence[i][j],                    
                     tooltip: {
-                        headerFormat: '<em>'+type+'</em><br/>',
-                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+                        pointFormat: '(confidence interval <b>{point.low:.1f}-{point.high:.1f} ' + unit + ')</b>'
                     }
                 }
                 series[index++] = {
@@ -172,7 +168,8 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                     yAxis: 0,
                     data: dataScatter[i][j],
                     tooltip: {
-                        pointFormat: '(standard deviation <b>{point.low:.1f}-{point.high:.1f} ' + unit + ')</b>'
+                        headerFormat: '<em>'+type+'</em><br/>',
+                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
                     }
                 }
             }
@@ -189,21 +186,21 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         let unit = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
         let type = this.translate.instant(this.type === 'B' ? 'BIOMASS' : 'ABUNDANCY');
         for (let rps of this.chartsData.resultPerSurvey) {
-            if (!dataScatter[this.zone.properties.code]) {
-                dataScatter[this.zone.properties.code] = [];
-                dataSD[this.zone.properties.code] = [];
+            if (!dataScatter[this.codeZone]) {
+                dataScatter[this.codeZone] = [];
+                dataSD[this.codeZone] = [];
             }
             for (let sp of this.species) {
-                if (!dataScatter[this.zone.properties.code][sp.scientificName]) {
-                    dataScatter[this.zone.properties.code][sp.scientificName] = [];
-                    dataSD[this.zone.properties.code][sp.scientificName] = [];
+                if (!dataScatter[this.codeZone][sp.scientificName]) {
+                    dataScatter[this.codeZone][sp.scientificName] = [];
+                    dataSD[this.codeZone][sp.scientificName] = [];
                 }
                 let rspp = rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code).length > 0 ? rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code)[0] : null;
-                let rpz = rspp ? rspp.resultPerZone.filter(z => z.codeZone === this.zone.properties.code) : null;
+                let rpz = rspp ? rspp.resultPerZone.filter(z => z.codeZone === this.codeZone) : null;
                 let value = rpz ? (this.type === 'B' ? rpz.map(rpp => rpp.biomassPerHA) : rpz.map(rpp => rpp.abundancePerHA)) : null;
                 let valuConf = rpz ? (this.type === 'B' ? rpz.map(rpp => rpp.SDBiomassPerHA) : rpz.map(rpp => rpp.SDabundancePerHA)) : (value ? 0 : null);
-                dataScatter[this.zone.properties.code][sp.scientificName] = [...dataScatter[this.zone.properties.code][sp.scientificName], value];
-                dataSD[this.zone.properties.code][sp.scientificName] = [...dataSD[this.zone.properties.code][sp.scientificName], [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]];
+                dataScatter[this.codeZone][sp.scientificName] = [...dataScatter[this.codeZone][sp.scientificName], value];
+                dataSD[this.codeZone][sp.scientificName] = [...dataSD[this.codeZone][sp.scientificName], [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]];
                 this.colors[colori++] = hcolors[i];
                 this.colors[colori++] = Highcharts.Color(hcolors[i]).brighten(0.2).get();
             }
