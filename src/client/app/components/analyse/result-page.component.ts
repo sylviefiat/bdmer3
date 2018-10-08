@@ -90,7 +90,7 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
     this.results$ = this.store.select(getAnalyseResult);
     this.locale$ = this.store.select(getLangues);
     console.log("after init");
-    this.analyseData$.map(d => {
+    this.analyseData$.subscribe(d => {
       console.log(d);
       if(!d){ 
         this.routerext.navigate(['/analyse']);

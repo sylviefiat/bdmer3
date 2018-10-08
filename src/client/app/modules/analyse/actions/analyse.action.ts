@@ -10,6 +10,7 @@ export namespace AnalyseAction {
   export const AUTH: string = 'AnalyseAction';
 
   export interface IAnalyseActions {
+    INIT: string;
     SELECT_COUNTRY: string;
     SELECT_PLATFORMS: string;
     SELECT_YEARS: string;
@@ -27,6 +28,7 @@ export namespace AnalyseAction {
   }
 
   export const ActionTypes: IAnalyseActions = {
+    INIT : type('[Analyse] init analyse'),
     SELECT_COUNTRY : type('[Analyse] Select country'),
     SELECT_PLATFORMS : type('[Analyse] Select Platforms'),
     SELECT_YEARS : type('[Analyse] Select years'),
@@ -42,6 +44,10 @@ export namespace AnalyseAction {
     ANALYSE_FAILURE : type('[Analyse] Analyse Failure'),
     REDIRECT : type('[Analyse] Analyse redirection to results')
   }
+export class InitAnalyse implements Action {
+  readonly type = ActionTypes.INIT;
+  payload: string = null;
+}
 export class SelectCountry implements Action {
   readonly type = ActionTypes.SELECT_COUNTRY;
 
@@ -125,6 +131,7 @@ export class Redirect implements Action {
 }
 
 export type Actions =
+  | InitAnalyse
   | SelectCountry
   | SelectPlatforms
   | SelectYears

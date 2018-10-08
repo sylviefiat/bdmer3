@@ -67,7 +67,7 @@ export class AnalysePageComponent implements OnInit {
   data$: Observable<Data>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
-    
+    this.store.dispatch(new AnalyseAction.InitAnalyse());
   }
 
   ngOnInit() {

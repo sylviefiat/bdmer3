@@ -240,66 +240,65 @@ export class ResultMapComponent implements OnInit, OnChanges {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rt of rsp.resultPerStation) {
-            //if (rt.densityPerHA >= 0 && rt.biomassPerHA >= 0) {
-              let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
-              let marker = MapService.getFeature(s, {
-                  code: s.properties.code,
-                  abundancy: rt.abundancePerHA,
-                  biomass: rt.biomassPerHA,
-                  species: rsp.codeSpecies,
-                  survey: this.results.resultPerSurvey[i].codeSurvey
-                })
-              
-              this.stations.push(marker);
-            //}
+            let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
+            let marker = MapService.getFeature(s, {
+              code: s.properties.code,
+              abundancy: rt.abundancePerHA,
+              biomass: rt.biomassPerHA,
+              species: rsp.codeSpecies,
+              survey: this.results.resultPerSurvey[i].codeSurvey
+            })
+
+            this.stations.push(marker);
           }
         }
       }
     }
   }
 
-  initZones(){
-    if(this.zones.length <=0 ){
+  initZones() {
+    if (this.zones.length <= 0) {
       for (let i in this.results.resultPerSurvey) {
         for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
           for (let rz of rsp.resultPerZone) {
-            //if (rz.densityPerHA >= 0 && rz.biomassPerHA >= 0) {
-              let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
-              let polygon = {
-                geometry: z.geometry,
-                properties: {
-                  code: z.properties.code,
-                  abundancy: rz.abundancePerHA,
-                  biomass: rz.biomassPerHA,
-                  species: rsp.codeSpecies,
-                  survey: this.results.resultPerSurvey[i].codeSurvey
-                }
-              };
-              this.zones.push(polygon);
-            //}
+            let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
+            let polygon = {
+              geometry: z.geometry,
+              properties: {
+                code: z.properties.code,
+                abundancy: rz.abundancePerHA,
+                biomass: rz.biomassPerHA,
+                species: rsp.codeSpecies,
+                survey: this.results.resultPerSurvey[i].codeSurvey
+              }
+            };
+            this.zones.push(polygon);
           }
         }
       }
     }
+    this.bounds$ = of(MapService.zoomToZones(Turf.featureCollection(
+      this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass }))
+        .filter(polygon => polygon !== null))));
   }
 
   filterFeaturesCollection() {
     // stations
     let filteredStations = this.stations
-        .filter(marker => marker.properties.species === this.spShow && marker.properties.survey === this.surveyShow );
+      .filter(marker => marker.properties.species === this.spShow && marker.properties.survey === this.surveyShow);
     let featureCollection = Turf.featureCollection(filteredStations);
     this.layerStations$ = of(featureCollection);
     // zones
     let fc2 = Turf.featureCollection(
       this.zones
         .filter(zone => zone.properties.species === this.spShow && zone.properties.survey === this.surveyShow)
-        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+        .map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass }))
         .filter(polygon => polygon !== null)
     );
     this.layerZones$ = of(fc2);
-    if(filteredStations.length > 0){
-      this.bounds$ = of(MapService.zoomToStations(featureCollection));
-    }
+    //if (filteredStations.length > 0) {
+    //  this.bounds$ = of(MapService.zoomToZones(fc2));
+    //}
   }
 
   getValue(feature) {
@@ -313,7 +312,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     }
   }
 
-  getUnit(){
+  getUnit() {
     switch (this.typeShow) {
       case "B":
         return "Kg/ha";
@@ -328,14 +327,12 @@ export class ResultMapComponent implements OnInit, OnChanges {
     this.selectedStation = (<any>evt).features[0];
   }
 
-  selectZone(evt: MapMouseEvent){
+  selectZone(evt: MapMouseEvent) {
     this.selectedZone = (<any>evt).features[0];
     this.zoneEmitter.emit(this.selectedZone.properties.code);
   }
 
-  selectZoneCoordinates(){
-    console.log(this.selectedZone);
-    console.log(MapService.getCoordinates(this.selectedZone));
+  selectZoneCoordinates() {
     return MapService.getCoordinates(this.selectedZone)[0][0];
   }
 

@@ -18,7 +18,7 @@ export interface Data {
 }
 
 export interface Results {
-    name: string;
+    name: string;    
     resultPerSurvey:ResultSurvey[];
 }
 
@@ -72,6 +72,7 @@ export interface ResultZone {
 
 export interface ResultPlatform {
     codePlatform: string;
+    surface: number;
     nbStrates: number;                     // nombre de strates = somme strates total zones
     nbZones: number;                       // nombre de zones considérées
     nbStations: number;                    // nombre de stations considérées
@@ -81,5 +82,12 @@ export interface ResultPlatform {
     varianceBiomass: number;               // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
     confidenceIntervalAbundance: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
     confidenceIntervalBiomass: number;     // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
+    stockAbundance: number;                // stock (ind.): moyenne du nombre d'individu par station * nbr strates total
+    stockBiomass: number;                  // stock (kg): moyenne des biomasses par station * nbr strates total / 1000
+    stockCIAbundance: number;              // Intervalle de confiance abondance stock: intervalle de confiance platforme * nbr strates total / 1000
+    stockCIBiomass: number;                // Intervalle de confiance biommasse stock: intervalle de confiance platforme * nbr strates total / 1000
+    stockCAAbundance: number;              // Hypothèse conservatrice - conservative assumption - en kg: stock (ind) - Intervalle de confiance abondance
+    stockCABiomass: number;                // Hypothèse conservatrice - conservative assumption - en kg: stock (kg) - Intervalle de confiance abondance
+    stockDensityPerHA: number;             // Densité par Hectare : stock (ind.) * 10000 / surface plateau
 }
 

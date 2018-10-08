@@ -208,13 +208,13 @@ export class AnalyseService {
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
         rzone.abundancePerHA = Number(rzone.abundance) * 10000 / Number(rzone.surface);
-        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.abundance));
+        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.abundancePerHA));
         // si calcul biomasse
         if (this.data.usedMethod.method !== 'NONE') {
             rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass), rzone.nbStations);
             rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) * 1000;
             rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
-            rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomass));
+            rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomassPerHA));
         }
         return of(rzone);
     }
@@ -224,6 +224,7 @@ export class AnalyseService {
         const T: number = 2.05;
         let rplatform : ResultPlatform = {
             codePlatform: platform.code,
+            surface: 0,
             nbStrates: 0,
             nbZones: 0,
             nbStations: 0,
@@ -232,21 +233,39 @@ export class AnalyseService {
             varianceAbundance: 0,
             varianceBiomass: 0,
             confidenceIntervalAbundance: 0,
-            confidenceIntervalBiomass: 0
+            confidenceIntervalBiomass: 0,
+            stockAbundance: 0,
+            stockBiomass: 0,
+            stockCIAbundance: 0,
+            stockCIBiomass: 0,
+            stockCAAbundance: 0,
+            stockCABiomass: 0,
+            stockDensityPerHA: 0 
         };
-        //let rzones = this.results.resultPerSurvey.filter(rs => rs.codeSurvey === survey.code)[0].resultPerSpecies.filter(rs => rs.codeSpecies === rspecies.codeSpecies)[0].resultPerZone.filter(rz => rz.codePlatform === platform.code);
+        // platform
         let rzones = rspecies.resultPerZone.filter(rpz => rpz.codePlatform === platform.code);
+        rplatform.surface = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStrates = this.getSum(rzones.map(rz => rz.nbStrates));
         rplatform.nbZones = rzones.length;
         rplatform.nbStations = this.getSum(rzones.map(rz => rz.nbStations));
         rplatform.averageAbundance = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageAbundance),rplatform.nbStrates);
         rplatform.varianceAbundance = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDabundancePerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
         rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
+        // stock
+        rplatform.stockAbundance = rplatform.averageAbundance * rplatform.nbStrates;
+        rplatform.stockCIAbundance = rplatform.confidenceIntervalAbundance * rplatform.nbStrates / 1000;
+        rplatform.stockCAAbundance = rplatform.stockAbundance - rplatform.stockCIAbundance;
+        rplatform.stockDensityPerHA = rplatform.stockAbundance * 10000 / rplatform.surface;;
         // si calcul biomasse
         if (this.data.usedMethod.method !== 'NONE') {
+            // platform
             rplatform.averageBiomass = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageBiomass),rplatform.nbStrates);
             rplatform.varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
             rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
+            // stock
+            rplatform.stockBiomass = rplatform.averageBiomass * rplatform.nbStrates / 1000;
+            rplatform.stockCIBiomass = rplatform.confidenceIntervalBiomass * rplatform.nbStrates / 1000;
+            rplatform.stockCABiomass = rplatform.stockBiomass - rplatform.stockCIBiomass;
         }
         return of(rplatform);
     }

@@ -19,6 +19,7 @@ export class AnalyseEffects {
   @Effect() redirectToResults$ = this.actions$
     .ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT)
     .pipe(
+      tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       exhaustMap(() => from(this.router.navigate(['/result']))),
       filter(moved => moved),
       map((moved) => new AnalyseAction.Analyse(""))
@@ -45,6 +46,7 @@ export class AnalyseEffects {
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
     .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
     .pipe(
+      tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       tap(() => console.log("analyse ok"))
   );
 
