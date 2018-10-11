@@ -19,6 +19,7 @@ import { ResultRappelComponent } from './result-rappel.component';
 import { ResultRappelDialogComponent } from './result-rappel-dialog.component';
 import { ResultSynthesisComponent } from './result-synthesis.component';
 import { ResultMapComponent } from './result-map.component';
+import { ResultStockComponent } from './result-stock.component';
 import { ResultBoxplotComponent } from './result-boxplot.component';
 import { ResultFilterComponent } from './result-filter.component';
 
@@ -47,6 +48,7 @@ export const ANALYSE_COMPONENTS: any[] = [
   ResultMapComponent,
   ResultBoxplotComponent,
   ResultFilterComponent,
+  ResultStockComponent
   ];
 
 export * from './analyse-page.component';
@@ -70,5 +72,6 @@ export * from './result-rappel.component';
 export * from './result-rappel-dialog.component';
 export * from './result-synthesis.component';
 export * from './result-map.component';
+export * from './result-stock.component';
 export * from './result-boxplot.component';
 export * from './result-filter.component';

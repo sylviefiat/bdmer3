@@ -14,6 +14,12 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     template: `
       <div class="results">
 
+        <bc-result-stock
+          [results]="results"
+          [analyseData]="analyseData"
+          [showBiom]="showBiom">
+        </bc-result-stock>
+
         <bc-result-map 
           [results]="results" 
           [analyseData]="analyseData"

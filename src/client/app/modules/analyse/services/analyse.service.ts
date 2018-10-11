@@ -6,6 +6,7 @@ import { Observable, of, from, concat } from 'rxjs';
 import { MapService } from '../../core/services/index';
 
 import { IAnalyseState } from '../states/index';
+import { MomentService } from "../../core/services/moment.service";
 import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, ResultPlatform, Method, DimensionsAnalyse } from '../models/index';
 import { Country } from '../../countries/models/country';
 import { Species, Platform, Survey, Mesure, Count, Station, Zone, LegalDimensions } from '../../datas/models/index';
@@ -16,7 +17,7 @@ export class AnalyseService {
     data: Data;
     stationsZones: any;
 
-    constructor() {
+    constructor(private ms: MomentService) {
     }
 
     analyse(analyseData: Data): Observable<Results> {
@@ -40,7 +41,8 @@ export class AnalyseService {
     }
 
     getResults() : Observable<Results> {
-        this.results = { name: "ANALYSE BDMER " + new Date(), resultPerSurvey: [] };
+        let day=this.ms.moment(new Date(), "DD/MM/YYYY").toISOString();
+        this.results = { name: "ANALYSE BDMER " + day, resultPerSurvey: [] };
         let resultsObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => from(this.data.usedSurveys)
@@ -248,7 +250,7 @@ export class AnalyseService {
         rplatform.nbStrates = this.getSum(rzones.map(rz => rz.nbStrates));
         rplatform.nbZones = rzones.length;
         rplatform.nbStations = this.getSum(rzones.map(rz => rz.nbStations));
-        rplatform.averageAbundance = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageAbundance),rplatform.nbStrates);
+        rplatform.averageAbundance = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
         rplatform.varianceAbundance = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDabundancePerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
         rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
         // stock
@@ -259,7 +261,7 @@ export class AnalyseService {
         // si calcul biomasse
         if (this.data.usedMethod.method !== 'NONE') {
             // platform
-            rplatform.averageBiomass = this.getAverage(rzones.map(rz => rz.nbStrates * rz.averageBiomass),rplatform.nbStrates);
+            rplatform.averageBiomass = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageBiomass))/rplatform.nbStrates;
             rplatform.varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
             rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
             // stock
@@ -279,10 +281,10 @@ export class AnalyseService {
     }
 
     getPlatformZoneForVariance(nbStrates, standardDeviation, nbStations): number {
-        return angularMath.powerOfNumber(Number(nbStrates), 2) * angularMath.powerOfNumber(Number(standardDeviation), 2) * (1 - Number(nbStations) / Number(nbStrates));
+        return angularMath.powerOfNumber(Number(nbStrates), 2) * angularMath.powerOfNumber(Number(standardDeviation), 2) * (1 - Number(nbStations) / Number(nbStrates))/ Number(nbStations);
     }
 
-    getStandardDeviation(table: number[]) {
+    /*getStandardDeviation(table: number[]) {
         if (table.length <= 1) return 0;
         let total = this.getSum(table);
         let length = table.length;
@@ -291,8 +293,18 @@ export class AnalyseService {
             .map(value => Math.pow(value - mean, 2))
             .reduce((p, c) => p + c);
         return Math.sqrt(variance / (length - 1));
-    }
+    }*/
 
+    getStandardDeviation(table: number[]) {
+        let sum = table.reduce((sum,value)=>sum+value,0);
+        let avg = sum / table.length;
+        // diffs = table.map(value => (value-avg));
+        let squareDiffs = table.map(value => (value-avg)*(value-avg));
+        let sumSquareDiffs = squareDiffs.reduce((sum,value)=> sum+value,0);
+        let avgSquareDiffs = sumSquareDiffs / squareDiffs.length;
+        let stdDev = Math.sqrt(avgSquareDiffs);
+        return stdDev;
+    }
 
 
 
