@@ -11,6 +11,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     selector: 'bc-result-stock',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
+        
      `,
     styles: [
         `

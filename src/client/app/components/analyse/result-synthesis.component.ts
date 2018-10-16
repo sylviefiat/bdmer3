@@ -64,8 +64,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
             <mat-card-title>{{ 'GRAPH_PER_ZONES' | translate }}</mat-card-title>
             <mat-card-subtitle>
               <mat-form-field>
-                <mat-select placeholder="{{'SELECT_ZONE' | translate}}" (selectionChange)="selectZone($event.value)">
-                  <mat-option *ngFor="let zone of sortedZoneList" value="{{zone.properties.code}}">{{zone.properties.code}}</mat-option>
+                <mat-select placeholder="{{'SELECT_ZONE' | translate}}" [value]="(selectedZone$ | async)" (selectionChange)="selectZone($event.value)">
+                  <mat-option *ngFor="let zone of sortedZoneList" value="{{zone.properties.code}}" >{{zone.properties.code}}</mat-option> 
                 </mat-select>
               </mat-form-field>
             </mat-card-subtitle>

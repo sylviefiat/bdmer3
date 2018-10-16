@@ -68,10 +68,6 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
 
     }
 
-    getElement(mot, i) {
-        return mot["\"" + i + "\""];
-    }
-
     ngOnInit() {
         this.getChartOptions();
     }
@@ -111,11 +107,11 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
             },
             yAxis: [{
                 title: {
-                    text: this.translate.instant(this.type === 'B' ? 'BIOMASS' : 'ABUNDANCY') + " <i>(" + this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT') + ")</i>"
+                    text: this.translate.instant(this.type === 'B' ? 'BIOMASS' : 'ABUNDANCY') + " <i>(" + this.translate.instant(this.type === 'B' ? 'BIOMAS_HA_UNIT' : 'ABUNDANCY_HA_UNIT') + ")</i>"
                 }
             },{
                 title: {
-                    text: "Stock (Kg)"
+                    text: this.translate.instant('STOCK') + " <i>(" + this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT') + ")</i>"
                 },
                 opposite: true
             }],
@@ -134,7 +130,8 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         let dataStock: any[][] = [];
         let dataStockCA: any[][] = [];
         let index = 0, colori = 0, i = 0;
-        let unit = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
+        let unit1 = this.translate.instant(this.type === 'B' ? 'BIOMASS_HA_UNIT' : 'ABUNDANCY_HA_UNIT');
+        let unit2 = this.translate.instant(this.type === 'B' ? 'BIOMASS_UNIT' : 'ABUNDANCY_UNIT');
         let type = this.translate.instant(this.type === 'B' ? 'BIOMASS' : 'ABUNDANCY');
         for (let rps of this.chartsData.resultPerSurvey) {
             if (!dataScatter[rps.codePlatform]) {
@@ -170,15 +167,15 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
         for (let i in dataScatter) {
             for (let j in dataScatter[i]) {
                 series[index++] = {
-                    name: 'Confidence interval '+type,
+                    name: this.translate.instant('CONFIDENCE_INTERVAL')+' '+type,
                     type: 'columnrange',
                     yAxis: 0,
                     showInLegend:true,
                     //color: this.colors[colori++],
                     data: dataConfidence[i][j],   
                     tooltip: {
-                        headerFormat: '<em>Confidence interval</em><br/>',
-                        pointFormat: '(Confidence interval '+type+' <b>{point.low:.1f}-{point.high:.1f} ' + unit + ')</b>'
+                        headerFormat: '<em>'+this.translate.instant('CONFIDENCE_INTERVAL')+'</em><br/>',
+                        pointFormat: '('+this.translate.instant('CONFIDENCE_INTERVAL')+' '+type+' <b>{point.low:.1f}-{point.high:.1f} ' + unit1 + ')</b>'
                     }
                 }
                 series[index++] = {
@@ -189,11 +186,11 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                     //color: this.colors[colori++],
                     tooltip: {
                         headerFormat: '<em>'+type+'</em><br/>',
-                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit1 + '</b>'
                     }
                 }
                 series[index++] = {
-                    name: 'Stock '+i + " / " + j,
+                    name: this.translate.instant('STOCK')+' '+i + " / " + j,
                     yAxis: 1,
                     data: dataStock[i][j],
                     type: 'line',
@@ -203,19 +200,19 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                         lineColor: this.colors[colori++]
                     },*/
                     tooltip: {
-                        headerFormat: '<em>Stock</em><br/>',
-                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit + '</b>'
+                        headerFormat: '<em>'+this.translate.instant('STOCK')+'</em><br/>',
+                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit2 + '</b>'
                     }
                 }
                 series[index++] = {
-                    name: 'Conservative assumption ',
+                    name: this.translate.instant('CONSERVATIVE_ASSUMPTION')+' ',
                     type: 'arearange',
                     yAxis: 1,
                     //color: this.colors[colori++],
                     data: dataStockCA[i][j],
                     tooltip: {
                         headerFormat: '<em>'+type+'</em><br/>',
-                        pointFormat: '(Stock conservative assumption <b>{point.low:.1f}-{point.high:.1f} ' + unit + ')</b>'
+                        pointFormat: '('+this.translate.instant('CONSERVATIVE_ASSUMPTION')+' <b>{point.low:.1f}-{point.high:.1f} ' + unit2 + ')</b>'
                     },
                     lineWidth: 0,
                     linkedTo: ':previous',

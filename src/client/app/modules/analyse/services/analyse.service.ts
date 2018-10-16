@@ -83,18 +83,18 @@ export class AnalyseService {
         let rspecies: ResultSpecies = { codeSpecies: species.code, nameSpecies: species.scientificName, resultPerStation: [], resultPerZone: [], resultPerPlatform: [] };
         let stationObs = of(rspecies)
                 .pipe(
-                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedStations.filter(station => this.hasStationSp(species,station,survey)))
+                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedStations.filter(station => this.stationInSurvey(station,survey)))
                         .pipe(
                             mergeMap((station: Station) => this.getResultStation(survey, species, station)),
                             mergeMap((rstation: ResultStation) => {
-                                //console.log(rstation);
+                                console.log(rstation);
                                 rspecies.resultPerStation.push(rstation);
                                 return of(rspecies);
                             }))))
                 .subscribe();
         let zoneObs = of(rspecies)
                 .pipe(
-                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedZones.filter(zone => this.hasZoneSp(species,zone,survey)))
+                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedZones.filter(zone => this.zoneOfStations(zone,survey)))
                         .pipe(
                             mergeMap((zone:Zone) => this.getResultZone(survey,rspecies,zone)),
                             mergeMap((rzone:ResultZone) => {
@@ -105,7 +105,7 @@ export class AnalyseService {
                 .subscribe();
         let platformObs = of(rspecies)
                 .pipe(
-                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedPlatforms.filter(platform => this.hasPlatformSp(species,platform,survey)))
+                    mergeMap((rspecies: ResultSpecies) => from(this.data.usedPlatforms.filter(platform => this.platformOfZones(platform,survey)))
                         .pipe(
                             mergeMap((platforms:Platform) => this.getResultPlatform(survey,rspecies,platforms)),
                             mergeMap((rplatforms:ResultPlatform) => {
@@ -119,34 +119,26 @@ export class AnalyseService {
         
     }
 
-    hasStationSp(species: Species, station: Station, survey: Survey): boolean {
-        return this.hasStationSpCode(species,station.properties.code,survey);
+    stationInSurvey(station: Station, survey: Survey): boolean {
+        return this.codeStationInSurvey(station.properties.code,survey);
     }
 
-    hasStationSpCode(species: Species, codeStation: string, survey: Survey): boolean {
-        for(let c of survey.counts.filter(c => c.codeStation ===codeStation)){
-            if(c.quantities && c.quantities.length > 0 && c.quantities[0].codeSpecies === species.code){
-                return true;
-            }
-            if(c.mesures && c.mesures.length > 0 && c.mesures.map(m => m.codeSpecies).indexOf(species.code)>=0){
-                return true;
-            }
-        }
-            return false;
+    codeStationInSurvey(codeStation:string,survey:Survey): boolean{
+        return survey.counts.filter(count => count.codeStation===codeStation).length>=0;
     }
 
-    hasZoneSp(species: Species, zone: Zone, survey: Survey): boolean {
+    zoneOfStations(zone: Zone, survey: Survey): boolean {
         for(let codeStation of this.stationsZones[zone.properties.code]){
-            if(this.hasStationSpCode(species,codeStation,survey)){
+            if(this.codeStationInSurvey(codeStation,survey)){
                 return true;
             }
         }
         return false;
     }
 
-    hasPlatformSp(species: Species, platform: Platform, survey: Survey){
+    platformOfZones(platform: Platform, survey: Survey){
         for(let zone of this.data.usedZones.filter(z => z.codePlatform === platform.code)){
-            if(this.hasZoneSp(species,zone,survey)){
+            if(this.zoneOfStations(zone,survey)){
                 return true;
             }
         }
@@ -160,6 +152,7 @@ export class AnalyseService {
         let quantities = cmesures.flatMap(c => c.quantities).map(q => q.quantity);
         let quantity = this.getSum(quantities);
         if (mesures.length === 0 && quantity ===0) {
+            console.log("set 0");
             return of(rstation);
         }
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
@@ -185,17 +178,18 @@ export class AnalyseService {
                 && ((requiredDims.longMin === 0 || mesure.long >= requiredDims.longMin) && (requiredDims.longMax === 0 || mesure.long <= requiredDims.longMax));
     }
 
+    // biomasse en grammes depuis des mesures en cm
     getBiomass(method: Method, mesure: Mesure, species: Species): number {
         let biom = 0;
         switch (method.method) {
-            // Poids individuel Longueur-Weight: LW = sp.LW.Coef_A x m.long ^ sp.LW.Coef_B
+            // Poids individuel(g) Longueur-Weight: LW = sp.LW.Coef_A x m.long ^ sp.LW.Coef_B
             case "LONGUEUR":
                 biom = Number(species.LW.coefA) * angularMath.powerOfNumber(Number(mesure.long), Number(species.LW.coefB));
                 break;
-            // Poids individuel Longueur-Largeur-Weight LLW = sp.LLW.Coef_A x (pi x (m.long/10)/2 x (m.larg/10)/2)^sp.LLW.Coef_B
+            // Poids individuel(g) Longueur-Largeur-Weight LLW = sp.LLW.Coef_A x (pi x (m.long/10)/2 x (m.larg/10)/2)^sp.LLW.Coef_B
             case "LONGLARG":
             default:
-                biom = Number(species.LLW.coefA) * angularMath.powerOfNumber((angularMath.getPi() * (Number(mesure.long) / 10) / 2 * (Number(mesure.larg) / 10) / 2), Number(species.LLW.coefB));
+                biom = Number(species.LLW.coefA) * angularMath.powerOfNumber((angularMath.getPi() * (Number(mesure.long)*Number(mesure.larg) / 4)), Number(species.LLW.coefB));
                 break;
         }
         return biom;
@@ -204,7 +198,7 @@ export class AnalyseService {
     getResultZone(survey: Survey, rspecies: ResultSpecies, zone: Zone): Observable<ResultZone> {
         let rzone : ResultZone = { codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0, averageAbundance: 0, abundance: 0, averageBiomass: 0,
             biomass: 0, biomassPerHA: 0, abundancePerHA: 0, SDBiomassPerHA: 0, SDabundancePerHA: 0 };
-        let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones.filter(sz => sz[zone.properties.code].indexOf(rps.codeStation)>=0));
+        let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation)>=0);
         rzone.nbStations = rstations.length;
         rzone.nbStrates = Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface), rstations.length);
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
@@ -214,7 +208,7 @@ export class AnalyseService {
         // si calcul biomasse
         if (this.data.usedMethod.method !== 'NONE') {
             rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass), rzone.nbStations);
-            rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) * 1000;
+            rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) / 1000;
             rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
             rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomassPerHA));
         }

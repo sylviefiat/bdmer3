@@ -131,20 +131,36 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYear
 export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurveys, (platforms: Platform[], surveys: Survey[]) => {
     let zones: Zone[] = [];
     if (!platforms || !surveys) return zones;
-    for (let s of surveys.filter(s => s.counts.length > 0)) {
-        let sz: Zone[] = platforms.filter(platform => platform.code === s.codePlatform)[0].zones;
-        zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
+    for (let survey of surveys.filter(s => s.counts.length > 0)) {
+        for(let station of (<any>platforms.map(p => p.stations)).flatMap(stations=>stations).filter((station:Station) => survey.counts.map(c => c.codeStation).indexOf(station.properties.code)>=0)){
+            let sz = (<any>platforms.map(p => p.zones)).flatMap(zones=>zones).filter((zone:Zone) => MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name })));
+            zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
+        }
     }
     return zones;
 });
 
+/*export const getStationsAvailables = createSelector(getUsedPlatforms, getUsedSurveys,getUsedZones, (platforms: any, surveys: Survey[], zones: Zone[]) => {
+    let stations: Station[] = [];
+    if (!platforms || !surveys || !zones) return stations;
+    for (let survey of surveys.filter(s => s.counts.length > 0)) {
+        for(let station of platforms.map(p => p.stations).flatMap(stations=>stations).filter((station:Station) => survey.counts.map(c => c.codeStation).indexOf(station.properties.code)>=0)){
+            if(zones.filter((zone:Zone) => MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name }))).length>=0){
+                stations = [...stations, station];
+            }
+        }
+    }
+    return stations;
+});*/
+
 export const getStationsAvailables = (state: IAnalyseState) => {
     let stations = [];
-    if (!state.usedPlatforms || !state.usedZones) return stations;
-    for (let p of state.usedPlatforms) {
-        for (let z of state.usedZones) {
-            stations = [...stations, ...p.stations.filter(s =>
-                TurfBPIP.default(s.geometry.coordinates, (<any>MapService.getPolygon(z, { name: z.properties.name }))))];
+    if (!state.usedPlatforms || !state.usedZones || !state.usedSurveys) return stations;
+    for (let survey of state.usedSurveys.filter(s => s.counts.length > 0)) {
+        for(let station of (<any>state.usedPlatforms.map(p => p.stations)).flatMap(stations=>stations).filter((station:Station) => survey.counts.map(c => c.codeStation).indexOf(station.properties.code)>=0)){
+            if(state.usedZones.filter((zone:Zone) => MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name }))).length>0){
+                stations = [...stations, station];
+            }
         }
     }
     return stations;
