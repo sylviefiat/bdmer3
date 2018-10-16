@@ -156,10 +156,10 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 dataConfidence[rps.codePlatform][sp.scientificName] = [...dataConfidence[rps.codePlatform][sp.scientificName], value ? [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]:[null,null]];
                 dataStock[rps.codePlatform][sp.scientificName] = [...dataStock[rps.codePlatform][sp.scientificName], valueStock];
                 dataStockCA[rps.codePlatform][sp.scientificName] = [...dataStockCA[rps.codePlatform][sp.scientificName], value ? [Number(valueStock) - Number(valuStockCA), Number(valueStock) + Number(valuStockCA)]:[null,null]];
-                this.colors[colori++] = Highcharts.Color(hcolors[i]).brighten(0.2).get();
+                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i])).brighten(0.2).get();
                 this.colors[colori++] = hcolors[i++];
                 this.colors[colori++] = hcolors[i];
-                this.colors[colori++] = Highcharts.Color(hcolors[i++]).brighten(0.2).get();
+                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get();
 
             }
         }
@@ -254,7 +254,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 dataScatter[this.codeZone][sp.scientificName] = [...dataScatter[this.codeZone][sp.scientificName], value];
                 dataSD[this.codeZone][sp.scientificName] = [...dataSD[this.codeZone][sp.scientificName], [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]];
                 this.colors[colori++] = hcolors[i];
-                this.colors[colori++] = Highcharts.Color(hcolors[i++]).brighten(0.2).get();
+                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get();
             }
         }
         colori=0;
