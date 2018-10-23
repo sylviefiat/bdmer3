@@ -17,15 +17,13 @@ img {
   margin-top: 25px;
 }
 
-mat-card-title,
-mat-card-content {
+mat-card-title, mat-card-content {
   display: flex;
   justify-content: center;
 }
 mat-card-subtitle {
   color: #555;
 }
-mat-form-field,
 mat-form-field {
   flex-grow: 1;
   padding-left: 1em;
@@ -33,10 +31,7 @@ mat-form-field {
 mat-card-actions {
   margin: 5px 0 0 !important;
 }
-/*input {
-      flex-grow: 1;
-      min-width: 300px;
-    }*/
+
 .column {
   display: flex;
   flex-direction: column;
@@ -45,28 +40,17 @@ mat-card-actions {
   display: flex;
   flex-grow: 1;
 }
-.mat-form-field {
-  /*width: auto;
-      padding-left: 2em;*/
-}
-.mat-form-field {
-  /*width: auto;*/
-}
 .hint {
-  /* Position the hint */
   position: absolute;
   left: 2px;
   right: auto;
   bottom: 7px;
-  /* Copy styles from ng-messages */
   font-size: 12px;
   line-height: 14px;
   transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
-  /* Set our own color */
   color: grey;
 }
-.btn[disabled],
-.mat-input-element[disabled] {
+.btn[disabled], .mat-input-element[disabled] {
   cursor: not-allowed;
   box-shadow: none;
   opacity: 0.65;

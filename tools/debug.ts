@@ -14,4 +14,4 @@ console.log('* angular-seed tools ');
 console.log('* debugging task:', TASK);
 console.log('**********************');
 
-gulp.start(TASK);
+gulp.task(TASK);

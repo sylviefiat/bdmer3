@@ -19,12 +19,14 @@ export class PlatformService {
   }
 
   initDB(dbname, remote, prefix): Observable<any> {
-    //console.log(dbname);
+    console.log('platform.service');
     this.db = new PouchDB(prefix + dbname, { revs_limit: 3 });
+    console.log('platform.service.db');
     return from(this.sync(remote + "/" + prefix + dbname));
   }
 
   public getAll(): Observable<any> {
+    console.log(this.db);
     return from(this.db.allDocs({ include_docs: true })).pipe(map((result: ResponsePDB) => result.rows.map(row => row.doc)));
   }
 

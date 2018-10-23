@@ -1,25 +1,25 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { Observable, Subscription } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { Csv2JsonService } from "../../modules/core/services/csv2json.service";
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from "@angular/forms";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Csv2JsonService } from '../../modules/core/services/csv2json.service';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
-import { RouterExtensions, Config } from "../../modules/core/index";
-import { Platform, Zone, Station } from "../../modules/datas/models/index";
-import { Country } from "../../modules/countries/models/country";
+import { RouterExtensions, Config } from '../../modules/core/index';
+import { Platform, Zone, Station } from '../../modules/datas/models/index';
+import { Country } from '../../modules/countries/models/country';
 
-import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getLangues } from "../../modules/ngrx/index";
-import { PlatformAction } from "../../modules/datas/actions/index";
-import { CountriesAction } from "../../modules/countries/actions/index";
+import { IAppState, getPlatformPageError, getSelectedPlatform, getPlatformPageMsg, getLangues } from '../../modules/ngrx/index';
+import { PlatformAction } from '../../modules/datas/actions/index';
+import { CountriesAction } from '../../modules/countries/actions/index';
 
 @Component({
   moduleId: module.id,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "bc-station-import",
-  templateUrl: "./station-import.component.html",
-  styleUrls: ["./station-import.component.css"]
+  selector: 'bc-station-import',
+  templateUrl: 'station-import.component.html',
+  styleUrls: ['station-import.component.css']
 })
 export class StationImportComponent implements OnDestroy {
   @Input() platform: Platform;
@@ -51,8 +51,8 @@ export class StationImportComponent implements OnDestroy {
     route: ActivatedRoute
   ) {
     this.actionSubscription = this.store.select(getLangues).subscribe((l: any) => {
-      this.docs_repo = "../../../assets/files/";
-      this.csvFile = "importStation-" + l + ".csv";
+      this.docs_repo = '../../../assets/files/';
+      this.csvFile = 'importStation-' + l + '.csv';
     });
   }
 
@@ -63,7 +63,7 @@ export class StationImportComponent implements OnDestroy {
   }
 
   handleUpload(csvFile: any): void {
-    let notFoundMsg = this.translate.instant("NO_CSV_FOUND");
+    let notFoundMsg = this.translate.instant('NO_CSV_FOUND');
     let reader = new FileReader();
 
     if (csvFile.target.files && csvFile.target.files.length > 0) {
@@ -90,7 +90,7 @@ export class StationImportComponent implements OnDestroy {
   }
 
   clearInput() {
-    this.stationForm.get("stationInputFile").reset();
+    this.stationForm.get('stationInputFile').reset();
   }
 
   changeNeedHelp() {

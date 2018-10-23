@@ -1,19 +1,10 @@
-.actions {
-  text-align: center;
+h5 {
+  margin-left: 15px;
 }
-.insideform {
+mat-card-title {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  flex-wrap: wrap;
-  margin: 72px 0;
 }
-.insideform mat-card {
-  flex-grow: 1;
-  margin: auto;
-  max-width: 500px;
-}
-mat-card-title,
 mat-card-content {
   display: flex;
   justify-content: center;
@@ -30,15 +21,19 @@ mat-card-actions {
 }
 mat-card-footer {
   display: flex;
+  a {
+    margin: 1em;
+  }
 }
-mat-card-footer a {
-  margin: 1em;
-}
-.msg {
+.actions {
   text-align: center;
-  padding: 16px;
-  color: white;
-  background-color: #4bb543;
+}
+.btn-danger {
+  background-color: red;
+}
+.btn-disabled {
+  background-color: grey;
+  cursor: not-allowed;
 }
 .error {
   text-align: center;
@@ -46,8 +41,29 @@ mat-card-footer a {
   color: white;
   background-color: red;
 }
-h5 {
-  margin-left: 15px;
+.errorStation {
+  color: red;
+}
+.insideform {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 72px 0;
+  mat-card {
+    flex-grow: 1;
+    margin: auto;
+    max-width: 500px;
+  }
+}
+.msg {
+  text-align: center;
+  padding: 16px;
+  color: white;
+  background-color: #4bb543;
+}
+.send {
+  background-color: #4bb543;
 }
 .warn {
   color: #8a6d3b;
@@ -55,29 +71,6 @@ h5 {
   border-color: #faebcc;
   padding: 5px;
 }
-.send {
-  background-color: #4bb543;
-}
-.btn-danger {
-  background-color: red;
-}
-
-.btn-disabled {
-  background-color: grey;
-  cursor: not-allowed;
-}
-
-.msg {
-  text-align: center;
-  padding: 16px;
-  color: white;
-  background-color: #4bb543;
-}
-
-.errorStation {
-  color: red;
-}
-
 .warning {
   color: orange;
 }

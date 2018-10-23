@@ -1,5 +1,4 @@
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'fs';
-import * as runSequence from 'run-sequence';
 import * as gulp from 'gulp';
 import * as util from 'gulp-util';
 import * as isstream from 'isstream';
@@ -33,7 +32,10 @@ function validateTasks(tasks: any) {
 function registerTasks(tasks: any) {
   Object.keys(tasks)
     .forEach((t: string) => {
-      gulp.task(t, (done: any) => runSequence.apply(null, [...tasks[t], done]));
+      gulp.task(t, (done) => {
+        var runTasks = gulp.series(tasks[t]);
+        return runTasks(done);
+      });
     });
 }
 

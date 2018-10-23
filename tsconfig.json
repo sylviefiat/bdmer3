@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "declaration": false,
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2017"],
+    "lib": ["es2017","es2015.core"],
     "sourceMap": true,
     "pretty": true,
     "allowUnreachableCode": false,

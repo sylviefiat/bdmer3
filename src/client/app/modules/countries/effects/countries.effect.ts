@@ -24,7 +24,6 @@ export class CountriesEffects {
         .pipe(
             withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
             map((value) => this.countriesService.initDB('countries', value[1], value[2])),
-            mergeMap(() => this.countriesService.getCountry(this.countriesService.adminCountry.code)),
             filter(country => !country),
             mergeMap(value => this.countriesService.insertCountry(this.countriesService.adminCountry)),
             mergeMap(value => this.countriesService.addUser(this.countriesService.adminUser))

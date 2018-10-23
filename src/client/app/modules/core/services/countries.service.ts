@@ -22,12 +22,15 @@ export class CountriesService {
     }
 
     initDB(dbname, remote, prefix): Observable<any> {
+        console.log('countries.service');
         this.db = new PouchDB( prefix + dbname, { skip_setup: true, revs_limit: 3 });
         this.sync(remote+'/'+prefix+dbname);
+        console.log('countries.service.db');
         return this.getCountry(this.adminCountry.code);
     }
 
     public getAll(): Observable<any> {
+        console.log(this.db);
         return from(this.db.allDocs({ include_docs: true })).pipe(
             map((result: ResponsePDB) =>
                 result.rows.map(row => row.doc)
@@ -72,13 +75,14 @@ export class CountriesService {
     }
 
     getUser(uname: string): Observable<User> {
+        console.log(this.db);
         return from(this.db.query(function(doc, emit) {
             doc.users && doc.users.forEach(function(user) {
                 emit(user.username);
             });
         }, { key: uname, include_docs: true }))
-            .pipe(map((result: ResponsePDB) => result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
-                result.rows[0].doc.users.filter(user => user.username === uname) && result.rows[0].doc.users.filter(user => user.username === uname)[0])
+            .pipe(map((result: ResponsePDB) => {console.log(result);return result.rows && result.rows[0] && result.rows[0].doc && result.rows[0].doc.users &&
+                result.rows[0].doc.users.filter(user => user.username === uname) && result.rows[0].doc.users.filter(user => user.username === uname)[0]})
             );
     }
 

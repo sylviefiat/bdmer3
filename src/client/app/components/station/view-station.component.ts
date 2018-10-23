@@ -1,25 +1,25 @@
-import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { RouterExtensions, Config } from "../../modules/core/index";
-import { MatDialogRef, MatDialog, MatDialogConfig } from "@angular/material";
-import { TranslateService } from "@ngx-translate/core";
+import { Component, OnInit, Output, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { RouterExtensions, Config } from '../../modules/core/index';
+import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
 
-import { IAppState } from "../../modules/ngrx/index";
+import { IAppState } from '../../modules/ngrx/index';
 
-import { PlatformAction } from "../../modules/datas/actions/index";
-import { User } from "../../modules/countries/models/country";
-import { Platform, Station, Count } from "../../modules/datas/models/index";
-import { WindowService } from "../../modules/core/services/index";
-import { stationMapModal } from "./station-map-modal.component";
-import { Country } from "../../modules/countries/models/country";
+import { PlatformAction } from '../../modules/datas/actions/index';
+import { User } from '../../modules/countries/models/country';
+import { Platform, Station, Count } from '../../modules/datas/models/index';
+import { WindowService } from '../../modules/core/services/index';
+import { stationMapModal } from './station-map-modal.component';
+import { Country } from '../../modules/countries/models/country';
 
 @Component({
   moduleId: module.id,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: "bc-view-station",
-  templateUrl: "view-station.component.html",
-  styleUrls: ["view-station.component.css"]
+  selector: 'bc-view-station',
+  templateUrl: 'view-station.component.html',
+  styleUrls: ['view-station.component.css']
 })
 export class ViewStationComponent implements OnInit {
   @Input() platform: Platform;
@@ -41,18 +41,18 @@ export class ViewStationComponent implements OnInit {
   ngOnInit() {}
 
   deleteStation() {
-    let deleteMsg = this.translate.instant("CONFIRM_DELETE_STATION");
-    if (this.windowService.confirm("Are you sure you want to delete this station from database ?")) {
+    let deleteMsg = this.translate.instant('CONFIRM_DELETE_STATION');
+    if (this.windowService.confirm('Are you sure you want to delete this station from database ?')) {
       this.remove.emit(this.station);
     }
   }
 
   actions(type: string) {
     switch (type) {
-      case "stationForm":
-        this.action.emit(type + "/" + this.platform._id + "/" + this.station.properties.code);
+      case 'stationForm':
+        this.action.emit(type + '/' + this.platform._id + '/' + this.station.properties.code);
         break;
-      case "deleteStation":
+      case 'deleteStation':
         this.deleteStation();
         break;
       default:
@@ -61,10 +61,10 @@ export class ViewStationComponent implements OnInit {
   }
 
   toPlatforms() {
-    this.routerext.navigate(["platform"]);
+    this.routerext.navigate(['platform']);
   }
 
   toPlatform() {
-    this.routerext.navigate(["platform/" + this.platform.code]);
+    this.routerext.navigate(['platform/' + this.platform.code]);
   }
 }

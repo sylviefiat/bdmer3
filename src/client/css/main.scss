@@ -17,12 +17,6 @@ html, body {
   width: 100%;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  background-color:#f3f3f4;
-}
-
 /* Box-sizing border-box */
 *, *:before, *:after {
   box-sizing: border-box;
@@ -30,6 +24,9 @@ body {
 
 /* Set up a default font and some padding to provide breathing room */
 body {
+  display: flex;
+  flex-direction: column;
+  background-color:#f3f3f4;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;

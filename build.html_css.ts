@@ -42,6 +42,7 @@ const abtractSCSSFiles  = join(Config.SCSS_SRC, '**', '*.scss');
  * Copies all HTML files in `src/client` over to the `dist/tmp` directory.
  */
 function prepareTemplates() {
+  util.log(Config.TMP_DIR);
   return gulp.src([
     join(Config.APP_SRC, '**', '*.html'),
     '!' + join(Config.APP_SRC, '**', '*.tns.html')
@@ -65,6 +66,7 @@ function processComponentStylesheets() {
  * Process scss files referenced from Angular component `styleUrls` metadata
  */
 function processComponentScss() {
+  util.log(Config.TMP_DIR);
   return getSCSSFiles('process-component-scss', [appSCSSFiles], [abtractSCSSFiles])
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.sass(Config.getPluginConfig('gulp-sass')).on('error', plugins.sass.logError))
@@ -99,6 +101,7 @@ function getSCSSFiles(cacheName:string, filesToCompile:string[], filesToExclude:
  * configured processors.
  */
 function processComponentCss() {
+  util.log(Config.TMP_DIR);
   return gulp.src([
     join(Config.APP_SRC, '**', '*.css'),
     '!' + join(Config.APP_SRC, '**', '*.tns.css'),
@@ -122,6 +125,7 @@ function processExternalStylesheets() {
  * the global project configuration.
  */
 function processAllExternalStylesheets() {
+  util.log(Config.CSS_DEST);
   return merge(getExternalCssStream(), getExternalScssStream())
     .pipe(isProd ? plugins.concatCss(gulpConcatCssConfig.targetFile, gulpConcatCssConfig.options) : plugins.util.noop())
     .pipe(plugins.postcss(processors))
@@ -175,6 +179,7 @@ function getExternalScss() {
  * Processes the external CSS files using `postcss` with the configured processors.
  */
 function processExternalCss() {
+  util.log(Config.CSS_DEST);
   return getExternalCssStream()
     .pipe(plugins.postcss(processors))
     .pipe(isProd ? plugins.concatCss(gulpConcatCssConfig.targetFile, gulpConcatCssConfig.options) : plugins.util.noop())
@@ -193,7 +198,7 @@ export =
     }
 
     run(done:any) {
-      return merge(processComponentStylesheets(), prepareTemplates(), processExternalStylesheets())
+     return merge(processComponentStylesheets(), prepareTemplates(), processExternalStylesheets())
         .pipe(done());
     }
   };

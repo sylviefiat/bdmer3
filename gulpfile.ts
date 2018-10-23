@@ -1,6 +1,5 @@
 import * as gulp from 'gulp';
 import * as util from 'gulp-util';
-import * as runSequence from 'run-sequence';
 
 import Config from './tools/config';
 import { loadTasks, loadCompositeTasks } from './tools/utils';
@@ -19,9 +18,15 @@ let firstRun = true;
 gulp.task('clean.once', (done: any) => {
   if (firstRun) {
     firstRun = false;
-    runSequence('check.tools', 'clean.dev', 'clean.coverage', done);
+    var runTasks = gulp.series('check.tools', 'clean.dev', 'clean.coverage');
+    return runTasks(done);
   } else {
     util.log('Skipping clean on rebuild');
     done();
   }
 });
+
+gulp.task('default', gulp.series(function(done) {    
+    // task code here
+    done();
+}));

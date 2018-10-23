@@ -27,10 +27,6 @@
     mat-card-actions {
       margin: 5px 0 0 !important;
     }
-    /*input {
-      flex-grow: 1;
-      min-width: 300px;
-    }*/
     .column {
       display: flex;
       flex-direction: column;    
@@ -38,13 +34,6 @@
     .row {
       display: flex;
       flex-grow: 1;    
-    }
-    .mat-form-field {
-      /*width: auto;
-      padding-left: 2em;*/
-    }
-    .mat-form-field {
-      /*width: auto;*/
     }
     .hint {
         /* Position the hint */

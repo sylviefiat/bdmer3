@@ -57,7 +57,7 @@ export function consoleLogTarget(consoleService: ConsoleService) {
 }
 export function app(store: Store<IAppState>) {
   return () => new Promise(resolve => {
-    store.dispatch(new AppInitAction.StartAppInitAction());
+    //store.dispatch(new AppInitAction.StartAppInitAction());
     store.dispatch(new AppInitAction.LoadServicesUrlAction());
     store.select(getServiceUrl)
       .pipe(

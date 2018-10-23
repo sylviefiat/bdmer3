@@ -110,24 +110,24 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/deep-freeze-strict/index.js'
       },
       {
-        name:"rxjs",
+        name:'rxjs',
         packageMeta: {  
-         defaultExtension:"js",
-         main:"bundles/rxjs.umd.js",
+         defaultExtension:'js',
+         main:'bundles/rxjs.umd.js',
          map:{  
-            "./observable":"./observable/index.js",
-            "./operators":"./operators/index.js",
+            './observable':'./observable/index.js',
+            './operators':'./operators/index.js',
          }
         }
       },
       {
-        name:"rxjs-compat",
+        name:'rxjs-compat',
         packageMeta: {  
-         defaultExtension:"js",
-         main:"bundles/rxjs.umd.js",
+         defaultExtension:'js',
+         main:'bundles/rxjs.umd.js',
          map:{  
-            "./observable":"./observable/index.js",
-            "./operators":"./operators/index.js",
+            './observable':'./observable/index.js',
+            './operators':'./operators/index.js',
          }
         }
       },

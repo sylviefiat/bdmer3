@@ -16,11 +16,14 @@ export class SpeciesService {
   }
 
   initDB(dbname, remote, prefix): Observable<any> {
+    console.log('species.service');
     this.db = new PouchDB(prefix+dbname, { revs_limit: 3 });
+    console.log('species.service.db');
     return from(this.sync(remote + "/" + prefix+dbname));
   }
 
   public getAll(): Observable<any> {
+    console.log(this.db);
     return from(this.db.allDocs({ include_docs: true })).pipe(map((result: ResponsePDB) => result.rows.map(row => row.doc)));
   }
 

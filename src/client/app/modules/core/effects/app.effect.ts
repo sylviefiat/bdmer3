@@ -12,9 +12,9 @@ import { AppInitAction } from '../actions/index';
 import { environment } from '../../../config';
 
 @Injectable()
-export class AppInitEffects implements OnRunEffects {
+export class AppInitEffects/* implements OnRunEffects*/ {
 
-    @Effect() ngrxOnRunEffects(resolvedEffects$: Observable<EffectNotification>): Observable<EffectNotification> {
+    /*@Effect() ngrxOnRunEffects(resolvedEffects$: Observable<EffectNotification>): Observable<EffectNotification> {
         return this.actions$.ofType<AppInitAction.StartAppInitAction>(AppInitAction.ActionTypes.START_APP_INIT)
             .pipe(
                 exhaustMap(() => resolvedEffects$
@@ -23,7 +23,7 @@ export class AppInitEffects implements OnRunEffects {
                     )
                 )
             );
-    }
+    }*/
 
     @Effect() loadServicesUrl$ = this.actions$
         .ofType<AppInitAction.LoadServicesUrlAction>(AppInitAction.ActionTypes.LOAD_SERVICES_URL)

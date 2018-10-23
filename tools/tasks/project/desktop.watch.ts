@@ -1,5 +1,4 @@
 import * as gulp from 'gulp';
-import * as runSequence from 'run-sequence';
 
 const electron = require('electron-connect').server.create({ 'path': 'dist/dev' });
 
@@ -9,5 +8,5 @@ export = () => {
 };
 
 function reload() {
- runSequence('desktop', electron.reload);
+ gulp.series('desktop', electron.reload);
 }

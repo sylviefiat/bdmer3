@@ -1,3 +1,4 @@
+import * as gulp from 'gulp';
 import { clean } from '../../utils';
 import { join } from 'path';
 
@@ -11,9 +12,9 @@ import Config from '../../config';
  *
  */
 export = clean([
-  'gulpfile.js',
-  'gulpfile.js.map',
-  join(Config.TOOLS_DIR, '**/*.js'),
-  join(Config.TOOLS_DIR, '**/*.js.map')
+      'gulpfile.js',
+      'gulpfile.js.map',
+      join(Config.TOOLS_DIR, '**/*.js'),
+      join(Config.TOOLS_DIR, '**/*.js.map')
 ]);
 

@@ -37,10 +37,6 @@ import { Species } from '../../modules/datas/models/index';
       padding-left: 2em;
       flex-grow: 1;
     }
-    
-    .mat-form-field {
-      flex-grow: 1;
-    }
     .hint {
       /* Position the hint */
       position: absolute;

@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, throwError } from 'rxjs';
-import { map, mergeMap, filter, catchError } from 'rxjs/operators';
+import { map, mergeMap, filter, catchError,tap } from 'rxjs/operators';
 import { Authenticate } from '../../auth/models/user';
 import { CountriesService } from './countries.service';
 import { User, Country } from '../../countries/models/country';
@@ -26,15 +26,19 @@ export class AuthService {
   }
 
   initDB(dbname,remote): Observable<any> {
+    console.log('auth.service');
     PouchDB.plugin(PouchDBAuth);
-    this.db = new PouchDB(remote + "/" + dbname, {skip_setup: true,revs_limit: 5}); 
-    return from(this.sync(remote + "/"  + dbname));
+    this.db = new PouchDB(remote+'/'+dbname, {skip_setup: true,revs_limit: 5}); 
+    console.log('auth.service.db');
+    return from(this.sync(dbname));
   }
 
   login({ username, password }: Authenticate): Observable<any> {
+    console.log(this.db);
     return from(this.db.login(username, password)).pipe(
+      tap((result)=> console.log(result)),
       filter((result: ResponsePDB) => result.ok),
-      mergeMap((result: ResponsePDB) => this.setUser(username)
+      mergeMap((result: ResponsePDB) => {console.log(result);return this.setUser(username)}
       ));
   }
 
@@ -53,6 +57,7 @@ export class AuthService {
   setUser(username): Observable<any>{
     return this.countriesService.getUser(username).pipe(
       map(user => {
+        console.log(user);
         this.currentUser = user;
         this.getLoggedInUser.emit(of(this.currentUser));        
         return of(this.currentUser);    
@@ -112,13 +117,13 @@ export class AuthService {
       mergeMap((response) => of(user)));
   }
 
-  public sync(local: string): Promise<any> {
-    let localDatabase = new PouchDB(local);
-    return this.db.sync(localDatabase, {
-      live: true,
-      retry: true
-    }).on('error', error => {
-      console.error(JSON.stringify(error));
-    });
-  }
+  public sync(remote: string): Promise<any> {
+        let remoteDatabase = new PouchDB(remote);
+        return this.db.sync(remoteDatabase, {
+            live: true,
+            retry: true
+        }).on('error', error => {
+            console.error(JSON.stringify(error));
+        });
+    }
 }

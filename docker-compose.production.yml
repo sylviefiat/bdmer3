@@ -17,7 +17,7 @@ services:
       - bdmer3-network
 
   bdmer3build:
-    hostname: dbmer3build
+    hostname: bdmer3build
     build:
       context: .
       dockerfile: ./.docker/angular-seed.production.dockerfile
@@ -28,6 +28,8 @@ services:
       - bdmer3-network
     volumes:
       - ./dist:/home/app/BDMER3/dist
+      - ./build.html_css.ts:/home/app/BDMER3/tools/tasks/seed/build.html_css.ts
+      - ./copy.prod.ts:/home/app/BDMER3/tools/tasks/seed/copy.prod.ts
 
   bdmer3-nginx:
     command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/angular-seed.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
@@ -46,10 +48,10 @@ services:
 
   # Just to build prod image - available also in bdmer_deploy project
   bdmer3-prod:
-    hostname: dbmer3-prod
+    hostname: bdmer3-prod
     build:
       context: .
-      dockerfile: ./.docker/dbmer3.production.dockerfile
+      dockerfile: ./.docker/bdmer3.production.dockerfile
     container_name: bdmer3-prod
     image: bdmer3-prod
     networks:

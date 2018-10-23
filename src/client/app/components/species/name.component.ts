@@ -30,9 +30,6 @@ import { FormGroup } from '@angular/forms';
     mat-form-field {
       padding-left: 2em;
       flex-grow: 1;
-    }
-    
-    .mat-form-field {
       width: auto;
     }
     .hint {

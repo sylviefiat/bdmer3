@@ -2,57 +2,28 @@ mat-card {
   display: flex;
   flex-direction: column;
 }
-.msg {
-  text-align: center;
-  padding: 16px;     
-  color: white;
-  background-color: #4BB543;
-}
 
-mat-card-title-group.main-title {
-  justify-content: space-evenly;
-  flex-direction: row-reverse;
-}
-mat-card-title-group img {
-  max-height: 70px;
-  width: auto!important;
-}
-
-// img{
-//   width: 100%!important;
-// }
-
-.data, .inside {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-  
-}
-.data mat-card, .inside mat-card {
-  width: 400px;
-  min-height: 100px;
-  margin: 15px;
-}
-.data mat-card-content {
- 
-}
 mat-card-title {
   font-style: italic;
 }
+mat-card-title-group {
+  .main-title {
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
+  }
+  img {
+    max-height: 70px;
+    width: auto!important;
+  }
+}
+
 mat-card-content {
   display: flex;
   justify-content:space-around;
   flex-direction: column;
-}
-mat-card-content.one{
-  display: flex;
-  justify-content:start;
-}
-.data mat-card-content, .inside mat-card-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  .one {
+    justify-content:start;
+  }
 }
 mat-card-actions {
   display: flex;
@@ -60,6 +31,30 @@ mat-card-actions {
 }
 mat-form-field {
   margin-left:50px;
+}
+
+.data, .inside {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;  
+  mat-card {
+    width: 400px;
+    min-height: 100px;
+    margin: 15px;
+  }
+  mat-card-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.msg {
+  text-align: center;
+  padding: 16px;     
+  color: white;
+  background-color: #4BB543;
 }
 .warn:hover {
  background-color: #d9534f;
@@ -92,8 +87,6 @@ mat-form-field {
   opacity: .5;
   &:before {
     content: '';
-    // use the linear-gradient for the fading effect
-    // use a solid background color for a solid bar
     background: linear-gradient(to right, transparent, #818078, transparent);
     position: absolute;
     left: 0;
@@ -109,7 +102,6 @@ mat-form-field {
 
     padding: 0 .5em;
     line-height: 1.5em;
-    // this is really the only tricky part, you need to specify the background color of the container element...
     color: #818078;
     background-color: #fcfcfa;
   }

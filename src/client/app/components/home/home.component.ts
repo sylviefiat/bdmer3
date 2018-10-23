@@ -34,18 +34,23 @@ export class HomeComponent implements OnInit {
 
   constructor(private store: Store<IAppState>) {}
 
-  ngOnInit() {
-    this.store.dispatch(new PlatformAction.LoadAction());
-    this.store.dispatch(new CountriesAction.LoadAction());
-    this.store.dispatch(new CountriesAction.InitAction());
-
+  ngOnInit() {   
     this.loggedIn$ = this.store.select(getisLoggedIn);
-    this.isAdmin$ = this.store.select(getisAdmin);
+    this.loggedIn$.subscribe(loggedIn => {
+      console.log(loggedIn);
+      if(loggedIn){
+        this.store.dispatch(new PlatformAction.LoadAction());
+        this.store.dispatch(new CountriesAction.LoadAction());
+        this.store.dispatch(new CountriesAction.InitAction());
+        this.isAdmin$ = this.store.select(getisAdmin);
 
-    this.platforms$ = this.store.select(getPlatformListCurrentCountry);
+        this.platforms$ = this.store.select(getPlatformListCurrentCountry);
 
-    this.userCountry$ = this.store.select(getAuthCountry);
+        this.userCountry$ = this.store.select(getAuthCountry);
 
-    this.countries$ = this.store.select(getAllCountriesInApp);
+        this.countries$ = this.store.select(getAllCountriesInApp);
+      }
+    });
+    
   }
 }

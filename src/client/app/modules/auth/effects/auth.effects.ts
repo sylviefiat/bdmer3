@@ -29,12 +29,16 @@ export class AuthEffects {
       withLatestFrom(this.store.select(getServiceUrl)),
       map((value) => this.authService.initDB('_users',value[1])),
       map((db) => {
-        let token = JSON.parse(localStorage.getItem('token'));
+        let token = JSON.parse(localStorage.getItem(AuthEffects.tokenItem));
+        console.log(token);
         if (token && token.expires > Math.floor(Date.now() / 1000)){
+            console.log("login ok");
           return new AuthAction.LoginSuccess(token);
         } else if (token) {
+            console.log("logout");
            return new AuthAction.Logout(token);
         } else {
+            console.log("anonymous");
           return new AuthAction.AnonymousUse();
         }
       })
