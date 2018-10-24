@@ -16,7 +16,7 @@ export function clean(paths: string|string[]): (done: () => void) => void {
     } else {
       pathsToClean = [<string>paths];
     }
-
+    util.log(pathsToClean);
     let promises = pathsToClean.map(p => {
       return new Promise(resolve => {
         const relativePath: string = relative(Config.PROJECT_ROOT, p);

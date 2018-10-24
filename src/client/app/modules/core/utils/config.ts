@@ -17,7 +17,7 @@ export class Config {
   public static PageClass: any;
 
 
-  public static DEBUG = {
+  public static DEBUG : any = {
     LEVEL_1: false, // .info only
     LEVEL_2: false, // .warn only
     LEVEL_3: false, // .error only

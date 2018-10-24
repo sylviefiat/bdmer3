@@ -10,9 +10,9 @@ const plugins = <any>gulpLoadPlugins();
 /**
  * Executes the build process, transpiling the TypeScript files within the `tools` directory.
  */
-export = () => {
+export = (done:any) => {
 
-  let tsProject = makeTsProject();
+  let tsProject = makeTsProject({outDir:'./'},'./');
 
   let src = [
     join(Config.PROJECT_ROOT, 'gulpfile.ts'),
@@ -23,9 +23,9 @@ export = () => {
     .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())
     .pipe(tsProject());
-
-  return result.js
+  result.js
     .pipe(plugins.template(new TemplateLocalsBuilder().build(), {interpolate: /<%=([\s\S]+?)%>/g}))
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest('./'));
+  return result;
 };

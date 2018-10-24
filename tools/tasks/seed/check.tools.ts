@@ -10,14 +10,14 @@ let fs = require('fs');
 export = (done: any) => {
 //gulp.task('check.tools',(done)=>{
   util.log('Check tools');
-  let checkFile = join(process.cwd(), 'tools', 'config.js');
-
+  let checkFile = join(process.cwd(), 'tools', 'config.ts');
+  util.log(checkFile);
   // need to require the build.toolchain task as it won't be able to run after we run clear.files
   let buildTools = require('./build.tools');
   let cleanTools = require('./clean.tools');
 
   let rebuild = false;
-  util.log('Check tools');
+
   try {
     fs.accessSync(checkFile, fs.F_OK);
     util.log('Gulpfile has previously been compiled, rebuilding toolchain');

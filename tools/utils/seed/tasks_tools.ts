@@ -141,15 +141,16 @@ function registerTask(taskname: string, path: string): void {
 
   gulp.task(taskname, (done: any) => {
     const task = normalizeTask(require(TASK), TASK);
-
     if (changeFileManager.pristine || task.shallRun(changeFileManager.lastChangedFiles)) {
       const result = task.run(done, changeFileManager.lastChangedFiles);
+      //util.log(result.catch);
       if (result && typeof result.catch === 'function') {
         result.catch((e: any) => {
           util.log(`Error while running "${TASK}"`, e);
         });
       }
       return result;
+      //done();
     } else {
       done();
     }

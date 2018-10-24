@@ -17,3 +17,4 @@ USER app
 WORKDIR $HOME/$APP_NAME
 
 RUN npm install --unsafe-perm=true
+RUN npm install promise-polyfill --save-exact

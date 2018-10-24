@@ -1,6 +1,7 @@
 import * as gulpLoadPlugins from 'gulp-load-plugins';
 import { join } from 'path';
 import ts = require('gulp-typescript/release/main');
+import * as util from 'gulp-util';
 
 import Config from '../../config';
 
@@ -14,10 +15,12 @@ let tsProjects: any = {};
  */
 export function makeTsProject(options: ts.Settings = {}, pathToTsConfig: string = Config.APP_SRC, projectName = Config.APP_PROJECTNAME) {
   let optionsHash = JSON.stringify(options);
+
   if (!tsProjects[optionsHash]) {
     let config = Object.assign({
       typescript: require('typescript')
     }, options);
+
     tsProjects[optionsHash] =
       plugins.typescript.createProject(join(pathToTsConfig, projectName), config);
   }
