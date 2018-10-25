@@ -281,6 +281,14 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@turf/invariant',
             path: 'node_modules/@turf/invariant/index.js'
+        },
+        {
+            name: 'jspdf',
+            path: 'node_modules/jspdf/dist/jspdf.min.js'
+        },
+        {
+            name: 'html2canvas',
+            path: 'node_modules/html2canvas/dist/html2canvas.min.js'
         }];
 
         this.addPackagesBundles(additionalPackages);

@@ -87,7 +87,6 @@ export class AnalyseService {
                         .pipe(
                             mergeMap((station: Station) => this.getResultStation(survey, species, station)),
                             mergeMap((rstation: ResultStation) => {
-                                console.log(rstation);
                                 rspecies.resultPerStation.push(rstation);
                                 return of(rspecies);
                             }))))
@@ -149,10 +148,9 @@ export class AnalyseService {
         let rstation : ResultStation = { codeStation: station.properties.code, surface: survey.surfaceStation, abundance: 0, biomasses: [], biomass: 0, biomassPerHA: 0, abundancePerHA: 0};        
         let cmesures:any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = cmesures.flatMap(c => c.mesures).filter(m => this.isInDims(m,species));
-        let quantities = cmesures.flatMap(c => c.quantities).map(q => q.quantity);
+        let quantities = cmesures.flatMap(c => c.quantities).filter(q => q).map(q => q.quantity);
         let quantity = this.getSum(quantities);
         if (mesures.length === 0 && quantity ===0) {
-            console.log("set 0");
             return of(rstation);
         }
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
