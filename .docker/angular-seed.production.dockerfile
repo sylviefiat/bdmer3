@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:8.12.0
 
 # prepare a user which runs everything locally! - required in child images!
 RUN useradd --user-group --create-home --shell /bin/false app
@@ -16,4 +16,4 @@ RUN chown -R app:app $HOME/*
 USER app
 WORKDIR $HOME/$APP_NAME
 
-RUN npm install --unsafe-perm=true
+RUN npm install

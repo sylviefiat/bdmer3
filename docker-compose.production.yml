@@ -49,7 +49,7 @@ services:
     hostname: dbmer3-prod
     build:
       context: .
-      dockerfile: ./.docker/dbmer3.production.dockerfile
+      dockerfile: ./.docker/bdmer3.production.dockerfile
     container_name: bdmer3-prod
     image: bdmer3-prod
     networks:
