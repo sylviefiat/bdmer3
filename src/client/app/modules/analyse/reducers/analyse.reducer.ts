@@ -12,8 +12,9 @@ export function analyseReducer(state: IAnalyseState = analyseInitialState, actio
     case AnalyseAction.ActionTypes.SELECT_COUNTRY: {
       //console.log(action.payload);
       return {
-        ...state,
-        usedCountry: action.payload
+        ...analyseInitialState,
+        usedCountry: action.payload,
+        
       };
     }
 

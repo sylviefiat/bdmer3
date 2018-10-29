@@ -1,7 +1,8 @@
 import { Observable, Subscription } from 'rxjs';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { Platform } from '../../modules/datas/models/index';
+import { Platform } from '../../modules/datas/index';
+import { Year } from '../../modules/analyse/index';
 
 @Component({
     selector: 'bc-analyse-year',
@@ -11,10 +12,10 @@ import { Platform } from '../../modules/datas/models/index';
       <h2>{{ 'SELECT_YEARS' | translate }}</h2>
       <mat-checkbox (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
-        </mat-checkbox>
+      </mat-checkbox>
       <div  class="years">
         <div *ngFor="let year of (years$ | async); let i=index">
-          <bc-year [group]="form.controls.years.controls[i]" [year]="year" (yearEmitter)="changeValue($event)"></bc-year>
+          <bc-year [group]="form.controls.years.controls[i]" [isFirst]="i===0" [year]="defaultYears[i]" (yearEmitter)="changeValue($event)" (periodEmitter)="setDefaultPeriod($event)"></bc-year>
         </div>
       </div>
     </div>
@@ -31,10 +32,10 @@ import { Platform } from '../../modules/datas/models/index';
     `]
 })
 export class AnalyseYearComponent implements OnInit, OnDestroy {
-    @Input() years$: Observable<string[]>;
-    defaultYears: string[] = [];
-    checkedYears: string[] = [];
-    @Output() yearEmitter = new EventEmitter<string[]>();
+    @Input() years$: Observable<number[]>;
+    defaultYears : Year[] = [];
+    checkedYears : Year[] = [];
+    @Output() yearEmitter = new EventEmitter<any[]>();
     @Input('group') public form: FormGroup;
     actionsSubscription: Subscription;
 
@@ -44,19 +45,18 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.actionsSubscription = this.years$.subscribe(years => {
-            this.defaultYears = years;
+            this.defaultYears = years.map(year=>{return {year:year,startDate:new Date(year+"-01-01"),endDate:new Date(year+"-12-31")};});
             this.initYears();
-        });
-        
+        });        
     }
 
     ngOnDestroy() {
         this.actionsSubscription.unsubscribe();
     }
 
-    newYear(y: string) {
+    newYear(y: Year) {
         return this._fb.group({
-            year: new FormControl(this.checkedYears.filter(year => year === y).length > 0)
+            year: new FormControl(this.checkedYears.filter((year:Year) => year.year === y.year).length > 0)
         });
     }
 
@@ -71,11 +71,16 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     }
 
     changeValue(yearCheck: any) {
-        this.checkedYears = [...this.checkedYears.filter(y => y !== yearCheck.year)];
+        this.checkedYears = [...this.checkedYears.filter(y => y.year !== yearCheck.year)];
         if (yearCheck.checked) {
-            this.checkedYears.push(yearCheck.year);
+            this.checkedYears.push(yearCheck);
         }
         this.yearEmitter.emit(this.checkedYears);
+    }
+
+    setDefaultPeriod(period: any){
+        console.log(period);
+
     }
 
     checkAll(ev) {

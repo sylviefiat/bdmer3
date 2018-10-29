@@ -11,7 +11,7 @@ import { IAppState } from '../../ngrx/index';
 export interface IAnalyseState {
     usedCountry: Country;
     usedPlatforms: Platform[];
-    usedYears: string[];
+    usedYears: [];
     usedSurveys: Survey[];
     usedZones: Zone[];
     usedStations: Station[];
@@ -102,12 +102,12 @@ export const getResult = (state: IAnalyseState) => state.result;
 export const getMsg = (state: IAnalyseState) => state.msg;
 
 export const getYearsAvailables = createSelector(getUsedPlatforms, (platforms: Platform[]) => {
-    let years: string[] = [];
+    let years: number[] = [];
     if (!platforms) return years;
     for (let p of platforms) {
         for (let s of p.surveys) {
             if(s.counts.length > 0) {
-                let y = new Date(s.dateStart).getFullYear().toString();
+                let y = new Date(s.dateStart).getFullYear();
                 if (years.indexOf(y) < 0) {
                     years.push(y);
                 }
@@ -117,13 +117,18 @@ export const getYearsAvailables = createSelector(getUsedPlatforms, (platforms: P
     return years.sort();
 });
 
-export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYears, (platforms: Platform[], years: string[]) => {
+export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYears, (platforms: any, years: any[]) => {
     let surveys: Survey[] = [];
     if (!platforms || !years) return surveys;
-    for (let p of platforms) {
-        for (let y of years) {
-            surveys = [...surveys, ...p.surveys.filter(s => s.counts.length > 0 && y === new Date(s.dateStart).getFullYear().toString())];
-        }        
+    console.log(years);
+    for (let s of platforms.flatMap(p => p.surveys)) {
+        let sd = new Date(s.dateStart);
+        let ysd = years.filter(year => year.year === sd.getFullYear());
+        let ed = new Date(s.dateEnd);
+        let yed = years.filter(year => year.year === ed.getFullYear());
+        if(s.counts.length > 0 && (ysd && ysd.length>0 && ysd[0].startDate <= sd && ysd[0].endDate >= sd) && (yed && yed.length>0 && yed[0].startDate <= ed && yed[0].endDate >= ed)){
+            surveys = [...surveys, s];
+        }
     }
     return surveys;
 });

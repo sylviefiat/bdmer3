@@ -53,7 +53,7 @@ export class AnalysePageComponent implements OnInit {
   countries$: Observable<Country[]>;
   currentCountry$: Observable<Country>;
   platforms$: Observable<Platform[]>;
-  years$: Observable<string[]>;
+  years$: Observable<[]>;
   surveys$: Observable<Survey[]>;
   zones$: Observable<Zone[]>;
   usedZones$: Observable<Zone[]>;

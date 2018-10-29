@@ -466,5 +466,8 @@
   "GRAPH_PLATFORMS":"Résultats pour les plateformes sélectionnées",
   "RESULTS_PLATFORMS":"Evolution du stock sur les plateformes",
   "RESULTS_ZONE":"Evolution du stock sur la zone ",
-  "LOGIN_SYSTEM_ERROR":"Une erreur inconnue est survenue, contacter l'administrateur du site"
+  "LOGIN_SYSTEM_ERROR":"Une erreur inconnue est survenue, contacter l'administrateur du site",
+  "AFFINE_PERIOD":"Si besoin, affiner la période sur l'année",
+  "START_DATE":"Date de début",
+  "END_DATE":"Date de fin"
 }

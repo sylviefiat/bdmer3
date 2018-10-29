@@ -23,7 +23,7 @@ export class AnalyseComponent {
     @Input() countries: Country[];
     @Input() currentCountry$: Observable<Country>;
     @Input() platforms$: Observable<Platform[]>;
-    @Input() years$: Observable<string[]>;
+    @Input() years$: Observable<[]>;
     @Input() surveys$: Observable<Survey[]>;
     @Input() zones$: Observable<Zone[]>;
     @Input() usedZones$: Observable<Zone[]>;
@@ -35,7 +35,7 @@ export class AnalyseComponent {
     @Input() locale: string;
     @Output() countryEmitter = new EventEmitter<Country>();
     @Output() platformEmitter = new EventEmitter<Platform[]>();
-    @Output() yearEmitter = new EventEmitter<string[]>();
+    @Output() yearEmitter = new EventEmitter<number[]>();
     @Output() surveyEmitter = new EventEmitter<Survey[]>();
     @Output() zoneEmitter = new EventEmitter<Zone[]>();
     @Output() stationEmitter = new EventEmitter<Station[]>();
@@ -83,7 +83,7 @@ export class AnalyseComponent {
         this.platformEmitter.emit(platforms); 
     }
 
-    setYears(years: string[]) {
+    setYears(years: []) {
         this.yearEmitter.emit(years); 
     }
 

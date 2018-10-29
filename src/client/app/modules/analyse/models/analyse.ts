@@ -17,6 +17,13 @@ export interface Data {
     usedMethod: Method;
 }
 
+export interface Year {
+    year: number;
+    startDate: Date;
+    endDate: Date;
+    checked?:boolean;
+}
+
 export interface Results {
     name: string;    
     resultPerSurvey:ResultSurvey[];

@@ -466,5 +466,8 @@
   "GRAPH_PLATFORMS":"Selected platforms results",
   "RESULTS_PLATFORMS":"Stock evolution on platforms",
   "RESULTS_ZONE":"Stock evolution on zone ",
-  "LOGIN_SYSTEM_ERROR":"An unknown error occurred, contact website administrator"
+  "LOGIN_SYSTEM_ERROR":"An unknown error occurred, contact website administrator",
+  "AFFINE_PERIOD":"If necessary, refine the time of the year",
+  "START_DATE":"Start date",
+  "END_DATE":"End date"
 }
