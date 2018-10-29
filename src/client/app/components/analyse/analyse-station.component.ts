@@ -73,22 +73,28 @@ import { Station, Zone } from '../../modules/datas/models/index';
                   [data]="layerStations$ | async">
                   <mgl-layer
                     id="stationsid"
-                    type="symbol"
+                    type="circle"
                     source="layerStations"
-                    [layout]="{
-                      'icon-image': {
-                          property: 'checked',
+                    [paint]="{
+                      'circle-radius': 6,
+                      'circle-color': '#ff0000',
+                      'circle-opacity': {
+                        property: 'checked',
                           type: 'categorical',
                           stops: [
-                              [false, 'triangle-stroked-15'],
-                              [true, 'triangle-15']
+                              [false, 0],
+                              [true, 1]
                           ]
                       },
-                      'icon-size': 1.5,
-                      'icon-rotate': 180,
-                      'icon-allow-overlap': true,
-                      'icon-ignore-placement': true
-                      }"            
+                      'circle-stroke-width': {
+                        property: 'checked',
+                          type: 'categorical',
+                          stops: [
+                              [false, 1],
+                              [true, 2]
+                          ]
+                      }
+                    }"
                     (click)="selectStation($event)"
                     (mouseEnter)="cursorStyle = 'pointer'"
                     (mouseLeave)="cursorStyle = ''">

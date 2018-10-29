@@ -20,92 +20,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
         [fitBounds]="bounds"
         (load) = "setMap($event)"
         (zoomEnd)="zoomChange($event)">
-        <ng-container *ngIf="showStations && (layerStations$ | async)">
-          <mgl-geojson-source
-            id="layerStations"
-            [data]="layerStations$ | async">
-            
-            <mgl-layer
-                *ngIf="(!showBiom) || (typeShow==='A')"
-                id="stationId_abun"
-                type="circle"
-                source="layerStations"
-                [paint]="{
-                  'circle-color': {
-                      property: 'abundancy',
-                      type: 'interval',
-                      stops: [
-                      [0, '#FFEDA0'],
-                      [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
-                      ]
-                  },
-                  'circle-radius': {
-                      property: 'abundancy',
-                      type: 'interval',
-                      stops: [
-                        [0, 2],
-                        [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
-                      ]
-                  }
-            }">
-            </mgl-layer>
-            <mgl-layer
-                *ngIf="showBiom && typeShow==='B'"
-                id="stationId_biom"
-                type="circle"
-                source="layerStations"
-                [paint]="{
-                  'circle-color': {
-                      property: 'biomass',
-                      type: 'interval',
-                      stops: [
-                      [0, '#FFEDA0'],
-                      [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
-                      ]
-                  },
-                  'circle-radius': {
-                      property: 'biomass',
-                      type: 'interval',
-                      stops: [
-                        [0, 2],
-                        [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
-                      ]
-                  }
-            }"
-            (click)="selectStation($event)">            
-            </mgl-layer>
-             <mgl-popup *ngIf="selectedStation"
-              [lngLat]="selectedStation.geometry?.coordinates">
-              <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span><br/>
-              <span *ngIf="typeShow==='B'" style="color:black;">{{'BIOMASS' | translate}} {{selectedStation.properties?.biomass}}</span>
-              <span *ngIf="typeShow==='A'" style="color:black;">{{'ABUNDANCY' | translate}} {{selectedStation.properties?.abundancy}}</span>
-            </mgl-popup>
-          </mgl-geojson-source>
-        </ng-container>
+        
         <ng-container *ngIf="(layerZones$ | async) && showZones">
           <mgl-geojson-source
             id="layerZones"
@@ -130,7 +45,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
                       [100, '#800026']
                     ]
                 },
-                'fill-opacity': 0.3,
+                'fill-opacity': 1,
                 'fill-outline-color': '#000'
                 }"
               (click)="selectZone($event)">
@@ -155,7 +70,7 @@ import { Results, Data } from '../../modules/analyse/models/index';
                       [100, '#800026']
                     ]
                 },
-                'fill-opacity': 0.3,
+                'fill-opacity': 1,
                 'fill-outline-color': '#000'
                 }"
               (click)="selectZone($event)">
@@ -163,6 +78,70 @@ import { Results, Data } from '../../modules/analyse/models/index';
             <mgl-popup *ngIf="selectedZone"
               [lngLat]="selectZoneCoordinates()">
               <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span><br/>
+            </mgl-popup>
+          </mgl-geojson-source>
+        </ng-container>
+
+        <ng-container *ngIf="showStations && (layerStations$ | async)">
+          <mgl-geojson-source
+            id="layerStations"
+            [data]="layerStations$ | async">
+            
+            <mgl-layer
+                *ngIf="(!showBiom) || (typeShow==='A')"
+                id="stationId_abun"
+                type="circle"
+                source="layerStations"
+                [paint]="{
+                  'circle-color': '#fff',
+                  'circle-radius': {
+                      property: 'abundancy',
+                      type: 'interval',
+                      stops: [
+                        [0, 2],
+                        [1, 3],
+                        [10, 4],
+                        [20, 5],
+                        [30, 6],
+                        [40, 7],
+                        [50, 8],
+                        [100, 9]
+                      ]
+                  },
+                  'circle-stroke-width': 1
+            }"
+            (click)="selectStation($event)">
+            </mgl-layer>
+            <mgl-layer
+                *ngIf="showBiom && typeShow==='B'"
+                id="stationId_biom"
+                type="circle"
+                source="layerStations"
+                [paint]="{
+                  'circle-color': '#fff',
+                  'circle-radius': {
+                      property: 'biomass',
+                      type: 'interval',
+                      stops: [
+                        [0, 2],
+                        [1, 3],
+                        [10, 4],
+                        [20, 5],
+                        [30, 6],
+                        [40, 7],
+                        [50, 8],
+                        [100, 9]
+                      ]
+                  },
+                  'circle-stroke-width': 1
+            }"
+            (click)="selectStation($event)">            
+            </mgl-layer>
+             <mgl-popup *ngIf="selectedStation"
+              [lngLat]="selectedStation.geometry?.coordinates">
+              <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span><br/>
+              <span *ngIf="typeShow==='B'" style="color:black;">{{'BIOMASS' | translate}} {{selectedStation.properties?.biomass}} {{'BIOMASS_UNIT' | translate}}</span>
+              <span *ngIf="typeShow==='A'" style="color:black;">{{'ABUNDANCY' | translate}} {{selectedStation.properties?.abundancy}} {{'ABUNDANCY_UNIT' | translate}}</span>
             </mgl-popup>
           </mgl-geojson-source>
         </ng-container>
@@ -234,6 +213,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     if (this.bounds) {
       this.map.fitBounds(this.bounds, { padding: 10 });
     }
+    //console.log(this.map.getCanvas().toDataURL());
   }
 
   ngOnChanges(event) {

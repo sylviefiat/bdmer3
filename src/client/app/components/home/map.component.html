@@ -1,0 +1,96 @@
+<nav id="switcher">
+      <a href="#" (click)="changeView('countries')" [class.isOn]="isDisplayed('countries')">{{'COUNTRIES' | translate}}</a>
+      <a href="#" (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+      <a href="#" (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
+      <div class="subswitch">
+        <a href="#" (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
+        <a href="#" (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
+      </div>
+    </nav>
+    <mgl-map
+    [style]="bls[bl]"
+    [fitBounds]="bounds$ | async"
+    [fitBoundsOptions]="{
+      padding: boundsPadding,
+      maxZoom: zoomMaxMap
+    }"
+    (zoomEnd)="zoomChange($event)"
+    (data)="styleChange($event)">
+      <ng-container *ngIf="isDisplayed('countries')">
+        <mgl-marker *ngFor="let marker of markersCountries"
+          [lngLat]="marker.lngLat">
+          <div
+            (click)="zoomOnCountry(marker.country)"
+            class="marker">
+            <fa [name]="'map-marker'" [border]=false [size]=3></fa><br/>
+            <span>{{marker.name}}</span>
+          </div>
+        </mgl-marker>
+      </ng-container>
+      <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
+        <mgl-geojson-source
+          id="layerZones"
+          [data]="layerZones$ | async">
+          <mgl-layer
+            id="zonesid"
+            type="fill"
+            source="layerZones"
+            [paint]="{
+              'fill-color': '#AFEEEE',
+              'fill-opacity': 0.3,
+              'fill-outline-color': '#000'
+              }">
+          </mgl-layer>
+          <mgl-layer
+            id="zonestext"
+            type="symbol"
+            source="layerZones"
+            [layout]="{
+              'text-field': '{code}',
+              'text-anchor':'bottom',
+              'text-font': [
+                'DIN Offc Pro Italic',
+                'Arial Unicode MS Regular'
+              ],
+              'text-allow-overlap': true,
+              'symbol-placement': 'point',
+              'symbol-avoid-edges': true,
+              'text-max-angle': 30,
+              'text-size': 12
+            }"
+            [paint]="{
+              'text-color': 'white'
+            }"
+          >
+          </mgl-layer>
+        </mgl-geojson-source>
+      </ng-container>
+      <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
+        <mgl-geojson-source
+          id="layerStations"
+          [data]="layerStations$ | async">
+          <mgl-layer
+            id="stationsid"
+            type="circle"
+            source="layerStations"
+            [paint]="{
+            'circle-radius': 6,
+            'circle-color': '#ff0000',
+            'circle-opacity': 1,
+            'circle-stroke-width': 1
+          }"
+          (click)="showPopupStation($event)"
+          (mouseEnter)="cursorStyle = 'pointer'"
+          (mouseLeave)="cursorStyle = ''">
+          </mgl-layer>
+        </mgl-geojson-source>
+      </ng-container>
+      <mgl-popup *ngIf="selectedStation"
+        [lngLat]="selectedStation.geometry?.coordinates">
+        <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span>
+      </mgl-popup>
+      <mgl-popup *ngIf="selectedZone"
+        [lngLat]="selectedZone.geometry?.coordinates[0][0]">
+        <span style="color:black;padding-right:10px;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span>
+      </mgl-popup>
+    </mgl-map>

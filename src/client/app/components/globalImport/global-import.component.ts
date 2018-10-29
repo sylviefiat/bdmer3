@@ -27,8 +27,8 @@ import { CountriesAction } from "../../modules/countries/actions/index";
   moduleId: module.id,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "bc-global-import",
-  templateUrl: "./global-import.component.html",
-  styleUrls: ["./global-import.component.css"]
+  templateUrl: "global-import.component.html",
+  styleUrls: ["global-import.component.css"]
 })
 export class GlobalImportComponent implements OnInit {
   @ViewChild("stepper") stepper: MatStepper;

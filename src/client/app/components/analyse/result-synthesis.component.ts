@@ -130,7 +130,7 @@ export class ResultSynthesisComponent implements OnInit {
       this.surveyShow$=of(this.analyseData.usedSurveys[0].code);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.analyseData.usedSurveys[0].code)[0]);
       this.showStations$=of(true);
-      this.showZones$=of(false);
+      this.showZones$=of(true);
       this.showBiom = this.analyseData.usedMethod.method !== 'NONE';
       this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> this.customSort(z1.properties.code,z2.properties.code));
     }

@@ -1,0 +1,95 @@
+mgl-map {
+  height: 50vh;
+  width: 100%;
+}
+.mapboxgl-popup-content {
+  color:black;
+}
+.marker{
+    color: white;
+}
+.markerValid{
+      color: green;
+    }
+    .markerInvalid{
+      color: orange;
+    }
+    .markerNew{
+      color: green
+    }
+
+.marker:hover {
+  cursor:'pointer';
+}
+#switcher {
+    background: #fff;
+    display:flex;
+    justify-content: flex-end;
+    z-index: 1;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#switcher a {
+    margin-left: 2px;
+    font-size: 13px;
+    color: #404040;
+    display: block;
+    margin: 0;
+    padding: 0;
+    padding: 10px;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+#switcher a:hover {
+    background-color: #f8f8f8;
+    color: #404040;
+}
+
+#switcher a.isOn {
+    background-color: #106cc8;
+    color: #ffffff;
+}
+
+#switcher a.isOn:hover {
+    background: #3074a4;
+}
+#switcher .subswitch {
+  display:flex;
+  flex-direction:row;
+}
+#switcher .subswitch a {
+  width:50%
+}
+    #stationsidpreview{
+      color: red
+    }
+    .hide {
+      display:none;
+    }
+
+.loading{
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.loading:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #106cc8;
+  border-color: #106cc8 transparent #106cc8 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
