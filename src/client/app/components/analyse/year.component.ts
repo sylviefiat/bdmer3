@@ -52,10 +52,10 @@ export class YearComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.minDate=this.year.startDate;
-    this.maxDate=this.year.endDate;
-    this.startDate = this.minDate;
-    this.endDate = this.maxDate;    
+    this.minDate=new Date(this.year.year+"-01-01");
+    this.maxDate=new Date(this.year.year+"-12-31");
+    this.startDate = this.year.startDate;
+    this.endDate = this.year.endDate;    
   }
 
   change(type:string,event: any){

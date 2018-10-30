@@ -125,6 +125,12 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYear
         let ysd = years.filter(year => year.year === sd.getFullYear());
         let ed = new Date(s.dateEnd);
         let yed = years.filter(year => year.year === ed.getFullYear());
+        if(ysd && ysd.length>0){
+            console.log(ysd[0]);
+            console.log(sd);
+            console.log(ysd[0].startDate <= sd);
+            console.log(ysd[0].endDate >= sd)
+        }
         if(s.counts.length > 0 && (ysd && ysd.length>0 && ysd[0].startDate <= sd && ysd[0].endDate >= sd) && (yed && yed.length>0 && yed[0].startDate <= ed && yed[0].endDate >= ed)){
             surveys = [...surveys, s];
         }

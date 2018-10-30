@@ -68,27 +68,36 @@ export class AnalyseYearComponent implements OnInit {
     }
 
     changeValue(yearCheck: any) {
-        this.checkedYears = [...this.checkedYears.filter(y => y.year !== yearCheck.year)];
-        if (yearCheck.checked) {
-            this.checkedYears.push(yearCheck);
-        }
-        this.yearEmitter.emit(this.checkedYears);
+        this.samePeriod$.subscribe(sp => {
+            this.checkedYears = [...this.checkedYears.filter(y => y.year !== yearCheck.year)];   
+            if(yearCheck.checked){
+                this.checkedYears.push(yearCheck);
+            }
+            this.yearEmitter.emit(this.checkedYears);                     
+            if(sp){
+                this.setDefaultPeriod({startDate:yearCheck.startDate,endDate:yearCheck.endDate,checked:true});
+            }
+        });        
     }
 
-    setDefaultPeriod(period: any){
-        this.samePeriod$ = of(period.checked);
+    setDefaultPeriod(period: any){     
+        /*this.checkedYears.forEach((year,index) => {
+            year.startDate = period.checked || !index ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
+            year.endDate = period.checked || !index ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
+        });*/
+        
+           
         this.defaultYears$=this.defaultYears$.map(defaultYears => {
-            defaultYears.forEach(year => {
-                year.startDate = period.checked ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
-                year.endDate = period.checked ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
+            defaultYears.forEach((year,index) => {
+                year.startDate = period.checked || !index ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
+                year.endDate = period.checked || !index ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
             });
+            this.checkedYears = defaultYears.filter(year => this.checkedYears.filter(y => y.year===year.year).length>0);
+            console.log(this.checkedYears);
+            this.yearEmitter.emit(this.checkedYears);
+            this.samePeriod$ = of(period.checked);
             return defaultYears;
         });
-        this.checkedYears.forEach(year => {
-            year.startDate = period.checked ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
-            year.endDate = period.checked ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
-        });
-        this.yearEmitter.emit(this.checkedYears);
     }
 
     checkAll(ev) {
