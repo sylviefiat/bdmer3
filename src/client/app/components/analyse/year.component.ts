@@ -6,10 +6,11 @@ import { Year } from '../../modules/analyse/index';
   selector: 'bc-year',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div [formGroup]="form"> 
+    <div [formGroup]="form" class="row"> 
         <mat-checkbox [formControlName]="'year'" (change)="change('check',$event)">
-          <span>{{ year.year }} </span>
-          <span *ngIf="form.controls.year.value" class="smaller">
+          <span>{{ year.year }} </span>          
+        </mat-checkbox>
+        <div *ngIf="form.controls.year.value" class="smaller">
             <span>&nbsp;&nbsp;-&nbsp;{{ 'AFFINE_PERIOD' | translate }}&nbsp;&nbsp;</span>
             <mat-form-field>
               <input matInput [matDatepicker]="startPicker" [min]="minDate" [max]="endDate" placeholder="{{ 'START_DATE' | translate }}" [(value)]="startDate" (dateInput)="change('start',$event)">
@@ -22,20 +23,23 @@ import { Year } from '../../modules/analyse/index';
               <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
               <mat-datepicker #endPicker></mat-datepicker>
             </mat-form-field>
-            <mat-checkbox *ngIf="isFirst" [value]="checked" (change)="changePeriod()">{{ 'APPLY_OTHERS' | translate}}</mat-checkbox>
-          </span>
-        </mat-checkbox>
+            <mat-checkbox *ngIf="isFirst" [(ngModel)]="samePeriod" (change)="changePeriod($event)" [ngModelOptions]="{standalone: true}">{{ 'APPLY_OTHERS' | translate}}</mat-checkbox>
+        </div>
     </div>
   `,
   styles:[`
     .smaller {
       font-size: smaller;
     }
+    .row {
+      display: flex;
+    }
   `]
 })
 export class YearComponent implements OnInit {
   @Input() year: Year;
   @Input() isFirst: boolean;
+  @Input() samePeriod: boolean; 
   @Input('group') public form: FormGroup;
   @Output() yearEmitter = new EventEmitter<Year>();
   @Output() periodEmitter = new EventEmitter<any>();
@@ -43,13 +47,11 @@ export class YearComponent implements OnInit {
   maxDate: Date;
   startDate: Date;
   endDate: Date;
-  checked: boolean = false;
 
   constructor(private _fb: FormBuilder) {
   }
 
   ngOnInit(){
-    console.log(this.year);
     this.minDate=this.year.startDate;
     this.maxDate=this.year.endDate;
     this.startDate = this.minDate;
@@ -72,9 +74,6 @@ export class YearComponent implements OnInit {
   }
 
   changePeriod(value) {
-    console.log(value);
-    if(value.checked){
-      return this.periodEmitter.emit({startDate:this.startDate,endDate:this.endDate});
-    }
+    return this.periodEmitter.emit({startDate:this.startDate,endDate:this.endDate,checked:value.checked});
   }
 }

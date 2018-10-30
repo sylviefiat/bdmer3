@@ -120,7 +120,6 @@ export const getYearsAvailables = createSelector(getUsedPlatforms, (platforms: P
 export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYears, (platforms: any, years: any[]) => {
     let surveys: Survey[] = [];
     if (!platforms || !years) return surveys;
-    console.log(years);
     for (let s of platforms.flatMap(p => p.surveys)) {
         let sd = new Date(s.dateStart);
         let ysd = years.filter(year => year.year === sd.getFullYear());

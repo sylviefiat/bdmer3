@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Platform } from '../../modules/datas/index';
@@ -14,8 +14,8 @@ import { Year } from '../../modules/analyse/index';
           {{ 'CHECK_ALL' | translate }}
       </mat-checkbox>
       <div  class="years">
-        <div *ngFor="let year of (years$ | async); let i=index">
-          <bc-year [group]="form.controls.years.controls[i]" [isFirst]="i===0" [year]="defaultYears[i]" (yearEmitter)="changeValue($event)" (periodEmitter)="setDefaultPeriod($event)"></bc-year>
+        <div *ngFor="let year of (defaultYears$ | async); let i=index">
+          <bc-year [group]="form.controls.years.controls[i]" [isFirst]="i===0" [samePeriod]="samePeriod$ | async" [year]="year" (yearEmitter)="changeValue($event)" (periodEmitter)="setDefaultPeriod($event)"></bc-year>
         </div>
       </div>
     </div>
@@ -31,43 +31,40 @@ import { Year } from '../../modules/analyse/index';
     }
     `]
 })
-export class AnalyseYearComponent implements OnInit, OnDestroy {
+export class AnalyseYearComponent implements OnInit {
     @Input() years$: Observable<number[]>;
-    defaultYears : Year[] = [];
+    defaultYears$ : Observable<Year[]>;
     checkedYears : Year[] = [];
     @Output() yearEmitter = new EventEmitter<any[]>();
     @Input('group') public form: FormGroup;
-    actionsSubscription: Subscription;
+    defaultStartMonth=0;
+    defaultStartDay=1;
+    defaultEndMonth=11;
+    defaultEndDay=31;
+    samePeriod$: Observable<boolean>;
 
-    constructor(private _fb: FormBuilder) {
-        
+    constructor(private _fb: FormBuilder) {        
     }
 
-    ngOnInit() {
-        this.actionsSubscription = this.years$.subscribe(years => {
-            this.defaultYears = years.map(year=>{return {year:year,startDate:new Date(year+"-01-01"),endDate:new Date(year+"-12-31")};});
-            this.initYears();
-        });        
-    }
-
-    ngOnDestroy() {
-        this.actionsSubscription.unsubscribe();
+    ngOnInit() { 
+        this.defaultYears$ = this.years$.map(years => {
+            let defaultYears: Year[] = [];
+            this.form.controls['years'] = this._fb.array([]);
+            years.forEach(year => {
+                let dy = {year:year,startDate:new Date(year, this.defaultStartMonth, this.defaultStartDay),endDate:new Date(year, this.defaultEndMonth, this.defaultEndDay),checked:false};
+                defaultYears=[...defaultYears,dy];
+                const control = <FormArray>this.form.controls['years'];
+                control.push(this.newYear(dy));
+            });
+            return defaultYears;
+        });
+        this.samePeriod$ = of(false);
     }
 
     newYear(y: Year) {
         return this._fb.group({
             year: new FormControl(this.checkedYears.filter((year:Year) => year.year === y.year).length > 0)
         });
-    }
-
-    initYears() {
-        if(this.defaultYears !== undefined){
-            this.form.controls['years'] = this._fb.array([]);
-            for (let year of this.defaultYears) {
-                const control = <FormArray>this.form.controls['years'];
-                control.push(this.newYear(year));
-            }
-        }
     }
 
     changeValue(yearCheck: any) {
@@ -79,16 +76,29 @@ export class AnalyseYearComponent implements OnInit, OnDestroy {
     }
 
     setDefaultPeriod(period: any){
-        console.log(period);
-
+        this.samePeriod$ = of(period.checked);
+        this.defaultYears$=this.defaultYears$.map(defaultYears => {
+            defaultYears.forEach(year => {
+                year.startDate = period.checked ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
+                year.endDate = period.checked ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
+            });
+            return defaultYears;
+        });
+        this.checkedYears.forEach(year => {
+            year.startDate = period.checked ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
+            year.endDate = period.checked ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
+        });
+        this.yearEmitter.emit(this.checkedYears);
     }
 
     checkAll(ev) {
+        this.defaultYears$.subscribe(defaultYears => {
+            this.checkedYears= ev.checked ? defaultYears : [];
+            this.yearEmitter.emit(this.checkedYears);
+        });
         const control = <FormArray>this.form.controls['years'];
         control.value.forEach(x => x.year = ev.checked)
-        control.setValue(control.value);
-        this.checkedYears = (ev.checked) ? this.defaultYears : [];
-        this.yearEmitter.emit(this.checkedYears);
+        control.setValue(control.value);        
     }
 
 }
