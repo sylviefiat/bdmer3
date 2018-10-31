@@ -126,14 +126,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: '@mapbox/mapbox-gl-geocoder',
             path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
         },
-        /*{
-            name: 'angular-highcharts',
-            path: 'node_modules/angular-highcharts/angular-highcharts.js'
-        },
-        {
-            name: 'highcharts-angular',
-            path: 'node_modules/highcharts-angular/index.js'
-        },*/
         {
             name: 'highcharts/modules/indicators',
             path: 'node_modules/highcharts/modules/indicators.js'
@@ -167,16 +159,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         }, {
             name: 'pouchdb-authentication',
             path: 'node_modules/pouchdb-authentication/dist/pouchdb.authentication.js'
-        }, /*{
-            name: '@angular/common',
-            path: 'node_modules/@angular/common/bundles/common.umd.js'
         }, {
-            name: '@angular/http',
-            path: 'node_modules/@angular/http/bundles/http.umd.js'
-        }, {
-            name: '@angular/common/http',
-            path: 'node_modules/@angular/common/bundles/common-http.umd.js'
-        }, */{
             name: '@angular/material',
             path: 'node_modules/@angular/material/bundles/material.umd.js'
         }, {
@@ -289,6 +272,18 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: 'html2canvas',
             path: 'node_modules/html2canvas/dist/html2canvas.min.js'
+        },
+        /*{
+            name: 'file-saver',
+            path: 'node_modules/file-saver/dist/FileSaver.min.js'
+        },*/
+        {
+            name: 'file-saver',
+            packageMeta: {
+                defaultExtension: 'js',
+                main: '../node_modules/file-saver/dist/FileSaver.min.js',
+                format: 'global'
+            }
         }];
 
         this.addPackagesBundles(additionalPackages);

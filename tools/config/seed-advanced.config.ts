@@ -131,69 +131,6 @@ export class SeedAdvancedConfig extends SeedConfig {
          }
         }
       },
-      /*{
-        name: 'rxjs',
-        path: 'node_modules/rxjs/'
-      },
-      {
-        name: 'rxjs/Observable',
-        path: 'node_modules/rxjs/Observable.js'
-      },
-      {
-        name: 'rxjs/Operator',
-        path: 'node_modules/rxjs/Operator.js'
-      },
-      {
-        name: 'rxjs/operators',
-        path: 'node_modules/rxjs/operators/'
-      },
-      {
-        name: 'rxjs/observable',
-        path: 'node_modules/rxjs/observable/'
-      },
-      {
-        name: 'rxjs/add',
-        path: 'node_modules/rxjs/'
-      },
-      {
-        name: 'rxjs-compat',
-        path: 'node_modules/rxjs-compat/index.js'
-      },
-      {
-        name: 'rxjs-compat/AsyncSubject',
-        path: 'node_modules/rxjs-compat/AsyncSubject.js'
-      },
-      {
-        name: 'rxjs-compat/Subscription',
-        path: 'node_modules/rxjs-compat/Subscription.js'
-      },
-      {
-        name: 'rxjs-compat/Subject',
-        path: 'node_modules/rxjs-compat/Subject.js'
-      },
-      {
-        name: 'rxjs-compat/ReplaySubject',
-        path: 'node_modules/rxjs-compat/ReplaySubject.js'
-      },{
-        name: 'rxjs-compat/Observable',
-        path: 'node_modules/rxjs-compat/Observable.js'
-      },
-      {
-        name: 'rxjs-compat/Operator',
-        path: 'node_modules/rxjs-compat/Operator.js'
-      },
-      {
-        name: 'rxjs-compat/operators',
-        path: 'node_modules/rxjs-compat/operators/'
-      },
-      {
-        name: 'rxjs-compat/observable',
-        path: 'node_modules/rxjs-compat/observable/'
-      },
-      {
-        name: 'rxjs-compat/operator',
-        path: 'node_modules/rxjs-compat/operator/'
-      },*/
       {
         name: 'tslib',
         path: 'node_modules/tslib/tslib.js'

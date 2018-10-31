@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { Cluster, Supercluster } from 'supercluster';
 import * as Turf from '@turf/turf';
+import { saveAs } from 'file-saver';
 import { MapService } from '../../modules/core/services/index';
 
 import { IAppState } from '../../modules/ngrx/index';
@@ -10,144 +11,10 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
 import { Results, Data } from '../../modules/analyse/models/index';
 
 @Component({
+  moduleId: module.id,
   selector: 'bc-result-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-  <div class="container">
-    <div *ngIf="loading">Map is loading</div>
-    <mgl-map *ngIf="!loading"
-        [style]="'mapbox://styles/mapbox/satellite-v9'"
-        [fitBounds]="bounds"
-        (load) = "setMap($event)"
-        (zoomEnd)="zoomChange($event)">
-        
-        <ng-container *ngIf="(layerZones$ | async) && showZones">
-          <mgl-geojson-source
-            id="layerZones"
-            [data]="layerZones$ | async">
-            <mgl-layer
-              *ngIf="(!showBiom) || (typeShow==='A')"
-              id="zonesid_abun"
-              type="fill"
-              source="layerZones"
-              [paint]="{
-                'fill-color': {
-                  property: 'abundancy',
-                    type: 'interval',
-                    stops: [
-                      [0, '#FFEDA0'],
-                      [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
-                    ]
-                },
-                'fill-opacity': 1,
-                'fill-outline-color': '#000'
-                }"
-              (click)="selectZone($event)">
-            </mgl-layer>
-            <mgl-layer
-              *ngIf="showBiom && typeShow==='B'"
-              id="zonesid_biom"
-              type="fill"
-              source="layerZones"
-              [paint]="{
-                'fill-color': {
-                  property: 'biomass',
-                    type: 'interval',
-                    stops: [
-                      [0, '#FFEDA0'],
-                      [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
-                    ]
-                },
-                'fill-opacity': 1,
-                'fill-outline-color': '#000'
-                }"
-              (click)="selectZone($event)">
-            </mgl-layer>
-            <mgl-popup *ngIf="selectedZone"
-              [lngLat]="selectZoneCoordinates()">
-              <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span><br/>
-            </mgl-popup>
-          </mgl-geojson-source>
-        </ng-container>
-
-        <ng-container *ngIf="showStations && (layerStations$ | async)">
-          <mgl-geojson-source
-            id="layerStations"
-            [data]="layerStations$ | async">
-            
-            <mgl-layer
-                *ngIf="(!showBiom) || (typeShow==='A')"
-                id="stationId_abun"
-                type="circle"
-                source="layerStations"
-                [paint]="{
-                  'circle-color': '#fff',
-                  'circle-radius': {
-                      property: 'abundancy',
-                      type: 'interval',
-                      stops: [
-                        [0, 2],
-                        [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
-                      ]
-                  },
-                  'circle-stroke-width': 1
-            }"
-            (click)="selectStation($event)">
-            </mgl-layer>
-            <mgl-layer
-                *ngIf="showBiom && typeShow==='B'"
-                id="stationId_biom"
-                type="circle"
-                source="layerStations"
-                [paint]="{
-                  'circle-color': '#fff',
-                  'circle-radius': {
-                      property: 'biomass',
-                      type: 'interval',
-                      stops: [
-                        [0, 2],
-                        [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
-                      ]
-                  },
-                  'circle-stroke-width': 1
-            }"
-            (click)="selectStation($event)">            
-            </mgl-layer>
-             <mgl-popup *ngIf="selectedStation"
-              [lngLat]="selectedStation.geometry?.coordinates">
-              <span style="color:black;">{{'STATION' | translate}} {{selectedStation.properties?.code}}</span><br/>
-              <span *ngIf="typeShow==='B'" style="color:black;">{{'BIOMASS' | translate}} {{selectedStation.properties?.biomass}} {{'BIOMASS_UNIT' | translate}}</span>
-              <span *ngIf="typeShow==='A'" style="color:black;">{{'ABUNDANCY' | translate}} {{selectedStation.properties?.abundancy}} {{'ABUNDANCY_UNIT' | translate}}</span>
-            </mgl-popup>
-          </mgl-geojson-source>
-        </ng-container>
-      </mgl-map>
-   </div>
-  `,
+  templateUrl: 'result-map.component.html',
   styles: [
     `
    mgl-map {
@@ -165,9 +32,15 @@ import { Results, Data } from '../../modules/analyse/models/index';
       display: flex;
       margin-left: 20px;
       margin-right: 20px;
+      flex-direction:row-reverse;
     }
     .popup {
       color: black;
+    }
+    #menu {
+      margin-left: -58px;
+      z-index: 1;
+      font-family: 'Open Sans', sans-serif;
     }
   `]
 })
@@ -213,7 +86,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     if (this.bounds) {
       this.map.fitBounds(this.bounds, { padding: 10 });
     }
-    //console.log(this.map.getCanvas().toDataURL());
+    console.log(this.map.getCanvas().toDataURL());
   }
 
   ngOnChanges(event) {
@@ -322,6 +195,12 @@ export class ResultMapComponent implements OnInit, OnChanges {
 
   selectZoneCoordinates() {
     return MapService.getCoordinates(this.selectedZone)[0][0];
+  }
+
+  exportMap(){
+    this.map.getCanvas().toBlob(function (blob) {
+      saveAs(blob, 'map.png');
+    })
   }
 
 

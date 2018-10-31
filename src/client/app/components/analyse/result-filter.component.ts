@@ -27,10 +27,20 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
             </mat-select>
           </mat-form-field>
         </mat-card-content>
-        <mat-card-content>
-          <div *ngFor="let item of legend">
-            <span class="legend-key" [style.backgroundColor]="item.color"></span>
-            <span>{{item.value}} </span><span>{{getUnit()}}</span>
+        <mat-card-content class="legend">
+          <div class="stationLegend" *ngIf="showStations">
+            <mat-card-subtitle> {{'STATIONS' | translate}}</mat-card-subtitle>
+            <div *ngFor="let item of legend">
+              <span class="legend-circle" [style.width]="item.size+'px'" [style.height]="item.size+'px'"></span>              
+              <span>{{item.value}} </span><span>{{getUnit()}}</span>
+            </div>
+          </div>
+          <div class="zoneLegend" *ngIf="showZones">
+          <mat-card-subtitle> {{'ZONES' | translate}}</mat-card-subtitle>
+            <div *ngFor="let item of legend">
+              <span class="legend-key" [style.backgroundColor]="item.color"></span>
+              <span>{{item.value}} </span><span>{{getUnit()}}</span>
+            </div>
           </div>
         </mat-card-content>
         <mat-card-content>
@@ -71,11 +81,27 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
       font-style: italic; 
       font-size: smaller;
     }
+    .legend {
+      display:flex;
+      flex-direction:row;
+      justify-content: space-around;
+    }
+    .stationLegend, .zoneLegend {
+      display:flex;
+      flex-direction:column;
+    }
     .legend-key {
       display: inline-block;
       border-radius: 20%;
       width: 10px;
       height: 10px;
+      margin-right: 5px;
+    }
+    .legend-circle {
+      display: inline-block;
+      border-radius: 50%;
+      border: solid 1px black;
+      background-color: white;
       margin-right: 5px;
     }
   `]
@@ -94,10 +120,10 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
-  legend = [{value:'0-1',color:'#FFEDA0'}, {value:'1-10',color:'#FED976'}, 
-    {value:'10-20',color:'#FEB24C'},{value:'20-30',color:'#FD8D3C'}, 
-    {value:'30-40',color:'#FC4E2A'}, {value:'40-50',color:'#E31A1C'}, 
-    {value:'50-100',color:'#BD0026'}, {value:'100+',color:'#800026'}];
+  legend = [{value:'0-1',color:'#FFEDA0',size:2}, {value:'1-10',color:'#FED976',size:3}, 
+    {value:'10-20',color:'#FEB24C',size:4},{value:'20-30',color:'#FD8D3C',size:5}, 
+    {value:'30-40',color:'#FC4E2A',size:6}, {value:'40-50',color:'#E31A1C',size:7}, 
+    {value:'50-100',color:'#BD0026',size:8}, {value:'100+',color:'#800026',size:9}];
   units = ['kg/ha', 'ind./ha'];
 
   constructor() {

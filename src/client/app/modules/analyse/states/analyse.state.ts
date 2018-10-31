@@ -125,12 +125,6 @@ export const getSurveysAvailables = createSelector(getUsedPlatforms, getUsedYear
         let ysd = years.filter(year => year.year === sd.getFullYear());
         let ed = new Date(s.dateEnd);
         let yed = years.filter(year => year.year === ed.getFullYear());
-        if(ysd && ysd.length>0){
-            console.log(ysd[0]);
-            console.log(sd);
-            console.log(ysd[0].startDate <= sd);
-            console.log(ysd[0].endDate >= sd)
-        }
         if(s.counts.length > 0 && (ysd && ysd.length>0 && ysd[0].startDate <= sd && ysd[0].endDate >= sd) && (yed && yed.length>0 && yed[0].startDate <= ed && yed[0].endDate >= ed)){
             surveys = [...surveys, s];
         }
@@ -149,19 +143,6 @@ export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurvey
     }
     return zones;
 });
-
-/*export const getStationsAvailables = createSelector(getUsedPlatforms, getUsedSurveys,getUsedZones, (platforms: any, surveys: Survey[], zones: Zone[]) => {
-    let stations: Station[] = [];
-    if (!platforms || !surveys || !zones) return stations;
-    for (let survey of surveys.filter(s => s.counts.length > 0)) {
-        for(let station of platforms.map(p => p.stations).flatMap(stations=>stations).filter((station:Station) => survey.counts.map(c => c.codeStation).indexOf(station.properties.code)>=0)){
-            if(zones.filter((zone:Zone) => MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name }))).length>=0){
-                stations = [...stations, station];
-            }
-        }
-    }
-    return stations;
-});*/
 
 export const getStationsAvailables = (state: IAnalyseState) => {
     let stations = [];

@@ -80,13 +80,7 @@ export class AnalyseYearComponent implements OnInit {
         });        
     }
 
-    setDefaultPeriod(period: any){     
-        /*this.checkedYears.forEach((year,index) => {
-            year.startDate = period.checked || !index ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
-            year.endDate = period.checked || !index ? new Date(year.year, period.endDate.getMonth(),period.endDate.getDate()):new Date(year.year, this.defaultEndMonth, this.defaultEndDay);
-        });*/
-        
-           
+    setDefaultPeriod(period: any){   
         this.defaultYears$=this.defaultYears$.map(defaultYears => {
             defaultYears.forEach((year,index) => {
                 year.startDate = period.checked || !index ? new Date(year.year, period.startDate.getMonth(),period.startDate.getDate()):new Date(year.year, this.defaultStartMonth, this.defaultStartDay);
