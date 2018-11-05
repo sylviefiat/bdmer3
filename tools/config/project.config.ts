@@ -265,10 +265,17 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: '@turf/invariant',
             path: 'node_modules/@turf/invariant/index.js'
         },
-        {
+	{
+            name: 'jspdf',
+            packageMeta: {
+                format: "global"
+            },
+            path: 'node_modules/jspdf/dist/jspdf.min.js',
+	},
+        /*{
             name: 'jspdf',
             path: 'node_modules/jspdf/dist/jspdf.min.js'
-        },
+        },*/
         {
             name: 'html2canvas',
             path: 'node_modules/html2canvas/dist/html2canvas.min.js'
@@ -281,7 +288,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'file-saver',
             packageMeta: {
                 defaultExtension: 'js',
-                main: '../node_modules/file-saver/dist/FileSaver.min.js',
+                main: 'dist/FileSaver.min.js',
                 format: 'global'
             }
         }];

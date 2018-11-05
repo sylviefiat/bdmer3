@@ -457,6 +457,7 @@ export class SeedConfig {
       "ngx-mapbox-gl": "node_modules/ngx-mapbox-gl",
       "@mapbox/mapbox-sdk": "node_modules/@mapbox/mapbox-sdk",
       "@ngrx": "node_modules/@ngrx",
+      "file-saver": "node_modules/file-saver",
 
       "app/*": "/app/*",
 
