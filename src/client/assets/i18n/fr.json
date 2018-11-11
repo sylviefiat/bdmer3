@@ -469,5 +469,6 @@
   "LOGIN_SYSTEM_ERROR":"Une erreur inconnue est survenue, contacter l'administrateur du site",
   "AFFINE_PERIOD":"Si besoin, affiner la période sur l'année",
   "START_DATE":"Date de début",
-  "END_DATE":"Date de fin"
+  "END_DATE":"Date de fin",
+  "APPLY_OTHERS":"même période pour toutes les années"
 }

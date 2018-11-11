@@ -1,4 +1,4 @@
-FROM node:8.12.0
+FROM node
 
 # prepare a user which runs everything locally! - required in child images!
 RUN useradd --user-group --create-home --shell /bin/false app

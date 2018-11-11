@@ -7,7 +7,7 @@ import { MapService } from '../../core/services/index';
 
 import { IAnalyseState } from '../states/index';
 import { MomentService } from "../../core/services/moment.service";
-import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, ResultPlatform, Method, DimensionsAnalyse } from '../models/index';
+import { Data, Results, ResultSurvey, ResultSpecies, ResultStation, ResultZone, ResultPlatform, Method, DimensionsAnalyse, ResultStock } from '../models/index';
 import { Country } from '../../countries/models/country';
 import { Species, Platform, Survey, Mesure, Count, Station, Zone, LegalDimensions } from '../../datas/models/index';
 
@@ -42,7 +42,7 @@ export class AnalyseService {
 
     getResults() : Observable<Results> {
         let day=this.ms.moment(new Date(), "DD/MM/YYYY").toISOString();
-        this.results = { name: "ANALYSE BDMER " + day, resultPerSurvey: [] };
+        this.results = { name: "ANALYSE BDMER " + day, resultPerSurvey: [], resultStock: [] };
         let resultsObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => from(this.data.usedSurveys)
@@ -53,7 +53,9 @@ export class AnalyseService {
                             this.results.resultPerSurvey.push(rsurvey);
                             //console.log(this.results);
                             return of(this.results);
-                        }))))
+                        }))),
+                mergeMap((results: Results) => this.getResultStock(results))
+            )
             .subscribe();
         return of(this.results);
     }
@@ -72,6 +74,25 @@ export class AnalyseService {
                         }))))
             .subscribe();
         return of(rsurvey);
+    }
+
+    getResultStock(results: Results) : Observable<Results> {
+        let stocks=[];
+        for(let rsv of results.resultPerSurvey){
+            for(let rsp of rsv.resultPerSpecies){
+                if(!stocks[rsp.codeSpecies]){
+                   stocks[rsp.codeSpecies] = {codeSpecies: rsp.codeSpecies,stock:0,stockCI:0,stockLegal:0,stockLegalCI:0,density:0,densityCI:0,densityLegal:0,densityLegalCI:0};
+                }
+                console.log(stocks);
+                stocks[rsp.codeSpecies].stock = this.getSum(rsp.resultPerPlatform.map(rp=>rp.stockAbundance));
+                stocks[rsp.codeSpecies].stockCI = this.getSum(rsp.resultPerPlatform.map(rp=>rp.stockCIAbundance));
+                stocks[rsp.codeSpecies].density = this.getSum(rsp.resultPerPlatform.map(rp=>rp.stockBiomass));
+                stocks[rsp.codeSpecies].densityCI = this.getSum(rsp.resultPerPlatform.map(rp=>rp.stockCIBiomass));
+            }
+        }
+        console.log(stocks);
+        results.resultStock = [...stocks];
+        return of(results);
     }
 
     hasSpSurvey(survey: Survey, species: Species): boolean {

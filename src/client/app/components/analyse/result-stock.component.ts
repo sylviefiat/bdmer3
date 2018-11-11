@@ -11,7 +11,16 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     selector: 'bc-result-stock',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-        
+        <mat-card class="container">
+            <mat-card-title-group>
+                <mat-card-title>{{'STOCK' | translate}}</mat-card-title>        
+            </mat-card-title-group>
+            <mat-card-content *ngFor="let sp of results.resultStock">
+                <div>{{ sp.codeSpecies }}</div>
+                <div>{{ 'BIOMASS' | translate }}: {{ sp.stock }} &plusmn;{{ sp.stockCI }}</div>
+                <div>{{ 'ABONDANCE' | translate }}: {{ sp.density }} &plusmn;{{ sp.densityCI }}</div>
+            </mat-card-content>
+        </mat-card>
      `,
     styles: [
         `

@@ -120,10 +120,10 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
-  legend = [{value:'0-1',color:'#FFEDA0',size:2}, {value:'1-10',color:'#FED976',size:3}, 
-    {value:'10-20',color:'#FEB24C',size:4},{value:'20-30',color:'#FD8D3C',size:5}, 
-    {value:'30-40',color:'#FC4E2A',size:6}, {value:'40-50',color:'#E31A1C',size:7}, 
-    {value:'50-100',color:'#BD0026',size:8}, {value:'100+',color:'#800026',size:9}];
+  legend = [{value:'0-1',color:'#FFEDA0',size:4}, {value:'1-10',color:'#FED976',size:6}, 
+    {value:'10-20',color:'#FEB24C',size:8},{value:'20-30',color:'#FD8D3C',size:10}, 
+    {value:'30-40',color:'#FC4E2A',size:12}, {value:'40-50',color:'#E31A1C',size:14}, 
+    {value:'50-100',color:'#BD0026',size:16}, {value:'100+',color:'#800026',size:18}];
   units = ['kg/ha', 'ind./ha'];
 
   constructor() {

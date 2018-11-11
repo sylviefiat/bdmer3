@@ -17,6 +17,12 @@ export interface Data {
     usedMethod: Method;
 }
 
+export interface DimensionsAnalyse {
+    codeSp: string;
+    longMin: number;
+    longMax: number;
+}
+
 export interface Year {
     year: number;
     startDate: Date;
@@ -27,6 +33,7 @@ export interface Year {
 export interface Results {
     name: string;    
     resultPerSurvey:ResultSurvey[];
+    resultStock: ResultStock[];
 }
 
 export interface ResultSurvey{
@@ -38,16 +45,22 @@ export interface ResultSurvey{
 
 export interface ResultSpecies {
     codeSpecies: string;
-    nameSpecies: string;
+    nameSpecies: string;    
     resultPerStation: ResultStation[];
     resultPerZone: ResultZone[];
     resultPerPlatform: ResultPlatform[];
 }
 
-export interface DimensionsAnalyse {
-    codeSp: string;
-    longMin: number;
-    longMax: number;
+export interface ResultStock {
+    codeSpecies: string;
+    stock: number;
+    stockCI: number;
+    stockLegal: number;
+    stockLegalCI: number;
+    density: number;
+    densityCI: number;
+    densityLegal: number;
+    densityLegalCI: number;
 }
 
 export interface ResultStation {

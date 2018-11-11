@@ -12,13 +12,12 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     selector: 'bc-result-synthesis',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-      <div class="results">
-
-        <bc-result-stock
+      <bc-result-stock
           [results]="results"
           [analyseData]="analyseData"
           [showBiom]="showBiom">
-        </bc-result-stock>
+      </bc-result-stock>
+      <div class="results">        
 
         <bc-result-map 
           [results]="results" 
