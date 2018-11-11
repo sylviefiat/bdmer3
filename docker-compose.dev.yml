@@ -5,8 +5,21 @@ services:
   #curl -X PUT http://admin:admin@127.0.0.1:5984/_users
   #curl -X PUT http://admin:admin@127.0.0.1:5984/_replicator
   #curl -X PUT http://admin:admin@127.0.0.1:5984/_global_changes
+  bdmer:
+    hostname: bdmer
+    build:
+      context: .
+      dockerfile: ./.docker/angular-seed.development.dockerfile
+    command: npm start
+    image: bdmer3-dev
+    volumes:
+      - ./src:/home/node/angular-seed/src
+    networks:
+      - bdmer-network
+    ports:
+      - '5555:5555'
   bdmerdb:
-    hostname: dbmerdb
+    hostname: bdmerdb
     image: couchdb:latest
     volumes:
       - ./.docker/couchdb_data/data:/usr/local/var/lib/couchdb
