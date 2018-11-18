@@ -10,6 +10,7 @@ export interface ICountriesState {
   countryList: any[];
   countryListCount: any[];
   countryListDetails: any;
+  platformTypeList: any;
 }
 
 export const countriesInitialState: ICountriesState = {
@@ -20,7 +21,8 @@ export const countriesInitialState: ICountriesState = {
   error: null,
   countryList: [],
   countryListCount: [],
-  countryListDetails: []
+  countryListDetails: [],
+  platformTypeList: []
 };
 export const getCountriesLoaded = (state: ICountriesState) => state.loaded;
 
@@ -39,4 +41,6 @@ export const getCountryNamesList = (state: ICountriesState) => state.countryList
 export const getCountryListCount = (state: ICountriesState) => state.countryListCount;
 
 export const getCountryDetailsList = (state: ICountriesState) => state.countryListDetails;
+
+export const getPlatformTypeList = (state: ICountriesState) => state.platformTypeList;
 

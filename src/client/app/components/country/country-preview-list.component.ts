@@ -4,7 +4,7 @@ import { Country } from './../../modules/countries/models/country';
 @Component({
   selector: 'bc-country-preview-list',
   template: `
-    <bc-country-preview *ngFor="let country of countries" [country]="country"></bc-country-preview>
+    <bc-country-preview *ngFor="let country of countries" [platformTypeList]="platformTypeList" [country]="country"></bc-country-preview>
   
   `,
   styles: [
@@ -19,6 +19,7 @@ import { Country } from './../../modules/countries/models/country';
 })
 export class CountryPreviewListComponent implements OnInit {
   @Input() countries: Country[];
+  @Input() platformTypeList: any[];
 
   ngOnInit() {     
     this.countries = this.countries.sort((c1,c2) => (c1.name<c2.name)?-1:((c1.name>c2.name)?1:0));

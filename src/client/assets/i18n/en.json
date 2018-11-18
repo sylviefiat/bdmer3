@@ -469,5 +469,9 @@
   "LOGIN_SYSTEM_ERROR":"An unknown error occurred, contact website administrator",
   "AFFINE_PERIOD":"If necessary, refine the time of the year",
   "START_DATE":"Start date",
-  "END_DATE":"End date"
+  "END_DATE":"End date",
+  "SELECT_PLATFORM_TYPE":"Choose platform type",
+  "VESSEL":"Vessel",
+  "AREA": "Area",
+  "TYPE_PLATFORM":"Plateforme type"
 }

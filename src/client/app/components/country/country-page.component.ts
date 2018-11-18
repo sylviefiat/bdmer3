@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
 
-import { IAppState, getAllCountriesInApp } from '../../modules/ngrx/index';
+import { IAppState, getAllCountriesInApp, getPlatformTypesList } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 
@@ -17,7 +17,7 @@ import { Country } from '../../modules/countries/models/country';
         {{ 'NEW_COUNTRY' | translate}}
       </button>
     </mat-card>
-    <bc-country-preview-list [countries]="countries$ | async"></bc-country-preview-list>
+    <bc-country-preview-list [countries]="countries$ | async" [platformTypeList]="platformTypeList$ | async"></bc-country-preview-list>
     
   `,
   styles: [
@@ -34,12 +34,14 @@ import { Country } from '../../modules/countries/models/country';
 })
 export class CountryPageComponent implements OnInit {
   countries$: Observable<Country[]>;
+  platformTypeList$: Observable<any[]>;
 
   constructor(private store: Store<IAppState>, public routerext: RouterExtensions) {}
 
   ngOnInit() {    
     this.countries$ = this.store.select(getAllCountriesInApp);
     this.store.dispatch(new CountriesAction.LoadAction()); 
+    this.platformTypeList$ = this.store.select(getPlatformTypesList);
   }
 
   newCountry() {

@@ -21,6 +21,7 @@ import { PlatformAction } from "../../modules/datas/actions/index";
   <div>
   <mat-card-title><a class="link" (click)="toCountries()">{{ 'COUNTRY_LIST' | translate}}</a> / {{ name }}</mat-card-title>
   <mat-card-subtitle>{{ code }}</mat-card-subtitle>
+  <mat-card-subtitle>{{ 'TYPE_PLATFORM' | translate }}: {{ type | translate }}</mat-card-subtitle>
   </div>
   <div>
   <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
@@ -121,6 +122,7 @@ export class CountryDetailComponent implements OnInit {
   @Input() platforms: Platform[];
   @Input() isAdmin: boolean;
   @Input() msg: string;
+  @Input() platformTypeList: any[];
   @Output() removecountry = new EventEmitter();
   stringDelete: string;
 
@@ -162,6 +164,11 @@ export class CountryDetailComponent implements OnInit {
 
   get code() {
     return this.country.code;
+  }
+
+  get type() {
+    console.log(this.platformTypeList);
+    return this.platformTypeList.filter(pt => pt.id===this.country.platformType)[0].value;
   }
 
   get users() {

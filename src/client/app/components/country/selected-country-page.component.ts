@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RouterExtensions, Config } from '../../modules/core/index';
-import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr, getSelectedCountryPlatforms } from '../../modules/ngrx/index';
+import { IAppState, getSelectedCountry, getisAdmin,getUserMessage,getUserErr, getSelectedCountryPlatforms, getPlatformTypesList } from '../../modules/ngrx/index';
 import { CountriesAction } from '../../modules/countries/actions/index';
 import { Country } from '../../modules/countries/models/country';
 import { Platform } from '../../modules/datas/models/index';
@@ -18,6 +18,7 @@ import { PlatformService } from '../../modules/datas/services/platform.service';
       [platforms]="platforms$ | async"
       [isAdmin]="isAdmin$ | async"
       [msg]="msg$ | async"
+      [platformTypeList]="platformTypeList$ | async"
       (removecountry)="removeFromCountries($event)">
     </bc-country-detail>
   `,
@@ -27,6 +28,7 @@ export class SelectedCountryPageComponent implements OnInit {
   platforms$: Observable<Platform[]>;
   isAdmin$: Observable<boolean>;
   msg$: Observable<string>;
+  platformTypeList$: Observable<any[]>;
 
   constructor(private platformService: PlatformService, private store: Store<IAppState>, public routerext: RouterExtensions) {            
   }
@@ -38,6 +40,7 @@ export class SelectedCountryPageComponent implements OnInit {
     this.platforms$ = this.store.select(getSelectedCountryPlatforms);
     this.isAdmin$ = this.store.select(getisAdmin);
     this.msg$ = this.store.select(getUserMessage);
+    this.platformTypeList$ = this.store.select(getPlatformTypesList);
   }
 
   removeFromCountries(data) {

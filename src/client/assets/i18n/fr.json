@@ -470,5 +470,9 @@
   "AFFINE_PERIOD":"Si besoin, affiner la période sur l'année",
   "START_DATE":"Date de début",
   "END_DATE":"Date de fin",
-  "APPLY_OTHERS":"même période pour toutes les années"
+  "APPLY_OTHERS":"même période pour toutes les années",
+  "SELECT_PLATFORM_TYPE":"Sélectionner le type de plateforme",
+  "VESSEL":"Navire",
+  "AREA": "Site",
+  "TYPE_PLATFORM":"Type de plateforme"
 }

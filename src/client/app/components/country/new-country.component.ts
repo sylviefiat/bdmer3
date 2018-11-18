@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
@@ -16,13 +16,14 @@ import { Country } from "../../modules/countries/models/country";
   templateUrl: "new-country.component.html",
   styleUrls: ["new-country.component.css"]
 })
-export class NewCountryComponent {
+export class NewCountryComponent implements OnInit {
   public image: any;
   results: any[];
   @Input() errorMessage: string | null;
   @Input() countryList: any[] | null;
   @Input() countryListDetails: any[] | null;
   @Input() countriesIds: any[] | null;
+  @Input() platformTypeList: any[] | null;
 
   @Output() submitted = new EventEmitter<Country>();
 
@@ -33,6 +34,7 @@ export class NewCountryComponent {
     pays: new FormControl(""),
     flag: new FormControl(""),
     province: new FormControl(""),
+    platformType: new FormControl(""),
     coordinates: new FormGroup({
       lat: new FormControl(),
       lng: new FormControl()
@@ -45,6 +47,11 @@ export class NewCountryComponent {
     private store: Store<IAppState>,
     private sanitizer: DomSanitizer
   ) {}
+
+  ngOnInit(){
+    console.log(this.countryList);
+    console.log(this.platformTypeList);
+  }
 
   check(event){
     this.form.get("province").reset();
@@ -71,13 +78,14 @@ export class NewCountryComponent {
         }
         this.http
           .get(
-            "http://maps.googleapis.com/maps/api/geocode/json?address=" +
+            "https://geocode.xyz/" +
               this.form.controls.pays.value["name"] +
-              "&sensor=false&apiKey=AIzaSyBSEMJ07KVIWdyD0uTKaO75UYsIMMCi69w"
+              "?json=1"
           )
           .subscribe(coord => {
-            this.form.controls.coordinates.get("lat").setValue(coord["results"]["0"].geometry.location.lat);
-            this.form.controls.coordinates.get("lng").setValue(coord["results"]["0"].geometry.location.lng);
+            console.log(coord);
+            this.form.controls.coordinates.get("lat").setValue(coord.latt);
+            this.form.controls.coordinates.get("lng").setValue(coord.longt);
 
             this.form.controls.flag.setValue(data);
 

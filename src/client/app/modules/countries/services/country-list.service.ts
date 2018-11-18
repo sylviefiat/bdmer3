@@ -49,6 +49,21 @@ export class CountryListService {
       );
   }
 
+  getPlatformTypeList(): Observable<Country[]> {
+    return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/platformType.json`)
+      .pipe(
+        map(res => res),
+        map(row => {
+          let keys = [];
+          for (let key in row) {
+            let pays={id: key, value: row[key]};
+            keys.push(pays);
+          }
+          return keys;
+        })
+      );
+  }
+
   getCountryName(code: string): any {
     return this.getCountryList()
       .pipe(

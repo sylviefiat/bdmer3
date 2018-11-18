@@ -19,7 +19,14 @@
           </mat-select>
         </mat-form-field>
       </p>
-
+      <p>
+        <fa [name]="'ship'" [border]=false [size]=2></fa>
+        <mat-form-field>
+          <mat-select placeholder="{{ 'SELECT_PLATFORM_TYPE' | translate}}" formControlName="platformType"  >
+            <mat-option *ngFor="let type of platformTypeList" [value]="type.id">{{ type.value | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </p>
 
       <p *ngIf="errorMessage" class="countryError">
         {{ errorMessage }}

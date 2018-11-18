@@ -11,6 +11,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
           <img mat-card-sm-image *ngIf="flag" [src]="flag"/>
           <mat-card-title>{{ name }}</mat-card-title>
           <mat-card-subtitle>{{ code }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ 'TYPE_PLATFORM' | translate }}: {{ type | translate }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
           <mat-card-subtitle>{{ 'USERS' | translate}}</mat-card-subtitle>
@@ -70,6 +71,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class CountryPreviewComponent {
   @Input() country: Country;
+  @Input() platformTypeList: any[];
 
   constructor(private sanitizer: DomSanitizer){}
 
@@ -83,6 +85,11 @@ export class CountryPreviewComponent {
 
   get code() {
     return this.country.code;
+  }
+
+  get type() {
+    console.log(this.platformTypeList);
+    return this.platformTypeList.filter(pt => pt.id===this.country.platformType)[0].value;
   }
 
   get users() {

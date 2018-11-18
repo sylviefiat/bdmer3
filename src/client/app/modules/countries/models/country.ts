@@ -6,6 +6,7 @@ export interface Country {
 	_attachments?: any;
 	users: User[];
   flag: string;
+  platformType: string;
   coordinates: Coordinates;
 }
 
