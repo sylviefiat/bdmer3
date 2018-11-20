@@ -1,9 +1,10 @@
 // angular
 import { NgModule, APP_INITIALIZER, } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import localeFr from '@angular/common/locales/fr';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome';
 
 // libs
@@ -41,6 +42,9 @@ if (String('<%= TARGET_DESKTOP %>') === 'true') {
 }
 
 declare var window, console, localStorage;
+
+// register french locale
+registerLocaleData(localeFr, 'fr');
 
 // For AoT compilation to work:
 export function win() {

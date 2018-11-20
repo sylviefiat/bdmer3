@@ -145,6 +145,7 @@ export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurvey
 });
 
 export const getStationsAvailables = (state: IAnalyseState) => {
+    //console.log(new Date());
     let stations = [];
     if (!state.usedPlatforms || !state.usedZones || !state.usedSurveys) return stations;
     for (let survey of state.usedSurveys.filter(s => s.counts.length > 0)) {
@@ -154,24 +155,32 @@ export const getStationsAvailables = (state: IAnalyseState) => {
             }
         }
     }
+   // console.log(new Date());
     return stations;
 };
 
 export const getSpeciesAvailables = createSelector(getSpeciesInApp, getSurveysAvailables, (speciesEntities: Species[], surveys: Survey[]) => {
     let species = [];
     if (!surveys || !speciesEntities) return species;
+
     for (let s of surveys) {
         for (let c of s.counts) {
             if(c.mesures){
                 for (let m of c.mesures) {
                     let cs = speciesEntities.filter(sp => sp.code === m.codeSpecies).filter(sp => species.filter(s => s.code === sp.code).length === 0);
                     species = [...species, ...cs];
+                    if(species.length===speciesEntities.length){
+                        return species.sort;
+                    }
                 }
             }
             if(c.quantities){
                 for (let q of c.quantities) {
                     let cs = speciesEntities.filter(sp => sp.code === q.codeSpecies).filter(sp => species.filter(s => s.code === sp.code).length === 0);
                     species = [...species, ...cs];
+                    if(species.length===speciesEntities.length){
+                        return species.sort;
+                    }
                 }
             }
         }

@@ -5,9 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
-  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones,getSelectedAnalyseStations, 
-  getSelectedAnalyseSpecies,getAnalyseCountry, getAnalyseData, getSelectedCountry } from '../../modules/ngrx/index';
+import {
+  IAppState, getLangues, getCountriesInApp, getisAdmin, getAnalyseMsg, getSelectedCountryPlatforms,
+  getSelectedAnalyseYears, getSelectedAnalyseSurveys, getSelectedAnalyseZones, getSelectedAnalyseStations,
+  getSelectedAnalyseSpecies, getAnalyseCountry, getAnalyseData, getSelectedCountry
+} from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Data, Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
 import { initMethods } from '../../modules/analyse/states/index';
@@ -47,6 +49,7 @@ import { LoaderAction } from "../../modules/core/actions/index";
       (methodEmitter)="selectMethod($event)"
       (analyse)="startAnalyse($event)">
     </bc-analyse>
+    <div *ngIf="started$ | async">Analyse en cours</div>
   `,
 })
 export class AnalysePageComponent implements OnInit {
@@ -65,12 +68,14 @@ export class AnalysePageComponent implements OnInit {
   locale$: Observable<string>;
   msg$: Observable<string>;
   data$: Observable<Data>;
+  started$: Observable<boolean>;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
     this.store.dispatch(new AnalyseAction.InitAnalyse());
   }
 
   ngOnInit() {
+    this.started$ = of(false);
     this.isAdmin$ = this.store.select(getisAdmin);
     this.locale$ = this.store.select(getLangues);
     this.countries$ = this.store.select(getCountriesInApp);
@@ -83,18 +88,18 @@ export class AnalysePageComponent implements OnInit {
     this.species$ = this.store.select(getSelectedAnalyseSpecies);
     this.msg$ = this.store.select(getAnalyseMsg);
     this.data$ = this.store.select(getAnalyseData);
-    this.usedZones$ = this.data$.map(data => data.usedZones); 
+    this.usedZones$ = this.data$.map(data => data.usedZones);
     this.methodsAvailables$ = this.data$.map(data => {
       let methods = initMethods;
-      if(!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities && c.quantities.length>0).length>0).length>0)){
-        methods = methods.filter((method:Method)=> method.method==="NONE");
+      if (!data.usedSurveys || !data.usedSpecies || (data.usedSurveys && data.usedSurveys.filter(s => s.counts && s.counts.filter(c => c.quantities && c.quantities.length > 0).length > 0).length > 0)) {
+        methods = methods.filter((method: Method) => method.method === "NONE");
         return methods;
       } else {
-        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LW || sp.LW.coefA===0 || sp.LW.coefB===0).length>0){
-          methods=methods.filter((method:Method)=> method.method!=="LONGUEUR");
+        if (data.usedSpecies && data.usedSpecies.filter(sp => !sp.LW || sp.LW.coefA === 0 || sp.LW.coefB === 0).length > 0) {
+          methods = methods.filter((method: Method) => method.method !== "LONGUEUR");
         }
-        if(data.usedSpecies && data.usedSpecies.filter(sp => !sp.LLW || sp.LLW.coefA===0 || sp.LLW.coefB===0).length>0){
-          methods=methods.filter((method:Method)=> method.method!=="LONGLARG");
+        if (data.usedSpecies && data.usedSpecies.filter(sp => !sp.LLW || sp.LLW.coefA === 0 || sp.LLW.coefB === 0).length > 0) {
+          methods = methods.filter((method: Method) => method.method !== "LONGLARG");
         }
         return methods;
       }
@@ -127,23 +132,24 @@ export class AnalysePageComponent implements OnInit {
   }
 
   selectStation(stations: Station[]) {
-    this.store.dispatch(new AnalyseAction.SelectStations(stations));    
+    this.store.dispatch(new AnalyseAction.SelectStations(stations));
   }
 
   selectSpecies(species: Species[]) {
-    this.store.dispatch(new AnalyseAction.SelectSpecies(species));   
+    this.store.dispatch(new AnalyseAction.SelectSpecies(species));
   }
 
   setDimensions(dims: DimensionsAnalyse[]) {
-    this.store.dispatch(new AnalyseAction.SelectDims(dims));    
+    this.store.dispatch(new AnalyseAction.SelectDims(dims));
   }
 
   selectMethod(method: Method) {
-    this.store.dispatch(new AnalyseAction.SelectMethod(method));    
+    this.store.dispatch(new AnalyseAction.SelectMethod(method));
   }
 
   startAnalyse(status: string) {
-    this.store.dispatch(new AnalyseAction.Redirect(status)); 
+    this.started$ = of(true);
+    this.store.dispatch(new AnalyseAction.Redirect(status));
   }
 
 

@@ -11,25 +11,42 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
     selector: 'bc-result-stock',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-        <mat-card class="container">
-            <mat-card-title-group>
-                <mat-card-title>{{'STOCK' | translate}}</mat-card-title>        
-            </mat-card-title-group>
-            <mat-card-content *ngFor="let sp of results.resultAll">
-                <div *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">
-                    <div>{{ sp.nameSpecies }}</div>
-                    <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">{{ 'BIOMASS' | translate }}: {{ sp.resultPerPlatform[0].resultStock.stock }} &plusmn;{{ sp.resultPerPlatform[0].resultStock.stockCI }}</div>
-                    <div>{{ 'ABONDANCE' | translate }}: {{ sp.resultPerPlatform[0].resultStock.density }} &plusmn;{{ sp.resultPerPlatform[0].resultStock.densityCI }}</div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+        <div>
+            <h2>{{'STOCK' | translate}}</h2>        
+            <div  class="container">
+            <mat-card *ngFor="let sp of results.resultAll">
+                <mat-card-title>{{ sp.nameSpecies }}</mat-card-title>
+                <mat-card-content *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">                                       
+                    <div>
+                        {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-2':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
+                        &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-2':'fr' }}  {{'INDIVIDUALS' | translate}}
+                    </div>
+                    <div>{{ 'CONSERVATIVE_IND' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-2':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
+                    <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">
+                        {{ 'TOTAL_STOCK' | translate }}: <span class="bold">{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stock) | number:'1.0-2':'fr' }} {{'TONS' | translate}} </span>
+                        &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} {{'TONS' | translate}}
+                    </div>
+                    <div *ngIf="sp.resultPerPlatform[0].resultStock.stockCA">{{ 'CONSERVATIVE_IND' | translate }}: {{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCA) | number:'1.0-2':'fr' }}  {{'TONS' | translate}}</div>
+                </mat-card-content>
+            </mat-card>
+            </div>
+        </div>
      `,
     styles: [
         `
-      .host {
+      .container {
           display: flex;
           flex-direction: row;
+          flex-wrap: wrap;
           justify-content: center;
+      }
+      mat-card {
+        width: 500px;
+        height: 300px;
+        margin: 15px;
+      }
+      .bold {
+          font-weight: bold;
       }
   `]
 })
@@ -45,9 +62,14 @@ export class ResultStockComponent implements OnInit {
     ngOnInit() {
     }
 
-    getResultStock(species) {
-
+    getInTonnes(kg: number){
+        if(!kg){
+            return 0;
+        }
+        return kg / 1000;
     }
+
+
 
 
 

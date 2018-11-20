@@ -473,5 +473,12 @@
   "SELECT_PLATFORM_TYPE":"Choose platform type",
   "VESSEL":"Vessel",
   "AREA": "Area",
-  "TYPE_PLATFORM":"Plateforme type"
+  "TYPE_PLATFORM":"Plateforme type",
+  "STOCK":"Total stock estimates",
+  "TOTAL_IND":"Total estimated number of individuals",
+  "TOTAL_STOCK":"Total stock estimates",
+  "CONSERVATIVE_IND":"Conservative hypothesis in number of individuals",
+  "CONSERVATIVE_STOCK":"Conservative hypothesis in tons",
+  "TONS":"Ton(s)",
+  "INDIVIDUALS":"Individual(s)"
 }
