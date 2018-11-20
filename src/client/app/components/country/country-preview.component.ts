@@ -88,7 +88,6 @@ export class CountryPreviewComponent {
   }
 
   get type() {
-    console.log(this.platformTypeList);
     return this.platformTypeList.filter(pt => pt.id===this.country.platformType)[0].value;
   }
 

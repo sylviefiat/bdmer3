@@ -86,7 +86,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     if (this.bounds) {
       this.map.fitBounds(this.bounds, { padding: 10 });
     }
-    console.log(this.map.getCanvas().toDataURL());
+    //console.log(this.map.getCanvas().toDataURL());
   }
 
   ngOnChanges(event) {

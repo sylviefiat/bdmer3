@@ -1,3 +1,6 @@
+export const AREA: number = 0;
+export const VESSEL:number = 1;
+
 export interface Country {
 	_id: string;
   _rev?: string;
@@ -6,7 +9,7 @@ export interface Country {
 	_attachments?: any;
 	users: User[];
   flag: string;
-  platformType: string;
+  platformType: number;
   coordinates: Coordinates;
 }
 

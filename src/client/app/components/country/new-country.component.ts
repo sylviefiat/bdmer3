@@ -82,7 +82,7 @@ export class NewCountryComponent implements OnInit {
               this.form.controls.pays.value["name"] +
               "?json=1"
           )
-          .subscribe(coord => {
+          .subscribe((coord:any) => {
             console.log(coord);
             this.form.controls.coordinates.get("lat").setValue(coord.latt);
             this.form.controls.coordinates.get("lng").setValue(coord.longt);

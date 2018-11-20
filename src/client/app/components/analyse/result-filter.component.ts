@@ -5,64 +5,10 @@ import { IAppState } from '../../modules/ngrx/index';
 import { Zone, Survey, Species, Station } from '../../modules/datas/models/index';
 
 @Component({
+  moduleId: module.id,
   selector: 'bc-result-filter',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-  <mat-card class="container">
-    <mat-card-title-group>
-        <mat-card-title>{{'FILTER' | translate}}</mat-card-title>        
-    </mat-card-title-group>
-        <mat-card-content>
-          <mat-card-subtitle>{{'LAYERS' | translate}}</mat-card-subtitle>
-          <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
-          <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
-          <p class="note">* {{'CLICK_ZONE' | translate}}</p>
-        </mat-card-content>
-        <mat-card-content>
-          <mat-card-subtitle *ngIf="showBiom"> {{'TYPE' | translate}}</mat-card-subtitle>
-          <mat-form-field>
-            <mat-select *ngIf="showBiom" [(ngModel)]="typeShow" (selectionChange)="this.typeShowEmitter.emit($event.value)">
-              <mat-option value="B">{{'DISPLAY_BIOMASS' | translate}}</mat-option>
-              <mat-option value="A">{{'DISPLAY_ABUNDANCE' | translate}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-card-content>
-        <mat-card-content class="legend">
-          <div class="stationLegend" *ngIf="showStations">
-            <mat-card-subtitle> {{'STATIONS' | translate}}</mat-card-subtitle>
-            <div *ngFor="let item of legend">
-              <span class="legend-circle" [style.width]="item.size+'px'" [style.height]="item.size+'px'"></span>              
-              <span>{{item.value}} </span><span>{{getUnit()}}</span>
-            </div>
-          </div>
-          <div class="zoneLegend" *ngIf="showZones">
-          <mat-card-subtitle> {{'ZONES' | translate}}</mat-card-subtitle>
-            <div *ngFor="let item of legend">
-              <span class="legend-key" [style.backgroundColor]="item.color"></span>
-              <span>{{item.value}} </span><span>{{getUnit()}}</span>
-            </div>
-          </div>
-        </mat-card-content>
-        <mat-card-content>
-          <mat-card-subtitle>{{'SPECIES' | translate}}</mat-card-subtitle>
-          <mat-form-field>
-            <mat-select [(ngModel)]="spShow" (selectionChange)="this.spShowEmitter.emit($event.value)">
-              <mat-option [value]="null">-</mat-option>
-              <mat-option *ngFor="let sp of species" value="{{sp.code}}">{{sp.scientificName}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-card-content>
-        <mat-card-content>
-          <mat-card-subtitle>{{'SURVEYS' | translate}}</mat-card-subtitle>
-          <mat-form-field>
-            <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
-              <mat-option [value]="null">-</mat-option>
-              <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-card-content>
-  </mat-card>
-  `,
+  templateUrl: 'result-filter.component.html',
   styles: [
   `
     mat-card {

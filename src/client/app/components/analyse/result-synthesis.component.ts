@@ -12,7 +12,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
     selector: 'bc-result-synthesis',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-      <bc-result-stock
+      <bc-result-stock *ngIf="analyseData.usedCountry.platformType==1"
           [results]="results"
           [analyseData]="analyseData"
           [showBiom]="showBiom">
@@ -47,7 +47,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (showZonesEmitter)="zonesLayerShow($event)">
         </bc-result-filter>
       </div>
-      <div class="charts"> 
+      <div class="charts" *ngIf="analyseData.usedCountry.platformType==0"> 
         <mat-card>
           <mat-card-title-group>
             <mat-card-title>{{ 'GRAPH_PLATFORMS' | translate }}</mat-card-title>
@@ -85,7 +85,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       :host {
         display: flex;
         flex-wrap: wrap;
-        flex-direction: row;
+        flex-direction: column;
         justify-content:center;
       }
       h2 {
@@ -98,6 +98,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
       }
       .charts {
         display:flex;
+        justify-content:center;
       }
     .noData {
       min-height:300px;
