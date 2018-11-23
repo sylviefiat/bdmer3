@@ -63,20 +63,20 @@ export const getPlatformMsg = (state: IPlatformState) => state.msg;
 
 export const getCurrentPlatformId = (state: IPlatformState) => state.currentPlatformId;
 
-export const getCurrentPlatform = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0];
+export const getCurrentPlatform = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0];
 
-export const getCurrentPlatformZones = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].zones;
+export const getCurrentPlatformZones = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].zones;
 
-export const getCurrentPlatformStations = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].stations;
+export const getCurrentPlatformStations = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].stations;
 
-export const getCurrentPlatformSurveys = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id === state.currentPlatformId)[0].surveys;
+export const getCurrentPlatformSurveys = (state: IPlatformState) => state.currentPlatformId && state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].surveys;
 
 export const getCurrentZoneId = (state: IPlatformState) => state.currentZoneId;
 
 export const getCurrentZone = (state: IPlatformState) => state.currentPlatformId && state.currentZoneId &&
     state.entities.filter(platform =>
-        platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-            zone.properties.code === state.currentZoneId)[0];
+        platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].zones.filter(zone =>
+            zone.properties.code.toLowerCase() === state.currentZoneId.toLowerCase())[0];
 
 export const getCurrentZoneStations = createSelector(getCurrentPlatform, getCurrentZone, (platform, zone) => {
     let stations = [];
@@ -90,7 +90,7 @@ export const getCurrentZoneStations = createSelector(getCurrentPlatform, getCurr
 
 export const getCurrentZoneZonePrefs = (state: IPlatformState) => state.currentPlatformId && state.currentZoneId &&
     state.entities.filter(platform =>
-        platform._id === state.currentPlatformId)[0].zones.filter(zone =>
+        platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].zones.filter(zone =>
             zone.properties.code === state.currentZoneId)[0].zonePreferences;
 
 export const getCurrentSurveyId = (state: IPlatformState) => state.currentSurveyId;
@@ -107,21 +107,21 @@ export const getCurrentStationId = (state: IPlatformState) => state.currentSurve
 
 export const getCurrentStation = (state: IPlatformState) => state.currentPlatformId && state.currentStationId &&
     state.entities.filter(platform =>
-        platform._id === state.currentPlatformId)[0].stations.filter(station =>
+        platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].stations.filter(station =>
             station.properties.code === state.currentStationId)[0];
 
 export const getCurrentSpPrefId = (state: IPlatformState) => state.currentSpPrefId;
 
 export const getCurrentSpPref = (state: IPlatformState) => state.currentPlatformId && state.currentZoneId && state.currentSpPrefId &&
     state.entities.filter(platform =>
-        platform._id === state.currentPlatformId)[0].zones.filter(zone =>
-            zone.properties.code === state.currentZoneId)[0].zonePreferences.filter(sppref =>
+        platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0].zones.filter(zone =>
+            zone.properties.code.toLowerCase() === state.currentZoneId.toLowerCase())[0].zonePreferences.filter(sppref =>
                 sppref.code === state.currentSpPrefId)[0];
 
 export const getCurrentCountId = (state: IPlatformState) => state.currentCountId;
 
 export const getCurrentCount = (state: IPlatformState) => state.currentPlatformId && state.currentSurveyId && state.currentCountId &&
-    state.entities.filter(platform => platform._id === state.currentPlatformId)[0]
-        .surveys.filter(survey => survey.code === state.currentSurveyId)[0]
-        .counts.filter(count => count.code === state.currentCountId)[0];
+    state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0]
+        .surveys.filter(survey => survey.code.toLowerCase() === state.currentSurveyId.toLowerCase())[0]
+        .counts.filter(count => count.code.toLowerCase() === state.currentCountId.toLowerCase())[0];
 

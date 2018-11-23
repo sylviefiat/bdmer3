@@ -160,7 +160,7 @@ export class PlatformService {
   editSurvey(platform: Platform, survey: Survey): Observable<Survey> {
     let msg = this.translate.instant("IMPORT_ERROR_SURVEY");
 
-    if (platform.code !== survey.codePlatform) return throwError(msg.IMPORT_ERROR_SURVEY);
+    if (platform.code.toLowerCase() !== survey.codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_SURVEY);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -178,7 +178,7 @@ export class PlatformService {
   importSurveys(platform: Platform, surveys: Survey[]): Observable<Survey[]> {
     let msg = this.translate.instant("IMPORT_ERROR_SURVEY");
 
-    if (platform.code !== surveys[0].codePlatform) return throwError(msg.IMPORT_ERROR_SURVEY);
+    if (platform.code.toLowerCase() !== surveys[0].codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_SURVEY);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -200,15 +200,15 @@ export class PlatformService {
     let errors = [];
     for(let survey of surveys){
       if (!survey.error) {
-        if (survey.codePlatform !== platform.code && survey.codeCountry === platform.codeCountry) {
+        if (survey.codePlatform.toLowerCase() !== platform.code.toLowerCase() && survey.codeCountry === platform.codeCountry) {
           errors= this.addError(errors,msg.NO_PLATFORM + survey.codePlatform + msg.FOR_COUNTRY + survey.codeCountry);
         }
 
-        if (survey.codePlatform === platform.code && survey.codeCountry !== platform.codeCountry) {
+        if (survey.codePlatform.toLowerCase() === platform.code.toLowerCase() && survey.codeCountry !== platform.codeCountry) {
           errors= this.addError(errors,msg.PLATFORM + survey.codePlatform + msg.NOT_PART_OF_COUNTRY + survey.codeCountry);
         }
 
-        if (survey.codePlatform !== platform.code && survey.codeCountry !== platform.codeCountry) {
+        if (survey.codePlatform.toLowerCase() !== platform.code.toLowerCase() && survey.codeCountry !== platform.codeCountry) {
           errors= this.addError(errors,msg.PLATFORM + survey.codePlatform + msg.AND_COUNTRY + survey.codeCountry + msg.NOT_IN_DATABASE);
         }
 
@@ -235,7 +235,7 @@ export class PlatformService {
 
   editStation(platform: Platform, station: Station): Observable<Station> {
     let msg = this.translate.instant("IMPORT_ERROR_STATION");
-    if (platform.code !== station.codePlatform) return throwError(msg.IMPORT_ERROR_STATION);
+    if (platform.code.toLowerCase() !== station.codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_STATION);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -263,7 +263,7 @@ export class PlatformService {
   importStations(platform: Platform, stations: Station[]): Observable<Station[]> {
     let msg = this.translate.instant("IMPORT_ERROR_STATION");
 
-    if (platform.code !== stations[0].codePlatform) return throwError(msg.IMPORT_ERROR_STATION);
+    if (platform.code.toLowerCase() !== stations[0].codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_STATION);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -284,7 +284,7 @@ export class PlatformService {
     let errors: string[] = [];
     for(let station of stations){
       if(!station.error){
-        if (station.codePlatform === platform.code) {
+        if (station.codePlatform.toLowerCase() === platform.code.toLowerCase()) {
           break;
         } else {
           errors= this.addError(errors,msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
@@ -297,7 +297,7 @@ export class PlatformService {
   editZonePref(platform: Platform, zonePref: ZonePreference): Observable<ZonePreference> {
     let msg = this.translate.instant("IMPORT_ERROR_ZONEPREF");
 
-    if (platform.code !== zonePref.codePlatform) return throwError(msg.IMPORT_ERROR_ZONEPREF);
+    if (platform.code.toLowerCase() !== zonePref.codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_ZONEPREF);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(st => {
@@ -328,7 +328,7 @@ export class PlatformService {
     let errors = [];
     for(let zonePref of zonePrefs){
       if (!zonePref.error) {
-        if(zonePref.codePlatform !== platform.code){
+        if(zonePref.codePlatform.toLowerCase() !== platform.code.toLowerCase()){
           errors = this.addError(errors,msg.ZONE_PREF + zonePref.code + msg.CANNOT_BE_INSERTED_CODEPLATFORM + zonePref.codePlatform + msg.NOT_IN_DATABASE);
         }
         if(platform.zones.filter(z => z.properties.code===zonePref.codeZone).length<0){
@@ -345,7 +345,7 @@ export class PlatformService {
   importZonePrefs(platform: Platform, zonePrefs: ZonePreference[]): Observable<ZonePreference[]> {
     let msg = this.translate.instant("IMPORT_ERROR_ZONE_PREFERENCE");
 
-    if (platform.code !== zonePrefs[0].codePlatform) return throwError(msg.IMPORT_ERROR_ZONE_PREFERENCE);
+    if (platform.code.toLowerCase() !== zonePrefs[0].codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_ZONE_PREFERENCE);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {
@@ -380,7 +380,7 @@ export class PlatformService {
   editCount(platform: Platform, count: Count): Observable<Count> {
     let msg = this.translate.instant("IMPORT_ERROR_COUNT");
 
-    if (platform.code !== count.codePlatform) return throwError(msg.IMPORT_ERROR_COUNT);
+    if (platform.code.toLowerCase() !== count.codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_COUNT);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(st => {
@@ -444,7 +444,7 @@ export class PlatformService {
 
   importCounts(platform: Platform, counts: Count[]): Observable<Count[]> {
     let msg = this.translate.instant("IMPORT_ERROR_COUNT");
-    if (platform.code !== counts[0].codePlatform) return throwError(msg.IMPORT_ERROR_COUNT);
+    if (platform.code.toLowerCase() !== counts[0].codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_COUNT);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
       mergeMap(pt => {

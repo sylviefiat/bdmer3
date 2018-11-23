@@ -255,7 +255,7 @@ export class PlatformEffects {
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingSurveyAction) => action.payload),
       mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
-      map(survey => new PlatformAction.AddPendingSurveySuccessAction(survey))
+      map((surveys:Survey[]) => new PlatformAction.AddPendingSurveySuccessAction(surveys))
     );
 
   @Effect()
