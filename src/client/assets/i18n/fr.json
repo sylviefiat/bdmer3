@@ -481,5 +481,7 @@
   "CONSERVATIVE_IND":"Hypothèse conservatrice en nombre d'individus",
   "CONSERVATIVE_STOCK":"Hypothèse conservatrice en tonnes",
   "TONS":"Tonne(s)",
-  "INDIVIDUALS":"Individu(s)"
+  "INDIVIDUALS":"Individu(s)",
+  "NO_COORDINATES":"Aucune coordonnées trouvées",
+  "WRONG_COORD_FORMAT":"Les coordonnées ne sont pas au format degré décimales"
 }

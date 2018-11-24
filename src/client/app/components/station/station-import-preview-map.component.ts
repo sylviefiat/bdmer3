@@ -74,7 +74,7 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
                             this.bounds = MapService.zoomToStations({ features: this.newStations });
                         }
                     }
-                }
+                } 
             }
         }
     }
@@ -104,6 +104,7 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
         let inside = false, i = 0;
         this.platform.zones.forEach(zone => {
           for(let station of stations){
+
             if (MapService.booleanInPolygon(station, MapService.getPolygon(zone, { name: zone.properties.name }))) {
               this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
               stations = [...stations.filter(st => st.properties.code !== station.properties.code)];

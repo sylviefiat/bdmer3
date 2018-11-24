@@ -480,5 +480,7 @@
   "CONSERVATIVE_IND":"Conservative hypothesis in number of individuals",
   "CONSERVATIVE_STOCK":"Conservative hypothesis in tons",
   "TONS":"Ton(s)",
-  "INDIVIDUALS":"Individual(s)"
+  "INDIVIDUALS":"Individual(s)",
+  "NO_COORDINATES":"One or many stations coordinates are missing",
+  "WRONG_COORD_FORMAT":"Coordinates are not in decimal degrees format"
 }

@@ -369,7 +369,7 @@ export class Csv2JsonService {
                         switch (headers[j]) {
                             case "codePlatform":
                             case "code":
-                            case "nom":
+                            case "nom":                        
                             case "latitude":
                             case "longitude":
                             case "description":
@@ -377,7 +377,7 @@ export class Csv2JsonService {
                                     return g[1].toUpperCase();
                                 });
                                 st[headers[j]] = data[j];
-                                break;
+                                break; 
                             default:
                                 if (!errorTab.includes(headers[j])) {
                                     errorTab.push(headers[j]);

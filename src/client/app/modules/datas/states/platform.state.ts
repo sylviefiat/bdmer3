@@ -96,11 +96,11 @@ export const getCurrentZoneZonePrefs = (state: IPlatformState) => state.currentP
 export const getCurrentSurveyId = (state: IPlatformState) => state.currentSurveyId;
 
 export const getCurrentSurvey = (state: IPlatformState) => state.currentPlatformId && state.currentSurveyId &&
-    state.entities.filter(platform => platform._id === state.currentPlatformId)[0]
+    state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0]
         .surveys.filter(survey => survey.code === state.currentSurveyId)[0];
 
 export const getCurrentSurveyCounts = (state: IPlatformState) => state.currentPlatformId && state.currentSurveyId &&
-    state.entities.filter(platform => platform._id === state.currentPlatformId)[0]
+    state.entities.filter(platform => platform._id.toLowerCase() === state.currentPlatformId.toLowerCase())[0]
         .surveys.filter(survey => survey.code === state.currentSurveyId)[0].counts;
 
 export const getCurrentStationId = (state: IPlatformState) => state.currentSurveyId;

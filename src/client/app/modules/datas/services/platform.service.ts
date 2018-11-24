@@ -280,14 +280,16 @@ export class PlatformService {
   }
 
   importStationVerification(stations: Station[], platform: Platform): Observable<string[]> {
-    let msg = this.translate.instant(['STATION', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE']);
+    let msg = this.translate.instant(['STATION', 'CANNOT_BE_INSERTED_CODEPLATFORM', 'NOT_IN_DATABASE','NO_COORDINATES','WRONG_COORD_FORMAT']);
     let errors: string[] = [];
     for(let station of stations){
       if(!station.error){
-        if (station.codePlatform.toLowerCase() === platform.code.toLowerCase()) {
-          break;
-        } else {
-          errors= this.addError(errors,msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+        if (station.codePlatform.toLowerCase() !== platform.code.toLowerCase()) {
+          errors=this.addError(errors,msg.STATION + station.properties.name + msg.CANNOT_BE_INSERTED_CODEPLATFORM + station.codePlatform + msg.NOT_IN_DATABASE);
+        } else if(!station.geometry || !station.geometry.coordinates){
+          errors= this.addError(errors,msg.STATION + station.properties.name + msg.NO_COORDINATES);
+        } else if(typeof station.geometry.coordinates[0] !== "number" || typeof station.geometry.coordinates[1] !== "number"){
+          errors= this.addError(errors,msg.STATION + station.properties.name + msg.WRONG_COORD_FORMAT);
         }
       }
     }

@@ -42,7 +42,7 @@
           (mouseEnter)="cursorStyle = 'pointer'"
           (mouseLeave)="cursorStyle = ''">
         </mgl-layer>
-        <mgl-layer
+        <!--mgl-layer
           id="zonestext"
           type="symbol"
           source="layerZones"
@@ -63,7 +63,7 @@
             'text-color': 'white'
           }"
         >
-        </mgl-layer>
+        </mgl-layer-->
       </mgl-geojson-source>
     </ng-container>
     <ng-container *ngIf="zoneStation && isDisplayed('zones')">
