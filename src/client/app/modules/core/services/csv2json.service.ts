@@ -484,7 +484,7 @@ export class Csv2JsonService {
         let headers = allTextLines[0];
         let lines: Count[] = [];
         let errorTab = [];
-        let sp;
+        let sp, caught=0, quantity=0;
         for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -519,14 +519,25 @@ export class Csv2JsonService {
                             if (!count.quantities) {
                                 count.quantities = [];
                             }
-                            let q;
                             // if it is french format replace decimal separator "," to "."
                             if (delimiter === Csv2JsonService.SEMICOLON) {
-                                q = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
+                                caught = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
                             } else {
-                                q = data[j];
+                                caught = data[j];
                             }
-                            count.quantities.push({ codeSpecies: sp, quantity: q });
+                            break;
+                        case "quantity":
+                            sp = data[headers.indexOf("codeSpecies")];
+                            if (sp.length < 2) break;
+                            if (!count.quantities) {
+                                count.quantities = [];
+                            }
+                            // if it is french format replace decimal separator "," to "."
+                            if (delimiter === Csv2JsonService.SEMICOLON) {
+                                quantity = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
+                            } else {
+                                quantity = data[j];
+                            }                            
                             break;
                         case "mesures":
                             sp = data[headers.indexOf("codeSpecies")];
@@ -549,7 +560,7 @@ export class Csv2JsonService {
                             break;
                     }
                 }
-
+                count.quantities.push({ codeSpecies: sp, caught: caught, quantity: quantity });
                 lines.push(count);
             }
         }

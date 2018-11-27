@@ -32,9 +32,9 @@ export class PlatformService {
     return from(
       this.db.query(
         function(doc, emit) {
-          emit(doc.code);
+          emit(doc.code.toLowerCase());
         },
-        { key: platformCode, include_docs: true }
+        { key: platformCode.toLowerCase(), include_docs: true }
       )
     ).pipe(map((result: ResponsePDB) => result.rows && result.rows[0] && result.rows[0].doc));
   }
