@@ -31,7 +31,8 @@ export interface Zone {
     zonePreferences: ZonePreference[];
 }
 
-export interface Property{
+export interface Property {
+  id?: string;
   name: string;
   code: string;
   surface: number;

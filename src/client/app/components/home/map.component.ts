@@ -106,7 +106,7 @@ export class MapComponent implements OnInit, OnChanges {
 
 
       if (this.markersCountries.length === 1 && this.platforms.length > 0) {
-        this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+        this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
       } else  if(this.markersCountries.length >= 1){
         this.bounds$ = of(this.zoomToCountries(this.markersCountries.map(mk => mk.lngLat)));
       }
@@ -120,20 +120,21 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   zoomToZonesOrStation(featureCollection) {
-    if(featureCollection.features.length>0){
-      var bnd = new LngLatBounds();
+    var bnd = new LngLatBounds();
+    if(featureCollection.features !== null){      
       var fc: Turf.FeatureCollection = featureCollection.features
       .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
-      .forEach((feature) => bnd.extend(feature.geometry.type.indexOf('Multi')>-1?feature.geometry.coordinates[0][0]:feature.geometry.coordinates[0]));
-      this.bounds$ = of(this.checkBounds(bnd));
-    }
+      .forEach((feature) => bnd.extend(MapService.zoomOnZone(feature)));
+      return MapService.checkBounds(bnd);
+    } 
+    return bnd;
   }
 
   zoomOnCountry(countryCode: string) {
     let platformsConsidered = this.platforms.filter(platform => platform.codeCountry === countryCode);
     this.setZones(platformsConsidered);
     if (platformsConsidered.length > 1) {
-      this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
+      this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     } else {
       this.bounds$ = of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country === countryCode).map(mk => mk.lngLat)));
     }
@@ -150,7 +151,7 @@ export class MapComponent implements OnInit, OnChanges {
       Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{code: zone.properties.code}))));
+          .map(zone => MapService.getFeature(zone,{id:zone.properties.id,code: zone.properties.code}))));
   }
 
   setStations(platforms: Platform[]) {
@@ -164,22 +165,6 @@ export class MapComponent implements OnInit, OnChanges {
       Turf.featureCollection(
         this.stations
           .map(station => MapService.getFeature(station,{ code: station.properties.code}))));
-  }
-
-  checkBounds(bounds: LngLatBounds){
-    if(bounds && bounds.getNorthEast() && bounds.getSouthWest()){
-      if(bounds.getNorthEast().lng<bounds.getSouthWest().lng){
-        let tmp = bounds.getSouthWest().lng;
-        bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng,bounds.getSouthWest().lat));
-        bounds.setNorthEast(new LngLat(tmp,bounds.getNorthEast().lat));
-      }
-      if(bounds.getNorthEast().lat<bounds.getSouthWest().lat){
-        let tmp = bounds.getSouthWest().lat;
-        bounds.setSouthWest(new LngLat(bounds.getSouthWest().lng,bounds.getNorthEast().lat));
-        bounds.setNorthEast(new LngLat(bounds.getNorthEast().lng,tmp));
-      }
-    }
-    return bounds;
   }
 
   showPopupStation(evt: MapMouseEvent) {

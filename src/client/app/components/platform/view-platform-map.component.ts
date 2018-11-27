@@ -123,7 +123,7 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
     let lz =  Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+          .map(zone => MapService.getFeature(zone,{ id:zone.properties.id, code: zone.properties.code})));
     this.layerZones$ = of(lz);
     this.bounds = MapService.zoomToZones(lz);
   }

@@ -40,7 +40,7 @@ export class MapService {
             case "GeometryCollection":
                 return feature.geometry.geometries.flatMap(geom => geom.coordinates);
             case "MultiPolygon":
-                return feature.geometry.geometries.flatMap(geom => geom.coordinates);
+                return feature.geometry.coordinates.flatMap(coord => coord);
             case "Polygon":
             case "Point":
                 return feature.geometry.coordinates;
