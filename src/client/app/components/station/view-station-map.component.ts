@@ -69,8 +69,8 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
 
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zone" && s !== "zones" && s !== "zonestext"), "countries", "zone", "zones","zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zone"  && s !== "zones"  && s !== "zonestext" && s !== "station"), "zone","zones", "zonestext", "station"];
   }
 
   changeView(view: string) {
@@ -112,9 +112,10 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
       if (this.platform.zones.length > 0) this.setZones(this.platform);
 
       this.zoneStation = null;
-
+      console.log(this.platform.zones);
       this.platform.zones.map(zone => {
-        if (MapService.booleanInPolygon(this.station, MapService.getPolygon(zone, {name:zone.properties.name}))) {
+        if (MapService.booleanInPolygon(this.station, MapService.getPolygon(zone, {code:zone.properties.code}))) {
+          console.log(zone);
           this.zoneStation = zone;
         }
       });
@@ -133,7 +134,7 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
 
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(MapService.getCoordinates(zone), { code: zone.properties.code }))));
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(MapService.getCoordinates(zone), { code: zone.properties.id ? zone.properties.id : zone.properties.code }))));
   }
 
   setStations(platforms: Platform) {

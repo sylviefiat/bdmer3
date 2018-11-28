@@ -71,8 +71,8 @@ export class ViewCountMapComponent implements OnInit, OnChanges {
 
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s!== "zonestext"), "countries", "zones", "zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s!== "zonestext" && s !== "stations"), "zones", "zonestext", "stations"];
   }
 
   changeView(view: string) {
@@ -136,7 +136,7 @@ export class ViewCountMapComponent implements OnInit, OnChanges {
 
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code }))));
+    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.id ? zone.properties.id : zone.properties.code }))));
     this.bounds = MapService.zoomToZones(Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code }))));
   }
 

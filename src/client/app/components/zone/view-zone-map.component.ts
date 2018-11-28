@@ -39,7 +39,9 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
   zones: Zone[] = [];
   layerZones$: Observable<Turf.FeatureCollection>;
   stations: Station[] = [];
+  stationsZone: Station[];
   layerStations$: Observable<Turf.FeatureCollection>;
+  layerStationsZone$: Observable<Turf.FeatureCollection>;
 
   show: string[] = ["countries"];
   tmp: string[] = [];
@@ -68,8 +70,8 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zone" && s !== "zones" && s !== "zonestext"), "countries", "zone", "zones", "zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zone" && s !== "zones" && s !== "zonestext" && s !== "stations"), "zone", "zones", "zonestext", "stations"];
   }
 
   changeView(view: string) {
@@ -99,6 +101,12 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
   init() {
     if (this.countries.length > 0) {
+      console.log(this.stationsZone);
+      if(!this.stationsZone){
+        this.stationsZone=this.platform.stations.filter(station => station).filter(station => MapService.booleanInPolygon(station,MapService.getPolygon(this.zone,{})));
+      }
+      
+        
       let country = this.countries.filter(country => country.code === this.platform.codeCountry)[0];
 
       this.markerCountry = {
@@ -109,6 +117,7 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
 
       if (this.platform.stations.length > 0) this.setStations(this.platform);
       if (this.platform.zones.length > 0) this.setZones(this.platform);
+      if (this.stationsZone.length > 0) this.setStationsZone(this.stationsZone);
 
       this.bounds = MapService.zoomOnZone(this.zone);
     }
@@ -119,7 +128,7 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
     let lz =  Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+          .map(zone => MapService.getFeature(zone,{ code: zone.properties.id ? zone.properties.id : zone.properties.code})));
     this.layerZones$ = of(lz);
     this.bounds = MapService.zoomToZones(lz);
   }
@@ -130,6 +139,12 @@ export class ViewZoneMapComponent implements OnInit, OnChanges {
     this.layerStations$ = of(
       Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
     );
+  }
+
+  setStationsZone(stations: Station[]) {
+    let fsz = Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })));
+    this.layerStationsZone$ = of(fsz);
+    this.bounds = MapService.zoomToStations(fsz);
   }
 
   showPopupStation(evt: MapMouseEvent) {

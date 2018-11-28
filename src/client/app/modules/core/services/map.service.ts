@@ -108,7 +108,7 @@ export class MapService {
 
     static booleanInPolygon(point,polygon){
         try {
-            if(point && point.geometry && point.geometry.coordinates && point.geometry.coordinates[0] instanceof Number && point.geometry.coordinates[1] instanceof Number){
+            if(point && point.geometry && point.geometry.coordinates && typeof point.geometry.coordinates[0] === "number" && typeof point.geometry.coordinates[1] === "number"){
                 return Turf.booleanPointInPolygon(point.geometry.coordinates, polygon);
             }
             return false;

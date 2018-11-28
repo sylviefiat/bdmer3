@@ -1,6 +1,9 @@
 <nav id="switcher">
       <a href="#" (click)="changeView('countries')" [class.isOn]="isDisplayed('countries')">{{'COUNTRIES' | translate}}</a>
-      <a href="#" (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+      <div class="subswitch">
+        <a href="#" (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+        <a href="#" (click)="changeView('zonestext')" [class.isOn]="isDisplayed('zones') && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
+      </div>
       <a href="#" (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
       <div class="subswitch">
         <a href="#" (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
@@ -41,12 +44,12 @@
               'fill-outline-color': '#000'
               }">
           </mgl-layer>
-          <mgl-layer
+          <mgl-layer *ngIf="isDisplayed('zonestext')"
             id="zonestext"
             type="symbol"
             source="layerZones"
             [layout]="{
-              'text-field': '{id}',
+              'text-field': '{code}',
               'text-anchor':'bottom',
               'text-font': [
                 'DIN Offc Pro Italic',

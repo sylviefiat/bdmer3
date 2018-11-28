@@ -66,11 +66,10 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonestext"), "countries", "zones", "zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "zonestext" && s !== "stations"), "zones", "zonestext", "stations"];
   }
 
   changeView(view: string) {
@@ -123,7 +122,7 @@ export class ViewPlatformMapComponent implements OnInit, OnChanges {
     let lz =  Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{ id:zone.properties.id, code: zone.properties.code})));
+          .map(zone => MapService.getFeature(zone,{code: zone.properties.id?zone.properties.id:zone.properties.code})));
     this.layerZones$ = of(lz);
     this.bounds = MapService.zoomToZones(lz);
   }

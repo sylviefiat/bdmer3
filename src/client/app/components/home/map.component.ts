@@ -62,9 +62,9 @@ export class MapComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='stations'),'countries'];
-    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='stations'),'countries','zones'];
-    if(this.zoom>this.zoomMinStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='stations'),'zones','stations'];
+    if(this.zoom<=this.zoomMinCountries) this.show=[...this.show.filter(s => s!=='countries'&&s!=='zones'&&s!=='zonestext'&&s!=='stations'),'countries'];
+    if(this.zoom<=this.zoomMinStations && this.zoom>this.zoomMinZones) this.show=[...this.show.filter(s=> s!=='countries'&&s!=='zones'&&s!=='zonestext'&&s!=='stations'),'countries','zones','zonestext'];
+    if(this.zoom>this.zoomMinStations) this.show=[...this.show.filter(s=>s!=='zones'&&s!=='zonestext'&&s!=='stations'),'zones','zonestext','stations'];
   }
 
   changeView(view: string) {
@@ -133,7 +133,8 @@ export class MapComponent implements OnInit, OnChanges {
   zoomOnCountry(countryCode: string) {
     let platformsConsidered = this.platforms.filter(platform => platform.codeCountry === countryCode);
     this.setZones(platformsConsidered);
-    if (platformsConsidered.length > 1) {
+
+    if (platformsConsidered && (<any>platformsConsidered).flatMap(platform=>platform.zones).length > 1) {
       this.bounds$ = this.layerZones$.map(layerZones => this.zoomToZonesOrStation(layerZones));
     } else {
       this.bounds$ = of(this.zoomToCountries(this.markersCountries.filter(mk => mk.country === countryCode).map(mk => mk.lngLat)));
@@ -151,7 +152,7 @@ export class MapComponent implements OnInit, OnChanges {
       Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{id:zone.properties.id,code: zone.properties.code}))));
+          .map(zone => MapService.getFeature(zone,{code: zone.properties.id?zone.properties.id:zone.properties.code}))));
   }
 
   setStations(platforms: Platform[]) {

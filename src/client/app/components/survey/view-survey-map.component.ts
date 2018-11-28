@@ -74,8 +74,8 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
 
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonestext"), "countries", "zones","zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones"  && s !== "zonestext" && s !== "stations"), "zones","zonestext", "stations"];
   }
 
   changeView(view: string) {
@@ -106,19 +106,19 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
   init() {
     if (this.countries.length > 0) {
       this.platform.stations.filter(station => station)
-      this.platform.stations.forEach(station => {
-        this.survey.counts.forEach(count => {
-          if (count.codeStation === station.properties.code) {
-            if (!this.stationsCount.includes(station)) {
-              this.stationsCount.push(station);
-              let zoneCount = this.platform.zones.filter(zone => MapService.booleanInPolygon(station,MapService.getPolygon(zone,{})))[0];
-              if(!this.zonesCount.includes(zoneCount)){
-                this.zonesCount.push(zoneCount);
+        .forEach(station => {
+          this.survey.counts.forEach(count => {
+            if (count.codeStation === station.properties.code) {
+              if (!this.stationsCount.includes(station)) {
+                this.stationsCount.push(station);
+                let zoneCount = this.platform.zones.filter(zone => MapService.booleanInPolygon(station,MapService.getPolygon(zone,{})))[0];
+                if(!this.zonesCount.includes(zoneCount)){
+                  this.zonesCount.push(zoneCount);
+                }
               }
             }
-          }
+          });
         });
-      });
 
       let country = this.countries.filter(country => country.code === this.platform.codeCountry)[0];
 
@@ -142,7 +142,7 @@ export class ViewSurveyMapComponent implements OnInit, OnChanges {
 
   setZones(platform: Platform) {
     this.zones = this.platform.zones;
-    let lz = Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code, hasCount: this.zonesCount.includes(zone)})));
+    let lz = Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.id ? zone.properties.id : zone.properties.code, hasCount: this.zonesCount.includes(zone)})));
     this.layerZones$ = of(lz);
     this.bounds = MapService.zoomToZones(lz);
   }

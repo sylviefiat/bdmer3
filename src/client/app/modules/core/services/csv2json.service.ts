@@ -334,10 +334,6 @@ export class Csv2JsonService {
                 codePlatform: lines[i]["codePlatform"]
             };
 
-            // this.mapStaticService.staticMapToB64(this.mapStaticService.googleMapUrlPoint([Number(lines[i]["longitude"]), Number(lines[i]["latitude"])])).then(function(data) {
-            //     geojson.staticMapStation = data.toString();
-            // })
-
             geojsons.push(geojson);
         }
 

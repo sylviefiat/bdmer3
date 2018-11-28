@@ -1,9 +1,12 @@
 <nav id="switcher">
-    <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
-    <a  (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
-    <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
-    <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
-  </nav>
+  <a (click)="changeView('zone')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+  <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+  <a (click)="changeView('zonestext')" [class.isOn]="isDisplayed('zones') && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
+  <a  (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
+  <a  (click)="changeView('stationsall')" [class.isOn]="isDisplayed('stationsall')">{{'STATIONS' | translate}}</a>
+  <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
+  <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
+</nav>
   <mgl-map
   [preserveDrawingBuffer]="true"
   [style]="bls[bl]"
@@ -26,47 +29,7 @@
         </div>
       </mgl-marker>
     </ng-container>
-    <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
-      <mgl-geojson-source
-        id="layerZones"
-        [data]="layerZones$ | async">
-        <mgl-layer
-          id="zonesid"
-          type="fill"
-          source="layerZones"
-          [paint]="{
-            'fill-color': '#AFEEEE',
-            'fill-opacity': 0.3,
-            'fill-outline-color': '#000'
-            }"
-          (mouseEnter)="cursorStyle = 'pointer'"
-          (mouseLeave)="cursorStyle = ''">
-        </mgl-layer>
-        <mgl-layer
-          id="zonestext"
-          type="symbol"
-          source="layerZones"
-          [layout]="{
-            'text-field': '{code}',
-            'text-allow-overlap': true,
-            'text-anchor':'bottom',
-            'text-font': [
-              'DIN Offc Pro Italic',
-              'Arial Unicode MS Regular'
-            ],
-            'symbol-placement': 'point',
-            'symbol-avoid-edges': true,
-            'text-max-angle': 30,
-            'text-size': 12
-          }"
-          [paint]="{
-            'text-color': 'white'
-          }"
-        >
-        </mgl-layer>
-      </mgl-geojson-source>
-    </ng-container>
-    <ng-container *ngIf="zone && isDisplayed('zones')">
+    <ng-container *ngIf="zone && isDisplayed('zone')">
       <mgl-geojson-source
         id="layerZone"
         [data]="zone">
@@ -106,7 +69,47 @@
         </mgl-layer>
       </mgl-geojson-source>
     </ng-container>
-    <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stations')">
+    <ng-container *ngIf="(layerZones$ | async) && isDisplayed('zones')">
+      <mgl-geojson-source
+        id="layerZones"
+        [data]="layerZones$ | async">
+        <mgl-layer
+          id="zonesid"
+          type="fill"
+          source="layerZones"
+          [paint]="{
+            'fill-color': '#AFEEEE',
+            'fill-opacity': 0.3,
+            'fill-outline-color': '#000'
+            }"
+          (mouseEnter)="cursorStyle = 'pointer'"
+          (mouseLeave)="cursorStyle = ''">
+        </mgl-layer>
+        <mgl-layer  *ngIf="isDisplayed('zonestext')"
+          id="zonestext"
+          type="symbol"
+          source="layerZones"
+          [layout]="{
+            'text-field': '{code}',
+            'text-allow-overlap': true,
+            'text-anchor':'bottom',
+            'text-font': [
+              'DIN Offc Pro Italic',
+              'Arial Unicode MS Regular'
+            ],
+            'symbol-placement': 'point',
+            'symbol-avoid-edges': true,
+            'text-max-angle': 30,
+            'text-size': 12
+          }"
+          [paint]="{
+            'text-color': 'white'
+          }"
+        >
+        </mgl-layer>
+      </mgl-geojson-source>
+    </ng-container>
+    <ng-container *ngIf="(layerStations$ | async) && isDisplayed('stationsall')">
       <mgl-geojson-source
         id="layerStations"
         [data]="layerStations$ | async">
@@ -115,9 +118,30 @@
           type="circle"
           source="layerStations"
           [paint]="{
-            'circle-radius': 5,
-            'circle-opacity': 0,
-            'circle-stroke-width': 2
+            'circle-radius': 6,
+            'circle-color': '#fff',
+            'circle-opacity': 1,
+            'circle-stroke-width': 1
+          }"
+          (click)="showPopupStation($event)"
+          (mouseEnter)="cursorStyle = 'pointer'"
+          (mouseLeave)="cursorStyle = ''">
+        </mgl-layer>
+      </mgl-geojson-source>
+    </ng-container>
+    <ng-container *ngIf=" (layerStationsZone$ | async) && isDisplayed('stations')">
+      <mgl-geojson-source
+        id="layerStationsZone"
+        [data]="(layerStationsZone$ | async)">
+        <mgl-layer
+          id="stationszoneid"
+          type="circle"
+          source="layerStationsZone"
+          [paint]="{
+            'circle-radius': 6,
+            'circle-color': '#ff0000',
+            'circle-opacity': 1,
+            'circle-stroke-width': 1
           }"
           (click)="showPopupStation($event)"
           (mouseEnter)="cursorStyle = 'pointer'"
