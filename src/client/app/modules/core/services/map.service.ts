@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Turf from '@turf/turf';
+import * as Intersect from '@turf/intersect';
 import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
 
 @Injectable()
@@ -23,9 +24,13 @@ export class MapService {
     }
 
     static getPolygon(feature, properties) {
+        //console.log(feature.geometry.type);
+        
         switch (feature.geometry.type) {
             case "GeometryCollection":
-                return Turf.multiPolygon(feature.geometry.geometries.map(geom => geom.coordinates), properties);
+                //console.log(feature); 
+                console.log(feature.geometry.geometries.flatMap(geom => geom.coordinates));
+                return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)], properties);
             case "MultiPolygon":
                 return Turf.multiPolygon(feature.geometries.coordinates, properties);
             case "Polygon":
@@ -93,6 +98,7 @@ export class MapService {
 
 
     static checkBounds(bounds: LngLatBounds): LngLatBounds {
+        console.log(bounds);
         if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
             let tmp = bounds.getSouthWest().lng;
             bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
@@ -117,6 +123,24 @@ export class MapService {
             throw e;
             
         }
+    }
+
+    static hasIntersection(poly1, poly2) {
+        let p1 = MapService.getPolygon(poly1,{});
+        let p2 = MapService.getPolygon(poly2,{});
+        //console.log(p1);
+        //console.log(p2);
+        if(p1 && p2){
+            try {
+                return Intersect.default(p1, p2);
+            } catch(e){
+                console.log(p1);
+                console.log(p2);
+                console.log(e);
+                return null;
+            }
+        }
+        return null;
     }
 
 }

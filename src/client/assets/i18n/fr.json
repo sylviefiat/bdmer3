@@ -485,5 +485,7 @@
   "NO_COORDINATES":"Aucune coordonnées trouvées",
   "WRONG_COORD_FORMAT":"Les coordonnées ne sont pas au format degré décimales",
   "ZONES_TEXT":"Labels",
-  "STATIONS_ALL":"Toutes"
+  "STATIONS_ALL":"Toutes",
+  "ZONES_NEW":"Zones importées",
+  "IMPORT_ZONE_WARNING": "ATTENTION l'import de nouvelles zones supprimera les zones existantes de la plateforme"
 }

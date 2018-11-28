@@ -1,5 +1,6 @@
 <nav id="switcher">
     <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+  <a (click)="changeView('zonestext')" [class.isOn]="isDisplayed('zones') && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
     <a  (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
     <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
     <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
@@ -78,7 +79,7 @@
           (mouseEnter)="cursorStyle = 'pointer'"
           (mouseLeave)="cursorStyle = ''">
         </mgl-layer>
-        <mgl-layer
+        <mgl-layer *ngIf="isDisplayed('zonestext')"
           id="zonestext"
           type="symbol"
           source="layerZones"
@@ -112,7 +113,8 @@
           source="layerStations"
           [paint]="{
             'circle-radius': 5,
-            'circle-opacity': 0,
+            'circle-color': '#ff0000',
+            'circle-opacity': 1,
             'circle-stroke-width': 2
           }"
           (click)="showPopupStation($event)"

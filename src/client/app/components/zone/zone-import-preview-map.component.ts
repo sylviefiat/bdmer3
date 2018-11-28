@@ -16,7 +16,7 @@ import { MapService } from "../../modules/core/services/index";
   moduleId: module.id,
   selector: 'bc-zone-import-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: 'zone-form-preview-map.component.html',
+  templateUrl: 'zone-import-preview-map.component.html',
   styleUrls: ['../maps.css'] 
 })
 export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
@@ -63,8 +63,7 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
 
     if (this.geojsons) {
       this.reset();
-      this.checkZoneValid(this.geojsons);
-      this.bounds = MapService.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
+      this.checkZoneValid(this.geojsons);      
     }
   }
 
@@ -78,9 +77,10 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   checkZoneValid(zonesCheck) {
+    
     for (let zc of zonesCheck) {
       this.platform.zones.map(zone => {
-        if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zc.geometry.coordinates))) {          
+        if (MapService.hasIntersection(zone,zc)) {          
           this.newZonesPreviewError.features.push(zc);
           zonesCheck.splice(zc, 1);
           return this.zoneIntersect.emit('error');
@@ -88,15 +88,8 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
       });
     }
     this.newZonesPreviewValid.features = zonesCheck;
+    this.bounds = MapService.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
     return this.zoneIntersect.emit('none');
-  }
-
-  addZone(geojsons) {
-    MapService.zoomToZones(geojsons);
-    for (let geojson of geojsons) {
-      var bnd = new LngLatBounds();
-      this.bounds = MapService.checkBounds(bnd.extend(geojson.geometry.coordinates[0]));
-    }
   }
 
   setMap(event) {
@@ -108,11 +101,11 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-
+    console.log(this.newZonesPreviewValid.features.length);
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonesnew" && s !== "zonestext"), "countries", this.newZonesPreviewValid.features.length===0 ? "zones" : "zonesnew", "zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "zonesnew" && s !== "zonestext" && s !== "stations"), this.newZonesPreviewValid.features.length===0 ?"zones" : "zonesnew", "zonestext", "stations"];
   }
 
   changeView(view: string) {
@@ -160,16 +153,16 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
     let lz =  Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{ code: zone.properties.code})));
+          .map(zone => MapService.getFeature(zone,{ code: zone.properties.id ? zone.properties.id : zone.properties.code})));
     this.layerZones$ = of(lz);
-    MapService.zoomToZones(lz);
+    this.bounds = MapService.zoomToZones(lz);
   }
 
   setStations(platform: Platform) {
     this.stations = platform.stations;
-    let fc = Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })))
+    let fc = Turf.featureCollection(this.stations.map(station => MapService.getFeature(station.geometry.coordinates, { code: station.properties.code })))
     this.layerStations$ = of(fc);
-    MapService.zoomToStations(fc);
+    this.bounds = MapService.zoomToStations(fc);
   }
 
 

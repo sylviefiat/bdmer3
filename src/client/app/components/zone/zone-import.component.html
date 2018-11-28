@@ -22,6 +22,9 @@
     <mat-card-content>
       {{'IMPORT_DESC_KML' | translate }}
     </mat-card-content>
+    <mat-card-content *ngIf="platform.zones.length>0" class="warn">
+      {{'IMPORT_ZONE_WARNING' | translate }}
+    </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_KML_ZONES' | translate }}</h5>
       <a *ngIf="!isAdmin" href="{{getKmlZonesUrl()}}" download>

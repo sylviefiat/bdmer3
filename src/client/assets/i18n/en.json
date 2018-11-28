@@ -484,5 +484,7 @@
   "NO_COORDINATES":"One or many stations coordinates are missing",
   "WRONG_COORD_FORMAT":"Coordinates are not in decimal degrees format",
   "ZONES_TEXT":"Labels",
-  "STATIONS_ALL":"All"
+  "STATIONS_ALL":"All",
+  "ZONES_NEW":"Imported zones",
+  "IMPORT_ZONE_WARNING": "WARNING import of new zones will destroy the platform existing zones"
 }

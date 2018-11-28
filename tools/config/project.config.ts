@@ -265,13 +265,21 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: '@turf/invariant',
             path: 'node_modules/@turf/invariant/index.js'
         },
-	{
+        {
+            name: '@turf/intersect',
+            path: 'node_modules/@turf/intersect/index.js'
+        },
+        {
+            name: 'martinez-polygon-clipping',
+            path: 'node_modules/martinez-polygon-clipping/dist/martinez.min.js'
+        },
+	    {
             name: 'jspdf',
             packageMeta: {
                 format: "global"
             },
             path: 'node_modules/jspdf/dist/jspdf.min.js',
-	},
+	    },
         /*{
             name: 'jspdf',
             path: 'node_modules/jspdf/dist/jspdf.min.js'

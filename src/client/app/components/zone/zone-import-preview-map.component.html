@@ -1,5 +1,7 @@
 <nav id="switcher">
     <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+    <a (click)="changeView('zonesnew')" [class.isOn]="isDisplayed('zonesnew')">{{'ZONES_NEW' | translate}}</a>
+    <a (click)="changeView('zonestext')" [class.isOn]="(isDisplayed('zones') || isDisplayed('zonesnew')) && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
     <a  (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
     <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
     <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
@@ -26,7 +28,7 @@
         </div>
       </mgl-marker>
     </ng-container>
-    <ng-container *ngIf="newZonesPreviewValid && isDisplayed('zones')">
+    <ng-container *ngIf="newZonesPreviewValid && isDisplayed('zonesnew')">
     <mgl-geojson-source
       id="layerPreviewsZoneValid"
       [data]="newZonesPreviewValid">
@@ -42,7 +44,7 @@
         (mouseEnter)="cursorStyle = 'pointer'"
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
-      <mgl-layer
+      <mgl-layer *ngIf="isDisplayed('zonestext')"
         id="previewzonetextvalid"
         type="symbol"
         source="layerPreviewsZoneValid"
@@ -66,7 +68,7 @@
       </mgl-layer>
     </mgl-geojson-source>
     </ng-container>
-    <ng-container *ngIf="newZonesPreviewError && isDisplayed('zones')">
+    <ng-container *ngIf="newZonesPreviewError && isDisplayed('zonesnew')">
     <mgl-geojson-source
       id="layerPreviewsZoneError"
       [data]="newZonesPreviewError">
@@ -82,7 +84,7 @@
         (mouseEnter)="cursorStyle = 'pointer'"
         (mouseLeave)="cursorStyle = ''">
       </mgl-layer>
-      <mgl-layer
+      <mgl-layer *ngIf="isDisplayed('zonestext')"
         id="previewzonetexterror"
         type="symbol"
         source="layerPreviewsZoneError"
@@ -122,7 +124,7 @@
           (mouseEnter)="cursorStyle = 'pointer'"
           (mouseLeave)="cursorStyle = ''">
         </mgl-layer>
-        <mgl-layer
+        <mgl-layer *ngIf="isDisplayed('zonestext')"
           id="zonestext"
           type="symbol"
           source="layerZones"
