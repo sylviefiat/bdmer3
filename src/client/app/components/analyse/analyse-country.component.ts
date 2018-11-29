@@ -47,7 +47,7 @@ import { Country } from '../../modules/countries/models/country';
       width:50%;
     }
     mgl-map {
-      height: 250px;
+      height: 500px;
       width: 50%;
     }
     .marker{

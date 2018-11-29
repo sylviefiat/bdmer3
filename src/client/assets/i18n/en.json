@@ -486,5 +486,6 @@
   "ZONES_TEXT":"Labels",
   "STATIONS_ALL":"All",
   "ZONES_NEW":"Imported zones",
-  "IMPORT_ZONE_WARNING": "WARNING import of new zones will destroy the platform existing zones"
+  "IMPORT_ZONE_WARNING": "WARNING import of new zones will destroy the platform existing zones",
+  "STATIONS_NEW":"Imported stations"
 }

@@ -422,7 +422,7 @@
   "LAYERS": "Afficher ",
   "INTERSECT_ERROR": "Zone invalide, elle chevauche une autre zone",
   "STATION_NOT_IN_ZONE": "La station n'est dans aucune zone existante",
-  "STATION_NOT_IN_ZONE": "Une ou plusieurs stations se situent en dehors des zones",
+  "STATIONS_NOT_IN_ZONE": "Une ou plusieurs stations se situent en dehors des zones",
   "ERROR_GEOJSON_ZONE_NAME": "Le champ 'name' est manquant ou erroné dans le fichier Geojson",
   "GRAPH_PER_ZONES": "Evolution des espèces par année et par zone",
   "CLICK_ZONE": "Cliquer sur une zone pour afficher ses graphiques",
@@ -487,5 +487,6 @@
   "ZONES_TEXT":"Labels",
   "STATIONS_ALL":"Toutes",
   "ZONES_NEW":"Zones importées",
-  "IMPORT_ZONE_WARNING": "ATTENTION l'import de nouvelles zones supprimera les zones existantes de la plateforme"
+  "IMPORT_ZONE_WARNING": "ATTENTION l'import de nouvelles zones supprimera les zones existantes de la plateforme",
+  "STATIONS_NEW":"Stations importées"
 }

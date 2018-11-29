@@ -13,11 +13,11 @@ import { Country, Coordinates } from "../../modules/countries/models/country";
 import { IAppState } from "../../modules/ngrx/index";
 
 @Component({
-  moduleId: module.id,
-  selector: "bc-station-import-map",
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: 'station-import-preview-map.component.html',
-  styleUrls: ['../maps.css']
+    moduleId: module.id,
+    selector: "bc-station-import-map",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: 'station-import-preview-map.component.html',
+    styleUrls: ['../maps.css']
 })
 export class PreviewMapStationImportComponent implements OnInit, OnChanges {
     @Input() platform: Platform;
@@ -74,7 +74,7 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
                             this.bounds = MapService.zoomToStations({ features: this.newStations });
                         }
                     }
-                } 
+                }
             }
         }
     }
@@ -92,25 +92,18 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
     }
 
     newStationsPreviewColor() {
-        if (this.newStationsPreviewValid) {
-            return "green";
-        } else {
-            return "orange";
-        }
+        return this.newStationsPreviewValid ? "green" : "orange";
     }
 
     checkStationsValid(stations) {
         this.isLoading = true;
         let inside = false, i = 0;
-        this.platform.zones.forEach(zone => {
-          for(let station of stations){
-
-            if (MapService.booleanInPolygon(station, MapService.getPolygon(zone, { name: zone.properties.name }))) {
-              this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
-              stations = [...stations.filter(st => st.properties.code !== station.properties.code)];
+        for (let station of stations) {
+            if (MapService.isStationInAZone(station, this.platform)) {
+                this.newStationsPreviewValid.push(Turf.point(station.geometry.coordinates));
+                stations = [...stations.filter(s => s.properties.code !== station.properties.code)];
             }
-          }
-        });
+        }
         this.newStationsPreviewInvalid = [...stations];
         this.newStationInvalid.emit(this.newStationsPreviewInvalid.length > 0 ? true : false);
         this.isLoading = false;
@@ -118,10 +111,20 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
 
     zoomChange(event) {
         this.zoom = event.target.getZoom();
-        if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
-        if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-            this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-        if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+        let nstation = (this.newStationsPreviewValid.length>0 || this.newStationsPreviewInvalid.length>0) ? "stationsnew" : null;
+        if (this.zoom <= this.zoomMinCountries) {
+            this.show = [...this.show.filter(s => s !== "countries","stationsnew"), "countries"];            
+        }
+        if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries){
+            this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonestext","stationsnew"), "countries", "zones","zonestext"];
+        }
+        if(nstation) {
+            this.show.push("stationsnew");
+        }
+        let ostation = (this.newStationsPreviewValid.length>0 || this.newStationsPreviewInvalid.length>0) ? "stationsnew" : "stations";
+        if (this.zoom > this.zoomMaxStations) {
+            this.show = [...this.show.filter(s => s !== "zones" && s !== "zonestext" && s !== "stations" && s !== "stationsnew"), "zones", ostation, "zonestext"];
+        }
     }
 
     changeView(view: string) {
@@ -170,9 +173,12 @@ export class PreviewMapStationImportComponent implements OnInit, OnChanges {
 
     setZones(platform: Platform) {
         this.zones = this.platform.zones;
-        let fc = Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code })))
-        this.layerZones$ = of(fc);
-        this.bounds = MapService.zoomToZones(fc);
+        let lz = Turf.featureCollection(
+            this.zones
+                .filter(zone => zone !== null)
+                .map(zone => MapService.getFeature(zone, { code: zone.properties.id ? zone.properties.id : zone.properties.code })));
+        this.layerZones$ = of(lz);
+        this.bounds = MapService.zoomToZones(lz);
     }
 
     setStations(platform: Platform) {

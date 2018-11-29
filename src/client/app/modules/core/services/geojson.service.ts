@@ -26,7 +26,7 @@ export class GeojsonService {
           delete geojson[i].properties["styleHash"];
           delete geojson[i].properties["styleMapHash"];
           delete geojson[i].properties["styleUrl"];
-          let name = geojson[i].properties.name ? geojson[i].properties.name : (geojson[i].properties.Name ? geojson[i].properties.Name : i);
+          let name = geojson[i].properties.name ? geojson[i].properties.name : (geojson[i].properties.Name ? geojson[i].properties.Name : (geojson[i].properties.id ? geojson[i].properties.id : i));
           geojson[i].properties.code =
             platform.code +
             "_" +

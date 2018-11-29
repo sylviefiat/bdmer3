@@ -32,6 +32,7 @@ export class MapService {
             case "Polygon":
                 return Turf.polygon(feature.geometry.coordinates, properties);
             default:
+            console.log("nothing");
                 return null;
         }
     }
@@ -39,11 +40,11 @@ export class MapService {
     static getMultiPolygon(feature) {
         switch (feature.geometry.type) {
             case "GeometryCollection":
-                return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)], { code: feature.properties.code });
+                return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)]);
             case "MultiPolygon":
-                return Turf.multiPolygon(feature.geometries.coordinates, { code: feature.properties.code });
+                return Turf.multiPolygon(feature.geometries.coordinates);
             case "Polygon":
-                return Turf.multiPolygon([feature.geometry.coordinates], { code: feature.properties.code });
+                return Turf.multiPolygon([feature.geometry.coordinates]);
             default:
                 return null;
         }
@@ -153,6 +154,23 @@ export class MapService {
                 return true;
             }
         }
+        return false;
+    }
+
+    static isStationInAZone(station, platform): boolean {
+        for (let zone of platform.zones) {
+            if(zone.properties.code==='Muscadin_33' && station.properties.code === 'Muscadin-2018-10-22_IWD'){
+                console.log(station);
+                console.log(zone);
+                console.log(MapService.getPolygon(zone, { name: zone.properties.name }));
+                console.log(MapService.getMultiPolygon(zone));
+                console.log(MapService.booleanInPolygon(station, MapService.getMultiPolygon(zone)))
+            }
+            if (MapService.booleanInPolygon(station, MapService.getPolygon(zone, { name: zone.properties.code }))) {
+                return true;
+            }
+        }
+        
         return false;
     }
 

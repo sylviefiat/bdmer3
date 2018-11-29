@@ -133,9 +133,14 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
   }
 
   setZones(platform: Platform) {
-    this.zones = this.platform.zones;
-    this.layerZones$ = of(Turf.featureCollection(this.zones.map(zone => Turf.polygon(MapService.getCoordinates(zone), { code: zone.properties.id ? zone.properties.id : zone.properties.code }))));
-  }
+        this.zones = this.platform.zones;
+        let lz = Turf.featureCollection(
+            this.zones
+                .filter(zone => zone !== null)
+                .map(zone => MapService.getFeature(zone, { code: zone.properties.id ? zone.properties.id : zone.properties.code })));
+        this.layerZones$ = of(lz);
+        this.bounds = MapService.zoomToZones(lz);
+    }
 
   setStations(platforms: Platform) {
     this.stations = this.platform.stations;
