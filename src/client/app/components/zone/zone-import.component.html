@@ -2,7 +2,7 @@
     <mat-card class="actions">
       <mat-card-title>{{ 'IMPORT_ZONES' | translate}}</mat-card-title>
       <mat-card-content>
-        <button *ngIf="importKmlFile === null || (intersectError$ | async)!=='none'; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
+        <button *ngIf="importKmlFile === null; else activedbutton" (click)="send()" class="btn btn-disabled" disabled>{{ 'SEND' | translate }}</button>
         <ng-template #activedbutton>
           <button (click)="send()" class="btn send">{{ 'SEND' | translate }}</button>
         </ng-template>
@@ -22,7 +22,7 @@
     <mat-card-content>
       {{'IMPORT_DESC_KML' | translate }}
     </mat-card-content>
-    <mat-card-content *ngIf="platform.zones.length>0" class="warn">
+    <mat-card-content *ngIf="platform && platform.zones && platform.zones.length>0" class="warn">
       {{'IMPORT_ZONE_WARNING' | translate }}
     </mat-card-content>
     <mat-card-footer class="footer">

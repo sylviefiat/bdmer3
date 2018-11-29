@@ -77,20 +77,18 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   checkZoneValid(zonesCheck) {
-    
     for (let zc of zonesCheck) {
-      this.platform.zones.map(zone => {
-        if (MapService.hasIntersection(zone,zc)) {          
+      if(MapService.isZoneInError(zc, this.platform)) {          
           this.newZonesPreviewError.features.push(zc);
-          zonesCheck.splice(zc, 1);
-          return this.zoneIntersect.emit('error');
+          zonesCheck=[...zonesCheck.filter(z => z.properties.code!==zc.properties.code)];
         }
-      });
     }
     this.newZonesPreviewValid.features = zonesCheck;
-    this.bounds = MapService.zoomToZones({ features: this.geojsons, type: "FeatureCollection" });
-    return this.zoneIntersect.emit('none');
+    this.bounds = MapService.zoomToZones({ features: [...this.newZonesPreviewError.features,...this.newZonesPreviewValid.features], type: "FeatureCollection" });
+    return this.zoneIntersect.emit(this.newZonesPreviewError.features.length>0?'error':'none');
   }
+
+  
 
   setMap(event) {
     this.map = event;
@@ -101,11 +99,14 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
-    console.log(this.newZonesPreviewValid.features.length);
-    if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
-    if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonesnew" && s !== "zonestext"), "countries", this.newZonesPreviewValid.features.length===0 ? "zones" : "zonesnew", "zonestext"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "zonesnew" && s !== "zonestext" && s !== "stations"), this.newZonesPreviewValid.features.length===0 ?"zones" : "zonesnew", "zonestext", "stations"];
+    let ozone = this.newZonesPreviewValid.features.length===0 && this.newZonesPreviewError.features.length ===0 ? "zones" : "zonesnew";
+    if (this.zoom <= this.zoomMinCountries) {this.show = [...this.show.filter(s => s !== "countries"), "countries"];}
+    if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries){      
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonesnew" && s !== "zonestext"), "countries", ozone, "zonestext"];
+    }
+    if (this.zoom > this.zoomMaxStations) {
+      this.show = [...this.show.filter(s => s !== "zones" && s !== "zonesnew" && s !== "zonestext" && s !== "stations"), ozone, "zonestext", "stations"]
+    };
   }
 
   changeView(view: string) {

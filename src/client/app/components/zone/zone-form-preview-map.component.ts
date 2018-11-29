@@ -17,7 +17,7 @@ import { MapService } from "../../modules/core/services/index";
   selector: 'bc-zone-form-map',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'zone-form-preview-map.component.html',
-  styleUrls: ['../maps.css']  
+  styleUrls: ['../maps.css']
 })
 export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
   @Input() platform: Platform;
@@ -82,17 +82,15 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
       "fill-outline-color": "#000"
     };
 
-    this.platform.zones.map(zone => {
-      if (Turf.intersect(Turf.polygon(zone.geometry.coordinates), Turf.polygon(zoneCheck))) {
-        this.zoneIntersect.emit(true);
+    if (MapService.isZoneInError(zoneCheck, this.platform)) {
+      this.zoneIntersect.emit(true);
 
-        this.colorPreview = {
-          "fill-color": "red",
-          "fill-opacity": 0.5,
-          "fill-outline-color": "#000"
-        };
-      }
-    });
+      this.colorPreview = {
+        "fill-color": "red",
+        "fill-opacity": 0.5,
+        "fill-outline-color": "#000"
+      };
+    }
   }
 
   createZone(coordinates) {
@@ -177,7 +175,7 @@ export class PreviewMapZoneFormComponent implements OnInit, OnChanges {
 
   setStations(platform: Platform) {
     this.stations = this.platform.stations;
-    let fc =  Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })));
+    let fc = Turf.featureCollection(this.stations.map(station => Turf.point(station.geometry.coordinates, { code: station.properties.code })));
     this.layerStations$ = of(fc);
     this.bounds = MapService.zoomToStations(fc);
   }

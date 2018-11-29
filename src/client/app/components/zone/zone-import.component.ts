@@ -73,6 +73,7 @@ export class ZoneImportComponent implements OnDestroy {
   }
 
   zoneIntersect(error) {
+    console.log(error);
     this.intersectError$ = of(error);
   }
 

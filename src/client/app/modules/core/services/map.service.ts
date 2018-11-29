@@ -24,17 +24,26 @@ export class MapService {
     }
 
     static getPolygon(feature, properties) {
-        //console.log(feature.geometry.type);
-        
         switch (feature.geometry.type) {
             case "GeometryCollection":
-                //console.log(feature); 
-                console.log(feature.geometry.geometries.flatMap(geom => geom.coordinates));
                 return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)], properties);
             case "MultiPolygon":
                 return Turf.multiPolygon(feature.geometries.coordinates, properties);
             case "Polygon":
                 return Turf.polygon(feature.geometry.coordinates, properties);
+            default:
+                return null;
+        }
+    }
+
+    static getMultiPolygon(feature) {
+        switch (feature.geometry.type) {
+            case "GeometryCollection":
+                return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)], { code: feature.properties.code });
+            case "MultiPolygon":
+                return Turf.multiPolygon(feature.geometries.coordinates, { code: feature.properties.code });
+            case "Polygon":
+                return Turf.multiPolygon([feature.geometry.coordinates], { code: feature.properties.code });
             default:
                 return null;
         }
@@ -67,7 +76,7 @@ export class MapService {
             .forEach((feature) => {
                 try {
                     return bnd.extend(feature.geometry.type.indexOf('Multi') > -1 ? feature.geometry.coordinates[0][0] : feature.geometry.coordinates[0])
-                } catch(e){
+                } catch (e) {
                     return bnd;
                 }
             });
@@ -98,7 +107,6 @@ export class MapService {
 
 
     static checkBounds(bounds: LngLatBounds): LngLatBounds {
-        console.log(bounds);
         if (bounds.getNorthEast().lng < bounds.getSouthWest().lng) {
             let tmp = bounds.getSouthWest().lng;
             bounds.setSouthWest(new LngLat(bounds.getNorthEast().lng, bounds.getSouthWest().lat));
@@ -112,35 +120,40 @@ export class MapService {
         return bounds;
     }
 
-    static booleanInPolygon(point,polygon){
+    static booleanInPolygon(point, polygon) {
         try {
-            if(point && point.geometry && point.geometry.coordinates && typeof point.geometry.coordinates[0] === "number" && typeof point.geometry.coordinates[1] === "number"){
+            if (point && point.geometry && point.geometry.coordinates && typeof point.geometry.coordinates[0] === "number" && typeof point.geometry.coordinates[1] === "number") {
                 return Turf.booleanPointInPolygon(point.geometry.coordinates, polygon);
             }
             return false;
-        } catch(e){
+        } catch (e) {
             console.log(e);
             throw e;
-            
+
         }
     }
 
     static hasIntersection(poly1, poly2) {
-        let p1 = MapService.getPolygon(poly1,{});
-        let p2 = MapService.getPolygon(poly2,{});
-        //console.log(p1);
-        //console.log(p2);
-        if(p1 && p2){
+        let p1 = MapService.getMultiPolygon(poly1);
+        let p2 = MapService.getMultiPolygon(poly2);
+        if (p1 && p2) {
             try {
                 return Intersect.default(p1, p2);
-            } catch(e){
-                console.log(p1);
-                console.log(p2);
+            } catch (e) {
                 console.log(e);
-                return null;
+                return 1;
             }
         }
-        return null;
+        return 0;
+    }
+
+    static isZoneInError(zone, platform): boolean {
+        for (let z of platform.zones) {
+            if (MapService.hasIntersection(zone, z)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
