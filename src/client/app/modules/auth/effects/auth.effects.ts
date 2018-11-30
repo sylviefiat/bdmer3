@@ -30,6 +30,7 @@ export class AuthEffects {
       map((value) => this.authService.initDB('_users',value[1])),
       map((db) => {
         let token = JSON.parse(localStorage.getItem('token'));
+        console.log(token);
         if (token && token.expires > Math.floor(Date.now() / 1000)){
           return new AuthAction.LoginSuccess(token);
         } else if (token) {

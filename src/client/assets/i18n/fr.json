@@ -476,10 +476,10 @@
   "AREA": "Site",
   "TYPE_PLATFORM":"Type de plateforme",
   "STOCK":"Bilan des estimations du stock total",
-  "TOTAL_IND":"Nombre total estimé d'individus",
+  "TOTAL_IND":"Abondance totale estimée",
   "TOTAL_STOCK":"Stock total estimé",
-  "CONSERVATIVE_IND":"Hypothèse conservatrice en nombre d'individus",
-  "CONSERVATIVE_STOCK":"Hypothèse conservatrice en tonnes",
+  "CONSERVATIVE_IND":"Hypothèse conservatrice",
+  "CONSERVATIVE_STOCK":"Hypothèse conservatrice",
   "TONS":"Tonne(s)",
   "INDIVIDUALS":"Individu(s)",
   "NO_COORDINATES":"Aucune coordonnées trouvées",
@@ -488,5 +488,7 @@
   "STATIONS_ALL":"Toutes",
   "ZONES_NEW":"Zones importées",
   "IMPORT_ZONE_WARNING": "ATTENTION l'import de nouvelles zones supprimera les zones existantes de la plateforme",
-  "STATIONS_NEW":"Stations importées"
+  "STATIONS_NEW":"Stations importées",
+  "STATIONS_COUNT":"Stations de comptage",
+  "EMPTY_COORD":"Une ou plusieurs coordonnées à 0"
 }

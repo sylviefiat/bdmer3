@@ -76,8 +76,8 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
 
     if (this.zoom <= this.zoomMinCountries) this.show = [...this.show.filter(s => s !== "countries"), "countries"];
     if (this.zoom <= this.zoomMaxStations && this.zoom > this.zoomMinCountries)
-      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones"), "countries", "zones"];
-    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations"), "zones", "stations"];
+      this.show = [...this.show.filter(s => s !== "countries" && s !== "zones" && s !== "zonestext"), "countries", "zones", "zonestext"];
+    if (this.zoom > this.zoomMaxStations) this.show = [...this.show.filter(s => s !== "zones" && s !== "stations" && s!== "stationsnew" && s !== "zonestext"), "zones", "stations","stationsnew", "zonestext"];
   }
 
   changeView(view: string) {
@@ -109,13 +109,12 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
     if (this.countries.length > 0) {
       this.stations = this.platform.stations;
       if (this.newCounts !== null && this.newCounts.length > 0) {
+
         this.stations.forEach(station => {
           this.newCounts.forEach(count => {
-            if (count.codeStation === station.properties.code) {
-              if (!this.stationsCount.includes(station)) {
-                this.stationsCount.push(station);
-                this.stations = [...this.stations.filter(st => st.properties.code !== station.properties.code)];
-              }
+            if(this.stations.filter(s => s.properties.code === count.codeStation).length > 0 && this.stationsCount.filter(sc => sc.properties.code === count.codeStation).length<=0){
+              this.stationsCount.push(this.stations.filter(s => s.properties.code === count.codeStation)[0]);
+              this.stationsCount = [...this.stationsCount.filter(sc => sc.properties.code !)]
             }
           });
         });
@@ -136,11 +135,14 @@ export class PreviewMapCountImportComponent implements OnInit, OnChanges {
   }
 
   setZones(platform: Platform) {
-    this.zones = this.platform.zones;
-    let fc = Turf.featureCollection(this.zones.map(zone => MapService.getPolygon(zone, { code: zone.properties.code })));
-    this.layerZones$ = of(fc);
-    this.bounds = MapService.zoomToZones(fc);
-  }
+        this.zones = this.platform.zones;
+        let lz = Turf.featureCollection(
+            this.zones
+                .filter(zone => zone !== null)
+                .map(zone => MapService.getFeature(zone, { code: zone.properties.id ? zone.properties.id : zone.properties.code })));
+        this.layerZones$ = of(lz);
+        this.bounds = MapService.zoomToZones(lz);
+    }
 
   setStations(stations: Station[]) {
     //this.stations = this.platform.stations;

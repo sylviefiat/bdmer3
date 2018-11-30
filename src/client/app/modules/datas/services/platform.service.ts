@@ -291,6 +291,8 @@ export class PlatformService {
         } else if(typeof station.geometry.coordinates[0] !== "number" || typeof station.geometry.coordinates[1] !== "number" || 
           isNaN(station.geometry.coordinates[0]) || isNaN(station.geometry.coordinates[1])){
           errors= this.addError(errors,msg.STATION + station.properties.name + msg.WRONG_COORD_FORMAT);
+        } else if(!station.geometry.coordinates[0] || !station.geometry.coordinates[1]){
+          errors= this.addError(errors,msg.STATION + station.properties.name + msg.EMPTY_COORD);
         }
       }
     }

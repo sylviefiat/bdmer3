@@ -44,6 +44,7 @@ export class CountImportComponent implements OnInit {
   countForm: FormGroup = new FormGroup({
     countInputFile: new FormControl()
   });
+  country: Country;
 
 
   constructor(
@@ -61,7 +62,7 @@ export class CountImportComponent implements OnInit {
       this.csvFileType1 = "importCountNoMesures-" + l + ".csv";
       this.csvFileType2 = "importCount-" + l + ".csv";
     });
-
+    this.country = this.countries.filter(c => c.code === this.platform.codeCountry)[0];
   }
 
   handleUpload(csvFile: any): void {

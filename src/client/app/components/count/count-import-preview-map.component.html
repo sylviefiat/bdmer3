@@ -1,6 +1,8 @@
 <nav id="switcher">
     <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
+    <a (click)="changeView('zonestext')" [class.isOn]="isDisplayed('zones') && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
     <a (click)="changeView('stations')" [class.isOn]="isDisplayed('stations')">{{'STATIONS' | translate}}</a>
+    <a (click)="changeView('stationsnew')" [class.isOn]="isDisplayed('stationsnew')">{{'STATIONS_COUNT' | translate}}</a>
     <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
     <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
   </nav>
@@ -42,6 +44,28 @@
           (mouseEnter)="cursorStyle = 'pointer'"
           (mouseLeave)="cursorStyle = ''">
         </mgl-layer>
+        <mgl-layer *ngIf="isDisplayed('zonestext')"
+          id="zonestext"
+          type="symbol"
+          source="layerZones"
+          [layout]="{
+            'text-field': '{code}',
+            'text-allow-overlap': true,
+            'text-anchor':'bottom',
+            'text-font': [
+              'DIN Offc Pro Italic',
+              'Arial Unicode MS Regular'
+            ],
+            'symbol-placement': 'point',
+            'symbol-avoid-edges': true,
+            'text-max-angle': 30,
+            'text-size': 12
+          }"
+          [paint]="{
+            'text-color': 'white'
+          }"
+        >
+        </mgl-layer>
       </mgl-geojson-source>
     </ng-container>
 
@@ -55,7 +79,7 @@
           source="layerStations"
           [paint]="{
             'circle-radius': 6,
-            'circle-color': '#ff0000',
+            'circle-color': '#fff',
             'circle-opacity': 1,
             'circle-stroke-width': 1
           }"
@@ -66,7 +90,7 @@
       </mgl-geojson-source>
     </ng-container>
 
-    <ng-container *ngIf=" (layerStationsCount$ | async)">
+    <ng-container *ngIf=" (layerStationsCount$ | async) && isDisplayed('stationsnew')">
       <mgl-geojson-source
         id="layerStationsCount"
         [data]="(layerStationsCount$ | async)">
@@ -75,9 +99,10 @@
           type="circle"
           source="layerStationsCount"
           [paint]="{
-            'circle-radius': 5,
-            'circle-opacity': 0,
-            'circle-stroke-width': 2
+            'circle-radius': 6,
+            'circle-color': '#ff0000',
+            'circle-opacity': 1,
+            'circle-stroke-width': 1
           }"
           (click)="showPopupStation($event)"
           (mouseEnter)="cursorStyle = 'pointer'"

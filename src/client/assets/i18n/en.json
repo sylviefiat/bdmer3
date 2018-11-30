@@ -475,10 +475,10 @@
   "AREA": "Area",
   "TYPE_PLATFORM":"Plateforme type",
   "STOCK":"Total stock estimates",
-  "TOTAL_IND":"Total estimated number of individuals",
+  "TOTAL_IND":"Global estimated abundancy",
   "TOTAL_STOCK":"Total stock estimates",
-  "CONSERVATIVE_IND":"Conservative hypothesis in number of individuals",
-  "CONSERVATIVE_STOCK":"Conservative hypothesis in tons",
+  "CONSERVATIVE_IND":"Conservative hypothesis",
+  "CONSERVATIVE_STOCK":"Conservative hypothesis",
   "TONS":"Ton(s)",
   "INDIVIDUALS":"Individual(s)",
   "NO_COORDINATES":"One or many stations coordinates are missing",
@@ -487,5 +487,7 @@
   "STATIONS_ALL":"All",
   "ZONES_NEW":"Imported zones",
   "IMPORT_ZONE_WARNING": "WARNING import of new zones will destroy the platform existing zones",
-  "STATIONS_NEW":"Imported stations"
+  "STATIONS_NEW":"Imported stations",
+  "STATIONS_COUNT":"Counts stations",
+  "EMPTY_COORD":"One or many coordinates are 0"
 }

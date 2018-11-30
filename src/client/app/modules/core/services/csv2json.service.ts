@@ -365,7 +365,7 @@ export class Csv2JsonService {
                         switch (headers[j]) {
                             case "codePlatform":
                             case "code":
-                            case "nom":                        
+                            case "nom":
                             case "latitude":
                             case "longitude":
                             case "description":
@@ -373,7 +373,7 @@ export class Csv2JsonService {
                                     return g[1].toUpperCase();
                                 });
                                 st[headers[j]] = data[j];
-                                break; 
+                                break;
                             default:
                                 if (!errorTab.includes(headers[j])) {
                                     errorTab.push(headers[j]);
@@ -480,7 +480,7 @@ export class Csv2JsonService {
         let headers = allTextLines[0];
         let lines: Count[] = [];
         let errorTab = [];
-        let sp, caught=0, quantity=0;
+        let sp, caught = 0, quantity = 0;
         for (let i = 1; i < allTextLines.length; i++) {
             let data = allTextLines[i];
             if (data.length == headers.length) {
@@ -512,12 +512,10 @@ export class Csv2JsonService {
                         case "count":
                             sp = data[headers.indexOf("codeSpecies")];
                             if (sp.length < 2) break;
-                            if (!count.quantities) {
-                                count.quantities = [];
-                            }
+                            
                             // if it is french format replace decimal separator "," to "."
                             if (delimiter === Csv2JsonService.SEMICOLON) {
-                                caught = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
+                                caught = parseFloat(data[j].replace(new RegExp('\\,', 'g'), '.'));
                             } else {
                                 caught = data[j];
                             }
@@ -525,15 +523,13 @@ export class Csv2JsonService {
                         case "quantity":
                             sp = data[headers.indexOf("codeSpecies")];
                             if (sp.length < 2) break;
-                            if (!count.quantities) {
-                                count.quantities = [];
-                            }
+
                             // if it is french format replace decimal separator "," to "."
                             if (delimiter === Csv2JsonService.SEMICOLON) {
-                                quantity = parseFloat(data[j].replace(new RegExp('\\,', 'g'),'.'));
+                                quantity = parseFloat(data[j].replace(new RegExp('\\,', 'g'), '.'));
                             } else {
                                 quantity = data[j];
-                            }                            
+                            }
                             break;
                         case "mesures":
                             sp = data[headers.indexOf("codeSpecies")];
@@ -556,7 +552,12 @@ export class Csv2JsonService {
                             break;
                     }
                 }
-                count.quantities.push({ codeSpecies: sp, caught: caught, quantity: quantity });
+                if (caught || quantity) {
+                    if (!count.quantities) {
+                        count.quantities = [];
+                    }
+                    count.quantities.push({ codeSpecies: sp, caught: caught, quantity: quantity });
+                }
                 lines.push(count);
             }
         }

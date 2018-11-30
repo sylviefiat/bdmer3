@@ -18,10 +18,10 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                 <mat-card-title>{{ sp.nameSpecies }}</mat-card-title>
                 <mat-card-content *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">                                       
                     <div>
-                        {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-2':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
-                        &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-2':'fr' }}  {{'INDIVIDUALS' | translate}}
+                        {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
+                        &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}
                     </div>
-                    <div>{{ 'CONSERVATIVE_IND' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-2':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
+                    <div>{{ 'CONSERVATIVE_IND' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
                     <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">
                         {{ 'TOTAL_STOCK' | translate }}: <span class="bold">{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stock) | number:'1.0-2':'fr' }} {{'TONS' | translate}} </span>
                         &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} {{'TONS' | translate}}
