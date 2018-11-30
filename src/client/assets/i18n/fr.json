@@ -490,5 +490,8 @@
   "IMPORT_ZONE_WARNING": "ATTENTION l'import de nouvelles zones supprimera les zones existantes de la plateforme",
   "STATIONS_NEW":"Stations importées",
   "STATIONS_COUNT":"Stations de comptage",
-  "EMPTY_COORD":"Une ou plusieurs coordonnées à 0"
+  "EMPTY_COORD":"Une ou plusieurs coordonnées à 0",
+  "ALL_SPECIES":"Toutes espèces",
+  "ALL_SURVEYS":"Tous les relevés",
+  "DENSITY_PER_HA": "Densité moyenne estimée"
 }

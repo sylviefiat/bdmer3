@@ -21,7 +21,7 @@ import { DialogData } from './result-rappel.component';
       <p> {{ 'NUMBER_SURVEYS_SELECT' | translate }}: {{ data.analyseData.usedSurveys.length }}</p>   
       <mat-form-field>
         <mat-select  placeholder="{{'SELECT_SURVEY' | translate}}" (selectionChange)="selectSurvey($event.value)">
-          <mat-option [value]="null">-</mat-option>
+          <mat-option [value]="null">{{ 'ALL_SURVEYS' | translate}}</mat-option>
           <mat-option *ngFor="let survey of data.analyseData.usedSurveys" [value]="survey">{{ survey.code }}</mat-option>
         </mat-select>
       </mat-form-field>   

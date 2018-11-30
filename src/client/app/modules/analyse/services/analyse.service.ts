@@ -270,10 +270,13 @@ export class AnalyseService {
     }
 
     getResultZone(rstations: ResultStation[], zone: Zone): Observable<ResultZone> {
-        let rzone : ResultZone = { codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0, averageAbundance: 0, abundance: 0,
+        let rzone : ResultZone = { codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0,
+            ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
             abundancePerHA: 0, SDabundancePerHA: 0 };
         //let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation)>=0);
         rzone.nbStations = rstations.length;
+        rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
+        console.log(rzone.ratioNstSurface);
         rzone.nbStrates = rstations.length >0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface), rstations.length):0;
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
@@ -298,8 +301,11 @@ export class AnalyseService {
     }
 
     getResultPlatform(rzones: ResultZone[], platform ?: Platform): Observable<ResultPlatform> {
-        // Valeur approximative de la statistique de student pour un échantillon de plus de 30 stations
+        // variable de student
         const T: number = 2.05;
+        console.log(rzones);
+        rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
+        console.log(rzones);
         let rplatform : ResultPlatform = {
             codePlatform: platform ? platform.code : null,
             surface: 0,
@@ -311,11 +317,11 @@ export class AnalyseService {
             confidenceIntervalAbundance: 0
         };
         // platform
-        //let rzones = rspecies.resultPerZone.filter(rpz => rpz.codePlatform === platform.code);
         rplatform.surface = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStrates = this.getSum(rzones.map(rz => rz.nbStrates));
         rplatform.nbZones = rzones.length;
         rplatform.nbStations = this.getSum(rzones.map(rz => rz.nbStations));
+
         rplatform.averageAbundance = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
         if(rzones.length>0 && rzones[0].averageAbundanceLegal){
             rplatform.averageAbundanceLegal = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
@@ -324,10 +330,11 @@ export class AnalyseService {
         rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
         // stock si platform type = site
         if(this.data.usedCountry.platformType===VESSEL){
-            rplatform.resultStock = { density:0, densityCI: 0, densityCA:0 };
+            rplatform.resultStock = { density:0, densityCI: 0, densityCA:0, densityPerHA:0 };
             rplatform.resultStock.density = rplatform.averageAbundance * rplatform.nbStrates;
-            rplatform.resultStock.densityCI = rplatform.confidenceIntervalAbundance * rplatform.nbStrates / 1000;
+            rplatform.resultStock.densityCI = rplatform.confidenceIntervalAbundance * rplatform.nbStrates;
             rplatform.resultStock.densityCA = rplatform.resultStock.density - rplatform.resultStock.densityCI;
+            rplatform.resultStock.densityPerHA = rplatform.resultStock.density / (rplatform.surface / 10000);
             if(rplatform.averageAbundanceLegal){
                 rplatform.resultStock.densityLegal = rplatform.averageAbundanceLegal * rplatform.nbStrates;
             }

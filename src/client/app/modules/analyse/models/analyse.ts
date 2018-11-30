@@ -107,5 +107,6 @@ export interface ResultStock {
     density : number;
     densityCI : number;
     densityCA : number;
+    densityPerHA : number;
     densityLegal ?: number;
 }

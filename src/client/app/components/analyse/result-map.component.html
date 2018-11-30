@@ -16,6 +16,29 @@
           <mgl-geojson-source
             id="layerZones"
             [data]="layerZones$ | async">
+             <mgl-layer
+              id="zonesid_ratio"
+              type="fill"
+              source="layerZones"
+              [paint]="{
+                'fill-color': {
+                  property: 'ratioNstSurface',
+                    type: 'interval',
+                    stops: [
+                      [0, 'red'],
+                      [0.2, 'white']
+                    ]
+                },
+                'fill-opacity': {
+                  property: 'ratioNstSurface',
+                    type: 'interval',
+                    stops: [
+                      [0, 0.5],
+                      [0.2, 0]
+                    ]
+                }
+              }">
+            </mgl-layer>
             <mgl-layer
               *ngIf="(!showBiom) || (typeShow==='A')"
               id="zonesid_abun"
@@ -28,12 +51,12 @@
                     stops: [
                       [0, '#FFEDA0'],
                       [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
+                      [25, '#FEB24C'],
+                      [50, '#FD8D3C'],
+                      [75, '#FC4E2A'],
+                      [100, '#E31A1C'],
+                      [250, '#BD0026'],
+                      [500, '#800026']
                     ]
                 },
                 'fill-opacity': 1,
@@ -53,12 +76,12 @@
                     stops: [
                       [0, '#FFEDA0'],
                       [1, '#FED976'],
-                      [10, '#FEB24C'],
-                      [20, '#FD8D3C'],
-                      [30, '#FC4E2A'],
-                      [40, '#E31A1C'],
-                      [50, '#BD0026'],
-                      [100, '#800026']
+                      [25, '#FEB24C'],
+                      [50, '#FD8D3C'],
+                      [75, '#FC4E2A'],
+                      [100, '#E31A1C'],
+                      [250, '#BD0026'],
+                      [500, '#800026']
                     ]
                 },
                 'fill-opacity': 1,

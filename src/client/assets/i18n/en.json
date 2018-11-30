@@ -489,5 +489,8 @@
   "IMPORT_ZONE_WARNING": "WARNING import of new zones will destroy the platform existing zones",
   "STATIONS_NEW":"Imported stations",
   "STATIONS_COUNT":"Counts stations",
-  "EMPTY_COORD":"One or many coordinates are 0"
+  "EMPTY_COORD":"One or many coordinates are 0",
+  "ALL_SPECIES":"All species",
+  "ALL_SURVEYS":"All surveys",
+  "DENSITY_PER_HA": "Average density estimated"
 }

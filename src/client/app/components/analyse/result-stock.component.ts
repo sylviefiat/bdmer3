@@ -22,6 +22,7 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                         &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}
                     </div>
                     <div>{{ 'CONSERVATIVE_IND' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
+                    <div>{{ 'DENSITY_PER_HA' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityPerHA | number:'1.0-0':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
                     <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">
                         {{ 'TOTAL_STOCK' | translate }}: <span class="bold">{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stock) | number:'1.0-2':'fr' }} {{'TONS' | translate}} </span>
                         &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} {{'TONS' | translate}}

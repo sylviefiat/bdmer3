@@ -37,7 +37,7 @@
     <mat-card-subtitle>{{'SPECIES' | translate}}</mat-card-subtitle>
     <mat-form-field>
       <mat-select [(ngModel)]="spShow" (selectionChange)="this.spShowEmitter.emit($event.value)">
-        <mat-option [value]="null">-</mat-option>
+        <mat-option [value]="null">{{ 'ALL_SPECIES' | translate}}</mat-option>
         <mat-option *ngFor="let sp of species" value="{{sp.code}}">{{sp.scientificName}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -46,7 +46,7 @@
     <mat-card-subtitle>{{'SURVEYS' | translate}}</mat-card-subtitle>
     <mat-form-field>
       <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
-        <mat-option [value]="null">-</mat-option>
+        <mat-option [value]="null">{{ 'ALL_SURVEYS' | translate}}</mat-option>
         <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
       </mat-select>
     </mat-form-field>
