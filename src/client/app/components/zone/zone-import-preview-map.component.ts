@@ -77,12 +77,14 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
   }
 
   checkZoneValid(zonesCheck) {
-    for (let zc of zonesCheck) {
-      if(MapService.isZoneInError(zc, this.platform)) {          
+    /*for (let zc of zonesCheck) {
+      console.log(zc);
+      if(MapService.isZoneInError(zc, this.platform)) { 
+        console.log("zone error");         
           this.newZonesPreviewError.features.push(zc);
           zonesCheck=[...zonesCheck.filter(z => z.properties.code!==zc.properties.code)];
         }
-    }
+    }*/
     this.newZonesPreviewValid.features = zonesCheck;
     this.bounds = MapService.zoomToZones({ features: [...this.newZonesPreviewError.features,...this.newZonesPreviewValid.features], type: "FeatureCollection" });
     return this.zoneIntersect.emit(this.newZonesPreviewError.features.length>0?'error':'none');
@@ -154,14 +156,15 @@ export class PreviewMapZoneImportComponent implements OnInit, OnChanges {
     let lz =  Turf.featureCollection(
         this.zones
           .filter(zone=> zone!==null)
-          .map(zone => MapService.getFeature(zone,{ code: zone.properties.id ? zone.properties.id : zone.properties.code})));
+          .map(zone => {
+            return MapService.getFeature(zone,{ code: zone.properties.id ? zone.properties.id : zone.properties.code});}));
     this.layerZones$ = of(lz);
     this.bounds = MapService.zoomToZones(lz);
   }
 
   setStations(platform: Platform) {
     this.stations = platform.stations;
-    let fc = Turf.featureCollection(this.stations.map(station => MapService.getFeature(station.geometry.coordinates, { code: station.properties.code })))
+    let fc = Turf.featureCollection(this.stations.map(station => MapService.getFeature(station, { code: station.properties.code })))
     this.layerStations$ = of(fc);
     this.bounds = MapService.zoomToStations(fc);
   }

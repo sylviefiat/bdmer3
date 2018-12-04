@@ -27,6 +27,7 @@ export class ViewStationComponent implements OnInit {
   @Input() countries: Country[];
   @Output() remove = new EventEmitter<any>();
   @Output() action = new EventEmitter<String>();
+  nCounts: number = 0;
 
   fileNameDialogRef: MatDialogRef<stationMapModal>;
 
@@ -38,7 +39,9 @@ export class ViewStationComponent implements OnInit {
     private windowService: WindowService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.nCounts = (<any>this.platform).surveys.flatMap(s => s.counts.filter(c => c.codeStation === this.station.properties.code)).length;
+  }
 
   deleteStation() {
     let deleteMsg = this.translate.instant("CONFIRM_DELETE_STATION");

@@ -50,7 +50,7 @@ export class CountFormComponent implements OnInit {
             const control = <FormArray>this.countForm.controls['quantities'];
             let addrCtrl;
             for (let qua of this.count.quantities) {
-                addrCtrl = this.newQuantity(qua.codeSpecies, qua.quantity);
+                addrCtrl = this.newQuantity(qua.codeSpecies, qua.density);
                 control.push(addrCtrl);
             }
         }

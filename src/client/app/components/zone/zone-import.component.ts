@@ -65,6 +65,7 @@ export class ZoneImportComponent implements OnDestroy {
       this.importKmlFile = kmlFile;
       this.intersectError$ = of("checking");
       this.geojsons$ = from(this.geojsonService.kmlToGeoJson(kmlFile.target.files["0"], this.platform));
+      console.log("here");
     }
   }
 

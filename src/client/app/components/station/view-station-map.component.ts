@@ -112,10 +112,8 @@ export class ViewStationMapComponent implements OnInit, OnChanges {
       if (this.platform.zones.length > 0) this.setZones(this.platform);
 
       this.zoneStation = null;
-      console.log(this.platform.zones);
       this.platform.zones.map(zone => {
         if (MapService.booleanInPolygon(this.station, MapService.getPolygon(zone, {code:zone.properties.code}))) {
-          console.log(zone);
           this.zoneStation = zone;
         }
       });

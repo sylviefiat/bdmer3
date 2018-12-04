@@ -13,6 +13,10 @@ import { Platform, Zone, Station } from "./../../modules/datas/models/platform";
         <mat-card-content>
           {{ coord }}
         </mat-card-content>
+        <mat-card-content>
+          <h5 mat-subheader>{{ 'STATS' | translate }}</h5>
+          <div>{{nCounts}} {{'COUNTS' | translate}}</div>
+       </mat-card-content>
       </mat-card>
     </a>
   `,
@@ -58,9 +62,12 @@ import { Platform, Zone, Station } from "./../../modules/datas/models/platform";
 export class StationPreviewComponent implements OnInit {
   @Input() station: Station;
   @Input() platform: Platform;
+  nCounts: number = 0;
   
 
-  ngOnInit(){}
+  ngOnInit(){
+    this.nCounts = (<any>this.platform).surveys.flatMap(s => s.counts.filter(c => c.codeStation === this.station.properties.code)).length;
+  }
 
   get id() {
     return this.station.properties.code;

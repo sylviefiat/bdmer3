@@ -2,7 +2,7 @@
     <a (click)="changeView('zone')" [class.isOn]="isDisplayed('zone')">{{'ZONE' | translate}}</a>
     <a (click)="changeView('zones')" [class.isOn]="isDisplayed('zones')">{{'ZONES' | translate}}</a>
     <a (click)="changeView('zonestext')" [class.isOn]="isDisplayed('zones') && isDisplayed('zonestext')">{{'ZONES_TEXT' | translate}}</a>
-    <a  (click)="changeView('station')" [class.isOn]="isDisplayed('station')">{{'STATION' | translate}}</a>
+    <a  (click)="changeView('station')" [class.isOn]="isDisplayed('station')">{{'STATIONS' | translate}}</a>
     <a  (click)="changeView('stationsall')" [class.isOn]="isDisplayed('stationsall')">{{'STATIONS_ALL' | translate}}</a>
     <a (click)="changeBL()" [class.isOn]="!bl" title="{{'SATELLITE' | translate}}"><fa [name]="'globe'" [border]=false [size]=1></fa></a>
     <a (click)="changeBL()" [class.isOn]="bl" title="{{'STREETS' | translate}}"><fa [name]="'map'" [border]=false [size]=1></fa></a>
