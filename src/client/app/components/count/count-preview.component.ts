@@ -23,7 +23,7 @@ import { Platform,Zone,Survey, Count, Species } from './../../modules/datas/mode
               {{ getSpeciesName(quantity.codeSpecies) }} :
             </span>
             <span>
-            {{quantity.quantity}}
+            {{quantity.density}}
             </span>
           </div>
         </mat-card-content>

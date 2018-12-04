@@ -58,6 +58,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   zones: any[] = [];
   layerStations$: Observable<Turf.FeatureCollection>;
   layerZones$: Observable<Turf.FeatureCollection>;
+  layerZonesNoRatio$: Observable<Turf.FeatureCollection>;
   bounds: LngLatBounds;
   boundsPadding: number = 50;
   zoomMaxMap = 10;
@@ -65,14 +66,23 @@ export class ResultMapComponent implements OnInit, OnChanges {
   map: any;
   selectedStation: GeoJSON.Feature<GeoJSON.Point> | null;
   selectedZone: GeoJSON.Feature<GeoJSON.Point> | null;
+  private docs_repo: string;
+  private imgs_repo: string;
+  stripes_img = 'stripes.png';
+  imageLoaded = false;
 
   constructor(mapService: MapService) {
-
+    this.docs_repo = '../../../assets/files/';
+    this.imgs_repo = '../../../assets/img/';
   }
 
   zoomChange(event) {
     this.zoom = event.target.getZoom();
   }
+
+  getStripes() {
+        return this.imgs_repo + this.stripes_img;
+    }
 
   ngOnInit() {
     console.log(this.results);
@@ -127,7 +137,8 @@ export class ResultMapComponent implements OnInit, OnChanges {
                 abundancy: rz.abundancePerHA,
                 biomass: rz.biomassPerHA,
                 species: rsp.codeSpecies,
-                survey: this.results.resultPerSurvey[i].codeSurvey
+                survey: this.results.resultPerSurvey[i].codeSurvey,
+                ratio: rz.ratioNstSurface
               }
             };
             this.zones.push(polygon);
@@ -147,19 +158,21 @@ export class ResultMapComponent implements OnInit, OnChanges {
     // zones
     let filteredZones = this.zones
         .filter(zone => (this.spShow===null || zone.properties.species === this.spShow) && 
-          (this.surveyShow===null || zone.properties.survey === this.surveyShow))
-        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass}))
+          (this.surveyShow===null || zone.properties.survey === this.surveyShow));
+    let fc = filteredZones
+        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio}))
         .filter(polygon => polygon !== null);
-    let fc2 = Turf.featureCollection(filteredZones);
-    this.layerZones$ = of(fc2);
+    let fcNo = filteredZones
+        .filter(fz => fz.ratio<0.2)
+        .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio}))
+        .filter(polygon => polygon !== null);
+    let fc1 = Turf.featureCollection(fc);
+    let fc1No = Turf.featureCollection(fcNo);
+    this.layerZones$ = of(fc1);
+    this.layerZonesNoRatio$ = of(fc1No);
     if(filteredZones.length > 0){      
-      this.bounds = MapService.zoomToZones(fc2);
-    } /*else if(this.showStations && filteredStations.length > 0){
-      this.bounds = MapService.zoomToStations(featureCollection);
-    }*/
-      /*if(this.bounds && this.map){
-        this.map.fitBounds(this.bounds, { padding: 10 });
-      }*/
+      this.bounds = MapService.zoomToZones(fc1);
+    } 
   }
 
   getValue(feature) {

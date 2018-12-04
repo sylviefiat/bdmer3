@@ -204,13 +204,13 @@ export class AnalyseService {
         let rstation : ResultStation = { codeStation: station.properties.code, surface: survey.surfaceStation, abundance: 0, abundancePerHA: 0};        
         let counts:any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = counts.flatMap(c => c.mesures.filter(m => m.codeSpecies === species.code));
-        let quantities = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code).map(q => q.quantity));
-        let quantity = this.getSum(quantities);
-        if (mesures.length === 0 && quantity ===0) {
+        let densites = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code).map(q => q.density));
+        let density = this.getSum(densites);
+        if (mesures.length === 0 && density ===0) {
             return of(rstation);
         }
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
-        rstation.abundance = mesures.length !==0 ? mesures.filter(m => this.isInDims(m,species)).length : Number(quantity);
+        rstation.abundance = mesures.length !==0 ? mesures.filter(m => this.isInDims(m,species)).length : Number(density);
         if(this.hasLegalDims(species) && mesures.length !==0){
             rstation.abundanceLegal = mesures.filter(m => this.isInLegalDims(m,species)).length
         }
@@ -276,7 +276,6 @@ export class AnalyseService {
         //let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation)>=0);
         rzone.nbStations = rstations.length;
         rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
-        console.log(rzone.ratioNstSurface);
         rzone.nbStrates = rstations.length >0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface), rstations.length):0;
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
@@ -303,9 +302,7 @@ export class AnalyseService {
     getResultPlatform(rzones: ResultZone[], platform ?: Platform): Observable<ResultPlatform> {
         // variable de student
         const T: number = 2.05;
-        console.log(rzones);
         rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
-        console.log(rzones);
         let rplatform : ResultPlatform = {
             codePlatform: platform ? platform.code : null,
             surface: 0,

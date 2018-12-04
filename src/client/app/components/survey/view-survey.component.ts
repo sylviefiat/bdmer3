@@ -43,7 +43,6 @@ export class ViewSurveyComponent implements OnInit {
 
   ngOnInit() {
     this.filteredCounts$ = this.counts$;
-    console.log(this.platform);
   }
 
   deleteSurvey() {

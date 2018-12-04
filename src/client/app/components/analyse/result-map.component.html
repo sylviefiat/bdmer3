@@ -11,59 +11,28 @@
         (load) = "setMap($event)"
         (zoomEnd)="zoomChange($event)"
         [preserveDrawingBuffer]= "true">
+        <mgl-image
+          id="stripes"
+          url="getStripes()"
+          (loaded)="imageLoaded = true">
+        </mgl-image>
         
         <ng-container *ngIf="(layerZones$ | async) && showZones">
           <mgl-geojson-source
-            id="layerZones"
-            [data]="layerZones$ | async">
-             <mgl-layer
+            id="layerZonesLowRatio"
+            [data]="(layerZonesNoRatio$| async)">
+             <mgl-layer *ngIf="imageLoaded"
               id="zonesid_ratio"
               type="fill"
-              source="layerZones"
+              source="layerZonesLowRatio"
               [paint]="{
-                'fill-color': {
-                  property: 'ratioNstSurface',
-                    type: 'interval',
-                    stops: [
-                      [0, 'red'],
-                      [0.2, 'white']
-                    ]
-                },
-                'fill-opacity': {
-                  property: 'ratioNstSurface',
-                    type: 'interval',
-                    stops: [
-                      [0, 0.5],
-                      [0.2, 0]
-                    ]
-                }
+                'fill-pattern': 'stripes' 
               }">
-            </mgl-layer>
-            <mgl-layer
-              *ngIf="(!showBiom) || (typeShow==='A')"
-              id="zonesid_abun"
-              type="fill"
-              source="layerZones"
-              [paint]="{
-                'fill-color': {
-                  property: 'abundancy',
-                    type: 'interval',
-                    stops: [
-                      [0, '#FFEDA0'],
-                      [1, '#FED976'],
-                      [25, '#FEB24C'],
-                      [50, '#FD8D3C'],
-                      [75, '#FC4E2A'],
-                      [100, '#E31A1C'],
-                      [250, '#BD0026'],
-                      [500, '#800026']
-                    ]
-                },
-                'fill-opacity': 1,
-                'fill-outline-color': '#000'
-                }"
-              (click)="selectZone($event)">
-            </mgl-layer>
+            </mgl-layer>     
+          </mgl-geojson-source>
+          <mgl-geojson-source
+            id="layerZones"
+            [data]="layerZones$ | async">                
             <mgl-layer
               *ngIf="showBiom && typeShow==='B'"
               id="zonesid_biom"
