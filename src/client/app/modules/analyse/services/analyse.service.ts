@@ -302,7 +302,9 @@ export class AnalyseService {
     getResultPlatform(rzones: ResultZone[], platform ?: Platform): Observable<ResultPlatform> {
         // variable de student
         const T: number = 2.05;
+        console.log(rzones);
         rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
+        console.log(rzones);
         let rplatform : ResultPlatform = {
             codePlatform: platform ? platform.code : null,
             surface: 0,

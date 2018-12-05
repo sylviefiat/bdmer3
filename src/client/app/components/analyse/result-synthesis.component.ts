@@ -28,6 +28,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
           [showZones]="showZones$ | async"
+          [showZonesNoRatio]="showZonesNoRatio$ | async"
           (zoneEmitter)="selectZone($event)">
         </bc-result-map>
 
@@ -40,11 +41,14 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
           [showZones]="showZones$ | async"
+          [showZonesNoRatio]="showZonesNoRatio$ | async"
+          [platformType]="analyseData.usedCountry.platformType"
           (typeShowEmitter)="selectTypeShow($event)"
           (spShowEmitter)="selectSpShow($event)"
           (surveyShowEmitter)="selectSurveyShow($event)"
           (showStationsEmitter)="stationsLayerShow($event)"
-          (showZonesEmitter)="zonesLayerShow($event)">
+          (showZonesEmitter)="zonesLayerShow($event)"
+          (showZoneNoEmitter)="zonesLayerNoRatioShow($event)">
         </bc-result-filter>
       </div>
       <div class="charts" *ngIf="analyseData.usedCountry.platformType==0"> 
@@ -115,6 +119,7 @@ export class ResultSynthesisComponent implements OnInit {
     surveyShow$: Observable<string>;
     showStations$: Observable<boolean>;
     showZones$: Observable<boolean>;
+    showZonesNoRatio$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
     selectedZone$: Observable<string>;
     sortedZoneList: Zone[];
@@ -178,6 +183,10 @@ export class ResultSynthesisComponent implements OnInit {
 
     zonesLayerShow(show: MatCheckboxChange){
       this.showZones$ = of(show.checked);      
+    }
+
+    zonesLayerNoRatioShow(show: MatCheckboxChange){
+      this.showZonesNoRatio$ = of(show.checked);      
     }
 
     selectZone(codeZone: string){

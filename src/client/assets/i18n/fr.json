@@ -493,5 +493,6 @@
   "EMPTY_COORD":"Une ou plusieurs coordonnées à 0",
   "ALL_SPECIES":"Toutes espèces",
   "ALL_SURVEYS":"Tous les relevés",
-  "DENSITY_PER_HA": "Densité moyenne estimée"
+  "DENSITY_PER_HA": "Densité moyenne estimée",
+  "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (trop de peu de stations)"
 }

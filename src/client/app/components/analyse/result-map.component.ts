@@ -52,6 +52,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
   @Input() surveyShow: string;
   @Input() showStations: boolean;
   @Input() showZones: boolean;
+  @Input() showZonesNoRatio: boolean;
   @Input() showBiom: boolean;
   @Output() zoneEmitter = new EventEmitter<string>();
   stations: any[] = [];
@@ -69,11 +70,12 @@ export class ResultMapComponent implements OnInit, OnChanges {
   private docs_repo: string;
   private imgs_repo: string;
   stripes_img = 'stripes.png';
-  imageLoaded = false;
+  imageLoaded$ : Observable<boolean>;
 
   constructor(mapService: MapService) {
     this.docs_repo = '../../../assets/files/';
     this.imgs_repo = '../../../assets/img/';
+    this.imageLoaded$ = of(false);
   }
 
   zoomChange(event) {
@@ -81,8 +83,12 @@ export class ResultMapComponent implements OnInit, OnChanges {
   }
 
   getStripes() {
-        return this.imgs_repo + this.stripes_img;
-    }
+    return this.imgs_repo + this.stripes_img;
+  }
+
+  isLoaded(event){
+    this.imageLoaded$ = of(true);
+  }
 
   ngOnInit() {
     console.log(this.results);
@@ -158,16 +164,20 @@ export class ResultMapComponent implements OnInit, OnChanges {
     // zones
     let filteredZones = this.zones
         .filter(zone => (this.spShow===null || zone.properties.species === this.spShow) && 
-          (this.surveyShow===null || zone.properties.survey === this.surveyShow));
-    let fc = filteredZones
+          (this.surveyShow===null || zone.properties.survey === this.surveyShow))
         .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio}))
         .filter(polygon => polygon !== null);
-    let fcNo = filteredZones
-        .filter(fz => fz.ratio<0.2)
+    // zones not taken into stock evaluation are stiped (ratio is <0.2)
+    let filteredZonesWithoutRatio = this.zones
+        .filter(zone => {
+          console.log(zone.properties.ratio);
+          console.log(zone.properties.ratio<0.2);
+          return (this.spShow===null || zone.properties.species === this.spShow) && 
+          (this.surveyShow===null || zone.properties.survey === this.surveyShow) && (zone.properties.ratio<0.2)})
         .map(zone => MapService.getPolygon(zone,{code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio}))
         .filter(polygon => polygon !== null);
-    let fc1 = Turf.featureCollection(fc);
-    let fc1No = Turf.featureCollection(fcNo);
+    let fc1 = Turf.featureCollection(filteredZones);
+    let fc1No = Turf.featureCollection(filteredZonesWithoutRatio);
     this.layerZones$ = of(fc1);
     this.layerZonesNoRatio$ = of(fc1No);
     if(filteredZones.length > 0){      

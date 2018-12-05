@@ -50,6 +50,13 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
       background-color: white;
       margin-right: 5px;
     }
+    .legend-stripe {
+      display: inline-block;
+      border-radius: 50%;
+      border: solid 1px black;
+      background-image: url('../../../assets/img/stripes.png');
+      margin-right: 5px;
+    }
   `]
 })
 export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
@@ -61,11 +68,14 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Input() surveyShow: string;
   @Input() showStations: boolean;
   @Input() showZones: boolean;
+  @Input() showZonesNoRatio: boolean;
+  @Input() platformType: boolean;
   @Output() typeShowEmitter= new EventEmitter<string>();
   @Output() spShowEmitter = new EventEmitter<string>();
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
+  @Output() showZoneNoEmitter = new EventEmitter<string>();
   legend = [{value:'0-1',color:'#FFEDA0',size:4}, {value:'1-25',color:'#FED976',size:6}, 
     {value:'25-50',color:'#FEB24C',size:8},{value:'50-75',color:'#FD8D3C',size:10}, 
     {value:'75-100',color:'#FC4E2A',size:12}, {value:'100-250',color:'#E31A1C',size:14}, 

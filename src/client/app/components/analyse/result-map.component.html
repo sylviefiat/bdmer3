@@ -13,15 +13,15 @@
         [preserveDrawingBuffer]= "true">
         <mgl-image
           id="stripes"
-          url="getStripes()"
-          (loaded)="imageLoaded = true">
+          [url]="getStripes()"
+          (loaded)="isLoaded($event)">
         </mgl-image>
         
-        <ng-container *ngIf="(layerZones$ | async) && showZones">
+        <ng-container *ngIf="(layerZonesNoRatio$ | async) && showZonesNoRatio">
           <mgl-geojson-source
             id="layerZonesLowRatio"
-            [data]="(layerZonesNoRatio$| async)">
-             <mgl-layer *ngIf="imageLoaded"
+            [data]="(layerZonesNoRatio$ | async)">
+             <mgl-layer *ngIf="imageLoaded$ | async"
               id="zonesid_ratio"
               type="fill"
               source="layerZonesLowRatio"
@@ -30,10 +30,37 @@
               }">
             </mgl-layer>     
           </mgl-geojson-source>
+        </ng-container>
+        <ng-container *ngIf="(layerZones$ | async) && showZones">          
           <mgl-geojson-source
             id="layerZones"
             [data]="layerZones$ | async">                
             <mgl-layer
+              *ngIf="(!showBiom) || (typeShow==='A')"
+              id="zonesid_abun"
+              type="fill"
+              source="layerZones"
+              [paint]="{
+                'fill-color': {
+                  property: 'abundancy',
+                    type: 'interval',
+                    stops: [
+                      [0, '#FFEDA0'],
+                      [1, '#FED976'],
+                      [25, '#FEB24C'],
+                      [50, '#FD8D3C'],
+                      [75, '#FC4E2A'],
+                      [100, '#E31A1C'],
+                      [250, '#BD0026'],
+                      [500, '#800026']
+                    ]
+                },
+                'fill-opacity': 1,
+                'fill-outline-color': '#000'
+                }"
+              (click)="selectZone($event)">
+            </mgl-layer>
+             <mgl-layer
               *ngIf="showBiom && typeShow==='B'"
               id="zonesid_biom"
               type="fill"
@@ -60,7 +87,7 @@
             </mgl-layer>
             <mgl-popup *ngIf="selectedZone"
               [lngLat]="selectZoneCoordinates()">
-              <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}}</span><br/>
+              <span style="color:black;">{{'ZONE' | translate}} {{selectedZone.properties?.code}} : {{selectedZone.properties?.abundancy}}</span><br/>
             </mgl-popup>
           </mgl-geojson-source>
         </ng-container>
@@ -83,12 +110,12 @@
                       stops: [
                         [0, 2],
                         [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
+                        [25, 4],
+                        [50, 5],
+                        [75, 6],
+                        [100, 7],
+                        [250, 8],
+                        [500, 9]
                       ]
                   },
                   'circle-stroke-width': 1
@@ -108,12 +135,12 @@
                       stops: [
                         [0, 2],
                         [1, 3],
-                        [10, 4],
-                        [20, 5],
-                        [30, 6],
-                        [40, 7],
-                        [50, 8],
-                        [100, 9]
+                        [25, 4],
+                        [50, 5],
+                        [75, 6],
+                        [100, 7],
+                        [250, 8],
+                        [500, 9]
                       ]
                   },
                   'circle-stroke-width': 1

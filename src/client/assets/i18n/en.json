@@ -492,5 +492,6 @@
   "EMPTY_COORD":"One or many coordinates are 0",
   "ALL_SPECIES":"All species",
   "ALL_SURVEYS":"All surveys",
-  "DENSITY_PER_HA": "Average density estimated"
+  "DENSITY_PER_HA": "Average density estimated",
+  "ZONES_NO_RATIO": "Zones no considered in the analysis (too few stations)"
 }
