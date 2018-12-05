@@ -52,9 +52,12 @@ import { Zone, Survey, Species, Station } from '../../modules/datas/models/index
     }
     .legend-stripe {
       display: inline-block;
-      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      border-radius: 20%;
       border: solid 1px black;
       background-image: url('../../../assets/img/stripes.png');
+      background-color: white;
       margin-right: 5px;
     }
   `]

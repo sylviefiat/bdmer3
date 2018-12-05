@@ -6,7 +6,7 @@
     <mat-card-subtitle>{{'LAYERS' | translate}}</mat-card-subtitle>
     <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
     <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
-    <mat-checkbox [checked]="showZonesNoRatio" (change)="showZoneNoEmitter.emit($event)"> <span class="legend-stripe"></span> <span class="note">{{ 'ZONES_NO_RATIO' | translate}}</span></mat-checkbox>
+    <p><mat-checkbox [checked]="showZonesNoRatio" (change)="showZoneNoEmitter.emit($event)"> <span class="legend-stripe"></span> <span class="note">{{ 'ZONES_NO_RATIO' | translate}}</span></mat-checkbox></p>
     <p class="note" *ngIf="platformType==0">* {{'CLICK_ZONE' | translate}}</p>
   </mat-card-content>
   <mat-card-content *ngIf="showBiom">
