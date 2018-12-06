@@ -4,7 +4,8 @@
   </mat-card-title-group>
   <mat-card-content>
     <mat-card-subtitle>{{'LAYERS' | translate}}</mat-card-subtitle>
-    <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}}</mat-checkbox>
+    <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}} ({{ (typeShow === 'A' ? 'ABUNDANCY' : 'BIOMASS') | translate }})</mat-checkbox>
+        <mat-checkbox [checked]="showStationsCatchs" (change)="showStationsCatchsEmitter.emit($event)">{{ 'STATIONS' | translate}} ({{ 'NB_CATCHS' | translate }})</mat-checkbox>
     <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
     <p><mat-checkbox [checked]="showZonesNoRatio" (change)="showZoneNoEmitter.emit($event)"> <span class="legend-stripe"></span> <span class="note">{{ 'ZONES_NO_RATIO' | translate}}</span></mat-checkbox></p>
     <p class="note" *ngIf="platformType==0">* {{'CLICK_ZONE' | translate}}</p>
@@ -19,18 +20,18 @@
     </mat-form-field>
   </mat-card-content>
   <mat-card-content class="legend">
-    <div class="stationLegend" *ngIf="showStations">
+    <div class="stationLegend" *ngIf="showStations || showStationsCatchs">
       <mat-card-subtitle> {{'STATIONS' | translate}}</mat-card-subtitle>
       <div *ngFor="let item of legend">
         <span class="legend-circle" [style.width]="item.size+'px'" [style.height]="item.size+'px'"></span>              
-        <span>{{item.value}} </span><span>{{getUnit()}}</span>
+        <span>{{item.value}} </span><span>{{getUnit('station')}}</span>
       </div>
     </div>
     <div class="zoneLegend" *ngIf="showZones">
       <mat-card-subtitle> {{'ZONES' | translate}}</mat-card-subtitle>
       <div *ngFor="let item of legend">
         <span class="legend-key" [style.backgroundColor]="item.color"></span>
-        <span>{{item.value}} </span><span>{{getUnit()}}</span>
+        <span>{{item.value}} </span><span>{{getUnit('zone')}}</span>
       </div>
     </div>
   </mat-card-content>
@@ -50,7 +51,7 @@
     <mat-card-subtitle>{{'SURVEYS' | translate}}</mat-card-subtitle>
     <mat-form-field>
       <mat-select [(ngModel)]="surveyShow" (selectionChange)="this.surveyShowEmitter.emit($event.value)">
-        <mat-option [value]="null">{{ 'ALL_SURVEYS' | translate}}</mat-option>
+        <mat-option [value]="'all'">{{ 'ALL_SURVEYS' | translate}}</mat-option>
         <mat-option *ngFor="let sv of surveys" value="{{sv.code}}">{{sv.code}}</mat-option>
       </mat-select>
     </mat-form-field>

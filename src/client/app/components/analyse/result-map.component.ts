@@ -51,6 +51,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     @Input() spShow: string;
     @Input() surveyShow: string;
     @Input() showStations: boolean;
+    @Input() showStationsCatchs: boolean;
     @Input() showZones: boolean;
     @Input() showZonesNoRatio: boolean;
     @Input() showBiom: boolean;
@@ -119,6 +120,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
                         let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
                         let marker = MapService.getFeature(s, {
                             code: s.properties.code,
+                            catchs: rt.nbCatchs,
                             abundancy: rt.abundancePerHA,
                             biomass: rt.biomassPerHA,
                             species: rsp.codeSpecies,
@@ -134,6 +136,23 @@ export class ResultMapComponent implements OnInit, OnChanges {
 
     initZones() {
         if (this.zones.length <= 0) {
+            for (let rsp of this.results.resultAll) {
+                    for (let rz of rsp.resultPerZone) {
+                        let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
+                        let polygon = {
+                            geometry: z.geometry,
+                            properties: {
+                                code: z.properties.code,
+                                abundancy: rz.abundancePerHA,
+                                biomass: rz.biomassPerHA,
+                                species: rsp.codeSpecies,
+                                survey: 'all',
+                                ratio: rz.ratioNstSurface
+                            }
+                        };
+                        this.zones.push(polygon);
+                    }
+                }
             for (let i in this.results.resultPerSurvey) {
                 for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
                     for (let rz of rsp.resultPerZone) {
@@ -181,13 +200,13 @@ export class ResultMapComponent implements OnInit, OnChanges {
         // stations
         let filteredStations = this.stations
             .filter(marker => (this.spShow === null || marker.properties.species === this.spShow) &&
-                (this.surveyShow === null || marker.properties.survey === this.surveyShow));
+                (this.surveyShow === 'all' || marker.properties.survey === this.surveyShow));
         let featureCollection = Turf.featureCollection(filteredStations);
         this.layerStations$ = of(featureCollection);
         // zones
         let filteredZones = this.zones
             .filter(zone => (this.spShow === null || zone.properties.species === this.spShow) &&
-                (this.surveyShow === null || zone.properties.survey === this.surveyShow))
+                (this.surveyShow === 'all' || zone.properties.survey === this.surveyShow))
             .map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio }))
             .filter(polygon => polygon !== null);
         // zones not taken into stock evaluation are stiped (ratio is <0.2)

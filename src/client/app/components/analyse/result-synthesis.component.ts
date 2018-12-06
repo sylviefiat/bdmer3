@@ -27,6 +27,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
+          [showStationsCatchs]="showStationsCatchs$ | async"
           [showZones]="showZones$ | async"
           [showZonesNoRatio]="showZonesNoRatio$ | async"
           (zoneEmitter)="selectZone($event)">
@@ -40,6 +41,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           [spShow]="spShow$ | async" 
           [surveyShow]="surveyShow$ | async"
           [showStations]="showStations$ | async"
+          [showStationsCatchs]="showStationsCatchs$ | async"
           [showZones]="showZones$ | async"
           [showZonesNoRatio]="showZonesNoRatio$ | async"
           [platformType]="analyseData.usedCountry.platformType"
@@ -47,6 +49,7 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
           (spShowEmitter)="selectSpShow($event)"
           (surveyShowEmitter)="selectSurveyShow($event)"
           (showStationsEmitter)="stationsLayerShow($event)"
+          (showStationsCatchsEmitter)="stationsCatchsLayerShow($event)"
           (showZonesEmitter)="zonesLayerShow($event)"
           (showZoneNoEmitter)="zonesLayerNoRatioShow($event)">
         </bc-result-filter>
@@ -118,6 +121,7 @@ export class ResultSynthesisComponent implements OnInit {
     spShow$: Observable<string>;
     surveyShow$: Observable<string>;
     showStations$: Observable<boolean>;
+    showStationsCatchs$: Observable<boolean>;
     showZones$: Observable<boolean>;
     showZonesNoRatio$: Observable<boolean>;
     currentresultSurvey$: Observable<ResultSurvey>;
@@ -135,7 +139,9 @@ export class ResultSynthesisComponent implements OnInit {
       this.surveyShow$=of(this.analyseData.usedSurveys[0].code);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.analyseData.usedSurveys[0].code)[0]);
       this.showStations$=of(true);
+      this.showStationsCatchs$=of(false);
       this.showZones$=of(true);
+      this.showZonesNoRatio$=of(false);
       this.showBiom = this.analyseData.usedMethod.method !== 'NONE';
       this.sortedZoneList = this.analyseData.usedZones.sort((z1,z2)=> this.customSort(z1.properties.code,z2.properties.code));
     }
@@ -174,11 +180,23 @@ export class ResultSynthesisComponent implements OnInit {
 
     selectSurveyShow(sus: string){
       this.surveyShow$ = of(sus);
-      this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
+      if(sus !== 'all'){
+        this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === sus)[0]);
+      } else {
+        this.currentresultSurvey$ = this.spShow$.map(sp => {
+          return { codeSurvey: 'All', yearSurvey: 0, codePlatform:null, resultPerSpecies:this.results.resultAll }
+        });
+      }
     }
 
     stationsLayerShow(show: MatCheckboxChange){
       this.showStations$ = of(show.checked);      
+      this.showStationsCatchs$ = of(!show.checked);
+    }
+
+    stationsCatchsLayerShow(show: MatCheckboxChange){
+      this.showStationsCatchs$ = of(show.checked);  
+      this.showStations$ = of(!show.checked);      
     }
 
     zonesLayerShow(show: MatCheckboxChange){

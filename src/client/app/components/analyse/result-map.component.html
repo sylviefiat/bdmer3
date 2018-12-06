@@ -92,13 +92,37 @@
           </mgl-geojson-source>
         </ng-container>
 
-        <ng-container *ngIf="showStations && (layerStations$ | async)">
+        <ng-container *ngIf="(showStations || showStationsCatchs) && (layerStations$ | async)">
           <mgl-geojson-source
             id="layerStations"
             [data]="layerStations$ | async">
-            
             <mgl-layer
-                *ngIf="(!showBiom) || (typeShow==='A')"
+                *ngIf="showStationsCatchs"
+                id="stationId_catchs"
+                type="circle"
+                source="layerStations"
+                [paint]="{
+                  'circle-color': '#fff',
+                  'circle-radius': {
+                      property: 'catchs',
+                      type: 'interval',
+                      stops: [
+                        [0, 2],
+                        [1, 3],
+                        [25, 4],
+                        [50, 5],
+                        [75, 6],
+                        [100, 7],
+                        [250, 8],
+                        [500, 9]
+                      ]
+                  },
+                  'circle-stroke-width': 1
+            }"
+            (click)="selectStation($event)">            
+            </mgl-layer>
+            <mgl-layer
+                *ngIf="showStations && ((!showBiom) || (typeShow==='A'))"
                 id="stationId_abun"
                 type="circle"
                 source="layerStations"
@@ -123,7 +147,7 @@
             (click)="selectStation($event)">
             </mgl-layer>
             <mgl-layer
-                *ngIf="showBiom && typeShow==='B'"
+                *ngIf="showStations && showBiom && typeShow==='B'"
                 id="stationId_biom"
                 type="circle"
                 source="layerStations"
