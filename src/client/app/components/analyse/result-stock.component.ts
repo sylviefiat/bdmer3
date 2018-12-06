@@ -11,12 +11,20 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
     selector: 'bc-result-stock',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-        <div>
-            <h2>{{'STOCK' | translate}}</h2>        
+        <div>            
+            <mat-card class="large">
+              <mat-card-title>{{'STOCK' | translate}}</mat-card-title>
+              <div>{{ 'NB_SURVEYS' | translate}}: {{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
+              <div>{{ 'PERIOD_COVERED' | translate}}: {{ displayYears() }}</div>
+            </mat-card>
             <div  class="container">
             <mat-card *ngFor="let sp of results.resultAll">
                 <mat-card-title>{{ sp.nameSpecies }}</mat-card-title>
-                <mat-card-content *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">                                       
+                <div *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">
+                  <mat-card-subtitle>{{ 'ASSESMENT_REPORT' | translate }}</mat-card-subtitle>
+                  <mat-card-content>
+                    <div>{{ 'NB_ZONES_RATIO_OK' | translate}}: {{ sp.resultPerPlatform[0].nbZones | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStations | number:'1.0-0':'fr' }}</div>                
                     <div>
                         {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
                         &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}
@@ -28,13 +36,29 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                         &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} {{'TONS' | translate}}
                     </div>
                     <div *ngIf="sp.resultPerPlatform[0].resultStock.stockCA">{{ 'CONSERVATIVE_IND' | translate }}: {{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCA) | number:'1.0-2':'fr' }}  {{'TONS' | translate}}</div>
-                </mat-card-content>
+                  </mat-card-content>
+                  <mat-card-subtitle>{{ 'FISHER_CATCHS_REPORT' | translate }}</mat-card-subtitle>
+                  <mat-card-content>
+                    <div>{{ 'NB_ZONES' | translate}}: {{ sp.resultPerPlatform[0].nbZonesTotal | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'NB_CATCHS' | translate}}: {{ sp.resultPerPlatform[0].nbCatchs | number:'1.0-0':'fr' }}</div>
+                  </mat-card-content>
+                </div>
             </mat-card>
             </div>
         </div>
      `,
     styles: [
         `
+      .large {
+        margin: 0 72px;
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        height:auto;
+        justify-content: center;
+        width: calc(100% - 144px);
+      }
       .container {
           display: flex;
           flex-direction: row;
@@ -70,7 +94,21 @@ export class ResultStockComponent implements OnInit {
         return kg / 1000;
     }
 
-
+    displayYears(){
+      let dy: string = "";
+      let years: string = "";
+      let dateStart: Date;
+      let dateEnd: Date;      
+      for(let y of this.analyseData.usedYears){
+        dy = dy === "" ? y.year : ", " + y.year;
+        dateStart = dateStart ? (dateStart === y.dateStart ? dateStart : null) : y.dateStart;
+        dateEnd = dateEnd ? (dateEnd === y.dateEnd ? dateEnd : null) : y.dateEnd;
+      }
+      if(!dateStart || !dateEnd){
+        return dy;
+      }
+      return dy + " - "+dateStart+ "/" + dateEnd;
+    }
 
 
 

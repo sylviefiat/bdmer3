@@ -8,7 +8,7 @@ export interface Method {
 export interface Data {
     usedCountry: Country;
     usedPlatforms: Platform[];
-    usedYears: string[];
+    usedYears: any[];
     usedSurveys: Survey[];
     usedZones: Zone[];
     usedStations: Station[];
@@ -54,6 +54,7 @@ export interface ResultSpecies {
 export interface ResultStation {
     codeStation: string;
     surface: number;                       // surface de la station en m²
+    nbCatchs: number;                      // nombre total d'individus pêchés
     abundance: number;                     // abondance = nombre de mesures - mesures non considérées par l'analyse
     abundanceLegal ?: number;              // abondance de taille légale
     biomass ?: number;                     // somme des biomasses
@@ -68,6 +69,7 @@ export interface ResultZone {
     surface: number,                       // surface en m²
     nbStrates: number;                     // nombre de strates = surface zone / surface moyenne station
     nbStations: number;                    // nombre de stations considérées
+    nbCatchs: number;                      // nombre total d'individus pêchés
     ratioNstSurface: number;               // ratio nombre de station par rapport à la surface en km²
     averageAbundance: number;              // moyenne(abondance par station)
     abundance: number;                     // nbStrates x moyenne(abondance par station)
@@ -87,7 +89,10 @@ export interface ResultPlatform {
     surface: number;                       // surface en m²
     nbStrates: number;                     // nombre de strates = somme strates total zones
     nbZones: number;                       // nombre de zones considérées
+    nbZonesTotal: number;                  // nombre de zones total
     nbStations: number;                    // nombre de stations considérées
+    nbStationsTotal: number;               // nombre de stations total
+    nbCatchs: number;                      // nombre total d'individus pêchés
     averageAbundance: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
     averageAbundanceLegal ?:number;        // moyenne abondance par station individus de taille légale
     averageBiomassLegal ?:number;          // moyenne biomasse par station individus de taille légale

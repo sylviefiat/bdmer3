@@ -494,5 +494,13 @@
   "ALL_SPECIES":"Toutes espèces",
   "ALL_SURVEYS":"Tous les relevés",
   "DENSITY_PER_HA": "Densité moyenne estimée",
-  "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (trop de peu de stations)"
+  "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (trop de peu de stations)",
+  "NB_SURVEYS":"Nombre de relevés",
+  "PERIOD_COVERED":"Période considérée",
+  "NB_ZONES_RATIO_OK":"Nombre de zones prises en compte",
+  "NB_ZONES":"Nombre de zones",
+  "NB_STATIONS":"Nombre de stations",
+  "NB_CATCHS":"Nombre d'individus pêchés",
+  "ASSESMENT_REPORT":"Résultats statistiques",
+  "FISHER_CATCHS_REPORT":"Résultats de pêche"
 }

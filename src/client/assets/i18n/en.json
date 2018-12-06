@@ -493,5 +493,13 @@
   "ALL_SPECIES":"All species",
   "ALL_SURVEYS":"All surveys",
   "DENSITY_PER_HA": "Average density estimated",
-  "ZONES_NO_RATIO": "Zones no considered in the analysis (too few stations)"
+  "ZONES_NO_RATIO": "Zones no considered in the analysis (too few stations)",
+  "NB_SURVEYS":"Number of surveys",
+  "PERIOD_COVERED":"Period covered",
+  "NB_ZONES_RATIO_OK":"Number of zones considered",
+  "NB_ZONES":"Number of zones",
+  "NB_STATIONS":"Number of stations",
+  "NB_CATCHS":"Number of catchs",
+  "ASSESMENT_REPORT":"Statistical report",
+  "FISHER_CATCHS_REPORT":"Fishing report"
 }

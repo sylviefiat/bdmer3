@@ -201,14 +201,16 @@ export class AnalyseService {
      }
 
     getResultStation(survey: Survey, species: Species, station: Station): Observable<ResultStation> {
-        let rstation : ResultStation = { codeStation: station.properties.code, surface: survey.surfaceStation, abundance: 0, abundancePerHA: 0};        
+        let rstation : ResultStation = { codeStation: station.properties.code, surface: survey.surfaceStation, nbCatchs:0, abundance: 0, abundancePerHA: 0};        
         let counts:any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = counts.flatMap(c => c.mesures.filter(m => m.codeSpecies === species.code));
-        let densites = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code).map(q => q.density));
-        let density = this.getSum(densites);
+        let quantities = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code));
+        let density = this.getSum(quantities.map(q => q.density));
+        let nbCatchs = this.getSum(quantities.map(q => q.catchs));
         if (mesures.length === 0 && density ===0) {
             return of(rstation);
         }
+        rstation.nbCatchs = mesures.length !==0 ? mesures.length : Number(nbCatchs);
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
         rstation.abundance = mesures.length !==0 ? mesures.filter(m => this.isInDims(m,species)).length : Number(density);
         if(this.hasLegalDims(species) && mesures.length !==0){
@@ -271,11 +273,12 @@ export class AnalyseService {
 
     getResultZone(rstations: ResultStation[], zone: Zone): Observable<ResultZone> {
         let rzone : ResultZone = { codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0,
-            ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
+            nbCatchs:0, ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
             abundancePerHA: 0, SDabundancePerHA: 0 };
         //let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation)>=0);
         rzone.nbStations = rstations.length;
         rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
+        rzone.nbCatchs = this.getSum(rstations.map(rs => rs.nbCatchs));
         rzone.nbStrates = rstations.length >0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface), rstations.length):0;
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
@@ -301,20 +304,26 @@ export class AnalyseService {
 
     getResultPlatform(rzones: ResultZone[], platform ?: Platform): Observable<ResultPlatform> {
         // variable de student
-        const T: number = 2.05;
-        console.log(rzones);
-        rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
-        console.log(rzones);
+        const T: number = 2.05;        
         let rplatform : ResultPlatform = {
             codePlatform: platform ? platform.code : null,
             surface: 0,
             nbStrates: 0,
             nbZones: 0,
+            nbZonesTotal: 0,
             nbStations: 0,
+            nbStationsTotal: 0,
+            nbCatchs: 0,
             averageAbundance: 0,
             varianceAbundance: 0,
             confidenceIntervalAbundance: 0
         };
+        // stats globales
+        rplatform.nbZonesTotal = rzones.length;
+        rplatform.nbStationsTotal = this.getSum(rzones.map(rz => rz.nbStations));
+        rplatform.nbCatchs = this.getSum(rzones.map(rz => rz.nbCatchs));
+        // filter on zones taken in analysis (ie number of stations per ha is >0.2)
+        rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
         // platform
         rplatform.surface = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStrates = this.getSum(rzones.map(rz => rz.nbStrates));
