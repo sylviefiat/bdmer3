@@ -28,10 +28,10 @@
     </mat-card-content>
     <mat-card-footer class="footer">
       <h5 mat-subheader>{{ 'DOWNLOAD_CSV_COUNTS' | translate }}</h5>
-      <a href="{{csvCountsUrlTpe1}}" *ngIf="country.platformType===0" download>
+      <a href="{{csvCountsUrlType1}}" *ngIf="country.platformType===0" download>
           <fa [name]="'download'" title="{{'CSV_COUNT_TYPE1' | translate}}" [border]=true [size]=1></fa>
       </a>
-      <a href="{{csvCountsUrlTpe2}}" *ngIf="country.platformType===1" download>
+      <a href="{{csvCountsUrlType2}}" *ngIf="country.platformType===1" download>
           <fa [name]="'download'"  title="{{'CSV_COUNT_TYPE2' | translate}}" [border]=true [size]=1></fa>
       </a>
     </mat-card-footer>
