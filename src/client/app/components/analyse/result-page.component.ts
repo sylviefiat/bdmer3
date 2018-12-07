@@ -38,6 +38,7 @@ import * as html2canvas from 'html2canvas';
 
     <div>
       <button (click)="captureScreen()">PRINT</button>
+      <bc-result-export-xls [analyseData]="analyseData$ | async" [results]="results$ | async" [locale]="locale$ | async"></bc-result-export-xls>
     </div>
   `,
   styles: [

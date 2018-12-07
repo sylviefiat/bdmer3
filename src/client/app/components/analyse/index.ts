@@ -22,6 +22,7 @@ import { ResultMapComponent } from './result-map.component';
 import { ResultStockComponent } from './result-stock.component';
 import { ResultBoxplotComponent } from './result-boxplot.component';
 import { ResultFilterComponent } from './result-filter.component';
+import { ResultExportXlsComponent } from './result-export-xls.component';
 
 
 export const ANALYSE_COMPONENTS: any[] = [
@@ -48,7 +49,8 @@ export const ANALYSE_COMPONENTS: any[] = [
   ResultMapComponent,
   ResultBoxplotComponent,
   ResultFilterComponent,
-  ResultStockComponent
+  ResultStockComponent,
+  ResultExportXlsComponent
   ];
 
 export * from './analyse-page.component';
@@ -75,3 +77,4 @@ export * from './result-map.component';
 export * from './result-stock.component';
 export * from './result-boxplot.component';
 export * from './result-filter.component';
+export * from './result-export-xls.component';

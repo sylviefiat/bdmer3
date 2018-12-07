@@ -108,24 +108,33 @@ export class AnalyseService {
                             rstations = [...rstations,...rs.resultPerSpecies.filter(rsp => rsp.codeSpecies===species.code)[0].resultPerStation];
                         }
                     });
+                    rsp2.resultPerStation = [...rsp2.resultPerStation, ...rstations];
                     return this.getResultZone(rstations,zone);
                 }),
-                mergeMap((rzones:ResultZone) => {
-
-                    rsp2.resultPerZone.push(rzones);
-                    return of(rzones);
+                mergeMap((rzone:ResultZone) => {
+                    rsp2.resultPerZone.push(rzone);
+                    return of(rzone);
                 })
             )
         .subscribe();
-        let platformObs = of(this.results)
+        let stockObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => this.getResultPlatform(rsp2.resultPerZone)),
                 mergeMap((rplatform: ResultPlatform) => {
                     rsp2.resultPerPlatform.push(rplatform);
-                    return of(rplatform)
+                    return of(rplatform);
                 })
             )
-        .subscribe();
+        .subscribe();  
+        let platformObs = from(this.data.usedPlatforms)
+            .pipe(
+                mergeMap((platform: Platform) => this.getResultPlatform(rsp2.resultPerZone.filter(rpz => rpz.codePlatform===platform.code),platform)),
+                mergeMap((rplatform: ResultPlatform) => {
+                    rsp2.resultPerPlatform.push(rplatform);
+                    return of(rplatform);
+                })
+            )
+        .subscribe();      
         return of(rsp2);
     }
 
@@ -307,7 +316,7 @@ export class AnalyseService {
         // variable de student
         const T: number = 2.05;        
         let rplatform : ResultPlatform = {
-            codePlatform: platform ? platform.code : null,
+            codePlatform: platform ? platform.code : 'all',
             surface: 0,
             nbStrates: 0,
             nbZones: 0,

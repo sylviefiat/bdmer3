@@ -280,18 +280,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
             },
             path: 'node_modules/jspdf/dist/jspdf.min.js',
 	    },
-        /*{
-            name: 'jspdf',
-            path: 'node_modules/jspdf/dist/jspdf.min.js'
-        },*/
         {
             name: 'html2canvas',
             path: 'node_modules/html2canvas/dist/html2canvas.min.js'
         },
-        /*{
-            name: 'file-saver',
-            path: 'node_modules/file-saver/dist/FileSaver.min.js'
-        },*/
         {
             name: 'file-saver',
             packageMeta: {
@@ -299,6 +291,10 @@ export class ProjectConfig extends SeedAdvancedConfig {
                 main: 'dist/FileSaver.min.js',
                 format: 'global'
             }
+        },
+        {
+            name: 'xlsx',
+            path: 'node_modules/xlsx/dist/xlsx.full.min.js'
         }];
 
         this.addPackagesBundles(additionalPackages);
