@@ -43,8 +43,9 @@ export class AnalyseService {
     }
 
     getResults() : Observable<Results> {
-        let day=this.ms.moment(new Date(), "DD/MM/YYYY").toISOString();
-        this.results = { name: "ANALYSE BDMER " + day, resultPerSurvey: [] };
+        let day=this.ms.moment(new Date()).format("YYYY-MM-DD");
+        console.log(day);
+        this.results = { name: "ANALYSE BDMER3 " + day, resultPerSurvey: [] };
         if(this.data.usedCountry.platformType===VESSEL){
             this.results.resultAll = [];
         }

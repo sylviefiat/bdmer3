@@ -14,7 +14,7 @@ import { CountriesAction, CountryAction } from '../../modules/countries/actions/
 import { PlatformAction, SpeciesAction } from '../../modules/datas/actions/index';
 import { AnalyseAction } from '../../modules/analyse/actions/index';
 
-import * as jspdf from 'jspdf';
+import { jsPDF } from 'jspdf';
 import * as html2canvas from 'html2canvas';
 
 @Component({
@@ -87,9 +87,10 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
   results$: Observable<Results>;
   locale$: Observable<string>;
   loading: boolean;
+  analyseName: string;
 
   constructor(private store: Store<IAppState>, route: ActivatedRoute, public routerext: RouterExtensions) {
-
+    
   }
 
   ngOnInit() {    
@@ -97,13 +98,14 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
     this.analyseData$ = this.store.select(getAnalyseData);
     this.results$ = this.store.select(getAnalyseResult);
     this.locale$ = this.store.select(getLangues);
-    console.log("after init");
+    
     this.analyseData$.subscribe(d => {
       console.log(d);
       if(!d || !d.usedCountry){ 
         this.routerext.navigate(['/analyse']);
       }
     });
+    this.results$.subscribe(result => this.analyseName = result ? result.name : '');
   }
 
   ngAfterViewInit(){
@@ -112,6 +114,7 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
   }
 
   public captureScreen(){
+    let dashedName = this.analyseName.replace(' ','-');
     var data = document.getElementById('canvasToPrint');
     html2canvas(data).then((canvas) => {
     // Few necessary setting options
@@ -120,11 +123,12 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
        
-      const contentDataURL = canvas.toDataURL('image/png')
-      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+      const contentDataURL = canvas.toDataURL('image/png');
+      //let pdf = new jsPDF.default('p', 'mm', 'a4'); // A4 size page of PDF
+      const pdf = new jsPDF();
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('MYPdf.pdf'); // Generated PDF
+      pdf.save(dashedName+'.pdf'); // Generated PDF
     });
   }
 
