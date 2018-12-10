@@ -500,7 +500,7 @@
   "NB_ZONES_RATIO_OK":"Nombre de zones prises en compte",
   "NB_ZONES":"Nombre de zones",
   "NB_STATIONS":"Nombre de stations",
-  "NB_CATCHS":"Nombre d'individus pêchés",
+  "NB_CATCHES":"Nombre d'individus pêchés",
   "ASSESMENT_REPORT":"Résultats statistiques",
-  "FISHER_CATCHS_REPORT":"Résultats de pêche"
+  "FISHER_CATCHES_REPORT":"Résultats de pêche"
 }

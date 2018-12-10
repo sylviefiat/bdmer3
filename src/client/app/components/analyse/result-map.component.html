@@ -92,19 +92,19 @@
           </mgl-geojson-source>
         </ng-container>
 
-        <ng-container *ngIf="(showStations || showStationsCatchs) && (layerStations$ | async)">
+        <ng-container *ngIf="(showStations || showStationsCatches) && (layerStations$ | async)">
           <mgl-geojson-source
             id="layerStations"
             [data]="layerStations$ | async">
             <mgl-layer
-                *ngIf="showStationsCatchs"
-                id="stationId_catchs"
+                *ngIf="showStationsCatches"
+                id="stationId_catches"
                 type="circle"
                 source="layerStations"
                 [paint]="{
                   'circle-color': '#fff',
                   'circle-radius': {
-                      property: 'catchs',
+                      property: 'catches',
                       type: 'interval',
                       stops: [
                         [0, 2],

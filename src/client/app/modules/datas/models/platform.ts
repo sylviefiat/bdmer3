@@ -90,7 +90,7 @@ export interface Count {
 
 export interface Quantity {
   codeSpecies: string;
-  catchs: number;
+  catches: number;
   density: number;
 }
 

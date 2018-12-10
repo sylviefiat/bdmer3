@@ -509,7 +509,7 @@ export class Csv2JsonService {
                             }
                             count[headers[j]] = d;
                             break;
-                        case "catchs":
+                        case "catches":
                             sp = data[headers.indexOf("codeSpecies")];
                             if (sp.length < 2) break;
                             
@@ -556,7 +556,7 @@ export class Csv2JsonService {
                     if (!count.quantities) {
                         count.quantities = [];
                     }
-                    count.quantities.push({ codeSpecies: sp, catchs: caught, density: quantity });
+                    count.quantities.push({ codeSpecies: sp, catches: caught, density: quantity });
                 }
                 lines.push(count);
             }

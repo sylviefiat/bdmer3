@@ -70,7 +70,7 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Input() spShow: string;
   @Input() surveyShow: string;
   @Input() showStations: boolean;
-  @Input() showStationsCatchs: boolean;
+  @Input() showStationsCatches: boolean;
   @Input() showZones: boolean;
   @Input() showZonesNoRatio: boolean;
   @Input() platformType: boolean;
@@ -78,7 +78,7 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() spShowEmitter = new EventEmitter<string>();
   @Output() surveyShowEmitter = new EventEmitter<string>();
   @Output() showStationsEmitter = new EventEmitter<string>();
-  @Output() showStationsCatchsEmitter = new EventEmitter<string>();
+  @Output() showStationsCatchesEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
   @Output() showZoneNoEmitter = new EventEmitter<string>();
   legend = [{value:'0-1',color:'#FFEDA0',size:4}, {value:'1-25',color:'#FED976',size:6}, 

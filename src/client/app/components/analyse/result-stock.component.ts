@@ -37,11 +37,11 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                     </div>
                     <div *ngIf="sp.resultPerPlatform[0].resultStock.stockCA">{{ 'CONSERVATIVE_IND' | translate }}: {{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCA) | number:'1.0-2':'fr' }}  {{'TONS' | translate}}</div>
                   </mat-card-content>
-                  <mat-card-subtitle>{{ 'FISHER_CATCHS_REPORT' | translate }}</mat-card-subtitle>
+                  <mat-card-subtitle>{{ 'FISHER_CATCHES_REPORT' | translate }}</mat-card-subtitle>
                   <mat-card-content>
                     <div>{{ 'NB_ZONES' | translate}}: {{ sp.resultPerPlatform[0].nbZonesTotal | number:'1.0-0':'fr' }}</div>
                     <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
-                    <div>{{ 'NB_CATCHS' | translate}}: {{ sp.resultPerPlatform[0].nbCatchs | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'NB_CATCHES' | translate}}: {{ sp.resultPerPlatform[0].nbCatches | number:'1.0-0':'fr' }}</div>
                   </mat-card-content>
                 </div>
             </mat-card>

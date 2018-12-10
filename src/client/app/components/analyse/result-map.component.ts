@@ -51,7 +51,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     @Input() spShow: string;
     @Input() surveyShow: string;
     @Input() showStations: boolean;
-    @Input() showStationsCatchs: boolean;
+    @Input() showStationsCatches: boolean;
     @Input() showZones: boolean;
     @Input() showZonesNoRatio: boolean;
     @Input() showBiom: boolean;
@@ -120,7 +120,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
                         let s: Station = this.analyseData.usedStations.filter((station: Station) => station.properties.code === rt.codeStation) && this.analyseData.usedStations.filter(station => station.properties.code === rt.codeStation)[0];
                         let marker = MapService.getFeature(s, {
                             code: s.properties.code,
-                            catchs: rt.nbCatchs,
+                            catches: rt.nbCatches,
                             abundancy: rt.abundancePerHA,
                             biomass: rt.biomassPerHA,
                             species: rsp.codeSpecies,

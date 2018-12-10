@@ -499,7 +499,7 @@
   "NB_ZONES_RATIO_OK":"Number of zones considered",
   "NB_ZONES":"Number of zones",
   "NB_STATIONS":"Number of stations",
-  "NB_CATCHS":"Number of catchs",
+  "NB_CATCHES":"Number of catches",
   "ASSESMENT_REPORT":"Statistical report",
-  "FISHER_CATCHS_REPORT":"Fishing report"
+  "FISHER_CATCHES_REPORT":"Fishing report"
 }
