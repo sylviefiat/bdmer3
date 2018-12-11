@@ -92,8 +92,8 @@ export class ResultExportXlsComponent implements OnInit {
         let ws = [];
         let oldYearSurvey = 0, i=1;
         for(let resultSurvey of this.results.resultPerSurvey){
-          for (let resultspecies of resultSurvey.resultPerSpecies) {
-              i = oldYearSurvey===resultSurvey.yearSurvey ? i+1 : 1;
+          i = oldYearSurvey===resultSurvey.yearSurvey ? i+1 : 1;
+          for (let resultspecies of resultSurvey.resultPerSpecies) {              
               let ws_name =  resultSurvey.yearSurvey +" ("+i+")" + " " + resultspecies.nameSpecies;
               // excel sheet name cannot exceed 31 chars
               ws_name = ws_name.substr(0,31);
@@ -107,7 +107,7 @@ export class ResultExportXlsComponent implements OnInit {
             bookType: 'xlsx', bookSST: true, type:
                 'binary'
         });
-        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), dashedName + '-stations.xlsx');
+        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), dashedName + '-surveys.xlsx');
     }
 
     s2ab(s) {
