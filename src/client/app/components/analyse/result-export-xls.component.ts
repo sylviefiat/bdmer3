@@ -14,9 +14,10 @@ import { saveAs } from 'file-saver';
     selector: 'bc-result-export-xls',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `   
-    <button (click)="exportPerPlatform()">Export Excel platforms results</button>
-    <button (click)="exportPerZone()">Export Excel zones results</button>
-    <button (click)="exportPerStation()">Export Excel stations results</button>
+    <button (click)="exportPerPlatform()">{{'EXCEL_EXPORT' | translate}} {{'RESULT_PER_PLATFORM' | translate}}</button>
+    <button (click)="exportPerZone()">{{'EXCEL_EXPORT' | translate}} {{'RESULT_PER_ZONE' | translate}}</button>
+    <button (click)="exportPerStation()">{{'EXCEL_EXPORT' | translate}} {{'RESULT_PER_STATION' | translate}}</button>
+    <button (click)="exportPerSurvey()">{{'EXCEL_EXPORT' | translate}} {{'RESULT_PER_SURVEY' | translate}}</button>
   `,
     styles: [
         `
@@ -41,8 +42,7 @@ export class ResultExportXlsComponent implements OnInit {
         for (let resultspecies of this.results.resultAll) {
             let ws_name = resultspecies.nameSpecies;
             wb.SheetNames.push(ws_name);
-            wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform));
-            
+            wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, {speciesCode: resultspecies.nameSpecies}));
         }
 
         const wbout = write(wb, {
@@ -53,11 +53,61 @@ export class ResultExportXlsComponent implements OnInit {
     }
 
     exportPerZone() {
-      
+      let wb: WorkBook = { SheetNames: [], Sheets: {} };
+        let dashedName = this.results.name.replace(' ', '-');
+        let ws = [];
+        for (let resultspecies of this.results.resultAll) {
+            let ws_name = resultspecies.nameSpecies;
+            wb.SheetNames.push(ws_name);
+            wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerZone, {speciesCode: resultspecies.nameSpecies}));            
+        }
+
+        const wbout = write(wb, {
+            bookType: 'xlsx', bookSST: true, type:
+                'binary'
+        });
+        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), dashedName + '-zones.xlsx');
     }
 
     exportPerStation() {
+      let wb: WorkBook = { SheetNames: [], Sheets: {} };
+        let dashedName = this.results.name.replace(' ', '-');
+        let ws = [];
+        for (let resultspecies of this.results.resultAll) {
+            let ws_name = resultspecies.nameSpecies;
+            wb.SheetNames.push(ws_name);
+            wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerStation,{speciesCode: resultspecies.nameSpecies}));            
+        }
 
+        const wbout = write(wb, {
+            bookType: 'xlsx', bookSST: true, type:
+                'binary'
+        });
+        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), dashedName + '-stations.xlsx');
+    }
+
+    exportPerSurvey() {
+      let wb: WorkBook = { SheetNames: [], Sheets: {} };
+        let dashedName = this.results.name.replace(' ', '-');
+        let ws = [];
+        let oldYearSurvey = 0, i=1;
+        for(let resultSurvey of this.results.resultPerSurvey){
+          for (let resultspecies of resultSurvey.resultPerSpecies) {
+              i = oldYearSurvey===resultSurvey.yearSurvey ? i+1 : 1;
+              let ws_name =  resultSurvey.yearSurvey +" ("+i+")" + " " + resultspecies.nameSpecies;
+              // excel sheet name cannot exceed 31 chars
+              ws_name = ws_name.substr(0,31);
+              oldYearSurvey = resultSurvey.yearSurvey;
+              wb.SheetNames.push(ws_name);
+              wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform,{surveyCode:resultSurvey.codeSurvey, speciesCode: resultspecies.nameSpecies}));
+          }
+        }
+
+        const wbout = write(wb, {
+            bookType: 'xlsx', bookSST: true, type:
+                'binary'
+        });
+        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), dashedName + '-stations.xlsx');
     }
 
     s2ab(s) {
@@ -69,11 +119,10 @@ export class ResultExportXlsComponent implements OnInit {
         return buf;
     }
 
-    flat(data): any[] {
+    flat(data, addedProperties): any[] {
         let flatArray = [];        
         for(let i=0; i < data.length; i++) {
-          console.log(data[i]);
-          let flatObject = {};
+          let flatObject = addedProperties;
           for (let prop in data[i]) {
               if (typeof data[i][prop] === 'object') {
                   for (var inProp in data[i][prop]) {
@@ -89,8 +138,9 @@ export class ResultExportXlsComponent implements OnInit {
     }
 
     getTranslateName(name){
-      let translate = this.translate.instant(name.replace(/([A-Z])/g, (g) => g[0].toUpperCase()));
-      console.log(translate);
+      let bigName= name.replace(/\.?([A-Z]+)/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "");
+      bigName = bigName.toUpperCase();
+      let translate = this.translate.instant(bigName);
       return translate;
     }
 

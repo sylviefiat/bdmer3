@@ -105,13 +105,13 @@ export interface ResultPlatform {
 }
 
 export interface ResultStock {
-    stock ?: number;
-    stockCI ?: number;
-    stockCA ?: number;
-    stockLegal ?: number;
-    density : number;
-    densityCI : number;
-    densityCA : number;
-    densityPerHA : number;
-    densityLegal ?: number;
+    stock ?: number;                       // stock
+    stockCI ?: number;                     // intervalle de confiance stock
+    stockCA ?: number;                     // hypothèse conservatrice stock
+    stockLegal ?: number;                  // Stock (taille légale)
+    density : number;                      // abondance / surface
+    densityCI : number;                    // intervalle de confiance densité
+    densityCA : number;                    // hypothèse conservatrice  densité
+    densityPerHA : number;                 // densité par hectare
+    densityLegal ?: number;                // densité de taille légale
 }

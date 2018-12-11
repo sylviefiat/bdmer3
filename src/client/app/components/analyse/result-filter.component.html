@@ -1,11 +1,11 @@
 <mat-card class="container">
   <mat-card-title-group>
-    <mat-card-title>{{'FILTER' | translate}}</mat-card-title>        
+    <mat-card-title>{{'FILTER_RESULTS' | translate}}</mat-card-title>        
   </mat-card-title-group>
   <mat-card-content>
     <mat-card-subtitle>{{'LAYERS' | translate}}</mat-card-subtitle>
     <mat-checkbox [checked]="showStations" (change)="showStationsEmitter.emit($event)">{{ 'STATIONS' | translate}} ({{ (typeShow === 'A' ? 'ABUNDANCY' : 'BIOMASS') | translate }})</mat-checkbox>
-        <mat-checkbox [checked]="showStationsCatches" (change)="showStationsCatchsEmitter.emit($event)">{{ 'STATIONS' | translate}} ({{ 'NB_CATCHES' | translate }})</mat-checkbox>
+        <mat-checkbox [checked]="showStationsCatches" (change)="showStationsCatchesEmitter.emit($event)">{{ 'STATIONS' | translate}} ({{ 'NB_CATCHES' | translate }})</mat-checkbox>
     <mat-checkbox [checked]="showZones" (change)="showZonesEmitter.emit($event)">{{ 'ZONES' | translate}}*</mat-checkbox>
     <p><mat-checkbox [checked]="showZonesNoRatio" (change)="showZoneNoEmitter.emit($event)"> <span class="legend-stripe"></span> <span class="note">{{ 'ZONES_NO_RATIO' | translate}}</span></mat-checkbox></p>
     <p class="note" *ngIf="platformType==0">* {{'CLICK_ZONE' | translate}}</p>
@@ -22,7 +22,7 @@
   <mat-card-content class="legend">
     <div class="stationLegend" *ngIf="showStations || showStationsCatches">
       <mat-card-subtitle> {{'STATIONS' | translate}}</mat-card-subtitle>
-      <div *ngFor="let item of legend">
+      <div *ngFor="let item of getLegend(showStations)">
         <span class="legend-circle" [style.width]="item.size+'px'" [style.height]="item.size+'px'"></span>              
         <span>{{item.value}} </span><span>{{getUnit('station')}}</span>
       </div>

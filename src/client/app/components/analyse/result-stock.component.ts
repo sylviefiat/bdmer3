@@ -13,7 +13,8 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
     template: `
         <div>            
             <mat-card class="large">
-              <mat-card-title>{{'STOCK' | translate}}</mat-card-title>
+              <mat-card-title>{{'STOCK' | translate }}</mat-card-title>
+              <mat-card-subtitle>{{'STOCK_STATS' | translate }}</mat-card-subtitle>
               <div>{{ 'NB_SURVEYS' | translate}}: {{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
               <div>{{ 'PERIOD_COVERED' | translate}}: {{ displayYears() }}</div>
             </mat-card>
@@ -24,7 +25,9 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                   <mat-card-subtitle>{{ 'ASSESMENT_REPORT' | translate }}</mat-card-subtitle>
                   <mat-card-content>
                     <div>{{ 'NB_ZONES_RATIO_OK' | translate}}: {{ sp.resultPerPlatform[0].nbZones | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'SURFACE_TOTALE_ZONES' | translate}}: {{ getSurfaceInKm2(sp.resultPerPlatform[0].surface) | number:'1.0-0':'fr' }}</div>
                     <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStations | number:'1.0-0':'fr' }}</div>                
+                    <div>{{ 'AVERAGE_STATIONS' | translate}}: {{ getAveStation(sp.resultPerPlatform[0]) | number:'1.0-0':'fr' }}</div>
                     <div>
                         {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
                         &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}
@@ -39,8 +42,9 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                   </mat-card-content>
                   <mat-card-subtitle>{{ 'FISHER_CATCHES_REPORT' | translate }}</mat-card-subtitle>
                   <mat-card-content>
-                    <div>{{ 'NB_ZONES' | translate}}: {{ sp.resultPerPlatform[0].nbZonesTotal | number:'1.0-0':'fr' }}</div>
-                    <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'VESSELS_NAMES' | translate}}: {{ getVesselsNames() }}</div>
+                    <div>{{ 'NB_TRIPS' | translate}}: {{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'NB_DIVES' | translate}}: {{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
                     <div>{{ 'NB_CATCHES' | translate}}: {{ sp.resultPerPlatform[0].nbCatches | number:'1.0-0':'fr' }}</div>
                   </mat-card-content>
                 </div>
@@ -67,7 +71,7 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
       }
       mat-card {
         width: 500px;
-        height: 300px;
+        height: 350px;
         margin: 15px;
       }
       .bold {
@@ -110,6 +114,20 @@ export class ResultStockComponent implements OnInit {
       return dy + " - "+dateStart+ "/" + dateEnd;
     }
 
+    getVesselsNames(){
+      let vn = "";
+      for(let platform of this.analyseData.usedPlatforms){
+        vn = (vn.length >0 ? ", ":"") + platform.code;
+      }
+      return vn;
+    }
 
+    getSurfaceInKm2(surface){
+      return Number(surface)/1000000;
+    }
+
+    getAveStation(Resultplatform) {
+      return Resultplatform.nbStations / (Number(Resultplatform.surface)/1000000);
+    }
 
 }
