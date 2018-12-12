@@ -113,5 +113,6 @@ export interface ResultStock {
     densityCI : number;                    // intervalle de confiance densité
     densityCA : number;                    // hypothèse conservatrice  densité
     densityPerHA : number;                 // densité par hectare
+    densityCAPerHA : number;               // hypothèse conservatrice de la densité par hectare
     densityLegal ?: number;                // densité de taille légale
 }

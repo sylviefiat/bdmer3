@@ -538,5 +538,7 @@
   "RESULT_PER_PLATFORM":"Resultts per platforme",
   "RESULT_PER_ZONE":"Resultts per area",
   "RESULT_PER_STATION":"Resultts per station",
-  "RESULT_PER_SURVEY":"Resultts per survey"
+  "RESULT_PER_SURVEY":"Resultts per survey",
+  "KM2":"km²",
+  "DENSITYCA_PER_HA":"Conservative hypothesis"
 }

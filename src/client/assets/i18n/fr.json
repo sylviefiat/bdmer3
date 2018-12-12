@@ -538,5 +538,7 @@
   "RESULT_PER_PLATFORM":"Résultats par plateforme",
   "RESULT_PER_ZONE":"Résultats par zone",
   "RESULT_PER_STATION":"Résultats par station",
-  "RESULT_PER_SURVEY":"Résultats par relevé"
+  "RESULT_PER_SURVEY":"Résultats par relevé",
+  "KM2":"km²",
+  "DENSITYCA_PER_HA":"Hypothèse conservatrice"
 }

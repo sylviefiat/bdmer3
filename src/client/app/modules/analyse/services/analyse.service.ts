@@ -34,7 +34,7 @@ export class AnalyseService {
         for(let zone of this.data.usedZones){
             this.stationsZones[zone.properties.code]=[];
             for(let st of stations){
-                if(MapService.booleanInPolygon(st,MapService.getPolygon(zone,{}))){
+                if(st.codePlatform === zone.codePlatform && MapService.booleanInPolygon(st,MapService.getPolygon(zone,{}))){
                     this.stationsZones[zone.properties.code]=[...this.stationsZones[zone.properties.code],st.properties.code];
                     stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
                 }
@@ -127,7 +127,9 @@ export class AnalyseService {
         .subscribe();  
         let platformObs = from(this.data.usedPlatforms)
             .pipe(
-                mergeMap((platform: Platform) => this.getResultPlatform(rsp2.resultPerZone.filter(rpz => rpz.codePlatform===platform.code),platform)),
+                mergeMap((platform: Platform) => {
+                    return this.getResultPlatform(rsp2.resultPerZone.filter(rpz => rpz.codePlatform===platform.code),platform)
+                }),
                 mergeMap((rplatform: ResultPlatform) => {
                     rsp2.resultPerPlatform.push(rplatform);
                     return of(rplatform);
@@ -347,12 +349,13 @@ export class AnalyseService {
         rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
         // stock si platform type = site
         if(this.data.usedCountry.platformType===VESSEL){
-            rplatform.resultStock = { density:0, densityCI: 0, densityCA:0, densityPerHA:0 };
+            rplatform.resultStock = { density:0, densityCI: 0, densityCA:0, densityPerHA:0, densityCAPerHA:0 };
             rplatform.resultStock.density = rplatform.averageAbundance * rplatform.nbStrates;
             rplatform.resultStock.densityCI = rplatform.confidenceIntervalAbundance * rplatform.nbStrates;
             rplatform.resultStock.densityCA = rplatform.resultStock.density - rplatform.resultStock.densityCI;
             rplatform.resultStock.densityPerHA = rplatform.resultStock.density / (rplatform.surface / 10000);
-            if(rplatform.averageAbundanceLegal){
+            rplatform.resultStock.densityCAPerHA = rplatform.resultStock.densityCA / (rplatform.surface / 10000);
+            if(rplatform.averageAbundanceLegal) {
                 rplatform.resultStock.densityLegal = rplatform.averageAbundanceLegal * rplatform.nbStrates;
             }
         }

@@ -25,15 +25,16 @@ import { Results, Data, ResultSurvey , ResultStock} from '../../modules/analyse/
                   <mat-card-subtitle>{{ 'ASSESMENT_REPORT' | translate }}</mat-card-subtitle>
                   <mat-card-content>
                     <div>{{ 'NB_ZONES_RATIO_OK' | translate}}: {{ sp.resultPerPlatform[0].nbZones | number:'1.0-0':'fr' }}</div>
-                    <div>{{ 'SURFACE_TOTALE_ZONES' | translate}}: {{ getSurfaceInKm2(sp.resultPerPlatform[0].surface) | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'SURFACE_TOTALE_ZONES' | translate}}: {{ getSurfaceInKm2(sp.resultPerPlatform[0].surface) | number:'1.0-0':'fr' }} {{ 'KM2' | translate }}</div>
                     <div>{{ 'NB_STATIONS' | translate}}: {{ sp.resultPerPlatform[0].nbStations | number:'1.0-0':'fr' }}</div>                
-                    <div>{{ 'AVERAGE_STATIONS' | translate}}: {{ getAveStation(sp.resultPerPlatform[0]) | number:'1.0-0':'fr' }}</div>
+                    <div>{{ 'AVERAGE_STATIONS' | translate}}: {{ getAveStation(sp.resultPerPlatform[0]) | number:'1.0-1':'fr' }}</div>
                     <div>
                         {{ 'TOTAL_IND' | translate }}:<span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
                         &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}
                     </div>
                     <div>{{ 'CONSERVATIVE_IND' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
-                    <div>{{ 'DENSITY_PER_HA' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityPerHA | number:'1.0-0':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
+                    <div>{{ 'DENSITY_PER_HA' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityPerHA | number:'1.0-1':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
+                    <div>{{ 'DENSITYCA_PER_HA' | translate }}: {{ sp.resultPerPlatform[0].resultStock.densityCAPerHA | number:'1.0-1':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
                     <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">
                         {{ 'TOTAL_STOCK' | translate }}: <span class="bold">{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stock) | number:'1.0-2':'fr' }} {{'TONS' | translate}} </span>
                         &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} {{'TONS' | translate}}
@@ -117,7 +118,7 @@ export class ResultStockComponent implements OnInit {
     getVesselsNames(){
       let vn = "";
       for(let platform of this.analyseData.usedPlatforms){
-        vn = (vn.length >0 ? ", ":"") + platform.code;
+        vn = (vn.length >0 ? vn+", ":"") + platform.code;
       }
       return vn;
     }
