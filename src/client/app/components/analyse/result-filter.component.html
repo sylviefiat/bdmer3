@@ -29,7 +29,7 @@
     </div>
     <div class="zoneLegend" *ngIf="showZones">
       <mat-card-subtitle> {{'ZONES' | translate}}</mat-card-subtitle>
-      <div *ngFor="let item of legend">
+      <div *ngFor="let item of legend_zone">
         <span class="legend-key" [style.backgroundColor]="item.color"></span>
         <span>{{item.value}} </span><span>{{getUnit('zone')}}</span>
       </div>

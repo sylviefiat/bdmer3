@@ -81,10 +81,15 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   @Output() showStationsCatchesEmitter = new EventEmitter<string>();
   @Output() showZonesEmitter = new EventEmitter<string>();
   @Output() showZoneNoEmitter = new EventEmitter<string>();
-  legend = [ {value:'0-1',color:'#FFEDA0',size:4}, {value:'1-25',color:'#FED976',size:6}, 
-    {value:'25-50',color:'#FEB24C',size:8},{value:'50-75',color:'#FD8D3C',size:10}, 
-    {value:'75-100',color:'#FC4E2A',size:12}, {value:'100-250',color:'#E31A1C',size:14}, 
-    {value:'250-500',color:'#BD0026',size:16}, {value:'500+',color:'#800026',size:18}
+  legend_zone = [ {value:'0-1',color:'#FFEDA0',size:4}, {value:'1-2',color:'#FED976',size:6}, 
+    {value:'2-3',color:'#FEB24C',size:8},{value:'3-5',color:'#FD8D3C',size:10}, 
+    {value:'5-7',color:'#FC4E2A',size:12}, {value:'7-10',color:'#E31A1C',size:14}, 
+    {value:'10-15',color:'#BD0026',size:16}, {value:'15+',color:'#800026',size:18}
+  ];
+  legend_station = [ {value:'0-1',color:'#FFEDA0',size:4}, {value:'1-5',color:'#FED976',size:6}, 
+    {value:'5-10',color:'#FEB24C',size:8},{value:'10-15',color:'#FD8D3C',size:10}, 
+    {value:'15-20',color:'#FC4E2A',size:12}, {value:'20-30',color:'#E31A1C',size:14}, 
+    {value:'30-40',color:'#BD0026',size:16}, {value:'40+',color:'#800026',size:18}
   ];
   legend_catches = [ {value:'0-1',color:'#FFEDA0',size:4}, {value:'1-5',color:'#FED976',size:6}, 
     {value:'5-10',color:'#FEB24C',size:8},{value:'10-20',color:'#FD8D3C',size:10}, 
@@ -120,7 +125,7 @@ export class ResultFilterComponent implements OnInit/*, AfterViewInit*/ {
   }
 
   getLegend(layerStation: boolean) {
-    return layerStation ? this.legend : this.legend_catches
+    return layerStation ? this.legend_station : this.legend_catches
   }
 
 }
