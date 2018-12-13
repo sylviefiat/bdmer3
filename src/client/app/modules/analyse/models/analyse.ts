@@ -87,6 +87,7 @@ export interface ResultZone {
 export interface ResultPlatform {
     codePlatform ?: string;
     surface: number;                       // surface en m²
+    surfaceTotal: number;                       // surface en m²
     nbStrates: number;                     // nombre de strates = somme strates total zones
     nbZones: number;                       // nombre de zones considérées
     nbZonesTotal: number;                  // nombre de zones total

@@ -319,6 +319,7 @@ export class AnalyseService {
         let rplatform : ResultPlatform = {
             codePlatform: platform ? platform.code : 'all',
             surface: 0,
+            surfaceTotal: 0,
             nbStrates: 0,
             nbZones: 0,
             nbZonesTotal: 0,
@@ -331,6 +332,7 @@ export class AnalyseService {
         };
         // stats globales
         rplatform.nbZonesTotal = rzones.length;
+        rplatform.surfaceTotal = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStationsTotal = this.getSum(rzones.map(rz => rz.nbStations));
         rplatform.nbCatches = this.getSum(rzones.map(rz => rz.nbCatches));
         // filter on zones taken in analysis (ie number of stations per ha is >0.2)

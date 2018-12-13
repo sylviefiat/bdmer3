@@ -1,0 +1,56 @@
+<div>            
+  <mat-card class="large">
+    <mat-card-title>{{'STOCK' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{'STOCK_STATS' | translate }}</mat-card-subtitle>
+    <div>{{ 'NB_SURVEYS' | translate}}: {{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
+    <div>{{ 'PERIOD_COVERED' | translate}}: {{ displayYears() }}</div>
+  </mat-card>
+  <div class="container">
+    <mat-card *ngFor="let sp of results.resultAll">
+      <mat-card-title>{{ sp.nameSpecies }}</mat-card-title>
+      <div *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">
+        <mat-card-subtitle>{{ 'ASSESMENT_REPORT' | translate }}</mat-card-subtitle>
+        <mat-card-content>
+          <div class="table three">
+            <div></div><div class="italic">{{'TOTAL' | translate}}</div><div class="italic">{{'INCLUDED' | translate}}</div>
+            <div>{{ 'NB_ZONES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbZonesTotal | number:'1.0-0':'fr' }}</div><div>{{ sp.resultPerPlatform[0].nbZones | number:'1.0-0':'fr' }}</div>
+            <div>{{ 'SURFACE' | translate}}</div><div>{{ getSurfaceInKm2(sp.resultPerPlatform[0].surfaceTotal) | number:'1.0-0':'fr' }} {{ 'KM2' | translate }}</div><div>{{ getSurfaceInKm2(sp.resultPerPlatform[0].surface) | number:'1.0-0':'fr' }} {{ 'KM2' | translate }}</div>
+            <div>{{ 'NB_STATIONS' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div><div>{{ sp.resultPerPlatform[0].nbStations | number:'1.0-0':'fr' }}</div>                
+            <div>{{ 'AVERAGE_STATIONS' | translate}}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'total') | number:'1.0-1':'fr' }}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'included') | number:'1.0-1':'fr' }}</div>
+          </div>
+        </mat-card-content>
+        <mat-card-content>
+          <div class="table two">
+            <div></div>
+            <div class="italic">{{ 'RESULT_TITLE' | translate }}</div>
+            <div>{{ 'TOTAL_IND' | translate }}</div>
+            <div><span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
+              &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }} 
+            </div>
+            <div>{{ 'CONSERVATIVE_IND' | translate }}</div>
+            <div>{{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
+            <div>{{ 'DENSITY_PER_HA' | translate }}</div>
+            <div>{{ sp.resultPerPlatform[0].resultStock.densityPerHA | number:'1.0-1':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
+            <div>{{ 'DENSITYCA_PER_HA' | translate }}</div>
+            <div>{{ sp.resultPerPlatform[0].resultStock.densityCAPerHA | number:'1.0-1':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
+            <div *ngIf="sp.resultPerPlatform[0].resultStock.stock">{{ 'TOTAL_STOCK' | translate }}</div>
+            <div *ngIf="sp.resultPerPlatform[0].resultStock.stock"> <span class="bold">{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stock) | number:'1.0-2':'fr' }} {{'TONS' | translate}} </span>
+              &plusmn;{{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCI) | number:'1.0-2':'fr' }} 
+            </div>
+            <div *ngIf="sp.resultPerPlatform[0].resultStock.stockCA">{{ 'CONSERVATIVE_IND' | translate }}</div>
+            <div *ngIf="sp.resultPerPlatform[0].resultStock.stockCA"> {{ getInTonnes(sp.resultPerPlatform[0].resultStock.stockCA) | number:'1.0-2':'fr' }}  {{'TONS' | translate}}</div>
+          </div>
+        </mat-card-content>
+        <mat-card-subtitle>{{ 'FISHER_CATCHES_REPORT' | translate }}</mat-card-subtitle>
+        <mat-card-content>
+          <div class="table two">
+            <div>{{ 'VESSELS_NAMES' | translate}}</div><div>{{ getVesselsNames(sp) }}</div>
+            <div>{{ 'NB_TRIPS' | translate}}</div><div>{{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
+            <div>{{ 'NB_DIVES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
+            <div>{{ 'NB_CATCHES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbCatches | number:'1.0-0':'fr' }}</div>
+          </div>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  </div>
+</div>

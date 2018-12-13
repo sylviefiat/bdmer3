@@ -496,11 +496,11 @@
   "EMPTY_COORD":"One or many coordinates are 0",
   "ALL_SPECIES":"All species",
   "ALL_SURVEYS":"All surveys",
-  "DENSITY_PER_HA": "Estimate average density",
-  "ZONES_NO_RATIO": "Zones not included in stock estimates (< stations / km²)",
+  "DENSITY_PER_HA": "Avergae density estimate",
+  "ZONES_NO_RATIO": "Zones not included in stock estimates (< 0.2 stations / km²)",
   "NB_SURVEYS":"Number of surveys",
   "PERIOD_COVERED":"Period covered",
-  "NB_ZONES_RATIO_OK":"Number of zones ",
+  "NB_ZONES_RATIO_OK":"Zones included in stock estimation",
   "NB_ZONES":"Number of zones",
   "NB_STATIONS":"Number of stations",
   "NB_CATCHES":"Catches",
@@ -540,5 +540,7 @@
   "RESULT_PER_STATION":"Resultts per station",
   "RESULT_PER_SURVEY":"Resultts per survey",
   "KM2":"km²",
-  "DENSITYCA_PER_HA":"Conservative hypothesis"
+  "DENSITYCA_PER_HA":"Conservative hypothesis",
+  "OUT_OF":"out of",
+  "INCLUDED":"included in stock estimation"
 }

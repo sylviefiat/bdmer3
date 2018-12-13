@@ -498,10 +498,10 @@
   "ALL_SPECIES":"Toutes espèces",
   "ALL_SURVEYS":"Tous les relevés",
   "DENSITY_PER_HA": "Densité moyenne estimée",
-  "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (< stations / km²)",
+  "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (< 0.2 stations / km²)",
   "NB_SURVEYS":"Nombre de relevés",
   "PERIOD_COVERED":"Période considérée",
-  "NB_ZONES_RATIO_OK":"Nombre de zones ",
+  "NB_ZONES_RATIO_OK":"Zones inclues dans l'estimation du stock",
   "NB_ZONES":"Nombre de zones",
   "NB_STATIONS":"Nombre de stations",
   "NB_CATCHES":"Nombre d'individus pêchés",
@@ -540,5 +540,7 @@
   "RESULT_PER_STATION":"Résultats par station",
   "RESULT_PER_SURVEY":"Résultats par relevé",
   "KM2":"km²",
-  "DENSITYCA_PER_HA":"Hypothèse conservatrice"
+  "DENSITYCA_PER_HA":"Hypothèse conservatrice",
+  "OUT_OF":"sur un total de",
+  "INCLUDED":"inclus dans l'estimation du stock"
 }

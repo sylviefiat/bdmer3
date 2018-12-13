@@ -137,7 +137,7 @@ export const getZonesAvailables = createSelector(getUsedPlatforms, getUsedSurvey
     if (!platforms || !surveys) return zones;
     for (let survey of surveys.filter(s => s.counts.length > 0)) {
         for(let station of (<any>platforms.map(p => p.stations)).flatMap(stations=>stations).filter((station:Station) => survey.counts.map(c => c.codeStation).indexOf(station.properties.code)>=0)){
-            let sz = (<any>platforms.map(p => p.zones)).flatMap(zones=>zones).filter((zone:Zone) => MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name })));
+            let sz = (<any>platforms.map(p => p.zones)).flatMap(zones=>zones).filter((zone:Zone) => zone.codePlatform===station.codePlatform && MapService.booleanInPolygon(station,MapService.getPolygon(zone, { name: zone.properties.name })));
             zones = [...zones, ...sz.filter(z => zones.indexOf(z) < 0)];
         }
     }
