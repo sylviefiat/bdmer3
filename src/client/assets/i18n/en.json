@@ -546,5 +546,6 @@
   "OUT_OF":"out of",
   "INCLUDED":"included in stock estimation",
   "PLATFORM_NO_DATA":"Disabled platforms don't have enought data to produce a stock estimation",
-  "DENSITY_CAPER_HA":"Conservative hypothesis (density)"
+  "DENSITY_CAPER_HA":"Conservative hypothesis (density)",
+  "HARVEST_SIZES":"Countries with minimum harvest size or weights"
 }

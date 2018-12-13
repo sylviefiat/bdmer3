@@ -12,7 +12,7 @@ import { Species } from './../../modules/datas/models/species';
           <mat-card-subtitle *ngIf="code">{{ code }}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
-          <h5 mat-subheader>{{ 'SPECIES_COUNTRIES' | translate }}</h5>
+          <h5 mat-subheader>{{ 'HARVEST_SIZES' | translate }}</h5>
           <ul>
             <li *ngFor="let dim of species.legalDimensions; let last = last;">
             {{ dim.codeCountry }}<span *ngIf="!last">,&nbsp;</span> 
