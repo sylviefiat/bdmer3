@@ -9,6 +9,7 @@ import { Platform } from '../../modules/datas/models/index';
     template: `
     <div [formGroup]="form"> 
       <h2>{{ 'SELECT_PLATFORMS' | translate }}</h2>
+      <div class="norecord">{{ 'PLATFORM_NO_DATA' | translate }}</div>
       <mat-checkbox (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
@@ -27,6 +28,12 @@ import { Platform } from '../../modules/datas/models/index';
       margin-bottom:10px;
       padding:5px;
       border: 1px solid grey;
+    }
+    .norecord {
+      color: orange;
+      padding-bottom:10px;
+      font-size: smaller;
+      font-style: italic;
     }
     `]
 })
@@ -56,7 +63,11 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
 
     newPlatform(p: Platform) {
         return this._fb.group({
-            platform: new FormControl(this.checkedPlatforms.filter(platform => platform.code === p.code).length > 0)
+            platform: new FormControl({
+                value: this.checkedPlatforms.filter(platform => platform.code === p.code).length > 0, 
+                disabled: !(p.zones.length > 0 && p.surveys.length > 0 && p.stations.length > 0 && 
+                    (<any>p.surveys).flatMap(s => s.counts).length > 0)
+            })
         });
     }
 
@@ -80,9 +91,21 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
 
     checkAll(ev) {
         const control = <FormArray>this.form.controls['platforms'];
-        control.value.forEach(x => x.platform = ev.checked)
-        control.setValue(control.value);
-        this.checkedPlatforms = (ev.checked) ? this.defaultPlatforms : [];
+        control.controls.forEach((x,i) => {
+            if(!x.disabled){
+                x.value.platform = ev.checked;
+                if(ev.checked){
+                    this.checkedPlatforms = [...this.checkedPlatforms.filter(cp => cp.code !== this.defaultPlatforms[i].code),this.defaultPlatforms[i]];
+                } else {
+                    this.checkedPlatforms = [...this.checkedPlatforms.filter(cp => cp.code !== this.defaultPlatforms[i].code)];
+                }
+                control.setControl(i,x);
+            }
+        })
+        //control.value.forEach(x => x.platform = ev.checked);
+        //control.setControl (control.controls);
+       // control.setValue(control.value);
+        //this.checkedPlatforms = (ev.checked) ? this.defaultPlatforms : [];
         this.platformEmitter.emit(this.checkedPlatforms);
     }
 

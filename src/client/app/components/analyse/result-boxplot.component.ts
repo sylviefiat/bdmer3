@@ -148,7 +148,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                     dataStockCA[rps.codePlatform][sp.scientificName] = [];
                 }
                 let rspp = rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code).length > 0 ? rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code)[0] : null;
-                let value = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.averageBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.averageAbundance))) : null;
+                let value = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.averageBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.abundanceTotal))) : null;
                 let valuConf = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalAbundance))) : (value ? 0 : null);
                 let valueStock = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stock)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.density))) : null;
                 let valuStockCA = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stockCA)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.densityCA))) : (value ? 0 : null);

@@ -121,7 +121,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
                         let marker = MapService.getFeature(s, {
                             code: s.properties.code,
                             catches: rt.nbCatches,
-                            abundancy: rt.abundancePerHA,
+                            abundancy: rt.densityPerHA,
                             biomass: rt.biomassPerHA,
                             species: rsp.codeSpecies,
                             survey: this.results.resultPerSurvey[i].codeSurvey

@@ -357,6 +357,7 @@
   "BIOMASS": "Biomasse",
   "ABUNDANCY": "Abondance",
   "ABUNDANCE": "Abondance",
+  "ABUNDANCE_TOTAL": "Abondance totale",
   "BIOMASS_UNIT": "Kg",
   "ABUNDANCY_UNIT": "ind.",
   "BIOMASS_HA_UNIT": "Kg/ha",
@@ -512,6 +513,7 @@
   "VESSELS_NAMES":"Noms des navires",
   "STOCK_STATS":"L’évaluation de stock a été réalisée par inférence statistique, sur la base des abondances observées sur les stations dans les zones où suffisamment de données ont été collectées (plus d’une station pour 5 km² en moyenne). Les résultats ci-dessous sont donc des estimations dont la précision est indiquée par l’intervalle de confiance à 95%.",
   "SURFACE_TOTALE_ZONES":"Surface totale des zones",
+  "SURFACE_TOTAL":"Surface totale",
   "AVERAGE_STATIONS":"Nombre moyen de stations par km²",
   "NB_STRATES":"Nombre de strates",
   "NB_ZONES_TOTAL":"Nombre de zones total",
@@ -542,5 +544,7 @@
   "KM2":"km²",
   "DENSITYCA_PER_HA":"Hypothèse conservatrice",
   "OUT_OF":"sur un total de",
-  "INCLUDED":"inclus dans l'estimation du stock"
+  "INCLUDED":"inclus dans l'estimation du stock",
+  "PLATFORM_NO_DATA":"Les plateformes désactivées n'ont pas assez de données pour produire une évaluation de stock",
+  "DENSITY_CAPER_HA":"Hypothèse conservatrice (densité)"
 }

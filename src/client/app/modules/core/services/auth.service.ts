@@ -118,7 +118,7 @@ export class AuthService {
       live: true,
       retry: true
     }).on('error', error => {
-      console.error(JSON.stringify(error));
+      //console.error(JSON.stringify(error));
     });
   }
 }

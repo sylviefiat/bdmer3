@@ -53,6 +53,8 @@ export interface ResultSpecies {
 
 export interface ResultStation {
     codeStation: string;
+    latitude: number;
+    longitude: number;
     surface: number;                       // surface de la station en m²
     nbCatches: number;                      // nombre total d'individus pêchés
     abundance: number;                     // abondance = nombre de mesures - mesures non considérées par l'analyse
@@ -60,7 +62,7 @@ export interface ResultStation {
     biomass ?: number;                     // somme des biomasses
     biomassLegal ?: number;                // somme des biommasses des individus de taille légale
     biomassPerHA ?: number;                // biomasse par hectare = somme biomasses * (10000 / surface station)
-    abundancePerHA: number;                // abondance par hectare = abondance * (10000 / surface station)
+    densityPerHA: number;                // densité par hectare = abondance * (10000 / surface station)
 }
 
 export interface ResultZone {
@@ -94,12 +96,12 @@ export interface ResultPlatform {
     nbStations: number;                    // nombre de stations considérées
     nbStationsTotal: number;               // nombre de stations total
     nbCatches: number;                      // nombre total d'individus pêchés
-    averageAbundance: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
-    averageAbundanceLegal ?:number;        // moyenne abondance par station individus de taille légale
+    abundanceTotal: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
+    abundanceLegal ?:number;        // moyenne abondance par station individus de taille légale
     averageBiomassLegal ?:number;          // moyenne biomasse par station individus de taille légale
     averageBiomass ?: number;              // moyenne biomasse par station = somme(nb strates zones x moyenne biomass stations zone) / nb strates total
-    varianceAbundance: number;             // Variance abondance = somme[nb strates zone^2 x écart type abondance zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
-    varianceBiomass ?: number;             // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    //varianceAbundance: number;             // Variance abondance = somme[nb strates zone^2 x écart type abondance zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    //varianceBiomass ?: number;             // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
     confidenceIntervalAbundance: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
     confidenceIntervalBiomass ?: number;   // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
     resultStock ?: ResultStock;

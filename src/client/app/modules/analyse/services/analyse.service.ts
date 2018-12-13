@@ -212,7 +212,7 @@ export class AnalyseService {
      }
 
     getResultStation(survey: Survey, species: Species, station: Station): Observable<ResultStation> {
-        let rstation : ResultStation = { codeStation: station.properties.code, surface: survey.surfaceStation, nbCatches:0, abundance: 0, abundancePerHA: 0};        
+        let rstation : ResultStation = { codeStation: station.properties.code, latitude: station.geometry.coordinates[1], longitude: station.geometry.coordinates[0], surface: survey.surfaceStation, nbCatches:0, abundance: 0, densityPerHA: 0};        
         let counts:any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = counts.flatMap(c => c.mesures.filter(m => m.codeSpecies === species.code));
         let quantities = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code));
@@ -228,7 +228,7 @@ export class AnalyseService {
             rstation.abundanceLegal = mesures.filter(m => this.isInLegalDims(m,species)).length
         }
         // ABONDANCE PER HECTARE STATION = ABONDANCE STATION x (10000 / SURFACE STATION)
-        rstation.abundancePerHA = Number(rstation.abundance) * (10000 / Number(rstation.surface));
+        rstation.densityPerHA = Number(rstation.abundance) * (10000 / Number(rstation.surface));
         // Pas de relation taille/poids = pas de calcul biomasse
         if (this.data.usedMethod.method !== 'NONE' && mesures.length !==0) {
             let biomasses = mesures.filter(m => this.isInDims(m,species)).map(m => this.getBiomass(this.data.usedMethod, m, species));            
@@ -286,7 +286,7 @@ export class AnalyseService {
         let rzone : ResultZone = { codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0,
             nbCatches:0, ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
             abundancePerHA: 0, SDabundancePerHA: 0 };
-        //let rstations = rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation)>=0);
+
         rzone.nbStations = rstations.length;
         rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
         rzone.nbCatches = this.getSum(rstations.map(rs => rs.nbCatches));
@@ -294,7 +294,7 @@ export class AnalyseService {
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
         rzone.abundancePerHA = Number(rzone.abundance) * 10000 / Number(rzone.surface);
-        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.abundancePerHA));
+        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.densityPerHA));
 
         if(rstations.length > 0 && rstations[0].abundanceLegal){
             rzone.averageAbundanceLegal = this.getAverage(rstations.map(rs => rs.abundanceLegal), rstations.length);
@@ -326,10 +326,11 @@ export class AnalyseService {
             nbStations: 0,
             nbStationsTotal: 0,
             nbCatches: 0,
-            averageAbundance: 0,
-            varianceAbundance: 0,
+            abundanceTotal: 0,            
             confidenceIntervalAbundance: 0
         };
+        let varianceAbundance = 0;
+        let varianceBiomass = 0;
         // stats globales
         rplatform.nbZonesTotal = rzones.length;
         rplatform.surfaceTotal = this.getSum(rzones.map(rz => rz.surface));
@@ -343,30 +344,30 @@ export class AnalyseService {
         rplatform.nbZones = rzones.length;
         rplatform.nbStations = this.getSum(rzones.map(rz => rz.nbStations));
 
-        rplatform.averageAbundance = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
+        rplatform.abundanceTotal = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
         if(rzones.length>0 && rzones[0].averageAbundanceLegal){
-            rplatform.averageAbundanceLegal = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
+            rplatform.abundanceLegal = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageAbundance))/rplatform.nbStrates;
         }
-        rplatform.varianceAbundance = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDabundancePerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
-        rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(rplatform.varianceAbundance) * T;
+        varianceAbundance = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDabundancePerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);
+        rplatform.confidenceIntervalAbundance = angularMath.squareOfNumber(varianceAbundance) * T;
         // stock si platform type = site
         if(this.data.usedCountry.platformType===VESSEL){
             rplatform.resultStock = { density:0, densityCI: 0, densityCA:0, densityPerHA:0, densityCAPerHA:0 };
-            rplatform.resultStock.density = rplatform.averageAbundance * rplatform.nbStrates;
+            rplatform.resultStock.density = rplatform.abundanceTotal * rplatform.nbStrates;
             rplatform.resultStock.densityCI = rplatform.confidenceIntervalAbundance * rplatform.nbStrates;
             rplatform.resultStock.densityCA = rplatform.resultStock.density - rplatform.resultStock.densityCI;
             rplatform.resultStock.densityPerHA = rplatform.resultStock.density / (rplatform.surface / 10000);
             rplatform.resultStock.densityCAPerHA = rplatform.resultStock.densityCA / (rplatform.surface / 10000);
-            if(rplatform.averageAbundanceLegal) {
-                rplatform.resultStock.densityLegal = rplatform.averageAbundanceLegal * rplatform.nbStrates;
+            if(rplatform.abundanceLegal) {
+                rplatform.resultStock.densityLegal = rplatform.abundanceLegal * rplatform.nbStrates;
             }
         }
         // si calcul biomasse
         if (this.data.usedMethod.method !== 'NONE') {
             // platform
             rplatform.averageBiomass = this.getSum(rzones.map(rz => rz.nbStrates * rz.averageBiomass))/rplatform.nbStrates;
-            rplatform.varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);            
-            rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(rplatform.varianceBiomass) * T;
+            varianceBiomass = this.getSum(rzones.map(rz => this.getPlatformZoneForVariance(rz.nbStrates, rz.SDBiomassPerHA, rz.nbStations))) / angularMath.powerOfNumber(rplatform.nbStrates, 2);            
+            rplatform.confidenceIntervalBiomass = angularMath.squareOfNumber(varianceBiomass) * T;
             // stock si platform type = site
             if(this.data.usedCountry.platformType===VESSEL){
                 rplatform.resultStock.stock = rplatform.averageBiomass * rplatform.nbStrates;

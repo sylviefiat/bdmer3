@@ -25,6 +25,7 @@ import * as html2canvas from 'html2canvas';
       <mat-card-title>{{ (results$ | async)?.name }}</mat-card-title>
       <mat-card-actions>
         <bc-result-rappel *ngIf="analyseData$ | async" [analyseData]="analyseData$ | async" [locale]="locale$ | async"></bc-result-rappel>
+        <bc-result-export-xls *ngIf="(analyseData$ | async) && (results$ | async)" [analyseData]="analyseData$ | async" [results]="results$ | async" [locale]="locale$ | async"></bc-result-export-xls>
       </mat-card-actions>
       
     </mat-card>
@@ -37,8 +38,7 @@ import * as html2canvas from 'html2canvas';
     </div>
 
     <div>
-      <button (click)="captureScreen()">PRINT</button>
-      <bc-result-export-xls [analyseData]="analyseData$ | async" [results]="results$ | async" [locale]="locale$ | async"></bc-result-export-xls>
+      <button (click)="captureScreen()">PRINT</button>      
     </div>
   `,
   styles: [

@@ -89,20 +89,20 @@ export class ResultExportXlsComponent implements OnInit {
     exportPerSurvey() {
       let wb: WorkBook = { SheetNames: [], Sheets: {} };
         let dashedName = this.results.name.replace(' ', '-');
-        let ws = [];
-        let oldYearSurvey = 0, i=1;
+        let ws = [], ws_temp = [];
         for(let resultSurvey of this.results.resultPerSurvey){
-          i = oldYearSurvey===resultSurvey.yearSurvey ? i+1 : 1;
           for (let resultspecies of resultSurvey.resultPerSpecies) {              
-              let ws_name =  resultSurvey.yearSurvey +" ("+i+")" + " " + resultspecies.nameSpecies;
-              // excel sheet name cannot exceed 31 chars
-              ws_name = ws_name.substr(0,31);
-              oldYearSurvey = resultSurvey.yearSurvey;
-              wb.SheetNames.push(ws_name);
-              wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform,{surveyCode:resultSurvey.codeSurvey, speciesCode: resultspecies.nameSpecies}));
+              let ws_name =  resultspecies.nameSpecies;
+              if(wb.SheetNames.indexOf(ws_name)<0){
+                wb.SheetNames.push(ws_name);  
+                ws_temp[ws_name] = [];
+              }              
+              ws_temp[ws_name]=[...ws_temp[ws_name],...this.flat(resultspecies.resultPerPlatform,{surveyCode:resultSurvey.codeSurvey})];
           }
         }
-
+        for(let name in ws_temp){
+          wb.Sheets[name] = utils.json_to_sheet(ws_temp[name]);
+        }
         const wbout = write(wb, {
             bookType: 'xlsx', bookSST: true, type:
                 'binary'
@@ -120,16 +120,20 @@ export class ResultExportXlsComponent implements OnInit {
     }
 
     flat(data, addedProperties): any[] {
-        let flatArray = [];        
+        let flatArray = [];
+
         for(let i=0; i < data.length; i++) {
-          let flatObject = addedProperties;
+          let flatObject = {};
+          for (let prop in addedProperties) {
+            flatObject[this.getTranslateName(prop)] = Number.isNaN(addedProperties[prop])?0:addedProperties[prop];
+          }
           for (let prop in data[i]) {
               if (typeof data[i][prop] === 'object') {
                   for (var inProp in data[i][prop]) {
-                      flatObject[this.getTranslateName(inProp)] = data[i][prop][inProp];
+                      flatObject[this.getTranslateName(inProp)] = (Number.isNaN(data[i][prop][inProp]) || data[i][prop][inProp].length<=0)?0:data[i][prop][inProp];
                   }
               } else {
-                  flatObject[this.getTranslateName(prop)] = data[i][prop];
+                  flatObject[this.getTranslateName(prop)] = (Number.isNaN(data[i][prop]) || data[i][prop].length<=0)?0:data[i][prop];
               }
           }
           flatArray.push(flatObject);
