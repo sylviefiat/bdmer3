@@ -524,6 +524,10 @@
   "AVERAGE_BIOMASS_LEGAL":"Biomasse moyenne des individus de taille légale",
   "VARIANCE_ABUNDANCE":"Variance (Abondance)",
   "VARIANCE_BIOMASS":"Variance (Biomasse)",
+  "ABUNDANCE_CI":"Intervalle de confiance (Abondance)",
+  "ABUNDANCE_CA":"Hypothèse conservatrice (Abondance)",
+  "ABUNDANCE_LEGAL":"Abondance des individus de taille légale",
+  "CONFIDENCE_INTERVAL_ABUNDANCE":"Intervalle de confiance (Abondance)",
   "CONFIDENCE_INTERVAL_BIOMASS":"Intervalle de confiance (Biomasse)",
   "STOCK":"Stock",
   "STOCK_CI":"Intervalle de confiance (Stock)",
@@ -547,5 +551,7 @@
   "INCLUDED":"inclus dans l'estimation du stock",
   "PLATFORM_NO_DATA":"Les plateformes désactivées n'ont pas assez de données pour produire une évaluation de stock",
   "DENSITY_CAPER_HA":"Hypothèse conservatrice (densité)",
-  "HARVEST_SIZES":"Pays ayant des mesures de taille ou de poids réglementaires"
+  "HARVEST_SIZES":"Pays ayant des mesures de taille ou de poids réglementaires",
+  "FISHING_EFFORT":"Effort de pêche",
+  "INDIVIDUAL_DIVES":"Plongées individuelles"
 }

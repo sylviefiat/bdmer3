@@ -46,7 +46,7 @@
           <div class="table two">
             <div>{{ 'VESSELS_NAMES' | translate}}</div><div>{{ getVesselsNames(sp) }}</div>
             <div>{{ 'NB_TRIPS' | translate}}</div><div>{{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
-            <div>{{ 'NB_DIVES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div>
+            <div>{{ 'FISHING_EFFORT' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }} {{ 'INDIVIDUAL_DIVES' | translate}}</div>
             <div>{{ 'NB_CATCHES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbCatches | number:'1.0-0':'fr' }}</div>
           </div>
         </mat-card-content>
