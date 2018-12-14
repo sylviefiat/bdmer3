@@ -149,14 +149,14 @@ export class AnalyseStationComponent implements OnInit {
     ngOnInit() {
         this.display$=of(true);
         this.stationsSubscription = this.stations$.subscribe(stations => {
-            if(this.defaultStations.length===0 || this.defaultStations.length !== stations.length){
+            //if(this.defaultStations.length===0 || this.defaultStations.length !== stations.length){
                 this.defaultStations = stations;
                 this.checkedStations = this.defaultStations;
                 this.initStations();
                 if(stations && stations.length > 0){
                     this.layerStations$ = of(Turf.featureCollection(stations.map(station => Turf.point(station.geometry.coordinates,{code: station.properties.code, checked: true}))));
                 }
-            }
+            //}
         });
         this.zonesSubscription = this.usedZones$.subscribe(zones => {
             let bounds = new LngLatBounds();            
@@ -200,10 +200,11 @@ export class AnalyseStationComponent implements OnInit {
             for (let station of this.defaultStations) {
                 const control = <FormArray>this.form.controls['stations'];
                 control.push(this.newStation(station));
-                control.value.forEach(x => x.station = true)
+                control.value.forEach(x => x.station = false)
                 control.setValue(control.value);
             }
-        }
+            this.checkItAll(true);
+        }        
     }
 
     selectStation(evt: MapMouseEvent){

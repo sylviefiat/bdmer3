@@ -42,8 +42,8 @@ import { ISpeciesState, speciesInitialState, speciesReducer, getSpeciesLoaded, g
 import { IPlatformState, platformInitialState, platformReducer, getPlatformLoaded, getPlatformLoading, getPlatformEntities, getPlatformIds, getPlatformImportErrors, getPlatformError, getPlatformMsg, getPlatformOfCurrentCountry, getPlatformsOfCurrentCountry, getSurveysOfCurrentCountry} from '../datas/index';
 import { getCurrentPlatform, getCurrentPlatformZones, getCurrentPlatformStations, getCurrentPlatformSurveys, getCurrentZone, getCurrentZoneStations,
     getCurrentZoneZonePrefs, getCurrentStation, getCurrentCount, getCurrentSpPref, getCurrentSurvey, getCurrentSurveyCounts } from '../datas/index';
-import { IAnalyseState, analyseInitialState, analyseReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
-    getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables } from '../analyse/index'
+import { IAnalyseState, IAvailableValueState, analyseInitialState, availableValueInitialState, analyseReducer, selectReducer, getData, getUsedCountry, getUsedSurveys, getUsedZones, getUsedStations, getUsedSpecies, getUsedDims,
+    getUsedMethod, getAnalysing, getAnalysed, getResult, getMsg, getZonesAvailables, getStationsAvailables, getYearsAvailables, getSurveysAvailables, getSpeciesAvailables, getUsedPlatforms } from '../analyse/index'
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -61,6 +61,7 @@ export interface IAppState {
   species: ISpeciesState;
   platform: IPlatformState;
   analyse: IAnalyseState;
+  select: IAvailableValueState;
 }
 
 /**
@@ -81,7 +82,8 @@ export const AppReducer: ActionReducerMap<IAppState, any> = {
   country: countryReducer,
   species: speciesReducer,
   platform: platformReducer,
-  analyse: analyseReducer
+  analyse: analyseReducer,
+  select: selectReducer
 };
 
 export const initialState: IAppState = {
@@ -95,7 +97,8 @@ export const initialState: IAppState = {
   country: countryInitialState,
   species: speciesInitialState,
   platform: platformInitialState,
-  analyse: analyseInitialState
+  analyse: analyseInitialState,
+  select: availableValueInitialState
 }
 
 // ensure state is frozen as extra level of security when developing
@@ -133,6 +136,8 @@ export const getSpeciesState = (state:IAppState) => state.species;
 export const getPlatformState = (state:IAppState) => state.platform;
 
 export const getAnalyseState = (state:IAppState) => state.analyse;
+
+export const getSelectState = (state:IAppState) => state.select;
 
 export const getAppState = (state:IAppState) => state;
 
@@ -225,8 +230,10 @@ export const isAnalysed: any = compose(getAnalysed, getAnalyseState);
 export const getAnalyseData: any = compose(getData, getAppState);
 export const getAnalyseResult: any = compose(getResult, getAnalyseState);
 export const getAnalyseMsg: any = compose(getMsg, getAnalyseState);
-export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getAppState);
-export const getSelectedAnalyseSurveys: any = compose(getSurveysAvailables, getAppState);
-export const getSelectedAnalyseZones: any = compose(getZonesAvailables, getAppState);
-export const getSelectedAnalyseStations: any = compose(getStationsAvailables, getAnalyseState);
-export const getSelectedAnalyseSpecies: any = compose(getSpeciesAvailables, getAppState);
+export const getAnalyseUsedPlatform: any = compose(getUsedPlatforms, getAppState)
+export const getAnalyseUsedSurvey: any = compose(getUsedSurveys, getAppState)
+export const getSelectedAnalyseYears: any = compose(getYearsAvailables, getSelectState);
+export const getSelectedAnalyseSurveys: any = compose(getSurveysAvailables, getSelectState);
+export const getSelectedAnalyseZones: any = compose(getZonesAvailables, getSelectState);
+export const getSelectedAnalyseStations: any = compose(getStationsAvailables, getSelectState);
+export const getSelectedAnalyseSpecies: any = compose(getSpeciesAvailables, getSelectState);

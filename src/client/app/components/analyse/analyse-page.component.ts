@@ -11,7 +11,7 @@ import {
   getSelectedAnalyseSpecies, getAnalyseCountry, getAnalyseData, getSelectedCountry
 } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
-import { Data, Method, DimensionsAnalyse } from '../../modules/analyse/models/index';
+import { Data, Method, DimensionsAnalyse, Year } from '../../modules/analyse/models/index';
 import { initMethods } from '../../modules/analyse/states/index';
 import { Country } from '../../modules/countries/models/country';
 import { CountriesAction, CountryAction } from '../../modules/countries/actions/index';
@@ -119,7 +119,7 @@ export class AnalysePageComponent implements OnInit {
     this.store.dispatch(new AnalyseAction.SelectPlatforms(platforms));
   }
 
-  selectYear(years: string[]) {
+  selectYear(years: Year[]) {
     this.store.dispatch(new AnalyseAction.SelectYears(years));
   }
 

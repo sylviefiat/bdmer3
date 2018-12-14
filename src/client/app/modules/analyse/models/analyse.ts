@@ -65,11 +65,18 @@ export interface ResultStation {
     densityPerHA: number;                // densité par hectare = abondance * (10000 / surface station)
 }
 
+export interface ResultStationExport {
+    codeStation: string;
+    latitude: number;
+    longitude: number;
+    surface: number;                       // surface de la station en m²
+    nbCatches: number;                      // nombre total d'individus pêchés
+}
+
 export interface ResultZone {
     codeZone: string;
     codePlatform: string;
     surface: number,                       // surface en m²
-    nbStrates: number;                     // nombre de strates = surface zone / surface moyenne station
     nbStations: number;                    // nombre de stations considérées
     nbCatches: number;                      // nombre total d'individus pêchés
     ratioNstSurface: number;               // ratio nombre de station par rapport à la surface en km²
@@ -83,28 +90,48 @@ export interface ResultZone {
     abundancePerHA ?: number;              // abondance par hectare = abondance * (10000 / surface zone)
     SDBiomassPerHA ?: number;              // ecart type / standard deviation biomasse par hectare
     SDabundancePerHA: number;              // ecart type / standard deviation abondance par hectare
+    nbStrates: number;                     // nombre de strates = surface zone / surface moyenne station
+}
+
+export interface ResultZoneExport {
+    codeZone: string;
+    codePlatform: string;
+    surface: number,                       // surface en m²
+    nbStations: number;                    // nombre de stations considérées
+    nbCatches: number;                      // nombre total d'individus pêchés
 }
 
 
 export interface ResultPlatform {
-    codePlatform ?: string;
+    codePlatform : string;
     surface: number;                       // surface en m²
-    surfaceTotal: number;                       // surface en m²
-    nbStrates: number;                     // nombre de strates = somme strates total zones
+    surfaceTotal: number;                  // surface en m²
+    nbZones: number;                       // nombre de zones considérées
+    nbZonesTotal: number;                  // nombre de zones total
+    nbStations: number;                    // nombre de stations considérées
+    nbStationsTotal: number;               // nombre de stations total
+    nbCatches: number;                     // nombre total d'individus pêchés
+    //varianceAbundance: number;           // Variance abondance = somme[nb strates zone^2 x écart type abondance zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    //varianceBiomass ?: number;           // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
+    confidenceIntervalAbundance?: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
+    confidenceIntervalBiomass ?: number;   // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
+    resultStock ?: ResultStock;
+    averageAbundance?: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
+    averageAbundanceLegal ?:number;        // moyenne abondance par station individus de taille légale
+    averageBiomass ?: number;              // moyenne biomasse par station = somme(nb strates zones x moyenne biomass stations zone) / nb strates total
+    averageBiomassLegal ?:number;          // moyenne biomasse par station individus de taille légale
+    nbStrates?: number;                     // nombre de strates = somme strates total zones
+}
+
+export interface ResultPlatformExport {
+    codePlatform : string;
+    surface: number;                       // surface en m²
+    surfaceTotal: number;                  // surface en m²
     nbZones: number;                       // nombre de zones considérées
     nbZonesTotal: number;                  // nombre de zones total
     nbStations: number;                    // nombre de stations considérées
     nbStationsTotal: number;               // nombre de stations total
     nbCatches: number;                      // nombre total d'individus pêchés
-    abundanceTotal: number;              // moyenne abondance par station = somme(nb strates zone * moyenne abondance zone) / nb strates total
-    abundanceLegal ?:number;        // moyenne abondance par station individus de taille légale
-    averageBiomassLegal ?:number;          // moyenne biomasse par station individus de taille légale
-    averageBiomass ?: number;              // moyenne biomasse par station = somme(nb strates zones x moyenne biomass stations zone) / nb strates total
-    //varianceAbundance: number;             // Variance abondance = somme[nb strates zone^2 x écart type abondance zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
-    //varianceBiomass ?: number;             // Variance biomass = somme[nb strates zone^2 x écart type biomass zone^2 * (1 - nb station zone / nb strates zone)] / nb strates total^2
-    confidenceIntervalAbundance: number;   // racine de la variance abondance * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)
-    confidenceIntervalBiomass ?: number;   // racine de la variance biomasse * T où T=2.05 (valeur approx. statistique de student pour plus de 30 stations)    
-    resultStock ?: ResultStock;
 }
 
 export interface ResultStock {
@@ -112,10 +139,10 @@ export interface ResultStock {
     stockCI ?: number;                     // intervalle de confiance stock
     stockCA ?: number;                     // hypothèse conservatrice stock
     stockLegal ?: number;                  // Stock (taille légale)
-    density : number;                      // abondance / surface
-    densityCI : number;                    // intervalle de confiance densité
-    densityCA : number;                    // hypothèse conservatrice  densité
+    abundance : number;                    // abondance / surface
+    abundanceCI : number;                  // intervalle de confiance densité
+    abundanceCA : number;                  // hypothèse conservatrice  densité
+    abundanceLegal ?: number;              // densité de taille légale
     densityPerHA : number;                 // densité par hectare
     densityCAPerHA : number;               // hypothèse conservatrice de la densité par hectare
-    densityLegal ?: number;                // densité de taille légale
 }

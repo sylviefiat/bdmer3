@@ -122,10 +122,12 @@ export class AnalyseZoneComponent implements OnInit, OnDestroy {
             this.defaultZones = zones;
             this.initZones();
             let bounds = new LngLatBounds();
-            let lz = Turf.featureCollection(this.defaultZones.map(zone => this.getFeature(zone,false)));
-            this.layerZones$ = of(lz);
-            if (this.defaultZones.length > 0) {              
-                this.bounds$ = of(MapService.zoomToZones(lz));
+            if(this.defaultZones && this.defaultZones.length>0){
+              let lz = Turf.featureCollection(this.defaultZones.map(zone => this.getFeature(zone,false)));
+              this.layerZones$ = of(lz);
+              if (this.defaultZones.length > 0) {              
+                  this.bounds$ = of(MapService.zoomToZones(lz));
+              }
             }
         });
 

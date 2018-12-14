@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { User, Country } from '../../countries/models/country';
 import { Platform, Zone, Survey, Station } from '../../datas/models/platform';
 import { Species } from '../../datas/models/species';
-import { Method, DimensionsAnalyse, Results } from '../models/analyse';
+import { Method, DimensionsAnalyse, Results, Year } from '../models/analyse';
 import { type } from '../../core/utils/index';
   
 export namespace AnalyseAction {
@@ -63,7 +63,7 @@ export class SelectPlatforms implements Action {
 export class SelectYears implements Action {
   readonly type = ActionTypes.SELECT_YEARS;
 
-  constructor(public payload: string[]) {}
+  constructor(public payload: Year[]) {}
 }
 
 export class SelectSurveys implements Action {

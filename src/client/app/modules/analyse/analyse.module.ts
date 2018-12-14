@@ -8,8 +8,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../shared/index';
 import { MultilingualModule } from '../i18n/multilingual.module';
 
-import { AnalyseEffects } from './effects/analyse.effects';
-import { AnalyseService } from './services/analyse.service';
+import { AnalyseEffects, SelectEffects } from './effects/index';
+import { AnalyseService, SelectService } from './services/index';
 
 
 @NgModule({
@@ -19,10 +19,10 @@ import { AnalyseService } from './services/analyse.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    EffectsModule.forFeature([AnalyseEffects])
+    EffectsModule.forFeature([AnalyseEffects,SelectEffects])
   ],
   declarations: [],
-  providers: [AnalyseService],
+  providers: [AnalyseService, SelectService],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
