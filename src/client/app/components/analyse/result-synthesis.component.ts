@@ -136,7 +136,7 @@ export class ResultSynthesisComponent implements OnInit {
     ngOnInit() {
       this.typeShow$=of('A');
       this.spShow$=of(this.analyseData.usedSpecies[0].code);
-      this.surveyShow$=of(this.analyseData.usedSurveys[0].code);
+      this.surveyShow$=of(this.results.resultAll?'all':this.analyseData.usedSurveys[0].code);
       this.currentresultSurvey$ = of(this.results.resultPerSurvey.filter(rs => rs.codeSurvey === this.analyseData.usedSurveys[0].code)[0]);
       this.showStations$=of(true);
       this.showStationsCatches$=of(false);

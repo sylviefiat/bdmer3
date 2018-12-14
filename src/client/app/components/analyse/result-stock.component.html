@@ -24,11 +24,11 @@
             <div></div>
             <div class="italic">{{ 'RESULT_TITLE' | translate }}</div>
             <div>{{ 'TOTAL_IND' | translate }}</div>
-            <div><span class="bold"> {{ sp.resultPerPlatform[0].resultStock.density | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
-              &plusmn; {{ sp.resultPerPlatform[0].resultStock.densityCI | number:'1.0-0':'fr' }} 
+            <div><span class="bold"> {{ sp.resultPerPlatform[0].resultStock.abundance | number:'1.0-0':'fr' }} {{'INDIVIDUALS' | translate}}</span> 
+              &plusmn; {{ sp.resultPerPlatform[0].resultStock.abundanceCI | number:'1.0-0':'fr' }} 
             </div>
             <div>{{ 'CONSERVATIVE_IND' | translate }}</div>
-            <div>{{ sp.resultPerPlatform[0].resultStock.densityCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
+            <div>{{ sp.resultPerPlatform[0].resultStock.abundanceCA | number:'1.0-0':'fr' }}  {{'INDIVIDUALS' | translate}}</div>
             <div>{{ 'DENSITY_PER_HA' | translate }}</div>
             <div>{{ sp.resultPerPlatform[0].resultStock.densityPerHA | number:'1.0-1':'fr' }}  {{'ABUNDANCY_HA_UNIT' | translate}}</div>
             <div>{{ 'DENSITYCA_PER_HA' | translate }}</div>

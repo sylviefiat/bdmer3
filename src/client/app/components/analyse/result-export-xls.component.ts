@@ -14,7 +14,7 @@ import { saveAs } from 'file-saver';
   selector: 'bc-result-export-xls',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `  
-  <fa [name]="'file-excel'" [border]=true [size]=3></fa>
+  <fa [name]="'file-excel-o'" [border]=true [size]=1></fa>
   <mat-form-field>     
     <mat-select  placeholder="{{'EXCEL_EXPORT' | translate}}" (selectionChange)="export($event.value)">
       <mat-option [value]="'platform'">{{ 'RESULT_PER_PLATFORM' | translate}}</mat-option>
@@ -114,6 +114,9 @@ export class ResultExportXlsComponent implements OnInit {
         }
         ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey })];
       }
+    }
+    for(let name in ws_temp){
+      wb.Sheets[name] = utils.json_to_sheet(ws_temp[name]);
     }
     return wb; 
   }

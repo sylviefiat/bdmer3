@@ -498,7 +498,7 @@
   "EMPTY_COORD":"Une ou plusieurs coordonnées à 0",
   "ALL_SPECIES":"Toutes espèces",
   "ALL_SURVEYS":"Tous les relevés",
-  "DENSITY_PER_HA": "Densité moyenne estimée",
+  "DENSITY_PER_HA": "Densité estimée",
   "ZONES_NO_RATIO": "Zones non prises en compte dans l'analyse (< 0.2 stations / km²)",
   "NB_SURVEYS":"Nombre de relevés",
   "PERIOD_COVERED":"Période considérée",
