@@ -311,6 +311,8 @@
   "ZONE_COORD_EX":
     "Structure of polygon coordinates : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordinates of the zone",
+  "LATITUDE":"Latitude",
+  "LONGITUDE":"Longitude",
   "STATION_NAME": "Name of station",
   "STATION_COORD": "Coordinates of station",
   "STATION_ERROR": "Station not valid.",

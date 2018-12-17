@@ -35,9 +35,9 @@ export class ResultExportXlsComponent implements OnInit {
   @Input() analyseData: Data;
   @Input() results: Results;
   @Input() locale: string;
-  modelPlatform: ResultPlatformExport = { codePlatform: "", surface: 0, surfaceTotal: 0, nbZones: 0, nbZonesTotal: 0, nbStations: 0, nbStationsTotal: 0, nbCatches: 0 };
-  modelZone: ResultZoneExport = { codeZone: "", codePlatform: "", surface: 0, nbStations: 0, nbCatches: 0 };
-  modelStation: ResultStationExport = { codeStation: "", latitude: 0, longitude: 0, surface: 0, nbCatches: 0 };
+  modelPlatform: ResultPlatformExport = { codePlatform: "", surface: 0, surfaceTotal: 0, nbZones: 0, nbZonesTotal: 0, nbStations: 0, nbStationsTotal: 0, nbCatches: 0, fishingEffort:0 };
+  modelZone: ResultZoneExport = { codeZone: "", codePlatform: "", surface: 0, nbStations: 0, nbCatches: 0, fishingEffort:0 };
+  modelStation: ResultStationExport = { codeStation: "", latitude: 0, longitude: 0, surface: 0, nbCatches: 0, nbDivers: 0 };
   ALL = "all";
 
   constructor(private translate: TranslateService) {
@@ -112,7 +112,7 @@ export class ResultExportXlsComponent implements OnInit {
           wb.SheetNames.push(ws_name);
           ws_temp[ws_name] = [];
         }
-        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey })];
+        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey }, this.modelPlatform)];
       }
     }
     for(let name in ws_temp){

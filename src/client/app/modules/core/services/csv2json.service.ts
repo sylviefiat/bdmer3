@@ -492,6 +492,7 @@ export class Csv2JsonService {
                         case "codeSurvey":
                         case "code":
                         case "codeStation":
+                        case "numberDivers":
                             header = headers[j].replace(/_([a-z])/g, function(g) {
                                 return g[1].toUpperCase();
                             });
@@ -508,7 +509,7 @@ export class Csv2JsonService {
                                 d = this.ms.moment(data[j], "MM/DD/YYYY").toISOString();
                             }
                             count[headers[j]] = d;
-                            break;
+                            break;                            
                         case "catches":
                             sp = data[headers.indexOf("codeSpecies")];
                             if (sp.length < 2) break;

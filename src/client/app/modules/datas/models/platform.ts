@@ -82,6 +82,7 @@ export interface Count {
     codePlatform: string;
     codeStation: string;
     date: Date;
+    numberDivers?: number;
     monospecies?: boolean;
     quantities?: Quantity[];
     mesures?: Mesure[];

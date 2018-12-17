@@ -23,18 +23,18 @@ export class AnalyseService {
 
     analyse(analyseData: Data): Observable<Results> {
         this.data = analyseData;
-        console.log("analyse start "+new Date());
-        this.setStationsZones();
+        console.log("analyse start " + new Date());
+
         return this.getResults();
     }
 
-    setStationsZones() {
+    setStationsZones(type: string) {
         this.stationsZones = [];
         let stations = this.data.usedStations;
         for (let zone of this.data.usedZones) {
             this.stationsZones[zone.properties.code] = [];
             for (let st of stations) {
-                if (st.codePlatform === zone.codePlatform && MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
+                if (((type === "survey" && st.codePlatform === zone.codePlatform) || (type === "stock")) && MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
                     this.stationsZones[zone.properties.code] = [...this.stationsZones[zone.properties.code], st.properties.code];
                     stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
                 }
@@ -62,12 +62,13 @@ export class AnalyseService {
         if (this.data.usedCountry.platformType === VESSEL) {
             let rstockObs = of(this.results).pipe(mergeMap((results: Results) => this.getResultStock())).subscribe();
         }
-        console.log("analyse stop "+new Date());
+        console.log("analyse stop " + new Date());
         return of(this.results);
     }
 
     getResultsSurvey(survey: Survey): Observable<ResultSurvey> {
         let rsurvey: ResultSurvey = { codeSurvey: survey.code, yearSurvey: new Date(survey.dateStart).getFullYear(), codePlatform: survey.codePlatform, resultPerSpecies: [] };
+        this.setStationsZones('survey');
         let speciesObs = of(rsurvey)
             .pipe(
                 mergeMap((rsurvey: ResultSurvey) => from(this.data.usedSpecies.filter(sp => this.hasSpSurvey(survey, sp)))
@@ -82,6 +83,7 @@ export class AnalyseService {
     }
 
     getResultStock(): Observable<Results> {
+        this.setStationsZones('stock');
         let speciesObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => from(this.data.usedSpecies)
@@ -115,9 +117,11 @@ export class AnalyseService {
             .subscribe();
         let zonesObs = from(this.data.usedZones.filter(zone => this.stationsZones[zone.properties.code] !== undefined && this.stationsZones[zone.properties.code].length > 0))
             .pipe(
-                mergeMap((zone: Zone) => this.getResultZone(rsp2.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) > 0), zone)),
+                mergeMap((zone: Zone) => this.getResultZone(rsp2.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
                 mergeMap((rzone: ResultZone) => {
-                    rsp2.resultPerZone.push(rzone);
+                    if(rzone !== null){
+                        rsp2.resultPerZone.push(rzone);
+                    }
                     return of(rzone);
                 })
             )
@@ -126,7 +130,9 @@ export class AnalyseService {
             .pipe(
                 mergeMap((results: Results) => this.getResultPlatform(rsp2.resultPerZone)),
                 mergeMap((rplatform: ResultPlatform) => {
-                    rsp2.resultPerPlatform.push(rplatform);
+                    if(rplatform !== null){
+                        rsp2.resultPerPlatform.push(rplatform);
+                    }
                     return of(rplatform);
                 })
             )
@@ -137,7 +143,9 @@ export class AnalyseService {
                     return this.getResultPlatform(rsp2.resultPerZone.filter(rpz => rpz.codePlatform === platform.code), platform)
                 }),
                 mergeMap((rplatform: ResultPlatform) => {
-                    rsp2.resultPerPlatform.push(rplatform);
+                    if(rplatform !== null){
+                        rsp2.resultPerPlatform.push(rplatform);
+                    }
                     return of(rplatform);
                 })
             )
@@ -159,7 +167,9 @@ export class AnalyseService {
                     .pipe(
                         mergeMap((station: Station) => this.getResultStation(survey, species, station)),
                         mergeMap((rstation: ResultStation) => {
-                            rspecies.resultPerStation.push(rstation);
+                            if (rstation !== null) {
+                                rspecies.resultPerStation.push(rstation);
+                            }
                             return of(rspecies);
                         }))))
             .subscribe();
@@ -167,9 +177,11 @@ export class AnalyseService {
             .pipe(
                 mergeMap((rspecies: ResultSpecies) => from(this.data.usedZones.filter(zone => this.zoneHasStationsInSurvey(zone, survey)))
                     .pipe(
-                        mergeMap((zone: Zone) => this.getResultZone(rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) > 0), zone)),
+                        mergeMap((zone: Zone) => this.getResultZone(rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
                         mergeMap((rzone: ResultZone) => {
-                            rspecies.resultPerZone.push(rzone);
+                            if(rzone !== null){
+                                rspecies.resultPerZone.push(rzone);
+                            }
                             return of(rspecies);
                         }))))
             .subscribe();
@@ -178,8 +190,10 @@ export class AnalyseService {
                 mergeMap((rspecies: ResultSpecies) => from(this.data.usedPlatforms.filter(platform => this.platformOfZones(platform, survey)))
                     .pipe(
                         mergeMap((platform: Platform) => this.getResultPlatform(rspecies.resultPerZone.filter(rpz => rpz.codePlatform === platform.code), platform)),
-                        mergeMap((rplatforms: ResultPlatform) => {
-                            rspecies.resultPerPlatform = [...rspecies.resultPerPlatform, rplatforms];
+                        mergeMap((rplatform: ResultPlatform) => {
+                            if(rplatform !== null){
+                                rspecies.resultPerPlatform = [...rspecies.resultPerPlatform, rplatform];
+                            }
                             return of(rspecies);
                         }
                         ))))
@@ -215,7 +229,6 @@ export class AnalyseService {
     }
 
     getResultStation(survey: Survey, species: Species, station: Station): Observable<ResultStation> {
-        let rstation: ResultStation = { codeStation: station.properties.code, latitude: station.geometry.coordinates[1], longitude: station.geometry.coordinates[0], surface: survey.surfaceStation, nbCatches: 0, abundance: 0, densityPerHA: 0 };
         let counts: any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = counts.flatMap(c => c.mesures.filter(m => m.codeSpecies === species.code));
         let quantities = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code));
@@ -223,9 +236,16 @@ export class AnalyseService {
         let nbCatches = quantities.length > 0 ? this.getSum(quantities.map(q => q.catches)) : 0;
 
         if (mesures.length === 0 && density === 0) {
-            return of(rstation);
+            return of(null);
         }
+        let rstation: ResultStation = {
+            codeStation: station.properties.code, latitude: station.geometry.coordinates[1], longitude: station.geometry.coordinates[0], surface: survey.surfaceStation,
+            nbCatches: 0, nbDivers: 0, abundance: 0, densityPerHA: 0
+        };
+        rstation.nbDivers = this.getAverage(counts.map(c => c.numberDivers));
         rstation.nbCatches = mesures.length !== 0 ? mesures.length : Number(nbCatches);
+
+
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
         rstation.abundance = mesures.length !== 0 ? mesures.filter(m => this.isInDims(m, species)).length : Number(density);
         if (this.hasLegalDims(species) && mesures.length !== 0) {
@@ -289,34 +309,39 @@ export class AnalyseService {
     getResultZone(rstations: ResultStation[], zone: Zone): Observable<ResultZone> {
         let rzone: ResultZone = {
             codeZone: zone.properties.code, codePlatform: zone.codePlatform, surface: Number(zone.properties.surface), nbStrates: 0, nbStations: 0,
-            nbCatches: 0, ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
+            nbCatches: 0, fishingEffort: 0, ratioNstSurface: 0, averageAbundance: 0, abundance: 0,
             abundancePerHA: 0, SDabundancePerHA: 0
         };
-
         rzone.nbStations = rstations.length;
-        if (rstations.length > 0) {
-            rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
-            rzone.nbCatches = this.getSum(rstations.map(rs => rs.nbCatches));
-            rzone.nbStrates = rstations.length > 0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface), rstations.length) : 0;
-            rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance), rstations.length);
-            rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
-            rzone.abundancePerHA = Number(rzone.abundance) * 10000 / Number(rzone.surface);
-            rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.densityPerHA));
+        if (rstations.length <= 0) {
+            return of(null);
+        }
+        rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
+        rzone.nbCatches = this.getSum(rstations.map(rs => rs.nbCatches));
+        rzone.fishingEffort = this.getSum(rstations.map(rs => rs.nbDivers));
+        if(rzone.codeZone==='Brizar_66'){
+            console.log(this.getAverage(rstations.map(rs => rs.surface)));
+            console.log(Number(zone.properties.surface));
+        }
+        rzone.nbStrates = rstations.length > 0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface)) : 0;
+        rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance));
+        rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
+        rzone.abundancePerHA = Number(rzone.abundance) * 10000 / Number(rzone.surface);
+        rzone.SDabundancePerHA = this.getStandardDeviation(rstations.map(rs => rs.densityPerHA));
 
-            if (rstations[0].abundanceLegal) {
-                rzone.averageAbundanceLegal = this.getAverage(rstations.map(rs => rs.abundanceLegal), rstations.length);
-            }
+        if (rstations[0].abundanceLegal) {
+            rzone.averageAbundanceLegal = this.getAverage(rstations.map(rs => rs.abundanceLegal));
+        }
 
-            // si calcul biomasse
-            if (this.data.usedMethod.method !== 'NONE') {
-                rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass), rzone.nbStations);
-                rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) / 1000;
-                if (rstations.length > 0 && rstations[0].biomassLegal) {
-                    rzone.averageBiomassLegal = this.getAverage(rstations.map(rs => rs.biomassLegal), rstations.length);
-                }
-                rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
-                rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomassPerHA));
+        // si calcul biomasse
+        if (this.data.usedMethod.method !== 'NONE') {
+            rzone.averageBiomass = this.getAverage(rstations.map(rs => rs.biomass));
+            rzone.biomass = Number(rzone.nbStrates) * Number(rzone.averageBiomass) / 1000;
+            if (rstations.length > 0 && rstations[0].biomassLegal) {
+                rzone.averageBiomassLegal = this.getAverage(rstations.map(rs => rs.biomassLegal));
             }
+            rzone.biomassPerHA = Number(rzone.biomass) * (10000 / Number(rzone.surface));
+            rzone.SDBiomassPerHA = this.getStandardDeviation(rstations.map(rs => rs.biomassPerHA));
         }
         return of(rzone);
     }
@@ -332,7 +357,8 @@ export class AnalyseService {
             nbZonesTotal: 0,
             nbStations: 0,
             nbStationsTotal: 0,
-            nbCatches: 0
+            nbCatches: 0,
+            fishingEffort: 0
         };
         let varianceAbundance = 0;
         let varianceBiomass = 0;
@@ -343,11 +369,15 @@ export class AnalyseService {
         let averageBiomass = 0;
         let averageBiomassLegal = 0;
         let confidenceIntervalBiomass = 0;
-        // stats globales
+        if(rzones.length <= 0){
+            return of(null);
+        }
+        // stats globales        
         rplatform.nbZonesTotal = rzones.length;
         rplatform.surfaceTotal = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStationsTotal = this.getSum(rzones.map(rz => rz.nbStations));
         rplatform.nbCatches = this.getSum(rzones.map(rz => rz.nbCatches));
+        rplatform.fishingEffort = this.getSum(rzones.map(rs => rs.fishingEffort));
         // filter on zones taken in analysis (ie number of stations per ha is >0.2)
         rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
         if (rzones.length > 0) {
@@ -398,16 +428,26 @@ export class AnalyseService {
         // insert
         rplatform.nbStrates = nbStrates;
         rplatform.averageAbundance = averageAbundance;
-        rplatform.averageAbundanceLegal = averageAbundanceLegal;
-        rplatform.confidenceIntervalAbundance = confidenceIntervalAbundance;
-        rplatform.averageBiomass = averageBiomass;
-        rplatform.averageBiomassLegal = averageBiomassLegal;
-        rplatform.confidenceIntervalBiomass = confidenceIntervalBiomass;
+        if(averageAbundanceLegal > 0){
+            rplatform.averageAbundanceLegal = averageAbundanceLegal;
+        }
+        if(confidenceIntervalAbundance > 0){
+            rplatform.confidenceIntervalAbundance = confidenceIntervalAbundance;
+        }
+        if(averageBiomass > 0){
+            rplatform.averageBiomass = averageBiomass;
+        }
+        if(averageBiomassLegal > 0){
+            rplatform.averageBiomassLegal = averageBiomassLegal;
+        }
+        if(confidenceIntervalBiomass>0){
+            rplatform.confidenceIntervalBiomass = confidenceIntervalBiomass;
+        }
         return of(rplatform);
     }
 
-    getAverage(values: any[], nb: number): number {
-        return values ? (values.length > 1 ? values.reduce((a, b) => Number(a) + Number(b) / Number(nb)) : values[0]) : 0;
+    getAverage(values: any[]): number {
+        return values ? (values.length > 1 ? values.reduce((a, b) => Number(a) + Number(b)) / values.length : Number(values[0])) : 0;
     }
 
     getSum(values: any[]): number {
@@ -427,6 +467,6 @@ export class AnalyseService {
         let avgSquareDiffs = sumSquareDiffs / squareDiffs.length;
         let stdDev = Math.sqrt(avgSquareDiffs);
         return stdDev;
-    }     
+    }
 
 }

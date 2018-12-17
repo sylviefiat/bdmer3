@@ -8,7 +8,7 @@
   <div class="container">
     <mat-card *ngFor="let sp of results.resultAll">
       <mat-card-title>{{ sp.nameSpecies }}</mat-card-title>
-      <div *ngIf="sp.resultPerPlatform[0] && sp.resultPerPlatform[0].resultStock">
+      <div *ngIf="sp.resultPerPlatform[0]">
         <mat-card-subtitle>{{ 'ASSESMENT_REPORT' | translate }}</mat-card-subtitle>
         <mat-card-content>
           <div class="table three">
@@ -16,10 +16,10 @@
             <div>{{ 'NB_ZONES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbZonesTotal | number:'1.0-0':'fr' }}</div><div>{{ sp.resultPerPlatform[0].nbZones | number:'1.0-0':'fr' }}</div>
             <div>{{ 'SURFACE' | translate}}</div><div>{{ getSurfaceInKm2(sp.resultPerPlatform[0].surfaceTotal) | number:'1.0-0':'fr' }} {{ 'KM2' | translate }}</div><div>{{ getSurfaceInKm2(sp.resultPerPlatform[0].surface) | number:'1.0-0':'fr' }} {{ 'KM2' | translate }}</div>
             <div>{{ 'NB_STATIONS' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }}</div><div>{{ sp.resultPerPlatform[0].nbStations | number:'1.0-0':'fr' }}</div>                
-            <div>{{ 'AVERAGE_STATIONS' | translate}}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'total') | number:'1.0-1':'fr' }}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'included') | number:'1.0-1':'fr' }}</div>
+            <div>{{ 'AVERAGE_STATIONS' | translate}}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'total') | number:'1.0-2':'fr' }}</div><div>{{ getAveStation(sp.resultPerPlatform[0],'included') | number:'1.0-1':'fr' }}</div>
           </div>
         </mat-card-content>
-        <mat-card-content>
+        <mat-card-content *ngIf="sp.resultPerPlatform[0].resultStock">
           <div class="table two">
             <div></div>
             <div class="italic">{{ 'RESULT_TITLE' | translate }}</div>
@@ -44,9 +44,9 @@
         <mat-card-subtitle>{{ 'FISHER_CATCHES_REPORT' | translate }}</mat-card-subtitle>
         <mat-card-content>
           <div class="table two">
-            <div>{{ 'VESSELS_NAMES' | translate}}</div><div>{{ getVesselsNames(sp) }}</div>
+            <div>{{ 'VESSELS_NAMES' | translate}}</div><div>{{ getVesselsNames() }}</div>
             <div>{{ 'NB_TRIPS' | translate}}</div><div>{{ results.resultPerSurvey.length | number:'1.0-0':'fr' }}</div>
-            <div>{{ 'FISHING_EFFORT' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbStationsTotal | number:'1.0-0':'fr' }} {{ 'INDIVIDUAL_DIVES' | translate}}</div>
+            <div>{{ 'FISHING_EFFORT' | translate}}</div><div>{{ sp.resultPerPlatform[0].fishingEffort | number:'1.0-0':'fr' }} {{ 'INDIVIDUAL_DIVES' | translate}}</div>
             <div>{{ 'NB_CATCHES' | translate}}</div><div>{{ sp.resultPerPlatform[0].nbCatches | number:'1.0-0':'fr' }}</div>
           </div>
         </mat-card-content>

@@ -311,6 +311,8 @@
   "ZONE_COORD_EX":
     "Structure des coordonnées du polygone : 'longitude1, latitude1, altitude1 longitude2, latitude2, altitude2 ... longitudeN, latitudeN, altitudeN'",
   "ZONE_COORD": "Coordonnées de la zone",
+  "LATITUDE":"Latitude",
+  "LONGITUDE":"Longitude",
   "POLYGON_ERROR": "Le polygone n'est pas valide",
   "STATION_NAME": "Nom de la station",
   "STATION_COORD": "Coordonnées de la station",

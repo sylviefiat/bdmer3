@@ -89,14 +89,10 @@ export class ResultStockComponent implements OnInit {
       return dy + " - "+dateStart+ "/" + dateEnd;
     }
 
-    getVesselsNames(resultSpecies){
+    getVesselsNames(){
       let vn = "";
-      if(resultSpecies.resultPerPlatform.length > 1){
-        for(let i=1; i<resultSpecies.resultPerPlatform.length; i++){
-          if(resultSpecies.resultPerPlatform[i] && resultSpecies.resultPerPlatform[i].nbZones>0){
-            vn = (vn.length >0 ? vn+", ":"") + resultSpecies.resultPerPlatform[i].codePlatform;
-          }
-        }
+      for(let rsurvey of this.results.resultPerSurvey){
+        vn = (vn.length >0 ? vn+", ":"") + rsurvey.codePlatform;
       }
       return vn;
     }
