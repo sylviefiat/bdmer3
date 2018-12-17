@@ -318,11 +318,7 @@ export class AnalyseService {
         }
         rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
         rzone.nbCatches = this.getSum(rstations.map(rs => rs.nbCatches));
-        rzone.fishingEffort = this.getSum(rstations.map(rs => rs.nbDivers));
-        if(rzone.codeZone==='Brizar_66'){
-            console.log(this.getAverage(rstations.map(rs => rs.surface)));
-            console.log(Number(zone.properties.surface));
-        }
+        rzone.fishingEffort = this.getSum(rstations.map(rs => rs.nbDivers));       
         rzone.nbStrates = rstations.length > 0 ? Number(zone.properties.surface) / this.getAverage(rstations.map(rs => rs.surface)) : 0;
         rzone.averageAbundance = this.getAverage(rstations.map(rs => rs.abundance));
         rzone.abundance = Number(rzone.nbStrates) * Number(rzone.averageAbundance);
@@ -427,22 +423,22 @@ export class AnalyseService {
         }
         // insert
         rplatform.nbStrates = nbStrates;
-        rplatform.averageAbundance = averageAbundance;
-        if(averageAbundanceLegal > 0){
+        //rplatform.s = averageAbundance;
+        /*if(averageAbundanceLegal > 0){
             rplatform.averageAbundanceLegal = averageAbundanceLegal;
-        }
-        if(confidenceIntervalAbundance > 0){
+        }*/
+        /*if(confidenceIntervalAbundance > 0){
             rplatform.confidenceIntervalAbundance = confidenceIntervalAbundance;
-        }
-        if(averageBiomass > 0){
+        }*/
+        /*if(averageBiomass > 0){
             rplatform.averageBiomass = averageBiomass;
         }
         if(averageBiomassLegal > 0){
             rplatform.averageBiomassLegal = averageBiomassLegal;
-        }
-        if(confidenceIntervalBiomass>0){
+        }*/
+        /*if(confidenceIntervalBiomass>0){
             rplatform.confidenceIntervalBiomass = confidenceIntervalBiomass;
-        }
+        }*/
         return of(rplatform);
     }
 
