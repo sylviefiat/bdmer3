@@ -512,8 +512,12 @@ export class Csv2JsonService {
                             break;                            
                         case "catches":
                             sp = data[headers.indexOf("codeSpecies")];
-                            if (sp.length < 2) break;
-                            
+                            if (!count.quantities) {count.quantities = [];}
+                            if (sp.length < 2){
+                                caught =0;
+                                quantity = 0;
+                                break;
+                            }
                             // if it is french format replace decimal separator "," to "."
                             if (delimiter === Csv2JsonService.SEMICOLON) {
                                 caught = parseFloat(data[j].replace(new RegExp('\\,', 'g'), '.'));
@@ -523,8 +527,12 @@ export class Csv2JsonService {
                             break;
                         case "density":
                             sp = data[headers.indexOf("codeSpecies")];
-                            if (sp.length < 2) break;
-
+                            if (!count.quantities) {count.quantities = [];}
+                            if (sp.length < 2){
+                                caught =0;
+                                quantity = 0;
+                                break;
+                            }
                             // if it is french format replace decimal separator "," to "."
                             if (delimiter === Csv2JsonService.SEMICOLON) {
                                 quantity = parseFloat(data[j].replace(new RegExp('\\,', 'g'), '.'));
@@ -534,9 +542,9 @@ export class Csv2JsonService {
                             break;
                         case "mesures":
                             sp = data[headers.indexOf("codeSpecies")];
-                            // if there is no species name (let size of 2 for undesired spaces) break;
-                            if (sp.length < 2) break;
-                            if (count.mesures == null) count.mesures = [];
+                            if (count.mesures == null) {count.mesures = [];}
+                            // if there is no species name (let size of 2 for undesired spaces) break;                            
+                            if (sp.length < 2) break;                            
                             let mes = data[j].split(",");
                             for (let dims of mes) {
                                 let longlarg = dims.split("/");
@@ -554,9 +562,6 @@ export class Csv2JsonService {
                     }
                 }
                 if (caught || quantity) {
-                    if (!count.quantities) {
-                        count.quantities = [];
-                    }
                     count.quantities.push({ codeSpecies: sp, catches: caught, density: quantity });
                 }
                 lines.push(count);

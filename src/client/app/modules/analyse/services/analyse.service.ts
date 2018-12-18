@@ -228,7 +228,11 @@ export class AnalyseService {
         return false;
     }
 
-    getResultStation(survey: Survey, species: Species, station: Station): Observable<ResultStation> {
+    getResultStation(survey: Survey, species: Species, station: Station): Observable<ResultStation> {        
+        let rstation: ResultStation = {
+            codeStation: station.properties.code, latitude: station.geometry.coordinates[1], longitude: station.geometry.coordinates[0], surface: survey.surfaceStation,
+            nbCatches: 0, nbDivers: 0, abundance: 0, densityPerHA: 0
+        };
         let counts: any = survey.counts.filter(c => c.codeStation === station.properties.code);
         let mesures = counts.flatMap(c => c.mesures.filter(m => m.codeSpecies === species.code));
         let quantities = counts.flatMap(c => c.quantities.filter(q => q && q.codeSpecies === species.code));
@@ -236,15 +240,10 @@ export class AnalyseService {
         let nbCatches = quantities.length > 0 ? this.getSum(quantities.map(q => q.catches)) : 0;
 
         if (mesures.length === 0 && density === 0) {
-            return of(null);
+            return of(rstation);
         }
-        let rstation: ResultStation = {
-            codeStation: station.properties.code, latitude: station.geometry.coordinates[1], longitude: station.geometry.coordinates[0], surface: survey.surfaceStation,
-            nbCatches: 0, nbDivers: 0, abundance: 0, densityPerHA: 0
-        };
         rstation.nbDivers = this.getAverage(counts.map(c => c.numberDivers));
         rstation.nbCatches = mesures.length !== 0 ? mesures.length : Number(nbCatches);
-
 
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
         rstation.abundance = mesures.length !== 0 ? mesures.filter(m => this.isInDims(m, species)).length : Number(density);
@@ -314,7 +313,7 @@ export class AnalyseService {
         };
         rzone.nbStations = rstations.length;
         if (rstations.length <= 0) {
-            return of(null);
+            return of(rzone);
         }
         rzone.ratioNstSurface = rzone.nbStations / (rzone.surface / 1000000);
         rzone.nbCatches = this.getSum(rstations.map(rs => rs.nbCatches));
@@ -366,7 +365,7 @@ export class AnalyseService {
         let averageBiomassLegal = 0;
         let confidenceIntervalBiomass = 0;
         if(rzones.length <= 0){
-            return of(null);
+            return of(rplatform);
         }
         // stats globales        
         rplatform.nbZonesTotal = rzones.length;
