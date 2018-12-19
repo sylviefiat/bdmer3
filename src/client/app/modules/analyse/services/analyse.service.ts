@@ -16,7 +16,8 @@ import { Species, Platform, Survey, Mesure, Count, Station, Zone, LegalDimension
 export class AnalyseService {
     results: Results;
     data: Data;
-    stationsZones: any;
+    stationsZonesPerPlatform: any;
+    stationsZonesStock: any;
 
     constructor(private ms: MomentService) {
     }
@@ -24,18 +25,23 @@ export class AnalyseService {
     analyse(analyseData: Data): Observable<Results> {
         this.data = analyseData;
         console.log("analyse start " + new Date());
-
+        this.setStationsZones();
         return this.getResults();
     }
 
-    setStationsZones(type: string) {
-        this.stationsZones = [];
+    setStationsZones() {
+        this.stationsZonesPerPlatform = [];
+        this.stationsZonesStock = [];
         let stations = this.data.usedStations;
         for (let zone of this.data.usedZones) {
-            this.stationsZones[zone.properties.code] = [];
+            this.stationsZonesPerPlatform[zone.properties.code] = [];
+            this.stationsZonesStock[zone.properties.code] = [];
             for (let st of stations) {
-                if (((type === "survey" && st.codePlatform === zone.codePlatform) || (type === "stock")) && MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
-                    this.stationsZones[zone.properties.code] = [...this.stationsZones[zone.properties.code], st.properties.code];
+                if( MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
+                    this.stationsZonesStock[zone.properties.code] = [...this.stationsZonesStock[zone.properties.code], st.properties.code];
+                    if(st.codePlatform === zone.codePlatform){
+                        this.stationsZonesPerPlatform[zone.properties.code] = [...this.stationsZonesPerPlatform[zone.properties.code], st.properties.code];
+                    }
                     stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
                 }
             }
@@ -68,7 +74,7 @@ export class AnalyseService {
 
     getResultsSurvey(survey: Survey): Observable<ResultSurvey> {
         let rsurvey: ResultSurvey = { codeSurvey: survey.code, yearSurvey: new Date(survey.dateStart).getFullYear(), codePlatform: survey.codePlatform, resultPerSpecies: [] };
-        this.setStationsZones('survey');
+        
         let speciesObs = of(rsurvey)
             .pipe(
                 mergeMap((rsurvey: ResultSurvey) => from(this.data.usedSpecies.filter(sp => this.hasSpSurvey(survey, sp)))
@@ -83,7 +89,6 @@ export class AnalyseService {
     }
 
     getResultStock(): Observable<Results> {
-        this.setStationsZones('stock');
         let speciesObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => from(this.data.usedSpecies)
@@ -101,6 +106,7 @@ export class AnalyseService {
 
     getResultStockSpecies(species: Species, results: Results): Observable<ResultSpecies> {
         let rsp2: ResultSpecies = { codeSpecies: species.code, nameSpecies: species.scientificName, resultPerStation: [], resultPerZone: [], resultPerPlatform: [] };
+        let rZonesStock : ResultZone[] = [];
         let stationsObs = of(this.results)
             .pipe(
                 mergeMap((results: Results) => {
@@ -115,9 +121,9 @@ export class AnalyseService {
                 })
             )
             .subscribe();
-        let zonesObs = from(this.data.usedZones.filter(zone => this.stationsZones[zone.properties.code] !== undefined && this.stationsZones[zone.properties.code].length > 0))
+        let zonesObsPlatform = from(this.data.usedZones.filter(zone => this.stationsZonesPerPlatform[zone.properties.code] !== undefined && this.stationsZonesPerPlatform[zone.properties.code].length > 0))
             .pipe(
-                mergeMap((zone: Zone) => this.getResultZone(rsp2.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
+                mergeMap((zone: Zone) => this.getResultZone(rsp2.resultPerStation.filter(rps => this.stationsZonesPerPlatform[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
                 mergeMap((rzone: ResultZone) => {
                     if(rzone !== null){
                         rsp2.resultPerZone.push(rzone);
@@ -126,9 +132,20 @@ export class AnalyseService {
                 })
             )
             .subscribe();
+        let zonesObsStock = from(this.data.usedZones.filter(zone => this.stationsZonesStock[zone.properties.code] !== undefined && this.stationsZonesStock[zone.properties.code].length > 0))
+            .pipe(
+                mergeMap((zone: Zone) => this.getResultZone(rsp2.resultPerStation.filter(rps => this.stationsZonesStock[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
+                mergeMap((rzone: ResultZone) => {
+                    if(rzone !== null){
+                        rZonesStock.push(rzone);
+                    }
+                    return of(rzone);
+                })
+            )
+            .subscribe();
         let stockObs = of(this.results)
             .pipe(
-                mergeMap((results: Results) => this.getResultPlatform(rsp2.resultPerZone)),
+                mergeMap((results: Results) => this.getResultPlatform(rZonesStock)),
                 mergeMap((rplatform: ResultPlatform) => {
                     if(rplatform !== null){
                         rsp2.resultPerPlatform.push(rplatform);
@@ -177,7 +194,7 @@ export class AnalyseService {
             .pipe(
                 mergeMap((rspecies: ResultSpecies) => from(this.data.usedZones.filter(zone => this.zoneHasStationsInSurvey(zone, survey)))
                     .pipe(
-                        mergeMap((zone: Zone) => this.getResultZone(rspecies.resultPerStation.filter(rps => this.stationsZones[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
+                        mergeMap((zone: Zone) => this.getResultZone(rspecies.resultPerStation.filter(rps => this.stationsZonesPerPlatform[zone.properties.code].indexOf(rps.codeStation) >= 0), zone)),
                         mergeMap((rzone: ResultZone) => {
                             if(rzone !== null){
                                 rspecies.resultPerZone.push(rzone);
@@ -211,7 +228,7 @@ export class AnalyseService {
     }
 
     zoneHasStationsInSurvey(zone: Zone, survey: Survey): boolean {
-        for (let codeStation of this.stationsZones[zone.properties.code]) {
+        for (let codeStation of this.stationsZonesPerPlatform[zone.properties.code]) {
             if (this.codeStationInSurvey(codeStation, survey)) {
                 return true;
             }
