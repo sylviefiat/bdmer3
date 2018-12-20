@@ -388,18 +388,26 @@ export class PlatformService {
     if (platform.code.toLowerCase() !== count.codePlatform.toLowerCase()) return throwError(msg.IMPORT_ERROR_COUNT);
     return this.getPlatform(platform.code).pipe(
       filter(platform => platform !== null),
-      mergeMap(st => {
+      mergeMap(p => {
         if (!count.mesures) count.mesures = [];
-        if (!count.mesures) count.quantities = [];
-        let cp = st.surveys.filter(c => c.code === count.codeSurvey)[0];
-        if (cp) {
-          if (cp.counts.filter(c => c.code === count.code).length > -1) {
-            cp.counts = [...cp.counts.filter(c => c.code !== count.code), count];
+        if (!count.quantities) count.quantities = [];
+        let survey = p.surveys.filter(c => c.code === count.codeSurvey)[0];                
+        
+        if (survey) {
+          if (survey.counts) {
+            if(survey.counts.filter(c => c.code === count.code).length>0){
+              let c = survey.counts.filter(c => c.code === count.code)[0];
+              c.mesures = [...c.mesures,...count.mesures];
+              c.quantities = [...c.quantities,...count.quantities];
+              survey.counts = [...survey.counts.filter(c => c.code !== count.code), c];
+            } else {
+              survey.counts = [...survey.counts.filter(c => c.code !== count.code), count];
+            }
           }
-          st.surveys = [...st.surveys.filter(c => c.code != count.codeSurvey), cp];
+          p.surveys = [...p.surveys.filter(c => c.code != count.codeSurvey), survey];
         }
-        this.currentPlatform = of(st);
-        return from(this.db.put(st));
+        this.currentPlatform = of(p);
+        return from(this.db.put(p));
       }),
       filter((response: ResponsePDB) => response.ok),
       mergeMap(response => of(count))
@@ -458,8 +466,16 @@ export class PlatformService {
           count.codePlatform = pt.code;
           if(!count.quantities){count.quantities=[]}
           if(!count.mesures){count.mesures=[]}
-          let survey = pt.surveys.filter(sv => sv.code === count.codeSurvey)[0];
-          survey.counts = [...survey.counts.filter(c => c.code !== count.code),count];
+          let survey = pt.surveys.filter(sv => sv.code === count.codeSurvey)[0];          
+          if(survey.counts && survey.counts.filter(c => c.code === count.code).length>0){
+              let c = survey.counts.filter(c => c.code === count.code)[0];
+              c.mesures = [...c.mesures,...count.mesures];
+              c.quantities = [...c.quantities,...count.quantities];
+              survey.counts = [...survey.counts.filter(c => c.code !== count.code), c];
+            } else {
+              survey.counts = [...survey.counts.filter(c => c.code !== count.code), count];
+            }
+          //survey.counts = [...survey.counts.filter(c => c.code !== count.code),count];
           pt.surveys = [...pt.surveys.filter(sv => sv.code !== survey.code), survey];
         }
         return from(this.db.put(pt));

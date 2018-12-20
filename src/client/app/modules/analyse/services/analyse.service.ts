@@ -38,14 +38,17 @@ export class AnalyseService {
             this.stationsZonesStock[zone.properties.code] = [];
             for (let st of stations) {
                 if( MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
-                    this.stationsZonesStock[zone.properties.code] = [...this.stationsZonesStock[zone.properties.code], st.properties.code];
+                    this.stationsZonesStock[zone.properties.code] = [...this.stationsZonesStock[zone.properties.code].filter(codeStation => codeStation!==st.properties.code),st.properties.code];
                     if(st.codePlatform === zone.codePlatform){
                         this.stationsZonesPerPlatform[zone.properties.code] = [...this.stationsZonesPerPlatform[zone.properties.code], st.properties.code];
-                    }
-                    stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
+                        stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
+                    } 
+                    
                 }
             }
         }
+        console.log(this.stationsZonesStock);
+        console.log(this.stationsZonesPerPlatform);
     }
 
     getResults(): Observable<Results> {
