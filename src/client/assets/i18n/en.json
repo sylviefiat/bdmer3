@@ -554,5 +554,6 @@
   "DENSITY_CAPER_HA":"Conservative hypothesis (density)",
   "HARVEST_SIZES":"Countries with minimum harvest size or weights",
   "FISHING_EFFORT":"Fishing effort",
-  "INDIVIDUAL_DIVES":"Individual dives"
+  "INDIVIDUAL_DIVES":"Individual dives",
+  "NB_DIVERS":"Number of divers"
 }
