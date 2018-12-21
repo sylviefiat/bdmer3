@@ -73,7 +73,7 @@ export class ResultExportXlsComponent implements OnInit {
         'binary'
     });
     let blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
-    console.log(fileName);
+    //console.log(fileName);
     /*var reader = new FileReader();
     reader.onloadend = function () {
         var url = <string>reader.result;
