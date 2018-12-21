@@ -32,23 +32,25 @@ export class AnalyseService {
     setStationsZones() {
         this.stationsZonesPerPlatform = [];
         this.stationsZonesStock = [];
-        let stations = this.data.usedStations;
+        let stationsS = this.data.usedStations;
+        let stationsPP = this.data.usedStations;
         for (let zone of this.data.usedZones) {
             this.stationsZonesPerPlatform[zone.properties.code] = [];
             this.stationsZonesStock[zone.properties.code] = [];
-            for (let st of stations) {
+            for (let st of stationsPP) {
                 if( MapService.booleanInPolygon(st, MapService.getPolygon(zone, {}))) {
-                    this.stationsZonesStock[zone.properties.code] = [...this.stationsZonesStock[zone.properties.code].filter(codeStation => codeStation!==st.properties.code),st.properties.code];
+                    if(stationsS.filter(s => s.properties.code===st.properties.code).length > 0){
+                        this.stationsZonesStock[zone.properties.code] = [...this.stationsZonesStock[zone.properties.code].filter(codeStation => codeStation!==st.properties.code),st.properties.code];
+                        stationsS = [...stationsS.filter(s => s.properties.code !== st.properties.code)];
+                    }
                     if(st.codePlatform === zone.codePlatform){
                         this.stationsZonesPerPlatform[zone.properties.code] = [...this.stationsZonesPerPlatform[zone.properties.code], st.properties.code];
-                        stations = [...stations.filter(s => s.properties.code !== st.properties.code)];
+                        stationsPP = [...stationsPP.filter(s => s.properties.code !== st.properties.code)];
                     } 
                     
                 }
             }
         }
-        console.log(this.stationsZonesStock);
-        console.log(this.stationsZonesPerPlatform);
     }
 
     getResults(): Observable<Results> {
@@ -77,7 +79,6 @@ export class AnalyseService {
 
     getResultsSurvey(survey: Survey): Observable<ResultSurvey> {
         let rsurvey: ResultSurvey = { codeSurvey: survey.code, yearSurvey: new Date(survey.dateStart).getFullYear(), codePlatform: survey.codePlatform, resultPerSpecies: [] };
-        
         let speciesObs = of(rsurvey)
             .pipe(
                 mergeMap((rsurvey: ResultSurvey) => from(this.data.usedSpecies.filter(sp => this.hasSpSurvey(survey, sp)))
@@ -97,7 +98,7 @@ export class AnalyseService {
                 mergeMap((results: Results) => from(this.data.usedSpecies)
                     .pipe(
                         mergeMap((species: Species) => this.getResultStockSpecies(species, results)),
-                        mergeMap((rspecies: ResultSpecies) => {
+                        mergeMap((rspecies: ResultSpecies) => {                            
                             this.results.resultAll.push(rspecies);
                             return of(this.results);
                         })
@@ -174,8 +175,10 @@ export class AnalyseService {
     }
 
     hasSpSurvey(survey: Survey, species: Species): boolean {
-        return survey.counts.filter((c: Count) => (c.quantities && c.quantities.length > 0 && c.quantities[0].codeSpecies === species.code)
-            || (c.mesures && c.mesures.length > 0 && c.mesures.filter(m => m.codeSpecies === species.code).length > 0)).length > 0;
+        return survey.counts.filter((c: Count) => {
+            return (c.quantities && c.quantities.length > 0 && c.quantities.map(q => q.codeSpecies).indexOf(species.code)>=0)
+            || (c.mesures && c.mesures.length > 0 && c.mesures.filter(m => m.codeSpecies === species.code).length > 0)
+        }).length > 0;
     }
 
     getResultsSurveySpecies(survey: Survey, species: Species): Observable<ResultSpecies> {
@@ -259,10 +262,11 @@ export class AnalyseService {
         let density = quantities.length > 0 ? this.getSum(quantities.map(q => q.density)) : 0;
         let nbCatches = quantities.length > 0 ? this.getSum(quantities.map(q => q.catches)) : 0;
 
+        rstation.nbDivers = this.getAverage(counts.map(c => c.numberDivers));
         if (mesures.length === 0 && density === 0) {
             return of(rstation);
         }
-        rstation.nbDivers = this.getAverage(counts.map(c => c.numberDivers));
+        
         rstation.nbCatches = mesures.length !== 0 ? mesures.length : Number(nbCatches);
 
         // ABONDANCE STATION = SOMME DES INDIVIDUS CONSIDERES
@@ -392,7 +396,7 @@ export class AnalyseService {
         rplatform.surfaceTotal = this.getSum(rzones.map(rz => rz.surface));
         rplatform.nbStationsTotal = this.getSum(rzones.map(rz => rz.nbStations));
         rplatform.nbCatches = this.getSum(rzones.map(rz => rz.nbCatches));
-        rplatform.fishingEffort = this.getSum(rzones.map(rs => rs.fishingEffort));
+        rplatform.fishingEffort = this.getSum(rzones.map(rz => rz.fishingEffort));
         // filter on zones taken in analysis (ie number of stations per ha is >0.2)
         rzones = rzones.filter(rz => rz.ratioNstSurface > 0.2);
         if (rzones.length > 0) {
@@ -413,7 +417,7 @@ export class AnalyseService {
                 rplatform.resultStock = { abundance: 0, abundanceCI: 0, abundanceCA: 0, densityPerHA: 0, densityCAPerHA: 0 };
                 rplatform.resultStock.abundance = averageAbundance * nbStrates;
                 rplatform.resultStock.abundanceCI = confidenceIntervalAbundance * nbStrates;
-                rplatform.resultStock.abundanceCA = rplatform.resultStock.abundance - rplatform.resultStock.abundanceCI;
+                rplatform.resultStock.abundanceCA = rplatform.resultStock.abundance >= rplatform.resultStock.abundanceCI ? rplatform.resultStock.abundance - rplatform.resultStock.abundanceCI : 0;
                 rplatform.resultStock.densityPerHA = rplatform.resultStock.abundance / (rplatform.surface / 10000);
                 rplatform.resultStock.densityCAPerHA = rplatform.resultStock.abundanceCA / (rplatform.surface / 10000);
                 if (averageAbundanceLegal) {
@@ -433,7 +437,7 @@ export class AnalyseService {
                 if (this.data.usedCountry.platformType === VESSEL) {
                     rplatform.resultStock.stock = averageBiomass * nbStrates;
                     rplatform.resultStock.stockCI = confidenceIntervalBiomass * nbStrates / 1000;
-                    rplatform.resultStock.stockCA = rplatform.resultStock.stock - rplatform.resultStock.stockCI;
+                    rplatform.resultStock.stockCA = rplatform.resultStock.stock > rplatform.resultStock.stockCI ? rplatform.resultStock.stock - rplatform.resultStock.stockCI : 0;
                     if (averageBiomassLegal) {
                         rplatform.resultStock.stockLegal = averageBiomassLegal * nbStrates;
                     }

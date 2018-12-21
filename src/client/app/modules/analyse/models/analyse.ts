@@ -73,6 +73,7 @@ export interface ResultStationExport {
     surface: number;                       // surface de la station en m²
     nbCatches: number;                     // nombre total d'individus pêchés
     nbDivers : number;                    // nb plongées x nb plongeurs
+    densityPerHA: number;                  // densité par hectare = abondance * (10000 / surface station)
 }
 
 export interface ResultZone {

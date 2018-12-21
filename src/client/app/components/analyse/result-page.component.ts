@@ -123,13 +123,85 @@ export class ResultPageComponent implements OnInit, AfterViewInit {
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
        
-      const contentDataURL = canvas.toDataURL('image/png');
+      //const contentDataURL = canvas.toDataURL('image/png');
+      const contentDataBlob = canvas.toBlob(blob => this.saveAs(blob, dashedName+'.png'));
       //let pdf = new jsPDF.default('p', 'mm', 'a4'); // A4 size page of PDF
-      const pdf = new jsPDF();
-      var position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save(dashedName+'.pdf'); // Generated PDF
+      //const pdf = new jsPDF();
+      //var position = 0;
+      //pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+      //pdf.save(dashedName+'.pdf'); // Generated PDF
+      //this.saveAs(contentDataBlob, dashedName+'.pdf' );
     });
+  }
+
+  download(url, name, opts) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+
+    xhr.onload = function () {
+      saveAs(xhr.response, name, opts);
+    };
+
+    xhr.onerror = function () {
+      console.error('could not download file');
+    };
+
+    xhr.send();
+  }
+
+
+  clicka(node) {
+    console.log(node);
+    try {
+      node.dispatchEvent(new MouseEvent('click'));
+    } catch (e) {
+      var evt = document.createEvent('MouseEvents');
+      evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+      node.dispatchEvent(evt);
+    }
+  }
+
+  corsEnabled(url) {
+    var xhr = new XMLHttpRequest(); // use sync to avoid popup blocker
+
+    xhr.open('HEAD', url, false);
+    xhr.send();
+    return xhr.status >= 200 && xhr.status <= 299;
+  } // `a.click()` doesn't work for all browsers (#465)
+
+
+  saveAs(blob, name, opts?) {
+    const self = this;
+    var a = document.createElement('a');
+    name = name || blob.name || 'download';
+    a.download = name;
+    a.rel = 'noopener'; // tabnabbing
+    // TODO: detect chrome extensions & packaged apps
+    //a.target = '_blank'
+
+    if (typeof blob === 'string') {
+      // Support regular links
+      a.href = blob;
+
+      if (a.origin !== location.origin) {
+        this.corsEnabled(a.href) ? this.download(blob, name, opts) : this.clicka(a);
+      } else {
+        this.clicka(a);
+      }
+    } else {
+      // Support blobs
+      console.log(blob);
+      a.href = URL.createObjectURL(blob);
+      setTimeout(function () {
+        URL.revokeObjectURL(a.href);
+      }, 4E4); // 40s
+
+      setTimeout(function () {
+        console.log("click");
+        self.clicka(a);
+      }, 0);
+    }
   }
 
 }

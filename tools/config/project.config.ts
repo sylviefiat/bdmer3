@@ -288,7 +288,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'file-saver',
             packageMeta: {
                 defaultExtension: 'js',
-                main: 'dist/FileSaver.min.js',
+                main: 'dist/FileSaver.js',
                 format: 'global'
             }
         },

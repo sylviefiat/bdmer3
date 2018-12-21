@@ -554,7 +554,7 @@
   "PLATFORM_NO_DATA":"Les plateformes désactivées n'ont pas assez de données pour produire une évaluation de stock",
   "DENSITY_CAPER_HA":"Hypothèse conservatrice (densité)",
   "HARVEST_SIZES":"Pays ayant des mesures de taille ou de poids réglementaires",
-  "FISHING_EFFORT":"Effort de pêche",
+  "FISHING_EFFORT":"Plongées individuelles",
   "INDIVIDUAL_DIVES":"Plongées individuelles",
   "NB_DIVERS":"Nombre de plongeurs"
 }
