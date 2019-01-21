@@ -21,9 +21,9 @@ export class SeedAdvancedConfig extends SeedConfig {
     ANALYTICS_TRACKING_ID: '',
   };
 
-   /**
-   * Holds added packages for desktop build.
-   */
+  /**
+  * Holds added packages for desktop build.
+  */
   DESKTOP_PACKAGES: ExtendPackages[] = [];
 
   constructor() {
@@ -45,7 +45,7 @@ export class SeedAdvancedConfig extends SeedConfig {
     if (this.TARGET_MOBILE_HYBRID) {
       // Perhaps Ionic or Cordova
       // This is not implemented in the seed but here to show you way forward if you wanted to add
-      bootstrap   = 'main.mobile.hybrid';
+      bootstrap = 'main.mobile.hybrid';
     }
     // Override seed defaults
     this.BOOTSTRAP_DIR = argv['app'] ? (argv['app'] + '/') : '';
@@ -61,6 +61,12 @@ export class SeedAdvancedConfig extends SeedConfig {
     // Advanced seed packages
     let additionalPackages: ExtendPackages[] = [
       {
+        name: '@angular/common/http',
+        path: 'node_modules/@angular/common/bundles/common-http.umd.js'
+      }, {
+        name: '@angular/common/locales/fr',
+        path: 'node_modules/@angular/common/locales/fr.js'
+      }, {
         name: 'lodash',
         path: 'node_modules/lodash/lodash.js'
       },
@@ -71,7 +77,7 @@ export class SeedAdvancedConfig extends SeedConfig {
       {
         name: '@ngrx/store',
         packageMeta: {
-          main: 'bundles/store.umd.js',
+          main: 'bundles/store.umd.js',//'node_modules/@ngrx/store/bundles/store.umd.js',
           defaultExtension: 'js'
         }
       },
@@ -84,7 +90,7 @@ export class SeedAdvancedConfig extends SeedConfig {
       },
       {
         name: '@ngrx/effects/testing',
-        path: 'testing/index.js'
+        path: 'index.js'
       },
       {
         name: '@ngrx/store-devtools',
@@ -110,41 +116,80 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/deep-freeze-strict/index.js'
       },
       {
-        name:"rxjs",
-        packageMeta: {  
-         defaultExtension:"js",
-         main:"bundles/rxjs.umd.js",
-         map:{  
-            "./observable":"./observable/index.js",
-            "./operators":"./operators/index.js",
-         }
+        name: 'rxjs',
+        packageMeta: {
+          defaultExtension: 'js',
+          main: 'bundles/rxjs.umd.js',
+          map: {
+            './observable': './observable/index.js',
+            './operators': './operators/index.js'
+          }
         }
       },
       {
-        name:"rxjs-compat",
-        packageMeta: {  
-         defaultExtension:"js",
-         main:"bundles/rxjs.umd.js",
-         map:{  
-            "./observable":"./observable/index.js",
-            "./operators":"./operators/index.js",
-         }
+        name: 'rxjs-compat',
+        packageMeta: {
+          defaultExtension: 'js',
+          main: 'bundles/rxjs.umd.js',
+          map: {
+            './observable': './observable/index.js',
+            './operators': './operators/index.js'
+          }
         }
       },
       {
         name: 'tslib',
         path: 'node_modules/tslib/tslib.js'
-      }
+      },
+      {
+        name: 'ngx-mapbox-gl',
+        packageMeta: {
+          defaultExtension: 'js',
+          main: 'bundles/ngx-mapbox-gl.umd.js',
+          format: 'cjs'
+        }
+      },
+      {
+        name: 'file-saver',
+        packageMeta: {
+          defaultExtension: 'js',
+          main: 'dist/FileSaver.js',
+          format: 'global'
+        }
+      },
+      {
+        name: '@mapbox/mapbox-sdk',
+        packageMeta: {
+          defaultExtension: 'js',
+          main: 'umd/mapbox-sdk.js'
+        }
+      },
+      {
+        name: 'jspdf',
+        packageMeta: {
+          format: 'global'
+        },
+        path: 'dist/jspdf.min.js',
+      },
+      {
+        name: 'xlsx',
+       /* packageMeta: {
+            defaultExtension: 'js',
+            exports: 'XLSX',
+            format: 'global'
+        },   */     
+        path: 'node_modules/xlsx/dist/xlsx.full.min.js',
+      },
     ];
 
     /**
      * Need to duplicate this in the project.config.ts to
      * pick up packages there too.
      */
-     this.DESKTOP_PACKAGES = [
+    this.DESKTOP_PACKAGES = [
       ...this.DESKTOP_PACKAGES,
       ...additionalPackages,
-      ];
+    ];
 
     this.addPackagesBundles(additionalPackages);
 
@@ -168,10 +213,10 @@ export class SeedAdvancedConfig extends SeedConfig {
     };
 
     // Fix up path to bootstrap module
-    this.SYSTEM_CONFIG.paths[this.BOOTSTRAP_MODULE] = `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`;
+    //this.SYSTEM_CONFIG.paths[this.BOOTSTRAP_MODULE] = `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`;
 
     /** Production **/
 
-    delete this.SYSTEM_BUILDER_CONFIG['packageConfigPaths']; // not all libs are distributed the same
+    //delete this.SYSTEM_BUILDER_CONFIG['packageConfigPaths']; // not all libs are distributed the same
   }
 }

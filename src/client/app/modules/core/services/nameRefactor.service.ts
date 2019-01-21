@@ -1,6 +1,6 @@
 export class NameRefactorService {
 
-      convertAccent(str){
+      convertAccent(str) {
             let conversions = new Object();
             conversions['ae'] = 'ä|æ|ǽ';
             conversions['oe'] = 'ö|œ';
@@ -53,8 +53,8 @@ export class NameRefactorService {
             conversions['OE'] = 'Œ';
             conversions['f'] = 'ƒ';
 
-            for(let i in conversions){
-                  let re = new RegExp(conversions[i],"g");
+            for(let i in conversions) {
+                  let re = new RegExp(conversions[i],'g');
                   str = str.replace(re,i);
             }
 

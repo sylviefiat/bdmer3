@@ -6,7 +6,10 @@ import { IAppState } from '../../modules/ngrx/index';
 import { Platform, Zone, Survey, Station, Species } from '../../modules/datas/models/index';
 import { Results, Data, ResultPlatformExport, ResultZoneExport, ResultStationExport } from '../../modules/analyse/models/index';
 
-import { utils, write, WorkBook } from 'xlsx';
+//import { utils, write, WorkBook } from 'xlsx';
+//import 'xlsx.utils.json_to_sheet';
+//import 'xlsx.write';
+import * as XLSX from 'xlsx';
 
 import { saveAs } from 'file-saver';
 
@@ -50,7 +53,7 @@ export class ResultExportXlsComponent implements OnInit {
   }
 
   export(type) {
-    let wb: WorkBook = { SheetNames: [], Sheets: {} };
+    let wb: XLSX.WorkBook = { SheetNames: [], Sheets: {} };
     let fileName = this.results.name.replace(' ', '-')+'-'+type+'.xlsx'; 
     switch (type) {
       case "platform":
@@ -68,57 +71,46 @@ export class ResultExportXlsComponent implements OnInit {
       default:
         break;
     }
-    const wbout = write(wb, {
+    const wbout = XLSX.write(wb, {
       bookType: 'xlsx', bookSST: true, type:
         'binary'
     });
     let blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
-    //console.log(fileName);
-    /*var reader = new FileReader();
-    reader.onloadend = function () {
-        var url = <string>reader.result;
-        url = url;
-        let popup = open('', '_blank');
-        if (popup) popup.location.href = url;
-        popup = null; // reverse-tabnabbing #460
-      };
-
-    reader.readAsDataURL(blob);*/
-
-    /*this.*/saveAs(blob, fileName );
+    saveAs(blob, fileName );
   }
 
-  exportPerPlatform(wb: WorkBook) {    
+  exportPerPlatform(wb: XLSX.WorkBook) {    
     let ws = [];
+    
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies }, this.modelPlatform));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies }, this.modelPlatform));
     }
     return wb;       
   }
 
-  exportPerZone(wb: WorkBook) {
+  exportPerZone(wb: XLSX.WorkBook) {
     let ws = [];
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone));
     }
     return wb; 
   }
 
-  exportPerStation(wb: WorkBook) {
+  exportPerStation(wb: XLSX.WorkBook) {
     let ws = [];
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation));
     }
     return wb; 
   }
 
-  exportPerSurvey(wb: WorkBook) {
+  exportPerSurvey(wb: XLSX.WorkBook) {
     let ws = [], ws_temp = [];
     for (let resultSurvey of this.results.resultPerSurvey) {
       for (let resultspecies of resultSurvey.resultPerSpecies) {
@@ -131,7 +123,7 @@ export class ResultExportXlsComponent implements OnInit {
       }
     }
     for(let name in ws_temp){
-      wb.Sheets[name] = utils.json_to_sheet(ws_temp[name]);
+      wb.Sheets[name] = XLSX.utils.json_to_sheet(ws_temp[name]);
     }
     return wb; 
   }

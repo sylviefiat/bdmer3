@@ -20,7 +20,6 @@ const INLINE_OPTIONS = {
 
 export = () => {
   let tsProject = makeTsProject({}, Config.TMP_DIR);
-  console.log("starting");
   let src = [
     Config.TOOLS_DIR + '/manual_typings/**/*.d.ts',
     join(Config.TMP_DIR, '**/*.ts'),
@@ -31,7 +30,6 @@ export = () => {
     .pipe(plugins.inlineNg2Template(INLINE_OPTIONS))
     .pipe(tsProject())
     .once('error', function(e: any) {
-      console.log("herei");
       console.log(e);
       this.once('finish', () => process.exit(1));
     });

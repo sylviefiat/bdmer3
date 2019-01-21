@@ -1,18 +1,18 @@
-import { join } from "path";
-import { SeedAdvancedConfig } from "./seed-advanced.config";
-import { ExtendPackages } from "./seed.config.interfaces";
+import { join } from 'path';
+import { SeedAdvancedConfig } from './seed-advanced.config';
+import { ExtendPackages } from './seed.config.interfaces';
 
 /**
  * This class extends the basic seed configuration, allowing for project specific overrides. A few examples can be found
  * below.
  */
 export class ProjectConfig extends SeedAdvancedConfig {
-    PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, "tasks", "project");
+    PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
 
     constructor() {
         super();
-        this.APP_TITLE = "BDMER³";
-        // this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
+        this.APP_TITLE = 'BDMER³';
+        //this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
         /* Enable typeless compiler runs (faster) between typed compiler runs. */
         // this.TYPED_COMPILE_INTERVAL = 5;
         // Add `NPM` third-party libraries to be injected/bundled.
@@ -42,7 +42,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
         this.ROLLUP_INCLUDE_DIR = [
             ...this.ROLLUP_INCLUDE_DIR,
-            //'node_modules/moment/**'
+            'node_modules/moment/**'
         ];
 
         this.ROLLUP_NAMED_EXPORTS = [
@@ -52,7 +52,8 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
         // Add packages (e.g. ng2-translate)
         // ng2-translate is already added with the advanced seed - here for example only
-        let additionalPackages: ExtendPackages[] = [{
+        let additionalPackages: ExtendPackages[] = [
+        {
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
         }, {
@@ -88,29 +89,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/mapbox-gl/dist/mapbox-gl-dev.js'
         },
         {
-            name: "ngx-mapbox-gl",
-            packageMeta: {
-                defaultExtension: "js",
-                main: "bundles/ngx-mapbox-gl.umd.js",
-                format: "cjs"
-            }
-        },
-        {
-            name: '@mapbox/togeojson',
-            path: 'node_modules/@mapbox/togeojson/togeojson.js'
-        },
-        {
-            name: "@mapbox/mapbox-sdk",
-            packageMeta: {
-                defaultExtension: "js",
-                main: "umd/mapbox-sdk.js"
-            }
-        },
-        {
-            name: '@mapbox/geojson-area',
-            path: 'node_modules/@mapbox/geojson-area/index.js'
-        },
-        {
             name: 'through',
             path: 'node_modules/through/index.js'
         },
@@ -121,10 +99,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: 'fs',
             path: 'node_modules/graceful-fs/fs.js'
-        },
-        {
-            name: '@mapbox/mapbox-gl-geocoder',
-            path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
         },
         {
             name: 'highcharts/modules/indicators',
@@ -164,7 +138,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
             path: 'node_modules/@angular/material/bundles/material.umd.js'
         }, {
             name: '@angular/cdk',
-            path: '/@angular/cdk/index.js'
+            path: 'node_modules/@angular/cdk/index.js'
         },
         {
             name: '@angular/cdk/a11y',
@@ -236,7 +210,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         },
         {
             name: 'papaparse',
-            path: "node_modules/papaparse"
+            path: 'node_modules/papaparse'
         }, {
             name: 'ngx-papaparse',
             path: 'node_modules/ngx-papaparse/bundles/ngx-papaparse.umd.min.js'
@@ -273,41 +247,33 @@ export class ProjectConfig extends SeedAdvancedConfig {
             name: 'martinez-polygon-clipping',
             path: 'node_modules/martinez-polygon-clipping/dist/martinez.min.js'
         },
-	    {
-            name: 'jspdf',
-            packageMeta: {
-                format: "global"
-            },
-            path: 'node_modules/jspdf/dist/jspdf.min.js',
-	    },
         {
             name: 'html2canvas',
             path: 'node_modules/html2canvas/dist/html2canvas.min.js'
         },
         {
-            name: 'file-saver',
-            packageMeta: {
-                defaultExtension: 'js',
-                main: 'dist/FileSaver.js',
-                format: 'global'
-            }
+            name: '@mapbox/togeojson',
+            path: 'node_modules/@mapbox/togeojson/togeojson.js'
         },
         {
-            name: 'xlsx',
-            path: 'node_modules/xlsx/dist/xlsx.full.min.js'
+            name: '@mapbox/geojson-area',
+            path: 'node_modules/@mapbox/geojson-area/index.js'
+        },
+        {
+            name: '@mapbox/mapbox-gl-geocoder',
+            path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
         }];
 
         this.addPackagesBundles(additionalPackages);
 
         // Fix up path to bootstrap module
-        //this.SYSTEM_CONFIG.package[this.BOOTSTRAP_MODULE].defaultExtension = 'js';
-
+        //this.SYSTEM_CONFIG.paths[this.BOOTSTRAP_MODULE].defaultExtension = 'js';
         /* Add proxy middleware */
         // this.PROXY_MIDDLEWARE = [
         //   require('http-proxy-middleware')('/api', { ws: false, target: 'http://localhost:3003' })
         // ];
 
         /* Add to or override NPM module configurations: */
-        // this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
+        //this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as Turf from '@turf/turf';
 import * as Intersect from '@turf/intersect';
-import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from "mapbox-gl";
+import { LngLatBounds, Layer, LngLat, MapMouseEvent, Map } from 'mapbox-gl';
 
 @Injectable()
 export class MapService {
@@ -10,13 +10,13 @@ export class MapService {
 
     static getFeature(feature, properties) {
         switch (feature.geometry.type) {
-            case "GeometryCollection":
+            case 'GeometryCollection':
                 return Turf.multiPolygon(feature.geometry.geometries.map(geom => geom.coordinates), properties);
-            case "MultiPolygon":
+            case 'MultiPolygon':
                 return Turf.multiPolygon(feature.geometries.coordinates, properties);
-            case "Polygon":
+            case 'Polygon':
                 return Turf.polygon(feature.geometry.coordinates, properties);
-            case "Point":
+            case 'Point':
                 return Turf.point(feature.geometry.coordinates, properties)
             default:
                 return null;
@@ -25,25 +25,24 @@ export class MapService {
 
     static getPolygon(feature, properties) {
         switch (feature.geometry.type) {
-            case "GeometryCollection":
+            case 'GeometryCollection':
                 return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)], properties);
-            case "MultiPolygon":
+            case 'MultiPolygon':
                 return Turf.multiPolygon(feature.geometries.coordinates, properties);
-            case "Polygon":
+            case 'Polygon':
                 return Turf.polygon(feature.geometry.coordinates, properties);
             default:
-            console.log("nothing");
                 return null;
         }
     }
 
     static getMultiPolygon(feature) {
         switch (feature.geometry.type) {
-            case "GeometryCollection":
+            case 'GeometryCollection':
                 return Turf.multiPolygon([feature.geometry.geometries.flatMap(geom => geom.coordinates)]);
-            case "MultiPolygon":
+            case 'MultiPolygon':
                 return Turf.multiPolygon(feature.geometries.coordinates);
-            case "Polygon":
+            case 'Polygon':
                 return Turf.multiPolygon([feature.geometry.coordinates]);
             default:
                 return null;
@@ -52,12 +51,12 @@ export class MapService {
 
     static getCoordinates(feature) {
         switch (feature.geometry.type) {
-            case "GeometryCollection":
+            case 'GeometryCollection':
                 return feature.geometry.geometries.flatMap(geom => geom.coordinates);
-            case "MultiPolygon":
+            case 'MultiPolygon':
                 return feature.geometry.coordinates.flatMap(coord => coord);
-            case "Polygon":
-            case "Point":
+            case 'Polygon':
+            case 'Point':
                 return feature.geometry.coordinates;
             default:
                 return null;
@@ -159,13 +158,6 @@ export class MapService {
 
     static isStationInAZone(station, platform): boolean {
         for (let zone of platform.zones) {
-            if(zone.properties.code==='Muscadin_33' && station.properties.code === 'Muscadin-2018-10-22_IWD'){
-                console.log(station);
-                console.log(zone);
-                console.log(MapService.getPolygon(zone, { name: zone.properties.name }));
-                console.log(MapService.getMultiPolygon(zone));
-                console.log(MapService.booleanInPolygon(station, MapService.getMultiPolygon(zone)))
-            }
             if (MapService.booleanInPolygon(station, MapService.getPolygon(zone, { name: zone.properties.code }))) {
                 return true;
             }

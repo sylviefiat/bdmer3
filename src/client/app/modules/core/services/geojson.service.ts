@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import * as togeojson from "@mapbox/togeojson";
-import * as area from "@mapbox/geojson-area";
-import { mergeMap } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import * as togeojson from '@mapbox/togeojson';
+import * as area from '@mapbox/geojson-area';
+import { mergeMap } from 'rxjs/operators';
 
-import { NameRefactorService } from "./nameRefactor.service";
-import { Platform } from "../../datas/models/platform";
-import { Observable, from, of } from "rxjs";
+import { NameRefactorService } from './nameRefactor.service';
+import { Platform } from '../../datas/models/platform';
+import { Observable, from, of } from 'rxjs';
 
 @Injectable()
 export class GeojsonService {
@@ -19,27 +19,27 @@ export class GeojsonService {
 
       reader.onload = function(event) {
         const parser = new DOMParser();
-        const x = parser.parseFromString((<string>reader.result), "application/xml");
+        const x = parser.parseFromString((<string>reader.result), 'application/xml');
         console.log(kml);        
         const geojson = self.toCamel(togeojson.kml(x).features);
         console.log(geojson);
         for (let i in geojson) {
-          delete geojson[i].properties["styleHash"];
-          delete geojson[i].properties["styleMapHash"];
-          delete geojson[i].properties["styleUrl"];
+          delete geojson[i].properties['styleHash'];
+          delete geojson[i].properties['styleMapHash'];
+          delete geojson[i].properties['styleUrl'];
           let name = geojson[i].properties.name ? geojson[i].properties.name : (geojson[i].properties.Name ? geojson[i].properties.Name : (geojson[i].properties.id ? geojson[i].properties.id : i));
           geojson[i].properties.code =
             platform.code +
-            "_" +
+            '_' +
             self.nameRefactorService
               .convertAccent(name)
-              .split(" ")
-              .join("-")
-              .replace(/[^a-zA-Z0-9]/g, "");
+              .split(' ')
+              .join('-')
+              .replace(/[^a-zA-Z0-9]/g, '');
 
           const surface = area.geometry(geojson[i].geometry);
 
-          geojson[i].properties.surface = parseInt(surface.toString().split(".")["0"]);
+          geojson[i].properties.surface = parseInt(surface.toString().split('.')['0']);
         }
         console.log(geojson);
         resolve(geojson);
@@ -52,7 +52,7 @@ export class GeojsonService {
     var newO, origKey, newKey, value;
     if (o instanceof Array) {
       return o.map(function(value) {
-        if (typeof value === "object") {
+        if (typeof value === 'object') {
           value = self.toCamel(value);
         }
         return value;

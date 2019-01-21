@@ -94,7 +94,7 @@ export * from './country/selected-country-page.component';
 export * from './country/user-detail.component';
 export * from './country/view-country-page.component';
 export * from './country/view-user-page.component';
-export * from  './country/selected-user-page.component';
+export * from './country/selected-user-page.component';
 export * from './country/new-country.component';
 export * from './country/new-country-page.component';
 export * from './country/new-user-page.component';

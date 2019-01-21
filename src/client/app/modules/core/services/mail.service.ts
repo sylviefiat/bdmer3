@@ -6,11 +6,9 @@ import { User } from '../../countries/models/country';
 @Injectable()
 export class MailService {
 
-    constructor() {
+    constructor() { }
 
-    }
-
-    sendPasswordMail(user: User): boolean{
+    sendPasswordMail(user: User): boolean {
         return true;
     }
 }

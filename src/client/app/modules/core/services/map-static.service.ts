@@ -1,19 +1,19 @@
-import { Injectable } from "@angular/core";
-import { NameRefactorService } from "./nameRefactor.service";
+import { Injectable } from '@angular/core';
+import { NameRefactorService } from './nameRefactor.service';
 
-import * as area from "@mapbox/geojson-area";
-import * as Turf from "@turf/turf";
-import * as togeojson from "@mapbox/togeojson";
-import * as mbxClient from "@mapbox/mapbox-sdk";
+import * as area from '@mapbox/geojson-area';
+import * as Turf from '@turf/turf';
+import * as togeojson from '@mapbox/togeojson';
+import * as mbxClient from '@mapbox/mapbox-sdk';
 
 @Injectable()
 export class MapStaticService {
   constructor(private nameRefactorService: NameRefactorService) {}
 
   refactorCoordinates(coordinates) {
-    var string = coordinates.split(" ");
+    var string = coordinates.split(' ');
 
-    while (string[string.length - 1] == "") {
+    while (string[string.length - 1] == '') {
       string.splice(string.length - 1, 1);
     }
 
@@ -21,12 +21,12 @@ export class MapStaticService {
 
     for (var i = 0; i < a; i++) {
       if (
-        parseFloat(string[i].split(",")["0"]) < -180 ||
-        parseFloat(string[i].split(",")["0"]) > 180 ||
-        parseFloat(string[i].split(",")["1"]) < -90 ||
-        parseFloat(string[i].split(",")["1"]) > 90
+        parseFloat(string[i].split(',')['0']) < -180 ||
+        parseFloat(string[i].split(',')['0']) > 180 ||
+        parseFloat(string[i].split(',')['1']) < -90 ||
+        parseFloat(string[i].split(',')['1']) > 90
       ) {
-        return "error";
+        return 'error';
       }
     }
 
@@ -45,7 +45,7 @@ export class MapStaticService {
     try {
       Turf.polygon(res);
     } catch (error) {
-      return "error";
+      return 'error';
     }
 
     return res;
@@ -55,10 +55,10 @@ export class MapStaticService {
     let isValid;
 
     switch (type) {
-      case "lat":
+      case 'lat':
         isValid = coord <= 90 && coord >= -90;
         break;
-      case "lng":
+      case 'lng':
         isValid = coord <= 180 && coord >= -180;
         break;
     }
@@ -68,41 +68,41 @@ export class MapStaticService {
 
   googleMapUrl(ar) {
     var a = ar.length;
-    ar = ar["0"];
+    ar = ar['0'];
 
-    var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
+    var url = 'https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C';
 
     for (var i = 0; i < ar.length; i++) {
-      url += ar[i]["1"] + "," + ar[i]["0"];
+      url += ar[i]['1'] + ',' + ar[i]['0'];
       if (i !== ar.length - 1) {
-        url += "|";
+        url += '|';
       }
     }
 
-    url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g";
+    url += '&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g';
 
     return url;
   }
 
   googleMapUrlPoint(ar) {
     var a = ar.length;
-    var url = "https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C";
-    url += ar["1"] + "," + ar["0"] + "&markers=color:green%7Clabel:T%7C" + ar["1"] + "," + ar["0"];
-    url += "&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g";
+    var url = 'https://maps.googleapis.com/maps/api/staticmap?path=color:0x0000ff%7Cweight:5%7C';
+    url += ar['1'] + ',' + ar['0'] + '&markers=color:green%7Clabel:T%7C' + ar['1'] + ',' + ar['0'];
+    url += '&size=700x700&zoom=9&key=AIzaSyCOm1K8tIc7J9GpKEjCKp4VnCwVukqic2g';
     return url;
   }
 
   setAllStaticMapToB64(platform, zone) {
-    let token = "pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw";
+    let token = 'pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw';
     const baseClient = mbxClient({ accessToken: token });
-    delete zone["codePlatform"];
-    delete zone["codePlatform"];
-    delete zone["staticmap"];
-    delete zone["stations"];
-    delete zone["zonePreferences"];
+    delete zone['codePlatform'];
+    delete zone['codePlatform'];
+    delete zone['staticmap'];
+    delete zone['stations'];
+    delete zone['zonePreferences'];
 
     let geoJson = {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: []
     };
 
@@ -110,11 +110,11 @@ export class MapStaticService {
 
     for (let zn of platform.zones) {
       console.log(zn);
-      delete zn["codePlatform"];
-      delete zn["codePlatform"];
-      delete zn["staticmap"];
-      delete zn["stations"];
-      delete zn["zonePreferences"];
+      delete zn['codePlatform'];
+      delete zn['codePlatform'];
+      delete zn['staticmap'];
+      delete zn['stations'];
+      delete zn['zonePreferences'];
       geoJson.features.push(zn);
     }
 
@@ -151,8 +151,8 @@ export class MapStaticService {
     //   });
 
     const request = baseClient.static.getStaticImage({
-      ownerId: "mapbox",
-      styleId: "streets-v10",
+      ownerId: 'mapbox',
+      styleId: 'streets-v10',
       width: 200,
       height: 300,
       coordinates: [55.3097329350996, -4.523781196019549],
@@ -165,7 +165,7 @@ export class MapStaticService {
     });
 
     const staticImageUrl = request.url();
-    console.log(staticImageUrl + "?access_token=pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw");
+    console.log(staticImageUrl + '?access_token=pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw');
 
     // var img = new Image();
     // img.src = staticImageUrl + "?access_token=" + token;
@@ -218,6 +218,6 @@ export class MapStaticService {
 
   setSurface(geometry) {
     var surface = area.geometry(geometry);
-    return parseInt(surface.toString().split(".")["0"]);
+    return parseInt(surface.toString().split('.')['0']);
   }
 }
