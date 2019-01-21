@@ -428,16 +428,17 @@ export class SeedConfig {
     meta: {
       'xlsx': {
         format: 'global',
-        exports: 'XLSX' // <-- this is needed to tell SystemJS to expose XLSX
+        exports: 'XLSX', // <-- this is needed to tell SystemJS to expose XLSX
+        defaultExtension:'js'
       }
     },
     map: {
       'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
-      'xlsx': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
-      'fs': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/fs' : '', // <-- systemjs doesn't seem to automatically suppress node core
-      'crypto': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/crypto' : '',
-      'stream': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/stream' : '',
+      'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
+      'fs': '', // <-- systemjs doesn't seem to automatically suppress node core
+      'crypto': '',
+      'stream': '',
     },
     transpiler: 'plugin-babel',
     paths: {
@@ -497,14 +498,15 @@ export class SeedConfig {
     meta: {
       'xlsx': {
         format: 'global',
-        exports: 'XLSX' // <-- this is needed to tell SystemJS to expose XLSX
+        exports: 'XLSX', // <-- this is needed to tell SystemJS to expose XLSX
+        defaultExtension:'js'
       }
     },
     map: {
-      'xlsx': this.BUILD_TYPE === BUILD_TYPES.DEVELOPMENT ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
-      'fs': '@node/fs',
-      'crypto': '@node/crypto',
-      'stream': '@node/stream'
+      'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
+      'fs': '', // <-- systemjs doesn't seem to automatically suppress node core
+      'crypto':'',
+      'stream': '',
     },
     packageConfigPaths: [
       join('node_modules', '*', 'package.json'),

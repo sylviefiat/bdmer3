@@ -3,6 +3,10 @@ import { Config } from '../../modules/core/index';
 import { Store } from '@ngrx/store';
 import { IAppState, getLangues } from '../../modules/ngrx/index';
 
+import * as XLSX from 'xlsx';
+
+import { saveAs } from 'file-saver';
+
 @Component({
     moduleId: module.id,
     selector: 'sd-about',
@@ -56,7 +60,26 @@ export class AboutComponent {
         return this.imgs_repo + this.sfa_img;
     }
 
-    get pdfUrl() {
-        return this.docs_repo + this.pdfFile;
+    getPdfUrl() {
+        let wb: XLSX.WorkBook = { SheetNames: [], Sheets: {} };
+        wb.SheetNames.push("test");
+        wb.Sheets["test"] = XLSX.utils.json_to_sheet([{ test: 'kcheoc' }]);
+        const wbout = XLSX.write(wb, {
+            bookType: 'xlsx', bookSST: true, type:
+                'binary'
+        });
+        console.log("test");
+        let blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
+        saveAs(blob, 'test.xls');
+        //return this.docs_repo + this.pdfFile;
+    }
+
+    s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) {
+            view[i] = s.charCodeAt(i) & 0xFF;
+        };
+        return buf;
     }
 }
