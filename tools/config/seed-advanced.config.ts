@@ -171,15 +171,10 @@ export class SeedAdvancedConfig extends SeedConfig {
         },
         path: 'dist/jspdf.min.js',
       },
-      {
-        name: 'xlsx',
-       /* packageMeta: {
-            defaultExtension: 'js',
-            exports: 'XLSX',
-            format: 'global'
-        },   */     
+     /* {
+        name: 'xlsx',   
         path: 'node_modules/xlsx/dist/xlsx.full.min.js',
-      },
+      },*/
     ];
 
     /**

@@ -427,13 +427,14 @@ export class SeedConfig {
     //defaultJSExtensions: true, 
     meta: {
       'xlsx': {
+        format: 'global',
         exports: 'XLSX' // <-- this is needed to tell SystemJS to expose XLSX
       }
     },
     map: {
       'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
-      //'xlsx': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
+      'xlsx': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
       'fs': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/fs' : '', // <-- systemjs doesn't seem to automatically suppress node core
       'crypto': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/crypto' : '',
       'stream': this.BUILD_TYPE === BUILD_TYPES.PRODUCTION ? '@node/stream' : '',
@@ -468,7 +469,6 @@ export class SeedConfig {
       'file-saver': 'node_modules/file-saver',
       '@mapbox': 'node_modules/@mapbox',
       'jspdf': 'node_modules/jspdf',
-      //'xlsx':'node_modules/xlsx',
 
       'app/*': '/app/*',
       // For test config
@@ -496,11 +496,12 @@ export class SeedConfig {
     base: this.PROJECT_ROOT,
     meta: {
       'xlsx': {
+        format: 'global',
         exports: 'XLSX' // <-- this is needed to tell SystemJS to expose XLSX
       }
     },
     map: {
-      //'xlsx': this.BUILD_TYPE === BUILD_TYPES.DEVELOPMENT ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
+      'xlsx': this.BUILD_TYPE === BUILD_TYPES.DEVELOPMENT ? 'node_modules/xlsx/xlsx.min.js' : 'node_modules/xlsx/dist/xlsx.full.min.js',
       'fs': '@node/fs',
       'crypto': '@node/crypto',
       'stream': '@node/stream'
@@ -529,8 +530,6 @@ export class SeedConfig {
       'ngx-mapbox-gl/*': 'node_modules/ngx-mapbox-gl/*',
       'file-saver/*': 'node_modules/file-saver/*',
       'jspdf/*': 'node_modules/jspdf/*',
-      //'shim':'node_modules/xlsx/dist/shim.min.js',
-      //'xlsx/*':'node_modules/xlsx/*',
       'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
       'node_modules/*': 'node_modules/*',
       '*': 'node_modules/*'
