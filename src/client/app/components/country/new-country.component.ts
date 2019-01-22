@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { defer, Observable, pipe, of } from "rxjs";
@@ -49,8 +49,6 @@ export class NewCountryComponent implements OnInit {
   ) {}
 
   ngOnInit(){
-    console.log(this.countryList);
-    console.log(this.platformTypeList);
   }
 
   check(event){
@@ -78,14 +76,19 @@ export class NewCountryComponent implements OnInit {
         }
         this.http
           .get(
-            "https://geocode.xyz/" +
+            "http://geocode.xyz/" +
               this.form.controls.pays.value["name"] +
-              "?json=1"
+              "?geojson=1", {responseType: 'text'}
           )
-          .subscribe((coord:any) => {
-            console.log(coord);
-            this.form.controls.coordinates.get("lat").setValue(coord.latt);
-            this.form.controls.coordinates.get("lng").setValue(coord.longt);
+          .subscribe((str:any) => {
+            console.log(str);
+            let latt = str.substr(str.indexOf('<latt>')+6, str.indexOf('</latt>')-str.indexOf('<latt>')-6);
+            console.log(latt);
+            console.log(this.form.controls.coordinates);
+            this.form.controls.coordinates.get("lat").setValue(latt);
+            let longt = str.substr(str.indexOf('<longt>')+7, str.indexOf('</longt>')-str.indexOf('<longt>')-7);
+            console.log(longt);
+            this.form.controls.coordinates.get("lng").setValue(longt);
 
             this.form.controls.flag.setValue(data);
 
