@@ -537,7 +537,7 @@
   "STOCK_LEGAL":"Stock des individus de taille légale",
   "DENSITY":"Densité",
   "DENSITY_CI":"Intervalle de confiance (Densité)",
-  "DENSITY_CA":"Hypothèse conservatrice (Densité)",
+  "DENSITY_CA":"Hypothese conservatrice (Densite)",
   "DENSITY_LEGAL":"Densité des individus de taille légale",
   "RATIO_NST_SURFACE":"Nombre de stations au km²",
   "ABUNDANCE_PER_HA":"Abondance par hectare",

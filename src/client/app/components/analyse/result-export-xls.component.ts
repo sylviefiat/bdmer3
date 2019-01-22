@@ -108,17 +108,17 @@ export class ResultExportXlsComponent implements OnInit {
   }
 
   exportPerSurvey(wb: XLSX.WorkBook) {
-    let ws = [], ws_temp = [];
-    let setHeader = true;
+    let ws = [], ws_temp = [];    
+    let setHeader = true, index = 0;
     for (let resultSurvey of this.results.resultPerSurvey) {
+      setHeader = !index++ ? true : false;
       for (let resultspecies of resultSurvey.resultPerSpecies) {
         let ws_name = resultspecies.nameSpecies;
         if (wb.SheetNames.indexOf(ws_name) < 0) {
           wb.SheetNames.push(ws_name);
           ws_temp[ws_name] = [];
         }
-        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey }, this.modelPlatform, setHeader)];
-        setHeader = false;
+        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey }, this.modelPlatform, setHeader)];        
       }
     }
     for(let name in ws_temp){
