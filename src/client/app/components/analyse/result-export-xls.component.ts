@@ -82,7 +82,7 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies },this.modelPlatform),{skipHeader:true});
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies },this.modelPlatform, true),{skipHeader:true});
     }
     return wb;       
   }
@@ -92,7 +92,7 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone),{skipHeader:true});
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone, true),{skipHeader:true});
     }
     return wb; 
   }
@@ -102,13 +102,14 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation),{skipHeader:true});
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation, true),{skipHeader:true});
     }
     return wb; 
   }
 
   exportPerSurvey(wb: XLSX.WorkBook) {
     let ws = [], ws_temp = [];
+    let setHeader = true;
     for (let resultSurvey of this.results.resultPerSurvey) {
       for (let resultspecies of resultSurvey.resultPerSpecies) {
         let ws_name = resultspecies.nameSpecies;
@@ -116,7 +117,8 @@ export class ResultExportXlsComponent implements OnInit {
           wb.SheetNames.push(ws_name);
           ws_temp[ws_name] = [];
         }
-        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey }, this.modelPlatform)];
+        ws_temp[ws_name] = [...ws_temp[ws_name], ...this.flat(resultspecies.resultPerPlatform, { surveyCode: resultSurvey.codeSurvey }, this.modelPlatform, setHeader)];
+        setHeader = false;
       }
     }
     for(let name in ws_temp){
@@ -134,7 +136,7 @@ export class ResultExportXlsComponent implements OnInit {
     return buf;
   }
 
-  flat(data, addedProperties, model?): any {
+  flat(data, addedProperties, model, setHeader): any {
     let flatArray = [];
     let header = [];    
 
@@ -168,7 +170,7 @@ export class ResultExportXlsComponent implements OnInit {
           }
         }
       }
-      if(flatArray.length===0){
+      if(flatArray.length===0 && setHeader){
         flatArray.push(header);
       }
       flatArray.push(flatObject);
