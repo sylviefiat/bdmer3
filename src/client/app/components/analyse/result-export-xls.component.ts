@@ -38,10 +38,13 @@ export class ResultExportXlsComponent implements OnInit {
   @Input() analyseData: Data;
   @Input() results: Results;
   @Input() locale: string;
+  headers;
   modelPlatform: ResultPlatformExport = { codePlatform: "", surface: 0, surfaceTotal: 0, nbZones: 0, nbZonesTotal: 0, nbStations: 0, nbStationsTotal: 0, nbCatches: 0, fishingEffort:0 };
+  
   modelZone: ResultZoneExport = { codeZone: "", codePlatform: "", surface: 0, nbStations: 0, nbCatches: 0, fishingEffort:0 };
   modelStation: ResultStationExport = { codeStation: "", latitude: 0, longitude: 0, surface: 0, nbCatches: 0, nbDivers: 0, densityPerHA:0 };
   ALL = "all";
+
 
   constructor(private translate: TranslateService) {
 
@@ -69,11 +72,8 @@ export class ResultExportXlsComponent implements OnInit {
       default:
         break;
     }
-    const wbout = XLSX.write(wb, {
-      bookType: 'xlsx', bookSST: true, type:
-        'binary'
-    });
-    let blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+    let blob = new Blob([this.s2ab(wbout)], { type: "**application/octet-stream**" });
     saveAs(blob, fileName );
   }
 
@@ -83,7 +83,7 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies }, this.modelPlatform));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerPlatform, { speciesCode: resultspecies.nameSpecies },this.modelPlatform),{skipHeader:true});
     }
     return wb;       
   }
@@ -93,7 +93,7 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerZone, { speciesCode: resultspecies.nameSpecies }, this.modelZone),{skipHeader:true});
     }
     return wb; 
   }
@@ -103,7 +103,7 @@ export class ResultExportXlsComponent implements OnInit {
     for (let resultspecies of this.results.resultAll) {
       let ws_name = resultspecies.nameSpecies;
       wb.SheetNames.push(ws_name);
-      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation));
+      wb.Sheets[ws_name] = XLSX.utils.json_to_sheet(this.flat(resultspecies.resultPerStation, { speciesCode: resultspecies.nameSpecies }, this.modelStation),{skipHeader:true});
     }
     return wb; 
   }
@@ -121,7 +121,7 @@ export class ResultExportXlsComponent implements OnInit {
       }
     }
     for(let name in ws_temp){
-      wb.Sheets[name] = XLSX.utils.json_to_sheet(ws_temp[name]);
+      wb.Sheets[name] = XLSX.utils.json_to_sheet(ws_temp[name],{skipHeader:true});
     }
     return wb; 
   }
@@ -135,28 +135,42 @@ export class ResultExportXlsComponent implements OnInit {
     return buf;
   }
 
-  flat(data, addedProperties, model?): any[] {
+  flat(data, addedProperties, model?): any {
     let flatArray = [];
+    let header = [];    
 
     for (let i = 0; i < data.length; i++) {
       let flatObject = {};
       let prop0 = null;
+      var charCode = "A".charCodeAt(0);
+      let index = String.fromCharCode(charCode);
+
       for (let prop in addedProperties) {
-        flatObject[this.getTranslateName(prop)] = Number.isNaN(addedProperties[prop]) ? 0 : addedProperties[prop];
+        if(header.indexOf(index)<0){header[index]=this.getTranslateName(prop);}
+        flatObject[index] = Number.isNaN(addedProperties[prop]) ? "" : ""+addedProperties[prop];
+        index = String.fromCharCode(++charCode);
       }
       for (let prop in data[i]) {
         prop0 = prop0 === null ? prop : prop0;
+
         if (typeof data[i][prop] === 'object') {
           for (var inProp in data[i][prop]) {
             if (!model || data[i][prop0].toLowerCase() == this.ALL || model.hasOwnProperty(inProp)) {
-              flatObject[this.getTranslateName(inProp)] = (Number.isNaN(data[i][prop][inProp]) || data[i][prop][inProp].length <= 0) ? 0 : data[i][prop][inProp];
+              if(header.indexOf(index)<0){header[index]=this.getTranslateName(inProp);}
+              flatObject[index] = (Number.isNaN(data[i][prop][inProp]) || data[i][prop][inProp].length <= 0) ? "" : ""+data[i][prop][inProp];
+              index = String.fromCharCode(++charCode);
             }
           }
         } else {
           if (!model || data[i][prop0].toLowerCase() === this.ALL || model.hasOwnProperty(prop)) {
-            flatObject[this.getTranslateName(prop)] = (Number.isNaN(data[i][prop]) || data[i][prop].length <= 0) ? 0 : data[i][prop];
+            if(header.indexOf(index)<0){header[index]=this.getTranslateName(prop);}
+            flatObject[index] = (Number.isNaN(data[i][prop]) || data[i][prop].length <= 0) ? "" : ""+data[i][prop];
+            index = String.fromCharCode(++charCode);
           }
         }
+      }
+      if(flatArray.length===0){
+        flatArray.push(header);
       }
       flatArray.push(flatObject);
     }
@@ -188,7 +202,6 @@ export class ResultExportXlsComponent implements OnInit {
 
 
   clicka(node) {
-    console.log(node);
     try {
       node.dispatchEvent(new MouseEvent('click'));
     } catch (e) {
