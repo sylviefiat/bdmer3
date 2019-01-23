@@ -1,6 +1,6 @@
 {
   "name": "bdmer3",
-  "version": "0.0.0",
+  "version": "1.2",
   "description": "High-quality, modular starter (advanced seed) project for Angular 2 apps with statically typed build and AoT + NativeScript + Electron",
   "repository": {
     "url": "https://github.com/sylviefiat/bdmer3/"
