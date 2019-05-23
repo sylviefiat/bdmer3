@@ -94,6 +94,7 @@
     "@types/node": "10.12.18",
     "@types/rimraf": "2.0.2",
     "@types/run-sequence": "0.0.30",
+<<<<<<< Updated upstream
     "@types/selenium-webdriver": "3.0.14",
     "@types/systemjs": "0.20.6",
     "@types/yargs": "12.0.6",
