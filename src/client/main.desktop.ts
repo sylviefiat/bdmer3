@@ -6,7 +6,7 @@ const electron = require('electron');
 const app = electron.app;
 const Menu: any = electron.Menu;
 const shell: any = electron.shell;
-// const {crashReporter} = require('electron');
+const {crashReporter} = require('electron');
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow: any = null;
 let template: any;
@@ -17,12 +17,12 @@ import { DesktopConfig } from './app/modules/electron/index';
 
 // Sample
 // You would need a valid `submitURL` to use
-// crashReporter.start({
-//   productName: 'AngularSeedAdvanced',
-//   companyName: 'NathanWalker',
-//   submitURL: 'https://github.com/NathanWalker/angular-seed-advanced',
-//   autoSubmit: true
-// });
+ crashReporter.start({
+   productName: 'bdmer3',
+   companyName: 'sylviefiat',
+   submitURL: 'https://github.com/sylviefiat/bdmer3',
+   autoSubmit: true
+ });
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')();
@@ -51,7 +51,7 @@ app.on('ready', () => {
     console.log(`Page navigated: ${url}`);
   });
 
-  let appTitle: string = `Angular Seed Advanced`;
+  let appTitle: string = `BDMer3`;
 
   let langMenu: any = {
     label: 'Language',
@@ -74,37 +74,12 @@ app.on('ready', () => {
     submenu: [{
       label: 'Learn More',
       click:() => {
-        shell.openExternal('https://github.com/NathanWalker/angular-seed-advanced');
+        shell.openExternal('https://github.com/sylviefiat/bdmer3');
       }
     }, {
         label: 'Issues',
         click:() => {
-          shell.openExternal('https://github.com/NathanWalker/angular-seed-advanced/issues');
-        }
-      }, {
-        label: `My Amazing Parent: Minko Gechev's Angular Seed`,
-        click:() => {
-          shell.openExternal('https://github.com/mgechev/angular-seed');
-        }
-      }, {
-        label: 'Angular 2',
-        click:() => {
-          shell.openExternal('https://angular.io/');
-        }
-      }, {
-        label: 'Electron',
-        click:() => {
-          shell.openExternal('http://electron.atom.io/');
-        }
-      }, {
-        label: 'Electron Docs',
-        click: () => {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs');
-        }
-      }, {
-        label: 'Codeology Visualization',
-        click:() => {
-          shell.openExternal('http://codeology.braintreepayments.com/nathanwalker/angular-seed-advanced');
+          shell.openExternal('https://github.com/sylviefiat/bdmer3/issues');
         }
       }]
   };

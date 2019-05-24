@@ -1,7 +1,7 @@
 {
   "name": "bdmer3",
-  "version": "1.2",
-  "description": "High-quality, modular starter (advanced seed) project for Angular 2 apps with statically typed build and AoT + NativeScript + Electron",
+  "version": "1.2.0",
+  "description": "BDMER3 project using Angular 2 with statically typed build and AoT + NativeScript + Electron",
   "repository": {
     "url": "https://github.com/sylviefiat/bdmer3/"
   },
@@ -63,7 +63,7 @@
   "author": "Minko Gechev <mgechev>",
   "contributors": [
     {
-      "name": "Sylvie Fiat <sylviefiat>"
+      "name": "Morgan Dubois <morgandbs>"
     }
   ],
   "license": "MIT",
@@ -94,7 +94,6 @@
     "@types/node": "10.12.18",
     "@types/rimraf": "2.0.2",
     "@types/run-sequence": "0.0.30",
-<<<<<<< Updated upstream
     "@types/selenium-webdriver": "3.0.14",
     "@types/systemjs": "0.20.6",
     "@types/yargs": "12.0.6",
@@ -107,11 +106,11 @@
     "connect-history-api-fallback": "1.6.0",
     "cssnano": "4.1.8",
     "deep-extend": "0.6.0",
+    "electron": "4.0.0",
     "electron-connect": "0.6.3",
     "electron-debug": "2.0.0",
     "event-stream": "4.0.1",
     "express": "4.16.4",
-    "express-history-api-fallback": "2.0.1",
     "gulp": "4.0.0",
     "gulp-atom-electron": "1.19.2",
     "gulp-cached": "1.1.1",
@@ -205,7 +204,6 @@
     "angular2-fontawesome": "5.2.1",
     "angular2-moment": "1.9.0",
     "core-js": "2.6.3",
-    "electron": "4.0.0",
     "es-module-loader": "2.3.0",
     "file-saver": "2.0.0",
     "file-system": "2.2.2",
