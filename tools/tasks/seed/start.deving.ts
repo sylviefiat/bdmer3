@@ -1,7 +1,7 @@
 import * as gulp from 'gulp';
 import * as gulpLoadPlugins from 'gulp-load-plugins';
 import { join } from 'path';
-import * as runSequence from 'run-sequence';
+//import * as runSequence from 'run-sequence';
 
 import Config from '../../config';
 
@@ -37,18 +37,18 @@ function watchAppFiles(path: string, fileChangeCallback: (e: any, done: () => vo
 
 gulp.task('watch.while_deving', function () {
   watchAppFiles('**/!(*.ts)', (e: any, done: any) =>
-    runSequence('build.assets.dev', 'build.html_css', 'build.index.dev', () => { notifyLiveReload(e); done(); }));
+    gulp.series('build.assets.dev', 'build.html_css', 'build.index.dev', () => { notifyLiveReload(e); done(); }));
   watchAppFiles('**/(*.ts)', (e: any, done: any) =>
-    runSequence('build.js.dev', 'build.index.dev', () => {
+    gulp.series('build.js.dev', 'build.index.dev', () => {
       notifyLiveReload(e);
-      runSequence('build.js.test', 'karma.run.with_coverage', done);
+      gulp.series('build.js.test', 'karma.run.with_coverage', ()=>done());
     }));
 });
 
-export = (done: any) =>
-  runSequence('build.test',
+export default (done: any) =>
+  gulp.series('build.test',
     'watch.while_deving',
     'server.start',
     'karma.run.with_coverage',
     'serve.coverage.watch',
-    done);
+    ()=>done());

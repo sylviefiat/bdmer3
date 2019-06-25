@@ -4,7 +4,7 @@ import { relative, join } from 'path';
 import Config from '../../config';
 var newer = require('gulp-newer');
 
-export = () => {
+export default () => {
   let src = [
     'node_modules/@angular/**/*',
     'node_modules/rxjs/**/*'

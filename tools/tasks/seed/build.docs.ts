@@ -10,7 +10,7 @@ const plugins = <any>gulpLoadPlugins();
  * Executes the build process, building the documentation for the TypeScript
  * files (excluding spec and e2e-spec files) using `typedoc`.
  */
-export = () => {
+export default () => {
 
   let src = [
     'typings/index.d.ts',

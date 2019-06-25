@@ -6,7 +6,7 @@ let fs = require('fs');
 
 // if gulpfile.ts has been compiled then we need to rebuild the toolchain
 
-export = (done: any) => {
+export default (done: any) => {
 
   let checkFile = join(process.cwd(), 'tools', 'config.js');
 

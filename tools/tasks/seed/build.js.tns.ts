@@ -16,7 +16,7 @@ const jsonSystemConfig = JSON.stringify(Config.TNS_CONFIG);
  * Executes the build process, transpiling the TypeScript files (except the spec and e2e-spec files) for the development
  * environment.
  */
-export =
+export default
   class BuildJsDev extends TypeScriptTask {
     run() {
       const src = [

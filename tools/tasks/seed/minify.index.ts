@@ -6,7 +6,7 @@ import Config from '../../config';
 /**
  * Minifies the final index.html file.
  */
-export = () => {
+export default () => {
   return gulp.src([join(Config.APP_DEST, 'index.html')])
     .pipe(htmlmin({
       collapseWhitespace: true,

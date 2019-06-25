@@ -13,7 +13,7 @@ let repeatableStartKarma = (done: any, config: any = {}) => {
   }).start();
 };
 
-export = (done: any) => {
+export default (done: any) => {
   let karmaReporters = Config.getKarmaReporters();
   karmaReporters.singleRun = true;
   return repeatableStartKarma(done, karmaReporters);

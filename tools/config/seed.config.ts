@@ -1,5 +1,7 @@
 import { join } from 'path';
-import * as slash from 'slash';
+//import * as slash from 'slash';
+//import slash = require('slash'); // tslint:disable-line
+import slash from 'slash';
 import { argv } from 'yargs';
 
 import { BuildType, ExtendPackages, InjectableDependency } from './seed.config.interfaces';
@@ -64,7 +66,7 @@ export class SeedConfig {
    * The default port is `5555`, which can be overriden by the  `--port` flag when running `npm start`.
    * @type {number}
    */
-  PORT = argv['port'] || 5555;
+  PORT = <number>argv['port'] || 5555;
 
   /**
    * The root folder of the project (up two levels from the current directory).
@@ -82,21 +84,21 @@ export class SeedConfig {
    * The default value is `false`, which can be overriden by the `--debug` flag when running `npm start`.
    * @type {boolean}
    */
-  DEBUG = argv['debug'] || false;
+  DEBUG = <boolean>argv['debug'] || false;
 
   /**
    * The port where the documentation application will run.
    * The default docs port is `4003`, which can be overriden by the `--docs-port` flag when running `npm start`.
    * @type {number}
    */
-  DOCS_PORT = argv['docs-port'] || 4003;
+  DOCS_PORT = <number>argv['docs-port'] || 4003;
 
   /**
    * The port where the unit test coverage report application will run.
    * The default coverage port is `4004`, which can by overriden by the `--coverage-port` flag when running `npm start`.
    * @type {number}
    */
-  COVERAGE_PORT = argv['coverage-port'] || 4004;
+  COVERAGE_PORT = <number>argv['coverage-port'] || 4004;
 
   /**
   * The path to the coverage output
@@ -111,7 +113,7 @@ export class SeedConfig {
    * which can be overriden by the `--base` flag when running `npm start`.
    * @type {string}
    */
-  APP_BASE = argv['base'] || '/';
+  APP_BASE = <string>argv['base'] || '/';
 
   /**
    * The base path of node modules.
@@ -156,14 +158,14 @@ export class SeedConfig {
    * The default directory is `app`.
    * @type {string}
    */
-  BOOTSTRAP_DIR = argv['app'] || 'app';
+  BOOTSTRAP_DIR = <string>argv['app'] || 'app';
 
   /**
    * The directory where the client files are located.
    * The default directory is `client`.
    * @type {string}
    */
-  APP_CLIENT = argv['client'] || 'client';
+  APP_CLIENT = <string>argv['client'] || 'client';
 
   /**
    * The bootstrap file to be used to boot the application.
@@ -831,7 +833,7 @@ function appVersion(): number | string {
  * Returns the application build type.
  */
 function getBuildType() {
-  let type = (argv['build-type'] || argv['env'] || '').toLowerCase();
+  let type = (<string>argv['build-type'] || <string>argv['env'] || '').toLowerCase();
   let base: string[] = argv['_'];
   let prodKeyword = !!base.filter(o => o.indexOf(BUILD_TYPES.PRODUCTION) >= 0).pop();
   if ((base && prodKeyword) || type === BUILD_TYPES.PRODUCTION) {

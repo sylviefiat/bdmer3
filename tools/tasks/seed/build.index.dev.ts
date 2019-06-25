@@ -12,7 +12,7 @@ const plugins = <any>gulpLoadPlugins();
 /**
  * Executes the build process, injecting the shims and libs into the `index.hml` for the development environment.
  */
-export = () => {
+export default () => {
   return gulp.src(join(Config.APP_SRC, 'index.html'))
     .pipe(inject('shims'))
     .pipe(inject('libs'))

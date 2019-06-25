@@ -1,10 +1,10 @@
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'fs';
-import * as runSequence from 'run-sequence';
-import * as gulp from 'gulp';
+//import runSequence from 'run-sequence';
+import gulp from 'gulp';
 import * as util from 'gulp-util';
-import * as isstream from 'isstream';
+import isstream from 'isstream';
 import { join } from 'path';
-import * as tildify from 'tildify';
+import tildify from 'tildify';
 
 import { changeFileManager } from './code_change_tools';
 import { Task } from '../../tasks/task';
@@ -30,10 +30,10 @@ function validateTasks(tasks: any) {
     }).filter((taskName: string) => !!taskName);
 }
 
-function registerTasks(tasks: any) {
+function registerTasks(tasks: any) { 
   Object.keys(tasks)
     .forEach((t: string) => {
-      gulp.task(t, (done: any) => runSequence.apply(null, [...tasks[t], done]));
+      gulp.task(t, (done: any) => gulp.series(...tasks[t], (seriesDone) => { seriesDone(); done()}));
     });
 }
 
@@ -102,6 +102,7 @@ export function loadCompositeTasks(seedTasksFile: string, projectTasksFile: stri
 }
 
 function normalizeTask(task: any, taskName: string) {
+  util.log('Normalize task', util.colors.yellow(taskName));
   if (task instanceof Task) {
     return task;
   }

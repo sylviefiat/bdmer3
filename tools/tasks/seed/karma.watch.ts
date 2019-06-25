@@ -2,7 +2,7 @@ import { startKarma } from '../../utils/seed/karma.start';
 /**
  * Executes the build process, running all unit tests using `karma`.
  */
-export = (done: any) => setTimeout(() => {
+export default (done: any) => setTimeout(() => {
   return startKarma(done, {
     singleRun: false
   });

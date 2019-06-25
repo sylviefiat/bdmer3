@@ -1,6 +1,6 @@
 import * as util from 'gulp-util';
 import { relative, normalize } from 'path';
-import * as rimraf from 'rimraf';
+import rimraf from 'rimraf';
 
 import Config from '../../config';
 

@@ -10,7 +10,7 @@ import Config from '../../config';
  * Executes the build process, deleting all JavaScript and Source Map files (which were transpiled from the TypeScript sources) with in
  * the `src/client` directory.
  */
-export = (done: any) => {
+export default (done: any) => {
   deleteAndWalk(Config.APP_SRC);
   done();
 };

@@ -10,7 +10,7 @@ import Config from '../../config';
  * need to be updated to handle the returned promise/stream
  *
  */
-export = clean([
+export default clean([
   'gulpfile.js',
   'gulpfile.js.map',
   join(Config.TOOLS_DIR, '**/*.js'),

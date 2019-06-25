@@ -24,7 +24,7 @@ export class TemplateLocalsBuilder {
 
 
   build() {
-    const configEnvName = argv['env-config'] || argv['config-env'] || 'dev';
+    const configEnvName = <string>argv['env-config'] || <string>argv['config-env'] || 'dev';
     const configPath = Config.getPluginConfig('environment-config');
     const envOnlyConfig = this.getConfig(configPath, configEnvName);
     const baseConfig = this.getConfig(configPath, 'base');

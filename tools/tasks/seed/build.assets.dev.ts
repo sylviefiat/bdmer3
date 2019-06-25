@@ -8,7 +8,7 @@ import Config from '../../config';
  * Executes the build process, copying the assets located in `src/client` over to the appropriate
  * `dist/dev` directory.
  */
-export =
+export
   class BuildAssetsTask extends AssetsTask {
     run(done: any) {
       let paths: string[] = [

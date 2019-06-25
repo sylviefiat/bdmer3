@@ -6,7 +6,7 @@ import Config from '../../config';
 /**
  * Removes all the js, js.map and metadata.json from the src and tools directories
  */
-export = clean([
+export default clean([
   'gulpfile.js',
   'gulpfile.js.map',
   join(Config.TOOLS_DIR, '**/*.js'),

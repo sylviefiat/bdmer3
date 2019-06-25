@@ -7,7 +7,7 @@ const replace = require('gulp-replace');
 /**
  * Executes the build task, copying all TypeScript files over to the `dist/tmp` directory.
  */
-export = () => {
+export default () => {
   return gulp.src([
       join(Config.APP_SRC, '**/*.ts'),
       join(Config.APP_SRC, '**/*.json'),

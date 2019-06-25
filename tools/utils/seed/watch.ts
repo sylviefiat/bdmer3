@@ -1,6 +1,7 @@
-import * as gulpLoadPlugins from 'gulp-load-plugins';
+import gulp from 'gulp';
+import gulpLoadPlugins from 'gulp-load-plugins';
 import { join } from 'path';
-import * as runSequence from 'run-sequence';
+//import runSequence from 'run-sequence';
 
 import Config from '../../config';
 import { changeFileManager } from './code_change_tools';
@@ -34,7 +35,7 @@ export function watch(taskname: string, root: string = Config.APP_SRC) {
       // https://github.com/mgechev/angular-seed/issues/1615 for more details.
       setTimeout(() => {
 
-        runSequence(taskname, () => {
+        gulp.series(taskname, () => {
           changeFileManager.clear();
           notifyLiveReload(e);
         });

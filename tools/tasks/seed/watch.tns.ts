@@ -1,5 +1,6 @@
+import * as gulp from 'gulp';
 import * as gulpLoadPlugins from 'gulp-load-plugins';
-import * as runSequence from 'run-sequence';
+//import * as runSequence from 'run-sequence';
 
 import Config from '../../config';
 import { changeFileManager } from '../../utils/seed/code_change_tools';
@@ -8,7 +9,7 @@ const plugins = <any>gulpLoadPlugins();
 
 const taskname = 'build.tns';
 
-export = function watch() {
+export function watch() {
   const paths: string[] = [
     `${Config.ASSETS_SRC}/**/*`,
     `${Config.TNS_APP_SRC}/**/*`,
@@ -22,7 +23,7 @@ export = function watch() {
   plugins.watch(paths, (e: any) => {
     changeFileManager.addFile(e.path);
 
-    runSequence(taskname, () => {
+    gulp.series(taskname, () => {
       changeFileManager.clear();
 
       notifyLiveReload(e);

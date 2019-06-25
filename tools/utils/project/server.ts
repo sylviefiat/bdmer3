@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import { Application } from 'express';
 import { SeedWebServer } from '../seed/server';
 

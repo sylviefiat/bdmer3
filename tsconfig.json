@@ -16,6 +16,7 @@
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "./node_modules/@types",
@@ -27,7 +28,9 @@
     ]
   },
   "files": [
-    "gulpfile.ts",
+    "gulpfile.ts"
+  ],
+  "include": [
     "tools/manual_typings/seed/autoprefixer.d.ts",
     "tools/manual_typings/seed/cssnano.d.ts",
     "tools/manual_typings/seed/express-history-api-fallback.d.ts",

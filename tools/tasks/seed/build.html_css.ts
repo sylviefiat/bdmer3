@@ -174,7 +174,7 @@ function processExternalCss() {
 /**
  * Executes the build process, processing the HTML and CSS files.
  */
-export =
+export default
   class BuildHtmlCss extends CssTask {
 
     shallRun(files: String[]) {

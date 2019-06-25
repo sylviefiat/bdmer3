@@ -2,7 +2,7 @@ import * as gulp from 'gulp';
 var symdest = require('gulp-symdest');
 var electron = require('gulp-atom-electron');
 
-export = () => {
+export default () => {
   let src = [
     'dist/dev/**/*'
   ];

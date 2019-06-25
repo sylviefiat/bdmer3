@@ -18,7 +18,7 @@ const modifyFile = (path: string, mod: any = (f: string) => f) => {
   writeFileSync(path, mod(file.toString()));
 };
 
-export = (done: any) => {
+export default (done: any) => {
   // Note: dirty hack until we're able to set config easier
   modifyFile(join(Config.TMP_DIR, 'tsconfig.json'), (content: string) => {
     const parsed = JSON.parse(content);

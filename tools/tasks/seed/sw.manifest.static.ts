@@ -3,7 +3,7 @@ import * as gulp from 'gulp';
 import Config from '../../config';
 import { join } from 'path';
 
-export = () => {
+export default () => {
   return gulp.src([join(Config.APP_SRC, 'ngsw-manifest.json')]);
     /*.pipe(gulpAddStaticFiles(gulp.src([
       join(Config.APP_DEST, '**', '*'),

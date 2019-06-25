@@ -1,8 +1,8 @@
 import * as express from 'express';
 import { Application } from 'express';
 import * as http from 'http';
-import * as fallback from 'express-history-api-fallback';
-import * as openResource from 'open';
+import fallback from 'express-history-api-fallback';
+import openResource from 'open';
 import { resolve } from 'path';
 
 import * as codeChangeTool from './code_change_tools';

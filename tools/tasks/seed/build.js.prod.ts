@@ -18,7 +18,7 @@ const INLINE_OPTIONS = {
  * Executes the build process, transpiling the TypeScript files for the production environment.
  */
 
-export = () => {
+export default () => {
   let tsProject = makeTsProject({}, Config.TMP_DIR);
   let src = [
     Config.TOOLS_DIR + '/manual_typings/**/*.d.ts',
