@@ -435,9 +435,9 @@ export class SeedConfig {
       }
     },
     map: {
-      'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
-      'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
-      'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
+      //'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
+      //'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
+      //'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
       'fs': '', // <-- systemjs doesn't seem to automatically suppress node core
       'crypto': '',
       'stream': '',
@@ -505,7 +505,7 @@ export class SeedConfig {
       }
     },
     map: {
-      'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
+      //'xlsx': 'node_modules/xlsx/dist/xlsx.full.min.js',
       'fs': '', // <-- systemjs doesn't seem to automatically suppress node core
       'crypto':'',
       'stream': '',

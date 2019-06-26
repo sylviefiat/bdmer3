@@ -53,7 +53,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         // Add packages (e.g. ng2-translate)
         // ng2-translate is already added with the advanced seed - here for example only
         let additionalPackages: ExtendPackages[] = [
-        {
+        /*{
             name: 'angular2-fontawesome',
             path: 'node_modules/angular2-fontawesome/angular2-fontawesome.js'
         }, {
@@ -262,7 +262,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
         {
             name: '@mapbox/mapbox-gl-geocoder',
             path: 'node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js'
-        }];
+        }*/];
 
         this.addPackagesBundles(additionalPackages);
 

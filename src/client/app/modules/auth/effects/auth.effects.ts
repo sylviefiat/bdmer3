@@ -28,15 +28,16 @@ export class AuthEffects {
       map((action: AppInitAction.FinishAppInitAction) => action.payload),
       withLatestFrom(this.store.select(getServiceUrl)),
       map((value) => this.authService.initDB('_users',value[1])),
-      map((db) => {
+      map((db) => {        
+        this.authService.login({username:'admin', password:'admin'});
         let token = JSON.parse(localStorage.getItem('token'));
-        if (token && token.expires > Math.floor(Date.now() / 1000)){
+        /*if (token && token.expires > Math.floor(Date.now() / 1000)){*/
           return new AuthAction.LoginSuccess(token);
-        } else if (token) {
+        /*} else if (token) {
            return new AuthAction.Logout(token);
         } else {
           return new AuthAction.AnonymousUse();
-        }
+        }*/
       })
     );
 
