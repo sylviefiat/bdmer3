@@ -11,7 +11,7 @@ const plugins = <any>gulpLoadPlugins();
  * Executes the build process, transpiling the TypeScript files (including the e2e-spec files, excluding the spec files)
  * for the e2e environment.
  */
-export default () => {
+export = () => {
   let tsProject = makeTsProject({ 'target': 'es2015' }, Config.E2E_SRC);
   let src = [
     Config.TOOLS_DIR + '/manual_typings/**/*.d.ts',

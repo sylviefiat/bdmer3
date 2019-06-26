@@ -19,16 +19,16 @@ export class SelectEffects {
 
 
   @Effect() selectPlatforms$ = this.actions$
-    .ofType<AnalyseAction.SelectPlatforms>(AnalyseAction.ActionTypes.SELECT_PLATFORMS)
     .pipe(
+      ofType<AnalyseAction.SelectPlatforms>(AnalyseAction.ActionTypes.SELECT_PLATFORMS),
       map((action: AnalyseAction.SelectPlatforms) => action.payload),
       mergeMap((platforms: Platform[]) => this.selectService.setYearsAvailables(platforms)),
       map((years: Year[]) => new SelectAction.SetYears(years))
     );
 
   @Effect() selectYears$ = this.actions$
-    .ofType<AnalyseAction.SelectYears>(AnalyseAction.ActionTypes.SELECT_YEARS)
     .pipe(
+      ofType<AnalyseAction.SelectYears>(AnalyseAction.ActionTypes.SELECT_YEARS),
       map((action: AnalyseAction.SelectYears) => action.payload),
       withLatestFrom(this.store.select(getAnalyseUsedPlatform)),
       mergeMap((value:[Year[],Platform[]]) => this.selectService.setSurveysAvailables(value[1],value[0])),
@@ -36,8 +36,8 @@ export class SelectEffects {
     );
 
   @Effect() selectSurveys$ = this.actions$
-    .ofType<AnalyseAction.SelectSurveys>(AnalyseAction.ActionTypes.SELECT_SURVEYS)
     .pipe(
+      ofType<AnalyseAction.SelectSurveys>(AnalyseAction.ActionTypes.SELECT_SURVEYS),
       map((action: AnalyseAction.SelectSurveys) => action.payload),
       withLatestFrom(this.store.select(getAnalyseUsedPlatform)),
       mergeMap((value:[Survey[],Platform[]]) => this.selectService.setZonesAvailables(value[1],value[0])),
@@ -45,8 +45,8 @@ export class SelectEffects {
     );
 
   @Effect() setStations$ = this.actions$
-      .ofType<SelectAction.SetZones>(SelectAction.ActionTypes.SET_ZONES) 
-      .pipe(
+     .pipe(
+      ofType<SelectAction.SetZones>(SelectAction.ActionTypes.SET_ZONES),
       map((action: SelectAction.SetZones) => action.payload),
       withLatestFrom(this.store.select(getAnalyseUsedPlatform),this.store.select(getAnalyseUsedSurvey)),
       mergeMap((value:[Zone[],Platform[],Survey[]]) => this.selectService.setStationsAvailables(value[1],value[0],value[2])),
@@ -54,8 +54,8 @@ export class SelectEffects {
     );
 
   @Effect() selectZones$ = this.actions$
-    .ofType<AnalyseAction.SelectZones>(AnalyseAction.ActionTypes.SELECT_ZONES)
     .pipe(
+      ofType<AnalyseAction.SelectZones>(AnalyseAction.ActionTypes.SELECT_ZONES),
       map((action: AnalyseAction.SelectZones) => action.payload),
       withLatestFrom(this.store.select(getAnalyseUsedPlatform),this.store.select(getAnalyseUsedSurvey)),
       mergeMap((value:[Zone[],Platform[],Survey[]]) => this.selectService.setStationsAvailables(value[1],value[0],value[2])),
@@ -63,8 +63,8 @@ export class SelectEffects {
     );
 
   @Effect() setSpecies$ = this.actions$
-    .ofType<SelectAction.SetStations>(SelectAction.ActionTypes.SET_STATIONS)
     .pipe(
+      ofType<SelectAction.SetStations>(SelectAction.ActionTypes.SET_STATIONS),
       map((action: SelectAction.SetStations) => action.payload),
       withLatestFrom(this.store.select(getSpeciesInApp),this.store.select(getAnalyseUsedSurvey)),
       mergeMap((value:[Station[],Species[],Survey[]]) => this.selectService.setSpeciesAvailables(value[1],value[2],value[0])),
@@ -72,8 +72,8 @@ export class SelectEffects {
     );
 
   @Effect() selectStations$ = this.actions$
-    .ofType<AnalyseAction.SelectStations>(AnalyseAction.ActionTypes.SELECT_STATIONS)
     .pipe(
+      ofType<AnalyseAction.SelectStations>(AnalyseAction.ActionTypes.SELECT_STATIONS),
       map((action: AnalyseAction.SelectStations) => action.payload),
       withLatestFrom(this.store.select(getSpeciesInApp),this.store.select(getAnalyseUsedSurvey)),
       mergeMap((value:[Station[],Species[],Survey[]]) => this.selectService.setSpeciesAvailables(value[1],value[2],value[0])),

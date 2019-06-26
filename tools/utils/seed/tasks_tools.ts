@@ -33,7 +33,8 @@ function validateTasks(tasks: any) {
 function registerTasks(tasks: any) { 
   Object.keys(tasks)
     .forEach((t: string) => {
-      gulp.task(t, (done: any) => gulp.series(...tasks[t], (seriesDone) => { seriesDone(); done()}));
+      //gulp.task(t, (done: any) => gulp.series(...tasks[t], (seriesDone) => { seriesDone(); done()}));
+      gulp.task(t, gulp.series(...tasks[t],(done)=>done()));
     });
 }
 
@@ -150,7 +151,7 @@ function registerTask(taskname: string, path: string): void {
       }
       return result;
     } else {
-      done();
+      return done();
     }
   });
 }

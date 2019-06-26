@@ -4,7 +4,7 @@ var newer = require('gulp-newer');
 
 import Config from '../../config';
 
-export default () => {
+export = () => {
   let src = [
     join(Config.APP_SRC, 'package.json')
   ];

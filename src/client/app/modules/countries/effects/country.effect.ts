@@ -24,8 +24,8 @@ export class CountryEffects {
 
   @Effect()
   addUserToCountry$: Observable<Action> = this.actions$
-    .ofType<CountryAction.AddUserAction>(CountryAction.ActionTypes.ADD_USER)
     .pipe(
+      ofType<CountryAction.AddUserAction>(CountryAction.ActionTypes.ADD_USER),
       map((action: CountryAction.AddUserAction) => action.payload),
       mergeMap(user => this.authService.signup(user)),
       mergeMap((user: User) => this.countriesService.addUser(user)),
@@ -35,8 +35,8 @@ export class CountryEffects {
 
   @Effect()
   removeUserFromCountry$: Observable<Action> = this.actions$
-    .ofType<CountryAction.RemoveUserAction>(CountryAction.ActionTypes.REMOVE_USER)
     .pipe(
+      ofType<CountryAction.RemoveUserAction>(CountryAction.ActionTypes.REMOVE_USER),
       map((action: CountryAction.RemoveUserAction) => action.payload),
       mergeMap(user => this.authService.remove(user)),
       mergeMap(user => this.countriesService.removeUser(user)),
@@ -45,8 +45,8 @@ export class CountryEffects {
     );
 
   @Effect({ dispatch: false }) addUserSuccess$ = this.actions$
-    .ofType<CountryAction.AddUserSuccessAction>(CountryAction.ActionTypes.ADD_USER_SUCCESS)
     .pipe(
+      ofType<CountryAction.AddUserSuccessAction>(CountryAction.ActionTypes.ADD_USER_SUCCESS),
       map((action: CountryAction.AddUserSuccessAction) => action.payload),
       mergeMap((country: Country) => this.router.navigate(['/countries/' + country.code])),
       delay(3000),
@@ -54,20 +54,22 @@ export class CountryEffects {
     );
 
   @Effect({ dispatch: false }) removeUserSuccess$ = this.actions$
-    .ofType<CountryAction.RemoveUserSuccessAction>(CountryAction.ActionTypes.REMOVE_USER_SUCCESS)
     .pipe(
+      ofType<CountryAction.RemoveUserSuccessAction>(CountryAction.ActionTypes.REMOVE_USER_SUCCESS),
       delay(3000),
       map(() => this.store.dispatch(new CountryAction.RemoveMsgAction()))
     );
 
   @Effect({ dispatch: false }) select$ = this.actions$
-    .ofType<CountryAction.SelectAction>(CountryAction.ActionTypes.SELECT)
-    .pipe(map(() => this.store.dispatch(new CountryAction.LoadAction()))
+    .pipe(
+      ofType<CountryAction.SelectAction>(CountryAction.ActionTypes.SELECT),
+      map(() => this.store.dispatch(new CountryAction.LoadAction()))
   );
 
   @Effect({ dispatch: false }) selectUser$ = this.actions$
-    .ofType<CountryAction.SelectUserAction>(CountryAction.ActionTypes.SELECT_USER)
-    .pipe(map(() => this.store.dispatch(new CountryAction.LoadUserAction()))
+    .pipe(
+      ofType<CountryAction.SelectUserAction>(CountryAction.ActionTypes.SELECT_USER),
+      map(() => this.store.dispatch(new CountryAction.LoadUserAction()))
   );
 
   constructor(

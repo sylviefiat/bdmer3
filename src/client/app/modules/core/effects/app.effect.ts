@@ -15,19 +15,21 @@ import { environment } from '../../../config';
 export class AppInitEffects implements OnRunEffects {
 
     @Effect() ngrxOnRunEffects(resolvedEffects$: Observable<EffectNotification>): Observable<EffectNotification> {
-        return this.actions$.ofType<AppInitAction.StartAppInitAction>(AppInitAction.ActionTypes.START_APP_INIT)
+        return this.actions$
             .pipe(
+                ofType<AppInitAction.StartAppInitAction>(AppInitAction.ActionTypes.START_APP_INIT),
                 exhaustMap(() => resolvedEffects$
                     .pipe(
-                        takeUntil(this.actions$.ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT))
+                        takeUntil(this.actions$
+                                    .pipe(ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)))
                     )
                 )
             );
     }
 
     @Effect() loadServicesUrl$ = this.actions$
-        .ofType<AppInitAction.LoadServicesUrlAction>(AppInitAction.ActionTypes.LOAD_SERVICES_URL)
         .pipe(
+            ofType<AppInitAction.LoadServicesUrlAction>(AppInitAction.ActionTypes.LOAD_SERVICES_URL),
             switchMap(action => this.http.get('/assets/app-config.json')),
             map(result => new AppInitAction.ServicesUrlLoadedAction(result)),
             catchError(error => of(new AppInitAction.ServicesUrlLoadedAction(environment)))

@@ -16,7 +16,7 @@ mat-card-content, mat-card-actions {
 }
 mat-card-content.one{
     display: flex;
-    justify-content:start;
+    justify-content: flex-start;
 }
 mat-card-actions {
   justify-content: center;

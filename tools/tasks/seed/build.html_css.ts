@@ -1,10 +1,10 @@
-import * as autoprefixer from 'autoprefixer';
-import * as cssnano from 'cssnano';
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import * as gulp from 'gulp';
-import * as gulpLoadPlugins from 'gulp-load-plugins';
-import * as merge from 'merge-stream';
+import gulpLoadPlugins from 'gulp-load-plugins';
+import merge from 'merge-stream';
 import * as util from 'gulp-util';
-import * as filter from 'gulp-filter';
+import filter from 'gulp-filter';
 import { join } from 'path';
 
 import Config from '../../config';
@@ -45,7 +45,7 @@ function prepareTemplates() {
   return gulp.src([
     join(Config.APP_SRC, '**', '*.html'),
     '!' + join(Config.APP_SRC, '**', '*.tns.html')
-  ])
+  ], { allowEmpty: true })
     .pipe(gulp.dest(Config.TMP_DIR));
 }
 
@@ -87,7 +87,7 @@ function getSCSSFiles(cacheName:string, filesToCompile:string[], filesToExclude:
   let filteredFiles:string[] = filesToCompile.concat(
     filesToExclude.map((path:string) => { return '!' + path; })
   );
-  return gulp.src(allFiles)
+  return gulp.src(allFiles, { allowEmpty: true })
     .pipe(plugins.cached(cacheName))
     .pipe(plugins.progeny())
     .pipe(filter(filteredFiles));
@@ -102,7 +102,7 @@ function processComponentCss() {
     join(Config.APP_SRC, '**', '*.css'),
     '!' + join(Config.APP_SRC, '**', '*.tns.css'),
     '!' + join(Config.APP_SRC, 'assets', '**', '*.css')
-  ])
+  ], { allowEmpty: true })
     .pipe(isProd ? plugins.cached('process-component-css') : plugins.util.noop())
     .pipe(plugins.postcss(processors))
     .on('error', reportPostCssError)
@@ -132,7 +132,7 @@ function processAllExternalStylesheets() {
  * Get a stream of external css files for subsequent processing.
  */
 function getExternalCssStream() {
-  return gulp.src(getExternalCss())
+  return gulp.src(getExternalCss(), { allowEmpty: true })
     .pipe(isProd ? plugins.cached('process-external-css') : plugins.util.noop());
 }
 
@@ -174,7 +174,7 @@ function processExternalCss() {
 /**
  * Executes the build process, processing the HTML and CSS files.
  */
-export default
+export =
   class BuildHtmlCss extends CssTask {
 
     shallRun(files: String[]) {

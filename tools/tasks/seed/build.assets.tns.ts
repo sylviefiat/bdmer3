@@ -40,7 +40,7 @@ function copyAppFonts() {
   return copyFiles(paths, 'fonts');
 }
 
-export default
+export =
   class BuildTNSAssetsTask extends AssetsTask {
     run() {
       return merge(

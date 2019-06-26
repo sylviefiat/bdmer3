@@ -77,7 +77,10 @@ export class AnalyseCountryComponent implements OnInit {
       this.markers = this.countries.filter(country => country.code !== "AA" && country.coordinates && country.coordinates.lng && country.coordinates.lat);
 
       if(this.markers.length > 0){
-        let coor0 = [this.markers[0].coordinates.lng,this.markers[0].coordinates.lat];
+        let coor0 = {
+          lon: this.markers[0].coordinates.lng,
+          lat:this.markers[0].coordinates.lat
+        }
         let bounds=this.markers.map(country => ([country.coordinates.lng,country.coordinates.lat])).reduce((bnd, coord) => {
           return bnd.extend(<any>coord);
         }, new LngLatBounds(coor0, coor0));

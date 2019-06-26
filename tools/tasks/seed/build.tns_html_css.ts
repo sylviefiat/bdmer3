@@ -102,7 +102,7 @@ function handlePlatformSpecificFiles() {
     .pipe(gulp.dest((Config.TNS_APP_DEST)));
 }
 
-export default
+export =
   class BuildTNSCSS extends CssTask {
     shallRun(files: String[]) {
       // Only run if tns-resources

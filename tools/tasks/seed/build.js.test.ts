@@ -17,7 +17,7 @@ let typedBuildCounter = Config.TYPED_COMPILE_INTERVAL; // Always start with the 
  * Executes the build process, transpiling the TypeScript files (excluding the spec and e2e-spec files) for the test
  * environment.
  */
-export default
+export =
   class BuildJsTest extends TypeScriptTask {
     run() {
       let tsProject: any;

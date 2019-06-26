@@ -6,8 +6,8 @@ let fs = require('fs');
 
 // if gulpfile.ts has been compiled then we need to rebuild the toolchain
 
-export default (done: any) => {
-
+export = (done: any) => {
+  util.log('check.tools');
   let checkFile = join(process.cwd(), 'tools', 'config.js');
 
   // need to require the build.toolchain task as it won't be able to run after we run clear.files

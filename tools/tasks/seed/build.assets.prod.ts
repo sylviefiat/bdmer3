@@ -18,7 +18,7 @@ var onlyDirs = function (es: any) {
  * Executes the build process, copying the assets located in `src/client` over to the appropriate
  * `dist/prod` directory.
  */
-export default () => {
+export = () => {
   let es: any = require('event-stream');
   return gulp.src([
     join(Config.APP_SRC, '**'),

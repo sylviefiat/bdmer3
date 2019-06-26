@@ -5,7 +5,7 @@ import Config from '../../config';
 /**
  * Executes the build process, generating the manifest file using `angular2-service-worker`.
  */
-export default () => {
+export = () => {
   return require('angular2-service-worker')
     .gulpGenManifest({
       group: [{

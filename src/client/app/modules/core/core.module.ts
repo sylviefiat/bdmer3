@@ -37,7 +37,7 @@ interface ICoreModuleOptions {
         PapaParseModule,
         MatDialogModule,
         AnalyseModule,
-        NgxMapboxGLModule.forRoot({
+        NgxMapboxGLModule.withConfig({
             accessToken: 'pk.eyJ1Ijoic3lsdmllZmlhdCIsImEiOiJjamk1MnZieGMwMTUxM3FxbDRhb2o5dDc3In0.V8jhcEcPBkyugxnw5gj2uw'
         }),
     ],

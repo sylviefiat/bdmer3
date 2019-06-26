@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatTableDataSource } from '@angular/material';
 
 import * as Highcharts from 'highcharts';
+
 declare var require: any;
 require('highcharts/highcharts-more')(Highcharts);
 require('highcharts/modules/exporting')(Highcharts);
@@ -156,10 +157,10 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 dataConfidence[rps.codePlatform][sp.scientificName] = [...dataConfidence[rps.codePlatform][sp.scientificName], value ? [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]:[null,null]];
                 dataStock[rps.codePlatform][sp.scientificName] = [...dataStock[rps.codePlatform][sp.scientificName], valueStock];
                 dataStockCA[rps.codePlatform][sp.scientificName] = [...dataStockCA[rps.codePlatform][sp.scientificName], value ? [Number(valueStock) - Number(valuStockCA), Number(valueStock) + Number(valuStockCA)]:[null,null]];
-                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i])).brighten(0.2).get();
+                this.colors[colori++] = Highcharts.Color(hcolors[i]).brighten(0.2).get('rgba');
                 this.colors[colori++] = hcolors[i++];
                 this.colors[colori++] = hcolors[i];
-                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get();
+                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get('rgba');
 
             }
         }

@@ -11,7 +11,7 @@ const plugins = <any>gulpLoadPlugins();
  * Executes the build process, transpiling the TypeScript files for the production environment.
  */
 
-export default () => {
+export = () => {
   const tsProject = makeTsProject({
     target: 'es2015',
     module: 'es2015',

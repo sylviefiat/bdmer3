@@ -19,23 +19,25 @@ import { AppInitAction,LoaderAction } from "../../core/actions/index";
 @Injectable()
 export class PlatformEffects {
   @Effect({ dispatch: false })
-  openDB$: Observable<any> = this.actions$.ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT).pipe(
-    map((action: AppInitAction.FinishAppInitAction) => action.payload),
-    withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
-    map(value => this.platformService.initDB("platforms", value[1], value[2]))
-  );
+  openDB$: Observable<any> = this.actions$
+    .pipe(
+      ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT),
+      map((action: AppInitAction.FinishAppInitAction) => action.payload),
+      withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
+      map(value => this.platformService.initDB("platforms", value[1], value[2]))
+    );
   
   @Effect()
   onError$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddPlatformFailAction | PlatformAction.AddZoneFailAction | PlatformAction.AddSurveyFailAction | PlatformAction.AddStationFailAction | PlatformAction.AddCountFailAction | PlatformAction.AddZonePrefFailAction>(
-      PlatformAction.ActionTypes.ADD_PLATFORM_FAIL,
-      PlatformAction.ActionTypes.ADD_ZONE_FAIL,
-      PlatformAction.ActionTypes.ADD_SURVEY_FAIL,
-      PlatformAction.ActionTypes.ADD_STATION_FAIL,
-      PlatformAction.ActionTypes.ADD_ZONE_PREF_FAIL,
-      PlatformAction.ActionTypes.ADD_COUNT_FAIL
-    )
     .pipe(
+      ofType<PlatformAction.AddPlatformFailAction | PlatformAction.AddZoneFailAction | PlatformAction.AddSurveyFailAction | PlatformAction.AddStationFailAction | PlatformAction.AddCountFailAction | PlatformAction.AddZonePrefFailAction>(
+        PlatformAction.ActionTypes.ADD_PLATFORM_FAIL,
+        PlatformAction.ActionTypes.ADD_ZONE_FAIL,
+        PlatformAction.ActionTypes.ADD_SURVEY_FAIL,
+        PlatformAction.ActionTypes.ADD_STATION_FAIL,
+        PlatformAction.ActionTypes.ADD_ZONE_PREF_FAIL,
+        PlatformAction.ActionTypes.ADD_COUNT_FAIL
+      ),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       delay(5000),
       map(() => new PlatformAction.RemoveMsgAction())
@@ -46,14 +48,18 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  loadPlatforms$: Observable<Action> = this.actions$.ofType<PlatformAction.LoadAction>(PlatformAction.ActionTypes.LOAD).pipe(
+  loadPlatforms$: Observable<Action> = this.actions$
+  .pipe(
+    ofType<PlatformAction.LoadAction>(PlatformAction.ActionTypes.LOAD),
     switchMap(() => this.platformService.getAll()),
     map((platforms: Platform[]) => new PlatformAction.LoadSuccessAction(platforms)),
     catchError(error => of(new PlatformAction.LoadFailAction(error)))
   );
 
   @Effect()
-  addPlatform$: Observable<Action> = this.actions$.ofType<PlatformAction.AddPlatformAction>(PlatformAction.ActionTypes.ADD_PLATFORM).pipe(
+  addPlatform$: Observable<Action> = this.actions$
+  .pipe(
+    ofType<PlatformAction.AddPlatformAction>(PlatformAction.ActionTypes.ADD_PLATFORM),
     map((action: PlatformAction.AddPlatformAction) => action.payload),
     withLatestFrom(this.store.select(getSelectedCountry)),
     mergeMap((value: [Platform, Country]) => this.platformService.editPlatform(value[0], value[1])),
@@ -63,8 +69,8 @@ export class PlatformEffects {
 
   @Effect()
   importPlatform$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportPlatformAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM)
     .pipe(
+      ofType<PlatformAction.ImportPlatformAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportPlatformAction) => action.payload),
       mergeMap((platforms: any) => this.csv2jsonService.csv2("platform", platforms)),
@@ -75,8 +81,8 @@ export class PlatformEffects {
 
   @Effect()
   checkPlatformCsv$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.CheckPlatformCsvFile>(PlatformAction.ActionTypes.CHECK_PLATFORM_CSV_FILE)
     .pipe(
+      ofType<PlatformAction.CheckPlatformCsvFile>(PlatformAction.ActionTypes.CHECK_PLATFORM_CSV_FILE),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckPlatformCsvFile) => action.payload),
       mergeMap((platform: Platform) => this.csv2jsonService.csv2("platform", platform)),
@@ -86,17 +92,19 @@ export class PlatformEffects {
     );
 
   @Effect()
-  removePlatform$: Observable<Action> = this.actions$.ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM).pipe(
-    map((action: PlatformAction.RemovePlatformAction) => action.payload),
-    mergeMap(platform => this.platformService.removePlatform(platform)),
-    map((platform: Platform) => new PlatformAction.RemovePlatformSuccessAction(platform)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+  removePlatform$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemovePlatformAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM),
+      map((action: PlatformAction.RemovePlatformAction) => action.payload),
+      mergeMap(platform => this.platformService.removePlatform(platform)),
+      map((platform: Platform) => new PlatformAction.RemovePlatformSuccessAction(platform)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
   );
 
   @Effect()
   removePlatformCountry$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemovePlatformCountryAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY)
     .pipe(
+      ofType<PlatformAction.RemovePlatformCountryAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY),
       map((action: PlatformAction.RemovePlatformCountryAction) => action.payload),
       mergeMap(platform => this.platformService.removePlatform(platform)),
       map((platform: Platform) => new PlatformAction.RemovePlatformCountrySuccessAction(platform)),
@@ -105,8 +113,8 @@ export class PlatformEffects {
 
   @Effect()
   addPlatformSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddPlatformSuccessAction>(PlatformAction.ActionTypes.ADD_PLATFORM_SUCCESS)
     .pipe(
+      ofType<PlatformAction.AddPlatformSuccessAction>(PlatformAction.ActionTypes.ADD_PLATFORM_SUCCESS),
       map((action: PlatformAction.AddPlatformSuccessAction) => action.payload),
       mergeMap((platform: Platform) => this.router.navigate(["/platform/" + platform._id])),
       delay(3000),
@@ -115,8 +123,8 @@ export class PlatformEffects {
 
   @Effect()
   importPlatformSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportPlatformSuccessAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportPlatformSuccessAction>(PlatformAction.ActionTypes.IMPORT_PLATFORM_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       tap(() => this.router.navigate(["/platform"])),
       delay(3000),
@@ -125,8 +133,8 @@ export class PlatformEffects {
 
   @Effect()
   removePlatformSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportPlatformSuccessAction | PlatformAction.RemovePlatformSuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportPlatformSuccessAction | PlatformAction.RemovePlatformSuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_SUCCESS),
       tap(() => this.router.navigate(["/platform"])),
       delay(3000),
       map(() => new PlatformAction.RemoveMsgAction())
@@ -134,8 +142,9 @@ export class PlatformEffects {
 
   @Effect()
   removePlatformCountrySuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemovePlatformCountrySuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS)
-    .pipe(map(() => new PlatformAction.RemoveMsgAction()));
+    .pipe(
+      ofType<PlatformAction.RemovePlatformCountrySuccessAction>(PlatformAction.ActionTypes.REMOVE_PLATFORM_COUNTRY_SUCCESS),
+      map(() => new PlatformAction.RemoveMsgAction()));
 
 
   /**************************************************************************************************************************/
@@ -143,18 +152,20 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  addZone$: Observable<Action> = this.actions$.ofType<PlatformAction.AddZoneAction>(PlatformAction.ActionTypes.ADD_ZONE).pipe(
-    map((action: PlatformAction.AddZoneAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
-    map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone)),
-    catchError(error => of(new PlatformAction.AddZoneFailAction(error)))
-  );
+  addZone$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddZoneAction>(PlatformAction.ActionTypes.ADD_ZONE),
+      map((action: PlatformAction.AddZoneAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Zone, Platform]) => this.platformService.editZone(value[0], value[1])),
+      map((zone: Zone) => new PlatformAction.AddZoneSuccessAction(zone)),
+      catchError(error => of(new PlatformAction.AddZoneFailAction(error)))
+    );
 
   @Effect()
   importZone$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE)
     .pipe(
+      ofType<PlatformAction.ImportZoneAction>(PlatformAction.ActionTypes.IMPORT_ZONE),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportZoneAction) => action.payload),      
       withLatestFrom(this.store.select(getSelectedPlatform)),
@@ -166,33 +177,39 @@ export class PlatformEffects {
     );
 
   @Effect()
-  removeZone$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveZoneAction>(PlatformAction.ActionTypes.REMOVE_ZONE).pipe(
-    map((action: PlatformAction.RemoveZoneAction) => action.payload),
-    mergeMap(zone => this.platformService.removeZone(zone)),
-    map((zone: Zone) => new PlatformAction.RemoveZoneSuccessAction(zone)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeZone$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveZoneAction>(PlatformAction.ActionTypes.REMOVE_ZONE),
+      map((action: PlatformAction.RemoveZoneAction) => action.payload),
+      mergeMap(zone => this.platformService.removeZone(zone)),
+      map((zone: Zone) => new PlatformAction.RemoveZoneSuccessAction(zone)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
-  removeAllZone$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveAllZoneAction>(PlatformAction.ActionTypes.REMOVE_ALL_ZONE).pipe(
-    map((action: PlatformAction.RemoveAllZoneAction) => action.payload),
-    mergeMap(platform => this.platformService.removeAllZone(platform)),
-    map((platform: Platform) => new PlatformAction.RemoveAllZoneSuccessAction(platform)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeAllZone$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveAllZoneAction>(PlatformAction.ActionTypes.REMOVE_ALL_ZONE),
+      map((action: PlatformAction.RemoveAllZoneAction) => action.payload),
+      mergeMap(platform => this.platformService.removeAllZone(platform)),
+      map((platform: Platform) => new PlatformAction.RemoveAllZoneSuccessAction(platform)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
-  addZoneSuccess$: Observable<Action> = this.actions$.ofType<PlatformAction.AddZoneSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS).pipe(
-    map((action: PlatformAction.AddZoneSuccessAction) => action.payload),
-    mergeMap((zone: Zone) => this.router.navigate(["/zone/" + zone.codePlatform + "/" + zone.properties.code])),
-    delay(3000),
-    map(() => new PlatformAction.RemoveMsgAction())
-  );
+  addZoneSuccess$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddZoneSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_SUCCESS),
+      map((action: PlatformAction.AddZoneSuccessAction) => action.payload),
+      mergeMap((zone: Zone) => this.router.navigate(["/zone/" + zone.codePlatform + "/" + zone.properties.code])),
+      delay(3000),
+      map(() => new PlatformAction.RemoveMsgAction())
+    );
 
   @Effect()
   importZoneSuccess$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS)
     .pipe(
+      ofType(PlatformAction.ActionTypes.IMPORT_ZONE_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportZoneSuccessAction) => action.payload),
       mergeMap((zones: Zone[]) => this.router.navigate(["/platform/" + zones[0].codePlatform + "/zones"])),
@@ -202,8 +219,8 @@ export class PlatformEffects {
 
   @Effect()
   removeZoneSuccess$: Observable<Action> = this.actions$
-    .ofType(PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS)
     .pipe(
+      ofType(PlatformAction.ActionTypes.REMOVE_ZONE_SUCCESS),
       map((action: PlatformAction.RemoveZoneSuccessAction) => action.payload),
       mergeMap((zone: Zone) => this.router.navigate(["/platform/" + zone.codePlatform + "/zones"])),
       delay(3000),
@@ -215,18 +232,20 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  addSurvey$: Observable<Action> = this.actions$.ofType<PlatformAction.AddSurveyAction>(PlatformAction.ActionTypes.ADD_SURVEY).pipe(
-    map((action: PlatformAction.AddSurveyAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
-    map((survey: Survey) => new PlatformAction.AddSurveySuccessAction(survey)),
-    catchError(error => of(new PlatformAction.AddSurveyFailAction(error)))
-  );
+  addSurvey$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddSurveyAction>(PlatformAction.ActionTypes.ADD_SURVEY),
+      map((action: PlatformAction.AddSurveyAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Survey, Platform]) => this.platformService.editSurvey(value[1], value[0])),
+      map((survey: Survey) => new PlatformAction.AddSurveySuccessAction(survey)),
+      catchError(error => of(new PlatformAction.AddSurveyFailAction(error)))
+    );
 
   @Effect()
   importSurvey$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY)
     .pipe(
+      ofType<PlatformAction.ImportSurveyAction>(PlatformAction.ActionTypes.IMPORT_SURVEY),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportSurveyAction) => action.payload),
       mergeMap((surveys: any) => this.csv2jsonService.csv2("survey", surveys)),
@@ -238,8 +257,8 @@ export class PlatformEffects {
 
   @Effect()
   checkSurveyCsv$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.CheckSurveyCsvFile>(PlatformAction.ActionTypes.CHECK_SURVEY_CSV_FILE)
     .pipe(
+      ofType<PlatformAction.CheckSurveyCsvFile>(PlatformAction.ActionTypes.CHECK_SURVEY_CSV_FILE),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckSurveyCsvFile) => action.payload),
       mergeMap((survey: any) => this.csv2jsonService.csv2("survey", survey)),
@@ -250,8 +269,8 @@ export class PlatformEffects {
 
   @Effect()
   addPendingSurvey$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddPendingSurveyAction>(PlatformAction.ActionTypes.ADD_PENDING_SURVEY)
     .pipe(
+      ofType<PlatformAction.AddPendingSurveyAction>(PlatformAction.ActionTypes.ADD_PENDING_SURVEY),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingSurveyAction) => action.payload),
       mergeMap((survey: Survey) => this.csv2jsonService.csv2("survey", survey)),
@@ -260,25 +279,27 @@ export class PlatformEffects {
 
   @Effect()
   removePendingSurvey$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemovePendingSurveyAction>(PlatformAction.ActionTypes.REMOVE_PENDING_SURVEY)
     .pipe(
+      ofType<PlatformAction.RemovePendingSurveyAction>(PlatformAction.ActionTypes.REMOVE_PENDING_SURVEY),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.RemovePendingSurveyAction) => action.payload),
       catchError((survey: Survey) => of(new PlatformAction.RemovePendingSurveySuccessAction(survey)))
     );
 
   @Effect()
-  removeSurvey$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveSurveyAction>(PlatformAction.ActionTypes.REMOVE_SURVEY).pipe(
-    map((action: PlatformAction.RemoveSurveyAction) => action.payload),
-    mergeMap(survey => this.platformService.removeSurvey(survey)),
-    map((survey: Survey) => new PlatformAction.RemoveSurveySuccessAction(survey)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeSurvey$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveSurveyAction>(PlatformAction.ActionTypes.REMOVE_SURVEY),
+      map((action: PlatformAction.RemoveSurveyAction) => action.payload),
+      mergeMap(survey => this.platformService.removeSurvey(survey)),
+      map((survey: Survey) => new PlatformAction.RemoveSurveySuccessAction(survey)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
   addSurveySuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddSurveySuccessAction>(PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS)
     .pipe(
+      ofType<PlatformAction.AddSurveySuccessAction>(PlatformAction.ActionTypes.ADD_SURVEY_SUCCESS),
       map((action: PlatformAction.AddSurveySuccessAction) => action.payload),
       mergeMap((survey: Survey) => this.router.navigate(["/survey/" + survey.codePlatform + "/" + survey.code])),
       delay(3000),
@@ -287,8 +308,8 @@ export class PlatformEffects {
 
   @Effect()
   importSurveySuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportSurveySuccessAction>(PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportSurveySuccessAction>(PlatformAction.ActionTypes.IMPORT_SURVEY_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportSurveySuccessAction) => action.payload),
       mergeMap((surveys: Survey[]) => this.router.navigate(["/platform/" + surveys[0].codePlatform])),
@@ -298,8 +319,8 @@ export class PlatformEffects {
 
   @Effect()
   removeSurveySuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemoveSurveySuccessAction>(PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS)
     .pipe(
+      ofType<PlatformAction.RemoveSurveySuccessAction>(PlatformAction.ActionTypes.REMOVE_SURVEY_SUCCESS),
       map((action: PlatformAction.RemoveSurveySuccessAction) => action.payload),
       mergeMap((survey: Survey) => this.router.navigate(["/platform/" + survey.codePlatform])),
       delay(3000),
@@ -311,18 +332,20 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  addStation$: Observable<Action> = this.actions$.ofType<PlatformAction.AddStationAction>(PlatformAction.ActionTypes.ADD_STATION).pipe(
-    map((action: PlatformAction.AddStationAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
-    map((station: Station) => new PlatformAction.AddStationSuccessAction(station)),
-    catchError(error => of(new PlatformAction.AddSurveyFailAction(error)))
-  );
+  addStation$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddStationAction>(PlatformAction.ActionTypes.ADD_STATION),
+      map((action: PlatformAction.AddStationAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Station, Platform]) => this.platformService.editStation(value[1], value[0])),
+      map((station: Station) => new PlatformAction.AddStationSuccessAction(station)),
+      catchError(error => of(new PlatformAction.AddSurveyFailAction(error)))
+    );
 
   @Effect()
   importStation$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION)
     .pipe(
+      ofType<PlatformAction.ImportStationAction>(PlatformAction.ActionTypes.IMPORT_STATION),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportStationAction) => action.payload),
       mergeMap((stations: any) => this.csv2jsonService.csv2("station", stations)),
@@ -334,8 +357,8 @@ export class PlatformEffects {
 
   @Effect()
   checkStationCsv$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.CheckStationCsvFile>(PlatformAction.ActionTypes.CHECK_STATION_CSV_FILE)
     .pipe(
+      ofType<PlatformAction.CheckStationCsvFile>(PlatformAction.ActionTypes.CHECK_STATION_CSV_FILE),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckStationCsvFile) => action.payload),
       mergeMap((stations:any) => this.csv2jsonService.csv2("station", stations)),
@@ -346,8 +369,8 @@ export class PlatformEffects {
 
   @Effect()
   addPendingStation$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddPendingStationAction>(PlatformAction.ActionTypes.ADD_PENDING_STATION)
     .pipe(
+      ofType<PlatformAction.AddPendingStationAction>(PlatformAction.ActionTypes.ADD_PENDING_STATION),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.AddPendingStationAction) => action.payload),
       mergeMap((station: Station) => this.csv2jsonService.csv2("station", station)),
@@ -356,25 +379,27 @@ export class PlatformEffects {
 
   @Effect()
   removePendingStation$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemovePendingStationAction>(PlatformAction.ActionTypes.REMOVE_PENDING_STATION)
     .pipe(
+      ofType<PlatformAction.RemovePendingStationAction>(PlatformAction.ActionTypes.REMOVE_PENDING_STATION),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.RemovePendingStationAction) => action.payload),
       catchError((station: Station) => of(new PlatformAction.RemovePendingStationSuccessAction(station)))
     );
 
   @Effect()
-  removeStation$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveStationAction>(PlatformAction.ActionTypes.REMOVE_STATION).pipe(
-    map((action: PlatformAction.RemoveStationAction) => action.payload),
-    mergeMap(station => this.platformService.removeStation(station)),
-    map((station: Station) => new PlatformAction.RemoveStationSuccessAction(station)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeStation$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveStationAction>(PlatformAction.ActionTypes.REMOVE_STATION),
+      map((action: PlatformAction.RemoveStationAction) => action.payload),
+      mergeMap(station => this.platformService.removeStation(station)),
+      map((station: Station) => new PlatformAction.RemoveStationSuccessAction(station)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
   addStationSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddStationSuccessAction>(PlatformAction.ActionTypes.ADD_STATION_SUCCESS)
     .pipe(
+      ofType<PlatformAction.AddStationSuccessAction>(PlatformAction.ActionTypes.ADD_STATION_SUCCESS),
       map((action: PlatformAction.AddStationSuccessAction) => action.payload),
       mergeMap((station: Station) => this.router.navigate(["/station/" + station.codePlatform + "/" + station.properties.code])),
       delay(3000),
@@ -383,8 +408,8 @@ export class PlatformEffects {
 
   @Effect()
   importStationSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportStationSuccessAction>(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportStationSuccessAction>(PlatformAction.ActionTypes.IMPORT_STATION_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportStationSuccessAction) => action.payload),
       mergeMap((stations: Station[]) => this.router.navigate([stations[0] ? "/platform/" + stations[0].codePlatform:""])),
@@ -394,8 +419,8 @@ export class PlatformEffects {
 
   @Effect()
   removeStationSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemoveStationSuccessAction>(PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS)
     .pipe(
+      ofType<PlatformAction.RemoveStationSuccessAction>(PlatformAction.ActionTypes.REMOVE_STATION_SUCCESS),
       map((action: PlatformAction.RemoveStationSuccessAction) => action.payload),
       mergeMap((station: Station) => this.router.navigate(["/platform/" + station.codePlatform])),
       delay(3000),
@@ -407,18 +432,20 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  addZonePref$: Observable<Action> = this.actions$.ofType<PlatformAction.AddZonePrefAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF).pipe(
-    map((action: PlatformAction.AddZonePrefAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
-    map((zonePref: ZonePreference) => new PlatformAction.AddZonePrefSuccessAction(zonePref)),
-    catchError(error => of(new PlatformAction.AddZonePrefFailAction(error)))
-  );
+  addZonePref$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddZonePrefAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF),
+      map((action: PlatformAction.AddZonePrefAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [ZonePreference, Platform]) => this.platformService.editZonePref(value[1], value[0])),
+      map((zonePref: ZonePreference) => new PlatformAction.AddZonePrefSuccessAction(zonePref)),
+      catchError(error => of(new PlatformAction.AddZonePrefFailAction(error)))
+    );
 
   @Effect()
   checkZonePrefCsv$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.CheckZonePrefCsvFile>(PlatformAction.ActionTypes.CHECK_ZONE_PREF_CSV_FILE)
     .pipe(
+      ofType<PlatformAction.CheckZonePrefCsvFile>(PlatformAction.ActionTypes.CHECK_ZONE_PREF_CSV_FILE),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckZonePrefCsvFile) => action.payload),
       mergeMap((zonePref: any) => this.csv2jsonService.csv2("zonePref", zonePref)),
@@ -429,8 +456,8 @@ export class PlatformEffects {
 
   @Effect()
   importZonePref$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportZonePrefAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF)
     .pipe(
+      ofType<PlatformAction.ImportZonePrefAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportZonePrefAction) => action.payload),
       withLatestFrom(this.store.select(getSpeciesInApp)),
@@ -442,17 +469,19 @@ export class PlatformEffects {
     );
 
   @Effect()
-  removeZonePref$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveZonePrefAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF).pipe(
-    map((action: PlatformAction.RemoveZonePrefAction) => action.payload),
-    mergeMap(zonePref => this.platformService.removeZonePref(zonePref)),
-    map((zonePref: ZonePreference) => new PlatformAction.RemoveZonePrefSuccessAction(zonePref)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeZonePref$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveZonePrefAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF),
+      map((action: PlatformAction.RemoveZonePrefAction) => action.payload),
+      mergeMap(zonePref => this.platformService.removeZonePref(zonePref)),
+      map((zonePref: ZonePreference) => new PlatformAction.RemoveZonePrefSuccessAction(zonePref)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
   addZonePrefSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddZonePrefSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF_SUCCESS)
     .pipe(
+      ofType<PlatformAction.AddZonePrefSuccessAction>(PlatformAction.ActionTypes.ADD_ZONE_PREF_SUCCESS),
       map((action: PlatformAction.AddZonePrefSuccessAction) => action.payload),
       mergeMap((zonePref: ZonePreference) =>
         this.router.navigate(["/zonePref/" + zonePref.codePlatform + "/" + zonePref.codeZone + "/" + zonePref.code])
@@ -463,8 +492,8 @@ export class PlatformEffects {
 
   @Effect()
   importZonePrefSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportZonePrefSuccessAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportZonePrefSuccessAction>(PlatformAction.ActionTypes.IMPORT_ZONE_PREF_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportZonePrefSuccessAction) => action.payload),
       mergeMap((zonePrefs: ZonePreference[]) => this.router.navigate([zonePrefs[0] ? "/zone/" + zonePrefs[0].codePlatform + "/" + zonePrefs[0].codeZone + "/zonesPref":""])),
@@ -474,8 +503,8 @@ export class PlatformEffects {
 
   @Effect()
   removeZonePrefSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemoveZonePrefSuccessAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS)
     .pipe(
+      ofType<PlatformAction.RemoveZonePrefSuccessAction>(PlatformAction.ActionTypes.REMOVE_ZONE_PREF_SUCCESS),
       map((action: PlatformAction.RemoveZonePrefSuccessAction) => action.payload),
       mergeMap((zonePref: ZonePreference) => this.router.navigate(["/zone/" + zonePref.codePlatform + "/" + zonePref.codeZone + "/zonesPref"])),
       delay(3000),
@@ -487,18 +516,20 @@ export class PlatformEffects {
   /**************************************************************************************************************************/
 
   @Effect()
-  addCount$: Observable<Action> = this.actions$.ofType<PlatformAction.AddCountAction>(PlatformAction.ActionTypes.ADD_COUNT).pipe(
-    map((action: PlatformAction.AddCountAction) => action.payload),
-    withLatestFrom(this.store.select(getSelectedPlatform)),
-    mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
-    map((count: Count) => new PlatformAction.AddCountSuccessAction(count)),
-    catchError(error => of(new PlatformAction.AddCountFailAction(error)))
-  );
+  addCount$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.AddCountAction>(PlatformAction.ActionTypes.ADD_COUNT),
+      map((action: PlatformAction.AddCountAction) => action.payload),
+      withLatestFrom(this.store.select(getSelectedPlatform)),
+      mergeMap((value: [Count, Platform]) => this.platformService.editCount(value[1], value[0])),
+      map((count: Count) => new PlatformAction.AddCountSuccessAction(count)),
+      catchError(error => of(new PlatformAction.AddCountFailAction(error)))
+    );
 
   @Effect()
   importCount$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportCountAction>(PlatformAction.ActionTypes.IMPORT_COUNT)
     .pipe(
+      ofType<PlatformAction.ImportCountAction>(PlatformAction.ActionTypes.IMPORT_COUNT),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       map((action: PlatformAction.ImportCountAction) => action.payload),
       mergeMap((count: any) => this.csv2jsonService.csv2(count.type, count.csvFile)),
@@ -510,8 +541,8 @@ export class PlatformEffects {
 
   @Effect()
   checkCountCsv$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE)
     .pipe(
+      ofType<PlatformAction.CheckCountCsvFile>(PlatformAction.ActionTypes.CHECK_COUNT_CSV_FILE),
       tap(() => this.store.dispatch(new PlatformAction.RemoveMsgAction())),
       map((action: PlatformAction.CheckCountCsvFile) => action.payload),
       mergeMap((count: any) =>this.csv2jsonService.csv2(count.type, count.csvFile)),
@@ -521,17 +552,19 @@ export class PlatformEffects {
     );
 
   @Effect()
-  removeCount$: Observable<Action> = this.actions$.ofType<PlatformAction.RemoveCountAction>(PlatformAction.ActionTypes.REMOVE_COUNT).pipe(
-    map((action: PlatformAction.RemoveCountAction) => action.payload),
-    mergeMap(count => this.platformService.removeCount(count)),
-    map((count: Count) => new PlatformAction.RemoveCountSuccessAction(count)),
-    catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
-  );
+  removeCount$: Observable<Action> = this.actions$
+    .pipe(
+      ofType<PlatformAction.RemoveCountAction>(PlatformAction.ActionTypes.REMOVE_COUNT),
+      map((action: PlatformAction.RemoveCountAction) => action.payload),
+      mergeMap(count => this.platformService.removeCount(count)),
+      map((count: Count) => new PlatformAction.RemoveCountSuccessAction(count)),
+      catchError(error => of(new PlatformAction.RemovePlatformFailAction(error)))
+    );
 
   @Effect()
   addCountSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.AddCountSuccessAction>(PlatformAction.ActionTypes.ADD_COUNT_SUCCESS)
     .pipe(
+      ofType<PlatformAction.AddCountSuccessAction>(PlatformAction.ActionTypes.ADD_COUNT_SUCCESS),
       map((action: PlatformAction.AddCountSuccessAction) => action.payload),
       mergeMap((count: Count) => this.router.navigate(["/count/" + count.codePlatform + "/" + count.codeSurvey + "/" + count.code])),
       delay(3000),
@@ -540,8 +573,8 @@ export class PlatformEffects {
 
   @Effect()
   importCountSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.ImportCountSuccessAction>(PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS)
     .pipe(
+      ofType<PlatformAction.ImportCountSuccessAction>(PlatformAction.ActionTypes.IMPORT_COUNT_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       map((action: PlatformAction.ImportCountSuccessAction) => action.payload),
       mergeMap((counts: Count[]) => this.router.navigate([counts[0] ? "/platform/" + counts[0].codePlatform :""])),
@@ -551,8 +584,8 @@ export class PlatformEffects {
 
   @Effect()
   removeCountSuccess$: Observable<Action> = this.actions$
-    .ofType<PlatformAction.RemoveCountSuccessAction>(PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS)
     .pipe(      
+      ofType<PlatformAction.RemoveCountSuccessAction>(PlatformAction.ActionTypes.REMOVE_COUNT_SUCCESS),
       map((action: PlatformAction.RemoveCountSuccessAction) => action.payload),
       mergeMap((count: Count) => this.router.navigate(["/survey/" + count.codePlatform + "/" + count.codeSurvey])),
       delay(3000),

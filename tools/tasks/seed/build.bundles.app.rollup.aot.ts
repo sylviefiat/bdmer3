@@ -30,7 +30,7 @@ const config = {
 };
 
 
-export default (done: any) => {
+export = (done: any) => {
   rollup.rollup(config)
     .then((bundle: any) => {
       const result = bundle.generate({

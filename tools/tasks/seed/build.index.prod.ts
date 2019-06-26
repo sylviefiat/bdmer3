@@ -12,7 +12,7 @@ const plugins = <any>gulpLoadPlugins();
  * Executes the build process, injecting the JavaScript and CSS dependencies into the `index.html` for the production
  * environment.
  */
-export default () => {
+export = () => {
   return gulp.src(join(Config.APP_SRC, 'index.html'))
     .pipe(injectJs())
     .pipe(injectCss())

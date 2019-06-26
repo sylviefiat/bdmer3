@@ -18,8 +18,8 @@ export class MultilingualEffects {
 
 
   @Effect() change$: Observable<Action> = this.actions$
-    .ofType<MultilingualAction.ChangeAction>(MultilingualAction.ActionTypes.CHANGE)
     .pipe(
+      ofType<MultilingualAction.ChangeAction>(MultilingualAction.ActionTypes.CHANGE),
       map((action: MultilingualAction.ChangeAction) => action.payload),
       mergeMap((lang:string) => {
         if (Lodash.includes(Lodash.map(this.languages, 'code'), lang)) {

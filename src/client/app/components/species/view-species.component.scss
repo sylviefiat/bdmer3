@@ -47,7 +47,7 @@ mat-card-content {
 }
 mat-card-content.one{
   display: flex;
-  justify-content:start;
+  justify-content: flex-start;
 }
 .data mat-card-content, .inside mat-card-content {
   display: flex;

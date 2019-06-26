@@ -23,8 +23,8 @@ export class AuthEffects {
 
   @Effect()
   openDB$: Observable<any> = this.actions$
-    .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
     .pipe(
+      ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT),
       map((action: AppInitAction.FinishAppInitAction) => action.payload),
       withLatestFrom(this.store.select(getServiceUrl)),
       map((value) => this.authService.initDB('_users',value[1])),
@@ -41,8 +41,8 @@ export class AuthEffects {
     );
 
     @Effect() login$ = this.actions$
-        .ofType<AuthAction.Login>(AuthAction.ActionTypes.LOGIN)
         .pipe(
+            ofType<AuthAction.Login>(AuthAction.ActionTypes.LOGIN),
             map((action: AuthAction.Login) => action.payload),
             exhaustMap(auth => this.authService.login(auth)),
             map((result: AccessToken) => {
@@ -58,8 +58,8 @@ export class AuthEffects {
         );
 
     @Effect({dispatch:false}) logout$ = this.actions$
-        .ofType<AuthAction.Logout>(AuthAction.ActionTypes.LOGOUT)
         .pipe(
+            ofType<AuthAction.Logout>(AuthAction.ActionTypes.LOGOUT),
             map((action: AuthAction.Logout) => action.payload),
             exhaustMap(stringisnull => this.authService.logout().pipe(
                 tap(authed => localStorage.removeItem(AuthEffects.tokenItem)),
@@ -68,8 +68,8 @@ export class AuthEffects {
         );
 
     @Effect({ dispatch: false }) loginSuccess$ = this.actions$
-        .ofType<AuthAction.LoginSuccess>(AuthAction.ActionTypes.LOGIN_SUCCESS)
         .pipe(
+            ofType<AuthAction.LoginSuccess>(AuthAction.ActionTypes.LOGIN_SUCCESS),
             map((action: AuthAction.LoginSuccess) => action.payload),
             withLatestFrom(this.store.select(getLatestURL)),
             map(([authInfo, url]) => [authInfo, url]),
@@ -82,13 +82,14 @@ export class AuthEffects {
         );
 
     @Effect({ dispatch: false }) loginRedirect$ = this.actions$
-        .ofType<AuthAction.LoginRedirect>(AuthAction.ActionTypes.LOGIN_REDIRECT)
-        .pipe(tap(authed => this.router.navigate(['/login']))
+        .pipe(
+            ofType<AuthAction.LoginRedirect>(AuthAction.ActionTypes.LOGIN_REDIRECT),
+            tap(authed => this.router.navigate(['/login']))
         );
 
     @Effect() lostpassword$ = this.actions$
-        .ofType<AuthAction.LostPassword>(AuthAction.ActionTypes.LOST_PASSWORD)
         .pipe(
+            ofType<AuthAction.LostPassword>(AuthAction.ActionTypes.LOST_PASSWORD),
             map((action: AuthAction.LostPassword) => action.payload),
             exhaustMap(usermail => this.countriesService.verifyMail(usermail)),
             map((user: User) => this.mailService.sendPasswordMail(user)),
@@ -97,13 +98,15 @@ export class AuthEffects {
         );
 
     @Effect({ dispatch: false }) lostpasswordSuccess$ = this.actions$
-        .ofType<AuthAction.LostPasswordSuccess>(AuthAction.ActionTypes.LOST_PASSWORD_SUCCESS)
-        .pipe(tap(() => this.router.navigate(['/login']))
+        .pipe(
+            ofType<AuthAction.LostPasswordSuccess>(AuthAction.ActionTypes.LOST_PASSWORD_SUCCESS),
+            tap(() => this.router.navigate(['/login']))
         );
 
     @Effect({ dispatch: false }) lostpasswordRedirect$ = this.actions$
-        .ofType<AuthAction.LostPasswordRedirect>(AuthAction.ActionTypes.LOST_PASSWORD_REDIRECT)
-        .pipe(tap(authed => this.router.navigate(['/login']))
+        .pipe(
+            ofType<AuthAction.LostPasswordRedirect>(AuthAction.ActionTypes.LOST_PASSWORD_REDIRECT),
+            tap(authed => this.router.navigate(['/login']))
         );
 
     constructor(

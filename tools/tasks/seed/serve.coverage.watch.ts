@@ -3,7 +3,7 @@ import * as browserSync from 'browser-sync';
 
 import Config from '../../config';
 
-export default () => {
+export = () => {
   let coverageFolder = Config.COVERAGE_TS_DIR;
   let watchedFiles: string[] = [join(coverageFolder, '**')];
 

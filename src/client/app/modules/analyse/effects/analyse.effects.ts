@@ -17,8 +17,8 @@ import { LoaderAction } from "../../core/actions/index";
 export class AnalyseEffects {
 
   @Effect() redirectToResults$ = this.actions$
-    .ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT)
     .pipe(
+      ofType<AnalyseAction.Redirect>(AnalyseAction.ActionTypes.REDIRECT),
       tap(() => this.store.dispatch(new LoaderAction.LoadingAction())),
       exhaustMap(() => from(this.router.navigate(['/result']))),
       filter(moved => moved),
@@ -26,8 +26,8 @@ export class AnalyseEffects {
     );
 
   @Effect() analyse$ = this.actions$
-    .ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE)
     .pipe(
+      ofType<AnalyseAction.Analyse>(AnalyseAction.ActionTypes.ANALYSE),
       map((action: AnalyseAction.Analyse) => action.payload),
       withLatestFrom(this.store.select(getAnalyseData)),
       mergeMap((value: [string, Data]) => this.analyseService.analyse(value[1])),
@@ -36,16 +36,16 @@ export class AnalyseEffects {
   );
 
   @Effect() setDefaultCountry$ = this.actions$
-    .ofType<AnalyseAction.SetDefaultCountry>(AnalyseAction.ActionTypes.SET_DEFAULT_COUNTRY)
     .pipe(
+      ofType<AnalyseAction.SetDefaultCountry>(AnalyseAction.ActionTypes.SET_DEFAULT_COUNTRY),
       withLatestFrom(this.store.select(getSelectedCountry)),
       filter(value => value[1]),
       map(value => new AnalyseAction.SelectCountry(value[1]))
     );
 
   @Effect({ dispatch: false }) analyseSuccess$ = this.actions$
-    .ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS)
     .pipe(
+      ofType<AnalyseAction.AnalyseSuccess>(AnalyseAction.ActionTypes.ANALYSE_SUCCESS),
       tap(() => this.store.dispatch(new LoaderAction.LoadedAction())),
       tap(() => console.log("analyse ok"))
   );

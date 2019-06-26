@@ -20,8 +20,8 @@ export class CountriesEffects {
 
     @Effect({ dispatch: false })
     openDB$: Observable<any> = this.actions$
-        .ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT)
         .pipe(
+            ofType<AppInitAction.FinishAppInitAction>(AppInitAction.ActionTypes.FINISH_APP_INIT),
             withLatestFrom(this.store.select(getServiceUrl),this.store.select(getPrefixDatabase)),
             map((value) => this.countriesService.initDB('countries', value[1], value[2])),
             mergeMap(() => this.countriesService.getCountry(this.countriesService.adminCountry.code)),
@@ -31,8 +31,8 @@ export class CountriesEffects {
         );
 
     @Effect() init$: Observable<Action> = this.actions$
-        .ofType<CountriesAction.InitAction>(CountriesAction.ActionTypes.INIT)
         .pipe(
+            ofType<CountriesAction.InitAction>(CountriesAction.ActionTypes.INIT),
             switchMap(init => this.countryListService.getCountryList()),
             withLatestFrom(this.countryListService.getCountryListDetails()),
             withLatestFrom(this.countryListService.getCountryListCount()),
@@ -44,8 +44,8 @@ export class CountriesEffects {
 
     @Effect()
     loadCountries$: Observable<Action> = this.actions$
-        .ofType<CountriesAction.LoadAction>(CountriesAction.ActionTypes.LOAD)
         .pipe(
+            ofType<CountriesAction.LoadAction>(CountriesAction.ActionTypes.LOAD),
             switchMap(load => this.countriesService.getAll()),
             map((countries: Country[]) => new CountriesAction.LoadSuccessAction(countries)),
             catchError(error => of(new CountriesAction.LoadFailAction(error)))
@@ -53,8 +53,8 @@ export class CountriesEffects {
 
     @Effect()
     addCountryToCountries$: Observable<Action> = this.actions$
-        .ofType<CountriesAction.AddCountryAction>(CountriesAction.ActionTypes.ADD_COUNTRY)
         .pipe(
+            ofType<CountriesAction.AddCountryAction>(CountriesAction.ActionTypes.ADD_COUNTRY),
             map((action: CountriesAction.AddCountryAction) => action.payload),
             mergeMap(country => this.countriesService.addCountry(country)),
             map((country) => new CountriesAction.AddCountrySuccessAction(country)),
@@ -62,17 +62,19 @@ export class CountriesEffects {
         );
 
     @Effect({ dispatch: false }) addCountrySuccess$ = this.actions$
-        .ofType<CountriesAction.AddCountrySuccessAction>(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS)
-        .pipe(tap(() => this.router.navigate(['/countries']))
+        .pipe(
+            ofType<CountriesAction.AddCountrySuccessAction>(CountriesAction.ActionTypes.ADD_COUNTRY_SUCCESS),
+            tap(() => this.router.navigate(['/countries']))
         );
     @Effect({ dispatch: false }) removeCountrySuccess$ = this.actions$
-        .ofType<CountriesAction.AddCountryFailAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS)
-        .pipe(tap(() => this.router.navigate(['/countries']))
+        .pipe(
+            ofType<CountriesAction.AddCountryFailAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY_SUCCESS),
+            tap(() => this.router.navigate(['/countries']))
         );
     @Effect()
     removeCountryFromCountries$: Observable<Action> = this.actions$
-        .ofType<CountriesAction.RemoveCountryAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY)
         .pipe(
+            ofType<CountriesAction.RemoveCountryAction>(CountriesAction.ActionTypes.REMOVE_COUNTRY),
             map((action: CountriesAction.RemoveCountryAction) => action.payload),
             mergeMap(country => this.countriesService.removeCountry(country)),
             map((country) => new CountriesAction.RemoveCountrySuccessAction(country)),

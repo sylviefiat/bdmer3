@@ -45,7 +45,7 @@ gulp.task('watch.while_deving', function () {
     }));
 });
 
-export default (done: any) =>
+export = (done: any) =>
   gulp.series('build.test',
     'watch.while_deving',
     'server.start',

@@ -1,6 +1,6 @@
 import * as gulp from 'gulp';
-import * as gulpLoadPlugins from 'gulp-load-plugins';
-import * as merge from 'merge-stream';
+import gulpLoadPlugins from 'gulp-load-plugins';
+import merge from 'merge-stream';
 import * as util from 'gulp-util';
 import { join/*, sep, relative*/ } from 'path';
 
@@ -16,7 +16,7 @@ let typedBuildCounter = Config.TYPED_COMPILE_INTERVAL; // Always start with the 
  * Executes the build process, transpiling the TypeScript files (except the spec and e2e-spec files) for the development
  * environment.
  */
-export default
+export =
   class BuildJsDev extends TypeScriptTask {
     run() {
       let tsProject: any;

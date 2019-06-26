@@ -9,7 +9,7 @@ const plugins = <any>gulpLoadPlugins();
 /**
  * Executes the build process, linting the TypeScript files using `codelyzer`.
  */
-export default () => {
+export = () => {
   let src = [
     join(Config.APP_SRC, '**/*.ts'),
     '!' + join(Config.APP_SRC, '**/*.d.ts'),
