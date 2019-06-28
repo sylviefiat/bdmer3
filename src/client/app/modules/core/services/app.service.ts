@@ -18,7 +18,7 @@ export class AppService {
     /*loadAppConfig(): Promise<any> {
         let http = this.injector.get(HttpClient);
 
-        return http.get('/assets/app-config.json')
+        return http.get('assets/app-config.json')
             .toPromise()
             .then(data => {
                 console.log(data);

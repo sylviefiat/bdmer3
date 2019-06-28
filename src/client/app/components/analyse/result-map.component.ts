@@ -75,8 +75,10 @@ export class ResultMapComponent implements OnInit, OnChanges {
     imageLoaded$: Observable<boolean>;
 
     constructor(mapService: MapService) {
-        this.docs_repo = '../../../assets/files/';
-        this.imgs_repo = '../../../assets/img/';
+        //this.docs_repo = '../../../assets/files/';
+        //this.imgs_repo = '../../../assets/img/';
+        this.docs_repo = 'assets/files/';
+        this.imgs_repo = 'assets/img/';
         this.imageLoaded$ = of(false);
     }
 
@@ -136,7 +138,8 @@ export class ResultMapComponent implements OnInit, OnChanges {
 
     initZones() {
         if (this.zones.length <= 0) {
-            for (let rsp of this.results.resultAll) {
+            if(this.results.resultAll){
+                for (let rsp of this.results.resultAll) {
                     for (let rz of rsp.resultPerZone) {
                         let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
                         let polygon = {
@@ -153,6 +156,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
                         this.zones.push(polygon);
                     }
                 }
+            }
             for (let i in this.results.resultPerSurvey) {
                 for (let rsp of this.results.resultPerSurvey[i].resultPerSpecies) {
                     for (let rz of rsp.resultPerZone) {
@@ -177,20 +181,22 @@ export class ResultMapComponent implements OnInit, OnChanges {
 
     initZonesNoRatio() {
         if (this.zonesNoRatio.length <= 0) {
-            for (let rsp of this.results.resultAll) {
-                for (let rz of rsp.resultPerZone.filter(r => r.ratioNstSurface <= 0.2)) {
-                    let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
-                    let polygon = {
-                        geometry: z.geometry,
-                        properties: {
-                            code: z.properties.code,
-                            abundancy: rz.abundancePerHA,
-                            biomass: rz.biomassPerHA,
-                            species: rsp.codeSpecies,
-                            ratio: rz.ratioNstSurface
-                        }
-                    };
-                    this.zonesNoRatio.push(polygon);
+            if(this.results.resultAll){
+                for (let rsp of this.results.resultAll) {
+                    for (let rz of rsp.resultPerZone.filter(r => r.ratioNstSurface <= 0.2)) {
+                        let z: Zone = this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone) && this.analyseData.usedZones.filter((zone: Zone) => zone.properties.code === rz.codeZone)[0];
+                        let polygon = {
+                            geometry: z.geometry,
+                            properties: {
+                                code: z.properties.code,
+                                abundancy: rz.abundancePerHA,
+                                biomass: rz.biomassPerHA,
+                                species: rsp.codeSpecies,
+                                ratio: rz.ratioNstSurface
+                            }
+                        };
+                        this.zonesNoRatio.push(polygon);
+                    }
                 }
             }
         }

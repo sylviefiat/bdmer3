@@ -28,8 +28,10 @@ export class AboutComponent {
     private imgs_repo: string;
 
     constructor(private injector: Injector, private store: Store<IAppState>) {
-        this.docs_repo = '../../../assets/files/';
-        this.imgs_repo = '../../../assets/img/';
+        //this.docs_repo = '../../../assets/files/';
+        //this.imgs_repo = '../../../assets/img/';
+        this.docs_repo = 'assets/files/';
+        this.imgs_repo = 'assets/img/';
 
         this.store.select(getLangues).subscribe(lang => {
             switch (lang) {
@@ -61,7 +63,7 @@ export class AboutComponent {
     }
 
     getPdfUrl() {
-        let wb: XLSX.WorkBook = { SheetNames: [], Sheets: {} };
+        /*let wb: XLSX.WorkBook = { SheetNames: [], Sheets: {} };
         wb.SheetNames.push("test");
         wb.Sheets["test"] = XLSX.utils.json_to_sheet([{ test: 'kcheoc' }]);
         const wbout = XLSX.write(wb, {
@@ -70,8 +72,8 @@ export class AboutComponent {
         });
         console.log("test");
         let blob = new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' });
-        saveAs(blob, 'test.xls');
-        //return this.docs_repo + this.pdfFile;
+        saveAs(blob, 'test.xls');*/
+        return this.docs_repo + this.pdfFile;
     }
 
     s2ab(s) {

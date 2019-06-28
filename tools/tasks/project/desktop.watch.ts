@@ -3,10 +3,10 @@ import * as gulp from 'gulp';
 
 const electron = require('electron-connect').server.create({ 'path': 'dist/dev' });
 
-export = (done) => {
+export = () => {
   electron.start();
   gulp.watch(['./src/**/*'], reload);
-  done();
+  //done();
 };
 
 function reload() {

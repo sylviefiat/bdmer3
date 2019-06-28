@@ -6,7 +6,7 @@
   display: flex;
 }
 .background {  
-  background: url("../../../assets/img/overlay.png"), url("../../../assets/img/Ressources-6-P.DUMAS.jpg");
+  background: url("assets/img/overlay.png"), url("assets/img/Ressources-6-P.DUMAS.jpg");
   background-size: 256px 256px, cover;
   background-attachment: fixed;
   background-position: top,left,bottom,center;
@@ -77,7 +77,7 @@ bc-home-map {
   max-width: 50%;
 
   .background_left {  
-    background: url("../../../assets/img/overlay.png"), url("../../../assets/img/Ressources-6-P.DUMAS.jpg");
+    background: url("assets/img/overlay.png"), url("assets/img/Ressources-6-P.DUMAS.jpg");
     background-size: 256px 256px, cover;
     background-position: center center;
     background-repeat: repeat, no-repeat;

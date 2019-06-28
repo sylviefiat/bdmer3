@@ -5,7 +5,7 @@
         "target": "es5",
         "inlineSourceMap": true,
         "experimentalDecorators": true,
-        "removeComments": false,
+        "removeComments": true,
         "emitDecoratorMetadata": true,
         "noImplicitUseStrict": true,
         //"allowSyntheticDefaultImports": true,

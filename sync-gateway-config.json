@@ -17,8 +17,8 @@
         }
     },
     "CORS": {
-        "Origin": ["http://localhost:5984"],
-        "LoginOrigin": ["http://localhost:5984"],
+        "Origin": ["http://bdmerdb:5984"],
+        "LoginOrigin": ["http://bdmerdb:5984"],
         "Headers": ["Content-Type"],
         "MaxAge": 17280000
     }

@@ -65,7 +65,8 @@ export class GlobalImportPageComponent implements OnInit {
     this.isAdmin$ = this.store.select(getisAdmin);
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.locale$ = this.store.select(getLangues);
-    this.docs_repo = "../../../assets/files/";
+    //this.docs_repo = "../../../assets/files/";
+    this.docs_repo = "assets/files/";
     this.countries$ = this.store.select(getAllCountriesInApp);
     this.countriesCount$ = this.store.select(getCountryCountList);
   }

@@ -444,7 +444,7 @@ export class SeedConfig {
     },
     transpiler: 'plugin-babel',
     paths: {
-      [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,
+      [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,      
       '@angular/animations': 'node_modules/@angular/animations/bundles/animations.umd.js',
       '@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/common': 'node_modules/@angular/common/bundles/common.umd.js',
@@ -461,9 +461,9 @@ export class SeedConfig {
       '@angular/core/testing': 'node_modules/@angular/core/bundles/core-testing.umd.js',
       '@angular/http/testing': 'node_modules/@angular/http/bundles/http-testing.umd.js',
       '@angular/platform-browser/testing':
-        'node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
+      'node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
       '@angular/platform-browser-dynamic/testing':
-        'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
+      'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
       'rxjs': 'node_modules/rxjs',
       'rxjs-compat': 'node_modules/rxjs-compat',
@@ -472,11 +472,12 @@ export class SeedConfig {
       'file-saver': 'node_modules/file-saver',
       '@mapbox': 'node_modules/@mapbox',
       'jspdf': 'node_modules/jspdf',
-
+      'systemjs-plugin-babel':'node_modules/systemjs-plugin-babel',
       'app/*': '/app/*',
+      'assets/*': '/assets/*',
       // For test config
       'dist/dev/*': '/base/dist/dev/*',
-      '*': 'node_modules/*'
+      'node_modules/*': '/node_modules/*'
     },
     packages: {
       '.': { defaultExtension: 'js' }
@@ -531,6 +532,7 @@ export class SeedConfig {
       '@angular/common/locales/fr': 'node_modules/@angular/common/locales/fr.js',
       'rxjs/*': 'node_modules/rxjs/*',
       'rxjs-compat/*': 'node_modules/rxjs-compat/*',
+      'plugin-babel':'node_modules/systemjs-plugin-babel/plugin-babel.js',
       'ngx-mapbox-gl/*': 'node_modules/ngx-mapbox-gl/*',
       'file-saver/*': 'node_modules/file-saver/*',
       'jspdf/*': 'node_modules/jspdf/*',

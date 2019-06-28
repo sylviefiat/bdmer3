@@ -30,7 +30,7 @@ export class AppInitEffects implements OnRunEffects {
     @Effect() loadServicesUrl$ = this.actions$
         .pipe(
             ofType<AppInitAction.LoadServicesUrlAction>(AppInitAction.ActionTypes.LOAD_SERVICES_URL),
-            switchMap(action => this.http.get('/assets/app-config.json')),
+            switchMap(action => this.http.get('assets/app-config.json')),
             map(result => new AppInitAction.ServicesUrlLoadedAction(result)),
             catchError(error => of(new AppInitAction.ServicesUrlLoadedAction(environment)))
         );

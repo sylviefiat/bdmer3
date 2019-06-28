@@ -61,13 +61,17 @@ export class SeedAdvancedConfig extends SeedConfig {
     // Advanced seed packages
     let additionalPackages: ExtendPackages[] = [
       {
-        name: 'plugin-babel',
-        path: 'node_modules/systemjs-plugin-babel/plugin-babel.js'
+        name: 'systemjs-plugin-babel',
+        path: 'node_modules/systemjs-plugin-babel/systemjs-babel-node.js'
       },
       {
         name: 'systemjs-babel-build',
         path: 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js'
       },
+      {
+        name: 'plugin-babel',
+        path: 'node_modules/systemjs-plugin-babel/plugin-babel.js'
+      },      
       {
         name: '@angular/common/http',
         path: 'node_modules/@angular/common/bundles/common-http.umd.js'
@@ -212,10 +216,6 @@ export class SeedAdvancedConfig extends SeedConfig {
         path: 'node_modules/supercluster/dist/supercluster.min.js'
       },
       {
-        name: '@turf/bbox',
-        path: 'node_modules/ngx-mapbox-gl/node_modules/@turf/bbox/index.js'
-      },
-      {
         name: 'mapbox-gl',
         path: 'node_modules/mapbox-gl/dist/mapbox-gl-dev.js'
       },
@@ -223,10 +223,10 @@ export class SeedAdvancedConfig extends SeedConfig {
         name: 'through',
         path: 'node_modules/through/index.js'
       },
-        {
+      {
             name: 'jsonparse',
             path: 'node_modules/jsonparse/jsonparse.js'
-        },
+      },
         {
             name: 'fs',
             path: 'node_modules/graceful-fs/fs.js'
@@ -350,6 +350,10 @@ export class SeedAdvancedConfig extends SeedConfig {
             name: '@turf/turf',
             path: 'node_modules/@turf/turf/turf.js'
         },
+      {
+        name: '@turf/bbox',
+        path: 'node_modules/ngx-mapbox-gl/node_modules/@turf/bbox/index.js'
+      },
         {
             name: '@turf/helpers',
             path: 'node_modules/@turf/helpers/index.js'
@@ -357,7 +361,7 @@ export class SeedAdvancedConfig extends SeedConfig {
         {
             name: '@turf/meta',
             path: 'node_modules/@turf/meta/index.js'
-        },
+        },  
         {
             name: '@turf/combine',
             path: 'node_modules/@turf/combine/index.js'

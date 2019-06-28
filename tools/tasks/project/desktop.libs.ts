@@ -1,4 +1,5 @@
 import * as gulp from 'gulp';
+import * as util from 'gulp-util';
 import { ExtendPackages } from '../../config/seed.config.interfaces';
 import { relative, join } from 'path';
 import Config from '../../config';
@@ -14,7 +15,7 @@ export = () => {
   additionalPkgs.forEach((pkg) => {
    if (typeof(pkg.name) !== 'undefined') {
       src.push(`node_modules/${pkg.name}/**/*`);
-    }
+    } 
   });
 
   src.push(...Config.NPM_DEPENDENCIES.map(x => relative(Config.PROJECT_ROOT, x.src)));

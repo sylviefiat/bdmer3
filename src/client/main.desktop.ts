@@ -105,7 +105,7 @@ app.on('ready', () => {
         }, {
           type: 'separator'
         }, {
-          label: 'Hide Angular Seed Advanced',
+          label: 'Hide this',
           accelerator: 'Command+H',
           selector: 'hide:'
         }, {

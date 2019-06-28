@@ -58,7 +58,8 @@ export class CountImportComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new SpeciesAction.LoadAction());
     this.store.select(getLangues).subscribe((l: any) => {
-      this.docs_repo = "../../../assets/files/";
+      //this.docs_repo = "../../../assets/files/";
+      this.docs_repo = "assets/files/";
       this.csvFileType1 = "importCountNoMesures-" + l + ".csv";
       this.csvFileType2 = "importCount-" + l + ".csv";
     });
