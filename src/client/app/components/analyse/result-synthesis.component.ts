@@ -81,7 +81,8 @@ import { Results, Data, ResultSurvey } from '../../modules/analyse/models/index'
                   [chartsData]="results"
                   [species]="analyseData.usedSpecies"
                   [codeZone]="selectedZone$ | async"
-                  [type]="typeShow$ | async">
+                  [type]="typeShow$ | async"
+                  [platformType]="analyseData.usedCountry.platformType">
                 </bc-result-boxplot>
           </mat-card-content>
         </mat-card>

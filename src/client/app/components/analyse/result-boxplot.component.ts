@@ -50,6 +50,7 @@ import { Results } from '../../modules/analyse/models/index';
 })
 export class ResultBoxplotComponent implements OnInit, OnChanges {
     @Input() type: string;
+    @Input() platformType: number;
     @Input() chartsData: Results;
     @Input() species: Species[];
     @Input() codeZone?: string;
@@ -151,17 +152,20 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 let rspp = rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code).length > 0 ? rps.resultPerSpecies.filter(rs => rs.codeSpecies === sp.code)[0] : null;
                 let value = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.averageBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.averageAbundance))) : null;
                 let valuConf = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalBiomass)) : Number(rspp.resultPerPlatform.map(rpp => rpp.confidenceIntervalAbundance))) : (value ? 0 : null);
-                let valueStock = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stock)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.abundance))) : null;
-                let valuStockCA = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stockCA)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.abundanceCA))) : (value ? 0 : null);
+                
                 dataScatter[rps.codePlatform][sp.scientificName] = [...dataScatter[rps.codePlatform][sp.scientificName], value];
                 dataConfidence[rps.codePlatform][sp.scientificName] = [...dataConfidence[rps.codePlatform][sp.scientificName], value ? [Number(value) - Number(valuConf), Number(value) + Number(valuConf)]:[null,null]];
-                dataStock[rps.codePlatform][sp.scientificName] = [...dataStock[rps.codePlatform][sp.scientificName], valueStock];
-                dataStockCA[rps.codePlatform][sp.scientificName] = [...dataStockCA[rps.codePlatform][sp.scientificName], value ? [Number(valueStock) - Number(valuStockCA), Number(valueStock) + Number(valuStockCA)]:[null,null]];
                 this.colors[colori++] = Highcharts.Color(hcolors[i]).brighten(0.2).get('rgba');
                 this.colors[colori++] = hcolors[i++];
-                this.colors[colori++] = hcolors[i];
-                this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get('rgba');
 
+                if(this.platformType === 1){
+                    let valueStock = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stock)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.abundance))) : null;
+                    let valuStockCA = rspp ? (this.type === 'B' ? Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.stockCA)) : Number(rspp.resultPerPlatform.map(rpp => rpp.resultStock.abundanceCA))) : (value ? 0 : null);                
+                    dataStock[rps.codePlatform][sp.scientificName] = [...dataStock[rps.codePlatform][sp.scientificName], valueStock];
+                    dataStockCA[rps.codePlatform][sp.scientificName] = [...dataStockCA[rps.codePlatform][sp.scientificName], value ? [Number(valueStock) - Number(valuStockCA), Number(valueStock) + Number(valuStockCA)]:[null,null]];                
+                    this.colors[colori++] = hcolors[i];
+                    this.colors[colori++] = (<any>Highcharts.Color(hcolors[i++])).brighten(0.2).get('rgba');
+                }
             }
         }
         colori=0;
@@ -190,38 +194,40 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                         pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit1 + '</b>'
                     }
                 }
-                series[index++] = {
-                    name: this.translate.instant('STOCK')+' '+i + " / " + j,
-                    yAxis: 1,
-                    data: dataStock[i][j],
-                    type: 'line',
-                   /* marker: {
-                        fillColor: 'white',
-                        lineWidth: 2,
-                        lineColor: this.colors[colori++]
-                    },*/
-                    tooltip: {
-                        headerFormat: '<em>'+this.translate.instant('STOCK')+'</em><br/>',
-                        pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit2 + '</b>'
+                if(this.platformType === 1){
+                    series[index++] = {
+                        name: this.translate.instant('STOCK')+' '+i + " / " + j,
+                        yAxis: 1,
+                        data: dataStock[i][j],
+                        type: 'line',
+                       /* marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: this.colors[colori++]
+                        },*/
+                        tooltip: {
+                            headerFormat: '<em>'+this.translate.instant('STOCK')+'</em><br/>',
+                            pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} ' + unit2 + '</b>'
+                        }
                     }
-                }
-                series[index++] = {
-                    name: this.translate.instant('CONSERVATIVE_ASSUMPTION')+' ',
-                    type: 'arearange',
-                    yAxis: 1,
-                    //color: this.colors[colori++],
-                    data: dataStockCA[i][j],
-                    tooltip: {
-                        headerFormat: '<em>'+type+'</em><br/>',
-                        pointFormat: '('+this.translate.instant('CONSERVATIVE_ASSUMPTION')+' <b>{point.low:.1f}-{point.high:.1f} ' + unit2 + ')</b>'
-                    },
-                    lineWidth: 0,
-                    linkedTo: ':previous',
-                    //color: Highcharts.getOptions().colors[0],
-                    fillOpacity: 0.3,
-                    zIndex: 0,
-                    marker: {
-                        enabled: false
+                    series[index++] = {
+                        name: this.translate.instant('CONSERVATIVE_ASSUMPTION')+' ',
+                        type: 'arearange',
+                        yAxis: 1,
+                        //color: this.colors[colori++],
+                        data: dataStockCA[i][j],
+                        tooltip: {
+                            headerFormat: '<em>'+type+'</em><br/>',
+                            pointFormat: '('+this.translate.instant('CONSERVATIVE_ASSUMPTION')+' <b>{point.low:.1f}-{point.high:.1f} ' + unit2 + ')</b>'
+                        },
+                        lineWidth: 0,
+                        linkedTo: ':previous',
+                        //color: Highcharts.getOptions().colors[0],
+                        fillOpacity: 0.3,
+                        zIndex: 0,
+                        marker: {
+                            enabled: false
+                        }
                     }
                 }
             }
