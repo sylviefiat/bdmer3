@@ -39,8 +39,8 @@
               </span> ({{'TOTAL' | translate}}: {{getNMesuresSpecies(mesure.codeSpecies)}}):
         </div>
         <li>
-          <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm,
-          <fa [name]="'arrows-h'" [border]=false [size]=1></fa> {{mesure.larg}}mm
+          <fa [name]="'arrows-v'" [border]=false [size]=1></fa> {{mesure.long}}mm
+          <span *ngIf="mesure.larg"><fa [name]="'arrows-h'" [border]=false [size]=1></fa>, {{mesure.larg}}mm</span>
         </li>
       </div>
     </mat-card-content>

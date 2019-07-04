@@ -19,7 +19,7 @@ import { Species } from '../../modules/datas/models/index';
         <div class="hint">{{ 'SPECIES_LONG_EX' | translate }}</div>    
       </mat-form-field>     
       <mat-form-field>
-        <input type="text" matInput placeholder="{{ 'SPECIES_LARG' | translate }}" formControlName="larg" required>
+        <input type="text" matInput placeholder="{{ 'SPECIES_LARG' | translate }}" formControlName="larg">
         <div class="hint">{{ 'SPECIES_LARG_EX' | translate }}</div>    
       </mat-form-field>
     </mat-card-content>
