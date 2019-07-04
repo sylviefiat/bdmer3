@@ -26,19 +26,19 @@ export function watch(taskname: string, root: string = Config.APP_SRC) {
       }));
     }
 
-    plugins.watch(paths, (e: any) => {
+    plugins.watch(paths, (e: any, done: any) => {
       changeFileManager.addFile(e.path);
-
 
       // Resolves issue in IntelliJ and other IDEs/text editors which
       // save multiple files at once.
       // https://github.com/mgechev/angular-seed/issues/1615 for more details.
       setTimeout(() => {
-
-        gulp.series(taskname, () => {
+        var runTask = gulp.series(taskname, (done:any) => {
           changeFileManager.clear();
           notifyLiveReload(e);
+          done();
         });
+        runTask(done);
 
       }, 100);
     });

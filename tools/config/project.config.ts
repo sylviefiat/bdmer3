@@ -274,6 +274,6 @@ export class ProjectConfig extends SeedAdvancedConfig {
         // ];
 
         /* Add to or override NPM module configurations: */
-        //this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
+        this.PLUGIN_CONFIGS['browser-sync'] = { ghostMode: false };
     }
 }

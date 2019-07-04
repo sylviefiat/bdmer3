@@ -140,7 +140,7 @@ export class ResultBoxplotComponent implements OnInit, OnChanges {
                 dataScatter[rps.codePlatform] = [];
                 dataConfidence[rps.codePlatform] = [];
                 dataStock[rps.codePlatform] = [];
-                dataStockCA[rps.codePlatform] = [];
+                dataStockCA[rps.codePlatform] = [];  
             }
             for (let sp of this.species) {
                 if (!dataScatter[rps.codePlatform][sp.scientificName]) {

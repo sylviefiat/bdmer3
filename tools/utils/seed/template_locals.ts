@@ -28,7 +28,7 @@ export class TemplateLocalsBuilder {
     const configPath = Config.getPluginConfig('environment-config');
     const envOnlyConfig = this.getConfig(configPath, configEnvName);
     const baseConfig = this.getConfig(configPath, 'base');
-
+    
     if (!envOnlyConfig) {
       throw new Error(configEnvName + ' is an invalid configuration name');
     }
@@ -38,6 +38,7 @@ export class TemplateLocalsBuilder {
       Config,
       { ENV_CONFIG: this.stringifyEnvConfig ? JSON.stringify(envConfig) : envConfig }
     );
+
     if (this.stringifySystemConfigDev) {
       Object.assign(locals, {SYSTEM_CONFIG_DEV: JSON.stringify(Config.SYSTEM_CONFIG_DEV)});
     }

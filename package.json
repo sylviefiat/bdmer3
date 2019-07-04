@@ -60,10 +60,11 @@
     "compodoc": "./node_modules/.bin/compodoc -p src/client/tsconfig.json",
     "serve.compodoc": "./node_modules/.bin/compodoc -s"
   },
-  "author": "Minko Gechev <mgechev>",
+  "author": "Sylvie Fiat <sylviefiat>",
   "contributors": [
     {
-      "name": "Morgan Dubois <morgandbs>"
+      "name": "Morgan Dubois <morgandbs>",
+      "name":"Minko Gechev <mgechev>"
     }
   ],
   "license": "MIT",
