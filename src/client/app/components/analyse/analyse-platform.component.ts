@@ -2,18 +2,20 @@ import { Observable, Subscription } from 'rxjs';
 import { Component, OnInit, AfterContentChecked, Output, Input, ChangeDetectionStrategy, EventEmitter,OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Platform } from '../../modules/datas/models/index';
+import { Country } from '../../modules/countries/models/country';
 
 @Component({
     selector: 'bc-analyse-platform',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <div [formGroup]="form"> 
-      <h2>{{ 'SELECT_PLATFORMS' | translate }}</h2>
+      <h2>{{ 'SELECT_PLATFORMS' | translate }}<span *ngIf="!isBoatType()">*</span></h2>
       <div class="norecord">{{ 'PLATFORM_NO_DATA' | translate }}</div>
-      <mat-checkbox (change)="checkAll($event)">
+      <div class="comment" *ngIf="!isBoatType()">*{{ 'PLATFORM_SELECT_ONE' | translate }}</div>
+      <mat-checkbox *ngIf="isBoatType()" (change)="checkAll($event)">
           {{ 'CHECK_ALL' | translate }}
         </mat-checkbox>
-      <div  class="platforms">
+      <div class="platforms">
         <div *ngFor="let platform of (platforms$ | async); let i=index">
           <bc-platform [group]="form.controls.platforms.controls[i]" [platform]="platform" (platformEmitter)="changeValue($event)"></bc-platform>
         </div>
@@ -29,15 +31,19 @@ import { Platform } from '../../modules/datas/models/index';
       padding:5px;
       border: 1px solid grey;
     }
-    .norecord {
+    .norecord, .comment {
       color: orange;
       padding-bottom:10px;
       font-size: smaller;
       font-style: italic;
     }
+    .comment {
+        color: darkgrey;
+    }
     `]
 })
 export class AnalysePlatformComponent implements OnInit, OnDestroy {
+    @Input() currentCountry: Country;
     @Input() platforms$: Observable<Platform[]>;
     defaultPlatforms: Platform[] = [];
     checkedPlatforms: Platform[] = [];
@@ -61,6 +67,10 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
         this.actionsSubscription.unsubscribe();
     }
 
+    isBoatType(){
+        return this.currentCountry && this.currentCountry.platformType === 1;
+    }
+
     newPlatform(p: Platform) {
         return this._fb.group({
             platform: new FormControl({
@@ -82,7 +92,11 @@ export class AnalysePlatformComponent implements OnInit, OnDestroy {
     }
 
     changeValue(platCheck: any) {
-        this.checkedPlatforms = [...this.checkedPlatforms.filter(p => p.code !== platCheck.platform.code)];
+        if(this.isBoatType()){
+            this.checkedPlatforms = [...this.checkedPlatforms.filter(p => p.code !== platCheck.platform.code)];
+        } else {
+            this.checkedPlatforms = [];            
+        }
         if (platCheck.checked) {
             this.checkedPlatforms.push(platCheck.platform);
         }

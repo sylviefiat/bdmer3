@@ -25,7 +25,7 @@
       <mat-step [stepControl]="platformsFormGroup">
         <form [formGroup]="platformsFormGroup">
           <ng-template matStepLabel>{{ 'PLATFORMS' | translate}}</ng-template>
-          <bc-analyse-platform [platforms$]="platforms$" (platformEmitter)="setPlatforms($event)" [group]="platformsFormGroup"></bc-analyse-platform>
+          <bc-analyse-platform [platforms$]="platforms$" [currentCountry]="currentCountry$ | async" (platformEmitter)="setPlatforms($event)" [group]="platformsFormGroup"></bc-analyse-platform>
           <div *ngIf="(years$ | async)?.length==0" class="norecord">{{ 'NO_YEARS' | translate}}</div> 
           <div>
             <button mat-button *ngIf="isAdmin"  matStepperPrevious>{{ 'BACK' | translate}}</button>

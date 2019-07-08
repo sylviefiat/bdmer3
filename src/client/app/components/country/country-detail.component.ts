@@ -167,7 +167,7 @@ export class CountryDetailComponent implements OnInit {
   }
 
   get type() {
-    return this.platformTypeList.filter(pt => Number(pt.id)===Number(this.country.platformType))[0] ? this.platformTypeList.filter(pt => Number(pt.id)===Number(this.country.platformType))[0].value : 'NONE';
+    return this.platformTypeList.filter(pt => Number(pt.id)===Number(this.country.platformType))[0] ? this.platformTypeList.filter(pt => Number(pt.id)===Number(this.country.platformType))[0].value : 'NO_TYPE';
   }
 
   get users() {
