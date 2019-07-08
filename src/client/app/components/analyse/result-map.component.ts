@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, ViewChild, OnChanges, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl';
-import { Cluster, Supercluster } from 'supercluster';
+import { LngLatBounds, LngLatLike, MapMouseEvent } from 'mapbox-gl'; 
 import * as Turf from '@turf/turf';
 import { saveAs } from 'file-saver';
 import { MapService } from '../../modules/core/services/index';
@@ -62,7 +61,7 @@ export class ResultMapComponent implements OnInit, OnChanges {
     layerStations$: Observable<Turf.FeatureCollection>;
     layerZones$: Observable<Turf.FeatureCollection>;
     layerZonesNoRatio$: Observable<Turf.FeatureCollection>;
-    bounds: LngLatBounds;
+    bounds: any;
     boundsPadding: number = 50;
     zoomMaxMap = 10;
     zoom: number = 9;
@@ -213,19 +212,20 @@ export class ResultMapComponent implements OnInit, OnChanges {
         let filteredZones = this.zones
             .filter(zone => (this.spShow === null || zone.properties.species === this.spShow) &&
                 (this.surveyShow === 'all' || zone.properties.survey === this.surveyShow))
-            .map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio }))
+            .map(zone => MapService.getFeature(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio }))
             .filter(polygon => polygon !== null);
         // zones not taken into stock evaluation are stiped (ratio is <0.2)
         let filteredZonesWithoutRatio = this.zonesNoRatio
             .filter(zone => (this.spShow === null || zone.properties.species === this.spShow))
-            .map(zone => MapService.getPolygon(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio }))
+            .map(zone => MapService.getFeature(zone, { code: zone.properties.code, abundancy: zone.properties.abundancy, biomass: zone.properties.biomass, ratio: zone.properties.ratio }))
             .filter(polygon => polygon !== null);
         let fc1 = Turf.featureCollection(filteredZones);
         let fc1No = Turf.featureCollection(filteredZonesWithoutRatio);
         this.layerZones$ = of(fc1);
         this.layerZonesNoRatio$ = of(fc1No);
         if (filteredZones.length > 0) {
-            this.bounds = MapService.zoomToZones(fc1);
+            this.bounds = Turf.bbox(fc1);
+            //this.bounds = MapService.zoomToZones(fc1);
         }
     }
 

@@ -5,10 +5,10 @@
     <button id="menu" mat-icon-button [matMenuTriggerFor]="appMenu">
       <fa [name]="'bars'" [border]=true></fa>
     </button>
-    <mgl-map *ngIf="!loading"
+    <mgl-map
         [style]="'mapbox://styles/mapbox/satellite-v9'"
         [fitBounds]="bounds"
-        (load) = "setMap($event)"
+        
         (zoomEnd)="zoomChange($event)"
         [preserveDrawingBuffer]= "true">
         <mgl-image

@@ -61,7 +61,7 @@ export class MapService {
             default:
                 return null;
         }
-    }
+    }   
 
     static zoomToCountries(coordinates): LngLatBounds {
         return coordinates.reduce((bnd, coord) => {
@@ -69,24 +69,12 @@ export class MapService {
         }, new LngLatBounds(coordinates[0], coordinates[0]));
     }
 
-    static zoomToZones(featureCollection): LngLatBounds {
-        var bnd = new LngLatBounds();
-        var fc: Turf.FeatureCollection = featureCollection.features
-            .filter(feature => feature && feature.geometry && feature.geometry.coordinates)
-            .forEach((feature) => {
-                try {
-                    return bnd.extend(feature.geometry.type.indexOf('Multi') > -1 ? feature.geometry.coordinates[0][0] : feature.geometry.coordinates[0])
-                } catch (e) {
-                    return bnd;
-                }
-            });
-        return this.checkBounds(bnd);
+    static zoomToZones(featureCollection): any {
+        return Turf.bbox(featureCollection);
     }
 
-    static zoomToStations(featureCollection): LngLatBounds {
-        var bnd = new LngLatBounds();
-        var fc: Turf.FeatureCollection = featureCollection.features.forEach(feature => bnd.extend(feature.geometry.coordinates));
-        return this.checkBounds(bnd);
+    static zoomToStations(featureCollection): any {
+        return Turf.bbox(featureCollection);
     }
 
     static zoomOnZone(zone): LngLatBounds {
