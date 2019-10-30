@@ -1,4 +1,4 @@
-#### BDMER3
+#### BDMER3 => projet déplacé gitlab in2p3 30/102019
 
 BDMER version 3 - Evaluation des stocks d'holothurie et autre invertébrés
 [UMR ENTROPIE](umr-entropie.ird.nc), IRD NOUVELLE CALEDONIE
